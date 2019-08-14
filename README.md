@@ -14,8 +14,6 @@ macOS
 
 In a terminal, execute /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
 
-# git commit
-check all
+# git commit check
 
-1. vscode format code
-2. npm run lint
+eslint ./src/** --fix
