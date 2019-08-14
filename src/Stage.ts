@@ -11,7 +11,7 @@ import { UIBase } from "./UIBase";
  */
 export class Stage extends PIXI.Container {
 
-    constructor(width: number, height: number) {
+    public constructor(width: number, height: number) {
         super();
         this._width = width;
         this._height = height;
@@ -74,7 +74,7 @@ export class Stage extends PIXI.Container {
         }
     }
 
-    public resize(width?: number, height?: number) {
+    public resize(width?: number, height?: number): void {
         if (width && !isNaN(width)) this._width = width;
         if (height && !isNaN(height)) this._height = height;
 

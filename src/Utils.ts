@@ -1,4 +1,4 @@
-export function log(message?: any, ...optionalParams: any[]) {
+export function log(message?: string, ...optionalParams: any[]): void {
     if (!optionalParams) {
         console.log(message);
     } else {

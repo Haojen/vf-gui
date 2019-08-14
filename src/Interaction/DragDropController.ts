@@ -49,7 +49,8 @@ export function getItem(item: UIBase) {
  * @param group 分组名
  */
 export function getEventItem(e: interaction.InteractionEvent, group: string | undefined) {
-    let item = null, index: number | undefined, id = e.data.identifier;
+    let item = null, index: number | undefined;
+    const id = e.data.identifier;
     for (let i = 0; i < _items.length; i++) {
         if (_items[i].dragDropEventId === id) {
             if (group !== _items[i].dragGroup) {

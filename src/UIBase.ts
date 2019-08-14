@@ -1,5 +1,4 @@
 import { UISettings } from "./UISettings";
-import { log } from "./Utils";
 import { Stage } from "./Stage";
 import { HorizontalAlignEnum, VerticalAlignEnum } from "./Align";
 import { DragEvent } from "./Interaction/DragEvent";
@@ -18,7 +17,7 @@ import { TouchEventEnum } from "./Interaction/TouchEventEnum";
  */
 export class UIBase extends PIXI.utils.EventEmitter {
 
-    constructor(width: number | string, height: number | string) {
+    public constructor(width: number | string, height: number | string) {
         super();
         this.container = new PIXI.Container();
         this.setting = new UISettings();
@@ -153,9 +152,9 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this.setting.top as number;
     }
     /**
-     * 设置宽度，数字或百分比
+     * 设置宽度百分比 
      */
-    set width(value: any) {
+    set widthPet(value: string){
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.width = item.num;
@@ -164,13 +163,20 @@ export class UIBase extends PIXI.utils.EventEmitter {
         }
         this.updatesettings(true);
     }
+    /**
+     * 设置宽度,整数
+     */
+    set width(value: number) {
+        this.setting.width = value;
+        this.updatesettings(true);
+    }
     get width() {
         return this.setting.width;
     }
     /** 
-     * 立即获取渲染的实际宽度
+     * 立即获取渲染的实际宽度 Identifier 'actual_width' is not in camel case 
      */
-    protected get actual_width() {
+    protected get actualWidth() {
         if (this.dirty) {
             if (this.setting.widthPct && this.parent) {
                 this._width = this.parent._width * this.setting.widthPct;
@@ -182,9 +188,9 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this._width;
     }
     /**
-     * 设置宽度，数字或百分比
+     * 设置高度，数百分比
      */
-    set height(value: any) {
+    set heightPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.height = item.num;
@@ -193,13 +199,20 @@ export class UIBase extends PIXI.utils.EventEmitter {
         }
         this.updatesettings(true);
     }
+    /**
+     * 设置高度，数字
+     */
+    set height(value: number) {
+        this.setting.height = value;
+        this.updatesettings(true);
+    }
     get height() {
         return this.setting.height;
     }
     /** 
      * 立即获取渲染的实际高度
      */
-    protected get actual_height() {
+    protected get actualHeight() {
         if (this.dirty) {
             if (this.setting.heightPct && this.parent) {
                 this._height = this.parent._height * this.setting.heightPct;
@@ -211,9 +224,9 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this._height;
     }
     /**
-     * 设置最小宽度，数字或百分比
+     * 设置最小宽度百分比
      */
-    set minWidth(value: any) {
+    set minWidthPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.minWidth = item.num;
@@ -222,13 +235,20 @@ export class UIBase extends PIXI.utils.EventEmitter {
         }
         this.updatesettings(true);
     }
+    /**
+     * 设置最小宽度
+     */
+    set minWidth(value: number) {
+        this.setting.minWidth = value;
+        this.updatesettings(true);
+    }
     get minWidth() {
         return this.setting.minWidth;
     }
     /** 
      * 立即获取渲染的实际最小宽度
      */
-    protected get actual_minWidth() {
+    protected get actualMinWidth() {
         if (this.dirty) {
             if (this.setting.minWidthPct && this.parent) {
                 this._minWidth = this.parent._width * this.setting.minWidthPct;
@@ -257,7 +277,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 立即获取渲染的实际最小高度
      */
-    protected get actual_minHeight() {
+    protected get actualMinHeight() {
         if (this.dirty) {
             if (this.setting.minHeightPct && this.parent) {
                 this._minHeight = this.parent._height * this.setting.minHeightPct;
@@ -286,7 +306,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 立即获取渲染的实际最小高度
      */
-    protected get actual_maxWidth() {
+    protected get actualMaxWidth() {
         if (this.dirty) {
             if (this.setting.maxWidthPct && this.parent) {
                 this._maxWidth = this.parent._width * this.setting.maxWidthPct;
@@ -315,7 +335,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 立即获取渲染的实际最小高度
      */
-    protected get actual_maxHeight() {
+    protected get actualMaxHeight() {
         if (this.dirty) {
             if (this.setting.maxHeightPct && this.parent) {
                 this._maxHeight = this.parent._height * this.setting.maxHeightPct;
@@ -344,7 +364,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 立即获取渲染的实际锚点左边距离
      */
-    protected get actual_anchorLeft() {
+    protected get actualAnchorLeft() {
         if (this.dirty) {
             if (this.setting.anchorLeftPct && this.parent) {
                 this._anchorLeft = this.parent._width * this.setting.anchorLeftPct;
@@ -373,7 +393,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 立即获取渲染的实际锚点右边距离
      */
-    protected get actual_anchorRight() {
+    protected get actualAnchorRight() {
         if (this.dirty) {
             if (this.setting.anchorRightPct && this.parent) {
                 this._anchorRight = this.parent._width * this.setting.anchorRightPct;
@@ -402,7 +422,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 立即获取渲染的实际锚点顶部距离
      */
-    protected get actual_anchorTop() {
+    protected get actualAnchorTop() {
         if (this.dirty) {
             if (this.setting.anchorTopPct && this.parent) {
                 this._anchorTop = this.parent._height * this.setting.anchorTopPct;
@@ -431,7 +451,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 立即获取渲染的实际锚点底部距离
      */
-    protected get actual_anchorBottom() {
+    protected get actualAnchorBottom() {
         if (this.dirty) {
             if (this.setting.anchorBottomPct && this.parent) {
                 this._anchorBottom = this.parent._height * this.setting.anchorBottomPct;
@@ -459,7 +479,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 立即获取渲染的实际左部距离
      */
-    protected get actual_left() {
+    protected get actualLeft() {
         if (this.dirty) {
             if (this.setting.leftPct && this.parent) {
                 this._left = this.parent._width * this.setting.leftPct;
@@ -486,7 +506,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 立即获取渲染的实际右部距离
      */
-    protected get actual_right() {
+    protected get actualRight() {
         if (this.dirty) {
             if (this.setting.rightPct && this.parent) {
                 this._right = this.parent.width * this.setting.rightPct;
@@ -515,7 +535,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 立即获取渲染的实际顶部距离
      */
-    protected get actual_top() {
+    protected get actualTop() {
         if (this.dirty) {
             if (this.setting.topPct && this.parent) {
                 this._top = this.parent._height * this.setting.topPct;
@@ -529,7 +549,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /**
      * 获取或设置距离底部距离
      */
-    set bottom(value: any) {
+    set bottomPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.bottom = item.num;
@@ -538,13 +558,18 @@ export class UIBase extends PIXI.utils.EventEmitter {
         }
         this.updatesettings(true);
     }
+    /** 设置底边距 */
+    set bootom(value:number){
+        this.setting.bottom = value;
+        this.updatesettings(true);
+    }
     get bottom() {
         return this.setting.bottom;
     }
     /** 
      * 立即获取渲染的实际顶部距离
      */
-    protected get actual_bottom() {
+    protected get actualBottom() {
         if (this.dirty) {
             if (this.setting.bottomPct && this.parent) {
                 this._bottom = this.parent.height * this.setting.bottomPct;
@@ -628,7 +653,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /**
      * 设置混合模式参考，PIXI.BLEND_MODES
      */
-    set 获取blendMode(value: number) {
+    set blendMode(value: number) {
         this.setting.blendMode = value;
         this.update();
     }
@@ -884,20 +909,20 @@ export class UIBase extends PIXI.utils.EventEmitter {
         let parentHeight: number, parentWidth: number;
         //transform convertion (% etc)
         this.dirty = true;
-        this._width = this.actual_width;
-        this._height = this.actual_height;
-        this._minWidth = this.actual_minWidth;
-        this._minHeight = this.actual_minHeight;
-        this._maxWidth = this.actual_maxWidth;
-        this._maxHeight = this.actual_maxHeight;
-        this._anchorLeft = this.actual_anchorLeft;
-        this._anchorRight = this.actual_anchorRight;
-        this._anchorTop = this.actual_anchorTop;
-        this._anchorBottom = this.actual_anchorBottom;
-        this._left = this.actual_left;
-        this._right = this.actual_right;
-        this._top = this.actual_top;
-        this._bottom = this.actual_bottom;
+        this._width = this.actualWidth;
+        this._height = this.actualHeight;
+        this._minWidth = this.actualMinWidth;
+        this._minHeight = this.actualMinHeight;
+        this._maxWidth = this.actualMaxWidth;
+        this._maxHeight = this.actualMaxHeight;
+        this._anchorLeft = this.actualAnchorLeft;
+        this._anchorRight = this.actualAnchorRight;
+        this._anchorTop = this.actualAnchorTop;
+        this._anchorBottom = this.actualAnchorBottom;
+        this._left = this.actualLeft;
+        this._right = this.actualRight;
+        this._top = this.actualTop;
+        this._bottom = this.actualBottom;
         this._parentWidth = parentWidth = this.parent._width;
         this._parentHeight = parentHeight = this.parent._height;
         this.dirty = false;
@@ -1046,21 +1071,22 @@ export class UIBase extends PIXI.utils.EventEmitter {
      * 添加UI元件，可以同时添加多个如addChild(a,b,c,d)
      * @param UIObject 要添加的UI组件
      */
-    public addChild(UIObject: UIBase) {
-        const argumentsLength = arguments.length;
+    public addChild(... UIObject: UIBase[]) {
+        const argumentsLength = UIObject.length;
         if (argumentsLength > 1) {
             for (let i = 0; i < argumentsLength; i++) {
-                this.addChild(arguments[i]);
+                this.addChild(UIObject[i]);
             }
         }
         else {
-            if (UIObject.parent) {
-                UIObject.parent.removeChild(UIObject);
+            const item  = UIObject[0];
+            if (item.parent) {
+                item.parent.removeChild(item);
             }
 
-            UIObject.parent = this;
-            this.container.addChild(UIObject.container);
-            this.children.push(UIObject);
+            item.parent = this;
+            this.container.addChild(item.container);
+            this.children.push(item);
             this.updatesettings(true, true);
         }
 
@@ -1070,21 +1096,22 @@ export class UIBase extends PIXI.utils.EventEmitter {
      * 移除已添加的UI组件，可以同时移除多个如addChild(a,b,c,d)
      * @param UIObject 要移除的UI组件
      */
-    public removeChild(UIObject: UIBase) {
-        const argumentLenght = arguments.length;
+    public removeChild(...UIObject: UIBase[]) {
+        const argumentLenght = UIObject.length;
         if (argumentLenght > 1) {
             for (let i = 0; i < argumentLenght; i++) {
-                this.removeChild(arguments[i]);
+                this.removeChild(UIObject[i]);
             }
         }
         else {
-            const index = this.children.indexOf(UIObject);
+            const item  = UIObject[0];
+            const index = this.children.indexOf(item);
             if (index !== -1) {
-                const oldUIParent = UIObject.parent;
+                const oldUIParent = item.parent;
                 //var oldParent = UIObject.container.parent;
-                UIObject.container.parent.removeChild(UIObject.container);
+                item.container.parent.removeChild(item.container);
                 this.children.splice(index, 1);
-                UIObject.parent = undefined;
+                item.parent = undefined;
 
                 //oldParent._recursivePostUpdateTransform();
                 setTimeout(() => { //hack but cant get the transforms to update propertly otherwice?

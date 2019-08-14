@@ -1,4 +1,5 @@
 import { HorizontalAlignEnum, VerticalAlignEnum } from "./Align";
+import { UIBase } from "./UIBase";
 
 /** 
  * 基础的显示数据类型 
@@ -92,11 +93,11 @@ export class UISettings {
     /** 分组拖动 */
     public dragGroup: string | undefined;
     /** 拖动容器 */
-    public dragContainer: any;
+    public dragContainer: PIXI.Container | UIBase | undefined;
     /** 是否开启接收拖动物 */
     public droppable: boolean | undefined;
     /**  */
-    public droppableReparent: any = null;
+    public droppableReparent: UIBase | undefined;
     /** 接收掉落的分组名 */
     public dropGroup: string | undefined;
 }
