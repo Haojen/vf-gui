@@ -3,6 +3,7 @@ import { interaction } from "pixi.js";
 
 /**
  * 记录当前正在拖动的UI组件列表
+ * @private
  */
 export const _items: UIBase[] = [];
 /**
@@ -10,6 +11,7 @@ export const _items: UIBase[] = [];
  * @param item 要添加的UI组件
  * @param e 传送的事件
  * @returns true|false
+ * @since 1.0.0
  */
 export function add(item: UIBase, e: interaction.InteractionEvent) {
     item.dragDropEventId = e.data.identifier;

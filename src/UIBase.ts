@@ -1,11 +1,11 @@
 import { UISettings } from "./UISettings";
 import { Stage } from "./Stage";
-import { HorizontalAlignEnum, VerticalAlignEnum } from "./Align";
+import { HorizontalAlignEnum, VerticalAlignEnum } from "./Enum/AlignEnum";
 import { DragEvent } from "./Interaction/DragEvent";
 import { interaction } from "pixi.js";
 import * as DragDropController from "./Interaction/DragDropController";
-import { DraggableEventEnum } from "./Interaction/DraggableEventEnum";
-import { TouchEventEnum } from "./Interaction/TouchEventEnum";
+import { DraggableEventEnum } from "./Enum/DraggableEventEnum";
+import { TouchMouseEventEnum } from "./Enum/TouchMouseEventEnum";
 
 /**
  * UI的顶级类，基础的UI对象
@@ -14,6 +14,7 @@ import { TouchEventEnum } from "./Interaction/TouchEventEnum";
  * @extends PIXI.UI.UIBase
  * @param width {Number} Width UI对象的宽度
  * @param height {Number} Height UI对象的高度
+ * @since 1.0.0
  */
 export class UIBase extends PIXI.utils.EventEmitter {
 
@@ -96,6 +97,8 @@ export class UIBase extends PIXI.utils.EventEmitter {
     protected _parentHeight = 0;
     /** 覆盖缓动播放时的位置 */
     protected _dragPosition: PIXI.Point | undefined;
+    /** 动态属性，避免其他类注入 */
+    public attach: {[key: string]: object|number|string} = {};
     /**
      * 上次的宽度（未使用，丢弃）
      */
@@ -260,15 +263,20 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this._minWidth;
     }
     /**
-     * 设置最小高度，数字或百分比
+     * 设置最小高度百分比
      */
-    set minHeight(value: any) {
+    set minHeightPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.minHeight = item.num;
         } else {
             this.setting.minHeightPct = item.pct;
         }
+        this.updatesettings(true);
+    }
+    /** 设置最小高度 */
+    set minHeight(value: number){
+        this.setting.minHeight = value;
         this.updatesettings(true);
     }
     get minHeight() {
@@ -289,15 +297,20 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this._minHeight;
     }
     /**
-     * 设置最大宽度，数字或百分比
+     * 设置最大宽度百分比
      */
-    set maxWidth(value: any) {
+    set maxWidthPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.maxWidth = item.num;
         } else {
             this.setting.maxWidthPct = item.pct;
         }
+        this.updatesettings(true);
+    }
+    /** 置最大宽度 */
+    set maxWidth(value: number|undefined){
+        this.setting.maxWidth = value;
         this.updatesettings(true);
     }
     get maxWidth() {
@@ -318,15 +331,20 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this._maxWidth;
     }
     /**
-     * 设置最大高度，数字或百分比
+     * 设置最大高度百分比
      */
-    set maxHeight(value: any) {
+    set maxHeightPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.maxHeight = item.num;
         } else {
             this.setting.maxHeightPct = item.pct;
         }
+        this.updatesettings(true);
+    }
+    /** 设置最大高度 */
+    set maxHeight(value: number|undefined){
+        this.setting.maxHeight = value;
         this.updatesettings(true);
     }
     get maxHeight() {
@@ -347,15 +365,20 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this._maxHeight;
     }
     /**
-     * 设置锚点距左边距离，数字或百分比
+     * 设置锚点距左边距离百分比
      */
-    set anchorLeft(value: any) {
+    set anchorLeftPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.anchorLeft = item.num;
         } else {
             this.setting.anchorLeftPct = item.pct;
         }
+        this.updatesettings(true);
+    }
+    /** 设置锚点距左边距离 */
+    set anchorLeft(value: number|undefined){
+        this.setting.anchorLeft = value;
         this.updatesettings(true);
     }
     get anchorLeft() {
@@ -376,15 +399,20 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this._anchorLeft;
     }
     /**
-     * 获取设置锚点右边距离，数字或百分比
+     * 获取设置锚点右边距离百分比
      */
-    set anchorRight(value: any) {
+    set anchorRightPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.anchorRight = item.num;
         } else {
             this.setting.anchorRightPct = item.pct;
         }
+        this.updatesettings(true);
+    }
+    /** 获取设置锚点右边距离 */
+    set anchorRight(value: number|undefined){
+        this.setting.anchorRight = value;
         this.updatesettings(true);
     }
     get anchorRight() {
@@ -405,15 +433,20 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this._anchorRight;
     }
     /**
-     * 获取或设置锚点距离顶部距离，数字或百分比
+     * 获取或设置锚点距离顶部距离百分比
      */
-    set anchorTop(value: any) {
+    set anchorTopPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.anchorTop = item.num;
         } else {
             this.setting.anchorTopPct = item.pct;
         }
+        this.updatesettings(true);
+    }
+    /** 获取或设置锚点距离顶部距离 */
+    set anchorTop(value: number|undefined){
+        this.setting.anchorTop = value;
         this.updatesettings(true);
     }
     get anchorTop() {
@@ -434,15 +467,20 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this._anchorTop;
     }
     /**
-     * 获取或设置锚点距离底部距离，数字或百分比
+     * 设置锚点距离底部距离百分比
      */
-    set anchorBottom(value: any) {
+    set anchorBottomPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.anchorBottom = item.num;
         } else {
             this.setting.anchorBottomPct = item.pct;
         }
+        this.updatesettings(true);
+    }
+    /** 获取或设置锚点距离底部距离 */
+    set anchorBottom(value: number|undefined){
+        this.setting.anchorBottom = value;
         this.updatesettings(true);
     }
     get anchorBottom() {
@@ -463,14 +501,19 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this._anchorBottom;
     }
 
-    /** 获取或设置距离左边的距离 */
-    set left(value: any) {
+    /** 设置距离左边距 百分比 */
+    set leftPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.left = item.num;
         } else {
             this.setting.leftPct = item.pct;
         }
+        this.updatesettings(true);
+    }
+    /** 设置左边距 */
+    set left(value: number|undefined){
+        this.setting.left = value;
         this.updatesettings(true);
     }
     get left() {
@@ -490,14 +533,19 @@ export class UIBase extends PIXI.utils.EventEmitter {
         }
         return this._left;
     }
-    /** 获取或设置距离右边的距离 */
-    set right(value: any) {
+    /** 设置右边距百分比 */
+    set rightPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.right = item.num;
         } else {
             this.setting.rightPct = item.pct;
         }
+        this.updatesettings(true);
+    }
+    /** 设置右边距 */
+    set right(value: number|undefined){
+        this.setting.right = value;
         this.updatesettings(true);
     }
     get right() {
@@ -518,9 +566,9 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this._right;
     }
     /**
-     * 获取设置距离顶部距离
+     * 设置距离顶部距离百分比
      */
-    set top(value: any) {
+    set topPct(value: string) {
         const item = this.getPetValue(value);
         if (item.num) {
             this.setting.top = item.num;
@@ -529,8 +577,13 @@ export class UIBase extends PIXI.utils.EventEmitter {
         }
         this.updatesettings(true);
     }
+    /** 设置顶边距 */
+    set top(value: number|undefined){
+        this.setting.top = value;
+        this.updatesettings(true);
+    }
     get top() {
-        return this.setting.left;
+        return this.setting.top;
     }
     /** 
      * 立即获取渲染的实际顶部距离
@@ -559,7 +612,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
         this.updatesettings(true);
     }
     /** 设置底边距 */
-    set bootom(value:number){
+    set bootom(value: number){
         this.setting.bottom = value;
         this.updatesettings(true);
     }
@@ -1221,8 +1274,8 @@ export class UIBase extends PIXI.utils.EventEmitter {
     protected clearDroppable() {
         if (this.dropInitialized) {
             this.dropInitialized = false;
-            this.container.removeListener(TouchEventEnum.mouseup, this.onDrop, this);
-            this.container.removeListener(TouchEventEnum.touchend, this.onDrop, this);
+            this.container.removeListener(TouchMouseEventEnum.mouseup, this.onDrop, this);
+            this.container.removeListener(TouchMouseEventEnum.touchend, this.onDrop, this);
         }
     }
 
@@ -1232,8 +1285,8 @@ export class UIBase extends PIXI.utils.EventEmitter {
             const container = this.container;
             //self = this;
             this.container.interactive = true;
-            container.on(TouchEventEnum.mouseup, this.onDrop, this);
-            container.on(TouchEventEnum.touchend, this.onDrop, this);
+            container.on(TouchMouseEventEnum.mouseup, this.onDrop, this);
+            container.on(TouchMouseEventEnum.touchend, this.onDrop, this);
         }
     }
 

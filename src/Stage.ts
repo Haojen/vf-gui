@@ -8,6 +8,7 @@ import { UIBase } from "./UIBase";
  * @memberof PIXI.UI
  * @param width {Number} 舞台宽度
  * @param height {Number} 舞台高度
+ * @since 1.0.0
  */
 export class Stage extends PIXI.Container {
 

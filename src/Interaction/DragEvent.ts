@@ -1,9 +1,10 @@
 import { UIBase } from "../UIBase";
-import { TouchEventEnum } from "./TouchEventEnum";
+import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
 import { interaction } from "pixi.js";
 
 /**
- * 拖动相关的事件订阅类
+ * 拖动相关的事件处理订阅类
+ * @since 1.0.0
  */
 export class DragEvent {
 
@@ -14,21 +15,20 @@ export class DragEvent {
     }
 
     private obj: UIBase;
-    private bound = false;
-    private start = new PIXI.Point();
+    public  id = 0;
     private offset = new PIXI.Point();
-    private mouse = new PIXI.Point();
     private movementX = 0;
     private movementY = 0;
+    private bound = false;
+    private start = new PIXI.Point();
+    private mouse = new PIXI.Point();
     private cancel = false;
     private dragging = false;
-    private self = this;
-    private id = 0;
 
     private startEvent() {
 
-        this.obj.container.on(TouchEventEnum.mousedown, this._onDragStart, this);
-        this.obj.container.on(TouchEventEnum.touchstart, this._onDragStart, this);
+        this.obj.container.on(TouchMouseEventEnum.mousedown, this._onDragStart, this);
+        this.obj.container.on(TouchMouseEventEnum.touchstart, this._onDragStart, this);
     }
 
 
@@ -37,13 +37,13 @@ export class DragEvent {
         this.onPress && this.onPress.call(this.obj, e, true);
         if (!this.bound && this.obj.stage) {
             this.start.copyFrom(e.data.global);
-            this.obj.stage.on(TouchEventEnum.mousemove, this._onDragMove, this);
-            this.obj.stage.on(TouchEventEnum.touchmove, this._onDragMove, this);
-            this.obj.stage.on(TouchEventEnum.mouseup, this._onDragEnd, this);
-            this.obj.stage.on(TouchEventEnum.mouseupoutside, this._onDragEnd, this);
-            this.obj.stage.on(TouchEventEnum.touchend, this._onDragEnd, this);
-            this.obj.stage.on(TouchEventEnum.touchendoutside, this._onDragEnd, this);
-            this.obj.stage.on(TouchEventEnum.touchcancel, this._onDragEnd, this);
+            this.obj.stage.on(TouchMouseEventEnum.mousemove, this._onDragMove, this);
+            this.obj.stage.on(TouchMouseEventEnum.touchmove, this._onDragMove, this);
+            this.obj.stage.on(TouchMouseEventEnum.mouseup, this._onDragEnd, this);
+            this.obj.stage.on(TouchMouseEventEnum.mouseupoutside, this._onDragEnd, this);
+            this.obj.stage.on(TouchMouseEventEnum.touchend, this._onDragEnd, this);
+            this.obj.stage.on(TouchMouseEventEnum.touchendoutside, this._onDragEnd, this);
+            this.obj.stage.on(TouchMouseEventEnum.touchcancel, this._onDragEnd, this);
             this.bound = true;
         }
 
@@ -76,13 +76,13 @@ export class DragEvent {
     private _onDragEnd(e: interaction.InteractionEvent) {
         if (e.data.identifier !== this.id) return;
         if (this.bound && this.obj.stage) {
-            this.obj.stage.removeListener(TouchEventEnum.mousemove, this._onDragMove, this);
-            this.obj.stage.removeListener(TouchEventEnum.touchmove, this._onDragMove, this);
-            this.obj.stage.removeListener(TouchEventEnum.mouseup, this._onDragEnd, this);
-            this.obj.stage.removeListener(TouchEventEnum.mouseupoutside, this._onDragEnd, this);
-            this.obj.stage.removeListener(TouchEventEnum.touchend, this._onDragEnd, this);
-            this.obj.stage.removeListener(TouchEventEnum.touchendoutside, this._onDragEnd, this);
-            this.obj.stage.removeListener(TouchEventEnum.touchcancel, this._onDragEnd, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.mousemove, this._onDragMove, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.touchmove, this._onDragMove, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.mouseup, this._onDragEnd, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.mouseupoutside, this._onDragEnd, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.touchend, this._onDragEnd, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.touchendoutside, this._onDragEnd, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.touchcancel, this._onDragEnd, this);
             this.dragging = false;
             this.bound = false;
             this.onDragEnd && this.onDragEnd.call(this.obj, e);
@@ -94,16 +94,16 @@ export class DragEvent {
     /** 清除拖动 */
     public stopEvent() {
         if (this.bound && this.obj.stage) {
-            this.obj.stage.removeListener(TouchEventEnum.mousemove, this._onDragMove, this);
-            this.obj.stage.removeListener(TouchEventEnum.touchmove, this._onDragMove, this);
-            this.obj.stage.removeListener(TouchEventEnum.mouseup, this._onDragEnd, this);
-            this.obj.stage.removeListener(TouchEventEnum.mouseupoutside, this._onDragEnd, this);
-            this.obj.stage.removeListener(TouchEventEnum.touchend, this._onDragEnd, this);
-            this.obj.stage.removeListener(TouchEventEnum.touchendoutside, this._onDragEnd, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.mousemove, this._onDragMove, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.touchmove, this._onDragMove, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.mouseup, this._onDragEnd, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.mouseupoutside, this._onDragEnd, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.touchend, this._onDragEnd, this);
+            this.obj.stage.removeListener(TouchMouseEventEnum.touchendoutside, this._onDragEnd, this);
             this.bound = false;
         }
-        this.obj.container.removeListener(TouchEventEnum.mousedown, this._onDragStart, this);
-        this.obj.container.removeListener(TouchEventEnum.touchstart, this._onDragStart, this);
+        this.obj.container.removeListener(TouchMouseEventEnum.mousedown, this._onDragStart, this);
+        this.obj.container.removeListener(TouchMouseEventEnum.touchstart, this._onDragStart, this);
     }
 
     public onPress: ((e: interaction.InteractionEvent, isPressed: boolean) => void) | undefined;

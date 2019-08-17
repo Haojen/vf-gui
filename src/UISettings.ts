@@ -1,4 +1,4 @@
-import { HorizontalAlignEnum, VerticalAlignEnum } from "./Align";
+import { HorizontalAlignEnum, VerticalAlignEnum } from "./Enum/AlignEnum";
 import { UIBase } from "./UIBase";
 
 /** 
@@ -78,7 +78,7 @@ export class UISettings {
     public rotation: number | undefined;
     /* 混合模式 */
     public blendMode: PIXI.BLEND_MODES | undefined;
-    /** 填充色 */
+    /** 色调 */
     public tint: number | undefined;
     /** 透明度（0-1） */
     public alpha = 1;

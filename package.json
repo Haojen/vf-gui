@@ -4,13 +4,13 @@
   "description": "[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)",
   "main": "index.js",
   "scripts": {
-    "test":   "echo \"Error: no test specified\" && exit 1",
-    "build":  "webpack",
-    "watch":  "webpack --watch",
-    "start":  "webpack-dev-server --open --config webpack.config.js",
-    "dev":    "webpack --mode development",
-    "docs":   "typedoc --out ./docs/ ./src/ --ignoreCompilerErrors --excludeExternals --exclude **/*.d.ts",
-    "lint":   "eslint ./src/** --fix"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server --open --config webpack.config.js",
+    "dev": "webpack --mode development",
+    "docs": "typedoc --out ./docs/ ./src/ --ignoreCompilerErrors --excludeExternals --exclude **/*.d.ts",
+    "lint": "eslint ./src/** --fix"
   },
   "keywords": [
     "pixi-ui",
@@ -33,7 +33,6 @@
     "pixi.js": "^5.1.0",
     "ts-loader": "^6.0.4",
     "ts-node": "^8.3.0",
-    "webpack": "^4.37.0",
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.7.2"
   },
@@ -43,7 +42,8 @@
     "eslint": "^6.1.0",
     "eslint-plugin-typescript": "^0.14.0",
     "typescript": "^3.5.3",
-    "typescript-eslint-parser": "^22.0.0"
+    "typescript-eslint-parser": "^22.0.0",
+    "webpack": "^4.39.2"
   },
   "repository": {
     "type": "git",
