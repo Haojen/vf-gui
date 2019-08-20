@@ -1,4 +1,6 @@
-import { DynamicText, DynamicAtlas } from "./DynamicText";
+import { DynamicText } from "./DynamicText";
+import { HorizontalAlignEnum } from "../Enum/AlignEnum";
+import { DynamicAtlas } from "./DynamicAtlas";
 
 /**
  * 动态文本的样式描述
@@ -11,7 +13,7 @@ export class DynamicTextStyle{
     /** 数据合并时的验证刷新字段，当false时，数据合并中，此时的脏属性设置并会被执行更新父级操作 */
     private respectDirty = true;
     private _scale = 1;
-    private _align = 'left';
+    private _align = HorizontalAlignEnum.left;
     private _fontFamily = 'Arial';
     private _fontSize = 26;
     private _fontWeight = 'normal';
@@ -33,21 +35,37 @@ export class DynamicTextStyle{
     private _overflowY: "visible"|"hidden" = 'visible'; //visible|hidden
     private _ellipsis = false;
 
+    /**
+     * 设置省略号
+     * @param atlas 动态图集
+     */
     public ellipsisSize(atlas: DynamicAtlas) {
         if (!this.ellipsis) 
             return 0;
-        const _cachedEllipsisSize  = (atlas.getCharObject(".", this).width + this._letterSpacing) * 3;
-        return _cachedEllipsisSize;
+        const charObj = (atlas.getCharObject(".", this));
+        if(charObj){
+            return (charObj.width + this._letterSpacing) * 3;
+        }
+        return 0;
     }
 
+    /**
+     * 克隆当前样式
+     */
     public clone() {
         const style = new DynamicTextStyle();
         style.merge(this);
         return style;
     }
 
-    public merge(style: DynamicTextStyle) {
-
+    /**
+     * 合并样式到当前组件
+     * @param style 要合并的样式
+     */
+    public merge(style: DynamicTextStyle|undefined) {
+        if(style == undefined){
+            return;
+        }
         if(style instanceof DynamicTextStyle){
             this.respectDirty = false;
             const tempStyle: TAny = style;
@@ -62,10 +80,20 @@ export class DynamicTextStyle{
         }
     }
 
+    /**
+     * 获取当前字符的特定字符串形式的样式，以"|"分割  
+     * 
+     * 如： 字符|颜色|阴影|描边|描边色|描边阴影
+     */
     public ctxKey(char: string) {
         return [char, this.fill, this.shadow, this.stroke, this.strokeFill, this.strokeShadow].join('|');
     }
 
+    /** 
+     * 获取特定格式的字体样式 fontWeight + fontStyle + fontSize + this.fontFamily;
+     * 
+     * 如：bold italic 26px Arial
+     */
     public ctxFont() {
         const fontSize = Math.min(200, Math.max(1, this.fontSize || 26)) + "px ";
         const fontWeight = this.fontWeight === "bold" ? this.fontWeight + " " : "";
@@ -74,7 +102,7 @@ export class DynamicTextStyle{
     }
 
     /** 设置脏渲染，当数据正在合并中时，并不会立即更新父级 */
-    public set _dirty(value: boolean){
+    private set _dirty(value: boolean){
         if (this.respectDirty) {
             if (this._parent) {
                 this._parent.dirtyStyle = value;
@@ -192,7 +220,6 @@ export class DynamicTextStyle{
     /** 
      * 水平居中方式
      * @default 0
-     * @see AlignEnum.VerticalAlignEnum
      */
     public get verticalAlign() {
         return this._verticalAlign;
@@ -256,7 +283,7 @@ export class DynamicTextStyle{
         }
     }
     /** 
-     * 填充色
+     * 阴影
      * @default ""
      */
     public get shadow() {

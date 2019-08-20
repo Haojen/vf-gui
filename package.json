@@ -10,7 +10,7 @@
     "start": "webpack-dev-server --open --config webpack.config.js",
     "dev": "webpack --mode development",
     "docs": "typedoc --out ./docs/ ./src/ --ignoreCompilerErrors --excludeExternals --exclude **/*.d.ts",
-    "lint": "eslint ./src/** --fix"
+    "lint": "eslint ./src/*.* ./src/**/*.*  --fix"
   },
   "keywords": [
     "pixi-ui",
@@ -39,7 +39,8 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
-    "eslint": "^6.1.0",
+    "emoji-regex": "^8.0.0",
+    "eslint": "^6.2.0",
     "eslint-plugin-typescript": "^0.14.0",
     "typescript": "^3.5.3",
     "typescript-eslint-parser": "^22.0.0",

@@ -1,3 +1,17 @@
+/** 严禁外部使用，声明 */
+interface TAny{
+    [propName: string]: any;
+}
+
+interface ArrayConstructor {
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
+    from<T>(arrayLike: ArrayLike<T>): T[];
+}
+
+interface String{
+    startsWith(searchString: string,position?: number): boolean;
+}
+
 interface TUIBase{
     //[propName: string]: any;
     blur?: Function;
@@ -10,7 +24,3 @@ interface TCheckBox{
     value: string;
 }
 
-/** 严禁外部使用，声明 */
-interface TAny{
-    [propName: string]: any;
-}
