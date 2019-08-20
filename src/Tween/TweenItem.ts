@@ -1,12 +1,9 @@
 import { TweenObject } from "./TweenObject";
-import { _activeTweenObjects, _tweenItemCache } from "./Tween";
+import { _activeTweenObjects} from "./Tween";
 import { UIBase } from "../UIBase";
 import { EaseBase } from "../Ease/EaseBase";
 import * as Utils from "../Utils";
-/**
- * @protected
- */
-export const _tweenItemCache: TweenItem[] = [];
+
 
 const widthKeys = ["width", "minWidth", "maxWidth", "anchorLeft", "anchorRight", "left", "right", "x"];
 const heightKeys = ["height", "minHeight", "maxHeight", "anchorTop", "anchorBottom", "top", "bottom", "y"];
@@ -54,6 +51,7 @@ function getFromValue(from: number|string, to: number|string, obj: UIBase, key: 
     }
     return 0;
 }
+
 
 export class TweenItem{
 
@@ -166,6 +164,10 @@ export class TweenItem{
         }
     }
 } 
+/**
+ * @protected
+ */
+export let _tweenItemCache: TweenItem[] = [];
 /**
  * 
  * @private
