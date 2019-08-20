@@ -79,8 +79,14 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     public dirty = true;
     /** 测量值 */
-    protected _width = 0;
-    protected _height = 0;
+    /**
+     * @private
+     */
+    public _width = 0;
+    /**
+     * @private
+     */
+    public _height = 0;
     protected _minWidth: number | undefined;
     protected _minHeight: number | undefined;
     protected _maxWidth: number | undefined;
