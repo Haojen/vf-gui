@@ -1156,8 +1156,18 @@ export class UIBase extends PIXI.utils.EventEmitter {
             this.children.push(item);
             this.updatesettings(true, true);
         }
-
         return UIObject;
+    }
+    public addChildAt(item: UIBase, index: number){
+        if (item.parent) {
+            item.parent.removeChild(item);
+        }
+
+        item.parent = this;
+        this.container.addChildAt(item.container,index);
+        this.children.splice(index,0,item);
+        this.updatesettings(true, true);
+        return item;
     }
     /**
      * 移除已添加的UI组件，可以同时移除多个如addChild(a,b,c,d)

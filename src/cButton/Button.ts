@@ -5,6 +5,7 @@ import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import { Text } from "../cText/Text";
 import { ClickEvent } from "../Interaction/ClickEvent";
 import { interaction } from "pixi.js";
+import { UIBase } from "../UIBase";
 
 /*
  * Features:
@@ -33,7 +34,6 @@ import { interaction } from "pixi.js";
  * @class
  * @extends PIXI.UI.InputBase
  * @memberof PIXI.UI
- * @param [options.isSliceSprite=null] {SliceSprite|Sprite} 设置图片类型true为SliceSprite,false为Sprite
  * @param [options.tabIndex=0] {Number} input tab index
  * @param [options.tabGroup=0] {Number|String} input tab group
  * @param [options.width=100h] {Number|String} width
@@ -43,27 +43,19 @@ export class Button extends InputBase{
     /**
      * 按钮构造函数 
      * 
-     * option.isSliceSprite 设置图片类型true为SliceSprite,false为Sprite
-     * @param option width:100,height:20,tabIndex:0,tabGroup:0,isSliceSprite:false
+     * @param option width:100,height:20,tabIndex:0,tabGroup:0,
      */
-    public constructor(option = {width:100,height:20,tabIndex:0,tabGroup:0,isSliceSprite:false}){  
+    public constructor(option = {width:100,height:20,tabIndex:0,tabGroup:0}){  
         super(option.width,option.height,option.tabIndex,option.tabGroup.toString());
-        
-        if(option.isSliceSprite){
-            this._background = new SliceSprite();
-        }else{
-            this._background = new Sprite();
-        }
-        this.init();
-        this.addChild(this._background);
+        this._option = option;
         this.container.buttonMode = true;
         this._clickEvent.onHover = this.onHover;
         this._clickEvent.onPress = this.onPress;
         this._clickEvent.onClick = this.onClick;
     }
-
+    private _option: {width: number;height: number;tabIndex: number;tabGroup: number};
     private _isHover = false;
-    private _background: SliceSprite|Sprite;
+    private _background: SliceSprite | Sprite | undefined;
     private _uiText: Text|undefined;
     private _clickEvent = new ClickEvent(this);
     /**
@@ -74,13 +66,6 @@ export class Button extends InputBase{
     private _sourceMove: SliceSprite|Sprite|undefined;
     private _sourceDown: SliceSprite|Sprite|undefined;
 
-    private init(){
-        this._background.widthPet = "100%";
-        this._background.heightPct = "100%";
-        this._background.pivot = 0.5;
-        this._background.verticalAlign = VerticalAlignEnum.middle
-        this._background.horizontalAlign = HorizontalAlignEnum.center;
-    }
     protected initialize() {
         super.initialize();
         this.container.interactiveChildren = false;
@@ -111,6 +96,28 @@ export class Button extends InputBase{
             }
             this._uiText.label = value;
         }
+    }
+    public get background(): SliceSprite | Sprite|undefined {
+        return this._background;
+    }
+    public set background(value: SliceSprite | Sprite|undefined) {
+        if(value === undefined){
+            return;
+        }
+        if(value === this._background){
+            return;
+        }
+        if(this._background){
+            this.removeChild(this._background);
+        }
+        this._background = value;
+        this._background.widthPet = "100%";
+        this._background.heightPct = "100%";
+        this._background.pivot = 0.5;
+        this._background.verticalAlign = VerticalAlignEnum.middle
+        this._background.horizontalAlign = HorizontalAlignEnum.center;
+        this.addChildAt(this._background as UIBase,0);
+
     }
 
     private onHover(e: interaction.InteractionEvent,over: boolean){
