@@ -4,6 +4,10 @@ import {TweenObject, getObject} from "./TweenObject"
 import { TweenItem, getNewTweenItem } from "./TweenItem";
 import { getNewCallbackItem } from "./TweenCallbackItem";
 /**
+ * 缓动控制类
+ */
+
+/**
  * @protected
  */
 export const _activeTweenObjects: {[key: string]: TweenObject} = {};
@@ -11,8 +15,8 @@ export const _activeTweenObjects: {[key: string]: TweenObject} = {};
 
 /**
  * 设置缓动，调用to,from,fromTo
- * @param obj 显示对象
- * @param params 参数
+ * @param obj 需要动画的对象
+ * @param params 设置动画的一些属性及其他参数
  * @private
  */
 export function set (obj: UIBase, params: TAny) {
@@ -27,8 +31,8 @@ export function set (obj: UIBase, params: TAny) {
 }
 /**
  * 从当前值到目标值
- * @param obj 显示容器
- * @param time 时间
+ * @param obj 需要动画的对象
+ * @param time 动画持续时间，一般是秒
  * @param params 缓动字段 如: { scale: 1.15, tint: "#ffffff" ,onComplete:(obj)=>{},onUpdate:(delta)=>{}}
  * @param ease 缓动函数 Ease/Ease.ts
  */
@@ -75,9 +79,9 @@ export function to(obj: UIBase, time: number, params: TAny, ease: EaseBase){
 
 /**
  * 从指定目标值到属性当前值
- * @param obj 
- * @param time 
- * @param params 
+ * @param obj 需要动画的对象
+ * @param time 动画持续时间，一般是秒
+ * @param params 设置动画的一些属性及其他参数
  * @param ease 
  */
 export function from(obj: UIBase, time: number, params: TAny, ease: EaseBase) {
@@ -122,10 +126,11 @@ export function from(obj: UIBase, time: number, params: TAny, ease: EaseBase) {
 }
 
 /**
- * 执行循环
- * @param obj 
- * @param time 
- * @param params 
+ * 动画从设置点到第二个设置点。
+ * @param obj 需要动画的对象
+ * @param time 动画持续时间，一般是秒
+ * @param paramsFrom 第一个目标点
+ * @param paramsTo 第二个目标点
  * @param ease 
  */
 export function fromTo(obj: UIBase, time: number, paramsFrom: TAny, paramsTo: TAny, ease: EaseBase) {
@@ -170,7 +175,7 @@ export function fromTo(obj: UIBase, time: number, paramsFrom: TAny, paramsTo: TA
         set(obj, paramsTo);
 }
 
-export function _update(delta: number) {
+export function update(delta: number) {
     for (const id in _activeTweenObjects) {
         const object = _activeTweenObjects[id];
         for (const key in object.tweens) {

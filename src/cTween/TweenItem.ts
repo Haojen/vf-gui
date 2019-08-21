@@ -167,7 +167,7 @@ export class TweenItem{
 /**
  * @protected
  */
-export let _tweenItemCache: TweenItem[] = [];
+export const _tweenItemCache: TweenItem[] = [];
 /**
  * 
  * @private

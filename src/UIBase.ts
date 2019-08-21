@@ -17,12 +17,20 @@ import { TouchMouseEventEnum } from "./Enum/TouchMouseEventEnum";
  * @since 1.0.0
  */
 export class UIBase extends PIXI.utils.EventEmitter {
-
-    public constructor(width: number | string, height: number | string) {
+    /**
+     * 构造函数
+     * @param width 宽 数字或百分比, 不传默认0
+     * @param height 高 数字或百分比,不传默认0
+     */
+    public constructor(width?: number | string, height?: number | string) {
         super();
         this.container = new PIXI.Container();
         this.setting = new UISettings();
-
+        if(width && height)
+            this.setDefaultSize(width,height)
+    }
+    /** 设置默认的宽高，一般使用情况在构造函数中，并不会触发组件刷新 */
+    public setDefaultSize(width: number | string, height: number | string){
         const widthItem = this.getPetValue(width);
         if (widthItem.num) {
             this.setting.width = widthItem.num;
@@ -680,14 +688,14 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this.setting.horizontalAlign;
     }
     /**
-     * 显示对象填充色
+     * 显示对象填充色 0xFFFFFF
      */
     set tint(value: number) {
         this.setting.tint = value;
         this.update();
     }
     get tint() {
-        return this.setting.tint || 0;
+        return this.setting.tint || NaN;
     }
     /**
      * 获取设置透明度

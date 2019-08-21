@@ -4,11 +4,11 @@
   "description": "[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"没有测试代码，你可以写一些，感谢!\" && exit 1",
     "build": "webpack",
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open --config webpack.config.js",
-    "dev": "webpack --mode development",
+    "prod": "webpack --mode production",
     "docs": "typedoc --out ./docs/ ./src/ --ignoreCompilerErrors --excludeExternals --exclude **/*.d.ts",
     "lint": "eslint ./src/*.* ./src/**/*.*  --fix"
   },
