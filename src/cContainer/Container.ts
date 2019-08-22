@@ -10,7 +10,7 @@ import { UIBase } from "../UIBase";
  * @param height {Number} 高度
  */
 export class Container extends UIBase{
-    public constructor(width: number, height: number){
+    public constructor(width?: number, height?: number){
         super(width,height);
         this.container.hitArea = new PIXI.Rectangle(0, 0, 0, 0);
     }
