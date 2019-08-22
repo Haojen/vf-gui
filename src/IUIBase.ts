@@ -18,10 +18,11 @@ interface TUIBase{
     focus?: Function;
 }
 
-interface TCheckBox{
-    checkGroup: string;
+interface CheckBox{
+    uuid: string;
+    checkGroup: string|undefined;
     checked: boolean;
-    value: string;
+    value: string|undefined;
 }
 
 interface Color{

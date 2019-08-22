@@ -6,6 +6,7 @@ import { interaction } from "pixi.js";
 import * as DragDropController from "./Interaction/DragDropController";
 import { DraggableEventEnum } from "./Enum/DraggableEventEnum";
 import { TouchMouseEventEnum } from "./Enum/TouchMouseEventEnum";
+import { token } from "./Utils";
 
 /**
  * UI的顶级类，基础的UI对象
@@ -24,6 +25,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     public constructor(width?: number | string, height?: number | string) {
         super();
+        this.uuid = token();
         this.container = new PIXI.Container();
         this.setting = new UISettings();
         if(width && height)
@@ -45,6 +47,8 @@ export class UIBase extends PIXI.utils.EventEmitter {
             this.setting.heightPct = heightItem.pct;
         }
     }
+    public uuid: string;
+    public name = "";
     /** 
      * 当前的显示容器 
      */

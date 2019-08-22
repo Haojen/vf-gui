@@ -137,3 +137,12 @@ export function Round(num: number, decimals: number) {
     const pow = Math.pow(10, decimals);
     return Math.round(num * pow) / pow;
 }
+
+/**
+ * @parivate
+ */
+export let _token = 1;
+/** 获取全局唯一数 */
+export function token(){
+    return (++_token).toString();
+}

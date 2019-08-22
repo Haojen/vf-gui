@@ -2,11 +2,10 @@ import { InputBase } from "../InputBase";
 import { Sprite } from "../cSprite/Sprite";
 import { SliceSprite } from "../cSliceSprite/SliceSprite";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
-import { Text } from "../cText/Text";
 import { ClickEvent } from "../Interaction/ClickEvent";
 import { interaction } from "pixi.js";
 import { UIBase } from "../UIBase";
-
+import * as InputController from "../Interaction/InputController";
 /*
  * Features:
  * Button, radio button (checkgroups)
@@ -29,23 +28,27 @@ import { UIBase } from "../UIBase";
  */
 
 /**
- * UI 按钮显 示对象
+ * UI 单选框与复选框，区别在于有没有时间去拆分，如果没有时间拆分就直接用这个吧，只是皮肤不同
+ * 
+ * box不需要设置设置组
+ * 
+ * radio 需要设置分组
  *
  * @class
  * @extends PIXI.UI.InputBase
  * @memberof PIXI.UI
  * @param [options.tabIndex=0] {Number} input tab index
  * @param [options.tabGroup=0] {Number|String} input tab group
- * @param [options.width=100h] {Number|String} width
+ * @param [options.width=20] {Number|String} width
  * @param [options.height=20] {Number|String} height
  */
-export class Button extends InputBase{
+export class CheckBox extends InputBase{
     /**
      * 按钮构造函数 
      * 
      * @param option width:100,height:20,tabIndex:0,tabGroup:0,
      */
-    public constructor(option = {width:100,height:20,tabIndex:0,tabGroup:0}){  
+    public constructor(option = {width:20,height:20,tabIndex:0,tabGroup:0}){  
         super(option.width,option.height,option.tabIndex,option.tabGroup.toString());
         this._option = option;
         this.container.buttonMode = true;
@@ -56,47 +59,68 @@ export class Button extends InputBase{
     private _option: {width: number;height: number;tabIndex: number;tabGroup: number};
     private _isHover = false;
     private _background: SliceSprite | Sprite | undefined;
-    private _uiText: Text|undefined;
+    private _checkmark: SliceSprite | Sprite | undefined;
     private _clickEvent = new ClickEvent(this);
-    /**
-     * 组件的当前视图状态 。 后续扩展
-     */
-    private _currentState: "up"|"move"|"down"|"enabled" = "up";
-    private _sourceUp: SliceSprite|Sprite|undefined;
-    private _sourceMove: SliceSprite|Sprite|undefined;
-    private _sourceDown: SliceSprite|Sprite|undefined;
+    private _checked = false;
+    private _checkGroup: string | undefined;
+    private _value: string|undefined;
 
-    protected initialize() {
-        super.initialize();
-        this.container.interactiveChildren = false;
-
-        const self = this;
-        //lazy to make sure all children is initialized (trying to get the bedst hitArea possible)
-        setTimeout(function () {
-            const bounds = self.container.getLocalBounds();
-            self.container.hitArea = new PIXI.Rectangle(bounds.x < 0 ? bounds.x : 0, bounds.y < 0 ? bounds.y : 0, Math.max(bounds.x + bounds.width + (bounds.x < 0 ? -bounds.x : 0), self._width), Math.max(bounds.y + bounds.height + (bounds.y < 0 ? -bounds.y : 0), self._height));
-        }, 20);
-    }
-    /**
-     * 获取或设置文本内容
+    /** 
+     * 获取设置默认值 
      */
-    public get label(): string{
-        if(this._uiText){
-            return this._uiText.label;
-        }
-        return "";
+    public get value() {
+        return this._value;
     }
-    public set label(value: string){
-        if(value){
-            if (this._uiText === undefined) {
-                this._uiText = new Text(value)
-                this._uiText.verticalAlign = VerticalAlignEnum.middle
-                this._uiText.horizontalAlign = HorizontalAlignEnum.center;
-                this.addChild(this._uiText);
-            }
-            this._uiText.label = value;
+    public set value(value) {
+        if(value === this._value){
+            return;
+        }
+        this._value = value;
+    }
+    /** 
+     * 获取或设置当前选中的值
+     */
+    public get selectedValue() {
+        if(this.checkGroup){
+            return InputController.getCheckGroupSelectedValue(this.checkGroup);
+        }
+        return undefined;
+    }
+    /** 
+     * 设置分组名
+     */
+    public get checkGroup(): string | undefined {
+        return this._checkGroup;
+    }
+    public set checkGroup(value: string | undefined) {
+        if(value === undefined){     
+            InputController.unRegistrerCheckGroup(this)
+        }
+        if(this._checkGroup == value){
+            return;
+        }
+        InputController.registrerCheckGroup(this);
+        this._checkGroup = value;
+    }
+    /** 
+     * 设置是否选中 
+     * @default false
+     */
+    public get checked() {
+        return this._checked;
+    }
+    public set checked(value) {
+        if (value !== this._checked) {
+            if (this.checkGroup)
+                InputController.updateCheckGroupSelected(this);
+            this._checked = value;
+            this.change(value);
         }
     }
+
+    /**
+     * 设置背景
+     */
     public get background(): SliceSprite | Sprite|undefined {
         return this._background;
     }
@@ -119,6 +143,27 @@ export class Button extends InputBase{
         this.addChildAt(this._background as UIBase,0);
 
     }
+    public get checkmark(): SliceSprite | Sprite | undefined {
+        return this._checkmark;
+    }
+    public set checkmark(value: SliceSprite | Sprite | undefined) {
+        if(value === undefined){
+            return;
+        }
+        if(value === this._checkmark){
+            return;
+        }
+        if(this._checkmark){
+            this.removeChild(this._checkmark);
+        }
+        this._checkmark = value;
+        this._checkmark.verticalAlign = VerticalAlignEnum.middle
+        this._checkmark.horizontalAlign = HorizontalAlignEnum.center;
+        if (!this._checked) {
+            this._checkmark.alpha = 0;
+        }
+        this.addChildAt(this._checkmark,1);
+    }
 
     private onHover(e: interaction.InteractionEvent,over: boolean){
         this._isHover = over;
@@ -134,8 +179,16 @@ export class Button extends InputBase{
     private onClick(){
         this.click();
     }
+    private change(value: boolean) {
+        if (this.checkmark)
+            this.checkmark.alpha = value ? 1 : 0;
+    }
     private click  () {
         this.emit("click");
+        if (this.checkGroup && this.checked)
+            return;
+        this.checked = !this.checked;
+        this.emit("change", this.checked);
     }
     public focus() {
         if (!this._focused) {
@@ -147,4 +200,5 @@ export class Button extends InputBase{
             super.blur();
         }
     }
+
 }

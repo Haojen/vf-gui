@@ -106,6 +106,14 @@ export class DragEvent {
         this.obj.container.removeListener(TouchMouseEventEnum.touchstart, this._onDragStart, this);
     }
 
+    public remove(){
+        this.stopEvent();
+        this.onPress = undefined;
+        this.onDragEnd = undefined;
+        this.onDragMove = undefined;
+        this.onDragStart = undefined;
+    }
+
     public onPress: ((e: interaction.InteractionEvent, isPressed: boolean) => void) | undefined;
     public onDragEnd: ((e: interaction.InteractionEvent) => void) | undefined
     public onDragMove: ((e: interaction.InteractionEvent, offset: PIXI.Point) => void) | undefined 

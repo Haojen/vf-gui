@@ -178,7 +178,13 @@ export class ClickEvent {
             this.obj.container.removeListener(TouchMouseEventEnum.touchmove, this._onMouseMove,this);
         }
     }
-
+    public remove(){
+        this.stopEvent();
+        this.onPress = undefined;
+        this.onHover = undefined;
+        this.onClick = undefined;
+        this.onMove = undefined;
+    }
     public onHover: ((e: interaction.InteractionEvent,over: boolean) => void) | undefined
     public onPress: ((e: interaction.InteractionEvent, isPressed: boolean) => void) | undefined;
     public onClick: ((e: interaction.InteractionEvent) => void) | undefined 

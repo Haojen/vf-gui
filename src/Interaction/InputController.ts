@@ -1,5 +1,9 @@
 import { UIBase } from "../UIBase";
 
+interface CheckGroupObject{
+    groups: {[key: string]: {[value: string]: CheckBox}} ;
+    values: {[key: string]: string|undefined}; 
+}
 /**
  * 记录当前正在拖动的UI组件列表
  * @private
@@ -14,12 +18,10 @@ export const tabGroups: {[key: string]: UIBase[]} = {};
  * 
  * @private
  */
-export const checkGroups: {[key: string]: {[value: string]: TCheckBox}} = {};
-/**
- * 
- * @private
- */
-export const checkGroupValues: {[key: string]: string} = {};
+export const _checkGroupObject: CheckGroupObject = {
+    groups: {},
+    values: {}
+} 
 
 /**
  * 注册组件
@@ -114,59 +116,69 @@ export function firePrev(){
  * 
  * checkGroups = [key]:{["value"]:cb}
  */
-export function registrerCheckGroup(cb: TCheckBox){
+export function registrerCheckGroup(cb: CheckBox){
     const name = cb.checkGroup;
-    let group = checkGroups[name];
-    if (!group) 
-        group = checkGroups[name] = {};
-
-    group[cb.value] = cb;
-
-    if (cb.checked)
-        checkGroupValues[name] = cb.value;
-}
-
-/** 更新分组中选中的checkbox组件  */
-export function updateCheckGroupSelected(cb: TCheckBox){
-    const group = checkGroups[cb.checkGroup];
-    for (const val in group) {
-        const b = group[val];
-        if (b !== cb)
-            b.checked = false;
-    }
-    checkGroupValues[cb.checkGroup] = cb.value;
-}
-
-/** 获取分组中选中的checkbox值 */
-export function getCheckGroupSelectedValue(name: string){
-    if (checkGroupValues[name])
-        return checkGroupValues[name];
-    return "";
-}
-
-/** 设置选中 */
-export function setCheckGroupSelectedValue(name: string,value: string){
-    const group = checkGroups[name];
-    if (group) {
-        const cb = group[value];
-        if (cb) {
-            cb.checked = true;
-        }
+    if(name){
+        let group = _checkGroupObject.groups[name];
+        if (!group) 
+            group = _checkGroupObject.groups[name] = {};
+    
+        group[cb.uuid] = cb;
+    
+        if (cb.checked)
+            _checkGroupObject.values[name] = cb.uuid;
     }
 }
 
 /**
  * 注销指定分组或指定分组的子项
- * @param name 分组名
- * @param value 分组值，如不传，删除整个name分组
+ * @param cb CheckBox
  */
-export function unRegistrerCheckGroup(name: string,value?: string){
-    const group = checkGroups[name];
-    if (group) {
-        if(value && group[value]){
-            delete checkGroups[name][value];
-        }else{
-            delete checkGroups[name];
+export function unRegistrerCheckGroup(cb: CheckBox){
+    if(cb.checkGroup && _checkGroupObject.groups[cb.checkGroup]){
+        delete _checkGroupObject.groups[cb.checkGroup][cb.uuid];
+        let isKey = false;
+        for(const key in _checkGroupObject.groups[cb.checkGroup]){
+            if(key) isKey = true;
+            break;
         }
-    } 
+        if(!isKey){
+            delete _checkGroupObject.groups[name];
+        }
+        if (cb.checked)
+            _checkGroupObject.values[name] = undefined;
+    }
+}
+/** 更新分组中选中的checkbox组件  */
+export function updateCheckGroupSelected(cb: CheckBox){
+    if(cb.checkGroup){
+        const group = _checkGroupObject.groups[cb.checkGroup];
+        for (const val in group) {
+            const b = group[val];
+            if (b !== cb)
+                b.checked = false;
+        }
+        _checkGroupObject.values[cb.checkGroup] = cb.uuid;
+    }
+}
+
+/** 获取分组中选中的checkbox值 */
+export function getCheckGroupSelectedValue(name: string){
+    const uuid = _checkGroupObject.values[name];
+    if(uuid){
+        const cb = _checkGroupObject.groups[name][uuid];
+        return cb.value;
+    }
+    return undefined;
+}
+
+/** 设置选中 */
+export function setCheckGroupSelectedValue(name: string,uuid: string){
+    const group = _checkGroupObject.groups[name];
+    if (group) {
+        const cb = group[uuid];
+        if (cb) {
+            cb.checked = true;
+        }
+    }
 }

@@ -21,7 +21,7 @@ export class InputBase extends UIBase{
         this.container.on("pointerup",this.onPointer,this);
         this.container.on("pointerupoutside",this.onPointer,this);
     }
-    private _focused = false;
+    protected _focused = false;
     private _useTab = true;
     private _usePrev = true;
     private _useNext = true;
