@@ -3,7 +3,7 @@ import Ease  from "../Ease/Ease";
 import { TweenObject, getObject } from "./TweenObject"
 import { TweenItem, getNewTweenItem } from "./TweenItem";
 import { getNewCallbackItem } from "./TweenCallbackItem";
-import { EaseBase } from "../Ease/EaseBase";
+import EaseBase from "../Ease/EaseBase";
 /**
  * 缓动控制类
  */
@@ -139,7 +139,10 @@ class Tween {
      * @param paramsTo 第二个目标点
      * @param ease 
      */
-    public static fromTo(obj: UIBase, time: number, paramsFrom: TAny, paramsTo: TAny, ease: EaseBase) {
+    public static fromTo(obj: UIBase, time: number, paramsFrom: TAny, paramsTo: TAny, ease?: EaseBase) {
+        if(ease === undefined){
+            ease = Ease.Power0.easeNone;
+        }
         const object = getObject(obj);
         let onUpdate = null;
         for (const key in paramsTo) {

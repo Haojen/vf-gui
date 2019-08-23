@@ -116,7 +116,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     /** 覆盖缓动播放时的位置 */
     protected _dragPosition: PIXI.Point | undefined;
     /** 动态属性，避免其他类注入 */
-    public attach: {[key: string]: object|number|string} = {};
+    public attach: {[key: string]: object|number|string|Function} = {};
     /**
      * 上次的宽度（未使用，丢弃）
      */

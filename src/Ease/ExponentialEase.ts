@@ -1,4 +1,4 @@
-import { EaseBase } from "./EaseBase";
+import EaseBase from "./EaseBase";
 
 /**
  * 设置缓动指数差值

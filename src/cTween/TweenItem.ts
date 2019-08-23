@@ -1,7 +1,7 @@
 import { TweenObject } from "./TweenObject";
 import { _activeTweenObjects} from "./Tween";
 import UIBase from "../UIBase";
-import { EaseBase } from "../Ease/EaseBase";
+import EaseBase from "../Ease/EaseBase";
 import * as Utils from "../Utils";
 
 
@@ -94,7 +94,7 @@ export class TweenItem{
      * @param time 缓动用时
      * @param ease 缓动函数
      */
-    public set(obj: TweenObject, key: string, from: number|string, to: number|string, time: number, ease: EaseBase) {
+    public set(obj: TweenObject, key: string, from: number|string, to: number|string, time: number, ease?: EaseBase) {
         if(typeof(from) == "string"){
             if(from[0]=="#"){
                 this.isColor = true;

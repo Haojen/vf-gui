@@ -1,4 +1,4 @@
-import {EaseBase} from "./EaseBase";
+import EaseBase from "./EaseBase";
 import {ExponentialEase} from "./ExponentialEase";
 /**
  * Math.PI * 0.5
