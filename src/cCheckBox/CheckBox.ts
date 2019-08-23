@@ -1,6 +1,6 @@
-import { InputBase } from "../InputBase";
-import { Sprite } from "../cSprite/Sprite";
-import { SliceSprite } from "../cSliceSprite/SliceSprite";
+import InputBase from "../InputBase";
+import Sprite from "../cSprite/Sprite";
+import SliceSprite from "../cSliceSprite/SliceSprite";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import ClickEvent from "../Interaction/ClickEvent";
 import { interaction } from "pixi.js";
@@ -42,7 +42,7 @@ import * as InputController from "../Interaction/InputController";
  * @param [options.width=20] {Number|String} width
  * @param [options.height=20] {Number|String} height
  */
-export class CheckBox extends InputBase{
+export default class CheckBox extends InputBase{
     /**
      * 按钮构造函数 
      * 

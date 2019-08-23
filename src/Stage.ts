@@ -10,7 +10,7 @@ import UIBase from "./UIBase";
  * @param height {Number} 舞台高度
  * @since 1.0.0
  */
-export class Stage extends PIXI.Container {
+export default class Stage extends PIXI.Container {
 
     public constructor(width: number, height: number) {
         super();

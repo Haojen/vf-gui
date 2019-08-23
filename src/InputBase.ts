@@ -12,7 +12,7 @@ import * as InputController from "./Interaction/InputController";
  * @param height {number} 高度
  * @param tabIndex {(PIXI.UI.SliceSprite|PIXI.UI.Sprite)} will be used as background for input
  */
-export class InputBase extends UIBase{
+export default class InputBase extends UIBase{
     public constructor(width: number, height: number, tabIndex: number, tabGroup: string){
         super(width,height);
         this.container.interactive = true;

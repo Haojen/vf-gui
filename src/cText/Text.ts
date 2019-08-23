@@ -8,7 +8,7 @@ import UIBase from "../UIBase";
  * @memberof PIXI.UI
  * @param Texture {PIXI.Texture} 文本对象
  */
-export class Text extends UIBase{
+export default class Text extends UIBase{
     /**
      * 文本构造函数
      * @param text 要显示的内容，默认为""

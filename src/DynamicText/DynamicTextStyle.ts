@@ -1,4 +1,4 @@
-import { DynamicText } from "./DynamicText";
+import DynamicText from "./DynamicText";
 import { HorizontalAlignEnum } from "../Enum/AlignEnum";
 import { DynamicAtlas } from "./DynamicAtlas";
 

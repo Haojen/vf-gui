@@ -5,7 +5,7 @@ import UIBase from "./UIBase";
  * 基础的显示数据类型 
  * @since 1.0.0
  */
-export class UISettings {
+export default class UISettings {
     /** 宽度 */
     public width = 0;
     /** 高度 */

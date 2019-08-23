@@ -1,8 +1,8 @@
-import { InputBase } from "../InputBase";
-import { Sprite } from "../cSprite/Sprite";
-import { SliceSprite } from "../cSliceSprite/SliceSprite";
+import InputBase from "../InputBase";
+import Sprite from "../cSprite/Sprite";
+import SliceSprite from "../cSliceSprite/SliceSprite";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
-import { Text } from "../cText/Text";
+import Text from "../cText/Text";
 import ClickEvent from "../Interaction/ClickEvent";
 import { interaction } from "pixi.js";
 import UIBase from "../UIBase";
@@ -39,7 +39,7 @@ import UIBase from "../UIBase";
  * @param [options.width=100h] {Number|String} width
  * @param [options.height=20] {Number|String} height
  */
-export class Button extends InputBase{
+export default class Button extends InputBase{
     /**
      * 按钮构造函数 
      * 

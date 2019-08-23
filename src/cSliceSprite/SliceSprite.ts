@@ -2,7 +2,7 @@ import UIBase from "../UIBase";
 /**
  * 动态宽高的图片,9切
  */
-export class SliceSprite extends UIBase{
+export default class SliceSprite extends UIBase{
     /**
      * 构造函数，如果不设置horizontalSlice，verticalSlice。 按设置的BorderWidth进行9切
      *

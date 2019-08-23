@@ -8,7 +8,7 @@ import UIBase from "../UIBase";
  * @memberof PIXI.UI
  * @param Texture {PIXI.Texture} 文本对象
  */
-export class Sprite extends UIBase{
+export default class Sprite extends UIBase{
     public constructor(t?: PIXI.Texture){
         super();
         this._source = t;

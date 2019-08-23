@@ -1,5 +1,5 @@
-import { UISettings } from "./UISettings";
-import { Stage } from "./Stage";
+import UISettings from "./UISettings";
+import Stage from "./Stage";
 import { HorizontalAlignEnum, VerticalAlignEnum } from "./Enum/AlignEnum";
 import DragEvent from "./Interaction/DragEvent";
 import { interaction } from "pixi.js";

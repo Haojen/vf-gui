@@ -9,7 +9,7 @@ import UIBase from "../UIBase";
  * @param width {Number} 宽度
  * @param height {Number} 高度
  */
-export class Container extends UIBase{
+export default class Container extends UIBase{
     public constructor(width?: number, height?: number){
         super(width,height);
         this.container.hitArea = new PIXI.Rectangle(0, 0, 0, 0);

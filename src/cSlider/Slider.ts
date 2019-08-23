@@ -1,7 +1,7 @@
 import UIBase from "../UIBase";
 import * as Utils from "../Utils";
-import { SliceSprite} from "../cSliceSprite/SliceSprite";
-import { Sprite } from "../cSprite/Sprite";
+import SliceSprite from "../cSliceSprite/SliceSprite";
+import Sprite from "../cSprite/Sprite";
 import Ease  from "../Ease/Ease";
 import Tween from "../cTween/Tween";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
@@ -10,7 +10,7 @@ import { interaction } from "pixi.js";
 /**
  * UI 滑动条
  */
-export class Slider extends UIBase{
+export default class Slider extends UIBase{
     public constructor(){
         super();
     }

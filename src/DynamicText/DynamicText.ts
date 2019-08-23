@@ -37,7 +37,7 @@ export const settings = {
 * @param [allowTags=true] {boolean} Allow inline styling
 * @param [options=null] {DynamicTextStyle} Additional text settings
 */
-export class DynamicText extends UIBase{
+export default class DynamicText extends UIBase{
 
     public constructor(text: string, options: {width: number;height: number;allowTags: boolean;style: DynamicTextStyle}){
         super(options.width || 0,options.height || 0);

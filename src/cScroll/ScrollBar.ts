@@ -1,11 +1,11 @@
-import { Slider } from "../cSlider/Slider";
-import { ScrollingContainer } from "./ScrollingContainer";
+import Slider from "../cSlider/Slider";
+import ScrollingContainer from "./ScrollingContainer";
 import Tween from "../cTween/Tween";
 
 /**
  * UI 滚动条容器
  */
-export class ScrollBar extends Slider{
+export default class ScrollBar extends Slider{
     public constructor(){
         super();
     }

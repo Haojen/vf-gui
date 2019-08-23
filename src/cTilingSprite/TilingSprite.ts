@@ -5,7 +5,7 @@ import UIBase from "../UIBase";
  * 
  * @example https://pixijs.io/examples/#/sprite/tiling-sprite.js
  */
-export class TilingSprite extends UIBase{
+export default class TilingSprite extends UIBase{
     public constructor(t: PIXI.Texture, width?: number, height?: number){
         super();
         this.sprite = new PIXI.TilingSprite(t);

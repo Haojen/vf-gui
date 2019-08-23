@@ -1,5 +1,5 @@
 import UIBase from "../UIBase";
-import { Container } from "../cContainer/Container";
+import Container from "../cContainer/Container";
 import { Point } from "pixi.js";
 import * as Ticker from "../Ticker";
 import * as Utils from "../Utils";
@@ -8,7 +8,7 @@ import MouseScrollEvent from "../Interaction/MouseScrollEvent";
 /**
  * 可滚动的容器
  */
-export class ScrollingContainer extends Container {
+export default class ScrollingContainer extends Container {
     public constructor() {
         super();
 
