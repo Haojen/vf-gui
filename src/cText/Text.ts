@@ -1,4 +1,4 @@
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 
 /**
  * UI文本显示对象

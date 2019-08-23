@@ -1,6 +1,6 @@
 import { TweenObject } from "./TweenObject";
 import { _activeTweenObjects} from "./Tween";
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 import { EaseBase } from "../Ease/EaseBase";
 import * as Utils from "../Utils";
 

@@ -1,4 +1,4 @@
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 /**
  * 动态宽高的图片,9切
  */

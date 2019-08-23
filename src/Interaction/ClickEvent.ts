@@ -1,12 +1,12 @@
 import { interaction } from "pixi.js";
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
 
 /**
  * 点击触摸相关的事件处理订阅类
  * @since 1.0.0
  */
-export class ClickEvent {
+export default class ClickEvent {
 
     /**
      * ClickEvent 构造函数

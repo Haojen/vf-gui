@@ -1,4 +1,4 @@
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 import { interaction } from "pixi.js";
 
 /**

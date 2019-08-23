@@ -1,4 +1,4 @@
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 
 /**
  * UI图片显示对象，如果使用拉伸或9切，请使用 SliceSprite

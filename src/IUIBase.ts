@@ -25,6 +25,10 @@ interface CheckBox{
     value: string|undefined;
 }
 
+interface ScrollBar{
+    alignToContainer: () => void;
+}
+
 interface Color{
     r: number;
     g: number;

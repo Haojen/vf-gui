@@ -1,5 +1,5 @@
 import { TweenItem } from "./TweenItem";
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 import { _activeTweenObjects } from "./Tween";
 import { TweenCallbackItem } from "./TweenCallbackItem";
 /**

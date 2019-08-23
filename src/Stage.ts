@@ -1,4 +1,4 @@
-import { UIBase } from "./UIBase";
+import UIBase from "./UIBase";
 
 /**
  * UI的舞台对象，展示所有UI组件

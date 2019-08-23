@@ -1,7 +1,7 @@
 import { UISettings } from "./UISettings";
 import { Stage } from "./Stage";
 import { HorizontalAlignEnum, VerticalAlignEnum } from "./Enum/AlignEnum";
-import { DragEvent } from "./Interaction/DragEvent";
+import DragEvent from "./Interaction/DragEvent";
 import { interaction } from "pixi.js";
 import * as DragDropController from "./Interaction/DragDropController";
 import { DraggableEventEnum } from "./Enum/DraggableEventEnum";
@@ -17,7 +17,7 @@ import { token } from "./Utils";
  * @param height {Number} Height UI对象的高度
  * @since 1.0.0
  */
-export class UIBase extends PIXI.utils.EventEmitter {
+export default class UIBase extends PIXI.utils.EventEmitter {
     /**
      * 构造函数
      * @param width 宽 数字或百分比, 不传默认0
@@ -1260,7 +1260,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
             };
 
 
-            this.drag.onDragMove = (e: interaction.InteractionEvent, offset) => {
+            this.drag.onDragMove = (e: interaction.InteractionEvent, offset: PIXI.Point) => {
                 if (this.dragging && this._dragPosition) {
                     this._dragPosition.set(containerStart.x + offset.x - stageOffset.x, containerStart.y + offset.y - stageOffset.y);
                     this.x = this._dragPosition.x;

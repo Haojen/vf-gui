@@ -1,4 +1,4 @@
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
 import { interaction } from "pixi.js";
 
@@ -6,7 +6,7 @@ import { interaction } from "pixi.js";
  * 拖动相关的事件处理订阅类
  * @since 1.0.0
  */
-export class DragEvent {
+export default class DragEvent {
 
     public constructor(obj: UIBase) {
         this.obj = obj;

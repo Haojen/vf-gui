@@ -1,11 +1,11 @@
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 import * as Utils from "../Utils";
 import { SliceSprite} from "../cSliceSprite/SliceSprite";
 import { Sprite } from "../cSprite/Sprite";
-import * as Ease from "../Ease/Ease";
-import * as Tween from "../cTween/Tween";
+import Ease  from "../Ease/Ease";
+import Tween from "../cTween/Tween";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
-import {DragEvent} from "../Interaction/DragEvent";
+import DragEvent from "../Interaction/DragEvent";
 import { interaction } from "pixi.js";
 /**
  * UI 滑动条
@@ -15,7 +15,7 @@ export class Slider extends UIBase{
         super();
     }
     /** 当前值 */
-    private _amt = 0;
+    protected _amt = 0;
     //set options
     private _track: SliceSprite | Sprite | undefined;
     /** 背景 */

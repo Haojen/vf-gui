@@ -1,4 +1,4 @@
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 
 /**
  * UI平铺显示对象,功能与官方一直，可参考官方示例

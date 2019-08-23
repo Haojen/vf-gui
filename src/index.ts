@@ -1,6 +1,13 @@
-import * as Utils from './Utils';
-import * as CE from "./Interaction/DragEvent";
-console.log(typeof (CE));
-console.log(typeof (Utils));
+import { log } from "./Utils";
 
-//Utils.log(1,2,[123,456]);
+//注入常规兼容方法
+if(!Array.from){
+    Array.from = function (el: unknown[]) {
+        return Array.apply(this, el);
+    }
+}
+String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
+    return this.lastIndexOf(word, pos || 0) === 0;
+});
+
+log(1,2,3,4,5,6,7);

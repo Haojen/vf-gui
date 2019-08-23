@@ -3,9 +3,9 @@ import { Sprite } from "../cSprite/Sprite";
 import { SliceSprite } from "../cSliceSprite/SliceSprite";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import { Text } from "../cText/Text";
-import { ClickEvent } from "../Interaction/ClickEvent";
+import ClickEvent from "../Interaction/ClickEvent";
 import { interaction } from "pixi.js";
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 
 /*
  * Features:

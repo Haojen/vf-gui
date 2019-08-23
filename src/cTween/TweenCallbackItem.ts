@@ -1,4 +1,4 @@
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 import { TweenObject } from "./TweenObject";
 import { _activeTweenObjects} from "./Tween";
 /**

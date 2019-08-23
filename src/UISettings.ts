@@ -1,5 +1,5 @@
 import { HorizontalAlignEnum, VerticalAlignEnum } from "./Enum/AlignEnum";
-import { UIBase } from "./UIBase";
+import UIBase from "./UIBase";
 
 /** 
  * 基础的显示数据类型 

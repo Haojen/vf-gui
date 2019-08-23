@@ -1,4 +1,4 @@
-import { UIBase } from "./UIBase";
+import UIBase from "./UIBase";
 import * as InputController from "./Interaction/InputController";
 /**
  * 输入对象的基础类
