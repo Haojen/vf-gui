@@ -1,8 +1,8 @@
 import InputBase from "../InputBase";
-import Sprite from "../cSprite/Sprite";
-import SliceSprite from "../cSliceSprite/SliceSprite";
+import Sprite from "./Sprite";
+import SliceSprite from "./SliceSprite";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
-import Text from "../cText/Text";
+import Text from "./Text";
 import ClickEvent from "../Interaction/ClickEvent";
 import { interaction } from "pixi.js";
 import UIBase from "../UIBase";

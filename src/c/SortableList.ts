@@ -1,8 +1,8 @@
-import Container from "../cContainer/Container";
+import Container from "./Container";
 import Ease from "../Ease/Ease";
 import EaseBase from "../Ease/EaseBase";
 import UIBase from "../UIBase";
-import Tween from "../cTween/Tween";
+import Tween from "./Tween";
 
 /**
  * UI 表格容器

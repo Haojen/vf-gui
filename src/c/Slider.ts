@@ -1,9 +1,9 @@
 import UIBase from "../UIBase";
 import * as Utils from "../Utils";
-import SliceSprite from "../cSliceSprite/SliceSprite";
-import Sprite from "../cSprite/Sprite";
+import SliceSprite from "./SliceSprite";
+import Sprite from "./Sprite";
 import Ease  from "../Ease/Ease";
-import Tween from "../cTween/Tween";
+import Tween from "./Tween";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import DragEvent from "../Interaction/DragEvent";
 import { interaction } from "pixi.js";

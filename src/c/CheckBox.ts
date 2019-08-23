@@ -1,6 +1,6 @@
 import InputBase from "../InputBase";
-import Sprite from "../cSprite/Sprite";
-import SliceSprite from "../cSliceSprite/SliceSprite";
+import Sprite from "./Sprite";
+import SliceSprite from "./SliceSprite";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import ClickEvent from "../Interaction/ClickEvent";
 import { interaction } from "pixi.js";

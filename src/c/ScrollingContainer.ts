@@ -1,5 +1,5 @@
 import UIBase from "../UIBase";
-import Container from "../cContainer/Container";
+import Container from "./Container";
 import { Point } from "pixi.js";
 import * as Ticker from "../Ticker";
 import * as Utils from "../Utils";

@@ -1,6 +1,6 @@
-import Slider from "../cSlider/Slider";
+import Slider from "./Slider";
 import ScrollingContainer from "./ScrollingContainer";
-import Tween from "../cTween/Tween";
+import Tween from "./Tween";
 
 /**
  * UI 滚动条容器

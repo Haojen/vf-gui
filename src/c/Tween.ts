@@ -1,8 +1,8 @@
 import UIBase from "../UIBase";
 import Ease  from "../Ease/Ease";
-import { TweenObject, getObject } from "./TweenObject"
-import { TweenItem, getNewTweenItem } from "./TweenItem";
-import { getNewCallbackItem } from "./TweenCallbackItem";
+import { TweenObject, getObject } from "./Tween/TweenObject"
+import { TweenItem, getNewTweenItem } from "./Tween/TweenItem";
+import { getNewCallbackItem } from "./Tween/TweenCallbackItem";
 import EaseBase from "../Ease/EaseBase";
 /**
  * 缓动控制类

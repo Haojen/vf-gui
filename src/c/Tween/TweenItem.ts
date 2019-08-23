@@ -1,8 +1,8 @@
 import { TweenObject } from "./TweenObject";
-import { _activeTweenObjects} from "./Tween";
-import UIBase from "../UIBase";
-import EaseBase from "../Ease/EaseBase";
-import * as Utils from "../Utils";
+import { _activeTweenObjects} from "../Tween";
+import UIBase from "../../UIBase";
+import EaseBase from "../../Ease/EaseBase";
+import * as Utils from "../../Utils";
 
 
 const widthKeys = ["width", "minWidth", "maxWidth", "anchorLeft", "anchorRight", "left", "right", "x"];
