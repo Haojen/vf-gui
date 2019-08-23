@@ -22,15 +22,12 @@ export default class SortableList extends Container{
      * @default 0
      */
     public tweenTime = 0;
-    public tweenEase:EaseBase|undefined;
-    public items:UIBase[] = [];
+    public tweenEase: EaseBase|undefined;
+    public items: UIBase[] = [];
     private _sortTimeout = -1;
-    /** 排序的规则 */
-    public fnValue?:()=>UIBase;
-    /**  */
-    public fnThenBy?:()=>UIBase;
 
-    public addChild(UIObject:UIBase) {
+
+    public addChild(UIObject: UIBase) {
         super.addChild(UIObject);
         if (this.items.indexOf(UIObject) == -1) {
             this.items.push(UIObject);
@@ -48,22 +45,22 @@ export default class SortableList extends Container{
      * @param fnValue 前置条件
      * @param fnThenBy 后置条件
      */
-    public addChildFn(UIObject:UIBase,fnValue:Function, fnThenBy:Function){
-        if (this.fnValue)
-            UIObject.attach._sortListValue = this.fnValue;
+    public addChildFn(UIObject: UIBase,fnValue: Function, fnThenBy: Function){
+        if (fnValue)
+            UIObject.attach._sortListValue = fnValue;
     
-        if (this.fnThenBy)
-            UIObject.attach._sortListThenByValue = this.fnThenBy;
+        if (fnThenBy)
+            UIObject.attach._sortListThenByValue = fnThenBy;
     
         if (!UIObject.attach._sortListRnd)
             UIObject.attach._sortListRnd = Math.random();  
 
         this.addChild(UIObject);
     }
-    public removeChild(... UIObject:UIBase[]) {
+    public removeChild(... UIObject: UIBase[]) {
         super.removeChild(... UIObject);
         UIObject.forEach(value=>{
-            let index = this.items.indexOf(value);
+            const index = this.items.indexOf(value);
             if (index != -1) {
                 this.items.splice(index, 1);
             }     
@@ -71,7 +68,7 @@ export default class SortableList extends Container{
         this.sort();
     }
 
-    public sort(instant?:boolean) {
+    public sort(instant?: boolean) {
         clearTimeout(this._sortTimeout);
     
         if (instant) {
@@ -83,30 +80,30 @@ export default class SortableList extends Container{
     }
 
     _sort() {
-        let self = this;
-        let desc = this.desc;
+        const self = this;
+        const desc = this.desc;
         let y = 0;
         let alt = true;
     
         this.items.sort( (a, b) => {
-            let aFnValue = a.attach._sortListValue as Function;
-            let bFnValue = b.attach._sortListValue as Function;
-            let aFnThenBy = a.attach._sortListThenByValue as Function;
-            let bFnThenBy = a.attach._sortListThenByValue as Function;
-            var res = aFnValue() < bFnValue() ? desc ? 1 : -1 :aFnValue() > bFnValue() ? desc ? -1 : 1 : 0;
+            const aFnValue = a.attach._sortListValue as Function;
+            const bFnValue = b.attach._sortListValue as Function;
+            const aFnThenBy = a.attach._sortListThenByValue as Function;
+            const bFnThenBy = a.attach._sortListThenByValue as Function;
+            let res = aFnValue() < bFnValue() ? desc ? 1 : -1 :aFnValue() > bFnValue() ? desc ? -1 : 1 : 0;
     
             if (res === 0 && aFnThenBy && bFnThenBy) {
                 res = aFnThenBy() < bFnThenBy() ? desc ? 1 : -1 :aFnThenBy() > bFnThenBy() ? desc ? -1 : 1 : 0;
             }
             if (res === 0) {
                 res = a.attach._sortListRnd > b.attach._sortListRnd ? 1 :
-                      a.attach._sortListRnd < b.attach._sortListRnd ? -1 : 0;
+                    a.attach._sortListRnd < b.attach._sortListRnd ? -1 : 0;
             }
             return res;
         });
     
-        for (var i = 0; i < this.items.length; i++) {
-            var item = this.items[i];
+        for (let i = 0; i < this.items.length; i++) {
+            const item = this.items[i];
     
             alt = !alt;
     
@@ -118,7 +115,7 @@ export default class SortableList extends Container{
                 item.y = y;
             }
             y += item.height;
-            let itemTany = item as TAny;//设置单独项目的背景或
+            const itemTany = item as TAny;//设置单独项目的背景或
             if (typeof itemTany.altering === "function")
                 itemTany.altering(alt);
         }

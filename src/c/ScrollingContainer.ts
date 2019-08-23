@@ -29,11 +29,12 @@ export default class ScrollingContainer extends Container {
      * 内容的宽高
      */
     private innerBounds = new PIXI.Rectangle();
+
+    private _scrollX = false;
     /** 
      * 是否启用水平滚动 
      * @default false
      */
-    private _scrollX = false;
     public get scrollX() {
         return this._scrollX;
     }
@@ -41,11 +42,12 @@ export default class ScrollingContainer extends Container {
         this._scrollX = value;
         this.initScrolling();
     }
+
+    private _scrollY = false;
     /**
      * 是否启用垂直滚动
      * @default false
      */
-    private _scrollY = false;
     public get scrollY() {
         return this._scrollY;
     }
@@ -229,7 +231,8 @@ export default class ScrollingContainer extends Container {
         this.Position[direction] = this.targetPosition[direction] = this.innerContainer.position[direction];
     }
 
-    protected focusPosition(pos: PIXI.Point) {
+    /** 根据焦点设置位置 */
+    public focusPosition(pos: PIXI.Point) {
         const bounds = this.getInnerBounds();
 
         let dif;

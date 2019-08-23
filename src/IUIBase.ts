@@ -3,6 +3,10 @@ interface TAny{
     [propName: string]: any;
 }
 
+interface Window{
+    readonly clipboardData: DataTransfer | null;
+}
+
 interface ArrayConstructor {
     from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
     from<T>(arrayLike: ArrayLike<T>): T[];

@@ -23,8 +23,8 @@ export default class InputBase extends UIBase{
     }
     protected _focused = false;
     private _useTab = true;
-    private _usePrev = true;
-    private _useNext = true;
+    protected _usePrev = true;
+    protected _useNext = true;
     private __down = false;
 
     protected onPointer(e: PIXI.interaction.InteractionEvent){
