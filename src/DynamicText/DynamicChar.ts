@@ -1,4 +1,4 @@
-import { DynamicTextStyle } from "./DynamicTextStyle";
+import DynamicTextStyle from "./DynamicTextStyle";
 import { Rectangle } from "pixi.js";
 
 export interface TBounds{

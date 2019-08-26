@@ -20,6 +20,7 @@
   "files": [
     "dist/",
     "src/",
+    "test/",
     "CONTRIBUTING.md",
     "LICENSE",
     "package.json",

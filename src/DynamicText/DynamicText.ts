@@ -1,5 +1,5 @@
 import * as emojiRegex from "emoji-regex";
-import { DynamicTextStyle } from "./DynamicTextStyle";
+import DynamicTextStyle from "./DynamicTextStyle";
 import UIBase from "../UIBase";
 import { DynamicChar} from "./DynamicChar";
 import { hexToInt } from "../Utils";

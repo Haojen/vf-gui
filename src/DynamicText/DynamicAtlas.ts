@@ -1,6 +1,6 @@
 import { TDynamicCharData, TGenerateCharData } from "./DynamicChar";
 import { Rectangle } from "pixi.js";
-import { DynamicTextStyle } from "./DynamicTextStyle";
+import DynamicTextStyle from "./DynamicTextStyle";
 import { log, hexToRgba } from "../Utils";
 import { settings } from "./DynamicText";
 import "../IUIBase";

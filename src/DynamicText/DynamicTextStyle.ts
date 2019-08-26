@@ -5,7 +5,7 @@ import { DynamicAtlas } from "./DynamicAtlas";
 /**
  * 动态文本的样式描述
  */
-export class DynamicTextStyle{
+export default class DynamicTextStyle{
     public constructor(_parent?: DynamicText){
         this._parent = _parent;
     }
