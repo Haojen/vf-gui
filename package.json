@@ -4,7 +4,7 @@
   "description": "[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"没有测试代码，你可以写一些，感谢!\" && exit 1",
+    "test":  "webpack --config test-webpack.config.js",
     "build": "webpack",
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open --config webpack.config.js",

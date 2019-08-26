@@ -65,7 +65,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 父容器 
      */
-    public parent: UIBase | undefined;
+    public parent: UIBase | Stage| undefined;
     /**  
      * 舞台引用
      */

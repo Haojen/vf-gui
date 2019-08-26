@@ -38,7 +38,7 @@ class Ticker extends PIXI.utils.EventEmitter{
             this.update(performance.now());
         }
     }
-    private update(time: number) {
+    public update(time: number) {
         this.now = time;
         this.ms = this.now - this.time;
         this.time = this.now;
@@ -70,4 +70,4 @@ class Ticker extends PIXI.utils.EventEmitter{
 /**
  * Ticker 的实例
  */
-export const shared= new Ticker(true);
+export const shared = new Ticker(true);
