@@ -15,14 +15,10 @@ class Ticker extends PIXI.utils.EventEmitter{
             this.disabled = false;
         }
     }
-    /** 当前运行的时间 */
+    /** 上次运行的时间 */
     public now = 0;
-    /** 时间的增量（秒） ms*0.001 */
-    public deltaTime = 0;
-    /** 上一次运行的时间 */
-    public time: number;
-    /** 时差 now - time */
-    public ms = 0;
+    /** 开始运行的时间 */
+    public time = 0;
     
     private _disabled = true;
     /** 是否关闭心跳.默认false不关闭 */
@@ -38,13 +34,11 @@ class Ticker extends PIXI.utils.EventEmitter{
             this.update(performance.now());
         }
     }
-    public update(time: number) {
-        this.now = time;
-        this.ms = this.now - this.time;
-        this.time = this.now;
-        this.deltaTime = this.ms  * 0.001;
-        this.emit("update", this.deltaTime);
-        Tween.update(this.deltaTime);
+    
+    public update(deltaTime: number) {
+        this.now = performance.now();;
+        this.emit("update", deltaTime);
+        Tween.update(deltaTime);
         if (this._disabled)
             requestAnimationFrame(this.update.bind(this));
     }

@@ -187,11 +187,11 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     /**
      * 设置宽度,整数
      */
-    set width(value: number) {
+    public set width(value: number) {
         this.setting.width = value;
         this.updatesettings(true);
     }
-    get width() {
+    public get width() {
         return this.setting.width;
     }
     /** 
@@ -712,7 +712,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
         return this.setting.alpha;
     }
     /**
-     * 获取设置旋转
+     * 获取设置旋转 (弧度)
      */
     set rotation(value: number) {
         this.setting.rotation = value;
@@ -720,6 +720,16 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     }
     get rotation() {
         return this.setting.rotation || 0;
+    }
+    /**
+     * 获取设置旋转 (角度)
+     */
+    set angle(value: number) {
+        this.setting.angle = value;
+        this.container.angle = value;
+    }
+    get angle() {
+        return this.setting.angle || 0;
     }
     /**
      * 设置混合模式参考，PIXI.BLEND_MODES

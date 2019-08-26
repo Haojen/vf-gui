@@ -76,6 +76,7 @@ export default class UISettings {
     public horizontalAlign: HorizontalAlignEnum | undefined;
     /* 旋转 */
     public rotation: number | undefined;
+    public angle: number| undefined;
     /* 混合模式 */
     public blendMode: PIXI.BLEND_MODES | undefined;
     /** 色调 */

@@ -13,7 +13,6 @@ export default class Sprite extends UIBase{
         super();
         this._source = t;
         this._sprite = new PIXI.Sprite(t);
-        this.setDefaultSize(this._sprite.width,this._sprite.height);
         this.container.addChild(this._sprite);
 
     }
@@ -41,6 +40,8 @@ export default class Sprite extends UIBase{
         }else{
             this._sprite.texture = PIXI.Texture.from(value);
         }
+        this.width = this._sprite.width;
+        this.height = this._sprite.height;
         this.update();
     }
 
@@ -50,8 +51,5 @@ export default class Sprite extends UIBase{
 
         if (!isNaN(this.blendMode))
             this._sprite.blendMode = this.blendMode;
-
-        this._sprite.width = this._width;
-        this._sprite.height = this._height;
     }
 }

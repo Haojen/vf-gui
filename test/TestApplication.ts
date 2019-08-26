@@ -5,7 +5,9 @@ export default class TestApplication{
 
     public constructor(thisObj:any,callback:(app:PIXI.Application,uiStage:vfui.Stage)=>void){
         this.app = new PIXI.Application();
-        this.uiStage = new vfui.Stage(window.innerWidth, window.innerHeight); 
+        this.app.view.style.width="1024px";
+        this.app.view.style.height="768px";
+        this.uiStage = new vfui.Stage(this.app.view.width, this.app.view.height); 
         this.app.stage.addChild(this.uiStage);
         document.body.appendChild(this.app.view);
         this.thisObj = thisObj;
@@ -20,16 +22,17 @@ export default class TestApplication{
 
     private initTest(){
         this.resize();
-        this.app.ticker.add(this.updata,this)
-        PIXI.loader.add('uisprites.json').load(() => {
+        this.app.ticker.add(this.updata,this);
+        const loader = PIXI.Loader.shared;
+        loader.add('assets/uisprites.json').load((loader:PIXI.Loader, resources:object) => {
             this.callback.call(this.thisObj,this.app,this.uiStage)
         });        
     }
 
     private resize(){
         this.app.resize();
-        this.uiStage.resize(window.innerWidth * devicePixelRatio, window.innerHeight * devicePixelRatio);
-        this.app.resizeTo.addEventListener("resize", () => {
+        this.uiStage.resize(this.app.view.width * devicePixelRatio, this.app.view.height * devicePixelRatio);
+        window.addEventListener("resize",  () => {
             this.resize();
         });
     }
