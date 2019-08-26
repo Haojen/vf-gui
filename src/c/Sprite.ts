@@ -40,11 +40,32 @@ export default class Sprite extends UIBase{
         }else{
             this._sprite.texture = PIXI.Texture.from(value);
         }
-        this.width = this._sprite.width;
-        this.height = this._sprite.height;
+        if(!this.height){
+            this.height = this._sprite.height;
+        }
+        if(!this.width){
+            this.width = this._sprite.width;
+        } 
         this.update();
     }
 
+    public set height(value:number){
+        this.setting.height = value;
+        this._sprite.height = value;
+        this.updatesettings(true);
+
+    }
+    public get height() {
+        return this.setting.height;
+    }
+    public set width(value:number){
+        this.setting.width = value;
+        this._sprite.width = value;
+        this.updatesettings(true);
+    }
+    public get width() {
+        return this.setting.height;
+    }
     public update(){
         if (!isNaN(this.tint))
             this._sprite.tint = this.tint;
