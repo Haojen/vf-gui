@@ -4,7 +4,7 @@ import DragEvent from "./DragEvent";
 import * as InputController from "./InputController";
 import MouseScrollEvent from "./MouseScrollEvent";
 
-let Interaction = {
+const Interaction = {
     ClickEvent,
     DragDropController,
     DragEvent,

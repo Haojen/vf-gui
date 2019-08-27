@@ -49,7 +49,7 @@ export default class Sprite extends UIBase{
         this.update();
     }
 
-    public set height(value:number){
+    public set height(value: number){
         this.setting.height = value;
         this._sprite.height = value;
         this.updatesettings(true);
@@ -58,7 +58,7 @@ export default class Sprite extends UIBase{
     public get height() {
         return this.setting.height;
     }
-    public set width(value:number){
+    public set width(value: number){
         this.setting.width = value;
         this._sprite.width = value;
         this.updatesettings(true);

@@ -3,9 +3,9 @@ import Sprite from "./Sprite";
 import SliceSprite from "./SliceSprite";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import ClickEvent from "../Interaction/ClickEvent";
-import { interaction } from "pixi.js";
 import UIBase from "../UIBase";
 import * as InputController from "../Interaction/InputController";
+import InteractionEvent from "../Interaction/InteractionEvent";
 /*
  * Features:
  * Button, radio button (checkgroups)
@@ -165,11 +165,11 @@ export default class CheckBox extends InputBase{
         this.addChildAt(this._checkmark,1);
     }
 
-    private onHover(e: interaction.InteractionEvent,over: boolean){
+    private onHover(e: InteractionEvent,over: boolean){
         this._isHover = over;
         this.emit("hover", over);
     }
-    private onPress(e: interaction.InteractionEvent,isPressed: boolean){
+    private onPress(e: InteractionEvent,isPressed: boolean){
         if (isPressed) {
             this.focus();
             e.data.originalEvent.preventDefault();

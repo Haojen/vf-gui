@@ -5,7 +5,7 @@ interface TAny{
 
 interface Window{
     readonly clipboardData: DataTransfer | null;
-    vfui:any;
+    vfui: any;
     
 }
 

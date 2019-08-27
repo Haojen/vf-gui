@@ -18,6 +18,9 @@ export default class TestSprite{
         sp.height = 100;
         uiStage.addChild(sp);
 
+        // sp.on(vfui.TouchMouseEventEnum.touchend,()=>{
+        //     console.log("我被点击了！");
+        // },this);
         // let count = 0;
         // vfui.TickerShared.addUpdateEvent((delta:number)=>{
         //     count += delta;

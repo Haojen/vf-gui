@@ -5,8 +5,7 @@ import Sprite from "./Sprite";
 import Ease  from "../Ease/Ease";
 import Tween from "./Tween";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
-import DragEvent from "../Interaction/DragEvent";
-import { interaction } from "pixi.js";
+import InteractionEvent from "../Interaction/InteractionEvent";
 /**
  * UI 滑动条
  */
@@ -173,7 +172,7 @@ export default class Slider extends UIBase{
     protected initialize(){
         super.initialize();
     }
-    protected onPress (event: interaction.InteractionEvent,isPressed: boolean) {
+    protected onPress (event: InteractionEvent,isPressed: boolean) {
         event.stopPropagation()
         if(this.trackDrag && this.trackDrag.id == event.data.identifier){
             if (isPressed)
@@ -181,14 +180,14 @@ export default class Slider extends UIBase{
         }
     }
 
-    protected onDragStart (event: interaction.InteractionEvent) {
+    protected onDragStart (event: InteractionEvent) {
         if(this.handle && this.handleDrag && this.handleDrag.id == event.data.identifier){
             this.startValue = this._amt;
             this.maxPosition = this.vertical ? this._height - this.handle._height : this._width - this.handle._width;
         }
     }
 
-    protected onDragMove (event: interaction.InteractionEvent,offset: PIXI.Point) {
+    protected onDragMove (event: InteractionEvent,offset: PIXI.Point) {
         if(this.handleDrag && this.handleDrag.id == event.data.identifier){
             this._amt = !this.maxPosition ? 0 : Math.max(0, Math.min(1, this.startValue + ((this.vertical ? offset.y : offset.x) / this.maxPosition)));
             this.triggerValueChanging();
@@ -199,7 +198,7 @@ export default class Slider extends UIBase{
 
     }
 
-    protected onDragEnd (event: interaction.InteractionEvent) {
+    protected onDragEnd (event: InteractionEvent) {
         if(this.handleDrag && this.handleDrag.id == event.data.identifier){
             this.triggerValueChange();
             this.update();

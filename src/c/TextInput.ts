@@ -5,6 +5,7 @@ import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import ScrollingContainer from "./ScrollingContainer";
 import { Text } from "pixi.js";
 import DragEvent from "../Interaction/DragEvent";
+import InteractionEvent from "../Interaction/InteractionEvent";
 /*
  * Features:
  * multiLine, shift selection, Mouse Selection, Cut, Copy, Paste, Delete, Backspace, Arrow navigation, tabIndex
@@ -623,7 +624,7 @@ export default class TextInput extends InputBase {
         this.blur();
     }
 
-    protected onPress(e: PIXI.interaction.InteractionEvent, mouseDown: boolean) {
+    protected onPress(e: InteractionEvent, mouseDown: boolean) {
 
         if (mouseDown) {
             const timeSinceLast = performance.now() - this.t;
@@ -656,7 +657,7 @@ export default class TextInput extends InputBase {
         }
         e.data.originalEvent.preventDefault();
     }
-    protected onDragMove(e: PIXI.interaction.InteractionEvent, offset: PIXI.Point){
+    protected onDragMove(e: InteractionEvent, offset: PIXI.Point){
         if (!this._chars.length || !this._focused) return;
 
         this.de.x = this._sp.x + offset.x;

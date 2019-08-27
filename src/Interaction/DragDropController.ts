@@ -1,5 +1,5 @@
 import UIBase from "../UIBase";
-import { interaction } from "pixi.js";
+import InteractionEvent from "./InteractionEvent";
 
 /**
  * 记录当前正在拖动的UI组件列表
@@ -13,7 +13,7 @@ export const _items: UIBase[] = [];
  * @returns true|false
  * @since 1.0.0
  */
-export function add(item: UIBase, e: interaction.InteractionEvent) {
+export function add(item: UIBase, e: InteractionEvent) {
     item.dragDropEventId = e.data.identifier;
     if (_items.indexOf(item) === -1) {
         _items.push(item);
@@ -50,7 +50,7 @@ export function getItem(item: UIBase) {
  * @param e 事件对象
  * @param group 分组名
  */
-export function getEventItem(e: interaction.InteractionEvent, group: string | undefined) {
+export function getEventItem(e: InteractionEvent, group: string | undefined) {
     let item = null, index: number | undefined;
     const id = e.data.identifier;
     for (let i = 0; i < _items.length; i++) {

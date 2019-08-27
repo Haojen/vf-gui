@@ -36,7 +36,7 @@ class Ticker extends PIXI.utils.EventEmitter{
     }
     
     public update(deltaTime: number) {
-        this.now = performance.now();;
+        this.now = performance.now();
         this.emit("update", deltaTime);
         Tween.update(deltaTime);
         if (this._disabled)

@@ -1,5 +1,6 @@
 import UIBase from "./UIBase";
 import * as InputController from "./Interaction/InputController";
+import InteractionEvent from "./Interaction/InteractionEvent";
 /**
  * 输入对象的基础类
  * 
@@ -27,7 +28,7 @@ export default class InputBase extends UIBase{
     protected _useNext = true;
     private __down = false;
 
-    protected onPointer(e: PIXI.interaction.InteractionEvent){
+    protected onPointer(e: InteractionEvent){
         switch(e.type){
             case "pointerdown":
                 this.focus();

@@ -20,8 +20,10 @@ import Ease from "./Ease/Ease";
 import Interaction from "./Interaction/Index";
 import UIBase from "./UIBase";
 import {shared as TickerShared} from "./Ticker";
+import * as AlignEnum from "./Enum/AlignEnum";
+import InteractionEvent,{TouchEvent}  from "./Interaction/InteractionEvent";
 
-
+/** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,SortableList,Sprite,TilingSprite,SliceSprite,Slider,
     ScrollBar,Text,DynamicText,DynamicTextStyle,TextInput,Button,CheckBox,Rect,Tween,Ease,Interaction,
-    UIBase,TickerShared};
+    UIBase,TickerShared,AlignEnum,InteractionEvent,TouchEvent};

@@ -1,9 +1,9 @@
-import { interaction } from "pixi.js";
 import UIBase from "../UIBase";
 import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
+import InteractionEvent, { TouchEvent } from "./InteractionEvent";
 
 /**
- * 点击触摸相关的事件处理订阅类
+ * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
  * @since 1.0.0
  */
 export default class ClickEvent {
@@ -11,13 +11,17 @@ export default class ClickEvent {
     /**
      * ClickEvent 构造函数
      * @param obj 调用的显示对象
+     * @param isOpenEmitEvent 是否开启事件派发，默认false，开启后，父类可以监听InteractionEvent下的TouchEvent
      * @param includeHover 是否监听鼠标移上与移出，默认true
      * @param rightMouseButton 是否开启鼠标右键点击，默认false
      * @param doubleClick 是否开启鼠标双击,默认false
      */
-    public constructor(obj: UIBase,includeHover?: boolean, rightMouseButton?: boolean, doubleClick?: boolean) {
+    public constructor(obj: UIBase,isOpenEmitEvent?: boolean,includeHover?: boolean, rightMouseButton?: boolean, doubleClick?: boolean) {
         this.obj = obj;
         
+        if(isOpenEmitEvent!==undefined){
+            this.isOpenEmitEvent = isOpenEmitEvent;
+        }
         if(includeHover!==undefined){
             this.right = includeHover;
         }
@@ -41,6 +45,8 @@ export default class ClickEvent {
 
     private obj: UIBase;
     public  id = 0;
+    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | vfui.TouchEvent */
+    public isOpenEmitEvent = false;
     private offset = new PIXI.Point();
     private movementX = 0;
     private movementY = 0;
@@ -56,7 +62,6 @@ export default class ClickEvent {
     private eventnameMouseupoutside =  TouchMouseEventEnum.mouseupoutside;
 
     private startEvent() {
-
         this.obj.container.on(this.eventnameMousedown, this._onMouseDown,this);
         if (!this.right) 
             this.obj.container.on(TouchMouseEventEnum.touchstart, this._onMouseDown,this);
@@ -68,10 +73,11 @@ export default class ClickEvent {
         }
     }
 
-    private _onMouseDown(e: interaction.InteractionEvent) {
+    private _onMouseDown(e: InteractionEvent) {
         this.mouse.copyFrom(e.data.global);
         this.id = e.data.identifier;
         this.onPress && this.onPress.call(this.obj, e, true);
+        this.isOpenEmitEvent && this.obj.emit(TouchEvent.onPress,e,true);
         if (!this.bound) {
             this.obj.container.on(this.eventnameMouseup, this._onMouseUp,this);
             this.obj.container.on(this.eventnameMouseupoutside, this._onMouseUpOutside,this);
@@ -86,6 +92,7 @@ export default class ClickEvent {
             const now = performance.now();
             if (now - this.time < 210) {
                 this.onClick && this.onClick.call(this.obj, e);
+                this.isOpenEmitEvent && this.obj.emit(TouchEvent.onClick,e);
             }
             else {
                 this.time = now;
@@ -95,7 +102,7 @@ export default class ClickEvent {
         e.data.originalEvent.preventDefault();
     }
 
-    private _mouseUpAll(e: interaction.InteractionEvent){
+    private _mouseUpAll(e: InteractionEvent){
         if (e.data.identifier !== this.id) 
             return;
         this.offset.set(e.data.global.x - this.mouse.x, e.data.global.y - this.mouse.y);
@@ -109,8 +116,9 @@ export default class ClickEvent {
             this.bound = false;
         }
         this.onPress && this.onPress.call(this.obj, e, false);
+        this.isOpenEmitEvent && this.obj.emit(TouchEvent.onPress,e,false);
     }
-    private _onMouseUp(e: interaction.InteractionEvent) {
+    private _onMouseUp(e: InteractionEvent) {
         if (e.data.identifier !== this.id) 
             return;
         this._mouseUpAll(e);
@@ -123,36 +131,41 @@ export default class ClickEvent {
                 return;
         }
 
-        if (!this.double)
+        if (!this.double){    
             this.onClick && this.onClick.call(this.obj, e);
+            this.isOpenEmitEvent && this.obj.emit(TouchEvent.onClick,e,false);
+        }
     }
 
-    private _onMouseUpOutside(e: interaction.InteractionEvent) {
+    private _onMouseUpOutside(e: InteractionEvent) {
         if (e.data.identifier !== this.id) 
             return;
         this._mouseUpAll(e);
     }
 
-    private _onMouseOver(e: interaction.InteractionEvent) {
+    private _onMouseOver(e: InteractionEvent) {
         if (!this.ishover) {
             this.ishover = true;
             this.obj.container.on(TouchMouseEventEnum.mousemove, this._onMouseMove,this);
             this.obj.container.on(TouchMouseEventEnum.touchmove, this._onMouseMove,this);
             this.onHover && this.onHover.call(this.obj, e, true);
+            this.isOpenEmitEvent && this.obj.emit(TouchEvent.onHover,e,true);
         }
     }
 
-    private _onMouseOut(e: interaction.InteractionEvent) {
+    private _onMouseOut(e: InteractionEvent) {
         if (this.ishover) {
             this.ishover = false;
             this.obj.container.removeListener(TouchMouseEventEnum.mousemove,this. _onMouseMove,this);
             this.obj.container.removeListener(TouchMouseEventEnum.touchmove, this._onMouseMove,this);
             this.onHover && this.onHover.call(this.obj, e, false);
+            this.isOpenEmitEvent && this.obj.emit(TouchEvent.onHover,e,true);
         }
     }
 
-    private _onMouseMove(e: interaction.InteractionEvent) {
+    private _onMouseMove(e: InteractionEvent) {
         this.onMove && this.onMove.call(this.obj, e);
+        this.isOpenEmitEvent && this.obj.emit(TouchEvent.onMove,e);
     }
 
     /** 清除拖动 */
@@ -185,8 +198,8 @@ export default class ClickEvent {
         this.onClick = undefined;
         this.onMove = undefined;
     }
-    public onHover: ((e: interaction.InteractionEvent,over: boolean) => void) | undefined
-    public onPress: ((e: interaction.InteractionEvent, isPressed: boolean) => void) | undefined;
-    public onClick: ((e: interaction.InteractionEvent) => void) | undefined 
-    public onMove: ((e: interaction.InteractionEvent) => void) | undefined
+    public onHover: ((e: InteractionEvent,over: boolean) => void) | undefined
+    public onPress: ((e: InteractionEvent, isPressed: boolean) => void) | undefined;
+    public onClick: ((e: InteractionEvent) => void) | undefined 
+    public onMove: ((e: InteractionEvent) => void) | undefined
 }

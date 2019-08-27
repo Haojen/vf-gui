@@ -2,11 +2,11 @@ import UISettings from "./UISettings";
 import Stage from "./Stage";
 import { HorizontalAlignEnum, VerticalAlignEnum } from "./Enum/AlignEnum";
 import DragEvent from "./Interaction/DragEvent";
-import { interaction } from "pixi.js";
 import * as DragDropController from "./Interaction/DragDropController";
 import { DraggableEventEnum } from "./Enum/DraggableEventEnum";
 import { TouchMouseEventEnum } from "./Enum/TouchMouseEventEnum";
 import { token } from "./Utils";
+import InteractionEvent from "./Interaction/InteractionEvent";
 
 /**
  * UI的顶级类，基础的UI对象
@@ -1244,7 +1244,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
 
             this._dragPosition = new PIXI.Point();
             this.drag = new DragEvent(this);
-            this.drag.onDragStart = (e: interaction.InteractionEvent) => {
+            this.drag.onDragStart = (e: InteractionEvent) => {
                 const added = DragDropController.add(this, e);
                 if (!this.dragging && added) {
                     this.dragging = true;
@@ -1270,7 +1270,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
             };
 
 
-            this.drag.onDragMove = (e: interaction.InteractionEvent, offset: PIXI.Point) => {
+            this.drag.onDragMove = (e: InteractionEvent, offset: PIXI.Point) => {
                 if (this.dragging && this._dragPosition) {
                     this._dragPosition.set(containerStart.x + offset.x - stageOffset.x, containerStart.y + offset.y - stageOffset.y);
                     this.x = this._dragPosition.x;
@@ -1280,7 +1280,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
 
             };
 
-            this.drag.onDragEnd = (e: interaction.InteractionEvent) => {
+            this.drag.onDragEnd = (e: InteractionEvent) => {
                 if (this.dragging) {
                     this.dragging = false;
                     //Return to container after 0ms if not picked up by a droppable
@@ -1328,7 +1328,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
         }
     }
 
-    private onDrop(e: interaction.InteractionEvent) {
+    private onDrop(e: InteractionEvent) {
         const item = DragDropController.getEventItem(e, this.dropGroup);
         if (item && item.dragging) {
             item.dragging = false;

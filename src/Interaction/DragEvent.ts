@@ -1,6 +1,6 @@
 import UIBase from "../UIBase";
 import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
-import { interaction } from "pixi.js";
+import InteractionEvent from "./InteractionEvent";
 
 /**
  * 拖动相关的事件处理订阅类
@@ -32,7 +32,7 @@ export default class DragEvent {
     }
 
 
-    private _onDragStart(e: interaction.InteractionEvent) {
+    private _onDragStart(e: InteractionEvent) {
         this.id = e.data.identifier;
         this.onPress && this.onPress.call(this.obj, e, true);
         if (!this.bound && this.obj.stage) {
@@ -50,7 +50,7 @@ export default class DragEvent {
         e.data.originalEvent.preventDefault();
     }
 
-    private _onDragMove(e: interaction.InteractionEvent) {
+    private _onDragMove(e: InteractionEvent) {
         if (e.data.identifier !== this.id) return;
         this.mouse.copyFrom(e.data.global);
         this.offset.set(this.mouse.x - this.start.x, this.mouse.y - this.start.y);
@@ -73,7 +73,7 @@ export default class DragEvent {
         this.onDragMove && this.onDragMove.call(this.obj, e, this.offset);
     }
 
-    private _onDragEnd(e: interaction.InteractionEvent) {
+    private _onDragEnd(e: InteractionEvent) {
         if (e.data.identifier !== this.id) return;
         if (this.bound && this.obj.stage) {
             this.obj.stage.removeListener(TouchMouseEventEnum.mousemove, this._onDragMove, this);
@@ -114,8 +114,8 @@ export default class DragEvent {
         this.onDragStart = undefined;
     }
 
-    public onPress: ((e: interaction.InteractionEvent, isPressed: boolean) => void) | undefined;
-    public onDragEnd: ((e: interaction.InteractionEvent) => void) | undefined
-    public onDragMove: ((e: interaction.InteractionEvent, offset: PIXI.Point) => void) | undefined 
-    public onDragStart: ((e: interaction.InteractionEvent) => void) | undefined
+    public onPress: ((e: InteractionEvent, isPressed: boolean) => void) | undefined;
+    public onDragEnd: ((e: InteractionEvent) => void) | undefined
+    public onDragMove: ((e: InteractionEvent, offset: PIXI.Point) => void) | undefined 
+    public onDragStart: ((e: InteractionEvent) => void) | undefined
 }

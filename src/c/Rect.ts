@@ -20,7 +20,7 @@ export default class Rect extends UIBase{
 
     private drawUpdate(){
         this._graphics.clear();
-        let graphics = this._graphics;
+        const graphics = this._graphics;
         graphics.beginFill(this.fill);
         graphics.drawRoundedRect(this.rx, this.ry, this.height, this.width,this.radius);
         graphics.endFill();
@@ -28,7 +28,7 @@ export default class Rect extends UIBase{
         
     }
     /** 绘制矩形方法 */
-    public drawRoundedRect(x:number,y:number,width:number,height:number,radius:number,color?:number){
+    public drawRoundedRect(x: number,y: number,width: number,height: number,radius: number,color?: number){
         this._radius = radius;
         this._rx = x;
         this._ry = y;
@@ -64,14 +64,14 @@ export default class Rect extends UIBase{
         this.drawUpdate();
     }
 
-    public set height(value:number){
+    public set height(value: number){
         this.setting.height = value;
         this.drawUpdate();
     }
     public get height() {
         return this.setting.height;
     }
-    public set width(value:number){
+    public set width(value: number){
         this.setting.width = value;
         this.drawUpdate();
     }

@@ -5,6 +5,7 @@ import * as Ticker from "../Ticker";
 import * as Utils from "../Utils";
 import DragEvent from "../Interaction/DragEvent";
 import MouseScrollEvent from "../Interaction/MouseScrollEvent";
+import InteractionEvent from "../Interaction/InteractionEvent";
 /**
  * 可滚动的容器
  */
@@ -196,14 +197,14 @@ export default class ScrollingContainer extends Container {
                 }
             };
 
-            this.dragEvent.onDragMove = (e: PIXI.interaction.InteractionEvent, offset: Point) => {
+            this.dragEvent.onDragMove = (e: InteractionEvent, offset: Point) => {
                 if (this.scrollX)
                     this.targetPosition.x = this.containerStart.x + offset.x;
                 if (this.scrollY)
                     this.targetPosition.y = this.containerStart.y + offset.y;
             };
 
-            this.dragEvent.onDragEnd = (e: PIXI.interaction.InteractionEvent) => {
+            this.dragEvent.onDragEnd = (e: InteractionEvent) => {
                 if (this.scrolling) {
                     this.scrolling = false;
                     this.emit("dragEnd", e);

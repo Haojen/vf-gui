@@ -4,8 +4,8 @@ import SliceSprite from "./SliceSprite";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import Text from "./Text";
 import ClickEvent from "../Interaction/ClickEvent";
-import { interaction } from "pixi.js";
 import UIBase from "../UIBase";
+import InteractionEvent from "../Interaction/InteractionEvent";
 
 /*
  * Features:
@@ -57,7 +57,7 @@ export default class Button extends InputBase{
     private _isHover = false;
     private _background: SliceSprite | Sprite | undefined;
     private _uiText: Text|undefined;
-    private _clickEvent = new ClickEvent(this);
+    private _clickEvent = new ClickEvent(this,true);
     /**
      * 组件的当前视图状态 。 后续扩展
      */
@@ -120,23 +120,13 @@ export default class Button extends InputBase{
 
     }
 
-    private onHover(e: interaction.InteractionEvent,over: boolean){
-        this._isHover = over;
-        this.emit("hover", over);
-    }
-    private onPress(e: interaction.InteractionEvent,isPressed: boolean){
+    private onPress(e: InteractionEvent,isPressed: boolean){
         if (isPressed) {
             this.focus();
             e.data.originalEvent.preventDefault();
         }
-        this.emit("press", isPressed);
     }
-    private onClick(){
-        this.click();
-    }
-    private click  () {
-        this.emit("click");
-    }
+
     public focus() {
         if (!this._focused) {
             super.focus();

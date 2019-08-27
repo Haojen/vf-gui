@@ -75,7 +75,7 @@ export default class Stage extends PIXI.Container {
         }
     }
     /** 添加显示对象，需集成UIBASE */
-    public addChild<T>(... UIObject: T[]):T {
+    public addChild<T>(... UIObject: T[]): T {
 
         const argumentsLength = UIObject.length;
         if (argumentsLength > 1) {
@@ -84,7 +84,7 @@ export default class Stage extends PIXI.Container {
             }
         }
         else {
-            const item :UIBase = UIObject[0] as any;
+            const item: UIBase = UIObject[0] as any;
             if(!(item instanceof UIBase)){
                 throw "stage addChild arg not vfui";
             }
@@ -100,7 +100,7 @@ export default class Stage extends PIXI.Container {
 
     }
     
-    public removeChild<T>(... UIObject: T[]):T {
+    public removeChild<T>(... UIObject: T[]): T {
         const argumentLenght = UIObject.length;
         if (argumentLenght > 1) {
             for (let i = 0; i < argumentLenght; i++) {
@@ -108,7 +108,7 @@ export default class Stage extends PIXI.Container {
             }
         }
         else {
-            const item :UIBase = UIObject[0] as any;
+            const item: UIBase = UIObject[0] as any;
             if(!(item instanceof UIBase)){
                 throw "stage removeChild arg not vfui";
             }
