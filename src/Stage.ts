@@ -84,22 +84,36 @@ export default class Stage extends PIXI.Container {
             }
         }
         else {
-            const item: UIBase = UIObject[0] as any;
-            if(!(item instanceof UIBase)){
+            if(UIObject[0] instanceof UIBase){
+                const item: TAny = UIObject[0];
+                if (item.parent) {
+                    item.parent.removeChild(item);
+                }
+                item.parent = this;
+                this.UIChildren.push(item as UIBase);
+                super.addChild(item.container);
+                item.updatesettings(true);
+            }else{
                 throw "stage addChild arg not vfui";
             }
+        }
+        return UIObject[0];
+    }
+
+    public addChildAt<T>(item: T, index: number){
+        if(item instanceof UIBase){
             if (item.parent) {
                 item.parent.removeChild(item);
             }
             item.parent = this;
-            this.UIChildren.push(item);
-            super.addChild(item.container);
+            super.addChildAt(item.container,index);
+            this.UIChildren.splice(index,0,item);
             item.updatesettings(true);
+        }else{
+            throw "stage addChildAt arg not vfui";
         }
-        return UIObject as any;
-
+        return item;
     }
-    
     public removeChild<T>(... UIObject: T[]): T {
         const argumentLenght = UIObject.length;
         if (argumentLenght > 1) {
@@ -108,11 +122,12 @@ export default class Stage extends PIXI.Container {
             }
         }
         else {
-            const item: UIBase = UIObject[0] as any;
-            if(!(item instanceof UIBase)){
+            
+            if(!(UIObject[0] instanceof UIBase)){
                 throw "stage removeChild arg not vfui";
             }
-            const index = this.UIChildren.indexOf(item);
+            const item: TAny = UIObject[0];
+            const index = this.UIChildren.indexOf(item as UIBase);
             if (index !== -1) {
                 item.container.parent.removeChild(item.container);
                 this.UIChildren.splice(index, 1);
@@ -120,7 +135,7 @@ export default class Stage extends PIXI.Container {
             }
 
         }
-        return UIObject as any;
+        return UIObject[0];
     }
 
     public resize(width?: number, height?: number): void {

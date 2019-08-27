@@ -10,18 +10,25 @@ class Ticker extends PIXI.utils.EventEmitter{
      */
     public constructor(autoStart: boolean){
         super();
-        this.time = performance.now();
+        this._time = performance.now();
         if (autoStart) {
             this.disabled = false;
         }
     }
     /** 上次运行的时间 */
-    public now = 0;
-    /** 开始运行的时间 */
-    public time = 0;
+    private _now = 0;
+    public get now() {
+        return this._now;
+    }
+
+    /** 开始运行的时间(运行时开始的时间) */
+    private _time = 0;
+    public get time() {
+        return this._time;
+    }
     
     private _disabled = true;
-    /** 是否关闭心跳.默认false不关闭 */
+    /** 是否关闭心跳.默认false不关闭,关闭后，缓动等组件也将关闭 */
     public get disabled() {
         return this._disabled;
     }
@@ -31,16 +38,18 @@ class Ticker extends PIXI.utils.EventEmitter{
         }
         this._disabled = value;
         if(!this._disabled){
-            this.update(performance.now());
+            this.update(this._now - performance.now());
         }
     }
     
     public update(deltaTime: number) {
-        this.now = performance.now();
-        this.emit("update", deltaTime);
+        if (this._disabled){
+            return;
+        }
+        this._now = performance.now();
         Tween.update(deltaTime);
-        if (this._disabled)
-            requestAnimationFrame(this.update.bind(this));
+        this.emit("update", deltaTime);
+        
     }
     /**
      * 增加更新监听器

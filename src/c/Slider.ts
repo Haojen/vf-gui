@@ -5,6 +5,7 @@ import Sprite from "./Sprite";
 import Ease  from "../Ease/Ease";
 import Tween from "./Tween";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
+import DragEvent from "../Interaction/DragEvent";
 import InteractionEvent from "../Interaction/InteractionEvent";
 /**
  * UI 滑动条
@@ -47,6 +48,7 @@ export default class Slider extends UIBase{
         this._fill = value;
         this.updateDisplayChild();
     }
+
     private handleDrag: DragEvent|undefined;
     private trackDrag: DragEvent|undefined;
     /**

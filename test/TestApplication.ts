@@ -4,9 +4,7 @@ import vfui from "../src/index";
 export default class TestApplication{
 
     public constructor(thisObj:any,callback:(app:PIXI.Application,uiStage:vfui.Stage)=>void){
-        this.app = new PIXI.Application();
-        this.app.view.style.width="1024px";
-        this.app.view.style.height="768px";
+        this.app = new PIXI.Application({width:1024,height:768});
         this.uiStage = new vfui.Stage(this.app.view.width, this.app.view.height); 
         this.app.stage.addChild(this.uiStage);
         document.body.appendChild(this.app.view);

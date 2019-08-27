@@ -1,9 +1,10 @@
 import TestContainer from "./TestContainer";
 import TestRect from "./TestRect";
-import { UIBase } from "../src/UI";
 import TestSprite from "./TestSprite";
+import TestTicker from "./TestTicker";
+import TestSliceSprite from "./TestSliceSprite";
 
-let type = "TestSprite";
+let type = "TestSliceSprite";
 switch(type){
     case "TestRect":
             new TestRect().load();
@@ -14,5 +15,11 @@ switch(type){
     case "TestSprite":
             new TestSprite().load();
         break;
+    case "TestTicker":
+        new TestTicker().load();
+    break;
+    case "TestSliceSprite":
+        new TestSliceSprite().load();
+    break;
         
 }

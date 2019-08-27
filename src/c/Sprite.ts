@@ -16,18 +16,18 @@ export default class Sprite extends UIBase{
         this.container.addChild(this._sprite);
 
     }
-    private _sprite: PIXI.Sprite;
-    private _source: number | string | PIXI.Texture | HTMLCanvasElement | HTMLVideoElement|undefined;
+    protected _sprite: PIXI.Sprite;
+    protected _source: number | string | PIXI.Texture |HTMLImageElement| HTMLCanvasElement | HTMLVideoElement|undefined;
     /** 
      * 获取或设置显示源 
      * 可以使key、url,PIXI.Texture | canva. 当是key时确认资源库是否存在
      * 
      * 设置null可以传入PIXI.Texture.EMPTY
      */
-    public get source(): number | string | PIXI.Texture | HTMLCanvasElement | HTMLVideoElement|undefined {
+    public get source(): number | string | PIXI.Texture | HTMLImageElement |HTMLCanvasElement | HTMLVideoElement|undefined {
         return this._source;
     }
-    public set source(value: number | string | PIXI.Texture | HTMLCanvasElement | HTMLVideoElement|undefined) {
+    public set source(value: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement|undefined) {
         if(value === undefined){
             return;
         }
@@ -66,6 +66,27 @@ export default class Sprite extends UIBase{
     public get width() {
         return this.setting.height;
     }
+
+    private _anchorX = 0;
+    /** 设置X的锚点 */
+    public get anchorX() {
+        return this._anchorX;
+    }
+    public set anchorX(value) {
+        this._anchorX = value;
+        this._sprite.anchor.x = value;
+    }
+    private _anchorY = 0;
+    /** 设置Y的锚点 */
+    public get anchorY() {
+        return this._anchorY;
+    }
+    public set anchorY(value) {
+        this._anchorY = value;
+        this._sprite.anchor.y = value;
+    }
+
+
     public update(){
         if (!isNaN(this.tint))
             this._sprite.tint = this.tint;

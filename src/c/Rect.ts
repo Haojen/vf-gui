@@ -13,7 +13,6 @@ export default class Rect extends UIBase{
         super();
         this.setDefaultSize(10,10);
         this._graphics = new PIXI.Graphics();
-        this.drawUpdate();
         this.container.addChild(this._graphics);
     }
     private _graphics: PIXI.Graphics;
@@ -22,9 +21,8 @@ export default class Rect extends UIBase{
         this._graphics.clear();
         const graphics = this._graphics;
         graphics.beginFill(this.fill);
-        graphics.drawRoundedRect(this.rx, this.ry, this.height, this.width,this.radius);
+        graphics.drawRoundedRect(this.rx, this.ry,this.width, this.height,this.radius);
         graphics.endFill();
-        this.updatesettings(true);
         
     }
     /** 绘制矩形方法 */
@@ -32,12 +30,11 @@ export default class Rect extends UIBase{
         this._radius = radius;
         this._rx = x;
         this._ry = y;
-        this.setting.width = width;
-        this.setting.height = height;
+        this.setDefaultSize(width,height);
         if(color){
             this._fill = color;
         }
-        this.drawUpdate();
+        this.updatesettings(true);
     }
     private _radius = 0;
     /**
@@ -48,7 +45,7 @@ export default class Rect extends UIBase{
     }
     public set radius(value) {
         this._radius = value;
-        this.drawUpdate();
+        this.updatesettings(true);
     }
 
     private _fill = 0xFFFFFF;
@@ -61,23 +58,9 @@ export default class Rect extends UIBase{
     }
     public set fill(value) {
         this._fill = value;
-        this.drawUpdate();
+        this.updatesettings(true);
     }
 
-    public set height(value: number){
-        this.setting.height = value;
-        this.drawUpdate();
-    }
-    public get height() {
-        return this.setting.height;
-    }
-    public set width(value: number){
-        this.setting.width = value;
-        this.drawUpdate();
-    }
-    public get width() {
-        return this.setting.height;
-    }
     private _rx = 0;
     /**
      * 绘制的起始坐标
@@ -87,18 +70,22 @@ export default class Rect extends UIBase{
     }
     public set rx(value) {
         this._rx = value;
-        this.drawUpdate();
+        this.updatesettings(true);
     }
     private _ry = 0;
     /**
      * 绘制的起始坐标
      */
     public get ry() {
-        return this._rx;
+        return this._ry;
     }
     public set ry(value) {
         this._ry = value;
+        this.updatesettings(true);
+    } 
+    
+    public update(){
         this.drawUpdate();
-    }  
+    }
     
 }

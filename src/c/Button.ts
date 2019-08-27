@@ -49,9 +49,7 @@ export default class Button extends InputBase{
         super(option.width,option.height,option.tabIndex,option.tabGroup.toString());
         this._option = option;
         this.container.buttonMode = true;
-        this._clickEvent.onHover = this.onHover;
         this._clickEvent.onPress = this.onPress;
-        this._clickEvent.onClick = this.onClick;
     }
     private _option: {width: number;height: number;tabIndex: number;tabGroup: number};
     private _isHover = false;

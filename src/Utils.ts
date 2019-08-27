@@ -1,9 +1,24 @@
+import { Rectangle } from "pixi.js";
 
 /** 日志输出 */
 export function log(message?: string|number|object, ... optionalParams: string[]|number[]|object[]){
     console.log(message,... optionalParams);
 }
 
+/**
+ * 快速设置矩形
+ * @param sourcr 
+ * @param x 
+ * @param y 
+ * @param w 
+ * @param h 
+ */
+export function setRectangle(source: Rectangle,x: number,y: number,w: number,h: number){
+    source.x = x;
+    source.y = y;
+    source.width = w;
+    source.height = h;
+}
 /**
  * helper function to convert string hex to int or default
  * 

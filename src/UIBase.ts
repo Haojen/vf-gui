@@ -34,14 +34,14 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     /** 设置默认的宽高，一般使用情况在构造函数中，并不会触发组件刷新 */
     public setDefaultSize(width: number | string, height: number | string){
         const widthItem = this.getPetValue(width);
-        if (widthItem.num) {
+        if (widthItem.num!== undefined) {
             this.setting.width = widthItem.num;
         } else {
             this.setting.widthPct = widthItem.pct;
         }
 
         const heightItem = this.getPetValue(height);
-        if (heightItem.num) {
+        if (heightItem.num!== undefined) {
             this.setting.height = heightItem.num;
         } else {
             this.setting.heightPct = heightItem.pct;
@@ -156,6 +156,11 @@ export default class UIBase extends PIXI.utils.EventEmitter {
         } else {
             pct = undefined;
         }
+        if(num)
+            num = Math.max(num,0);
+        if(pct){
+            pct = Math.max(pct,0);
+        }
         return { num, pct };
     }
     /** 获取设置X */
@@ -177,7 +182,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set widthPet(value: string){
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num !== undefined) {
             this.setting.width = item.num;
         } else {
             this.setting.widthPct = item.pct;
@@ -188,6 +193,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      * 设置宽度,整数
      */
     public set width(value: number) {
+        value = Math.max(value,0);
         this.setting.width = value;
         this.updatesettings(true);
     }
@@ -213,7 +219,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set heightPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.height = item.num;
         } else {
             this.setting.heightPct = item.pct;
@@ -224,6 +230,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      * 设置高度，数字
      */
     set height(value: number) {
+        value = Math.max(value,0);
         this.setting.height = value;
         this.updatesettings(true);
     }
@@ -249,7 +256,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set minWidthPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.minWidth = item.num;
         } else {
             this.setting.minWidthPct = item.pct;
@@ -285,7 +292,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set minHeightPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.minHeight = item.num;
         } else {
             this.setting.minHeightPct = item.pct;
@@ -319,7 +326,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set maxWidthPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.maxWidth = item.num;
         } else {
             this.setting.maxWidthPct = item.pct;
@@ -353,7 +360,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set maxHeightPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.maxHeight = item.num;
         } else {
             this.setting.maxHeightPct = item.pct;
@@ -387,7 +394,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set anchorLeftPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.anchorLeft = item.num;
         } else {
             this.setting.anchorLeftPct = item.pct;
@@ -421,7 +428,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set anchorRightPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.anchorRight = item.num;
         } else {
             this.setting.anchorRightPct = item.pct;
@@ -455,7 +462,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set anchorTopPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.anchorTop = item.num;
         } else {
             this.setting.anchorTopPct = item.pct;
@@ -489,7 +496,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set anchorBottomPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.anchorBottom = item.num;
         } else {
             this.setting.anchorBottomPct = item.pct;
@@ -522,7 +529,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     /** 设置距离左边距 百分比 */
     set leftPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.left = item.num;
         } else {
             this.setting.leftPct = item.pct;
@@ -530,7 +537,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
         this.updatesettings(true);
     }
     /** 设置左边距 */
-    set left(value: number|undefined){
+    set left(value: number){
         this.setting.left = value;
         this.updatesettings(true);
     }
@@ -554,7 +561,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     /** 设置右边距百分比 */
     set rightPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.right = item.num;
         } else {
             this.setting.rightPct = item.pct;
@@ -588,7 +595,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set topPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.top = item.num;
         } else {
             this.setting.topPct = item.pct;
@@ -596,7 +603,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
         this.updatesettings(true);
     }
     /** 设置顶边距 */
-    set top(value: number|undefined){
+    set top(value: number){
         this.setting.top = value;
         this.updatesettings(true);
     }
@@ -622,7 +629,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     set bottomPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.bottom = item.num;
         } else {
             this.setting.bottomPct = item.pct;
@@ -1010,7 +1017,6 @@ export default class UIBase extends PIXI.utils.EventEmitter {
 
         let pivotXOffset = this.pivotX * this._width;
         let pivotYOffset = this.pivotY * this._height;
-
         if (this.pixelPerfect) {
             pivotXOffset = Math.round(pivotXOffset);
             pivotYOffset = Math.round(pivotYOffset);
@@ -1052,7 +1058,6 @@ export default class UIBase extends PIXI.utils.EventEmitter {
                 this.container.position.x = 0;
             }
         }
-
 
         if (this.verticalAlign === undefined) {
             //get anchors (use top bottom if conflict)
@@ -1119,7 +1124,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
             this.container.position.x = this._dragPosition.x;
             this.container.position.y = this._dragPosition.y;
         }
-
+        
         //scale
         this.container.scale.x = this.setting.scaleX;
         this.container.scale.y = this.setting.scaleY;
@@ -1138,7 +1143,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
             this.container.position.x = Math.round(this.container.position.x);
             this.container.position.y = Math.round(this.container.position.y);
         }
-
+        
     }
     /** 
      * 更新所有子节点

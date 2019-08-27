@@ -17,11 +17,11 @@ export default class UISettings {
     /** 最大高度 */
     public maxHeight: number | undefined;
     /** 距离父容器的左边距 */
-    public left: number | undefined;
+    public left = 0;
     /** 距离父容器的右边距 */
     public right: number | undefined;
     /** 距离父容器的顶边距 */
-    public top: number | undefined;
+    public top = 0;
     /** 距离父容器的底边距 */
     public bottom: number | undefined;
     /** 锚点距离父容器的左边距（0-1） */
