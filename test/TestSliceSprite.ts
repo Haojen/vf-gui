@@ -13,8 +13,8 @@ export default class TestSliceSprite{
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage){
 
-        let borderWidth = 200;
-        /** 本地位图 */
+        let borderWidth = 100;
+        /** 9切图，设置边距100，可观察左边纹理 */
         let sp = new vfui.SliceSprite();
         //sp.horizontalSlice = true;
         //sp.verticalSlice = false;
