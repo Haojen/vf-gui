@@ -227,9 +227,6 @@ export default class SliceSprite extends UIBase {
         if(this.t === undefined || this.t.width ===0 || this.t.height ===0 ){
             return;
         }
-        console.log("r1esou2rce1",this.t); 
-        console.log("r1esou2rce1",this.f); 
-        console.log("wh",this.t.width,this.t.height);
         this.updateLayer();
         const bw = this.bw;
         if (this.vs && this.hs) {

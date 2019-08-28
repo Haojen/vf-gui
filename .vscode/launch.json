@@ -30,7 +30,7 @@
             "request": "launch",
             "port": 9222,
             "name": "Test",
-            "url": "http://127.0.0.1:5501/test.html",
+            "url": "http://127.0.0.1:5501/test.html?type=TestContainer",
             "sourceMaps": true,
             "webRoot": "${workspaceFolder}",
             "preLaunchTask":"test",

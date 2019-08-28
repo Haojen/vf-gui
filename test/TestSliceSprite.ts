@@ -24,6 +24,7 @@ export default class TestSliceSprite{
         sp.borderWidth = borderWidth;
         uiStage.addChild(sp);
         
+        //双向拉伸
         let g = new vfui.Rect();
         g.x = sp.x+borderWidth;
         g.y = sp.x+borderWidth;
