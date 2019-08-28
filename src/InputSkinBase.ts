@@ -3,6 +3,7 @@ import { VerticalAlignEnum, HorizontalAlignEnum } from "./Enum/AlignEnum";
 import ClickEvent from "./Interaction/ClickEvent";
 import InteractionEvent, { TouchEvent } from "./Interaction/InteractionEvent";
 import SliceSprite from "./c/SliceSprite";
+import { UIBase } from "./UI";
 
 /**
  * UI 按钮显 示对象
@@ -30,20 +31,28 @@ export default class InputSkinBase extends InputBase{
         this._background.horizontalAlign = HorizontalAlignEnum.center;
         this._background.borderWidth = 10;
         this.addChild(this._background);
-        this.on(TouchEvent.onMove,()=>{
-            this.currentState = "Move";
-        });
-        this.on(TouchEvent.onHover,(e: InteractionEvent,over: boolean)=>{
-            this._isHover = over;
-            this.currentState = "Up";
-        });
-        this.on(TouchEvent.onPress,()=>{
-            this.currentState = "Down";
-        });
-        this.on(TouchEvent.onClick,()=>{
-            this.currentState = "Down";
-        });
+        this.on(TouchEvent.onMove,this.onMove,this);
+        this.on(TouchEvent.onHover,this.onHover,this);
+        this.on(TouchEvent.onPress,this.onPress,this);
+        this.on(TouchEvent.onClick,this.onClick,this);
     }
+
+    protected onHover(e: InteractionEvent,thisObj:UIBase,over: boolean){
+        this._isHover = over;
+        this.currentState = "Up";
+    }
+    protected onPress(){
+        this.currentState = "Down";
+    }
+    protected onClick(){
+        this.currentState = "Down";
+    }
+    protected onMove() {
+        this.currentState = "Move";
+    }
+   
+
+
     protected _isHover = false;
     protected _background = new SliceSprite();
     protected _clickEvent = new ClickEvent(this,true);

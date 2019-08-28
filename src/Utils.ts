@@ -1,4 +1,4 @@
-import { Rectangle } from "pixi.js";
+import { Rectangle, utils } from "pixi.js";
 
 /** 日志输出 */
 export function log(message?: string|number|object, ... optionalParams: string[]|number[]|object[]){
@@ -137,13 +137,10 @@ export function Round(num: number, decimals: number) {
     return Math.round(num * pow) / pow;
 }
 
-/**
- * @parivate
- */
-export let _token = 1;
+
 /** 获取全局唯一数 */
-export function token(){
-    return (++_token).toString();
+export function uid(){
+    return utils.uid().toString();
 }
 
 /** 获取URL参数 */

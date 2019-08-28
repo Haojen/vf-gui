@@ -51,12 +51,6 @@ export default class SliceSprite extends UIBase {
                 if(this._texture){
                     this.t = this._texture.baseTexture;
                     this.f = this._texture.frame;
-                    if(!this.height){
-                        this.height = this.t.height;
-                    }
-                    if(!this.width){
-                        this.width = this.t.width;
-                    } 
                     this.updatesettings(true);           
                 }
             },this);

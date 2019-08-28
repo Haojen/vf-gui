@@ -4,27 +4,6 @@ import InteractionEvent from "../Interaction/InteractionEvent";
 import InputSkinBase from "../InputSkinBase";
 import TextStyle from "./Text/TextStyle";
 
-/*
- * Features:
- * Button, radio button (checkgroups)
- *
- * Methods:
- * blur()
- * focus()
- *
- * Properties:
- * label: get/set Button value
- *
- * Events:
- * "hover"          param: [bool]isHover (hover/leave)
- * "press"          param: [bool]isPressed (pointerdown/pointerup)
- * "click"
- * "blur"
- * "focus"
- * "focusChanged"   param: [bool]isFocussed
- *
- */
-
 /**
  * UI 按钮显 示对象
  *
@@ -107,16 +86,5 @@ export default class Button extends InputSkinBase{
 
     public get text(){
         return this._text;
-    }
-
-    private onPress(e: InteractionEvent,isPressed: boolean){
-        if (isPressed) {
-            this.focus();
-            e.data.originalEvent.preventDefault();
-        }
-    }
-
-    public update(){
-        super.update();
     }
 }

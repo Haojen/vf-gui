@@ -14,8 +14,10 @@ export default class TestSprite{
         /** 本地位图 */
         let sp = new vfui.Sprite();
         sp.source = "assets/sprite.png"; //本地文件路径
-        sp.width = 100;
-        sp.height = 100;
+        sp.width = 0;//宽高为0的情况下，会读取本身图片宽高自适应
+        sp.height = 0;
+        sp.maxWidth = 100;
+        sp.maxHeight = 100;
         uiStage.addChild(sp);
         //网络位图
         let sp1 = new vfui.Sprite();

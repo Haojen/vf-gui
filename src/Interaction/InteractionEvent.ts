@@ -19,22 +19,26 @@ export default class InteractionEvent extends PIXI.interaction.InteractionEvent{
 export enum TouchEvent{
     /**
      * 移出
-     * e: interaction.InteractionEvent,over: boolean
+     * 
+     * (e: InteractionEvent,thisObj:UIBase,over: boolean)=>{}
      */
-    onHover = "onHover",
+    onHover = "hover",
     /**
      * 按下 
-     * e: interaction.InteractionEvent, isPressed: boolean)
+     * 
+     * (e: InteractionEvent,thisObj:UIBase, isPressed: boolean)=>void
      */
-    onPress = "onPress",
+    onPress = "press",
     /**
      * 点击
-     * e: interaction.InteractionEvent
+     * 
+     * (e: InteractionEvent,thisObj:UIBase)=>void
      */
-    onClick = "onClick",
+    onClick = "click",
     /**
      * 移动
-     * e: interaction.InteractionEvent
+     * 
+     * (e: InteractionEvent,thisObj:UIBase)=>void
      */
-    onMove = "onMove",
+    onMove = "move",
 }

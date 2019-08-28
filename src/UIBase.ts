@@ -5,7 +5,7 @@ import DragEvent from "./Interaction/DragEvent";
 import * as DragDropController from "./Interaction/DragDropController";
 import { DraggableEventEnum } from "./Enum/DraggableEventEnum";
 import { TouchMouseEventEnum } from "./Enum/TouchMouseEventEnum";
-import { token } from "./Utils";
+import { uid } from "./Utils";
 import InteractionEvent from "./Interaction/InteractionEvent";
 
 /**
@@ -25,7 +25,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      */
     public constructor(width?: number | string, height?: number | string) {
         super();
-        this.uuid = token();
+        this.uuid = uid();
         this.container = new PIXI.Container();
         this.setting = new UISettings();
         if(width && height)

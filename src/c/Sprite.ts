@@ -37,34 +37,29 @@ export default class Sprite extends UIBase{
         this._source = value;
         if(value instanceof  PIXI.Texture){
             this._sprite.texture = value;
+            this.correctionWidthAndHeight();
+            this.updatesettings(true);  
         }else{
             this._sprite.texture = PIXI.Texture.from(value);
-        }
-        if(!this.height){
-            this.height = this._sprite.height;
-        }
-        if(!this.width){
-            this.width = this._sprite.width;
-        } 
-        this.update();
+            if(this._sprite.texture.width>1 && this._sprite.texture.height>1){
+                this.correctionWidthAndHeight();
+                this.updatesettings(true);  
+            }
+            this._sprite.texture.once("update",()=>{
+                this.correctionWidthAndHeight();
+                this.updatesettings(true);  
+                
+            },this);
+        }        
     }
 
-    public set height(value: number){
-        this.setting.height = value;
-        this._sprite.height = value;
-        this.updatesettings(true);
-
-    }
-    public get height() {
-        return this.setting.height;
-    }
-    public set width(value: number){
-        this.setting.width = value;
-        this._sprite.width = value;
-        this.updatesettings(true);
-    }
-    public get width() {
-        return this.setting.height;
+    private correctionWidthAndHeight(){
+        if(this.setting.width == 0){
+            this.setting.width = this._sprite.texture.width;
+        }
+        if(this.setting.height == 0){
+            this.setting.height = this._sprite.texture.height;
+        }
     }
 
     private _anchorX = 0;
@@ -93,5 +88,8 @@ export default class Sprite extends UIBase{
 
         if (!isNaN(this.blendMode))
             this._sprite.blendMode = this.blendMode;
+        
+        this._sprite.width = this._width;
+        this._sprite.height = this._height;
     }
 }
