@@ -1,4 +1,5 @@
 import UIBase from "../UIBase";
+import TextStyle from "./Text/TextStyle";
 
 /**
  * UI文本显示对象
@@ -7,14 +8,15 @@ import UIBase from "../UIBase";
  * @extends PIXI.UI.UIBase
  * @memberof PIXI.UI
  * @param Texture {PIXI.Texture} 文本对象
+ * @see https://pixijs.io/pixi-text-style
  */
 export default class Text extends UIBase{
     /**
      * 文本构造函数
      * @param text 要显示的内容，默认为""
-     * @param TextStyle {} 文本样式，参考PIXI.TextStyle
+     * @param TextStyle {} 文本样式，参考TextStyle
      */
-    public constructor(text = "", TextStyle?: PIXI.TextStyle){
+    public constructor(text = "", TextStyle?: TextStyle){
         super();
         this._source = text;
         this._text = new PIXI.Text(text,TextStyle);
@@ -46,6 +48,32 @@ export default class Text extends UIBase{
     }
     public set label(value: string){
         this.source = value;
+    }
+
+    public get style(): TextStyle{
+        return this._text.style;
+    }
+    public set style(value: TextStyle){
+        this._text.style = value;
+    }
+
+    public get textWidth(){
+        return this._text.getBounds().width;
+    }
+    public get textHeight(){
+        return this._text.getBounds().height;
+    }
+    public get textBounds(){
+        return this._text.getBounds();
+    }
+
+    public baseupdate() {
+        const bounds = this._text.getBounds();
+        this.setting.width = bounds.width;
+        this.setting.widthPct = undefined;
+        this.setting.height = bounds.height;
+        this.setting.heightPct = undefined;
+        super.baseupdate();
     }
 
     public update(){

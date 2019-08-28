@@ -9,6 +9,7 @@ import SliceSprite from "./c/SliceSprite";
 import Slider from "./c/Slider";
 import ScrollBar from "./c/ScrollBar";
 import Text from "./c/Text";
+import TextStyle from "./c/Text/TextStyle";
 import DynamicText from "./DynamicText/DynamicText";
 import DynamicTextStyle from "./DynamicText/DynamicTextStyle";
 import TextInput from "./c/TextInput";
@@ -25,5 +26,5 @@ import InteractionEvent,{TouchEvent}  from "./Interaction/InteractionEvent";
 
 /** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,SortableList,Sprite,TilingSprite,SliceSprite,Slider,
-    ScrollBar,Text,DynamicText,DynamicTextStyle,TextInput,Button,CheckBox,Rect,Tween,Ease,Interaction,
+    ScrollBar,Text,TextStyle,DynamicText,DynamicTextStyle,TextInput,Button,CheckBox,Rect,Tween,Ease,Interaction,
     UIBase,TickerShared,AlignEnum,InteractionEvent,TouchEvent};

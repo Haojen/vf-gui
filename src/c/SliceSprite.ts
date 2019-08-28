@@ -1,6 +1,5 @@
 import { setRectangle, log } from "../Utils";
 import UIBase from "../UIBase";
-import Sprite from "./Sprite";
 /**
  * 动态宽高的图片,9切
  */
@@ -41,6 +40,13 @@ export default class SliceSprite extends UIBase {
                 this._texture.removeAllListeners();
             }
             this._texture = PIXI.Texture.from(value);
+            if(this._texture.width>1 && this._texture.height>1){
+                if(this._texture){
+                    this.t = this._texture.baseTexture;
+                    this.f = this._texture.frame;
+                    this.updatesettings(true);           
+                }
+            }
             this._texture.once("update",()=>{
                 if(this._texture){
                     this.t = this._texture.baseTexture;

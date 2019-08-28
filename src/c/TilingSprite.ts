@@ -34,8 +34,8 @@ export default class TilingSprite extends UIBase{
         if(value instanceof  PIXI.Texture){
             this.getNewTilingSprite(value);
         }else{
-            let t = PIXI.Texture.from(value);
-            let sprite = this.getNewTilingSprite(t);
+            const t = PIXI.Texture.from(value);
+            const sprite = this.getNewTilingSprite(t);
             sprite.texture.once("update",()=>{
                 if(!this.height){
                     this.height = sprite.height;
@@ -49,7 +49,7 @@ export default class TilingSprite extends UIBase{
         }
     }
 
-    private getNewTilingSprite(t:PIXI.Texture){
+    private getNewTilingSprite(t: PIXI.Texture){
         if(this._sprite === undefined){
             this._sprite =new PIXI.TilingSprite(t);
             this.container.addChild(this._sprite);
@@ -80,7 +80,7 @@ export default class TilingSprite extends UIBase{
     public update(){
         if(this._sprite){
             if (!isNaN(this.tint))
-            this._sprite.tint = this.tint;
+                this._sprite.tint = this.tint;
 
             if (!isNaN(this.blendMode))
                 this._sprite.blendMode = this.blendMode;

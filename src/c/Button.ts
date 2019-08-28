@@ -1,11 +1,8 @@
-import InputBase from "../InputBase";
-import Sprite from "./Sprite";
-import SliceSprite from "./SliceSprite";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import Text from "./Text";
-import ClickEvent from "../Interaction/ClickEvent";
-import UIBase from "../UIBase";
 import InteractionEvent from "../Interaction/InteractionEvent";
+import InputSkinBase from "../InputSkinBase";
+import TextStyle from "./Text/TextStyle";
 
 /*
  * Features:
@@ -39,7 +36,7 @@ import InteractionEvent from "../Interaction/InteractionEvent";
  * @param [options.width=100h] {Number|String} width
  * @param [options.height=20] {Number|String} height
  */
-export default class Button extends InputBase{
+export default class Button extends InputSkinBase{
     /**
      * 按钮构造函数 
      * 
@@ -47,75 +44,69 @@ export default class Button extends InputBase{
      */
     public constructor(option = {width:100,height:20,tabIndex:0,tabGroup:0}){  
         super(option.width,option.height,option.tabIndex,option.tabGroup.toString());
-        this._option = option;
         this.container.buttonMode = true;
         this._clickEvent.onPress = this.onPress;
+        this._text.verticalAlign = VerticalAlignEnum.middle
+        this._text.horizontalAlign = HorizontalAlignEnum.center;
+        this._text.style.fontSize = 18;
+        this._text.style.fill = 0xFFFFFF;
+        this._text.top = 8;
+        this._text.left = 8;
+        this._text.right = 8;
+        this._text.bootom = 8;
+        this.addChild(this._text);   
     }
-    private _option: {width: number;height: number;tabIndex: number;tabGroup: number};
-    private _isHover = false;
-    private _background: SliceSprite | Sprite | undefined;
-    private _uiText: Text|undefined;
-    private _clickEvent = new ClickEvent(this,true);
-    /**
-     * 组件的当前视图状态 。 后续扩展
-     */
-    private _currentState: "up"|"move"|"down"|"enabled" = "up";
-    private _sourceUp: SliceSprite|Sprite|undefined;
-    private _sourceMove: SliceSprite|Sprite|undefined;
-    private _sourceDown: SliceSprite|Sprite|undefined;
+
+    public _text = new Text();
 
     protected initialize() {
         super.initialize();
         this.container.interactiveChildren = false;
-
-        const self = this;
-        //lazy to make sure all children is initialized (trying to get the bedst hitArea possible)
-        setTimeout(function () {
-            const bounds = self.container.getLocalBounds();
-            self.container.hitArea = new PIXI.Rectangle(bounds.x < 0 ? bounds.x : 0, bounds.y < 0 ? bounds.y : 0, Math.max(bounds.x + bounds.width + (bounds.x < 0 ? -bounds.x : 0), self._width), Math.max(bounds.y + bounds.height + (bounds.y < 0 ? -bounds.y : 0), self._height));
-        }, 20);
     }
+
     /**
      * 获取或设置文本内容
      */
     public get label(): string{
-        if(this._uiText){
-            return this._uiText.label;
-        }
-        return "";
+        return this._text.label;
     }
     public set label(value: string){
-        if(value){
-            if (this._uiText === undefined) {
-                this._uiText = new Text(value)
-                this._uiText.verticalAlign = VerticalAlignEnum.middle
-                this._uiText.horizontalAlign = HorizontalAlignEnum.center;
-                this.addChild(this._uiText);
-            }
-            this._uiText.label = value;
-        }
+        this._text.label = value;
     }
-    public get background(): SliceSprite | Sprite|undefined {
-        return this._background;
-    }
-    public set background(value: SliceSprite | Sprite|undefined) {
-        if(value === undefined){
-            return;
-        }
-        if(value === this._background){
-            return;
-        }
-        if(this._background){
-            this.removeChild(this._background);
-        }
-        this._background = value;
-        this._background.widthPet = "100%";
-        this._background.heightPct = "100%";
-        this._background.pivot = 0.5;
-        this._background.verticalAlign = VerticalAlignEnum.middle
-        this._background.horizontalAlign = HorizontalAlignEnum.center;
-        this.addChildAt(this._background as UIBase,0);
 
+    /** 设置颜色 */
+    public get labelColor(){
+        return this._text.style.fill.toString();
+    }
+    public set labelColor(value: string){
+        this._text.style.fill = value;
+    }
+
+    /** 设置文字大小 */
+    public get labelSize(){
+        return this._text.style.fontSize as number;
+    }
+    public set labelSize(value: number){
+        this._text.style.fontSize = value;
+    }
+    /** 设置文字居中方式 */
+    public get labelHorizontalAlign(){
+        return this._text.horizontalAlign || HorizontalAlignEnum.center;
+    }      
+    public set labelHorizontalAlign(value: number){
+        this._text.horizontalAlign = value;
+    }
+
+    /** 设置文字复杂样式 */
+    public get labelStyle(){
+        return this._text.style;
+    }
+    public set labelStyle(value: TextStyle){
+        this._text.style = value;
+    }
+
+    public get text(){
+        return this._text;
     }
 
     private onPress(e: InteractionEvent,isPressed: boolean){
@@ -125,14 +116,7 @@ export default class Button extends InputBase{
         }
     }
 
-    public focus() {
-        if (!this._focused) {
-            super.focus();
-        }
-    }
-    public blur() {
-        if (this._focused) {
-            super.blur();
-        }
+    public update(){
+        super.update();
     }
 }
