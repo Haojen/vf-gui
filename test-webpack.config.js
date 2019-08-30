@@ -1,10 +1,17 @@
 const path = require('path');
+const webpack = require('webpack');
+
 
 module.exports = {
+    
     mode: 'development',
     devtool: 'source-map',
     entry: './test/index.ts',
+    plugins:[
+        new webpack.IgnorePlugin(/pixi.js|es6-tween/)
+    ],
     module: {
+        noParse: /pixi.js|es6-tween/,
         rules: [
             {
                 test: /pixi.js/,

@@ -12,6 +12,7 @@ export default class Rect extends UIBase{
     public constructor(){
         super();
         this.setDefaultSize(10,10);
+        this.setting.tint = 0xFFFFFF;
         this._graphics = new PIXI.Graphics();
         this.container.addChild(this._graphics);
     }
@@ -20,7 +21,7 @@ export default class Rect extends UIBase{
     private drawUpdate(){
         this._graphics.clear();
         const graphics = this._graphics;
-        graphics.beginFill(this.fill);
+        graphics.beginFill(this.setting.tint);
         graphics.drawRoundedRect(this.rx, this.ry,this.width, this.height,this.radius);
         graphics.endFill();
         
@@ -32,7 +33,7 @@ export default class Rect extends UIBase{
         this._ry = y;
         this.setDefaultSize(width,height);
         if(color){
-            this._fill = color;
+            this.setting.tint = color;
         }
         this.updatesettings(true);
     }
@@ -48,17 +49,15 @@ export default class Rect extends UIBase{
         this.updatesettings(true);
     }
 
-    private _fill = 0xFFFFFF;
     /** 
      * 要填充的颜色 
      * @default 0xFFFFFF
      * */
     public get fill() {
-        return this._fill;
+        return this.tint;
     }
     public set fill(value) {
-        this._fill = value;
-        this.updatesettings(true);
+        this.tint = value;
     }
 
     private _rx = 0;
@@ -83,7 +82,16 @@ export default class Rect extends UIBase{
         this._ry = value;
         this.updatesettings(true);
     } 
-    
+   /**
+     * 显示对象填充色 0xFFFFFF
+     */
+    set tint(value: number) {
+        this._graphics.tint = value;
+        this.setting.tint = value;
+    }
+    get tint() {
+        return this.setting.tint || NaN;
+    }
     public update(){
         this.drawUpdate();
     }

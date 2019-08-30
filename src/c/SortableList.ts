@@ -1,8 +1,6 @@
 import Container from "./Container";
-import Ease from "../Ease/Ease";
-import EaseBase from "../Ease/EaseBase";
 import UIBase from "../UIBase";
-import Tween from "./Tween";
+import * as tween from "./Tween/index";
 
 /**
  * UI 表格容器
@@ -10,7 +8,6 @@ import Tween from "./Tween";
 export default class SortableList extends Container{
     public constructor(){
         super();
-        Ease.Sine.SineIn
     }
     /** 
      * 是否按降序排序
@@ -22,7 +19,7 @@ export default class SortableList extends Container{
      * @default 0
      */
     public tweenTime = 0;
-    public tweenEase: EaseBase|undefined;
+    public tweenEase = tween.Easing.Sinusoidal.In;
     public items: UIBase[] = [];
     private _sortTimeout = -1;
 
@@ -76,7 +73,7 @@ export default class SortableList extends Container{
             return;
         }
 
-        this._sortTimeout = setTimeout( () => { this._sort(); }, 0);
+        this._sortTimeout = window.setTimeout( () => { this._sort(); }, 0);
     }
 
     _sort() {
@@ -107,8 +104,8 @@ export default class SortableList extends Container{
     
             alt = !alt;
     
-            if (this.tweenTime > 0) {
-                Tween.fromTo(item, this.tweenTime, { x: item.x, y: item.y }, { x: 0, y: y }, this.tweenEase);
+            if (this.tweenTime > 0) {            
+                tween.Tween.fromTo(item, this.tweenTime, { x: item.x, y: item.y }, { x: 0, y: y }).easing(this.tweenEase);
             }
             else {
                 item.x = 0;

@@ -1,9 +1,7 @@
 import UIBase from "../UIBase";
 import * as Utils from "../Utils";
 import SliceSprite from "./SliceSprite";
-import Sprite from "./Sprite";
-import Ease  from "../Ease/Ease";
-import Tween from "./Tween";
+import * as tween from "./Tween/index";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import DragEvent from "../Interaction/DragEvent";
 import InteractionEvent from "../Interaction/InteractionEvent";
@@ -13,38 +11,47 @@ import InteractionEvent from "../Interaction/InteractionEvent";
 export default class Slider extends UIBase{
     public constructor(){
         super();
+        this._track = new SliceSprite();
+        this._track.borderWidth = 7;
+        this.handle = new SliceSprite();
+        this.handle.borderWidth = 7;
+        this._fill = new SliceSprite();
+        this._fill.borderWidth = 7;
+        this.addChild(this._track);
+        this.addChild(this.handle);
+        this.addChild(this._fill);
     }
     /** 当前值 */
     protected _amt = 0;
     //set options
-    private _track: SliceSprite | Sprite | undefined;
+    private _track: SliceSprite;
     /** 背景 */
-    public get track(): SliceSprite | Sprite | undefined {
+    public get sourceTrack(): SliceSprite {
         return this._track;
     }
-    public set track(value: SliceSprite | Sprite | undefined) {
+    public set sourceTrack(value: SliceSprite) {
         this._track = value;
         this.updateDisplayChild();
     }
-    private _handle: SliceSprite | Sprite | undefined;
+    public handle: SliceSprite;
     /** 拖拽手柄*/
-    public get handle(): SliceSprite | Sprite | undefined {
-        return this._handle;
+    public get sourceHandle(): SliceSprite {
+        return this.handle;
     }
-    public set handle(value: SliceSprite | Sprite | undefined) {
-        this._handle = value;
-        if(this._handle) {
-            this._handle.pivot = 0.5;
-            this._handle.container.buttonMode = true;
+    public set sourceHandle(value: SliceSprite) {
+        this.handle = value;
+        if(this.handle) {
+            this.handle.pivot = 0.5;
+            this.handle.container.buttonMode = true;
         }
         this.updateDisplayChild();
     }   
-    private _fill: SliceSprite | Sprite | undefined;
+    private _fill: SliceSprite;
     /** 进度填充 */
-    public get fill(): SliceSprite | Sprite | undefined {
+    public get sourceFill(): SliceSprite {
         return this._fill;
     }
-    public set fill(value: SliceSprite | Sprite | undefined) {
+    public set sourceFill(value: SliceSprite) {
         this._fill = value;
         this.updateDisplayChild();
     }
@@ -119,25 +126,19 @@ export default class Slider extends UIBase{
         this.update();
     }
     protected updateDisplayChild(){
-        if(this.track && this.fill && this.handle){
-            const sps = [this.track,this.fill,this.handle];
-            sps.forEach(value=>{
-                value && this.addChild(value);
-            });
-            if (this.vertical) {
-                this.heightPct = "100%";
-                this.width = this.track.width;
-                this.track.heightPct = "100%";
-                this.handle.horizontalAlign = HorizontalAlignEnum.center;
-                if (this.fill) this.fill.horizontalAlign = HorizontalAlignEnum.center;
-            }
-            else {
-                this.widthPet = "100%";
-                this.height = this.track.height;
-                this.track.widthPet = "100%";
-                this.handle.verticalAlign = VerticalAlignEnum.middle
-                if (this.fill) this.fill.verticalAlign = VerticalAlignEnum.middle;
-            }
+        if (this.vertical) {
+            this.heightPct = "100%";
+            this.width = this._track.width;
+            this._track.heightPct = "100%";
+            this.handle.horizontalAlign = HorizontalAlignEnum.center;
+            if (this._fill) this._fill.horizontalAlign = HorizontalAlignEnum.center;
+        }
+        else {
+            this.widthPet = "100%";
+            this.height = this._track.height;
+            this._track.widthPet = "100%";
+            this.handle.verticalAlign = VerticalAlignEnum.middle
+            if (this._fill) this._fill.verticalAlign = VerticalAlignEnum.middle;
         }
     }
     public update (soft?: boolean) {
@@ -148,24 +149,24 @@ export default class Slider extends UIBase{
                 handleSize = this.handle._height || this.handle.container.height;
                 val = ((this._height - handleSize) * this._amt) + (handleSize * 0.5);
                 if (soft) {
-                    Tween.to(this.handle, 0.3, { top: val }, Ease.Power2.easeOut);
-                    if (this.fill) Tween.to(this.fill, 0.3, { height: val }, Ease.Power2.easeOut);
+                    tween.Tween.to(this.handle, 0.3, { top: val }).easing(tween.Easing.Exponential.InOut)
+                    if (this._fill) tween.Tween.to(this._fill, 0.3, { height: val }).easing(tween.Easing.Exponential.InOut)
                 }
                 else {
-                    Tween.set(this.handle, { top: val });
-                    if (this.fill) Tween.set(this.fill, { height: val });
+                    //tween.Tween.set(this.handle, { top: val });
+                    //if (this._fill) tween.Tween.set(this._fill, { height: val });
                 }
             }
             else {
                 handleSize = this.handle._width || this.handle.container.width;
                 val = ((this._width - handleSize) * this._amt) + (handleSize * 0.5);
                 if (soft) {
-                    Tween.to(this.handle, 0.3, { left: val }, Ease.Power2.easeOut);
-                    if (this.fill) Tween.to(this.fill, 0.3, { width: val }, Ease.Power2.easeOut);
+                    tween.Tween.to(this.handle, 0.3, { left: val }).easing(tween.Easing.Exponential.InOut)
+                    if (this._fill) tween.Tween.to(this._fill, 0.3, { width: val }).easing(tween.Easing.Exponential.InOut)
                 }
                 else {
-                    Tween.set(this.handle, { left: val });
-                    if (this.fill) Tween.set(this.fill, { width: val });
+                    //tween.Tween.set(this.handle, { left: val });
+                    //if (this._fill) tween.Tween.set(this._fill, { width: val });
                 }
             }
         }
@@ -209,8 +210,8 @@ export default class Slider extends UIBase{
         }
     }
     protected updatePositionToMouse (mousePosition: PIXI.Point, soft: boolean) {
-        if(this.track){
-            this.track.container.toLocal(mousePosition, undefined, this.localMousePosition, true);
+        if(this._track){
+            this._track.container.toLocal(mousePosition, undefined, this.localMousePosition, true);
         }     
         if(this.handle){
             const newPos = this.vertical ? this.localMousePosition.y - this.handle._height * 0.5 : this.localMousePosition.x - this.handle._width * 0.5;

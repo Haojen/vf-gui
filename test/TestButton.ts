@@ -16,9 +16,9 @@ export default class TestButton{
         /** UI组件 按钮 */
         let button1 = this.getNewButton(uiStage);
         button1.label = "点我试试";
-        button1.on(vfui.TouchEvent.onClick,this.onClick,this);
-        button1.on(vfui.TouchEvent.onPress,this.onPress,this);
-        button1.on(vfui.TouchEvent.onHover,this.onHover,this);
+        button1.on(vfui.Interaction.TouchEvent.onClick,this.onClick,this);
+        button1.on(vfui.Interaction.TouchEvent.onPress,this.onPress,this);
+        button1.on(vfui.Interaction.TouchEvent.onHover,this.onHover,this);
 
         /** 有文字的按钮 */
         let button2 = this.getNewButton(uiStage);
@@ -60,14 +60,14 @@ export default class TestButton{
         return button;
     }
 
-    private onClick(e:vfui.InteractionEvent,button:vfui.Button){
+    private onClick(e:vfui.Interaction.InteractionEvent,button:vfui.Button){
         button.label = "点击" + e.type;
     }
 
-    private onPress(e:vfui.InteractionEvent,button:vfui.Button){
+    private onPress(e:vfui.Interaction.InteractionEvent,button:vfui.Button){
         button.label = "按下" + e.type;
     }
-    private onHover(e:vfui.InteractionEvent,button:vfui.Button){
+    private onHover(e:vfui.Interaction.InteractionEvent,button:vfui.Button){
         button.label = "移出" + e.type;
     }
 }

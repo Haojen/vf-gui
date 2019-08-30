@@ -16,15 +16,13 @@ import TextInput from "./c/TextInput";
 import Button from "./c/Button";
 import CheckBox from "./c/CheckBox";
 import Rect from "./c/Rect";
-import Tween from "./c/Tween";
-import Ease from "./Ease/Ease";
-import Interaction from "./Interaction/Index";
+import * as Interaction from "./Interaction/Index";
 import UIBase from "./UIBase";
 import {shared as TickerShared} from "./Ticker";
 import * as AlignEnum from "./Enum/AlignEnum";
-import InteractionEvent,{TouchEvent}  from "./Interaction/InteractionEvent";
+import * as tween from "./c/Tween/index";
 
 /** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,SortableList,Sprite,TilingSprite,SliceSprite,Slider,
-    ScrollBar,Text,TextStyle,DynamicText,DynamicTextStyle,TextInput,Button,CheckBox,Rect,Tween,Ease,Interaction,
-    UIBase,TickerShared,AlignEnum,InteractionEvent,TouchEvent};
+    ScrollBar,Text,TextStyle,DynamicText,DynamicTextStyle,TextInput,Button,CheckBox,Rect,Interaction,
+    UIBase,TickerShared,AlignEnum,tween};

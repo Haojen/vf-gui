@@ -22,7 +22,6 @@ export default class Text extends UIBase{
         this._text = new PIXI.Text(text,TextStyle);
         this.setDefaultSize(this._text.width,this._text.height);
         this.container.addChild(this._text);
-
     }
     private _text: PIXI.Text;
     private _source: string;
@@ -83,4 +82,12 @@ export default class Text extends UIBase{
         if (!isNaN(this.blendMode))
             this._text.blendMode = this.blendMode;
     }
+}
+/** 获得默认行高 */
+export function defaultLineHeight(style?:TextStyle){
+    let _tempText = new PIXI.Text("1",style);
+    let lineHeight = _tempText.height;
+    let textHeight = _tempText.height;
+    _tempText.destroy();
+    return {lineHeight,textHeight};
 }

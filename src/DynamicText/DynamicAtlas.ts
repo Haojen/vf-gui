@@ -1,5 +1,4 @@
 import { TDynamicCharData, TGenerateCharData } from "./DynamicChar";
-import { Rectangle } from "pixi.js";
 import DynamicTextStyle from "./DynamicTextStyle";
 import { log, hexToRgba } from "../Utils";
 import { settings } from "./DynamicText";
@@ -117,7 +116,7 @@ export class DynamicAtlas{
     private drawObject(obj: TDynamicCharData){
         if(this.context && obj.texture){
             this.context.drawImage(obj._cache, obj.frame.x, obj.frame.y);
-            obj.texture.frame = obj.frame as Rectangle;
+            obj.texture.frame = obj.frame as PIXI.Rectangle;
             obj.texture.update();
         }
     }
@@ -179,11 +178,10 @@ export class DynamicAtlas{
                 this.newObjects.push(obj);
 
                 if (this.lazyTimeout === undefined)
-                    this.lazyTimeout = setTimeout( () => {
+                    this.lazyTimeout = window.setTimeout( () => {
                         this.addNewObjects();
                         this.lazyTimeout = undefined;
                     }, 0);
-
             }
         }
 

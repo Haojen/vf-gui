@@ -1,6 +1,6 @@
 import Slider from "./Slider";
 import ScrollingContainer from "./ScrollingContainer";
-import Tween from "./Tween";
+import * as tween from "./Tween/index";
 
 /**
  * UI 滚动条容器
@@ -83,11 +83,11 @@ export default class ScrollBar extends Slider{
     public toggleHidden(hidden: boolean) {
         if (this.autohide) {
             if (hidden && !this._hidden) {
-                Tween.to(this, 0.2, { alpha: 0 });
+                tween.Tween.to(this, 0.2, { alpha: 0 });
                 this._hidden = true;
             }
             else if (!hidden && this._hidden) {
-                Tween.to(this, 0.2, { alpha: 1 });
+                tween.Tween.to(this, 0.2, { alpha: 1 });
                 this._hidden = false;
             }
         }

@@ -2,7 +2,7 @@
 import vfui from "../src/index";
 import TestApplication from "./TestApplication"
 
-export default class TestSprite{
+export default class TestText{
 
     public constructor(){}
     
@@ -44,6 +44,7 @@ export default class TestSprite{
         richText.x = 50;
         richText.y = 250;
         uiStage.addChild(richText);
+        
     }
     
 }

@@ -5,7 +5,12 @@ import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import ScrollingContainer from "./ScrollingContainer";
 import { Text } from "pixi.js";
 import DragEvent from "../Interaction/DragEvent";
-import InteractionEvent from "../Interaction/InteractionEvent";
+import InteractionEvent, { KeyEvent } from "../Interaction/InteractionEvent";
+import { defaultLineHeight } from "./Text";
+import { htmlInputShared } from "./HtmlInput";
+import { keyboardShared } from "../Interaction/KeyboardEvent";
+import TextStyle from "./Text/TextStyle";
+import InputSkinBase from "../InputSkinBase";
 /*
  * Features:
  * multiLine, shift selection, Mouse Selection, Cut, Copy, Paste, Delete, Backspace, Arrow navigation, tabIndex
@@ -36,21 +41,12 @@ import InteractionEvent from "../Interaction/InteractionEvent";
 /**
  * 创建文本输入
  */
-export default class TextInput extends InputBase {
-    public constructor(option = { width: 20, height: 20, tabIndex: 0, tabGroup: 0 }) {
+export default class TextInput extends InputSkinBase {
+    public constructor(option = { width: 100, height: 20, tabIndex: 0, tabGroup: 0 },style?:TextStyle) {
         super(option.width, option.height, option.tabIndex, option.tabGroup.toString());
-        if (TextInput._puiTempInput === undefined) {
-            TextInput._puiTempInput = document.createElement("INPUT") as HTMLInputElement;
-            TextInput._puiTempInput.setAttribute("type", "text");
-            TextInput._puiTempInput.setAttribute("id", "_pui_tempInput");
-            TextInput._puiTempInput.setAttribute("style", "position:fixed; left:-10px; top:-10px; width:0px; height: 0px;");
-            document.body.appendChild(TextInput._puiTempInput);
-        }
-        this._tempText = new PIXI.Text("1");
-        this._textHeight = this._tempText.height;
-        this._lineHeight = this._textHeight;
-        this._tempText.destroy();
-
+        let text = defaultLineHeight(style);
+        this._lineHeight = text.lineHeight;
+        this._textHeight = text.textHeight;
         //selection graphics
         const selection = this._selection = new PIXI.Graphics();
         selection.visible = false;
@@ -59,24 +55,39 @@ export default class TextInput extends InputBase {
         caret.graphics.visible = false;
         caret.graphics.lineStyle(1, 0xffffff, 1);
         caret.graphics.moveTo(0, 0);
-        caret.graphics.lineTo(0, this._textHeight);
+        caret.graphics.lineTo(0, this._lineHeight);
         //var padding
         this._textContainer = new ScrollingContainer();
         this.updateTextContainer();
-        this.addChild(this._textContainer);
+        this.addChild(this._textContainer); 
 
         this._dragEvent = new DragEvent(this);
-        this._dragEvent.onPress = this.onPress;
+        this._dragEvent.onPress = this.onDragPress;
         this._dragEvent.onDragMove = this.onDragMove;
-    }
+        //键盘事件，需要调用keyboardShared.focus开启 或 keyboardShared.blur关闭
+        this.on(KeyEvent.keydown,this.onKeyboard,this);
+        this.on(KeyEvent.paste,this.pasteEvent,this);
+        this.on(KeyEvent.copy,this.copyEvent,this);
+        this.on(KeyEvent.cut,this.cutEvent,this);
 
-    private static _puiTempInput: HTMLInputElement;
+        htmlInputShared.addBlurEvent(this.blur,this);
+        htmlInputShared.addInputEvent(this.inputEvent,this);
+    }
+    /** 光标 */
+    private _caret: { graphics: PIXI.Graphics; index: number; atEnd: boolean;forward: boolean;down: boolean};
+    /** 选中的颜色 */
+    private _selection: PIXI.Graphics;
+    /** 行高 */
+    private _lineHeight: number;
+    /** 文字高度 */
+    private _textHeight:number;
+    /** 文本容器 */
+    private _textContainer: ScrollingContainer;
+
     private _lastWidth = 0;
-    private _lastHeight = 0;
-    private _background: SliceSprite | Sprite | undefined;
     private _dirtyText = true;
     private _maxLength = 1000;
-    private _label: string = "";
+    private _label = "";
     private _lastLabel = "";
     private _style: TAny|undefined;
     private _chars: Text[] = [];
@@ -84,11 +95,6 @@ export default class TextInput extends InputBase {
     private color = "#000000"; //style.fill
     private selectedColor = "#ffffff";
     private selectedBackgroundColor = "#318cfa";
-    private _tempText: PIXI.Text;
-    private _textHeight: number;
-    private _lineHeight: number;
-    private _selection: PIXI.Graphics;//选中
-    private _caret: { graphics: PIXI.Graphics; index: number; atEnd: boolean;forward: boolean;down: boolean};//光标
     //var padding
     private paddingLeft = 3;
     private paddingRight = 3;
@@ -111,10 +117,7 @@ export default class TextInput extends InputBase {
     private ds = new PIXI.Point();
     /** dragend */
     private de = new PIXI.Point();
-    /** Reverse drag direction */
-    private rdd = false;
-    /** vertical Reverse drag direction */
-    private vrdd = false;
+
     private selectionStart = -1;
     private selectionEnd = -1;
     private hasSelection = false;
@@ -125,13 +128,6 @@ export default class TextInput extends InputBase {
     private _textLengthPX = 0;
     private _textHeightPX = 0;
     private _lineIndexMax = 0;
-    private ctrlDown = false;
-    private shiftDown = false;
-    private shiftKey = 16;
-    private ctrlKey = 17;
-    private cmdKey = 91;
-
-    private _textContainer: ScrollingContainer;
 
     private _sp = new PIXI.Point();
     private _dragEvent: DragEvent;
@@ -169,34 +165,7 @@ export default class TextInput extends InputBase {
 
         }
     }
-    /**
-     * 设置背景
-     */
-    public get background(): SliceSprite | Sprite | undefined {
-        return this._background;
-    }
-    public set background(value: SliceSprite | Sprite | undefined) {
-        if (value === undefined) {
-            return;
-        }
-        if (value === this._background) {
-            return;
-        }
-        if (this._background) {
-            this.removeChild(this._background);
-        }
-        this._background = value;
-        if (this._background) {
-            this.width = this._background.width;
-            this.height = this._background.height;
-
-            this._background.widthPet = "100%";
-            this._background.heightPct = "100%";
-            this._background.verticalAlign = VerticalAlignEnum.middle
-            this._background.horizontalAlign = HorizontalAlignEnum.center;
-            this.addChild(this._background);
-        }
-    }
+    
 
     /** 更新文本容器 */
     protected updateTextContainer() {
@@ -390,12 +359,15 @@ export default class TextInput extends InputBase {
         clearInterval(this.caretInterval);
         this._caret.graphics.alpha = 1;
         this._caret.graphics.visible = true;
-        this.caretInterval = setInterval( () => {
+        this.caretInterval = window.setInterval( () => {
             this._caret.graphics.alpha = this._caret.graphics.alpha === 0 ? 1 : 0;
         }, 500);
-
     }
 
+    /**
+     * 当前位置插入符号
+     * @param c 
+     */
     protected insertTextAtCaret (c: string) {
         if (!this._multiLine && c.indexOf("\n") != -1) {
             c = c.replace(/\n/g, '');
@@ -417,41 +389,24 @@ export default class TextInput extends InputBase {
         }
     }
 
-    protected keyDownEvent(_e: Event) {
-        const e = _e as WheelEvent;
-        if (e.which === this.ctrlKey || e.which === this.cmdKey) this.ctrlDown = true;
-        if (e.which === this.shiftKey) this.shiftDown = true;
+    protected onKeyboard(e:InteractionEvent,obj:TextInput) {
 
-        this.emit("keydown", e);
 
-        if (e.defaultPrevented)
-            return;
-
-        if (e.which === 13) { //enter
+        if (e.type === KeyEvent.enter.toString()) {
             this.insertTextAtCaret('\n');
-            e.preventDefault();
             return;
         }
-
-        if (this.ctrlDown) {
-
-            //ctrl + ?
-            if (e.which === 65) { //ctrl + a
-                this.select();
-                e.preventDefault();
-                return;
-            }
-            else if (e.which === 90) { //ctrl + z (undo)
-                if (this.label != this._lastLabel)
-                    this.valueEvent = this._lastLabel;
-                this.setCaretIndex(this._lastLabel.length + 1);
-                e.preventDefault();
-                return;
-            }
-
+        if(e.type === KeyEvent.ctrlA.toString()){
+            this.select();
+            return;
         }
-        if (e.which === 8) {
-            //backspace
+        if(e.type === KeyEvent.ctrlZ.toString()){
+            if (this.label != this._lastLabel)
+                this.valueEvent = this._lastLabel;
+            this.setCaretIndex(this._lastLabel.length + 1);
+            return;
+        }
+        if(e.type === KeyEvent.backspace.toString()){
             if (!this.deleteSelection()) {
                 if (this._caret.index > 0 || (this._chars.length === 1 && this._caret.atEnd)) {
                     if (this._caret.atEnd) {
@@ -464,167 +419,125 @@ export default class TextInput extends InputBase {
                     }
                 }
             }
-            e.preventDefault();
             return;
         }
-        if (e.which === 46) {
-            //delete
+        if(e.type === KeyEvent.delete.toString()){
             if (!this.deleteSelection()) {
                 if (!this._caret.atEnd) {
                     this.valueEvent = this.label.slice(0, this._caret.index) + this.label.slice(this._caret.index + 1);
                     this.setCaretIndex(this._caret.index);
                 }
             }
-            e.preventDefault();
             return;
         }
-        else if (e.which === 37 || e.which === 39) {
-            this.rdd = e.which === 37;
-            if (this.shiftDown) {
-                if (this.hasSelection) {
-                    const caretAtStart = this.selectionStart === this._caret.index;
-                    if (caretAtStart) {
-                        if (this.selectionStart === this.selectionEnd && this.rdd === this._caret.forward) {
-                            this.setCaretIndex(this._caret.forward ? this._caret.index : this._caret.index + 1);
-                        }
-                        else {
-                            const startindex = this.rdd ? this._caret.index - 1 : this._caret.index + 1;
-                            this.selectRange(startindex, this.selectionEnd);
-                            this._caret.index = Math.min(this._chars.length - 1, Math.max(0, startindex));
-                        }
+        if(e.type === KeyEvent.left.toString() || e.type === KeyEvent.right.toString()){
+            let rdd = e.type === KeyEvent.left.toString();//Reverse drag direction
+            if (this.hasSelection)
+                this.setCaretIndex(rdd ? this.selectionStart : this.selectionEnd + 1);
+            else
+                this.setCaretIndex(this._caret.index + (rdd ? this._caret.atEnd ? 0 : -1 : 1));
+        }
+        if(e.type === KeyEvent.shiftLeft.toString() || e.type === KeyEvent.shiftRight.toString()){
+            let rdd = e.type === KeyEvent.shiftLeft.toString();//Reverse drag direction
+            if (this.hasSelection) {
+                const caretAtStart = this.selectionStart === this._caret.index;
+                if (caretAtStart) {
+                    if (this.selectionStart === this.selectionEnd && rdd === this._caret.forward) {
+                        this.setCaretIndex(this._caret.forward ? this._caret.index : this._caret.index + 1);
                     }
                     else {
-                        const endIndex = this.rdd ? this._caret.index - 1 : this._caret.index + 1;
-                        this.selectRange(this.selectionStart, endIndex);
-                        this._caret.index = Math.min(this._chars.length - 1, Math.max(0, endIndex));
+                        const startindex = rdd ? this._caret.index - 1 : this._caret.index + 1;
+                        this.selectRange(startindex, this.selectionEnd);
+                        this._caret.index = Math.min(this._chars.length - 1, Math.max(0, startindex));
                     }
                 }
                 else {
-                    const _i = this._caret.atEnd ? this._caret.index + 1 : this._caret.index;
-                    const selectIndex = this.rdd ? _i - 1 : _i;
-                    this.selectRange(selectIndex, selectIndex);
-                    this._caret.index = selectIndex;
-                    this._caret.forward = !this.rdd;
+                    const endIndex = rdd ? this._caret.index - 1 : this._caret.index + 1;
+                    this.selectRange(this.selectionStart, endIndex);
+                    this._caret.index = Math.min(this._chars.length - 1, Math.max(0, endIndex));
                 }
             }
             else {
-                //Navigation
-                if (this.hasSelection)
-                    this.setCaretIndex(this.rdd ? this.selectionStart : this.selectionEnd + 1);
-                else
-                    this.setCaretIndex(this._caret.index + (this.rdd ? this._caret.atEnd ? 0 : -1 : 1));
+                const _i = this._caret.atEnd ? this._caret.index + 1 : this._caret.index;
+                const selectIndex = rdd ? _i - 1 : _i;
+                this.selectRange(selectIndex, selectIndex);
+                this._caret.index = selectIndex;
+                this._caret.forward = !rdd;
             }
-            e.preventDefault();
-            return;
-
         }
-        else if (this._multiLine && (e.which === 38 || e.which === 40)) {
-            this.vrdd = e.which === 38;
-            if (this.shiftDown) {
-                if (this.hasSelection) {
-                    this.de.y = Math.max(0, Math.min(this._textHeightPX, this.de.y + (this.vrdd ? -this._lineHeight : this._lineHeight)));
-                    this.updateClosestIndex(this.de, false);
+        if(e.type === KeyEvent.top.toString() || e.type === KeyEvent.down.toString()){
+            let vrdd = e.type === KeyEvent.top.toString() ;//vertical Reverse drag direction
+            if (this.hasSelection) {
+                this.setCaretIndex(vrdd ? this.selectionStart : this.selectionEnd + 1);
+            }
+            else {
+                this.ds.copyFrom(this._caret.graphics.position);
+                this.ds.y += vrdd ? -this._lineHeight : this._lineHeight;
+                this.ds.x += 1;
+                this.updateClosestIndex(this.ds, true);
+                this.setCaretIndex(this.sie ? this.si + 1 : this.si);
+            }
+        }
+        if(this._multiLine && (e.type === KeyEvent.shiftTop.toString() || e.type === KeyEvent.shiftDown.toString())){
+            let vrdd = e.type === KeyEvent.top.toString() ;//vertical Reverse drag direction
+            if (this.hasSelection) {
+                this.de.y = Math.max(0, Math.min(this._textHeightPX, this.de.y + (vrdd ? -this._lineHeight : this._lineHeight)));
+                this.updateClosestIndex(this.de, false);
+                //console.log(si, ei);
+                if (Math.abs(this.si - this.ei) <= 1) {
                     //console.log(si, ei);
-                    if (Math.abs(this.si - this.ei) <= 1) {
-                        //console.log(si, ei);
-                        this.setCaretIndex(this.sie ? this.si + 1 : this.si);
-                    } else {
-                        this._caret.index = (this.eie ? this.ei + 1 : this.ei) + (this._caret.down ? -1 : 0);
-                        this.selectRange(this._caret.down ? this.si : this.si - 1, this._caret.index);
-                    }
+                    this.setCaretIndex(this.sie ? this.si + 1 : this.si);
+                } else {
+                    this._caret.index = (this.eie ? this.ei + 1 : this.ei) + (this._caret.down ? -1 : 0);
+                    this.selectRange(this._caret.down ? this.si : this.si - 1, this._caret.index);
+                }
 
-                }
-                else {
-                    this.si = this._caret.index;
-                    this.sie = false;
-                    this.de.copyFrom(this._caret.graphics.position);
-                    this.de.y = Math.max(0, Math.min(this._textHeightPX, this.de.y + (this.vrdd ? -this._lineHeight : this._lineHeight)));
-                    this.updateClosestIndex(this.de, false);
-                    this._caret.index = (this.eie ? this.ei + 1 : this.ei) - (this.vrdd ? 0 : 1);
-                    this.selectRange(this.vrdd ? this.si - 1 : this.si, this._caret.index);
-                    this._caret.down = !this.vrdd;
-                }
             }
             else {
-                if (this.hasSelection) {
-                    this.setCaretIndex(this.vrdd ? this.selectionStart : this.selectionEnd + 1);
-                }
-                else {
-                    this.ds.copyFrom(this._caret.graphics.position);
-                    this.ds.y += this.vrdd ? -this._lineHeight : this._lineHeight;
-                    this.ds.x += 1;
-                    this.updateClosestIndex(this.ds, true);
-                    this.setCaretIndex(this.sie ? this.si + 1 : this.si);
-                }
+                this.si = this._caret.index;
+                this.sie = false;
+                this.de.copyFrom(this._caret.graphics.position);
+                this.de.y = Math.max(0, Math.min(this._textHeightPX, this.de.y + (vrdd ? -this._lineHeight : this._lineHeight)));
+                this.updateClosestIndex(this.de, false);
+                this._caret.index = (this.eie ? this.ei + 1 : this.ei) - (vrdd ? 0 : 1);
+                this.selectRange(vrdd ? this.si - 1 : this.si, this._caret.index);
+                this._caret.down = !vrdd;
             }
-            e.preventDefault();
-            return;
         }
     }
 
-    protected keyUpEvent(_e: Event) {
-        const e = _e as WheelEvent;
-        if (e.which == this.ctrlKey || e.which == this.cmdKey) this.ctrlDown = false;
-        if (e.which === this.shiftKey) this.shiftDown = false;
-
-        this.emit("keyup", e);
-
-        if (e.defaultPrevented)
-            return;
-    }
-
-    protected copyEvent(e: ClipboardEvent) {
-        this.emit("copy", e);
-
-        if (e.defaultPrevented)
-            return;
-
+    protected copyEvent(e:InteractionEvent,obj:TextInput,clipboardData: DataTransfer | null) {
         if (this.hasSelection) {
-            const clipboardData = e.clipboardData || window.clipboardData;
             if(clipboardData)
                 clipboardData.setData('Text', this.label.slice(this.selectionStart, this.selectionEnd + 1));
         }
-        e.preventDefault();
     }
-    protected cutEvent(e: ClipboardEvent) {
-        this.emit("cut", e);
 
-        if (e.defaultPrevented)
-            return;
-
+    protected cutEvent(e:InteractionEvent,obj:TextInput,clipboardData: DataTransfer | null) {
         if (this.hasSelection) {
-            this.copyEvent(e);
+            this.copyEvent(e,obj,clipboardData);
             this.deleteSelection();
         }
-        e.preventDefault();
     }
 
-    protected pasteEvent(e: ClipboardEvent) {
-        this.emit("paste", e);
-
-        if (e.defaultPrevented)
-            return;
-
-        const clipboardData = e.clipboardData || window.clipboardData;
+    protected pasteEvent(e:InteractionEvent,obj:TextInput,clipboardData: DataTransfer | null) {
         if(clipboardData)
             this.insertTextAtCaret(clipboardData.getData('Text'));
-        e.preventDefault();
     }
 
-    protected inputEvent(e: Event) {
-        const c = TextInput._puiTempInput.value;
+    protected inputEvent(e: InteractionEvent) {
+        const c = htmlInputShared.value;
         if (c.length) {
             this.insertTextAtCaret(c);
-            TextInput._puiTempInput.value = "";
+            htmlInputShared.value = "";
         }
-        e.preventDefault();
     }
 
     protected inputBlurEvent() {
         this.blur();
     }
 
-    protected onPress(e: InteractionEvent, mouseDown: boolean) {
+    protected onDragPress(e: InteractionEvent, mouseDown: boolean) {
 
         if (mouseDown) {
             const timeSinceLast = performance.now() - this.t;
@@ -687,29 +600,23 @@ export default class TextInput extends InputBase {
         this._caret.down = offset.y > 0;
         this.scrollToPosition(this.de);
     }
+
     public focus () {
         if (!this._focused) {
-            InputBase.prototype.focus.call(this);
+            super.focus.call(this);
 
             const l = this.container.worldTransform.tx + "px";
             const t = this.container.worldTransform.ty + "px";
             const h = this.container.height + "px";
             const w = this.container.width + "px";
 
-            TextInput._puiTempInput.setAttribute("style", "position:fixed; left:" + l + "; top:" + t + "; height:" + h + "; width:" + w + ";");
-            TextInput._puiTempInput.value = "";
-            TextInput._puiTempInput.focus();
-            TextInput._puiTempInput.setAttribute("style", "position:fixed; left:-10px; top:-10px; width:0px; height: 0px;");
-
+            htmlInputShared.style = "position:fixed; left:" + l + "; top:" + t + "; height:" + h + "; width:" + w + ";";
+            htmlInputShared.value = "";
+            htmlInputShared.focus();
+            htmlInputShared.style = "position:fixed; left:-10px; top:-10px; width:0px; height: 0px;";
             this._textContainer.innerContainer.cacheAsBitmap = false;
-            TextInput._puiTempInput.addEventListener("blur", this.inputBlurEvent.bind(this), false);
-            document.addEventListener("keydown", this.keyDownEvent.bind(this), false);
-            document.addEventListener("keyup", this.keyUpEvent.bind(this), false);
-            document.addEventListener('paste', this.pasteEvent.bind(this), false);
-            document.addEventListener('copy', this.copyEvent.bind(this), false);
-            document.addEventListener('cut', this.cutEvent.bind(this), false);
-            TextInput._puiTempInput.addEventListener('input', this.inputEvent.bind(this), false);
 
+            keyboardShared.focus(this);
             setTimeout( ()=> {
                 if (!this._caret.graphics.visible && !this._selection.visible && !this._multiLine)
                     this.setCaretIndex(this._chars.length);
@@ -722,26 +629,20 @@ export default class TextInput extends InputBase {
     public blur() {
         if (this._focused) {
             super.blur();
-            this.ctrlDown = false;
-            this.shiftDown = false;
             this.hideCaret();
             this.clearSelection();
             if (this._chars.length > 1) this._textContainer.innerContainer.cacheAsBitmap = true;
-            TextInput._puiTempInput.removeEventListener("blur", this.inputBlurEvent.bind(this));
-            document.removeEventListener("keydown", this.keyDownEvent.bind(this));
-            document.removeEventListener("keyup", this.keyUpEvent.bind(this));
-            document.removeEventListener('paste', this.pasteEvent.bind(this));
-            document.removeEventListener('copy', this.copyEvent.bind(this));
-            document.removeEventListener('cut', this.cutEvent.bind(this));
-            TextInput._puiTempInput.removeEventListener('input', this.inputEvent.bind(this));
-            TextInput._puiTempInput.blur();
-
+            keyboardShared.blur();
         }
 
         if (!this._multiLine)
             this.resetScrollPosition();
     }
 
+    /**
+     * 设置光标索引位置
+     * @param index 索引位置，0开始
+     */
     public setCaretIndex(index: number) {
         this._caret.atEnd = index >= this._chars.length;
         this._caret.index = Math.max(0, Math.min(this._chars.length - 1, index));
@@ -772,6 +673,9 @@ export default class TextInput extends InputBase {
 
     }
 
+    /**
+     * 全选
+     */
     public select () {
         this.selectRange(0, this._chars.length - 1);
     }

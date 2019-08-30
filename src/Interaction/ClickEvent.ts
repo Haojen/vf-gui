@@ -45,7 +45,7 @@ export default class ClickEvent {
 
     private obj: UIBase;
     public  id = 0;
-    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | vfui.TouchEvent */
+    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | vfui.Interaction.TouchEvent */
     public isOpenEmitEvent = false;
     private offset = new PIXI.Point();
     private movementX = 0;

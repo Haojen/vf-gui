@@ -1,4 +1,4 @@
-import Tween from "./c/Tween";
+import * as tween from "./c/Tween/index";
 
 /**
  * 心跳，需要UI库初始化后，进行实例调用注册
@@ -37,6 +37,7 @@ class Ticker extends PIXI.utils.EventEmitter{
             return;
         }
         this._disabled = value;
+        tween.autoPlay(!this._disabled);
         if(!this._disabled){
             this.update(this._now - performance.now());
         }
@@ -46,8 +47,9 @@ class Ticker extends PIXI.utils.EventEmitter{
         if (this._disabled){
             return;
         }
-        this._now = performance.now();
-        Tween.update(deltaTime);
+        //let lastNow = this._now;
+        //this._now = performance.now();
+        //tween.update();
         this.emit("update", deltaTime);
         
     }

@@ -1,5 +1,3 @@
-import { Rectangle, utils } from "pixi.js";
-
 /** 日志输出 */
 export function log(message?: string|number|object, ... optionalParams: string[]|number[]|object[]){
     console.log(message,... optionalParams);
@@ -13,7 +11,7 @@ export function log(message?: string|number|object, ... optionalParams: string[]
  * @param w 
  * @param h 
  */
-export function setRectangle(source: Rectangle,x: number,y: number,w: number,h: number){
+export function setRectangle(source: PIXI.Rectangle,x: number,y: number,w: number,h: number){
     source.x = x;
     source.y = y;
     source.width = w;
@@ -140,7 +138,7 @@ export function Round(num: number, decimals: number) {
 
 /** 获取全局唯一数 */
 export function uid(){
-    return utils.uid().toString();
+    return PIXI.utils.uid().toString();
 }
 
 /** 获取URL参数 */

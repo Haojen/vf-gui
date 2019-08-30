@@ -451,7 +451,7 @@ export default class DynamicText extends UIBase{
     public update(){
         if (this.lazyUpdate === undefined) return;
         const self = this;
-        this.lazyUpdate = setTimeout(function () {
+        this.lazyUpdate = window.setTimeout(function () {
             
             //console.log("UPDATING TEXT");
             const dirtySize = !self.autoWidth && (self._width != self.lastWidth || self._height != self.lastHeight || self.dirtyText);
