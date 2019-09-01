@@ -3,18 +3,18 @@
  * 
  * 触摸或鼠标操作事件 可查看 -> TouchEventEnum.TouchEnum
  * 
- * import InteractionEvent from "../Interaction/InteractionEvent";
+ * import InteractionEvent from "../Interaction/InteractionEvent",
  */
 export default class InteractionEvent extends PIXI.interaction.InteractionEvent{
     public constructor(){
-        super();
+        super()
     }
 }
 
 /**
- * 对外
+ * 对外，封装的点击触摸事件
  * 
- * import InteractionEvent,{TouchEvent} from "../Interaction/InteractionEvent";
+ * import InteractionEvent,{TouchEvent} from "../Interaction/InteractionEvent",
  */
 export enum TouchEvent{
     /**
@@ -46,7 +46,7 @@ export enum TouchEvent{
 /** 
  * 键盘事件 驱动类KeysEvent
  * 
- * import InteractionEvent,{KeyEvent} from "../Interaction/InteractionEvent";
+ * import InteractionEvent,{KeyEvent} from "../Interaction/InteractionEvent",
  */
 export const enum KeyEvent{
     /** 
@@ -157,4 +157,21 @@ export const enum KeyEvent{
      * (e:InteractionEvent,obj:UIBase)
      */
     shiftDown = "shift40"
+}
+
+/**
+ * 缓动事件
+ */
+export enum TweenEvent{
+    Callback = 'Callback',
+    update = 'update',
+    complete = 'complete',
+    start = 'start',
+    repeat = 'repeat',
+    reverse = 'reverse',
+    pause = 'pause',
+    play = 'play',
+    restart = 'restart',
+    stop = 'stop',
+    seek = 'seek'
 }

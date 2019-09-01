@@ -149,8 +149,8 @@ export default class Slider extends UIBase{
                 handleSize = this.handle._height || this.handle.container.height;
                 val = ((this._height - handleSize) * this._amt) + (handleSize * 0.5);
                 if (soft) {
-                    tween.Tween.to(this.handle, 0.3, { top: val }).easing(tween.Easing.Exponential.InOut)
-                    if (this._fill) tween.Tween.to(this._fill, 0.3, { height: val }).easing(tween.Easing.Exponential.InOut)
+                    tween.Tween.to(this.handle,{ top: val },{duration:300}).easing(tween.Easing.Exponential.InOut)
+                    if (this._fill) tween.Tween.to(this._fill, { height: val },{duration:300}).easing(tween.Easing.Exponential.InOut)
                 }
                 else {
                     //tween.Tween.set(this.handle, { top: val });
@@ -161,8 +161,8 @@ export default class Slider extends UIBase{
                 handleSize = this.handle._width || this.handle.container.width;
                 val = ((this._width - handleSize) * this._amt) + (handleSize * 0.5);
                 if (soft) {
-                    tween.Tween.to(this.handle, 0.3, { left: val }).easing(tween.Easing.Exponential.InOut)
-                    if (this._fill) tween.Tween.to(this._fill, 0.3, { width: val }).easing(tween.Easing.Exponential.InOut)
+                    tween.Tween.to(this.handle,{ left: val },{duration:300}).easing(tween.Easing.Exponential.InOut)
+                    if (this._fill) tween.Tween.to(this._fill, { width: val },{duration:200}).easing(tween.Easing.Exponential.InOut)
                 }
                 else {
                     //tween.Tween.set(this.handle, { left: val });

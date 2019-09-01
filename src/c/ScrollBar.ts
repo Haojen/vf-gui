@@ -83,11 +83,11 @@ export default class ScrollBar extends Slider{
     public toggleHidden(hidden: boolean) {
         if (this.autohide) {
             if (hidden && !this._hidden) {
-                tween.Tween.to(this, 0.2, { alpha: 0 });
+                tween.Tween.to(this, { alpha: 0 },{duration:200});
                 this._hidden = true;
             }
             else if (!hidden && this._hidden) {
-                tween.Tween.to(this, 0.2, { alpha: 1 });
+                tween.Tween.to(this,{ alpha: 1 },{duration:200});
                 this._hidden = false;
             }
         }

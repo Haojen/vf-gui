@@ -1,5 +1,6 @@
 import vfui from "../src/index";
 import TestApplication from "./TestApplication"
+import { Utils } from "../src/UI";
 
 /// <reference
 export default class TestTween{
@@ -20,42 +21,47 @@ export default class TestTween{
         uiStage.addChild(t);
         /** 常规缓动 */
         let r = new vfui.Rect();
-        r.y = 100;
-        r.drawRoundedRect(0,0,100,100,5,0xffffff);
+        r.y = 150;
+        r.x = 70;
+        r.drawRoundedRect(-50,-50,100,100,5,0xffcc00);
+
         uiStage.addChild(r);
         let rc = new vfui.Interaction.ClickEvent(r);
         rc.onClick = e=>{
             console.log("click1");
-            vfui.tween.Tween.to(r,{width:500},{duration:2000})
-            .easing(vfui.tween.Easing.Cubic.In)
-            .on(vfui.tween.utils.EVENT_UPDATE,(width:number)=>{console.log(width)})
-            .on(vfui.tween.utils.EVENT_COMPLETE,()=>{r.width = 100;})
+            const tween1 = new vfui.tween.Tween(r)
+            .to({ x: 200  }, 2000)
+            .repeat(Infinity)
+            .easing(vfui.tween.Easing.Elastic.InOut)
+            .yoyo(true)
+            .start();
+
+          const tween2 = new vfui.tween.Tween(r)
+            .to({ angle: 90 }, 2000)
+            .repeat(Infinity)
+            .easing(vfui.tween.Easing.Quadratic.InOut)
+            .yoyo(true)
             .start();
         }
 
         /** 目标缓动 */
         let r2 = new vfui.Rect();
-        r2.y = 220;
-        r2.drawRoundedRect(0,0,100,100,5,0xffffff);
+        r2.y = 280;
+        r2.x = 70;
+        r2.drawRoundedRect(-50,-50,100,100,5,0xffcc00);
         uiStage.addChild(r2);
         let rc2 = new vfui.Interaction.ClickEvent(r2);
         rc2.onClick = e=>{
             console.log("click2");
-            // vfui.tween.Tween.to(r2,{x:200,tint:'#FFFFFF'},{duration:2000})
-            // .easing(vfui.tween.Easing.Cubic.In)
-            // .on(vfui.tween.utils.EVENT_UPDATE,(x:number,tint:number)=>{console.log(tint)})
-            // .on(vfui.tween.utils.EVENT_COMPLETE,()=>{r2.width = 100;})
-            // .start();
-
-            // new vfui.tween.Tween(r2, {width:100})
-            // .to({width:500}, 2000)
-            // .easing(vfui.tween.Easing.Elastic.InOut)
-            // .start();
-
-            // new vfui.tween.Tween(r2, {x:0,backgroundColor:'#FFF'})
-            // .to({x:200,backgroundColor:'#0cf'}, 2000)
-            // .easing(vfui.tween.Easing.Elastic.InOut)
-            // .start();
+            new vfui.tween.Tween({color:"#"+r2.fill.toString(16),x:70})
+            .to({color:"#00ccff",x:200}, 2000)
+            .easing(vfui.tween.Easing.Elastic.InOut)
+            .on(vfui.tween.TweenEvent.update,(obj:any)=>{
+                console.log(obj.x,obj.color)
+                r2.fill = Utils.rgbStrToNumber(obj.color) ;
+                r2.x = obj.x;
+            })
+            .start();
         }
 
 

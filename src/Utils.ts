@@ -17,6 +17,38 @@ export function setRectangle(source: PIXI.Rectangle,x: number,y: number,w: numbe
     source.width = w;
     source.height = h;
 }
+/** 获取当前运行时时间 */
+export function now(){
+    if (performance !== undefined && performance.now !== undefined) {
+        // This must be bound, because directly assigning this function
+        // leads to an invocation exception in Chrome.
+        return performance.now.bind(performance)();
+        // Use Date.now if it is available.
+      } else {
+        const offset = performance && performance.timing && performance.timing.navigationStart ? performance.timing.navigationStart : Date.now()
+        return Date.now() - offset;
+      }
+}
+
+/**
+ * 深度拷贝对象
+ * @param source 对象元
+ */
+export function deepCopy (source:any|any[]) {
+    if (source === undefined || typeof source !== 'object') {
+      return source;
+    } else if (Array.isArray(source)) {
+      return [].concat(source as []);
+    } else if (typeof source === 'object') {
+      let target:{[key:string]:TAny} = {};
+      for (let prop in source) {
+        target[prop] = deepCopy(source[prop]);
+      }
+      return target;
+    }
+    return source;
+  }
+
 /**
  * helper function to convert string hex to int or default
  * 
@@ -72,6 +104,15 @@ export function rgbToHex(r: number, g: number, b: number) {
 export function rgbToNumber (r: number, g: number, b: number) {
     return r * 65536 + g * 256 + b;
 }
+
+/**
+ * rgb字符串形式转换
+ * @param color rgb(255,255,255)
+ */
+export function rgbStrToNumber(color:string){
+    let colors = color.substring(4,color.length-1).split(",");
+    return rgbToNumber(parseInt(colors[0]),parseInt(colors[1]),parseInt(colors[2]));
+}
 /**
  * 10进制转RGB
  * @param c 数
@@ -87,9 +128,9 @@ export function numberToRgb (c: number) {
 /**
  * hex 转 RGB，
  * 
- * 如: #ffffff->255,255,255
+ * 如hex字符串: "#ffffff"->255,255,255
  * 
- * 如: 0xffffff->255,255,255
+ * 如16进制数字: 0xffffff->255,255,255
  * @param hex 
  */
 export function hexToRgb (hex?: string|number) {
@@ -113,6 +154,7 @@ export function hexToRgb (hex?: string|number) {
         b: parseInt(result[3], 16)
     } : {r:255,g:255,b:255};
 }
+
 /**
  * 根据amt计算当前的位置start-stop，两数差值
  * @param start 开始数值
