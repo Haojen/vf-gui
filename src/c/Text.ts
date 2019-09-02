@@ -84,10 +84,10 @@ export default class Text extends UIBase{
     }
 }
 /** 获得默认行高 */
-export function defaultLineHeight(style?:TextStyle){
-    let _tempText = new PIXI.Text("1",style);
-    let lineHeight = _tempText.height;
-    let textHeight = _tempText.height;
+export function defaultLineHeight(style?: TextStyle){
+    const _tempText = new PIXI.Text("1",style);
+    const lineHeight = _tempText.height;
+    const textHeight = _tempText.height;
     _tempText.destroy();
     return {lineHeight,textHeight};
 }

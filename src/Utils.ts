@@ -24,30 +24,30 @@ export function now(){
         // leads to an invocation exception in Chrome.
         return performance.now.bind(performance)();
         // Use Date.now if it is available.
-      } else {
+    } else {
         const offset = performance && performance.timing && performance.timing.navigationStart ? performance.timing.navigationStart : Date.now()
         return Date.now() - offset;
-      }
+    }
 }
 
 /**
  * 深度拷贝对象
  * @param source 对象元
  */
-export function deepCopy (source:any|any[]) {
+export function deepCopy (source: any) {
     if (source === undefined || typeof source !== 'object') {
-      return source;
+        return source;
     } else if (Array.isArray(source)) {
-      return [].concat(source as []);
+        return [].concat(source as []);
     } else if (typeof source === 'object') {
-      let target:{[key:string]:TAny} = {};
-      for (let prop in source) {
-        target[prop] = deepCopy(source[prop]);
-      }
-      return target;
+        const target: {[key: string]: TAny} = {};
+        for (const prop in source) {
+            target[prop] = deepCopy(source[prop]);
+        }
+        return target;
     }
     return source;
-  }
+}
 
 /**
  * helper function to convert string hex to int or default
@@ -109,8 +109,8 @@ export function rgbToNumber (r: number, g: number, b: number) {
  * rgb字符串形式转换
  * @param color rgb(255,255,255)
  */
-export function rgbStrToNumber(color:string){
-    let colors = color.substring(4,color.length-1).split(",");
+export function rgbStrToNumber(color: string){
+    const colors = color.substring(4,color.length-1).split(",");
     return rgbToNumber(parseInt(colors[0]),parseInt(colors[1]),parseInt(colors[2]));
 }
 /**

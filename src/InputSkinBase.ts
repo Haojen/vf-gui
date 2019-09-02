@@ -37,7 +37,7 @@ export default class InputSkinBase extends InputBase{
         this.on(TouchEvent.onClick,this.onClick,this);
     }
 
-    protected onHover(e: InteractionEvent,thisObj:UIBase,over: boolean){
+    protected onHover(e: InteractionEvent,thisObj: UIBase,over: boolean){
         this._isHover = over;
         this.currentState = "Up";
     }

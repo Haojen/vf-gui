@@ -102,7 +102,7 @@ export default class ClickEvent {
         e.data.originalEvent.preventDefault();
     }
 
-    private emitTouchEvent(event: string | symbol,e:InteractionEvent, ... args: any[]){
+    private emitTouchEvent(event: string | symbol,e: InteractionEvent, ... args: unknown[]){
         if(this.isOpenEmitEvent){
             e.type = event.toString();
             this.obj.emit(e.type,e,this.obj,... args);

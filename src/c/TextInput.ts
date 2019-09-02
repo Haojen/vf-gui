@@ -1,7 +1,3 @@
-import InputBase from "../InputBase";
-import SliceSprite from "./SliceSprite";
-import Sprite from "./Sprite";
-import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import ScrollingContainer from "./ScrollingContainer";
 import { Text } from "pixi.js";
 import DragEvent from "../Interaction/DragEvent";
@@ -42,9 +38,9 @@ import InputSkinBase from "../InputSkinBase";
  * 创建文本输入
  */
 export default class TextInput extends InputSkinBase {
-    public constructor(option = { width: 100, height: 20, tabIndex: 0, tabGroup: 0 },style?:TextStyle) {
+    public constructor(option = { width: 100, height: 20, tabIndex: 0, tabGroup: 0 },style?: TextStyle) {
         super(option.width, option.height, option.tabIndex, option.tabGroup.toString());
-        let text = defaultLineHeight(style);
+        const text = defaultLineHeight(style);
         this._lineHeight = text.lineHeight;
         this._textHeight = text.textHeight;
         //selection graphics
@@ -80,7 +76,7 @@ export default class TextInput extends InputSkinBase {
     /** 行高 */
     private _lineHeight: number;
     /** 文字高度 */
-    private _textHeight:number;
+    private _textHeight: number;
     /** 文本容器 */
     private _textContainer: ScrollingContainer;
 
@@ -389,8 +385,7 @@ export default class TextInput extends InputSkinBase {
         }
     }
 
-    protected onKeyboard(e:InteractionEvent,obj:TextInput) {
-
+    protected onKeyboard(e: InteractionEvent) {
 
         if (e.type === KeyEvent.enter.toString()) {
             this.insertTextAtCaret('\n');
@@ -431,14 +426,14 @@ export default class TextInput extends InputSkinBase {
             return;
         }
         if(e.type === KeyEvent.left.toString() || e.type === KeyEvent.right.toString()){
-            let rdd = e.type === KeyEvent.left.toString();//Reverse drag direction
+            const rdd = e.type === KeyEvent.left.toString();//Reverse drag direction
             if (this.hasSelection)
                 this.setCaretIndex(rdd ? this.selectionStart : this.selectionEnd + 1);
             else
                 this.setCaretIndex(this._caret.index + (rdd ? this._caret.atEnd ? 0 : -1 : 1));
         }
         if(e.type === KeyEvent.shiftLeft.toString() || e.type === KeyEvent.shiftRight.toString()){
-            let rdd = e.type === KeyEvent.shiftLeft.toString();//Reverse drag direction
+            const rdd = e.type === KeyEvent.shiftLeft.toString();//Reverse drag direction
             if (this.hasSelection) {
                 const caretAtStart = this.selectionStart === this._caret.index;
                 if (caretAtStart) {
@@ -466,7 +461,7 @@ export default class TextInput extends InputSkinBase {
             }
         }
         if(e.type === KeyEvent.top.toString() || e.type === KeyEvent.down.toString()){
-            let vrdd = e.type === KeyEvent.top.toString() ;//vertical Reverse drag direction
+            const vrdd = e.type === KeyEvent.top.toString() ;//vertical Reverse drag direction
             if (this.hasSelection) {
                 this.setCaretIndex(vrdd ? this.selectionStart : this.selectionEnd + 1);
             }
@@ -479,7 +474,7 @@ export default class TextInput extends InputSkinBase {
             }
         }
         if(this._multiLine && (e.type === KeyEvent.shiftTop.toString() || e.type === KeyEvent.shiftDown.toString())){
-            let vrdd = e.type === KeyEvent.top.toString() ;//vertical Reverse drag direction
+            const vrdd = e.type === KeyEvent.top.toString() ;//vertical Reverse drag direction
             if (this.hasSelection) {
                 this.de.y = Math.max(0, Math.min(this._textHeightPX, this.de.y + (vrdd ? -this._lineHeight : this._lineHeight)));
                 this.updateClosestIndex(this.de, false);
@@ -506,26 +501,26 @@ export default class TextInput extends InputSkinBase {
         }
     }
 
-    protected copyEvent(e:InteractionEvent,obj:TextInput,clipboardData: DataTransfer | null) {
+    protected copyEvent(e: InteractionEvent,obj: TextInput,clipboardData: DataTransfer | null) {
         if (this.hasSelection) {
             if(clipboardData)
                 clipboardData.setData('Text', this.label.slice(this.selectionStart, this.selectionEnd + 1));
         }
     }
 
-    protected cutEvent(e:InteractionEvent,obj:TextInput,clipboardData: DataTransfer | null) {
+    protected cutEvent(e: InteractionEvent,obj: TextInput,clipboardData: DataTransfer | null) {
         if (this.hasSelection) {
             this.copyEvent(e,obj,clipboardData);
             this.deleteSelection();
         }
     }
 
-    protected pasteEvent(e:InteractionEvent,obj:TextInput,clipboardData: DataTransfer | null) {
+    protected pasteEvent(e: InteractionEvent,obj: TextInput,clipboardData: DataTransfer | null) {
         if(clipboardData)
             this.insertTextAtCaret(clipboardData.getData('Text'));
     }
 
-    protected inputEvent(e: InteractionEvent) {
+    protected inputEvent() {
         const c = htmlInputShared.value;
         if (c.length) {
             this.insertTextAtCaret(c);

@@ -11,7 +11,7 @@ class KeyboardSelectEvent {
 
     }
 
-    private obj:UIBase|undefined;
+    private obj: UIBase|undefined;
     private ctrlDown = false;
     private shiftDown = false;
     private shiftKey = 16;
@@ -147,7 +147,7 @@ class KeyboardSelectEvent {
 
         if (e.defaultPrevented)
             return;
-        let clipboardData = e.clipboardData || window.clipboardData;
+        const clipboardData = e.clipboardData || window.clipboardData;
         this.obj.emit(KeyEvent.copy, e,this.obj,clipboardData);
         e.preventDefault();
     }
@@ -158,7 +158,7 @@ class KeyboardSelectEvent {
         this.obj.emit(KeyEvent.cut, e,this.obj);
         if (e.defaultPrevented)
             return;
-        let clipboardData = e.clipboardData || window.clipboardData;
+        const clipboardData = e.clipboardData || window.clipboardData;
         this.obj.emit(KeyEvent.cut, e,this.obj,clipboardData);
         e.preventDefault();
     }
@@ -171,12 +171,12 @@ class KeyboardSelectEvent {
         this.obj.emit(KeyEvent.paste, e,this.obj);
         if (e.defaultPrevented)
             return;
-        let clipboardData = e.clipboardData || window.clipboardData;
+        const clipboardData = e.clipboardData || window.clipboardData;
         this.obj.emit(KeyEvent.paste, e,this.obj,clipboardData);
         e.preventDefault();
     }
 
-    public focus(obj:UIBase){
+    public focus(obj: UIBase){
         this.addEvent();
         this.obj = obj;
     }

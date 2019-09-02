@@ -34,14 +34,8 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      * @static
      */
-    static fromTo(object: any, to: any, params: any = {}) {
-        params.quickRender = params.quickRender ? params.quickRender : !to
-        const tween = new Tween(object).to(to, params);
-        if (params.quickRender) {
-            tween.render().update(tween._startTime);
-            tween._rendered = false;
-            tween._onStartCallbackFired = false;
-        }
+    static fromTo(object: any, to: any, duration?: number) {
+        const tween = new Tween(object).to(to, duration);
         return tween;
     }
     /**
@@ -53,8 +47,8 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      * @static
      */
-    static to(object: TAny|TAny[], to: TAny, params: TAny) {
-        return Tween.fromTo(object, to, params)
+    static to(object: any|any[], to: any, duration?: number) {
+        return Tween.fromTo(object, to, duration)
     }
     /**
      * Easier way calling constructor only applies the `from` value, useful for CSS Animation
@@ -65,8 +59,8 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      * @static
      */
-    static from(object: any, from: any, params: any) {
-        return Tween.fromTo(object, from, params)
+    static from(object: any, from: any, duration?: number) {
+        return Tween.fromTo(object, from, duration)
     }
     constructor(object?: any) {
         super();
@@ -262,7 +256,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example let tween = new vfui.Tween({x:0}).to({x:100}, 2000)
      * @memberof vfui.Tween
      */
-    public to(properties:TAny, duration = 1000) {
+    public to(properties:any, duration = 1000) {
         this._valuesEnd = properties;
         if(typeof duration === 'function'){
             this.duration = this._duration;
@@ -413,7 +407,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
             return this
         }
         for (let i = 0, len = this._chainedTweensCount; i < len; i++) {
-            (this as TAny)[CHAINED_TWEENS + i] = tween[i];
+            (this as any)[CHAINED_TWEENS + i] = tween[i];
         }
 
         return this;
@@ -546,7 +540,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
         } = this;
 
         let elapsed:number;
-        let currentEasing:TAny;
+        let currentEasing:any;
         let property:string;
         let propCount = 0
         time = time !== undefined ? time : now();
@@ -658,7 +652,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
 
                 if (_chainedTweensCount) {
                     for (let i = 0; i < _chainedTweensCount; i++) {
-                        (this as TAny)[CHAINED_TWEENS + i].start(time + _duration);
+                        (this as any)[CHAINED_TWEENS + i].start(time + _duration);
                     }
                 }
 

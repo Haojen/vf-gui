@@ -91,7 +91,7 @@ export default class Rect extends UIBase{
         this._graphicsDirty = true;
         this.updatesettings(true);
     } 
-   /**
+    /**
      * 显示对象填充色 0xFFFFFF
      */
     set tint(value: number) {

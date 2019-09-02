@@ -1,6 +1,5 @@
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import Text from "./Text";
-import InteractionEvent from "../Interaction/InteractionEvent";
 import InputSkinBase from "../InputSkinBase";
 import TextStyle from "./Text/TextStyle";
 
