@@ -66,6 +66,7 @@ export function decompose(prop: any, obj: any, from: any, to: any): any {
     if (typeof fromValue === 'number' && typeof toValue === 'number') {
         //
     } else if (fromValue && fromValue.splice && fromValue.isString && toValue && toValue.splice && toValue.isString) {
+        //
     } else if (typeof fromValue === 'string' && Array.isArray(toValue)) {
         const fromValue1 = decomposeString(fromValue);
         const toValues = toValue.map(decomposeString);
