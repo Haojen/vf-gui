@@ -105,7 +105,7 @@ export default class SortableList extends Container{
             alt = !alt;
     
             if (this.tweenTime > 0) {            
-                tween.Tween.fromTo(item, { x: 0, y: y },{duration:this.tweenTime}).easing(this.tweenEase);
+                //tween.Tween.fromTo(item, { x: 0, y: y },{duration:this.tweenTime}).easing(this.tweenEase);
             }
             else {
                 item.x = 0;

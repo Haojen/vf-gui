@@ -8,6 +8,7 @@ import {
     Plugins,
     remove,
     removeAll,
+    removeDisplay,
     update
 } from './core'
 import Easing from './Easing'
@@ -21,6 +22,7 @@ export {
     getAll,
     removeAll,
     remove,
+    removeDisplay,
     add,
     update,
     isRunning,

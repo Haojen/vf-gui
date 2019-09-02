@@ -34,13 +34,13 @@ export default class ScrollBar extends Slider{
 
     protected initialize () {
         super.initialize();
-        this._onValueChanging = () => {
-            if(this.scrollingContainer){
-                const sizeAmt = this.scrollingContainer._height / this.scrollingContainer.innerContainer.height || 0.001;
-                if (sizeAmt < 1)
-                    this.scrollingContainer.forcePctPosition(this.vertical ? "y" : "x", this._amt);
-            }
-        }
+        // this._onValueChanging = () => {
+        //     if(this.scrollingContainer){
+        //         const sizeAmt = this.scrollingContainer._height / this.scrollingContainer.innerContainer.height || 0.001;
+        //         if (sizeAmt < 1)
+        //             this.scrollingContainer.forcePctPosition(this.vertical ? "y" : "x", this._amt);
+        //     }
+        // }
     }
 
     public alignToContainer() {
@@ -60,7 +60,7 @@ export default class ScrollBar extends Slider{
             this._amt = !scrollingContainer["_" + widthORheight] || !diff ? 0 : -(innerContainer[xORy] / diff);
             
             const self = this as TAny;
-            const handle = this.handle as TAny;
+            const handle = this._thumb as TAny;
             if (sizeAmt >= 1) {
                 size = self["_" + widthORheight];
                 handle[topORleft] = size * 0.5;
@@ -83,11 +83,11 @@ export default class ScrollBar extends Slider{
     public toggleHidden(hidden: boolean) {
         if (this.autohide) {
             if (hidden && !this._hidden) {
-                tween.Tween.to(this, { alpha: 0 },{duration:200});
+                tween.Tween.to(this, { alpha: 0 },200);
                 this._hidden = true;
             }
             else if (!hidden && this._hidden) {
-                tween.Tween.to(this,{ alpha: 1 },{duration:200});
+                tween.Tween.to(this,{ alpha: 1 },200);
                 this._hidden = false;
             }
         }

@@ -76,7 +76,7 @@ export default class ClickEvent {
     private _onMouseDown(e: InteractionEvent) {
         this.mouse.copyFrom(e.data.global);
         this.id = e.data.identifier;
-        this.onPress && this.onPress.call(this.obj, e, true);
+        this.onPress && this.onPress.call(this.obj, e, true),this.obj;
         this.emitTouchEvent(TouchEvent.onPress,e,true);
         if (!this.bound) {
             this.obj.container.on(this.eventnameMouseup, this._onMouseUp,this);
@@ -91,7 +91,7 @@ export default class ClickEvent {
         if (this.double) {
             const now = performance.now();
             if (now - this.time < 210) {
-                this.onClick && this.onClick.call(this.obj, e);
+                this.onClick && this.onClick.call(this.obj, e,this);
                 this.emitTouchEvent(TouchEvent.onClick,e);
             }
             else {
@@ -140,7 +140,7 @@ export default class ClickEvent {
         }
 
         if (!this.double){    
-            this.onClick && this.onClick.call(this.obj, e);
+            this.onClick && this.onClick.call(this.obj, e,this);
             this.emitTouchEvent(TouchEvent.onClick,e,false);
         }
     }
@@ -156,7 +156,7 @@ export default class ClickEvent {
             this.ishover = true;
             this.obj.container.on(TouchMouseEventEnum.mousemove, this._onMouseMove,this);
             this.obj.container.on(TouchMouseEventEnum.touchmove, this._onMouseMove,this);
-            this.onHover && this.onHover.call(this.obj, e, true);
+            this.onHover && this.onHover.call(this.obj, e, true,this);
             this.emitTouchEvent(TouchEvent.onHover,e,true);
         }
     }
@@ -166,13 +166,13 @@ export default class ClickEvent {
             this.ishover = false;
             this.obj.container.removeListener(TouchMouseEventEnum.mousemove,this. _onMouseMove,this);
             this.obj.container.removeListener(TouchMouseEventEnum.touchmove, this._onMouseMove,this);
-            this.onHover && this.onHover.call(this.obj, e, false);
+            this.onHover && this.onHover.call(this.obj, e, false,this);
             this.emitTouchEvent(TouchEvent.onHover,e,true);
         }
     }
 
     private _onMouseMove(e: InteractionEvent) {
-        this.onMove && this.onMove.call(this.obj, e);
+        this.onMove && this.onMove.call(this.obj, e,this);
         this.emitTouchEvent(TouchEvent.onMove,e);
     }
 
@@ -206,8 +206,8 @@ export default class ClickEvent {
         this.onClick = undefined;
         this.onMove = undefined;
     }
-    public onHover: ((e: InteractionEvent,over: boolean) => void) | undefined
-    public onPress: ((e: InteractionEvent, isPressed: boolean) => void) | undefined;
-    public onClick: ((e: InteractionEvent) => void) | undefined 
-    public onMove: ((e: InteractionEvent) => void) | undefined
+    public onHover: ((e: InteractionEvent,over: boolean,clickEvent?:ClickEvent) => void) | undefined
+    public onPress: ((e: InteractionEvent, isPressed: boolean,clickEvent?:ClickEvent) => void) | undefined;
+    public onClick: ((e: InteractionEvent,clickEvent?:ClickEvent) => void) | undefined 
+    public onMove: ((e: InteractionEvent,clickEvent?:ClickEvent) => void) | undefined
 }

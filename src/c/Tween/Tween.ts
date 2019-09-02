@@ -1,5 +1,5 @@
 import { add, Plugins, remove, isRunning, isLagSmoothing } from './core';
-import { now, deepCopy } from "../../Utils";
+import { now, deepCopy, uid } from "../../Utils";
 import Easing from './Easing';
 import {
     decompose,
@@ -13,7 +13,6 @@ import {
 import { TweenEvent } from '../../Interaction/InteractionEvent';
 import Interpolation from "./Interpolation";
 
-let _id = 0; // Unique ID
 const defaultEasing = Easing.Linear.None;
 
 /**
@@ -30,7 +29,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @param {object} object - Initial value
      * @param {object} to - Target value
      * @param {object} params - Options of tweens
-     * @example Tween.fromTo(myObject, {x:0}, {x:200}, {duration:1000})
+     * @example Tween.fromTo(myObject, {x:0}, {x:200},1000)
      * @memberof vfui.Tween
      * @static
      */
@@ -43,7 +42,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @param {any} object object
      * @param {object} to - Target value
      * @param {object} params - Options of tweens
-     * @example Tween.to(myObject, {x:200}, {duration:1000})
+     * @example Tween.to(myObject, {x:200}, 1000)
      * @memberof vfui.Tween
      * @static
      */
@@ -55,7 +54,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @param {any} object object
      * @param {object} from - Initial value
      * @param {object} params - Options of tweens
-     * @example Tween.from(myObject, {x:200}, {duration:1000})
+     * @example Tween.from(myObject, {x:200}, 1000)
      * @memberof vfui.Tween
      * @static
      */
@@ -65,14 +64,14 @@ export default class Tween extends PIXI.utils.EventEmitter {
     constructor(object?: any) {
         super();
 
-        this.id = _id++
+        this.id = uid();
         this.object = object;
         this._valuesStart = Array.isArray(object) ? [] : {};
         this._interpolationFunction = Interpolation.Linear;
         return this;
     }
 
-    public id: number;
+    public id: string;
     public object: any;
     private _valuesEnd: any = null;
     private _valuesStart: any;
@@ -347,7 +346,6 @@ export default class Tween extends PIXI.utils.EventEmitter {
         this._startTime = time !== undefined ? (typeof time === 'string' ? now() + parseFloat(time) : time) : now();
         this._startTime += this._delayTime;
         this._initTime = this._prevTime = this._startTime;
-
         this._onStartCallbackFired = false;
         this._rendered = false;
         this._isPlaying = true;
@@ -645,7 +643,6 @@ export default class Tween extends PIXI.utils.EventEmitter {
                 if (!preserve) {
                     this._isPlaying = false;
                     remove(this);
-                    _id--;
                 }
                 this.emit(TweenEvent.complete, object);
                 this._repeat = this._r;

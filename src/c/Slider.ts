@@ -5,89 +5,134 @@ import * as tween from "./Tween/index";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import DragEvent from "../Interaction/DragEvent";
 import InteractionEvent from "../Interaction/InteractionEvent";
+import Sprite from "./Sprite";
 /**
  * UI 滑动条
  */
 export default class Slider extends UIBase{
+
+    /**
+     * 滑动条值发生改变后
+     */
+    public static readonly ChangeEvent= "change";
+    /**
+     * 滑动条值发生改变时
+     */
+    public static readonly ChangingEvent= "changing";
+
     public constructor(){
         super();
         this._track = new SliceSprite();
-        this._track.borderWidth = 7;
-        this.handle = new SliceSprite();
-        this.handle.borderWidth = 7;
-        this._fill = new SliceSprite();
-        this._fill.borderWidth = 7;
-        this.addChild(this._track);
-        this.addChild(this.handle);
-        this.addChild(this._fill);
-    }
-    /** 当前值 */
-    protected _amt = 0;
-    //set options
-    private _track: SliceSprite;
-    /** 背景 */
-    public get sourceTrack(): SliceSprite {
-        return this._track;
-    }
-    public set sourceTrack(value: SliceSprite) {
-        this._track = value;
-        this.updateDisplayChild();
-    }
-    public handle: SliceSprite;
-    /** 拖拽手柄*/
-    public get sourceHandle(): SliceSprite {
-        return this.handle;
-    }
-    public set sourceHandle(value: SliceSprite) {
-        this.handle = value;
-        if(this.handle) {
-            this.handle.pivot = 0.5;
-            this.handle.container.buttonMode = true;
+        this._track.borderWidth = 0;
+        this._thumb = new Sprite();
+        //this._thumb.borderWidth = 0;
+        if(this._thumb) {
+            this._thumb.pivot = 0.5;
+            this._thumb.container.buttonMode = true;
         }
-        this.updateDisplayChild();
-    }   
-    private _fill: SliceSprite;
-    /** 进度填充 */
-    public get sourceFill(): SliceSprite {
-        return this._fill;
-    }
-    public set sourceFill(value: SliceSprite) {
-        this._fill = value;
-        this.updateDisplayChild();
-    }
+        this._tracklight = new SliceSprite();
+        this._tracklight.borderWidth = 0;
+        this.addChild(this._track);
+        this.addChild(this._tracklight);
+        this.addChild(this._thumb);
 
-    private handleDrag: DragEvent|undefined;
-    private trackDrag: DragEvent|undefined;
+        this._handleDrag.onPress = this.onPress;
+        this._handleDrag.onDragStart = this.onDragStart;
+        this._handleDrag.onDragMove = this.onDragMove;
+        this._handleDrag.onDragEnd = this.onDragEnd;
+
+        this._trackDrag.onPress = this.onPress;
+        this._trackDrag.onDragStart = this.onDragStart;
+        this._trackDrag.onDragMove = this.onDragMove;
+        this._trackDrag.onDragEnd = this.onDragEnd;
+    }
+    /** 
+     * 当前值 
+     */
+    protected _amt = 0;
     /**
      * 小数的保留位，0不保留
      * @default 0
      */
-    private decimals = 0;
+    private _decimals = 0;
     /**
      * 滑块方向
      */
     private _vertical = false;
+    //set options
+    protected _track: SliceSprite;
+    protected _tracklight: SliceSprite;
+    protected _thumb: Sprite;
+
+    protected _sourceTrack = "";
+    protected _sourceTracklight = "";
+    protected _sourceThumb = "";
+
+    private _handleDrag = new DragEvent(this);
+    private _trackDrag = new DragEvent(this);
+
+    private _startValue = 0;
+    private _maxPosition = 0;
+    private _localMousePosition = new PIXI.Point();
+    private _lastChange = 0;
+    private _lastChanging = 0;
+    
+    private _minValue = 0;
+    private _maxValue = 100;
+
+    /** 是否可以绘制布局，设置本值并不会触发绘制，只是标记*/
+    protected _isUpdateLayout = true;
+    
+    /** 
+     * 背景
+     */
+    public get sourceTrack(){
+        return this._sourceTrack;
+    }
+    public set sourceTrack(value) {
+        this._sourceTrack = value;
+        this._track.source = value;
+    }
+    
+    /** 
+     * 进度填充 
+     */
+    public get sourceTracklight() {
+        return this._sourceTracklight;
+    }
+    public set sourceTracklight(value) {
+        this._sourceTracklight = value;
+        this._tracklight.source = value;
+    }
+
+    /** 
+     * 拖拽手柄
+     */
+    public get sourceThumb() {
+        return this._sourceThumb;
+    }
+    public set sourceThumb(value) {
+        this._sourceThumb = value;
+        this._thumb.removeListener("sourceComplete");
+        this._thumb.source = value;
+        this._thumb.visible = false;
+        this._thumb.once("sourceComplete",()=>{
+            this.update();
+            this._thumb.visible = true;
+        })
+    }   
+
+    /**
+     * 是否垂直
+     * @default false
+     */
     public get vertical() {
         return this._vertical;
     }
     public set vertical(value) {
         this._vertical = value;
     }
-    /** 更改完成 */
-    protected _onValueChange: Function|undefined;
-    /** 更改时 */
-    protected _onValueChanging: Function|undefined;
-    /**
-     * 是否可用
-     */
-    private _disabled = false;
-    private startValue = 0;
-    private maxPosition = 0;
-    private localMousePosition = new PIXI.Point();
-    private _lastChange = 0;
-    private _lastChanging = 0;
-    
-    private _minValue = 0;
+
     /** 
      * 最小值 
      * @default 0
@@ -99,7 +144,7 @@ export default class Slider extends UIBase{
         this._minValue = value;
         this.update();
     }
-    private _maxValue = 100;
+   
     /** 
      * 最大值 
      * @default 100
@@ -115,107 +160,112 @@ export default class Slider extends UIBase{
      * 当前值 
      */
     public get value() {
-        return Utils.Round(Utils.Lerp(this._minValue, this._maxValue, this._amt), this.decimals);
+        return Utils.Round(Utils.Lerp(this._minValue, this._maxValue, this._amt), this._decimals);
     }
     public set value(value: number) {
         this._amt = (Math.max(this._minValue, Math.min(this._maxValue, value)) - this._minValue) / (this._maxValue - this._minValue);
-        if (this._onValueChange )
-            this._onValueChange(this.value);
-        if (this._onValueChanging)
-            this._onValueChanging(this.value);
         this.update();
+        this.triggerValueChange();
+        this.triggerValueChanging();
     }
-    protected updateDisplayChild(){
+
+    protected updateLayout(){
+
+        if(!this._isUpdateLayout){
+            return;
+        }
+        this._track.widthPet = "100%";
+        this._track.heightPct = "100%";
+
         if (this.vertical) {
-            this.heightPct = "100%";
-            this.width = this._track.width;
-            this._track.heightPct = "100%";
-            this.handle.horizontalAlign = HorizontalAlignEnum.center;
-            if (this._fill) this._fill.horizontalAlign = HorizontalAlignEnum.center;
+            this._thumb.horizontalAlign = HorizontalAlignEnum.center;
+            this._tracklight.horizontalAlign = HorizontalAlignEnum.center;
+            this._tracklight.widthPet = "100%";
+        }else {
+            this._thumb.verticalAlign = VerticalAlignEnum.middle;
+            this._tracklight.verticalAlign = VerticalAlignEnum.middle;
+            this._tracklight.heightPct = "100%";
         }
-        else {
-            this.widthPet = "100%";
-            this.height = this._track.height;
-            this._track.widthPet = "100%";
-            this.handle.verticalAlign = VerticalAlignEnum.middle
-            if (this._fill) this._fill.verticalAlign = VerticalAlignEnum.middle;
-        }
+        this._isUpdateLayout = false;
     }
     public update (soft?: boolean) {
+        this.updateLayout();
+
         let handleSize: number;
         let val: number;
-        if(this.handle){
+        if(this._thumb){
             if (this.vertical) {
-                handleSize = this.handle._height || this.handle.container.height;
+                handleSize = this._thumb._height || this._thumb.container.height;
                 val = ((this._height - handleSize) * this._amt) + (handleSize * 0.5);
                 if (soft) {
-                    tween.Tween.to(this.handle,{ top: val },{duration:300}).easing(tween.Easing.Exponential.InOut)
-                    if (this._fill) tween.Tween.to(this._fill, { height: val },{duration:300}).easing(tween.Easing.Exponential.InOut)
+                    
+                    tween.Tween.to(this._thumb,{ top: val },300).easing(tween.Easing.Linear.None).start();
+                    tween.Tween.to(this._tracklight, { height: val },300).easing(tween.Easing.Linear.None).start();
                 }
                 else {
-                    //tween.Tween.set(this.handle, { top: val });
-                    //if (this._fill) tween.Tween.set(this._fill, { height: val });
+                    this._thumb.top = val;
+                    this._tracklight.height = val;
                 }
             }
             else {
-                handleSize = this.handle._width || this.handle.container.width;
+                handleSize = this._thumb._width || this._thumb.container.width;
                 val = ((this._width - handleSize) * this._amt) + (handleSize * 0.5);
                 if (soft) {
-                    tween.Tween.to(this.handle,{ left: val },{duration:300}).easing(tween.Easing.Exponential.InOut)
-                    if (this._fill) tween.Tween.to(this._fill, { width: val },{duration:200}).easing(tween.Easing.Exponential.InOut)
+                    tween.Tween.to(this._thumb,{ left: val },300).easing(tween.Easing.Linear.None).start();
+                    tween.Tween.to(this._tracklight, { width: val },300).easing(tween.Easing.Linear.None).start();
                 }
                 else {
-                    //tween.Tween.set(this.handle, { left: val });
-                    //if (this._fill) tween.Tween.set(this._fill, { width: val });
+                    this._thumb.left = val;
+                    this._tracklight.width = val;
                 }
             }
         }
     }
 
-    protected initialize(){
-        super.initialize();
-    }
-    protected onPress (event: InteractionEvent,isPressed: boolean) {
-        event.stopPropagation()
-        if(this.trackDrag && this.trackDrag.id == event.data.identifier){
-            if (isPressed)
+    protected onPress (event: InteractionEvent,isPressed: boolean,dragEvent?:DragEvent) {
+        
+        event.stopPropagation();
+        if(this._trackDrag==dragEvent && this._trackDrag.id == event.data.identifier){
+            if (isPressed){
                 this.updatePositionToMouse(event.data.global, true);
+            }
+                
         }
     }
 
     protected onDragStart (event: InteractionEvent) {
-        if(this.handle && this.handleDrag && this.handleDrag.id == event.data.identifier){
-            this.startValue = this._amt;
-            this.maxPosition = this.vertical ? this._height - this.handle._height : this._width - this.handle._width;
+        if(this._thumb && this._handleDrag && this._handleDrag.id == event.data.identifier){
+            this._startValue = this._amt;
+            this._maxPosition = this.vertical ? this._height - this._thumb._height : this._width - this._thumb._width;
         }
     }
 
     protected onDragMove (event: InteractionEvent,offset: PIXI.Point) {
-        if(this.handleDrag && this.handleDrag.id == event.data.identifier){
-            this._amt = !this.maxPosition ? 0 : Math.max(0, Math.min(1, this.startValue + ((this.vertical ? offset.y : offset.x) / this.maxPosition)));
+        if(this._handleDrag && this._handleDrag.id == event.data.identifier){
+            this._amt = !this._maxPosition ? 0 : Math.max(0, Math.min(1, this._startValue + ((this.vertical ? offset.y : offset.x) / this._maxPosition)));
             this.triggerValueChanging();
             this.update();
-        }else if(this.trackDrag && this.trackDrag.id == event.data.identifier){
+        }else if(this._trackDrag && this._trackDrag.id == event.data.identifier){
             this.updatePositionToMouse(event.data.global, false);
         }
 
     }
 
     protected onDragEnd (event: InteractionEvent) {
-        if(this.handleDrag && this.handleDrag.id == event.data.identifier){
+        if(this._handleDrag && this._handleDrag.id == event.data.identifier){
             this.triggerValueChange();
             this.update();
-        }else if(this.trackDrag && this.trackDrag.id == event.data.identifier){
+        }else if(this._trackDrag && this._trackDrag.id == event.data.identifier){
             this.triggerValueChange();
         }
     }
     protected updatePositionToMouse (mousePosition: PIXI.Point, soft: boolean) {
         if(this._track){
-            this._track.container.toLocal(mousePosition, undefined, this.localMousePosition, true);
+            this._track.container.toLocal(mousePosition, undefined, this._localMousePosition, true);
         }     
-        if(this.handle){
-            const newPos = this.vertical ? this.localMousePosition.y - this.handle._height * 0.5 : this.localMousePosition.x - this.handle._width * 0.5;
-            const maxPos = this.vertical ? this._height - this.handle._height : this._width - this.handle._width;
+        if(this._thumb){
+            const newPos = this.vertical ? this._localMousePosition.y - this._thumb._height * 0.5 : this._localMousePosition.x - this._thumb._width * 0.5;
+            const maxPos = this.vertical ? this._height - this._thumb._height : this._width - this._thumb._width;
             this._amt = !maxPos ? 0 : Math.max(0, Math.min(1, newPos / maxPos));
             this.update(soft);
             this.triggerValueChanging();
@@ -223,20 +273,16 @@ export default class Slider extends UIBase{
     }
 
     private triggerValueChange() {
-        this.emit("change", this.value);
+        this.emit("change", this.value,this._lastChange);
         if (this._lastChange != this.value) {
             this._lastChange = this.value;
-            if (this._onValueChange)
-                this._onValueChange(this.value);
         }
     }
 
     private triggerValueChanging() {
-        this.emit("changing", this.value);
+        this.emit("changing", this.value,this._lastChanging);
         if (this._lastChanging != this.value) {
             this._lastChanging = this.value;
-            if (this._onValueChanging)
-                this._onValueChanging(this.value);
         }
     }
 }

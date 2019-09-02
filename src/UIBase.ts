@@ -979,14 +979,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     public update() {
 
     }
-    /**
-     * 渲染父容器
-     */
-    public updateParent() {
-        if (this.parent && this.parent.updatesettings) {
-            this.parent.updatesettings(false, true);
-        }
-    }
+
     /** 
      * 更新渲染设置属性
      */
@@ -1144,6 +1137,14 @@ export default class UIBase extends PIXI.utils.EventEmitter {
             this.container.position.y = Math.round(this.container.position.y);
         }
         
+    }
+    /**
+     * 渲染父容器
+     */
+    public updateParent() {
+        if (this.parent && this.parent.updatesettings) {
+            this.parent.updatesettings(false, true);
+        }
     }
     /** 
      * 更新所有子节点

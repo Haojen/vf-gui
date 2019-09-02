@@ -2,6 +2,7 @@ import { setRectangle, log } from "../Utils";
 import UIBase from "../UIBase";
 /**
  * 动态宽高的图片,9切
+ * Event: sourceComplete
  */
 export default class SliceSprite extends UIBase {
     /**
@@ -35,6 +36,7 @@ export default class SliceSprite extends UIBase {
         if(value instanceof  PIXI.Texture){
             this.t= value.baseTexture;
             this.f = value.frame;
+            this.emit("sourceComplete",this._source);
         }else{
             if(this._texture){
                 this._texture.removeAllListeners();
@@ -44,17 +46,19 @@ export default class SliceSprite extends UIBase {
                 if(this._texture){
                     this.t = this._texture.baseTexture;
                     this.f = this._texture.frame;
-                    this.updatesettings(true);           
+                    this.updatesettings(true);     
+                    this.emit("sourceComplete",this._source);      
                 }
+            }else{
+                this._texture.once("update",()=>{
+                    if(this._texture){
+                        this.t = this._texture.baseTexture;
+                        this.f = this._texture.frame;
+                        this.updatesettings(true);
+                        this.emit("sourceComplete",this._source);
+                    }
+                },this);
             }
-            this._texture.once("update",()=>{
-                if(this._texture){
-                    this.t = this._texture.baseTexture;
-                    this.f = this._texture.frame;
-                    this.updatesettings(true);           
-                }
-            },this);
-
         }
     }
 
@@ -69,7 +73,7 @@ export default class SliceSprite extends UIBase {
         return this.bw;
     }
     /** 
-     * 是否水平切，上下切
+     * 是否水平切
     */
     public set horizontalSlice(value: boolean) {
         this.hs = value;
@@ -80,7 +84,7 @@ export default class SliceSprite extends UIBase {
         return this.hs;
     }
     /** 
-      * 是否垂直切，左右切
+      * 是否垂直切
      */
     public set verticalSlice(value: boolean) {
         this.vs = value;
@@ -91,14 +95,15 @@ export default class SliceSprite extends UIBase {
         return this.vs;
     }
     /** 
-      * 是否垂直切，左右切
+      * 图片展示方式，平铺或拉伸
+      * @default false 拉伸
      */
     public set tile(value: boolean) {
         this._tile = value;
         this.updatesettings(true);
     }
     public get tile() {
-        return this.tile;
+        return this._tile;
     }
     private ftl= new PIXI.Rectangle;
     private ftr= new PIXI.Rectangle;

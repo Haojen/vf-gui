@@ -117,6 +117,18 @@ export function get(tween: Tween) {
     return null;
 }
 
+export function removeDisplay(uuid:string){
+    for (let i = 0; i < _tweens.length; i++) {
+        console.log(_tweens[i].object.uuid);
+        if (_tweens[i].object.uuid && uuid === _tweens[i].object.uuid) {
+            _tweens[i].stop();
+            remove(_tweens[i]);
+            return;
+        }
+    }
+    return;
+}
+
 /**
  * 从缓动列表移除对象
  * @param {Tween} tween Tween instance

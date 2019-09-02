@@ -39,17 +39,21 @@ export default class Sprite extends UIBase{
             this._sprite.texture = value;
             this.correctionWidthAndHeight();
             this.updatesettings(true);  
+            this.emit("sourceComplete",this._source);
         }else{
             this._sprite.texture = PIXI.Texture.from(value);
             if(this._sprite.texture.width>1 && this._sprite.texture.height>1){
                 this.correctionWidthAndHeight();
                 this.updatesettings(true);  
+                this.emit("sourceComplete",this._source);
+            }else{
+                this._sprite.texture.once("update",()=>{
+                    this.correctionWidthAndHeight();
+                    this.updatesettings(true);  
+                    this.emit("sourceComplete",this._source);
+                },this);
             }
-            this._sprite.texture.once("update",()=>{
-                this.correctionWidthAndHeight();
-                this.updatesettings(true);  
-                
-            },this);
+
         }        
     }
 
