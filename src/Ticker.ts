@@ -24,6 +24,7 @@ class Ticker extends PIXI.utils.EventEmitter{
     public get disabled() {
         return this._disabled;
     }
+    
     public set disabled(value: boolean) {
         if(value == this._disabled){
             return;
@@ -34,14 +35,13 @@ class Ticker extends PIXI.utils.EventEmitter{
         }
     }
     
-    //deltaTime: number
-    public update() {
+    public update(deltaTime: number) {
         if (this._disabled){
             return;
         }
         const _now = now();
         tween.update(_now);
-        this.emit("update", _now-this._lastnow);
+        this.emit("update", _now - this._lastnow,deltaTime);
         this._lastnow = _now;
         
     }
