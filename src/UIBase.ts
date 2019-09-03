@@ -27,6 +27,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
         super();
         this.uuid = uid();
         this.container = new PIXI.Container();
+        this.container.name = this.constructor.name;
         this.setting = new UISettings();
         if(width && height)
             this.setDefaultSize(width,height)
@@ -953,6 +954,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     get interactiveChildren() {
         return this.container.interactiveChildren;
     }
+    
     /**
      * 绘制渲染对象
      * @param updateChildren 是否渲染子节点，true渲染
@@ -973,6 +975,26 @@ export default class UIBase extends PIXI.utils.EventEmitter {
         this.update();
         if (updateChildren) this.updateChildren();
     }
+
+    protected dalayDrawTimeId = -1;
+    /**
+     * 延迟渲染，PIXI还没找到下一帧事件，后续修改，注意生命周期结束的销毁
+     */
+    protected set dalayDraw(isDalay: boolean){
+        if(!isDalay){
+            window.clearTimeout(this.dalayDrawTimeId);
+            this.dalayDrawTimeId = -1;
+        }
+        if(this.dalayDrawTimeId!==-1){
+            return;
+        }
+        this.dalayDrawTimeId = window.setTimeout(() => {
+            this.update();
+            this.dalayDrawTimeId = -1;
+        }, 30);
+    }
+    
+
     /**
      * 更新方法，其他组件重写
      */
@@ -1158,24 +1180,33 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      * 添加UI元件，可以同时添加多个如addChild(a,b,c,d)
      * @param UIObject 要添加的UI组件
      */
-    public addChild(... UIObject: UIBase[]) {
-        const argumentsLength = UIObject.length;
-        if (argumentsLength > 1) {
-            for (let i = 0; i < argumentsLength; i++) {
-                this.addChild(UIObject[i]);
-            }
-        }
-        else {
-            const item  = UIObject[0];
-            if (item.parent) {
-                item.parent.removeChild(item);
-            }
+    public addChild(UIObject: UIBase) {
+        // const argumentsLength = UIObject.length;
+        // if (argumentsLength > 1) {
+        //     for (let i = 0; i < argumentsLength; i++) {
+        //         this.addChild(UIObject[i]);
+        //     }
+        // }
+        // else {
+        //     const item  = UIObject[0];
+        //     if (item.parent) {
+        //         item.parent.removeChild(item);
+        //     }
 
-            item.parent = this;
-            this.container.addChild(item.container);
-            this.children.push(item);
-            this.updatesettings(true, true);
+        //     item.parent = this;
+        //     this.container.addChild(item.container);
+        //     this.children.push(item);
+        //     this.updatesettings(true, true);
+        // }
+        const item  = UIObject;
+        if (item.parent) {
+            item.parent.removeChild(item);
         }
+
+        item.parent = this;
+        this.container.addChild(item.container);
+        this.children.push(item);
+        this.updatesettings(true, true);
         return UIObject;
     }
     public addChildAt(item: UIBase, index: number){
@@ -1193,29 +1224,44 @@ export default class UIBase extends PIXI.utils.EventEmitter {
      * 移除已添加的UI组件，可以同时移除多个如addChild(a,b,c,d)
      * @param UIObject 要移除的UI组件
      */
-    public removeChild(...UIObject: UIBase[]) {
-        const argumentLenght = UIObject.length;
-        if (argumentLenght > 1) {
-            for (let i = 0; i < argumentLenght; i++) {
-                this.removeChild(UIObject[i]);
-            }
-        }
-        else {
-            const item  = UIObject[0];
-            const index = this.children.indexOf(item);
-            if (index !== -1) {
-                const oldUIParent = item.parent;
-                //var oldParent = UIObject.container.parent;
-                item.container.parent.removeChild(item.container);
-                this.children.splice(index, 1);
-                item.parent = undefined;
+    public removeChild(UIObject: UIBase) {
+        // const argumentLenght = UIObject.length;
+        // if (argumentLenght > 1) {
+        //     for (let i = 0; i < argumentLenght; i++) {
+        //         this.removeChild(UIObject[i]);
+        //     }
+        // }
+        // else {
+        //     const item  = UIObject[0];
+        //     const index = this.children.indexOf(item);
+        //     if (index !== -1) {
+        //         const oldUIParent = item.parent;
+        //         //var oldParent = UIObject.container.parent;
+        //         item.container.parent.removeChild(item.container);
+        //         this.children.splice(index, 1);
+        //         item.parent = undefined;
 
-                //oldParent._recursivePostUpdateTransform();
-                setTimeout(() => { //hack but cant get the transforms to update propertly otherwice?
-                    if (oldUIParent && oldUIParent.updatesettings)
-                        oldUIParent.updatesettings(true, true);
-                }, 0);
-            }
+        //         //oldParent._recursivePostUpdateTransform();
+        //         setTimeout(() => { //hack but cant get the transforms to update propertly otherwice?
+        //             if (oldUIParent && oldUIParent.updatesettings)
+        //                 oldUIParent.updatesettings(true, true);
+        //         }, 0);
+        //     }
+        // }
+        const item  = UIObject;
+        const index = this.children.indexOf(item);
+        if (index !== -1) {
+            const oldUIParent = item.parent;
+            //var oldParent = UIObject.container.parent;
+            item.container.parent.removeChild(item.container);
+            this.children.splice(index, 1);
+            item.parent = undefined;
+
+            //oldParent._recursivePostUpdateTransform();
+            setTimeout(() => { //hack but cant get the transforms to update propertly otherwice?
+                if (oldUIParent && oldUIParent.updatesettings)
+                    oldUIParent.updatesettings(true, true);
+            }, 0);
         }
     }
     /**

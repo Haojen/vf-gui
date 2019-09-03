@@ -34,13 +34,15 @@ class Ticker extends PIXI.utils.EventEmitter{
         }
     }
     
-    public update(deltaTime: number) {
+    //deltaTime: number
+    public update() {
         if (this._disabled){
             return;
         }
-        tween.update(now());
-        this.emit("update", deltaTime);
-        this._lastnow = now();
+        const _now = now();
+        tween.update(_now);
+        this.emit("update", _now-this._lastnow);
+        this._lastnow = _now;
         
     }
     /**

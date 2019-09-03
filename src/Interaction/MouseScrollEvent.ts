@@ -1,5 +1,6 @@
 import UIBase from "../UIBase";
 import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
+import { uid } from "../Utils";
 
 interface TWheelEvent extends WheelEvent{
     /** 火狐 */
@@ -22,11 +23,11 @@ export default class MouseScrollEvent{
         obj.container.interactive = true;
         this.startEvent();
     }
-
+    public  id = "";
     private obj: UIBase
     private preventDefault: boolean;
-    private bound = false;
     private delta = new PIXI.Point();
+    private mouseScrllBind: ((_e: TWheelEvent | Event) => void | undefined) | undefined;
 
     private startEvent() {
         this.obj.container.on(TouchMouseEventEnum.mouseover, this._onHover, this);
@@ -34,7 +35,7 @@ export default class MouseScrollEvent{
     }
 
     private _onMouseScroll(_e: TWheelEvent|Event) {
-
+        _e
         const e = _e as TWheelEvent;
         if (this.preventDefault)
             e.preventDefault();
@@ -47,30 +48,38 @@ export default class MouseScrollEvent{
         this.onMouseScroll && this.onMouseScroll.call(this.obj, e, this.delta);
     }
     //e?: interaction.InteractionEvent
+
     private _onHover() {
-        if (!this.bound) {
-            document.addEventListener("mousewheel", this._onMouseScroll.bind(this), false);
-            document.addEventListener("DOMMouseScroll", this._onMouseScroll.bind(this), false);
-            this.bound = true;
+        if (this.mouseScrllBind === undefined) {
+            this.id = uid();
+            this.mouseScrllBind = this._onMouseScroll.bind(this);
+            document.addEventListener("mousewheel", this.mouseScrllBind, { passive: false });
+            document.addEventListener("DOMMouseScroll", this.mouseScrllBind, { passive: false });
+            console.log("add",this.id);
         }
     }
     //e?: interaction.InteractionEvent
     private _onMouseOut() {
-        if (this.bound) {
-            document.removeEventListener("mousewheel", this._onMouseScroll.bind(this));
-            document.removeEventListener("DOMMouseScroll", this._onMouseScroll.bind(this));
-            this.bound = false;
+        if (this.mouseScrllBind) {
+            document.removeEventListener("mousewheel", this.mouseScrllBind);
+            document.removeEventListener("DOMMouseScroll", this.mouseScrllBind);
+            this.mouseScrllBind = undefined;
+            console.log("remove",this.id);
         }
     }
 
     public stopEvent() {
-        if (this.bound) {
-            document.removeEventListener("mousewheel", this._onMouseScroll.bind(this));
-            document.removeEventListener("DOMMouseScroll", this._onMouseScroll.bind(this));
-            this.bound = false;
+        if (this.mouseScrllBind) {
+            document.removeEventListener("mousewheel", this.mouseScrllBind);
+            document.removeEventListener("DOMMouseScroll", this.mouseScrllBind);
+            this.mouseScrllBind = undefined;
         }
         this.obj.container.removeListener('mouseover',this. _onHover,this);
         this.obj.container.removeListener('mouseout', this._onMouseOut,this);
+    }
+
+    public remove(){
+        this.stopEvent();
     }
 
     public onMouseScroll: ((e: WheelEvent,delta: PIXI.Point) => void) | undefined

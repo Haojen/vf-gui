@@ -67,6 +67,7 @@ export default class DragEvent {
                     return;
                 }
             }
+            
             this.onDragStart && this.onDragStart.call(this.obj, e,this);
             this.dragging = true;
         }
@@ -112,10 +113,11 @@ export default class DragEvent {
         this.onDragEnd = undefined;
         this.onDragMove = undefined;
         this.onDragStart = undefined;
+        this.obj.container.interactive = false;
     }
 
-    public onPress: ((e: InteractionEvent, isPressed: boolean,dragObj?:DragEvent) => void) | undefined;
-    public onDragEnd: ((e: InteractionEvent,dragObj?:DragEvent) => void) | undefined
-    public onDragMove: ((e: InteractionEvent, offset: PIXI.Point,dragObj?:DragEvent) => void) | undefined 
-    public onDragStart: ((e: InteractionEvent,dragObj?:DragEvent) => void) | undefined
+    public onPress: ((e: InteractionEvent, isPressed: boolean,dragObj?: DragEvent) => void) | undefined;
+    public onDragEnd: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
+    public onDragMove: ((e: InteractionEvent, offset: PIXI.Point,dragObj?: DragEvent) => void) | undefined 
+    public onDragStart: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
 }

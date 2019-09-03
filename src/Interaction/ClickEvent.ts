@@ -205,9 +205,10 @@ export default class ClickEvent {
         this.onHover = undefined;
         this.onClick = undefined;
         this.onMove = undefined;
+        this.obj.container.interactive = false;
     }
-    public onHover: ((e: InteractionEvent,over: boolean,clickEvent?:ClickEvent) => void) | undefined
-    public onPress: ((e: InteractionEvent, isPressed: boolean,clickEvent?:ClickEvent) => void) | undefined;
-    public onClick: ((e: InteractionEvent,clickEvent?:ClickEvent) => void) | undefined 
-    public onMove: ((e: InteractionEvent,clickEvent?:ClickEvent) => void) | undefined
+    public onHover: ((e: InteractionEvent,over: boolean,clickEvent?: ClickEvent) => void) | undefined
+    public onPress: ((e: InteractionEvent, isPressed: boolean,clickEvent?: ClickEvent) => void) | undefined;
+    public onClick: ((e: InteractionEvent,clickEvent?: ClickEvent) => void) | undefined 
+    public onMove: ((e: InteractionEvent,clickEvent?: ClickEvent) => void) | undefined
 }

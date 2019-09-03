@@ -33,7 +33,7 @@ export default class SortableList extends Container{
         if (!UIObject.attach._sortListRnd)
             UIObject.attach._sortListRnd = Math.random();  
         this.sort();
-        return [UIObject];
+        return UIObject;
     }
 
     /**
@@ -54,14 +54,12 @@ export default class SortableList extends Container{
 
         this.addChild(UIObject);
     }
-    public removeChild(... UIObject: UIBase[]) {
-        super.removeChild(... UIObject);
-        UIObject.forEach(value=>{
-            const index = this.items.indexOf(value);
-            if (index != -1) {
-                this.items.splice(index, 1);
-            }     
-        });
+    public removeChild(UIObject: UIBase) {
+        super.removeChild(UIObject);
+        const index = this.items.indexOf(UIObject);
+        if (index != -1) {
+            this.items.splice(index, 1);
+        }   
         this.sort();
     }
 

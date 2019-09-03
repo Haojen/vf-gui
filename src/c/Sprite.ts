@@ -18,6 +18,11 @@ export default class Sprite extends UIBase{
     }
     protected _sprite: PIXI.Sprite;
     protected _source: number | string | PIXI.Texture |HTMLImageElement| HTMLCanvasElement | HTMLVideoElement|undefined;
+    
+    /** 获得图像 */
+    public get img(){
+        return this._sprite;
+    }
     /** 
      * 获取或设置显示源 
      * 可以使key、url,PIXI.Texture | canva. 当是key时确认资源库是否存在

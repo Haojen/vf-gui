@@ -222,7 +222,7 @@ export default class Slider extends UIBase{
         }
     }
 
-    protected onPress (event: InteractionEvent,isPressed: boolean,dragEvent?:DragEvent) {
+    protected onPress (event: InteractionEvent,isPressed: boolean,dragEvent?: DragEvent) {
         
         event.stopPropagation();
         if(this._trackDrag==dragEvent && this._trackDrag.id == event.data.identifier){
@@ -272,14 +272,14 @@ export default class Slider extends UIBase{
         }
     }
 
-    private triggerValueChange() {
+    protected triggerValueChange() {
         this.emit("change", this.value,this._lastChange);
         if (this._lastChange != this.value) {
             this._lastChange = this.value;
         }
     }
 
-    private triggerValueChanging() {
+    protected triggerValueChanging() {
         this.emit("changing", this.value,this._lastChanging);
         if (this._lastChanging != this.value) {
             this._lastChanging = this.value;

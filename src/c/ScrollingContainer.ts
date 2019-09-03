@@ -6,21 +6,27 @@ import * as Utils from "../Utils";
 import DragEvent from "../Interaction/DragEvent";
 import MouseScrollEvent from "../Interaction/MouseScrollEvent";
 import InteractionEvent from "../Interaction/InteractionEvent";
+import { now } from "../Utils";
+import Rect from "./Rect";
+
 /**
  * 可滚动的容器
  */
 export default class ScrollingContainer extends Container {
     public constructor() {
         super();
-
-        this.container.addChild(this.mask);
+        this._maskRect.y = 0;
+        this.addChild(this._maskRect);
         this.container.addChild(this.innerContainer);
-        this.container.mask = this.mask;
+        this.container.name = "ScrollingContainer.container";
+        this.innerContainer.name = "ScrollingContainer.innerContainer";
+        this.mask = this._maskRect.graphics;
     }
+
     /**
      * 遮罩
      */
-    private mask = new PIXI.Graphics();
+    private _maskRect = new Rect();
     /**
      * 内容容器
      * @private
@@ -29,33 +35,8 @@ export default class ScrollingContainer extends Container {
     /**
      * 内容的宽高
      */
-    private innerBounds = new PIXI.Rectangle();
+    public innerBounds = new PIXI.Rectangle();
 
-    private _scrollX = false;
-    /** 
-     * 是否启用水平滚动 
-     * @default false
-     */
-    public get scrollX() {
-        return this._scrollX;
-    }
-    public set scrollX(value) {
-        this._scrollX = value;
-        this.initScrolling();
-    }
-
-    private _scrollY = false;
-    /**
-     * 是否启用垂直滚动
-     * @default false
-     */
-    public get scrollY() {
-        return this._scrollY;
-    }
-    public set scrollY(value) {
-        this._scrollY = value;
-        this.initScrolling();
-    }
     /**
      * 是否启动拖拽滚动
      * @default true
@@ -65,6 +46,10 @@ export default class ScrollingContainer extends Container {
      * 拖动处理类
      */
     private dragEvent: DragEvent | undefined;
+    /**
+     * 鼠标滚动
+     */
+    private mouseScrollEvent: MouseScrollEvent | undefined;
     /**
      * 滚动的阻力或柔度 (0-1) 
      * @default 0.5
@@ -105,50 +90,139 @@ export default class ScrollingContainer extends Container {
     /**
      * 临时方案，设置时间间隔，跳转容器宽高
      */
-    private boundCached = performance.now() - 1000;
+    private _boundCached = now() - 1000;
 
     private _lastWidth = 0;
     private _lastHeight = 0;
+    private _scrollX = false;
+    private _scrollY = false;
+    private _isInitScrolling = false;
+    /** 
+     * 是否启用水平滚动 
+     * @default false
+     */
+    public get scrollX() {
+        return this._scrollX;
+    }
+    public set scrollX(value) {
+        this._scrollX = value;
+    }
 
-    protected initialize() {
-        super.initialize();
+    /**
+     * 是否启用垂直滚动
+     * @default false
+     */
+    public get scrollY() {
+        return this._scrollY;
+    }
+    public set scrollY(value) {
+        this._scrollY = value;
     }
 
     public update() {
-        super.update();
         if (this._lastWidth != this._width || this._lastHeight != this._height) {
-            const of = this.expandMask;
-            this.mask.clear();
-            this.mask.lineStyle(0);
-            this.mask.beginFill(0xFFFFFF, 1);
-            if (this.radius === 0) {
-
-                //this.mask.drawRect(0, 0, this._width, this._height);
-                //this.mask.drawRect(-of, -of, this._width + of, this.height + of);
-                //this.mask.moveTo(-of, -of);
-                //this.mask.lineTo(this._width + of, -of);
-                //this.mask.lineTo(this._width + of, this._height + of);
-                //this.mask.lineTo(-of, this._height + of);
-                this.mask.drawRect(-of, -of, this._width + of, this._height + of);
-            }
-            else {
-                this.mask.drawRoundedRect(-of, -of, this._width + of, this.height + of, this.radius);
-            }
-            this.mask.endFill();
+            const _of = this.expandMask;
+            this._maskRect.drawRoundedRect(_of, -_of, this._width + _of, this.height + _of, this.radius,0xFFFFFF);
             this._lastWidth = this._width;
             this._lastHeight = this._height;
         }
 
+        this.setScrollPosition();
+    }
 
-        if (this.setScrollPosition) {
-            this.setScrollPosition();
+    protected setScrollPosition(speed?: PIXI.Point) {
+        if (speed) {
+            this._Speed = speed;
+        }
+
+        if (!this.animating) {
+            this.animating = true;
+            this._lastPosition.copyFrom(this.innerContainer.position);
+            this._targetPosition.copyFrom(this.innerContainer.position);
+            this.updateScrollPosition(0);
+            //Ticker.shared.removeUpdateEvent(this.updateScrollPosition, this);
+            //Ticker.shared.addUpdateEvent(this.updateScrollPosition, this);
         }
     }
 
-    public addChild(...uiObject: UIBase[]) {
-        super.addChild(...uiObject);
+    public addChild(uiObject: UIBase) {
+        super.addChild(uiObject);
+        if(uiObject != this._maskRect){
+            this.innerContainer.addChild(uiObject.container);
+        } 
         this.getInnerBounds(true); //make sure bounds is updated instantly when a child is added
         return uiObject;
+    }
+
+    protected getInnerBounds(force?: boolean) {
+        //this is a temporary fix, because we cant rely on innercontainer height if the children is positioned > 0 y.
+        if (force || now() - this._boundCached > 1000) {
+            this.innerContainer.getLocalBounds(this.innerBounds);
+            this.innerBounds.height = this.innerBounds.y + this.innerContainer.height;
+            this.innerBounds.width = this.innerBounds.x + this.innerContainer.width;
+            this._boundCached = now();
+        }
+
+        return this.innerBounds;
+    }
+
+    private _containerStart = new PIXI.Point();
+    private _targetPosition = new PIXI.Point();
+    private _lastPosition = new PIXI.Point();
+    private _Position = new PIXI.Point();
+    private _Speed = new PIXI.Point();
+    private _stop = false;
+
+    protected initialize(){
+        super.initialize();
+        this.initScrolling();
+    }
+    protected initScrolling() {
+
+        this._isInitScrolling = true;
+        if (this.dragEvent) {
+            this.dragEvent.remove();
+            this.dragEvent = undefined;
+        }
+        //Drag scroll
+        if (this.dragScrolling) {
+            this.dragEvent = new DragEvent(this);
+            this.dragEvent.onDragStart = () => {
+                if (!this.scrolling) {
+                    this._containerStart.copyFrom(this.innerContainer.position);
+                    this._Position.copyFrom(this.innerContainer.position);
+                    this.scrolling = true;
+                    this.setScrollPosition();
+                    Ticker.shared.addUpdateEvent(this.updateScrollPosition, this);
+                }
+            };
+
+            this.dragEvent.onDragMove = (e: InteractionEvent, offset: Point) => {
+                if (this.scrollX)
+                    this._targetPosition.x = this._containerStart.x + offset.x;
+                if (this.scrollY)
+                    this._targetPosition.y = this._containerStart.y + offset.y;
+            };
+
+            this.dragEvent.onDragEnd = () => {
+                if (this.scrolling) {
+                    this.scrolling = false;
+                    Ticker.shared.removeUpdateEvent(this.updateScrollPosition, this);
+                }
+            };
+        }
+        //Mouse scroll
+        if(this.mouseScrollEvent ){
+            this.mouseScrollEvent.remove();
+            this.mouseScrollEvent = undefined;
+        }
+        const scrollSpeed = new PIXI.Point();
+        this.mouseScrollEvent = new MouseScrollEvent(this, true);
+        this.mouseScrollEvent.onMouseScroll = (e: WheelEvent,delta) => {
+            scrollSpeed.set(-delta.x * 0.2, -delta.y * 0.2);
+            this.setScrollPosition(scrollSpeed);
+        };
+        this.updateScrollBars();
     }
 
     protected updateScrollBars() {
@@ -157,79 +231,21 @@ export default class ScrollingContainer extends Container {
         }
     }
 
-    protected getInnerBounds(force?: boolean) {
-        //this is a temporary fix, because we cant rely on innercontainer height if the children is positioned > 0 y.
-        if (force || performance.now() - this.boundCached > 1000) {
-            this.innerContainer.getLocalBounds(this.innerBounds);
-            this.innerContainer.getLocalBounds(this.innerBounds);
-            this.innerBounds.height = this.innerBounds.y + this.innerContainer.height;
-            this.innerBounds.width = this.innerBounds.x + this.innerContainer.width;
-            this.boundCached = performance.now();
-        }
 
-        return this.innerBounds;
-    }
-
-    private containerStart = new PIXI.Point();
-    private targetPosition = new PIXI.Point();
-    private lastPosition = new PIXI.Point();
-    private Position = new PIXI.Point();
-    private Speed = new PIXI.Point();
-    private stop = false;
-
-    protected initScrolling() {
-
-        if (this.dragEvent) {
-            this.dragEvent.remove();
-            this.dragEvent = undefined;
-        }
-        //Drag scroll
-        if (this.dragScrolling) {
-            this.dragEvent = new DragEvent(this);
-            this.dragEvent.onDragStart = (e) => {
-                if (!this.scrolling) {
-                    
-                    this.containerStart.copyFrom(this.innerContainer.position);
-                    this.Position.copyFrom(this.innerContainer.position);
-                    this.scrolling = true;
-                    this.setScrollPosition();
-                    this.emit("dragStart", e);
-                }
-            };
-
-            this.dragEvent.onDragMove = (e: InteractionEvent, offset: Point) => {
-                if (this.scrollX)
-                    this.targetPosition.x = this.containerStart.x + offset.x;
-                if (this.scrollY)
-                    this.targetPosition.y = this.containerStart.y + offset.y;
-            };
-
-            this.dragEvent.onDragEnd = (e: InteractionEvent) => {
-                if (this.scrolling) {
-                    this.scrolling = false;
-                    this.emit("dragEnd", e);
-                }
-            };
-        }
-        //Mouse scroll
-        const scrollSpeed = new PIXI.Point();
-        const scroll = new MouseScrollEvent(this, true);
-        scroll.onMouseScroll = () => {
-            this.setScrollPosition(scrollSpeed);
-        };
-        this.updateScrollBars();
-    }
-
+    /**
+     * 百分比设置位置
+     * @param direction 方向
+     * @param pct 百分比0-1
+     */
     public forcePctPosition(direction: "x" | "y", pct: number) {
         const bounds = this.getInnerBounds();
-
         if (this.scrollX && direction == "x") {
             this.innerContainer.position[direction] = -((bounds.width - this._width) * pct);
         }
         if (this.scrollY && direction == "y") {
             this.innerContainer[direction] = -((bounds.height - this._height) * pct);
         }
-        this.Position[direction] = this.targetPosition[direction] = this.innerContainer.position[direction];
+        this._Position[direction] = this._targetPosition[direction] = this.innerContainer.position[direction];
     }
 
     /** 根据焦点设置位置 */
@@ -262,27 +278,15 @@ export default class ScrollingContainer extends Container {
             }
         }
 
-        this.lastPosition.copyFrom(this.innerContainer.position);
-        this.targetPosition.copyFrom(this.innerContainer.position);
-        this.Position.copyFrom(this.innerContainer.position);
+        this._lastPosition.copyFrom(this.innerContainer.position);
+        this._targetPosition.copyFrom(this.innerContainer.position);
+        this._Position.copyFrom(this.innerContainer.position);
         this.updateScrollBars();
     }
 
-    protected setScrollPosition(speed?: PIXI.Point) {
-        if (speed) {
-            this.Speed = speed;
-        }
-
-        if (!this.animating) {
-            this.animating = true;
-            this.lastPosition.copyFrom(this.innerContainer.position);
-            this.targetPosition.copyFrom(this.innerContainer.position);
-            Ticker.shared.addUpdateEvent(this.updateScrollPosition, this);
-        }
-    }
 
     protected updateScrollPosition(delta: number) {
-        this.stop = true;
+        this._stop = true;
         if (this.scrollX) this.updateDirection("x", delta);
         if (this.scrollY) this.updateDirection("y", delta);
         if (stop) {
@@ -291,57 +295,59 @@ export default class ScrollingContainer extends Container {
     }
 
     protected updateDirection(direction: "x" | "y", delta: number) {
+        delta = delta * 0.001;
+
         const bounds = this.getInnerBounds();
 
-        let min;
+        let min: number;
         if (direction == "y")
             min = Math.round(Math.min(0, this._height - bounds.height));
         else
             min = Math.round(Math.min(0, this._width - bounds.width));
 
-        if (!this.scrolling && Math.round(this.Speed[direction]) !== 0) {
-            this.targetPosition[direction] += this.Speed[direction];
-            this.Speed[direction] = Utils.Lerp(this.Speed[direction], 0, (5 + 2.5 / Math.max(this.softness, 0.01)) * delta);
+        if (!this.scrolling && Math.round(this._Speed[direction]) !== 0) {
 
-            if (this.targetPosition[direction] > 0) {
-                this.targetPosition[direction] = 0;
+            this._targetPosition[direction] += this._Speed[direction];
+            this._Speed[direction] = Utils.Lerp(this._Speed[direction], 0, (5 + 2.5 / Math.max(this.softness, 0.01)) * delta);
+
+            if (this._targetPosition[direction] > 0) {
+                this._targetPosition[direction] = 0;
 
             }
-            else if (this.targetPosition[direction] < min) {
-                this.targetPosition[direction] = min;
+            else if (this._targetPosition[direction] < min) {
+                this._targetPosition[direction] = min;
 
             }
         }
-
-        if (!this.scrolling && Math.round(this.Speed[direction]) === 0 && (this.innerContainer[direction] > 0 || this.innerContainer[direction] < min)) {
-            const target = this.Position[direction] > 0 ? 0 : min;
-            this.Position[direction] = Utils.Lerp(this.Position[direction], target, (40 - (30 * this.softness)) * delta);
-            this.stop = false;
+        
+        if (!this.scrolling && Math.round(this._Speed[direction]) === 0 && (this.innerContainer[direction] > 0 || this.innerContainer[direction] < min)) {
+            const target = this._Position[direction] > 0 ? 0 : min;
+            this._Position[direction] = Utils.Lerp(this._Position[direction], target, (40 - (30 * this.softness)) * delta);
+            this._stop = false;
         }
-        else if (this.scrolling || Math.round(this.Speed[direction]) !== 0) {
+        else if (this.scrolling || Math.round(this._Speed[direction]) !== 0) {
 
             if (this.scrolling) {
-                this.Speed[direction] = this.Position[direction] - this.lastPosition[direction];
-                this.lastPosition.copyFrom(this.Position);
+                this._Speed[direction] = this._Position[direction] - this._lastPosition[direction];
+                this._lastPosition.copyFrom(this._Position);
             }
-            if (this.targetPosition[direction] > 0) {
-                this.Speed[direction] = 0;
-                this.Position[direction] = 100 * this.softness * (1 - Math.exp(this.targetPosition[direction] / -200));
+            if (this._targetPosition[direction] > 0) {
+                this._Speed[direction] = 0;
+                this._Position[direction] = 100 * this.softness * (1 - Math.exp(this._targetPosition[direction] / -200));
             }
-            else if (this.targetPosition[direction] < min) {
-                this.Speed[direction] = 0;
-                this.Position[direction] = min - (100 * this.softness * (1 - Math.exp((min - this.targetPosition[direction]) / -200)));
+            else if (this._targetPosition[direction] < min) {
+                this._Speed[direction] = 0;
+                this._Position[direction] = min - (100 * this.softness * (1 - Math.exp((min - this._targetPosition[direction]) / -200)));
             }
             else {
-                this.Position[direction] = this.targetPosition[direction];
+                this._Position[direction] = this._targetPosition[direction];
             }
-            this.stop = false;
+            this._stop = false;
         }
 
-        this.innerContainer.position[direction] = Math.round(this.Position[direction]);
+        this.innerContainer.position[direction] = Math.round(this._Position[direction]);
 
         this.updateScrollBars();
-
     }
 
 }

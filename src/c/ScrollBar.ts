@@ -10,7 +10,36 @@ export default class ScrollBar extends Slider{
         super();
     }
 
+    /**
+     * 是的自动隐藏滚动条
+     */
+    public autohide = false;
     private _scrollingContainer: ScrollingContainer | undefined;
+    private _hidden = false;
+
+    protected toggleHidden(hidden: boolean) {
+        if (this.autohide) {
+            if (hidden && !this._hidden) {
+                tween.Tween.to(this, { alpha: 0 },200);
+                this._hidden = true;
+            }
+            else if (!hidden && this._hidden) {
+                tween.Tween.to(this,{ alpha: 1 },200);
+                this._hidden = false;
+            }
+        }
+    }
+
+    protected triggerValueChanging(){
+        super.triggerValueChanging();
+        if(this.scrollingContainer){
+            const sizeAmt = this.scrollingContainer._height / this.scrollingContainer.innerContainer.height || 0.001;
+            if (sizeAmt < 1)
+                this.scrollingContainer.forcePctPosition(this.vertical ? "y" : "x", this._amt);
+        }
+    }
+
+
     public get scrollingContainer(): ScrollingContainer | undefined {
         return this._scrollingContainer;
     }
@@ -26,21 +55,7 @@ export default class ScrollBar extends Slider{
         this._scrollingContainer = value;
         if(this._scrollingContainer){
             this._scrollingContainer._scrollBars.push(this);
-        }
-        
-    }
-    private autohide = false;
-    private _hidden = false;
-
-    protected initialize () {
-        super.initialize();
-        // this._onValueChanging = () => {
-        //     if(this.scrollingContainer){
-        //         const sizeAmt = this.scrollingContainer._height / this.scrollingContainer.innerContainer.height || 0.001;
-        //         if (sizeAmt < 1)
-        //             this.scrollingContainer.forcePctPosition(this.vertical ? "y" : "x", this._amt);
-        //     }
-        // }
+        }  
     }
 
     public alignToContainer() {
@@ -77,19 +92,6 @@ export default class ScrollBar extends Slider{
                 this.toggleHidden(false);
             }
             handle[widthORheight] = size;
-        }
-    }
-    
-    public toggleHidden(hidden: boolean) {
-        if (this.autohide) {
-            if (hidden && !this._hidden) {
-                tween.Tween.to(this, { alpha: 0 },200);
-                this._hidden = true;
-            }
-            else if (!hidden && this._hidden) {
-                tween.Tween.to(this,{ alpha: 1 },200);
-                this._hidden = false;
-            }
         }
     }
 }
