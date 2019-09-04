@@ -5,7 +5,7 @@ import * as tween from "./Tween/index";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
 import DragEvent from "../Interaction/DragEvent";
 import InteractionEvent from "../Interaction/InteractionEvent";
-import Sprite from "./Sprite";
+
 /**
  * UI 滑动条
  */
@@ -20,26 +20,26 @@ export default class Slider extends UIBase{
      */
     public static readonly ChangingEvent= "changing";
 
-    public constructor(){
+    public constructor(trackBorderWidth = 0,thumbBorderWidth = 0,tracklightBorderWidth = 0){
         super();
         this._track = new SliceSprite();
-        this._track.borderWidth = 0;
-        this._thumb = new Sprite();
-        //this._thumb.borderWidth = 0;
+        this._track.borderWidth = trackBorderWidth;
+        this._thumb = new SliceSprite();
+        this._thumb.borderWidth = thumbBorderWidth;
         if(this._thumb) {
             this._thumb.pivot = 0.5;
             this._thumb.container.buttonMode = true;
         }
         this._tracklight = new SliceSprite();
-        this._tracklight.borderWidth = 0;
+        this._tracklight.borderWidth = tracklightBorderWidth;
         this.addChild(this._track);
         this.addChild(this._tracklight);
         this.addChild(this._thumb);
 
-        this._handleDrag.onPress = this.onPress;
-        this._handleDrag.onDragStart = this.onDragStart;
-        this._handleDrag.onDragMove = this.onDragMove;
-        this._handleDrag.onDragEnd = this.onDragEnd;
+        this._thumbDrag.onPress = this.onPress;
+        this._thumbDrag.onDragStart = this.onDragStart;
+        this._thumbDrag.onDragMove = this.onDragMove;
+        this._thumbDrag.onDragEnd = this.onDragEnd;
 
         this._trackDrag.onPress = this.onPress;
         this._trackDrag.onDragStart = this.onDragStart;
@@ -62,13 +62,13 @@ export default class Slider extends UIBase{
     //set options
     protected _track: SliceSprite;
     protected _tracklight: SliceSprite;
-    protected _thumb: Sprite;
+    protected _thumb: SliceSprite;
 
     protected _sourceTrack = "";
     protected _sourceTracklight = "";
     protected _sourceThumb = "";
 
-    private _handleDrag = new DragEvent(this);
+    private _thumbDrag = new DragEvent(this);
     private _trackDrag = new DragEvent(this);
 
     private _startValue = 0;
@@ -113,14 +113,19 @@ export default class Slider extends UIBase{
     }
     public set sourceThumb(value) {
         this._sourceThumb = value;
-        this._thumb.removeListener("sourceComplete");
+        this._thumb.off(SliceSprite.SourceCompleteEvent,this.onThumbLoadComplete,this);
+        this._thumb.once(SliceSprite.SourceCompleteEvent,this.onThumbLoadComplete,this);
         this._thumb.source = value;
         this._thumb.visible = false;
-        this._thumb.once("sourceComplete",()=>{
-            this.update();
-            this._thumb.visible = true;
-        })
-    }   
+    }
+
+    //rectangle:PIXI.Rectangle,source?:SliceSprite
+    protected  onThumbLoadComplete(rectangle: PIXI.Rectangle,source: SliceSprite){
+        source.visible = true;
+        source.width = rectangle.width;
+        source.height = rectangle.height;
+        this.update();
+    }
 
     /**
      * 是否垂直
@@ -131,6 +136,8 @@ export default class Slider extends UIBase{
     }
     public set vertical(value) {
         this._vertical = value;
+        this._isUpdateLayout = true;
+        this.update();
     }
 
     /** 
@@ -179,11 +186,15 @@ export default class Slider extends UIBase{
 
         if (this.vertical) {
             this._thumb.horizontalAlign = HorizontalAlignEnum.center;
+            this._thumb.verticalAlign = undefined;
             this._tracklight.horizontalAlign = HorizontalAlignEnum.center;
+            this._tracklight.verticalAlign = undefined;
             this._tracklight.widthPet = "100%";
         }else {
             this._thumb.verticalAlign = VerticalAlignEnum.middle;
+            this._thumb.horizontalAlign = undefined;
             this._tracklight.verticalAlign = VerticalAlignEnum.middle;
+            this._tracklight.horizontalAlign = undefined;
             this._tracklight.heightPct = "100%";
         }
         this._isUpdateLayout = false;
@@ -234,14 +245,14 @@ export default class Slider extends UIBase{
     }
 
     protected onDragStart (event: InteractionEvent) {
-        if(this._thumb && this._handleDrag && this._handleDrag.id == event.data.identifier){
+        if(this._thumb && this._thumbDrag && this._thumbDrag.id == event.data.identifier){
             this._startValue = this._amt;
             this._maxPosition = this.vertical ? this._height - this._thumb._height : this._width - this._thumb._width;
         }
     }
 
     protected onDragMove (event: InteractionEvent,offset: PIXI.Point) {
-        if(this._handleDrag && this._handleDrag.id == event.data.identifier){
+        if(this._thumbDrag && this._thumbDrag.id == event.data.identifier){
             this._amt = !this._maxPosition ? 0 : Math.max(0, Math.min(1, this._startValue + ((this.vertical ? offset.y : offset.x) / this._maxPosition)));
             this.triggerValueChanging();
             this.update();
@@ -252,7 +263,7 @@ export default class Slider extends UIBase{
     }
 
     protected onDragEnd (event: InteractionEvent) {
-        if(this._handleDrag && this._handleDrag.id == event.data.identifier){
+        if(this._thumbDrag && this._thumbDrag.id == event.data.identifier){
             this.triggerValueChange();
             this.update();
         }else if(this._trackDrag && this._trackDrag.id == event.data.identifier){

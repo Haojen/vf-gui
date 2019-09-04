@@ -22,7 +22,14 @@ export default class ScrollingContainer extends Container {
         this.innerContainer.name = "ScrollingContainer.innerContainer";
         this.mask = this._maskRect.graphics;
     }
-
+    /**
+     * 滑动条值发生改变后
+     */
+    public static readonly ChangeEvent= "change";
+    /**
+     * 滑动条值发生改变后
+     */
+    public static readonly ReSizeEvent= "resize";
     /**
      * 遮罩
      */
@@ -64,16 +71,6 @@ export default class ScrollingContainer extends Container {
      * 遮罩的扩充范围
      */
     public expandMask = 0;
-    /**
-     * 预留
-     * how much can be scrolled past content dimensions
-     */
-    private overflowY = 0;
-    /**
-     * 预留
-     * how much can be scrolled past content dimensions
-     */
-    private overflowX = 0;
     /** 
      * 是否开启滚动动画 
      * @default false
@@ -83,10 +80,6 @@ export default class ScrollingContainer extends Container {
      * 是否滚动中
      */
     private scrolling = false;
-    /**
-     * @private
-     */
-    public _scrollBars: ScrollBar[] = [];
     /**
      * 临时方案，设置时间间隔，跳转容器宽高
      */
@@ -140,8 +133,6 @@ export default class ScrollingContainer extends Container {
             this._lastPosition.copyFrom(this.innerContainer.position);
             this._targetPosition.copyFrom(this.innerContainer.position);
             this.updateScrollPosition(0);
-            //Ticker.shared.removeUpdateEvent(this.updateScrollPosition, this);
-            //Ticker.shared.addUpdateEvent(this.updateScrollPosition, this);
         }
     }
 
@@ -154,7 +145,9 @@ export default class ScrollingContainer extends Container {
         return uiObject;
     }
 
+
     protected getInnerBounds(force?: boolean) {
+
         //this is a temporary fix, because we cant rely on innercontainer height if the children is positioned > 0 y.
         if (force || now() - this._boundCached > 1000) {
             this.innerContainer.getLocalBounds(this.innerBounds);
@@ -162,7 +155,6 @@ export default class ScrollingContainer extends Container {
             this.innerBounds.width = this.innerBounds.x + this.innerContainer.width;
             this._boundCached = now();
         }
-
         return this.innerBounds;
     }
 
@@ -226,9 +218,7 @@ export default class ScrollingContainer extends Container {
     }
 
     protected updateScrollBars() {
-        for (let i = 0; i < this._scrollBars.length; i++) {
-            this._scrollBars[i].alignToContainer();
-        }
+        this.emit(ScrollingContainer.ChangeEvent,this)
     }
 
 

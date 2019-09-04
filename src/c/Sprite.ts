@@ -9,6 +9,10 @@ import UIBase from "../UIBase";
  * @param Texture {PIXI.Texture} 文本对象
  */
 export default class Sprite extends UIBase{
+    
+    /** 图片加载完成事件 */
+    public static readonly SourceCompleteEvent = "sourceCompleteEvent";
+
     public constructor(t?: PIXI.Texture){
         super();
         this._source = t;
@@ -44,18 +48,18 @@ export default class Sprite extends UIBase{
             this._sprite.texture = value;
             this.correctionWidthAndHeight();
             this.updatesettings(true);  
-            this.emit("sourceComplete",this._source);
+            this.emit(Sprite.SourceCompleteEvent,value.frame,this);
         }else{
             this._sprite.texture = PIXI.Texture.from(value);
             if(this._sprite.texture.width>1 && this._sprite.texture.height>1){
                 this.correctionWidthAndHeight();
                 this.updatesettings(true);  
-                this.emit("sourceComplete",this._source);
+                this.emit(Sprite.SourceCompleteEvent,this._sprite.texture .frame,this);
             }else{
                 this._sprite.texture.once("update",()=>{
                     this.correctionWidthAndHeight();
                     this.updatesettings(true);  
-                    this.emit("sourceComplete",this._source);
+                    this.emit(Sprite.SourceCompleteEvent,this._sprite.texture .frame,this);
                 },this);
             }
 

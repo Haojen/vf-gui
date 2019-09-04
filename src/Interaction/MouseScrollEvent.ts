@@ -55,7 +55,6 @@ export default class MouseScrollEvent{
             this.mouseScrllBind = this._onMouseScroll.bind(this);
             document.addEventListener("mousewheel", this.mouseScrllBind, { passive: false });
             document.addEventListener("DOMMouseScroll", this.mouseScrllBind, { passive: false });
-            console.log("add",this.id);
         }
     }
     //e?: interaction.InteractionEvent
@@ -64,7 +63,6 @@ export default class MouseScrollEvent{
             document.removeEventListener("mousewheel", this.mouseScrllBind);
             document.removeEventListener("DOMMouseScroll", this.mouseScrllBind);
             this.mouseScrllBind = undefined;
-            console.log("remove",this.id);
         }
     }
 

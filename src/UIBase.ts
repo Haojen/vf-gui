@@ -196,6 +196,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     public set width(value: number) {
         value = Math.max(value,0);
         this.setting.width = value;
+        this.setting.widthPct = undefined;
         this.updatesettings(true);
     }
     public get width() {
@@ -233,6 +234,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     set height(value: number) {
         value = Math.max(value,0);
         this.setting.height = value;
+        this.setting.heightPct = undefined;
         this.updatesettings(true);
     }
     get height() {

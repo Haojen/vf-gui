@@ -11,34 +11,83 @@ export default class TestScrollBar{
     }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage){
-        /** 本地位图 */
-        let sp = new vfui.Sprite();
-        sp.source = "assets/sprite.png"; //本地文件路径
-        sp.width = 0;//宽高为0的情况下，会读取本身图片宽高自适应
-        sp.height = 0;
-        sp.maxWidth = 100;
-        sp.maxHeight = 100;
-        uiStage.addChild(sp);
-        //网络位图
-        let sp1 = new vfui.Sprite();
-        sp1.source = "https://file.vipkid-inc.com/api/file/view?fileId=859ebe85e12e42e19939f71793c3a2e3&systemCode=PORTAL&privateKey=380FB669BFF76642E947A90950B88C58&fileName=%E5%B0%8F%E5%8D%9A%E9%A5%AE%E6%96%99-%E9%A2%84%E8%A7%88%E5%9B%BE.png"; //HTTP
-        sp1.width = 100;
-        sp1.height = 100;
-        sp1.y = 110;
-        uiStage.addChild(sp1);
-        //标签位图(需要可跨域)
-        let img = new Image(100,100);
-        img.src = "assets/sprite.png";
-        img.onload = ()=>{
-            let sp2 = new vfui.Sprite();
-            sp2.source = img; //HTTP
-            sp2.width = 100;
-            sp2.height = 100;
-            sp2.y = 220;
-            uiStage.addChild(sp2);
+
+        let t = new vfui.Text("scrooll 组件，配合ScrollingContainer一起使用", new vfui.TextStyle({ fill: 0x00ffcc }));
+        t.y = 20;
+        uiStage.addChild(t);
+
+        let sc = this.addSc(uiStage,50,100,"拖拽进度条或拖拽图片");
+        /** 滑动条容器 vertical = false */
+        let vscrollBar = new vfui.ScrollBar(0,1);//参数2设置sourceTrack的9宫拉伸
+        vscrollBar.sourceThumb = "assets/skin/ScrollBar/roundthumb.png";
+        vscrollBar.sourceTrack = "assets/skin/ScrollBar/track_sb.png";
+        vscrollBar.x = sc.x - 30;
+        vscrollBar.y = sc.y;
+        vscrollBar.width = 10;
+        vscrollBar.height = sc.height;
+        vscrollBar.scrollingContainer = sc;//绑定vfui.ScrollingContainer
+        vscrollBar.value = 0;
+        vscrollBar.vertical = true; 
+        vscrollBar.autohide = true; //当内容不需要滚动时，隐藏
+        uiStage.addChild(vscrollBar);
+
+        /** 滑动条容器 vertical = true */
+        let hscrollBar = new vfui.ScrollBar(0,1);
+        hscrollBar.sourceThumb = "assets/skin/ScrollBar/roundthumb.png";
+        hscrollBar.sourceTrack = "assets/skin/ScrollBar/track_sb.png";
+        hscrollBar.x = sc.x;
+        hscrollBar.y = sc.y + sc.height + 20;
+        hscrollBar.width = sc.width;
+        hscrollBar.height = 10;
+        hscrollBar.scrollingContainer = sc;//绑定vfui.ScrollingContainer
+        hscrollBar.value = 0;
+        hscrollBar.vertical = false; 
+        hscrollBar.autohide = true;
+        uiStage.addChild(hscrollBar);
+
+    }
+
+
+    private addSc(uiStage: vfui.Stage, x: number, y: number,label:string) {
+        let sc = new vfui.ScrollingContainer();
+        sc.x = x;
+        sc.y = y;
+        sc.scrollX = true;
+        sc.scrollY = true;
+        sc.dragScrolling = true;
+        sc.expandMask = 2;
+        sc.softness = 0.2;
+        sc.width = 300;
+        sc.height = 200;
+
+
+        for (let i = 0; i < 1; ++i) {
+            this.addSp(sc, i);
         }
+
+
+        let t = new vfui.Text(label, new vfui.TextStyle({ fill: 0x00ffcc }));
+        t.y = 0;
+        sc.addChild(t);
+
+        let rect = new vfui.Rect();
+        rect.drawRoundedRect(-5, -5, 310, 210, 1);
+        rect.x = x;
+        rect.y = y;
+        uiStage.addChild(rect);
+        uiStage.addChild(sc);
+        return sc;
+    }
+
+    private addSp(sc: vfui.ScrollingContainer, i: number) {
+
+        let sp = new vfui.Sprite();
+        sp.source = "assets/sprite.png";
+        sp.y = i * 620;
+        sc.addChild(sp);
 
     }
     
 }
+
 

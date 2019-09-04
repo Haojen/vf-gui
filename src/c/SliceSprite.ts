@@ -5,6 +5,9 @@ import UIBase from "../UIBase";
  * Event: sourceComplete
  */
 export default class SliceSprite extends UIBase {
+
+    /** 图片加载完成事件 */
+    public static readonly SourceCompleteEvent = "sourceCompleteEvent";
     /**
      * 构造函数，如果不设置horizontalSlice，verticalSlice。 按设置的BorderWidth进行9切
      * 
@@ -36,7 +39,7 @@ export default class SliceSprite extends UIBase {
         if(value instanceof  PIXI.Texture){
             this.t= value.baseTexture;
             this.f = value.frame;
-            this.emit("sourceComplete",this._source);
+            this.emit(SliceSprite.SourceCompleteEvent,this.f,this);
         }else{
             if(this._texture){
                 this._texture.removeAllListeners();
@@ -47,7 +50,7 @@ export default class SliceSprite extends UIBase {
                     this.t = this._texture.baseTexture;
                     this.f = this._texture.frame;
                     this.updatesettings(true);     
-                    this.emit("sourceComplete",this._source);      
+                    this.emit(SliceSprite.SourceCompleteEvent,this.f,this);      
                 }
             }else{
                 this._texture.once("update",()=>{
@@ -55,7 +58,7 @@ export default class SliceSprite extends UIBase {
                         this.t = this._texture.baseTexture;
                         this.f = this._texture.frame;
                         this.updatesettings(true);
-                        this.emit("sourceComplete",this._source);
+                        this.emit(SliceSprite.SourceCompleteEvent,this.f,this);
                     }
                 },this);
             }
