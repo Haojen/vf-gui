@@ -540,7 +540,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
         this.updatesettings(true);
     }
     /** 设置左边距 */
-    set left(value: number){
+    set left(value: number|undefined){
         this.setting.left = value;
         this.updatesettings(true);
     }
@@ -606,7 +606,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
         this.updatesettings(true);
     }
     /** 设置顶边距 */
-    set top(value: number){
+    set top(value: number|undefined){
         this.setting.top = value;
         this.updatesettings(true);
     }

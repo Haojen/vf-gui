@@ -3,7 +3,7 @@ import UIBase from "../UIBase";
 import * as tween from "./Tween/index";
 
 /**
- * UI 表格容器
+ * UI 可以排序的容器
  */
 export default class SortableList extends Container{
     public constructor(){
@@ -23,26 +23,17 @@ export default class SortableList extends Container{
     public items: UIBase[] = [];
     private _sortTimeout = -1;
 
-
-    public addChild(UIObject: UIBase) {
-        super.addChild(UIObject);
-        if (this.items.indexOf(UIObject) == -1) {
-            this.items.push(UIObject);
-        }
-    
-        if (!UIObject.attach._sortListRnd)
-            UIObject.attach._sortListRnd = Math.random();  
-        this.sort();
-        return UIObject;
-    }
-
     /**
-     * 添加显示列表，并感觉相关传入函数进行排序
+     * 添加显示列表，通过参数函数进行排序
      * @param UIObject UI显示对象   
      * @param fnValue 前置条件
      * @param fnThenBy 后置条件
      */
-    public addChildFn(UIObject: UIBase,fnValue: Function, fnThenBy: Function){
+    public addChild(UIObject: UIBase,fnValue?: Function, fnThenBy?: Function){
+        super.addChild(UIObject);
+        if (this.items.indexOf(UIObject) === -1) {
+            this.items.push(UIObject);
+        }
         if (fnValue)
             UIObject.attach._sortListValue = fnValue;
     
@@ -52,7 +43,8 @@ export default class SortableList extends Container{
         if (!UIObject.attach._sortListRnd)
             UIObject.attach._sortListRnd = Math.random();  
 
-        this.addChild(UIObject);
+        this.sort();
+        return UIObject;
     }
     public removeChild(UIObject: UIBase) {
         super.removeChild(UIObject);
@@ -103,7 +95,7 @@ export default class SortableList extends Container{
             alt = !alt;
     
             if (this.tweenTime > 0) {            
-                //tween.Tween.fromTo(item, { x: 0, y: y },{duration:this.tweenTime}).easing(this.tweenEase);
+                tween.Tween.fromTo(item, { x: 0, y: y },this.tweenTime).easing(this.tweenEase).start();
             }
             else {
                 item.x = 0;

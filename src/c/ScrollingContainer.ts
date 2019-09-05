@@ -115,7 +115,7 @@ export default class ScrollingContainer extends Container {
     public update() {
         if (this._lastWidth != this._width || this._lastHeight != this._height) {
             const _of = this.expandMask;
-            this._maskRect.drawRoundedRect(_of, -_of, this._width + _of, this.height + _of, this.radius,0xFFFFFF);
+            this._maskRect.drawRoundedRect(_of, -_of, this._width + _of, this._height + _of, this.radius,0xFFFFFF);
             this._lastWidth = this._width;
             this._lastHeight = this._height;
         }
