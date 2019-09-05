@@ -70,17 +70,19 @@ export default class InputBase extends UIBase{
             this.blur();
     }
 
+    private keyDownEventBind:TAny;
     protected _bindEvents() {
         if (this.stage) {
             this.stage.on("pointerdown", this.documentMouseDown,this);
-            document.addEventListener("keydown", this.keyDownEvent.bind(this));
+            this.keyDownEventBind = this.keyDownEvent.bind(this);
+            document.addEventListener("keydown", this.keyDownEventBind);
         }
     }
 
     protected _clearEvents(){
         if (this.stage) {
             this.stage.off("pointerdown", this.documentMouseDown,this);
-            document.removeEventListener("keydown", this.keyDownEvent.bind(this));
+            document.removeEventListener("keydown", this.keyDownEventBind);
         }
     }
 

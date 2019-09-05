@@ -2,15 +2,15 @@
 import vfui from "../src/index";
 import TestApplication from "./TestApplication"
 
-export default class TestText{
+export default class TestText {
 
-    public constructor(){}
-    
-    public load(){
-        new TestApplication(this,this.onLoad)
+    public constructor() { }
+
+    public load() {
+        new TestApplication(this, this.onLoad)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage){
+    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
         /** 文本组件 */
         let basicText = new vfui.Text();
         basicText.label = 'Basic text in vfui-ui';
@@ -36,7 +36,7 @@ export default class TestText{
             wordWrap: true,
             wordWrapWidth: 600,
         });
-        
+
         let richText = new vfui.Text();
         richText.label = '包含了换行与多种自定义样式的组件,包含了换行与多种自定义样式的组件,包含了换行与多种自定义样式的组件';
         richText.style = style;
@@ -44,8 +44,8 @@ export default class TestText{
         richText.x = 50;
         richText.y = 250;
         uiStage.addChild(richText);
-        
+
     }
-    
+
 }
 

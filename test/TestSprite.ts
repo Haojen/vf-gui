@@ -2,15 +2,15 @@
 import vfui from "../src/index";
 import TestApplication from "./TestApplication"
 
-export default class TestSprite{
+export default class TestSprite {
 
-    public constructor(){}
-    
-    public load(){
-        new TestApplication(this,this.onLoad)
+    public constructor() { }
+
+    public load() {
+        new TestApplication(this, this.onLoad)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage){
+    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
         /** 本地位图 */
         let sp = new vfui.Sprite();
         sp.source = "assets/sprite.png"; //本地文件路径
@@ -27,9 +27,9 @@ export default class TestSprite{
         sp1.y = 110;
         uiStage.addChild(sp1);
         //标签位图(需要可跨域)
-        let img = new Image(100,100);
+        let img = new Image(100, 100);
         img.src = "assets/sprite.png";
-        img.onload = ()=>{
+        img.onload = () => {
             let sp2 = new vfui.Sprite();
             sp2.source = img; //HTTP
             sp2.width = 100;
@@ -39,6 +39,6 @@ export default class TestSprite{
         }
 
     }
-    
+
 }
 

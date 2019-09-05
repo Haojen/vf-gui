@@ -82,7 +82,7 @@ export default class TestTween {
         let rc3 = new vfui.Interaction.ClickEvent(r3);
         rc3.onClick = e => {
             rc3.remove();
-            
+
             new vfui.tween.Tween(r3.style)
                 .to({ letterSpacing: 10, fontSize: 40, fill: ["#00ccff", "#ffcc00", "#00ff00"] }, 2000)
                 .easing(vfui.tween.Easing.Quadratic.InOut)
@@ -92,7 +92,7 @@ export default class TestTween {
                 .start();
 
 
-            
+
         }
 
     }

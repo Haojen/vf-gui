@@ -49,6 +49,8 @@ export enum TouchEvent{
  * import InteractionEvent,{KeyEvent} from "../Interaction/InteractionEvent",
  */
 export const enum KeyEvent{
+
+    input = "input",
     /** 
      * 键盘按下 
      * 
@@ -80,7 +82,7 @@ export const enum KeyEvent{
      */
     cut = "cut",
     /** 
-     * 空格
+     * 回退删除
      * 
      * (e:InteractionEvent,obj:UIBase)
      */

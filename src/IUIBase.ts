@@ -1,7 +1,6 @@
 /** 严禁外部使用，声明 */
-interface TAny{
-    [propName: string]: any;
-}
+
+declare type TAny = any
 
 interface Window{
     readonly clipboardData: DataTransfer | null;
@@ -24,7 +23,9 @@ interface TUIBase{
     blur?: Function;
     focus?: Function;
 }
-
+interface InputStyle extends CSSStyleDeclaration{
+    multiline?:boolean;
+}
 interface CheckBox{
     uuid: string;
     checkGroup: string|undefined;

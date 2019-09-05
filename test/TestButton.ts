@@ -2,23 +2,23 @@
 import vfui from "../src/index";
 import TestApplication from "./TestApplication"
 
-export default class TestButton{
+export default class TestButton {
 
-    public constructor(){
-        
-    }
-    
-    public load(){
-        new TestApplication(this,this.onLoad)
+    public constructor() {
+
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage){
+    public load() {
+        new TestApplication(this, this.onLoad)
+    }
+
+    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
         /** UI组件 按钮 */
         let button1 = this.getNewButton(uiStage);
         button1.label = "点我试试";
-        button1.on(vfui.Interaction.TouchEvent.onClick,this.onClick,this);
-        button1.on(vfui.Interaction.TouchEvent.onPress,this.onPress,this);
-        button1.on(vfui.Interaction.TouchEvent.onHover,this.onHover,this);
+        button1.on(vfui.Interaction.TouchEvent.onClick, this.onClick, this);
+        button1.on(vfui.Interaction.TouchEvent.onPress, this.onPress, this);
+        button1.on(vfui.Interaction.TouchEvent.onHover, this.onHover, this);
 
         /** 有文字的按钮 */
         let button2 = this.getNewButton(uiStage);
@@ -47,7 +47,7 @@ export default class TestButton{
 
     }
 
-    private getNewButton(uiStage: vfui.Stage){
+    private getNewButton(uiStage: vfui.Stage) {
         let button = new vfui.Button();
         button.x = 100;
         button.y = 100;
@@ -60,14 +60,14 @@ export default class TestButton{
         return button;
     }
 
-    private onClick(e:vfui.Interaction.InteractionEvent,button:vfui.Button){
+    private onClick(e: vfui.Interaction.InteractionEvent, button: vfui.Button) {
         button.label = "点击" + e.type;
     }
 
-    private onPress(e:vfui.Interaction.InteractionEvent,button:vfui.Button){
+    private onPress(e: vfui.Interaction.InteractionEvent, button: vfui.Button) {
         button.label = "按下" + e.type;
     }
-    private onHover(e:vfui.Interaction.InteractionEvent,button:vfui.Button){
+    private onHover(e: vfui.Interaction.InteractionEvent, button: vfui.Button) {
         button.label = "移出" + e.type;
     }
 }

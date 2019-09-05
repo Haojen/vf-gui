@@ -2,17 +2,17 @@
 import vfui from "../src/index";
 import TestApplication from "./TestApplication"
 
-export default class TestTicker{
+export default class TestTicker {
 
-    public constructor(){
-        
-    }
-    
-    public load(){
-        new TestApplication(this,this.onLoad)
+    public constructor() {
+
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage){
+    public load() {
+        new TestApplication(this, this.onLoad)
+    }
+
+    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
         /** 本地位图 */
         let sp = new vfui.Sprite();
         sp.source = "assets/sprite.png"; //本地文件路径
@@ -24,14 +24,14 @@ export default class TestTicker{
         sp.anchorY = 0.5;
         uiStage.addChild(sp);
 
-        this.update = (delta)=>{
+        this.update = (delta) => {
             console.log(delta);//两帧间隔毫秒
-            sp.rotation +=0.01;
+            sp.rotation += 0.01;
         }
-        if(this.update){
-            vfui.TickerShared.addUpdateEvent(this.update,this);
+        if (this.update) {
+            vfui.TickerShared.addUpdateEvent(this.update, this);
         }
-        
+
         //两秒后卸载当前跳
         // setTimeout(() => {
         //     if(this.update)
@@ -45,5 +45,5 @@ export default class TestTicker{
         // }, 2000);
     }
 
-    private update:((n:number)=>void)|undefined;
+    private update: ((n: number) => void) | undefined;
 }

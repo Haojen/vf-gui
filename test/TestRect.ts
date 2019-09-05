@@ -3,15 +3,15 @@ import vfui from "../src/index";
 import TestApplication from "./TestApplication"
 import { Utils } from "../src/UI";
 
-export default class TestRect{
+export default class TestRect {
 
-    public constructor(){}
-    
-    public load(){
-        new TestApplication(this,this.onLoad)
+    public constructor() { }
+
+    public load() {
+        new TestApplication(this, this.onLoad)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage){
+    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
         /** 绘制矩形 */
         let rect = new vfui.Rect();
         rect.x = 200;
@@ -28,14 +28,14 @@ export default class TestRect{
         uiStage.addChild(rect);
 
         let count = 0;
-        vfui.TickerShared.addUpdateEvent((delta:number)=>{
+        vfui.TickerShared.addUpdateEvent((delta: number) => {
             count += delta;
-            if(count>50){
-                count= 0;
+            if (count > 50) {
+                count = 0;
                 rect.rotation += 0.1;
-            } 
-        },this)
+            }
+        }, this)
     }
-    
+
 }
 

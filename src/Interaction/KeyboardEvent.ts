@@ -19,26 +19,45 @@ class KeyboardSelectEvent {
     private cmdKey = 91;
 
     private isAddEvent = false;
+
+    private keyDownEventBind:TAny;
+    private keyUpEventBind:TAny;
+    private pasteEventBind:TAny;
+    private copyEventBind:TAny;
+    private cutEventBind:TAny;
+
     private addEvent(){
         if(this.isAddEvent){
             return;
         }
         this.isAddEvent = true;
-        document.addEventListener("keydown", this.keyDownEvent.bind(this), false);
-        document.addEventListener("keyup", this.keyUpEvent.bind(this), false);
-        document.addEventListener('paste', this.pasteEvent.bind(this), false);
-        document.addEventListener('copy', this.copyEvent.bind(this), false);
-        document.addEventListener('cut', this.cutEvent.bind(this), false);
+        this.keyDownEventBind = this.keyDownEvent.bind(this);
+        this.keyUpEventBind = this.keyUpEvent.bind(this);
+        this.pasteEventBind = this.pasteEvent.bind(this);
+        this.copyEventBind = this.copyEvent.bind(this);
+        this.cutEventBind = this.cutEvent.bind(this);
+
+        document.addEventListener("keydown", this.keyDownEventBind, { passive: false });
+        document.addEventListener("keyup", this.keyUpEventBind, { passive: false });
+        document.addEventListener('paste', this.pasteEventBind, { passive: false });
+        document.addEventListener('copy', this.copyEventBind, { passive: false });
+        document.addEventListener('cut', this.cutEventBind, { passive: false });
     }
     private removeEvent(){
         
-        document.removeEventListener("keydown", this.keyDownEvent.bind(this));
-        document.removeEventListener("keyup", this.keyUpEvent.bind(this));
-        document.removeEventListener('paste', this.pasteEvent.bind(this));
-        document.removeEventListener('copy', this.copyEvent.bind(this));
-        document.removeEventListener('cut', this.cutEvent.bind(this));
+        document.removeEventListener("keydown", this.keyDownEventBind);
+        document.removeEventListener("keyup", this.keyUpEventBind);
+        document.removeEventListener('paste', this.pasteEventBind);
+        document.removeEventListener('copy', this.copyEventBind);
+        document.removeEventListener('cut', this.cutEventBind);
 
         this.isAddEvent = false;
+
+        this.keyDownEventBind = undefined;
+        this.keyUpEventBind = undefined;
+        this.pasteEventBind = undefined;
+        this.copyEventBind = undefined;
+        this.cutEventBind = undefined;
     }
 
     protected keyDownEvent(e: KeyboardEvent) {
@@ -57,67 +76,67 @@ class KeyboardSelectEvent {
             return;
 
         if (e.which === KeyEvent.enter) {
-            this.obj.emit(KeyEvent.enter.toString(), this.obj);
+            this.obj.emit(KeyEvent.enter.toString(), this.obj,KeyEvent.enter.toString());
             e.preventDefault();
             return;
         }
         if (e.which === KeyEvent.backspace) {
-            this.obj.emit(KeyEvent.backspace.toString(), this.obj);
+            this.obj.emit(KeyEvent.backspace.toString(), this.obj,KeyEvent.backspace.toString());
             e.preventDefault();
             return;
         }
         if (e.which === KeyEvent.delete) {
-            this.obj.emit(KeyEvent.delete.toString(), this.obj);
+            this.obj.emit(KeyEvent.delete.toString(), this.obj,KeyEvent.delete.toString());
             e.preventDefault();
             return;
         }
 
         if (e.which === KeyEvent.left) {
             if(this.shiftDown){
-                this.obj.emit(KeyEvent.left.toString(), this.obj);
+                this.obj.emit(KeyEvent.left.toString(), this.obj,KeyEvent.left.toString(),);
             }else{
-                this.obj.emit(KeyEvent.shiftLeft.toString(), this.obj);
+                this.obj.emit(KeyEvent.shiftLeft.toString(), this.obj,KeyEvent.shiftLeft.toString());
             }
             e.preventDefault();
             return;
         }
         if (e.which === KeyEvent.right) {
             if(this.shiftDown){
-                this.obj.emit(KeyEvent.right.toString(), this.obj);
+                this.obj.emit(KeyEvent.right.toString(), this.obj,KeyEvent.right.toString());
             }else{
-                this.obj.emit(KeyEvent.shiftRight.toString(), this.obj);
+                this.obj.emit(KeyEvent.shiftRight.toString(), this.obj,KeyEvent.shiftRight.toString());
             }
             e.preventDefault();
             return;
         }
         if (e.which === KeyEvent.top) {
             if(this.shiftDown){
-                this.obj.emit(KeyEvent.top.toString(), this.obj);
+                this.obj.emit(KeyEvent.top.toString(), this.obj,KeyEvent.top.toString());
             }else{
-                this.obj.emit(KeyEvent.shiftTop.toString(), this.obj);
+                this.obj.emit(KeyEvent.shiftTop.toString(), this.obj,KeyEvent.shiftTop.toString());
             }
             e.preventDefault();
             return;
         }
         if (e.which === KeyEvent.down) {
             if(this.shiftDown){
-                this.obj.emit(KeyEvent.down.toString(), this.obj);
+                this.obj.emit(KeyEvent.down.toString(), this.obj,KeyEvent.down.toString());
             }else{
-                this.obj.emit(KeyEvent.shiftDown.toString(), this.obj);
+                this.obj.emit(KeyEvent.shiftDown.toString(), this.obj,KeyEvent.shiftDown.toString());
             }
             e.preventDefault();
             return;
         }
         if (e.which === KeyEvent.ctrlA) {
             if(this.ctrlDown){
-                this.obj.emit(KeyEvent.ctrlA.toString(), this.obj);
+                this.obj.emit(KeyEvent.ctrlA.toString(), this.obj,KeyEvent.ctrlA.toString());
             }
             e.preventDefault();
             return;
         }
         if (e.which === KeyEvent.ctrlZ) { 
             if(this.ctrlDown){
-                this.obj.emit(KeyEvent.ctrlZ.toString(), this.obj);
+                this.obj.emit(KeyEvent.ctrlZ.toString(), this.obj,KeyEvent.ctrlZ.toString());
             }
             e.preventDefault();
             return;

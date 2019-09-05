@@ -17,20 +17,20 @@ export default class TestScrollingContainer {
         uiStage.addChild(t);
 
         /** 滚动容器 水平拖动 */
-        let sc1 = this.addSc(uiStage, 50, 40,"水平拖动");
+        let sc1 = this.addSc(uiStage, 50, 40, "水平拖动");
         sc1.scrollX = true;
 
         /** 滚动容器 垂直拖动 */
-        let sc2 = this.addSc(uiStage, 50, 260,"垂直拖动");
+        let sc2 = this.addSc(uiStage, 50, 260, "垂直拖动");
         sc2.scrollY = true;
 
         /** 滚动容器 垂直水平拖动 */
-        let sc3 = this.addSc(uiStage, 50, 480,"任意拖动");
+        let sc3 = this.addSc(uiStage, 50, 480, "任意拖动");
         sc3.scrollX = true;
         sc3.scrollY = true;
     }
 
-    private addSc(uiStage: vfui.Stage, x: number, y: number,label:string) {
+    private addSc(uiStage: vfui.Stage, x: number, y: number, label: string) {
         let sc = new vfui.ScrollingContainer();
         sc.x = x;
         sc.y = y;

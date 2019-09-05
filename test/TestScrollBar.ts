@@ -2,23 +2,23 @@
 import vfui from "../src/index";
 import TestApplication from "./TestApplication"
 
-export default class TestScrollBar{
+export default class TestScrollBar {
 
-    public constructor(){}
-    
-    public load(){
-        new TestApplication(this,this.onLoad)
+    public constructor() { }
+
+    public load() {
+        new TestApplication(this, this.onLoad)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage){
+    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
         let t = new vfui.Text("scrooll 组件，配合ScrollingContainer一起使用", new vfui.TextStyle({ fill: 0x00ffcc }));
         t.y = 20;
         uiStage.addChild(t);
 
-        let sc = this.addSc(uiStage,50,100,"拖拽进度条或拖拽图片");
+        let sc = this.addSc(uiStage, 50, 100, "拖拽进度条或拖拽图片");
         /** 滑动条容器 vertical = false */
-        let vscrollBar = new vfui.ScrollBar(0,1);//参数2设置sourceTrack的9宫拉伸
+        let vscrollBar = new vfui.ScrollBar(0, 1);//参数2设置sourceTrack的9宫拉伸
         vscrollBar.sourceThumb = "assets/skin/ScrollBar/roundthumb.png";
         vscrollBar.sourceTrack = "assets/skin/ScrollBar/track_sb.png";
         vscrollBar.x = sc.x - 30;
@@ -27,12 +27,12 @@ export default class TestScrollBar{
         vscrollBar.height = sc.height;
         vscrollBar.scrollingContainer = sc;//绑定vfui.ScrollingContainer
         vscrollBar.value = 0;
-        vscrollBar.vertical = true; 
+        vscrollBar.vertical = true;
         vscrollBar.autohide = true; //当内容不需要滚动时，隐藏
         uiStage.addChild(vscrollBar);
 
         /** 滑动条容器 vertical = true */
-        let hscrollBar = new vfui.ScrollBar(0,1);
+        let hscrollBar = new vfui.ScrollBar(0, 1);
         hscrollBar.sourceThumb = "assets/skin/ScrollBar/roundthumb.png";
         hscrollBar.sourceTrack = "assets/skin/ScrollBar/track_sb.png";
         hscrollBar.x = sc.x;
@@ -41,14 +41,14 @@ export default class TestScrollBar{
         hscrollBar.height = 10;
         hscrollBar.scrollingContainer = sc;//绑定vfui.ScrollingContainer
         hscrollBar.value = 0;
-        hscrollBar.vertical = false; 
+        hscrollBar.vertical = false;
         hscrollBar.autohide = true;
         uiStage.addChild(hscrollBar);
 
     }
 
 
-    private addSc(uiStage: vfui.Stage, x: number, y: number,label:string) {
+    private addSc(uiStage: vfui.Stage, x: number, y: number, label: string) {
         let sc = new vfui.ScrollingContainer();
         sc.x = x;
         sc.y = y;
@@ -87,7 +87,7 @@ export default class TestScrollBar{
         sc.addChild(sp);
 
     }
-    
+
 }
 
 

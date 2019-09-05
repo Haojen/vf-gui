@@ -2,15 +2,15 @@
 import vfui from "../src/index";
 import TestApplication from "./TestApplication"
 
-export default class TestPixi{
+export default class TestPixi {
 
-    public constructor(){}
-    
-    public load(){
-        new TestApplication(this,this.onLoad)
+    public constructor() { }
+
+    public load() {
+        new TestApplication(this, this.onLoad)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage){
+    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
         // let c = new PIXI.Container();
         // c.width = 100;
@@ -44,8 +44,8 @@ export default class TestPixi{
         //     console.log(c.getLocalBounds(r));
         //     console.log(r);
         // }, 2000);
-        
+
     }
-    
+
 }
 
