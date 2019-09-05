@@ -7,6 +7,7 @@ import { DraggableEventEnum } from "./Enum/DraggableEventEnum";
 import { TouchMouseEventEnum } from "./Enum/TouchMouseEventEnum";
 import { uid } from "./Utils";
 import InteractionEvent from "./Interaction/InteractionEvent";
+import ContainerBase from "./c/ContainerBase";
 
 /**
  * UI的顶级类，基础的UI对象
@@ -26,7 +27,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     public constructor(width?: number | string, height?: number | string) {
         super();
         this.uuid = uid();
-        this.container = new PIXI.Container();
+        this.container = new ContainerBase();
         this.container.name = this.constructor.name;
         this.setting = new UISettings();
         if(width && height)
@@ -53,7 +54,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 当前的显示容器 
      */
-    public container: PIXI.Container;
+    public container: ContainerBase;
     /** 
      * UI对象的显示属性集合 
      */
