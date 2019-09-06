@@ -1,7 +1,7 @@
 import InputBase from "./InputBase";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "./Enum/AlignEnum";
 import ClickEvent from "./Interaction/ClickEvent";
-import InteractionEvent, { TouchEvent } from "./Interaction/InteractionEvent";
+import InteractionEvent, { TouchMouseEvent } from "./Interaction/InteractionEvent";
 import SliceSprite from "./c/SliceSprite";
 import { UIBase } from "./UI";
 
@@ -31,10 +31,10 @@ export default class InputSkinBase extends InputBase{
         this._background.horizontalAlign = HorizontalAlignEnum.center;
         this._background.borderWidth = 10;
         this.addChild(this._background);
-        this.on(TouchEvent.onMove,this.onMove,this);
-        this.on(TouchEvent.onHover,this.onHover,this);
-        this.on(TouchEvent.onPress,this.onPress,this);
-        this.on(TouchEvent.onClick,this.onClick,this);
+        this.on(TouchMouseEvent.onMove,this.onMove,this);
+        this.on(TouchMouseEvent.onHover,this.onHover,this);
+        this.on(TouchMouseEvent.onPress,this.onPress,this);
+        this.on(TouchMouseEvent.onClick,this.onClick,this);
     }
 
     protected onHover(e: InteractionEvent,thisObj: UIBase,over: boolean){

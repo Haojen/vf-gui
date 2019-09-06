@@ -242,7 +242,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
 
         this.update(time, false);
 
-        this.emit(TweenEvent.seek, time, this.object);
+        //this.emit(TweenEvent.seek, time, this.object);
 
         return keepPlaying ? this : this.pause();
     }

@@ -5,8 +5,8 @@
  * 
  * import InteractionEvent from "../Interaction/InteractionEvent",
  */
-export default class InteractionEvent extends PIXI.interaction.InteractionEvent{
-    public constructor(){
+export default class InteractionEvent extends PIXI.interaction.InteractionEvent {
+    public constructor() {
         super()
     }
 }
@@ -14,9 +14,9 @@ export default class InteractionEvent extends PIXI.interaction.InteractionEvent{
 /**
  * 对外，封装的点击触摸事件
  * 
- * import InteractionEvent,{TouchEvent} from "../Interaction/InteractionEvent",
+ * import InteractionEvent,{Mouse} from "../Interaction/InteractionEvent",
  */
-export enum TouchEvent{
+export enum TouchMouseEvent {
     /**
      * 移出
      * 
@@ -48,7 +48,7 @@ export enum TouchEvent{
  * 
  * import InteractionEvent,{KeyEvent} from "../Interaction/InteractionEvent",
  */
-export const enum KeyEvent{
+export const enum KeyEvent {
 
     input = "input",
     /** 
@@ -92,7 +92,7 @@ export const enum KeyEvent{
      * 
      * (e:InteractionEvent,obj:UIBase)
      */
-    enter = 13, 
+    enter = 13,
     /** 
      * 删除
      * 
@@ -146,7 +146,7 @@ export const enum KeyEvent{
      * 
      * (e:InteractionEvent,obj:UIBase)
      */
-    shiftRight= "shift39",
+    shiftRight = "shift39",
     /** 
      * shift + 箭头上
      * 
@@ -164,16 +164,45 @@ export const enum KeyEvent{
 /**
  * 缓动事件
  */
-export enum TweenEvent{
+export enum TweenEvent {
+    /**
+     * 
+     */
     Callback = 'Callback',
+    /**
+     * 每次改变
+     */
     update = 'update',
+    /**
+     * 完成
+     */
     complete = 'complete',
+    /**
+     * 开始时
+     */
     start = 'start',
+    /**
+     * 每次重复时
+     */
     repeat = 'repeat',
+    /**
+     * 反向时
+     */
     reverse = 'reverse',
+    /**
+     * 暂停时
+     */
     pause = 'pause',
+    /**
+     * 播放时
+     */
     play = 'play',
+    /**
+     * 重新开始时
+     */
     restart = 'restart',
-    stop = 'stop',
-    seek = 'seek'
+    /**
+     * 停止时
+     */
+    stop = 'stop'
 }

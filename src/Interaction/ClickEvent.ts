@@ -1,6 +1,6 @@
 import UIBase from "../UIBase";
 import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
-import InteractionEvent, { TouchEvent } from "./InteractionEvent";
+import InteractionEvent, { TouchMouseEvent } from "./InteractionEvent";
 
 /**
  * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
@@ -95,7 +95,7 @@ export default class ClickEvent {
         this.mouse.copyFrom(e.data.global);
         this.id = e.data.identifier;
         this.onPress && this.onPress.call(this.obj, e, true),this.obj;
-        this.emitTouchEvent(TouchEvent.onPress,e,true);
+        this.emitTouchEvent(TouchMouseEvent.onPress,e,true);
         if (!this.bound) {
             this.obj.container.on(this.eventnameMouseup, this._onMouseUp,this);
             this.obj.container.on(this.eventnameMouseupoutside, this._onMouseUpOutside,this);
@@ -110,7 +110,7 @@ export default class ClickEvent {
             const now = performance.now();
             if (now - this.time < 210) {
                 this.onClick && this.onClick.call(this.obj, e,this);
-                this.emitTouchEvent(TouchEvent.onClick,e);
+                this.emitTouchEvent(TouchMouseEvent.onClick,e);
             }
             else {
                 this.time = now;
@@ -142,7 +142,7 @@ export default class ClickEvent {
             this.bound = false;
         }
         this.onPress && this.onPress.call(this.obj, e, false);
-        this.emitTouchEvent(TouchEvent.onPress,e,false);
+        this.emitTouchEvent(TouchMouseEvent.onPress,e,false);
     }
     private _onMouseUp(e: InteractionEvent) {
         if (e.data.identifier !== this.id) 
@@ -159,7 +159,7 @@ export default class ClickEvent {
 
         if (!this.double){    
             this.onClick && this.onClick.call(this.obj, e,this);
-            this.emitTouchEvent(TouchEvent.onClick,e,false);
+            this.emitTouchEvent(TouchMouseEvent.onClick,e,false);
         }
     }
 
@@ -175,7 +175,7 @@ export default class ClickEvent {
             this.obj.container.on(TouchMouseEventEnum.mousemove, this._onMouseMove,this);
             this.obj.container.on(TouchMouseEventEnum.touchmove, this._onMouseMove,this);
             this.onHover && this.onHover.call(this.obj, e, true,this);
-            this.emitTouchEvent(TouchEvent.onHover,e,true);
+            this.emitTouchEvent(TouchMouseEvent.onHover,e,true);
         }
     }
 
@@ -185,13 +185,13 @@ export default class ClickEvent {
             this.obj.container.removeListener(TouchMouseEventEnum.mousemove,this. _onMouseMove,this);
             this.obj.container.removeListener(TouchMouseEventEnum.touchmove, this._onMouseMove,this);
             this.onHover && this.onHover.call(this.obj, e, false,this);
-            this.emitTouchEvent(TouchEvent.onHover,e,true);
+            this.emitTouchEvent(TouchMouseEvent.onHover,e,true);
         }
     }
 
     private _onMouseMove(e: InteractionEvent) {
         this.onMove && this.onMove.call(this.obj, e,this);
-        this.emitTouchEvent(TouchEvent.onMove,e);
+        this.emitTouchEvent(TouchMouseEvent.onMove,e);
     }
 
     /** 清除拖动 */

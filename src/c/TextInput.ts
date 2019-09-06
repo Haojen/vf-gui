@@ -1,5 +1,5 @@
 import HtmlInput from "./InputText/HtmlInput";
-import InteractionEvent, { KeyEvent,TouchEvent } from "../Interaction/InteractionEvent";
+import InteractionEvent, { KeyEvent} from "../Interaction/InteractionEvent";
 import UIBase from "../UIBase";
 
 
