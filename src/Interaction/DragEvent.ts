@@ -8,10 +8,10 @@ import InteractionEvent from "./InteractionEvent";
  * 
  *  可侦听事件(未实现):
  * ```
- *  {InteractionEvent}.Drag.xxxxxx
- *  {InteractionEvent}.Drag.xxxxxx
- *  {InteractionEvent}.Drag.xxxxxx
- *  {InteractionEvent}.Drag.xxxxxx
+ *  {InteractionEvent}.DraggableEvent.onDragPress
+ *  {InteractionEvent}.DraggableEvent.onDragStart
+ *  {InteractionEvent}.DraggableEvent.onDragMove
+ *  {InteractionEvent}.DraggableEvent.onDragEnd
  * ```
  *  可赋值方法:
  * ```

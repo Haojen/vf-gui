@@ -43,6 +43,19 @@ export enum TouchMouseEvent {
     onMove = "move",
 }
 
+/**
+ * DragEvent、UI组件拖动事件枚举，
+ */
+export enum DraggableEvent {
+    /**
+     * UIBase中不包含次事件，DragEvent中包含
+     */
+    onDragPress = "onDragPress",
+    onDragStart = "onDragStart",
+    onDragMove = "onDragMove",
+    onDragEnd = "onDragEnd"
+}
+
 /** 
  * 键盘事件 驱动类KeysEvent
  * 

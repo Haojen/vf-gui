@@ -10,8 +10,6 @@ import Slider from "./c/Slider";
 import ScrollBar from "./c/ScrollBar";
 import Text from "./c/Text";
 import TextStyle from "./c/Text/TextStyle";
-import DynamicText from "./DynamicText/DynamicText";
-import DynamicTextStyle from "./DynamicText/DynamicTextStyle";
 import TextInput from "./c/TextInput";
 import Button from "./c/Button";
 import CheckBox from "./c/CheckBox";
@@ -24,5 +22,5 @@ import * as tween from "./c/Tween/index";
 
 /** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,SortableList,Sprite,TilingSprite,SliceSprite,Slider,
-    ScrollBar,Text,TextStyle,DynamicText,DynamicTextStyle,TextInput,Button,CheckBox,Rect,Interaction,
+    ScrollBar,Text,TextStyle,TextInput,Button,CheckBox,Rect,Interaction,
     UIBase,TickerShared,AlignEnum,tween};

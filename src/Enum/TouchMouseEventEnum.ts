@@ -1,5 +1,5 @@
 /**
- * 鼠标点击与触摸事件枚举
+ * 鼠标点击与触摸事件枚举,内部UIBase使用
  * @since 1.0.0
  */
 export const enum TouchMouseEventEnum {
@@ -10,13 +10,19 @@ export const enum TouchMouseEventEnum {
     mouseout = "mouseout",
     mouseupoutside = "mouseupoutside",
     
-    rightdown = "rightdown",
-    rightup = "rightup",
-    rightupoutside = "rightupoutside",
+    mouseRightDown  = "rightdown",
+    mouseRightup = "rightup",
+    mouseRightupoutside = "rightupoutside",
 
     touchstart = "touchstart",
-    touchmove = "touchmove",
+    touchcancel = "touchcancel",
     touchend = "touchend",
     touchendoutside = "touchendoutside",
-    touchcancel = "touchcancel",
+    touchmove = "touchmove",
+    tap = "tap"
 }
+
+// type InteractionPointerEvents = "pointerdown" | "pointercancel" | "pointerup" | "pointertap" | "pointerupoutside" | "pointermove" | "pointerover" | "pointerout";
+// type InteractionTouchEvents = "touchstart" | "touchcancel" | "touchend" | "touchendoutside" | "touchmove" | "tap";
+// type InteractionMouseEvents = "rightdown" | "mousedown" | "rightup" | "mouseup" | "rightclick" | "click" | "rightupoutside" | "mouseupoutside" | "mousemove" | "mouseover" | "mouseout" | "mouseover";
+// type InteractionPixiEvents = "added" | "removed";

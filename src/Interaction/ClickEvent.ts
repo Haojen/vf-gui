@@ -51,9 +51,9 @@ export default class ClickEvent {
         }
 
         if(this.right){
-            this.eventnameMousedown = TouchMouseEventEnum.rightdown;
-            this.eventnameMouseup = TouchMouseEventEnum.rightup;
-            this.eventnameMouseupoutside = TouchMouseEventEnum.rightupoutside;
+            this.eventnameMousedown = TouchMouseEventEnum.mouseRightDown;
+            this.eventnameMouseup = TouchMouseEventEnum.mouseRightup;
+            this.eventnameMouseupoutside = TouchMouseEventEnum.mouseRightupoutside;
         }
 
         obj.container.interactive = true;

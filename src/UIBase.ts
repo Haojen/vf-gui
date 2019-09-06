@@ -3,10 +3,9 @@ import Stage from "./Stage";
 import { HorizontalAlignEnum, VerticalAlignEnum } from "./Enum/AlignEnum";
 import DragEvent from "./Interaction/DragEvent";
 import * as DragDropController from "./Interaction/DragDropController";
-import { DraggableEventEnum } from "./Enum/DraggableEventEnum";
-import { TouchMouseEventEnum } from "./Enum/TouchMouseEventEnum";
+import { TouchMouseEventEnum, } from "./Enum/TouchMouseEventEnum";
 import { uid } from "./Utils";
-import InteractionEvent from "./Interaction/InteractionEvent";
+import InteractionEvent,{DraggableEvent} from "./Interaction/InteractionEvent";
 import ContainerBase from "./c/ContainerBase";
 
 /**
@@ -1320,7 +1319,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
                     } else {
                         stageOffset.set(0);
                     }
-                    this.emit(DraggableEventEnum.draggablestart, e);
+                    this.emit(DraggableEvent.onDragStart, e);
                 }
             };
 
@@ -1330,7 +1329,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
                     this._dragPosition.set(containerStart.x + offset.x - stageOffset.x, containerStart.y + offset.y - stageOffset.y);
                     this.x = this._dragPosition.x;
                     this.y = this._dragPosition.y;
-                    this.emit(DraggableEventEnum.draggablemove, e);
+                    this.emit(DraggableEvent.onDragMove, e);
                 }
 
             };
@@ -1356,7 +1355,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
                                 this.parent.addChild(this);
                             }
                         }
-                        this.emit(DraggableEventEnum.draggableend, e);
+                        this.emit(DraggableEvent.onDragEnd, e);
                     }, 0);
                 }
 
