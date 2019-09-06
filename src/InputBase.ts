@@ -70,7 +70,7 @@ export default class InputBase extends UIBase{
             this.blur();
     }
 
-    private keyDownEventBind:TAny;
+    private keyDownEventBind: TAny;
     protected _bindEvents() {
         if (this.stage) {
             this.stage.on("pointerdown", this.documentMouseDown,this);

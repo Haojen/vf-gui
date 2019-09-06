@@ -1,5 +1,5 @@
 import HtmlInput from "./InputText/HtmlInput";
-import InteractionEvent, { KeyEvent} from "../Interaction/InteractionEvent";
+import { KeyEvent} from "../Interaction/InteractionEvent";
 import UIBase from "../UIBase";
 
 
@@ -17,7 +17,7 @@ import UIBase from "../UIBase";
  */
 export default class TextInput extends UIBase {
 
-    constructor(styles?:TAny,width = 100,height = 20,tabIndex = 0, tabGroup = "0") {
+    constructor(styles?: TAny) {
         super();
 
         this._inputStyle = Object.assign(
@@ -46,18 +46,18 @@ export default class TextInput extends UIBase {
         this.container.on("render",this.render,this);
 
     }
-    private htmlInputShared:HtmlInput;
-    private _inputStyle:InputStyle;
+    private htmlInputShared: HtmlInput;
+    private _inputStyle: InputStyle;
     private _disabled = false;
-    private _max_length = NaN;
-    private _previous:TAny = {};
+    private _maxLength = NaN;
+    private _previous: {canvasBounds: TAny;worldTransform: TAny;worldAlpha: TAny;worldVisible: TAny}|TAny = {};
     private _domVisible = true;
     private _placeholder = '';
     private _placeholderColor = 0xa9a9a9;
     private _substituted = false;
-    private _lastRenderer:PIXI.Renderer|undefined;
+    private _lastRenderer: PIXI.Renderer|undefined;
     private _resolution = 1;
-    private _canvasBounds:  { top: number, left:number, width:number, height: number}|undefined;
+    private _canvasBounds:  { top: number; left: number; width: number; height: number}|undefined;
     private _surrogateHitbox: PIXI.Graphics|undefined;
     private _surrogateMask: PIXI.Graphics|undefined;
     private _surrogate: PIXI.Text|undefined;
@@ -106,10 +106,10 @@ export default class TextInput extends UIBase {
      * 设置最大可输入
      */
     public get maxLength() {
-        return this._max_length;
+        return this._maxLength;
     }
     public set maxLength(value) {
-        this._max_length = value;
+        this._maxLength = value;
         this.htmlInputShared.setAttribute('maxlength', value.toString());
     }
     /** 
@@ -130,15 +130,15 @@ export default class TextInput extends UIBase {
         }
         return parseInt(this._inputStyle.fontSize);
     }
-    public set fontSize(value:number) {
-        let str = value + "px";
+    public set fontSize(value: number) {
+        const str = value + "px";
         this.setInputStyle("fontSize",str);
     }
     /** 设置字体 */
     public get fontFamily() {
         return this._inputStyle.fontFamily;
     }
-    public set fontFamily(value:string) {
+    public set fontFamily(value: string) {
         this.setInputStyle("fontFamily",value);
     }
     
@@ -151,7 +151,7 @@ export default class TextInput extends UIBase {
         }
         return this._inputStyle.color;
     }
-    public set fill(value:string) {
+    public set fill(value: string) {
         this.setInputStyle("color",value.toString());
     }
     
@@ -218,7 +218,7 @@ export default class TextInput extends UIBase {
      * @param key 健
      * @param value 值
      */
-    public setInputStyle(key:TAny, value:TAny) {
+    public setInputStyle(key: TAny, value: TAny) {
         this._inputStyle[key] = value;
         this.htmlInputShared.setStyleValue(key,value);
         if (this._substituted && (key === 'fontFamily' || key === 'fontSize'))
@@ -230,7 +230,7 @@ export default class TextInput extends UIBase {
 
 
     // SETUP
-    private _onInputInput(e:InteractionEvent) {
+    private _onInputInput() {
         if (this._substituted)
             this._updateSubstitution();
     }
@@ -244,7 +244,7 @@ export default class TextInput extends UIBase {
     }
 
 
-    private  _setState(state:string) {
+    private  _setState(state: string) {
         this.state = state;
         if (this._substituted)
             this._updateSubstitution();
@@ -252,11 +252,11 @@ export default class TextInput extends UIBase {
 
     // RENDER & UPDATE
     // for pixi v5
-    public render(renderer:PIXI.Renderer) {
+    public render(renderer: PIXI.Renderer) {
         this._renderInternal(renderer);
     }
 
-    private _renderInternal(renderer:PIXI.Renderer) {
+    private _renderInternal(renderer: PIXI.Renderer) {
         this._resolution = renderer.resolution;
         this._lastRenderer = renderer;
         this._canvasBounds = this._getCanvasBounds();
@@ -288,24 +288,24 @@ export default class TextInput extends UIBase {
     private _updateDOMInput() {
         if (!this._canvasBounds)
             return;
-        let cb = this._canvasBounds;
-        let transform = this._pixiMatrixToCSS(this._getDOMRelativeWorldTransform());
+        const cb = this._canvasBounds;
+        const transform = this._pixiMatrixToCSS(this._getDOMRelativeWorldTransform());
         this.htmlInputShared.updatePostion(cb.top,cb.left,transform,this.container.worldAlpha);
         this.htmlInputShared.visible = this.container.worldVisible && this._domVisible;
-
-        this._previous.canvas_bounds = this._canvasBounds;
-        this._previous.world_transform = this.container.worldTransform.clone();
-        this._previous.world_alpha = this.container.worldAlpha;
-        this._previous.world_visible = this.container.worldVisible;
+        
+        this._previous.canvasBounds = this._canvasBounds;
+        this._previous.worldTransform = this.container.worldTransform.clone();
+        this._previous.worldAlpha = this.container.worldAlpha;
+        this._previous.worldVisible = this.container.worldVisible;
     }
 
     // STATE COMPAIRSON (FOR PERFORMANCE BENEFITS)
     private _needsUpdate() {
         return (
-            !this._comparePixiMatrices(this.container.worldTransform, this._previous.world_transform)
-            || !this._compareClientRects(this._canvasBounds, this._previous.canvas_bounds)
-            || this.container.worldAlpha != this._previous.world_alpha
-            || this.container.worldVisible != this._previous.world_visible
+            !this._comparePixiMatrices(this.container.worldTransform, this._previous.worldTransform)
+            || !this._compareClientRects(this._canvasBounds, this._previous.canvasBounds)
+            || this.container.worldAlpha != this._previous.worldAlpha
+            || this.container.worldVisible != this._previous.worldVisible
         )
     }
 
@@ -334,11 +334,11 @@ export default class TextInput extends UIBase {
     }
 
     private _updateSurrogate() {
-        let padding = this._deriveSurrogatePadding();
-        let inputBounds = this.htmlInputShared.getDOMInputBounds();
+        const padding = this._deriveSurrogatePadding();
+        const inputBounds = this.htmlInputShared.getDOMInputBounds();
         if(this._surrogate){
             this._surrogate.style = this._deriveSurrogateStyle();
-            this._surrogate.style.padding = Math.max.apply(Math, padding);
+            this._surrogate.style.padding = Math.max(... padding);
             this._surrogate.y = this._inputStyle.multiline ? padding[0] : (inputBounds.height - this._surrogate.height) / 2;
             this._surrogate.x = padding[3];
             if(this._inputStyle.multiline){
@@ -352,7 +352,7 @@ export default class TextInput extends UIBase {
         this._updateSurrogateMask(inputBounds, padding);
     }
 
-    private _updateSurrogateHitbox(bounds:ClientRect) {
+    private _updateSurrogateHitbox(bounds: ClientRect) {
         if(this._surrogateHitbox){
             this._surrogateHitbox.clear();
             this._surrogateHitbox.beginFill(0);
@@ -362,7 +362,7 @@ export default class TextInput extends UIBase {
         }
     }
 
-    private _updateSurrogateMask(bounds:ClientRect, padding:number[]) {
+    private _updateSurrogateMask(bounds: ClientRect, padding: number[]) {
         if(this._surrogateMask){
             this._surrogateMask.clear();
             this._surrogateMask.beginFill(0);
@@ -397,9 +397,9 @@ export default class TextInput extends UIBase {
     }
 
     private _deriveSurrogateStyle() {
-        let style:TAny = new PIXI.TextStyle()
+        const style: TAny = new PIXI.TextStyle()
 
-        for (var key in this._inputStyle) {
+        for (const key in this._inputStyle) {
             switch (key) {
                 case 'color':
                     style.fill = this._inputStyle.color;
@@ -430,20 +430,20 @@ export default class TextInput extends UIBase {
     }
 
     private _deriveSurrogatePadding() {
-        let indent = this._inputStyle.textIndent ? parseFloat(this._inputStyle.textIndent) : 0
+        const indent = this._inputStyle.textIndent ? parseFloat(this._inputStyle.textIndent) : 0
 
         if (this._inputStyle.padding && this._inputStyle.padding.length > 0) {
-            let components = this._inputStyle.padding.trim().split(' ');
+            const components = this._inputStyle.padding.trim().split(' ');
 
             if (components.length == 1) {
-                let padding = parseFloat(components[0]);
+                const padding = parseFloat(components[0]);
                 return [padding, padding, padding, padding + indent];
             } else if (components.length == 2) {
-                let paddingV = parseFloat(components[0]);
-                let paddingH = parseFloat(components[1]);
+                const paddingV = parseFloat(components[0]);
+                const paddingH = parseFloat(components[1]);
                 return [paddingV, paddingH, paddingV, paddingH + indent];
             } else if (components.length == 4) {
-                let padding = components.map(component => {
+                const padding = components.map(component => {
                     return parseFloat(component);
                 })
                 padding[3] += indent;
@@ -472,8 +472,8 @@ export default class TextInput extends UIBase {
 
     private _getCanvasBounds() {
         if(this._lastRenderer){
-            let rect = this._lastRenderer.view.getBoundingClientRect();
-            let bounds = { top: rect.top, left: rect.left, width: rect.width, height: rect.height };
+            const rect = this._lastRenderer.view.getBoundingClientRect();
+            const bounds = { top: rect.top, left: rect.left, width: rect.width, height: rect.height };
             bounds.left += window.scrollX;
             bounds.top += window.scrollY;
             return bounds;
@@ -483,22 +483,22 @@ export default class TextInput extends UIBase {
 
     private _getDOMRelativeWorldTransform() {
         if(this._lastRenderer){
-            let canvas_bounds = this._lastRenderer.view.getBoundingClientRect();
-            let matrix = this.container.worldTransform.clone();
+            const canvasBounds = this._lastRenderer.view.getBoundingClientRect();
+            const matrix = this.container.worldTransform.clone();
     
             matrix.scale(this._resolution, this._resolution);
-            matrix.scale(canvas_bounds.width / this._lastRenderer.width,
-                canvas_bounds.height / this._lastRenderer.height)
+            matrix.scale(canvasBounds.width / this._lastRenderer.width,
+                canvasBounds.height / this._lastRenderer.height)
             return matrix;
         }
 
     }
 
-    private _pixiMatrixToCSS(m:TAny) {
+    private _pixiMatrixToCSS(m: TAny) {
         return 'matrix(' + [m.a, m.b, m.c, m.d, m.tx, m.ty].join(',') + ')';
     }
 
-    private _comparePixiMatrices(m1:TAny, m2:TAny) {
+    private _comparePixiMatrices(m1: TAny, m2: TAny) {
         if (!m1 || !m2) return false
         return (
             m1.a == m2.a
@@ -510,7 +510,7 @@ export default class TextInput extends UIBase {
         )
     }
 
-    private _compareClientRects(r1:TAny, r2:TAny) {
+    private _compareClientRects(r1: TAny, r2: TAny) {
         if (!r1 || !r2) return false
         return (
             r1.left == r2.left

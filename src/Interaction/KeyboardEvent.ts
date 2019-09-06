@@ -20,11 +20,11 @@ class KeyboardSelectEvent {
 
     private isAddEvent = false;
 
-    private keyDownEventBind:TAny;
-    private keyUpEventBind:TAny;
-    private pasteEventBind:TAny;
-    private copyEventBind:TAny;
-    private cutEventBind:TAny;
+    private keyDownEventBind: TAny;
+    private keyUpEventBind: TAny;
+    private pasteEventBind: TAny;
+    private copyEventBind: TAny;
+    private cutEventBind: TAny;
 
     private addEvent(){
         if(this.isAddEvent){

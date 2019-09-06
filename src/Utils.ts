@@ -34,7 +34,7 @@ export function now(){
  * 深度拷贝对象
  * @param source 对象元
  */
-export function deepCopy (source: any) {
+export function deepCopy (source: TAny) {
     if (source === undefined || typeof source !== 'object') {
         return source;
     } else if (Array.isArray(source)) {
