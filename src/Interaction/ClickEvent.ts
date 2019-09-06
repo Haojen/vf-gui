@@ -4,6 +4,24 @@ import InteractionEvent, { TouchEvent } from "./InteractionEvent";
 
 /**
  * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
+ * 
+ *  可侦听事件:
+ * ```
+ *  {InteractionEvent}.TouchEvent.onHover
+ *  {InteractionEvent}.TouchEvent.onPress
+ *  {InteractionEvent}.TouchEvent.onClick
+ *  {InteractionEvent}.TouchEvent.onMove
+ * ```
+ *  可赋值方法:
+ * ```
+ *  onHover: ((e: InteractionEvent,over: boolean,clickEvent?: ClickEvent) => void) | undefined
+ *  onPress: ((e: InteractionEvent, isPressed: boolean,clickEvent?: ClickEvent) => void) | undefined;
+ *  onClick: ((e: InteractionEvent,clickEvent?: ClickEvent) => void) | undefined 
+ *  onMove: ((e: InteractionEvent,clickEvent?: ClickEvent) => void) | undefined
+ * ```
+ * 
+ * @example 可查看 `TestSliceSprite` 示例
+ * 
  * @since 1.0.0
  */
 export default class ClickEvent {

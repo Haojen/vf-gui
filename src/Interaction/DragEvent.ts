@@ -2,8 +2,27 @@ import UIBase from "../UIBase";
 import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
 import InteractionEvent from "./InteractionEvent";
 
+
 /**
- * 拖动相关的事件处理订阅类
+ * 多拽相关的事件处理类
+ * 
+ *  可侦听事件(未实现):
+ * ```
+ *  {InteractionEvent}.Drag.xxxxxx
+ *  {InteractionEvent}.Drag.xxxxxx
+ *  {InteractionEvent}.Drag.xxxxxx
+ *  {InteractionEvent}.Drag.xxxxxx
+ * ```
+ *  可赋值方法:
+ * ```
+ * onPress: ((e: InteractionEvent, isPressed: boolean,dragObj?: DragEvent) => void) | undefined;
+ * onDragEnd: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
+ * onDragMove: ((e: InteractionEvent, offset: PIXI.Point,dragObj?: DragEvent) => void) | undefined 
+ * onDragStart: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
+ * ```
+ * 
+ * @example 可查看 `Slider` 源码
+ * 
  * @since 1.0.0
  */
 export default class DragEvent {

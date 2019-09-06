@@ -7,8 +7,22 @@ interface TWheelEvent extends WheelEvent{
     axis: number;
 }
 
+
+
 /**
- * 鼠标滚动滑轮事件处理
+ * 鼠标滑轮事件
+ * 
+ *  可侦听事件(未实现):
+ * ```
+ *  {InteractionEvent}.MouseScroll.xxxxxx.
+ * ```
+ *  可赋值方法:
+ * ```
+ * oonMouseScroll: ((e: WheelEvent,delta: PIXI.Point) => void) | undefined
+ * ```
+ * 
+ * @example 可查看 `Slider` 源码
+ * 
  * @since 1.0.0
  */
 export default class MouseScrollEvent{

@@ -23,9 +23,28 @@ interface TUIBase{
     blur?: Function;
     focus?: Function;
 }
-interface InputStyle extends CSSStyleDeclaration{
-    multiline?:boolean;
+
+interface InputStyle{
+    [propName: string]: any;
+    fontFamily: string,
+    fontSize?: string;
+    fontWeight?:string
+    fontVariant:"normal"|"small-caps"|"inherit"
+    color: '#000000',
+    padding: string,
+    multiline:boolean;
+    fontStyle:"normal"|"italic"|"oblique"|"inherit"
+    letterSpacing:number,
+    textIndent:string,
+
+    position: 'absolute',
+    background: 'none',
+    border: 'none',
+    outline: 'none',
+    transformOrigin: '0 0',
+    lineHeight: '1'
 }
+
 interface CheckBox{
     uuid: string;
     checkGroup: string|undefined;

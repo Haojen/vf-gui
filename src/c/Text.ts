@@ -3,6 +3,8 @@ import TextStyle from "./Text/TextStyle";
 
 /**
  * UI文本显示对象
+ * 
+ * 中文换行特殊处理 xxxx.style.breakWords = true;
  *
  * @class
  * @extends PIXI.UI.UIBase

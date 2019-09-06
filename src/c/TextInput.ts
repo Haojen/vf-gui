@@ -1,777 +1,523 @@
-import ScrollingContainer from "./ScrollingContainer";
-import { Text } from "pixi.js";
-import DragEvent from "../Interaction/DragEvent";
-import InteractionEvent, { KeyEvent } from "../Interaction/InteractionEvent";
-import { defaultLineHeight } from "./Text";
-import { htmlInputShared } from "./HtmlInput";
-import { keyboardShared } from "../Interaction/KeyboardEvent";
-import TextStyle from "./Text/TextStyle";
-import InputSkinBase from "../InputSkinBase";
-/*
- * Features:
- * multiLine, shift selection, Mouse Selection, Cut, Copy, Paste, Delete, Backspace, Arrow navigation, tabIndex
- *
- * Methods:
- * blur()
- * focus()
- * select() - selects all text
- * selectRange(startIndex, endIndex)
- * clearSelection()
- * setCaretIndex(index) moves caret to index
- *
- *
- * Events:
- * "change"
- * "blur"
- * "blur"
- * "focus"
- * "focusChanged" param: [bool]focus
- * "keyup" param: Event
- * "keydown" param: Event
- * "copy" param: Event
- * "paste" param: Event
- * "cut" param: Event
- * "keyup" param: Event
- */
+import HtmlInput from "./InputText/HtmlInput";
+import InteractionEvent, { KeyEvent,TouchEvent } from "../Interaction/InteractionEvent";
+import UIBase from "../UIBase";
+
 
 /**
- * 创建文本输入
+ * @example
+ * new PIXI.TextInput({     
+ * input: {
+ *      fontSize: '25pt',
+ *      padding: '14px',
+ *      width: '500px',
+ *      color: '#26272E'
+ *  }, 
+ *  box: {...}
+ * })
  */
-export default class TextInput extends InputSkinBase {
-    public constructor(option = { width: 100, height: 20, tabIndex: 0, tabGroup: 0 },style?: TextStyle) {
-        super(option.width, option.height, option.tabIndex, option.tabGroup.toString());
-        const text = defaultLineHeight(style);
-        this._lineHeight = text.lineHeight;
-        this._textHeight = text.textHeight;
-        //selection graphics
-        const selection = this._selection = new PIXI.Graphics();
-        selection.visible = false;
-        //caret graphics
-        const caret = this._caret = { graphics: new PIXI.Graphics(), index: 0 ,atEnd:false,forward:false,down:false};
-        caret.graphics.visible = false;
-        caret.graphics.lineStyle(1, 0xffffff, 1);
-        caret.graphics.moveTo(0, 0);
-        caret.graphics.lineTo(0, this._lineHeight);
-        //var padding
-        this._textContainer = new ScrollingContainer();
-        this.updateTextContainer();
-        this.addChild(this._textContainer); 
+export default class TextInput extends UIBase {
 
-        this._dragEvent = new DragEvent(this);
-        this._dragEvent.onPress = this.onDragPress;
-        this._dragEvent.onDragMove = this.onDragMove;
-        //键盘事件，需要调用keyboardShared.focus开启 或 keyboardShared.blur关闭
-        this.on(KeyEvent.keydown,this.onKeyboard,this);
-        this.on(KeyEvent.paste,this.pasteEvent,this);
-        this.on(KeyEvent.copy,this.copyEvent,this);
-        this.on(KeyEvent.cut,this.cutEvent,this);
+    constructor(styles?:TAny,width = 100,height = 20,tabIndex = 0, tabGroup = "0") {
+        super();
 
-        htmlInputShared.addBlurEvent(this.blur,this);
-        htmlInputShared.addInputEvent(this.inputEvent,this);
+        this._inputStyle = Object.assign(
+            {
+                position: 'absolute',
+                background: 'none',
+                border: 'none',
+                outline: 'none',
+                transformOrigin: '0 0',
+                padding: '5px 8px',
+                color: '#000000',
+                lineHeight: '1'
+            },
+            styles
+        ) as TAny;
+        
+        this.htmlInputShared = new HtmlInput(this._inputStyle.multiline);
+        this.htmlInputShared.setStyle(this._inputStyle);
+        this.htmlInputShared.on(KeyEvent.input,this._onInputInput,this);
+        this.htmlInputShared.on('focus',this._onFocused,this);
+        this.htmlInputShared.on('blur',this._onBlurred,this);
+
+        this.substituteText = true;
+        this._setState('DEFAULT'); 
+        this.container.isEmitRender = true;
+        this.container.on("render",this.render,this);
+
     }
-    /** 光标 */
-    private _caret: { graphics: PIXI.Graphics; index: number; atEnd: boolean;forward: boolean;down: boolean};
-    /** 选中的颜色 */
-    private _selection: PIXI.Graphics;
-    /** 行高 */
-    private _lineHeight: number;
-    /** 文字高度 */
-    private _textHeight: number;
-    /** 文本容器 */
-    private _textContainer: ScrollingContainer;
-
-    private _lastWidth = 0;
-    private _dirtyText = true;
-    private _maxLength = 1000;
-    private _label = "";
-    private _lastLabel = "";
-    private _style: TAny|undefined;
-    private _chars: Text[] = [];
-    private _multiLine = false;
-    private color = "#000000"; //style.fill
-    private selectedColor = "#ffffff";
-    private selectedBackgroundColor = "#318cfa";
-    //var padding
-    private paddingLeft = 3;
-    private paddingRight = 3;
-    private paddingBottom = 3;
-    private paddingTop = 3;
-    //selection Vars
-    /** interval for flash */
-    private caretInterval = -1;
-    /** startIndex */
-    private si = 0;
-    /** startIndexEnd */
-    private sie = false;
-    /** endIndex */
-    private ei = 0;
-    /** endIndexEnd */
-    private eie = false;
-    /** startposition */
-    private sp = new PIXI.Point();
-    /** dragStart */
-    private ds = new PIXI.Point();
-    /** dragend */
-    private de = new PIXI.Point();
-
-    private selectionStart = -1;
-    private selectionEnd = -1;
-    private hasSelection = false;
-    /** timestamp */
-    private t = performance.now();
-    /** click counter */
-    private cc = 0;
-    private _textLengthPX = 0;
-    private _textHeightPX = 0;
-    private _lineIndexMax = 0;
-
-    private _sp = new PIXI.Point();
-    private _dragEvent: DragEvent;
-
-    public get valueEvent(): string {
-        return this.label;
-    }
-    public set valueEvent(value: string) {
-        if (this.maxLength)
-            value = value.slice(0, this.maxLength);
-
-        if (this._label != value) {
-            this._label = value;
-            this.emit("change");
+    private htmlInputShared:HtmlInput;
+    private _inputStyle:InputStyle;
+    private _disabled = false;
+    private _max_length = NaN;
+    private _previous:TAny = {};
+    private _domVisible = true;
+    private _placeholder = '';
+    private _placeholderColor = 0xa9a9a9;
+    private _substituted = false;
+    private _lastRenderer:PIXI.Renderer|undefined;
+    private _resolution = 1;
+    private _canvasBounds:  { top: number, left:number, width:number, height: number}|undefined;
+    private _surrogateHitbox: PIXI.Graphics|undefined;
+    private _surrogateMask: PIXI.Graphics|undefined;
+    private _surrogate: PIXI.Text|undefined;
+    private _fontMetrics: PIXI.IFontMetrics|undefined;
+    protected state = 'DEFAULT';
+    
+    // GETTERS & SETTERS
+    public update(){
+        if(this._surrogate){
+            //this._surrogate.width = this.actualWidth;
+            //this._surrogate.height = this.actualHeight;
         }
-    }
-
-    public get maxLength() {
-        return this._maxLength;
-    }
-    public set maxLength(value) {
-        this._maxLength = value;
-        this.label = this._label;
-    }
-    public get label(): string {
-        return this._label;
-    }
-    public set label(value: string) {
-        const str = value.slice(0, this.maxLength);
-        if (this._label != str) {
-            this._lastLabel = this._label;
-            this._label  = str;
-            this._dirtyText = true;
-            this.update();
-
-        }
+        this.setInputStyle("width",this.actualWidth.toString() + "px");
+        this.setInputStyle("height",this.actualHeight.toString() + "px");
     }
     
-
-    /** 更新文本容器 */
-    protected updateTextContainer() {
-        this._textContainer.scrollX = !this._multiLine;
-        this._textContainer.scrollY = this._multiLine;
-        this._textContainer.dragScrolling = this._multiLine;
-        this._textContainer.expandMask = 2;
-        this._textContainer.softness = 0.2;
-        this._textContainer.anchorTop = this.paddingTop;
-        this._textContainer.anchorBottom = this.paddingBottom;
-        this._textContainer.anchorLeft = this.paddingLeft;
-        this._textContainer.anchorRight = this.paddingRight;
-        if (this._multiLine) {
-            this._useNext = this._usePrev = false;
-            this.dragRestrictAxis = "x";
-            this.dragThreshold = 5;
-            this._textContainer.dragRestrictAxis = "y";
-            this._textContainer.dragThreshold = 5;
+    /**
+     * 预览文字
+     */
+    public get placeholder() {
+        return this._placeholder;
+    }
+    public set placeholder(text) {
+        this._placeholder = text;
+        if (this._substituted) {
+            this._updateSurrogate()
+            this.htmlInputShared.placeholder = '';
         } else {
-            this._textContainer.dragRestrictAxis = undefined;
+            this.htmlInputShared.placeholder = text;
         }
-    }
-
-    protected updateText() {
-        this._textLengthPX = 0;
-        this._textHeightPX = 0;
-        this._lineIndexMax = 0;
-
-        const chars = this._chars;
-        const innerContainer = this._textContainer.innerContainer;
-        let lineIndex = 0;
-        const length = this._label.length;
-        let x = 0;
-        let y = (this._lineHeight - this._textHeight) * 0.5;
-        let i = 0;
-
-        //destroy excess chars
-        if (chars.length > length) {
-            for (i = chars.length - 1; i >= length; i--) {
-                innerContainer.removeChild(chars[i]);
-                chars[i].destroy();
-            }
-            this._chars.splice(length, chars.length - length);
-        }
-
-        //update and add chars
-        let whitespace = false;
-        let newline = false;
-        let wordIndex = 0;
-        let lastWordIndex = -1;
-        let wrap = false;
-        for (i = 0; i < this._label.length; i++) {
-            if (whitespace || newline) {
-                lastWordIndex = i;
-                wordIndex++;
-            }
-
-            let c = this._label[i];
-            whitespace = c === " ";
-            newline = c === "\n";
-
-            if (newline) { //newline "hack". webgl render errors if \n is passed to text
-                c = "";
-            }
-
-            let charText = chars[i];
-            if (!charText) {
-                charText = new PIXI.Text(c, this._style);
-                innerContainer.addChild(charText);
-                chars.push(charText);
-            }
-            else {
-                charText.text = c;
-            }
-
-            charText.scale.x = newline ? 0 : 1;
-            (charText as TAny).wrapped = wrap;
-            wrap = false;
-
-            if (newline || (this._multiLine && x + charText.width >= this._width - this.paddingLeft - this.paddingRight)) {
-                lineIndex++;
-                x = 0;
-                y += this._lineHeight;
-
-                if (lastWordIndex != -1 && !newline) {
-                    i = lastWordIndex - 1;
-                    lastWordIndex = -1;
-                    wrap = true;
-                    continue;
-                }
-            }
-
-
-            (charText as TAny).lineIndex = lineIndex;
-            charText.x = x;
-            charText.y = y;
-            (charText as TAny).wordIndex = whitespace || newline ? -1 : wordIndex;
-            x += charText.width;
-
-
-            if (x > this._textLengthPX)
-                this._textLengthPX = x;
-            if (y > this._textHeightPX)
-                this._textHeightPX = y;
-        }
-
-        this._lineIndexMax = lineIndex;
-
-        //put caret on top
-        innerContainer.addChild(this._caret.graphics);
-
-        //recache
-        if (innerContainer.cacheAsBitmap) {
-            innerContainer.cacheAsBitmap = false;
-            innerContainer.cacheAsBitmap = true;
-        }
-
-        this._textContainer.update();
-
-    }
-
-    protected updateClosestIndex(point: PIXI.Point, start: boolean) {
-        let currentDistX = 99999;
-        let currentIndex = -1;
-        let atEnd = false;
-
-        let closestLineIndex = 0;
-        if (this._lineIndexMax > 0)
-            closestLineIndex = Math.max(0, Math.min(this._lineIndexMax, Math.floor(point.y / this._lineHeight)));
-
-        for (let i = 0; i < this._chars.length; i++) {
-            const char = this._chars[i];
-            if ((char as TAny).lineIndex != closestLineIndex) continue;
-
-            const distX = Math.abs(point.x - (char.x + (char.width * 0.5)));
-            if (distX < currentDistX) {
-                currentDistX = distX;
-                currentIndex = i;
-                atEnd = point.x > char.x + (char.width * 0.5);
-            }
-        }
-
-        if (start) {
-            this.si = currentIndex;
-            this.sie = atEnd;
-        }
-        else {
-            this.ei = currentIndex;
-            this.eie = atEnd;
-        }
-    }
-
-    protected deleteSelection() {
-        if (this.hasSelection) {
-            this.label = this.label.slice(0, this.selectionStart) + this.label.slice(this.selectionEnd + 1);
-            this.setCaretIndex(this.selectionStart);
-            return true;
-        }
-        return false;
-    }
-
-    protected updateSelectionColors() {
-        //Color charecters
-        for (let i = 0; i < this._chars.length; i++) {
-            if (i >= this.selectionStart && i <= this.selectionEnd)
-                this._chars[i].style.fill = this.selectedColor;
-            else
-                this._chars[i].style.fill = this.color;
-        }
-    }
-
-    protected scrollToPosition(pos: PIXI.Point) {
-        this._sp.copyFrom(pos);
-        if (this._multiLine && this._sp.y >= this._lineHeight)
-            this._sp.y += this._lineHeight;
-        this._textContainer.focusPosition(this._sp);
-    }
-
-    protected resetScrollPosition() {
-        this._sp.set(0, 0);
-        this._textContainer.focusPosition(this._sp);
-    }
-
-    protected hideCaret() {
-        this._caret.graphics.visible = false;
-        clearInterval(this.caretInterval);
-    }
-
-    protected showCaret() {
-        this.clearSelection();
-        clearInterval(this.caretInterval);
-        this._caret.graphics.alpha = 1;
-        this._caret.graphics.visible = true;
-        this.caretInterval = window.setInterval( () => {
-            this._caret.graphics.alpha = this._caret.graphics.alpha === 0 ? 1 : 0;
-        }, 500);
     }
 
     /**
-     * 当前位置插入符号
-     * @param c 
+     * 设置不可用
      */
-    protected insertTextAtCaret (c: string) {
-        if (!this._multiLine && c.indexOf("\n") != -1) {
-            c = c.replace(/\n/g, '');
-        }
-
-        if (this.hasSelection)
-            this.deleteSelection();
-        if (!this.maxLength || this._chars.length < this.maxLength) {
-
-            if (this._caret.atEnd) {
-                this.valueEvent += c;
-                this.setCaretIndex(this._chars.length);
-            }
-            else {
-                const index = Math.min(this._chars.length - 1, this._caret.index);
-                this.valueEvent = this.label.slice(0, index) + c + this.label.slice(index);
-                this.setCaretIndex(index + c.length);
-            }
-        }
+    public get disabled() {
+        return this._disabled;
+    }
+    public set disabled(value) {
+        this._disabled = value;
+        this.htmlInputShared.disabled = value;
+        this._setState(value ? 'DISABLED' : 'DEFAULT')
     }
 
-    protected onKeyboard(e: InteractionEvent) {
+    /**
+     * 设置最大可输入
+     */
+    public get maxLength() {
+        return this._max_length;
+    }
+    public set maxLength(value) {
+        this._max_length = value;
+        this.htmlInputShared.setAttribute('maxlength', value.toString());
+    }
+    /** 
+     * 过滤表达式
+     */
+    public get restrict() {
+        return this.htmlInputShared.restrict;
+    }
+    public set restrict(regex) {
+        this.htmlInputShared.restrict = regex;
+    }
+    /**
+     * 设置字体大小
+     */
+    public get fontSize() {
+        if(this._inputStyle.fontSize == null){
+            return NaN;
+        }
+        return parseInt(this._inputStyle.fontSize);
+    }
+    public set fontSize(value:number) {
+        let str = value + "px";
+        this.setInputStyle("fontSize",str);
+    }
+    /** 设置字体 */
+    public get fontFamily() {
+        return this._inputStyle.fontFamily;
+    }
+    public set fontFamily(value:string) {
+        this.setInputStyle("fontFamily",value);
+    }
+    
+    /**
+     * 设置字体颜色
+     */
+    public get fill() {
+        if(this._inputStyle.color == null){
+            return "";
+        }
+        return this._inputStyle.color;
+    }
+    public set fill(value:string) {
+        this.setInputStyle("color",value.toString());
+    }
+    
+    /** 
+     * 设置文本 
+     */
+    public get text() {
+        return this.htmlInputShared.value;
+    }
+    public set text(text) {
+        this.htmlInputShared.value = text;
+        if (this._substituted) this._updateSurrogate();
+    }
 
-        if (e.type === KeyEvent.enter.toString()) {
-            this.insertTextAtCaret('\n');
+ 
+    private get substituteText() {
+        return this._substituted;
+    }
+    private set substituteText(substitute) {
+        if (this._substituted == substitute)
             return;
-        }
-        if(e.type === KeyEvent.ctrlA.toString()){
-            this.select();
-            return;
-        }
-        if(e.type === KeyEvent.ctrlZ.toString()){
-            if (this.label != this._lastLabel)
-                this.valueEvent = this._lastLabel;
-            this.setCaretIndex(this._lastLabel.length + 1);
-            return;
-        }
-        if(e.type === KeyEvent.backspace.toString()){
-            if (!this.deleteSelection()) {
-                if (this._caret.index > 0 || (this._chars.length === 1 && this._caret.atEnd)) {
-                    if (this._caret.atEnd) {
-                        this.valueEvent = this.label.slice(0, this._chars.length - 1);
-                        this.setCaretIndex(this._caret.index);
-                    }
-                    else {
-                        this.valueEvent = this.label.slice(0, this._caret.index - 1) + this.label.slice(this._caret.index);
-                        this.setCaretIndex(this._caret.index - 1);
-                    }
-                }
-            }
-            return;
-        }
-        if(e.type === KeyEvent.delete.toString()){
-            if (!this.deleteSelection()) {
-                if (!this._caret.atEnd) {
-                    this.valueEvent = this.label.slice(0, this._caret.index) + this.label.slice(this._caret.index + 1);
-                    this.setCaretIndex(this._caret.index);
-                }
-            }
-            return;
-        }
-        if(e.type === KeyEvent.left.toString() || e.type === KeyEvent.right.toString()){
-            const rdd = e.type === KeyEvent.left.toString();//Reverse drag direction
-            if (this.hasSelection)
-                this.setCaretIndex(rdd ? this.selectionStart : this.selectionEnd + 1);
-            else
-                this.setCaretIndex(this._caret.index + (rdd ? this._caret.atEnd ? 0 : -1 : 1));
-        }
-        if(e.type === KeyEvent.shiftLeft.toString() || e.type === KeyEvent.shiftRight.toString()){
-            const rdd = e.type === KeyEvent.shiftLeft.toString();//Reverse drag direction
-            if (this.hasSelection) {
-                const caretAtStart = this.selectionStart === this._caret.index;
-                if (caretAtStart) {
-                    if (this.selectionStart === this.selectionEnd && rdd === this._caret.forward) {
-                        this.setCaretIndex(this._caret.forward ? this._caret.index : this._caret.index + 1);
-                    }
-                    else {
-                        const startindex = rdd ? this._caret.index - 1 : this._caret.index + 1;
-                        this.selectRange(startindex, this.selectionEnd);
-                        this._caret.index = Math.min(this._chars.length - 1, Math.max(0, startindex));
-                    }
-                }
-                else {
-                    const endIndex = rdd ? this._caret.index - 1 : this._caret.index + 1;
-                    this.selectRange(this.selectionStart, endIndex);
-                    this._caret.index = Math.min(this._chars.length - 1, Math.max(0, endIndex));
-                }
-            }
-            else {
-                const _i = this._caret.atEnd ? this._caret.index + 1 : this._caret.index;
-                const selectIndex = rdd ? _i - 1 : _i;
-                this.selectRange(selectIndex, selectIndex);
-                this._caret.index = selectIndex;
-                this._caret.forward = !rdd;
-            }
-        }
-        if(e.type === KeyEvent.top.toString() || e.type === KeyEvent.down.toString()){
-            const vrdd = e.type === KeyEvent.top.toString() ;//vertical Reverse drag direction
-            if (this.hasSelection) {
-                this.setCaretIndex(vrdd ? this.selectionStart : this.selectionEnd + 1);
-            }
-            else {
-                this.ds.copyFrom(this._caret.graphics.position);
-                this.ds.y += vrdd ? -this._lineHeight : this._lineHeight;
-                this.ds.x += 1;
-                this.updateClosestIndex(this.ds, true);
-                this.setCaretIndex(this.sie ? this.si + 1 : this.si);
-            }
-        }
-        if(this._multiLine && (e.type === KeyEvent.shiftTop.toString() || e.type === KeyEvent.shiftDown.toString())){
-            const vrdd = e.type === KeyEvent.top.toString() ;//vertical Reverse drag direction
-            if (this.hasSelection) {
-                this.de.y = Math.max(0, Math.min(this._textHeightPX, this.de.y + (vrdd ? -this._lineHeight : this._lineHeight)));
-                this.updateClosestIndex(this.de, false);
-                //console.log(si, ei);
-                if (Math.abs(this.si - this.ei) <= 1) {
-                    //console.log(si, ei);
-                    this.setCaretIndex(this.sie ? this.si + 1 : this.si);
-                } else {
-                    this._caret.index = (this.eie ? this.ei + 1 : this.ei) + (this._caret.down ? -1 : 0);
-                    this.selectRange(this._caret.down ? this.si : this.si - 1, this._caret.index);
-                }
 
-            }
-            else {
-                this.si = this._caret.index;
-                this.sie = false;
-                this.de.copyFrom(this._caret.graphics.position);
-                this.de.y = Math.max(0, Math.min(this._textHeightPX, this.de.y + (vrdd ? -this._lineHeight : this._lineHeight)));
-                this.updateClosestIndex(this.de, false);
-                this._caret.index = (this.eie ? this.ei + 1 : this.ei) - (vrdd ? 0 : 1);
-                this.selectRange(vrdd ? this.si - 1 : this.si, this._caret.index);
-                this._caret.down = !vrdd;
-            }
+        this._substituted = substitute;
+
+        if (substitute) {
+            this._createSurrogate();
+            this._domVisible = false;
+        } else {
+            this._destroySurrogate();
+            this._domVisible = true;
         }
+        this.placeholder = this._placeholder;
+        this._update();
     }
 
-    protected copyEvent(e: InteractionEvent,obj: TextInput,clipboardData: DataTransfer | null) {
-        if (this.hasSelection) {
-            if(clipboardData)
-                clipboardData.setData('Text', this.label.slice(this.selectionStart, this.selectionEnd + 1));
-        }
-    }
-
-    protected cutEvent(e: InteractionEvent,obj: TextInput,clipboardData: DataTransfer | null) {
-        if (this.hasSelection) {
-            this.copyEvent(e,obj,clipboardData);
-            this.deleteSelection();
-        }
-    }
-
-    protected pasteEvent(e: InteractionEvent,obj: TextInput,clipboardData: DataTransfer | null) {
-        if(clipboardData)
-            this.insertTextAtCaret(clipboardData.getData('Text'));
-    }
-
-    protected inputEvent() {
-        const c = htmlInputShared.value;
-        if (c.length) {
-            this.insertTextAtCaret(c);
-            htmlInputShared.value = "";
-        }
-    }
-
-    protected inputBlurEvent() {
-        this.blur();
-    }
-
-    protected onDragPress(e: InteractionEvent, mouseDown: boolean) {
-
-        if (mouseDown) {
-            const timeSinceLast = performance.now() - this.t;
-            this.t = performance.now();
-            if (timeSinceLast < 250) {
-                this.cc++;
-                if (this.cc > 1)
-                    this.select();
-                else {
-                    this._textContainer.innerContainer.toLocal(this.sp, undefined, this.ds, true);
-                    this.updateClosestIndex(this.ds, true);
-                    const c = this._chars[this.si];
-                    if (c) {
-                        if ((c as TAny).wordIndex != -1)
-                            this.selectWord((c as TAny).wordIndex);
-                        else
-                            this.selectRange(this.si, this.si);
-                    }
-                }
-            }
-            else {
-                this.cc = 0;
-                this._sp.copyFrom(e.data.global);
-                this._textContainer.innerContainer.toLocal(this._sp, undefined, this.ds, true);
-                if (this._chars.length) {
-                    this.updateClosestIndex(this.ds, true);
-                    this.setCaretIndex(this.sie ? this.si + 1 : this.si);
-                }
-            }
-        }
-        e.data.originalEvent.preventDefault();
-    }
-    protected onDragMove(e: InteractionEvent, offset: PIXI.Point){
-        if (!this._chars.length || !this._focused) return;
-
-        this.de.x = this._sp.x + offset.x;
-        this.de.y = this._sp.y + offset.y;
-        this._textContainer.innerContainer.toLocal(this.de, undefined, this.de, true);
-        this.updateClosestIndex(this.de, false);
-
-        if (this.si < this.ei) {
-            this.selectRange(this.sie ? this.si + 1 : this.si, this.eie ? this.ei : this.ei - 1);
-            this._caret.index = this.eie ? this.ei : this.ei - 1;
-        }
-        else if (this.si > this.ei) {
-            this.selectRange(this.ei, this.sie ? this.si : this.si - 1);
-            this._caret.index = this.ei;
-        }
-        else {
-            if (this.sie === this.eie) {
-                this.setCaretIndex(this.sie ? this.si + 1 : this.si);
-            }
-            else {
-                this.selectRange(this.si, this.ei);
-                this._caret.index = this.ei;
-            }
-        }
-
-        this._caret.forward = this.si <= this.ei;
-        this._caret.down = offset.y > 0;
-        this.scrollToPosition(this.de);
-    }
-
-    public focus () {
-        if (!this._focused) {
-            super.focus.call(this);
-
-            const l = this.container.worldTransform.tx + "px";
-            const t = this.container.worldTransform.ty + "px";
-            const h = this.container.height + "px";
-            const w = this.container.width + "px";
-
-            htmlInputShared.style = "position:fixed; left:" + l + "; top:" + t + "; height:" + h + "; width:" + w + ";";
-            htmlInputShared.value = "";
-            htmlInputShared.focus();
-            htmlInputShared.style = "position:fixed; left:-10px; top:-10px; width:0px; height: 0px;";
-            this._textContainer.innerContainer.cacheAsBitmap = false;
-
-            keyboardShared.focus(this);
-            setTimeout( ()=> {
-                if (!this._caret.graphics.visible && !this._selection.visible && !this._multiLine)
-                    this.setCaretIndex(this._chars.length);
-            }, 0);
-
-        }
+    /** 
+     * 设置焦点 
+     */
+    public focus() {
+        this.htmlInputShared.setStyle(this._inputStyle);
+        if (this._substituted && !this._domVisible)
+            this.htmlInputShared.visible = true;
+        this.htmlInputShared.value = this.text;
+        this.htmlInputShared.focus();
 
     }
-
+    /** 
+     * 失去焦点 
+     */
     public blur() {
-        if (this._focused) {
-            super.blur();
-            this.hideCaret();
-            this.clearSelection();
-            if (this._chars.length > 1) this._textContainer.innerContainer.cacheAsBitmap = true;
-            keyboardShared.blur();
-        }
-
-        if (!this._multiLine)
-            this.resetScrollPosition();
-    }
-
-    /**
-     * 设置光标索引位置
-     * @param index 索引位置，0开始
-     */
-    public setCaretIndex(index: number) {
-        this._caret.atEnd = index >= this._chars.length;
-        this._caret.index = Math.max(0, Math.min(this._chars.length - 1, index));
-
-        if (this._chars.length && index > 0) {
-
-            let i = Math.max(0, Math.min(index, this._chars.length - 1));
-            let c = this._chars[i];
-
-            if (c && (c as TAny).wrapped) {
-                this._caret.graphics.x = c.x;
-                this._caret.graphics.y = c.y;
-            }
-            else {
-                i = Math.max(0, Math.min(index - 1, this._chars.length - 1));
-                c = this._chars[i];
-                this._caret.graphics.x = this._chars[i].x + this._chars[i].width;
-                this._caret.graphics.y = ((c as TAny).lineIndex * this._lineHeight) + (this._lineHeight - this._textHeight) * 0.5;
-            }
-        }
-        else {
-            this._caret.graphics.x = 0;
-            this._caret.graphics.y = (this._lineHeight - this._textHeight) * 0.5;
-        }
-
-        this.scrollToPosition(this._caret.graphics.position);
-        this.showCaret();
-
+        this.htmlInputShared.blur();
     }
 
     /**
      * 全选
      */
-    public select () {
-        this.selectRange(0, this._chars.length - 1);
+    public select() {
+        this.focus()
+        this.htmlInputShared.select();
     }
 
-    public selectWord (wordIndex: number) {
-        let startIndex = this._chars.length;
-        let endIndex = 0;
-        for (let i = 0; i < this._chars.length; i++) {
-            if ((this._chars[i] as TAny).wordIndex !== wordIndex) continue;
-            if (i < startIndex)
-                startIndex = i;
-            if (i > endIndex)
-                endIndex = i;
+    /**
+     * 设置css style样式
+     * @param key 健
+     * @param value 值
+     */
+    public setInputStyle(key:TAny, value:TAny) {
+        this._inputStyle[key] = value;
+        this.htmlInputShared.setStyleValue(key,value);
+        if (this._substituted && (key === 'fontFamily' || key === 'fontSize'))
+            this._updateFontMetrics();
+
+        if (this._lastRenderer)
+            this._update();
+    }
+
+
+    // SETUP
+    private _onInputInput(e:InteractionEvent) {
+        if (this._substituted)
+            this._updateSubstitution();
+    }
+
+    private _onFocused() {
+        this._setState('FOCUSED');
+    }
+
+    private _onBlurred() {
+        this._setState('DEFAULT');
+    }
+
+
+    private  _setState(state:string) {
+        this.state = state;
+        if (this._substituted)
+            this._updateSubstitution();
+    }
+
+    // RENDER & UPDATE
+    // for pixi v5
+    public render(renderer:PIXI.Renderer) {
+        this._renderInternal(renderer);
+    }
+
+    private _renderInternal(renderer:PIXI.Renderer) {
+        this._resolution = renderer.resolution;
+        this._lastRenderer = renderer;
+        this._canvasBounds = this._getCanvasBounds();
+        if (this._needsUpdate())
+            this._update();
+    }
+
+    private _update() {
+        this._updateDOMInput();
+        if (this._substituted) this._updateSurrogate();
+        
+    }
+
+    private _updateSubstitution() {
+        if (this.state === 'FOCUSED') {
+            this._domVisible = true;
+            if(this._surrogate)
+                this._surrogate.visible = false;
+            this.text.length === 0
+        } else {
+            this._domVisible = false;
+            if(this._surrogate)
+                this._surrogate.visible = true;
         }
-
-        this.selectRange(startIndex, endIndex);
+        this._updateDOMInput();
+        this._updateSurrogate();
     }
 
-    public drawSelectionRect (x: number, y: number, w: number, h: number) {
-        const color = "0x" + this.selectedBackgroundColor.slice(1);
-        this._selection.beginFill(parseInt(color), 1);
-        this._selection.moveTo(x, y);
-        this._selection.lineTo(x + w, y);
-        this._selection.lineTo(x + w, y + h);
-        this._selection.lineTo(x, y + h);
-        this._selection.endFill();
+    private _updateDOMInput() {
+        if (!this._canvasBounds)
+            return;
+        let cb = this._canvasBounds;
+        let transform = this._pixiMatrixToCSS(this._getDOMRelativeWorldTransform());
+        this.htmlInputShared.updatePostion(cb.top,cb.left,transform,this.container.worldAlpha);
+        this.htmlInputShared.visible = this.container.worldVisible && this._domVisible;
+
+        this._previous.canvas_bounds = this._canvasBounds;
+        this._previous.world_transform = this.container.worldTransform.clone();
+        this._previous.world_alpha = this.container.worldAlpha;
+        this._previous.world_visible = this.container.worldVisible;
     }
 
-    public updateSelectionGraphics () {
-        const c1: TAny = this._chars[this.selectionStart];
-        if (c1 !== undefined) {
-            let cx = c1.x;
-            let cy = c1.y;
-            let w = 0;
-            const h = this._textHeight;
-            let cl = c1.lineIndex;
+    // STATE COMPAIRSON (FOR PERFORMANCE BENEFITS)
+    private _needsUpdate() {
+        return (
+            !this._comparePixiMatrices(this.container.worldTransform, this._previous.world_transform)
+            || !this._compareClientRects(this._canvasBounds, this._previous.canvas_bounds)
+            || this.container.worldAlpha != this._previous.world_alpha
+            || this.container.worldVisible != this._previous.world_visible
+        )
+    }
 
-            this._selection.clear();
-            for (let i = this.selectionStart; i <= this.selectionEnd; i++) {
-                const c: TAny = this._chars[i];
-                if (c.lineIndex != cl) {
-                    this.drawSelectionRect(cx, cy, w, h);
-                    cx = c.x;
-                    cy = c.y;
-                    cl = c.lineIndex;
-                    w = 0;
-                }
-                w += c.width;
+    // INPUT SUBSTITUTION
+    private _createSurrogate() {
+        this._surrogateHitbox = new PIXI.Graphics();
+        this._surrogateHitbox.name = "_surrogateHitbox";
+        this._surrogateHitbox.alpha = 0;
+        this._surrogateHitbox.interactive = true;
+        this._surrogateHitbox.cursor = 'text';
+        this._surrogateHitbox.on('pointerdown', this._onSurrogateFocus,this);
+        this.container.addChild(this._surrogateHitbox);
+
+        this._surrogateMask = new PIXI.Graphics();
+        this._surrogateMask.name = "_surrogateMask";
+        this.container.addChild(this._surrogateMask);
+
+        this._surrogate = new PIXI.Text('', {});
+        this._surrogate.name = "_surrogate";
+        this.container.addChild(this._surrogate);
+
+        this._surrogate.mask = this._surrogateMask;
+
+        this._updateFontMetrics();
+        this._updateSurrogate();
+    }
+
+    private _updateSurrogate() {
+        let padding = this._deriveSurrogatePadding();
+        let inputBounds = this.htmlInputShared.getDOMInputBounds();
+        if(this._surrogate){
+            this._surrogate.style = this._deriveSurrogateStyle();
+            this._surrogate.style.padding = Math.max.apply(Math, padding);
+            this._surrogate.y = this._inputStyle.multiline ? padding[0] : (inputBounds.height - this._surrogate.height) / 2;
+            this._surrogate.x = padding[3];
+            if(this._inputStyle.multiline){
+                this._surrogate.style.wordWrap = true;
+                this._surrogate.style.wordWrapWidth = inputBounds.width;
+                this._surrogate.style.breakWords = true;
             }
-            this.drawSelectionRect(cx, cy, w, h);
-            this._textContainer.innerContainer.addChildAt(this._selection, 0);
+            this._surrogate.text = this._deriveSurrogateText();
+        }
+        this._updateSurrogateHitbox(inputBounds);
+        this._updateSurrogateMask(inputBounds, padding);
+    }
+
+    private _updateSurrogateHitbox(bounds:ClientRect) {
+        if(this._surrogateHitbox){
+            this._surrogateHitbox.clear();
+            this._surrogateHitbox.beginFill(0);
+            this._surrogateHitbox.drawRect(0, 0, bounds.width, bounds.height);
+            this._surrogateHitbox.endFill();
+            this._surrogateHitbox.interactive = !this._disabled;
         }
     }
 
-    public selectRange (startIndex: number, endIndex: number) {
-        if (startIndex > -1 && endIndex > -1) {
-            const start = Math.min(startIndex, endIndex, this._chars.length - 1);
-            const end = Math.min(Math.max(startIndex, endIndex), this._chars.length - 1);
-            if (start != this.selectionStart || end != this.selectionEnd) {
-                this.hasSelection = true;
-                this._selection.visible = true;
-                this.selectionStart = start;
-                this.selectionEnd = end;
-                this.hideCaret();
-                this.updateSelectionGraphics();
-                this.updateSelectionColors();
-            }
+    private _updateSurrogateMask(bounds:ClientRect, padding:number[]) {
+        if(this._surrogateMask){
+            this._surrogateMask.clear();
+            this._surrogateMask.beginFill(0);
+            this._surrogateMask.drawRect(padding[3], 0, bounds.width - padding[3] - padding[1], bounds.height);
+            this._surrogateMask.endFill();
+        }
+    }
+
+    private _destroySurrogate() {
+        if (!this._surrogate) return;
+        if (!this._surrogateHitbox) return
+
+        this.container.removeChild(this._surrogate);
+        this.container.removeChild(this._surrogateHitbox);
+
+        this._surrogate.destroy();
+        this._surrogateHitbox && this._surrogateHitbox.destroy();
+
+        this._surrogate = undefined;
+        this._surrogateHitbox = undefined;
+    }
+
+    private _onSurrogateFocus() {
+        this.htmlInputShared.visible = true;
+        //sometimes the input is not being focused by the mouseclick
+        setTimeout(this._ensureFocus.bind(this), 10);
+    }
+
+    private _ensureFocus() {
+        if (!this._hasFocus())
             this.focus();
-        }
-        else {
-            this.clearSelection();
-        }
     }
 
-    public clearSelection () {
-        if (this.hasSelection) {
-            //remove color
-            this.hasSelection = false;
-            this._selection.visible = false;
-            this.selectionStart = -1;
-            this.selectionEnd = -1;
-            this.updateSelectionColors();
-        }
-    }
+    private _deriveSurrogateStyle() {
+        let style:TAny = new PIXI.TextStyle()
 
-    public update() {
-        if (this._width != this._lastWidth) {
-            this._lastWidth = this._width;
-            if (this._multiLine) {
-                this.updateText();
-                if (this._caret.graphics.visible) 
-                    this.setCaretIndex(this._caret.index);
-                if (this.hasSelection) 
-                    this.updateSelectionGraphics();
+        for (var key in this._inputStyle) {
+            switch (key) {
+                case 'color':
+                    style.fill = this._inputStyle.color;
+                    break
+                case 'fontFamily':
+                case 'fontSize':
+                case 'fontWeight':
+                case 'fontVariant':
+                case 'fontStyle':
+                    style[key] = this._inputStyle[key];
+                    break
+                case 'letterSpacing':
+                    style.letterSpacing = parseFloat(this._inputStyle.letterSpacing as TAny);
+                    break
             }
         }
-        //update text
-        if (this._dirtyText) {
-            this.updateText();
-            this._dirtyText = false;
+
+        if (this._inputStyle.multiline) {
+            style.lineHeight = parseFloat(style.fontSize);
+            style.wordWrap = true;
+            style.wordWrapWidth = this.htmlInputShared.getDOMInputBounds().width;
         }
+        
+        if (this.htmlInputShared.value.length === 0)
+            style.fill = this._placeholderColor;
+
+        return style;
     }
 
+    private _deriveSurrogatePadding() {
+        let indent = this._inputStyle.textIndent ? parseFloat(this._inputStyle.textIndent) : 0
+
+        if (this._inputStyle.padding && this._inputStyle.padding.length > 0) {
+            let components = this._inputStyle.padding.trim().split(' ');
+
+            if (components.length == 1) {
+                let padding = parseFloat(components[0]);
+                return [padding, padding, padding, padding + indent];
+            } else if (components.length == 2) {
+                let paddingV = parseFloat(components[0]);
+                let paddingH = parseFloat(components[1]);
+                return [paddingV, paddingH, paddingV, paddingH + indent];
+            } else if (components.length == 4) {
+                let padding = components.map(component => {
+                    return parseFloat(component);
+                })
+                padding[3] += indent;
+                return padding;
+            }
+        }
+
+        return [0, 0, 0, indent];
+    }
+
+    private _deriveSurrogateText() {
+        return this.htmlInputShared.value.length === 0 ? this._placeholder : this.htmlInputShared.value;
+    }
+
+    private _updateFontMetrics() {
+        const style = this._deriveSurrogateStyle();
+        const font = style.toFontString();
+        this._fontMetrics = PIXI.TextMetrics.measureFont(font);
+    }
+
+    // HELPER FUNCTIONS
+
+    private _hasFocus() {
+        return document.activeElement === this.htmlInputShared.domInput;
+    }
+
+    private _getCanvasBounds() {
+        if(this._lastRenderer){
+            let rect = this._lastRenderer.view.getBoundingClientRect();
+            let bounds = { top: rect.top, left: rect.left, width: rect.width, height: rect.height };
+            bounds.left += window.scrollX;
+            bounds.top += window.scrollY;
+            return bounds;
+        }
+        return undefined;
+    }
+
+    private _getDOMRelativeWorldTransform() {
+        if(this._lastRenderer){
+            let canvas_bounds = this._lastRenderer.view.getBoundingClientRect();
+            let matrix = this.container.worldTransform.clone();
+    
+            matrix.scale(this._resolution, this._resolution);
+            matrix.scale(canvas_bounds.width / this._lastRenderer.width,
+                canvas_bounds.height / this._lastRenderer.height)
+            return matrix;
+        }
+
+    }
+
+    private _pixiMatrixToCSS(m:TAny) {
+        return 'matrix(' + [m.a, m.b, m.c, m.d, m.tx, m.ty].join(',') + ')';
+    }
+
+    private _comparePixiMatrices(m1:TAny, m2:TAny) {
+        if (!m1 || !m2) return false
+        return (
+            m1.a == m2.a
+            && m1.b == m2.b
+            && m1.c == m2.c
+            && m1.d == m2.d
+            && m1.tx == m2.tx
+            && m1.ty == m2.ty
+        )
+    }
+
+    private _compareClientRects(r1:TAny, r2:TAny) {
+        if (!r1 || !r2) return false
+        return (
+            r1.left == r2.left
+            && r1.top == r2.top
+            && r1.width == r2.width
+            && r1.height == r2.height
+        )
+    }
 }
+

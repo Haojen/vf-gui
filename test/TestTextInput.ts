@@ -1,7 +1,6 @@
 
 import vfui from "../src/index";
 import TestApplication from "./TestApplication"
-import ContainerBase from "../src/c/ContainerBase";
 
 export default class TestTextInput {
 
@@ -12,48 +11,30 @@ export default class TestTextInput {
     }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
-        /** 文本组件 */
-        console.log(123);
 
-        // app.renderer.on("postrender",()=>{
-        //     console.log();
-        // },this)
+        /** 文本输入组件 */
+        let textInput1 = new vfui.TextInput({multiline:false});
+        textInput1.top = 10;
+        textInput1.width = 300;
+        textInput1.height = 30;
+        textInput1.fontSize = 24;//"32px"
+        textInput1.fill = "#00ffcc";
+        textInput1.fontFamily = "微软雅黑";
+        textInput1.placeholder = "单行输入文本...";
+        //textInput2.disabled = true;
+        uiStage.addChild(textInput1);
 
-        // let t = new vfui.Rect();
-        // t.drawRoundedRect(0,0,100,100,1);
-        // uiStage.addChild(t);
-
-        // let c = new ContainerBase();
-        // c.on("render",(o:any)=>{
-        //     console.log(o);
-        // });
-        // t.container.addChild(c);
-
-        //app.stage.addChild(c);
-        // let r = new vfui.Rect();
-        // r.drawRoundedRect(0,0,200,100,10);
-        // r.x = 0;
-        // r.y = 210;
-        // uiStage.addChild(r);
-        // let style = new vfui.TextStyle({
-        //     fontFamily: 'Calibri' ,
-        //     fontSize: 20,
-        //     fill: '#000000',
-        //     padding: 6
-        // });
-        // let textInput2 = new vfui.TextInput({ width: 100, height: 20, tabIndex: 2, tabGroup: 0 },style);
-        // textInput2.y = 210;
-        // textInput2.width = 200;
-        // textInput2.height = 100;
-        // textInput2.sourceUp = "assets/skin/Button/button_up.png";
-        // textInput2.sourceDown = textInput2.sourceUp;
-        // textInput2.sourceMove = textInput2.sourceUp;
-        // // textInput2.on("focusChanged", function (focus) {
-        // //     textInput2.background.alpha = focus ? 0.4 : 0.2;
-        // // });
-        // uiStage.addChild(textInput2);
+        let textInput2 = new vfui.TextInput({multiline:true});
+        textInput2.top = 100;
+        textInput2.width = 300;
+        textInput2.height = 100;
+        textInput2.fontSize = 24;//"32px"
+        textInput2.fill = "red";
+        textInput2.fontFamily = "微软雅黑";
+        textInput2.placeholder = "多行输入...";
+        //textInput2.disabled = true;
+        uiStage.addChild(textInput2);
 
     }
-
 }
 
