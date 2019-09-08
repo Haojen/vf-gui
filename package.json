@@ -2,15 +2,16 @@
   "name": "pixi-vfui",
   "version": "1.0.0",
   "description": "[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)",
-  "main": "index.js",
+  "main": "vfui.js",
+  "types": "vfui.d.ts",
   "scripts": {
     "test": "webpack --config test-webpack.config.js",
     "build": "webpack",
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open --config webpack.config.js",
     "prod": "webpack --mode production",
-    "docs": "typedoc --out ./docs/ ./src/ --ignoreCompilerErrors --excludeExternals --exclude **/*.d.ts",
-    "lint": "eslint ./src/*.* ./src/**/*.*  --fix"
+    "lint": "eslint ./src/*.* ./src/**/*.*  --fix",
+    "dts":"tsc --emitDeclarationOnly -d ./src/index.ts --declarationDir ./dist/"
   },
   "keywords": [
     "pixi-ui",
@@ -43,6 +44,7 @@
     "emoji-regex": "^8.0.0",
     "eslint": "^6.3.0",
     "eslint-plugin-typescript": "^0.14.0",
+    "typedoc": "^0.15.0",
     "typescript": "^3.5.3",
     "typescript-eslint-parser": "^22.0.0",
     "webpack": "^4.39.2"
