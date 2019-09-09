@@ -2,19 +2,23 @@
 
 pixi-vfui简称vfui是基于pixijs引擎提供的开源UI组件库，使用语言TypeScript。
 
-vfui分基础UI与扩展UI库(NPM)。基础UI提供常用的UI组件库，NPM组件提供额外扩展库，非常规需求。
+vfui分基础UI与扩展UI库(NPM):
+
+基础UI提供常用的UI组件库。
+
+NPM组件提供额外扩展库，非常规需求。
 
 # 学习(Learn) （未完成）
 
 文档(documentation)
 
-[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)
+[https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/](https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/)
 
 API
 
-[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)
+[https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/globals.html](https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/globals.html)
 
-示例(Examples)
+示例(Examples) （未完成）
 
 [https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)
 

@@ -11,7 +11,8 @@
     "start": "webpack-dev-server --open --config webpack.config.js",
     "prod": "webpack --mode production",
     "lint": "eslint ./src/*.* ./src/**/*.*  --fix",
-    "dts":"tsc --emitDeclarationOnly -d ./src/index.ts --declarationDir ./dist/"
+    "docs": "typedoc",
+    "dts": "tsc --emitDeclarationOnly -d ./src/index.ts --declarationDir ./dist/"
   },
   "keywords": [
     "pixi-ui",
