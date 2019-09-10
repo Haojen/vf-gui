@@ -16,7 +16,7 @@ export default class InteractionEvent extends PIXI.interaction.InteractionEvent 
  * 
  * import InteractionEvent,{Mouse} from "../Interaction/InteractionEvent",
  */
-export enum TouchMouseEvent {
+export const enum TouchMouseEvent {
     /**
      * 移出
      * 
@@ -46,7 +46,7 @@ export enum TouchMouseEvent {
 /**
  * DragEvent、UI组件拖动事件枚举，
  */
-export enum DraggableEvent {
+export const enum DraggableEvent {
     /**
      * UIBase中不包含次事件，DragEvent中包含
      */
@@ -177,7 +177,7 @@ export const enum KeyEvent {
 /**
  * 缓动事件
  */
-export enum TweenEvent {
+export const enum TweenEvent {
     /**
      * 
      */

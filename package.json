@@ -1,9 +1,9 @@
 {
-  "name": "pixi-vfui",
+  "name": "vfui",
   "version": "1.0.0",
   "description": "[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)",
-  "main": "vfui.js",
-  "types": "vfui.d.ts",
+  "main": "dist/vfui.js",
+  "types": "dist/vfui.d.ts",
   "scripts": {
     "test": "webpack --config test-webpack.config.js",
     "build": "webpack",
@@ -12,19 +12,16 @@
     "prod": "webpack --mode production",
     "lint": "eslint ./src/*.* ./src/**/*.*  --fix",
     "docs": "typedoc",
-    "dts": "tsc --emitDeclarationOnly -d ./src/index.ts --declarationDir ./dist/"
+    "dts": "dts-generator --project  ./  --out ./dist/vfui.d.ts"
   },
   "keywords": [
+    "vfui",
     "pixi-ui",
     "pixi-vfui",
     "ts"
   ],
   "files": [
     "dist/",
-    "src/",
-    "test/",
-    "CONTRIBUTING.md",
-    "LICENSE",
     "package.json",
     "README.md"
   ],

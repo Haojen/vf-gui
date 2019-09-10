@@ -1,74 +1,94 @@
-# pixi-vfui
+## pixi-vfui
 
-pixi-vfui简称vfui是基于pixijs引擎提供的开源UI组件库，使用语言TypeScript。
+pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI库。 为PIXIJS提供提供基础可靠的UI组件。
 
-vfui分基础UI与扩展UI库(NPM):
+## 学习(Learn) 
 
-基础UI提供常用的UI组件库。
 
-NPM组件提供额外扩展库，非常规需求。
+* [文档(documentation)](https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/)
 
-# 学习(Learn) （未完成）
+* [API](https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/globals.html)
 
-文档(documentation)
+* [示例(Examples)](https://vipkid-edu.github.io/pixi-vfui-docs/play)
 
-[https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/](https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/)
+* [源码(Github)](https://github.com/vipkid-edu/pixi-vfui/)
 
-API
 
-[https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/globals.html](https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/globals.html)
+## 安装(Setup) 
 
-示例(Examples) （未完成）
+>使用vfui库之前，我们默认你已经导入pixijs库，如何导入请参考网络教程。
 
-[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)
+### NPM Install （未完成）
 
-源码(Github)
+    npm install vfui
 
-[https://github.com/vipkid-edu/pixi-vfui/](https://github.com/vipkid-edu/pixi-vfui/)
+#### 正确的导入方式 (The correct way to import is): （未完成）
 
-# 安装(Setup) （未完成）
+    import vfui from "vfui";
 
-使用vfui库之前，我们默认你已经导入pixijs库，如何导入请参考网络教程。
+### CDN Install （未完成）
 
-## NPM Install （未完成）
+    <script src="https://xxxxxxxxx/1.0.0/vfui.min.js"></script>
 
-`
-    npm install pixi-vfui
-`
-### 正确的导入方式 (The correct way to import is): （未完成）
-`
-    import vfui from "pixi-vfui";
-`
 
-## CDN Install （未完成）
-`
-    <script src="https://xxxxxxxxx/1.0.0/pixi-vfi.min.js"></script>
-`
-
-# 如何构建(How build)
+## 如何构建(How build)
 
 1. git clone https://github.com/vipkid-edu/pixi-vfui
-2. setup Visual Studio Code
-3. setup Visual Studio Code Extension (Debugger for Chrome）
-4. setup Visual Studio Code Extension (ESLint）
-5. setup Visual Studio Code Extension (Live Server）
-6. run Live Server
-7. npm run build or npm run watch
-8. view http://127.0.0.1:5501/
+1. setup Visual Studio Code
+1. setup Visual Studio Code Extension (Debugger for Chrome）
+1. setup Visual Studio Code Extension (ESLint）
+1. setup Visual Studio Code Extension (Live Server）
+1. run Live Server
+1. npm run build or npm run watch
+1. view http://127.0.0.1:5501/
 
 
-# chrome debug 
+## 如果你是开发人员请提交时进行`eslint`检测
 
-Windows
+    npm run lint
+
+
+## 组件(Component)
+可使用组件：
+
+    Stage - UI舞台
+    Text - 文本
+    Button - 按钮
+    CheckBox - 单选与复选
+    Slider - 滑动条
+    Container - 容器
+    ScrollingContainer - 可滑动的容器
+    ScrollBar - 带有滑动条容器
+    SortableList - 带有排序功能的列表容器
+    Sprite - 图片
+    SliceSprite - 可以设置九宫拉伸的图片
+    TilingSprite - 平铺的图片
+    TextInput - 输入文本
+    Ticker - 心跳
+    Tween - 缓动
+    Rect - 绘制矢量矩形
+
+计划中：
+
+    Sound - 音频
+    Recording/Audio - 麦克风
+    Spine/DB - 龙骨
+    Video - 视频
+    Particle - 粒子
+    DialogueText - 字幕
+    Sequence - 动画序列图
+    Accordion - 手风琴
+    Http/WebSocket - 网络
+
+## Ohter
+
+Chrome debug - windows
 
 Right click the Chrome shortcut, and select properties
 In the "target" field, append --remote-debugging-port=9222
 Or in a command prompt, execute <path to chrome>/chrome.exe --remote-debugging-port=9222
 
-macOS
+Chrome debug - mac
 
 In a terminal, execute /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
 
-# git commit check
-
-eslint ./src/** --fix

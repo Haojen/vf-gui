@@ -1,5 +1,6 @@
-
 import vfui from "../src/index";
+
+
 
 export default class TestApplication {
 
@@ -11,6 +12,7 @@ export default class TestApplication {
         this.thisObj = thisObj;
         this.callback = callback;
         this.initTest();
+        
     }
 
     private uiStage: vfui.Stage;
