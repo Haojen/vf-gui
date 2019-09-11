@@ -1,14 +1,9 @@
 
-import vfui from "../src/index";
-import TestApplication from "./TestApplication"
+import vfui from "./index";
 
 export default class TestPixi {
 
     public constructor() { }
-
-    public load() {
-        new TestApplication(this, this.onLoad)
-    }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 

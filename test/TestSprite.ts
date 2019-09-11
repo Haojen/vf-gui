@@ -1,20 +1,17 @@
 
-import vfui from "../src/index";
-import TestApplication from "./TestApplication"
+import vfui from "./index";
 
 export default class TestSprite {
 
-    public constructor() { }
-
-    public load() {
-        new TestApplication(this, this.onLoad)
+    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+        this.onLoad(app,uiStage)
     }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
         /** 本地位图 */
         let sp = new vfui.Sprite();
         sp.source = "assets/sprite.png"; //本地文件路径
-        sp.width = 0;//宽高为0的情况下，会读取本身图片宽高自适应
+        sp.width = 0;//宽高为0的情况下
         sp.height = 0;
         sp.maxWidth = 100;
         sp.maxHeight = 100;

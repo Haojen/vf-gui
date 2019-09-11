@@ -1,13 +1,9 @@
-
-import vfui from "../src/index";
-import TestApplication from "./TestApplication"
+import vfui from "./index";
 
 export default class TestTilingSprite {
 
-    public constructor() { }
-
-    public load() {
-        new TestApplication(this, this.onLoad)
+    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+        this.onLoad(app,uiStage)
     }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {

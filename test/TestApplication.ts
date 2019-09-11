@@ -1,4 +1,4 @@
-import vfui from "../src/index";
+import vfui from "./index";
 
 
 

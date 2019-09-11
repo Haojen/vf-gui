@@ -1,14 +1,9 @@
-
-import vfui from "../src/index";
-import TestApplication from "./TestApplication"
-import ClickEvent from "../src/Interaction/ClickEvent";
+import vfui from "./index";
 
 export default class TestSliceSprite {
 
-    public constructor() { }
-
-    public load() {
-        new TestApplication(this, this.onLoad)
+    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+        this.onLoad(app,uiStage)
     }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
@@ -37,7 +32,7 @@ export default class TestSliceSprite {
 
         //点击遮罩区域，进行图像宽高调整
         let s = 1.1;
-        let click = new ClickEvent(g);
+        let click = new vfui.Interaction.ClickEvent(g);
         click.onClick = () => {
             console.log("onClick");
             sp.width = sp.width * s;

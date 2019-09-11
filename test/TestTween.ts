@@ -1,17 +1,10 @@
-import vfui from "../src/index";
-import TestApplication from "./TestApplication"
-import { Utils } from "../src/UI";
+import vfui from "./index";
 
-/// <reference
 export default class TestTween {
 
-    public constructor() { }
-
-
-    public load() {
-        new TestApplication(this, this.onLoad)
+    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+        this.onLoad(app,uiStage)
     }
-
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
@@ -64,7 +57,7 @@ export default class TestTween {
                 .yoyo(true)
                 .on(vfui.tween.TweenEvent.update, (obj: any) => {
                     if (obj.color.indexOf("-") === -1) {//清除不规范色值
-                        r2.fill = Utils.rgbStrToNumber(obj.color);
+                        r2.fill = vfui.Utils.rgbStrToNumber(obj.color);
                         r2.x = Math.floor(obj.x);
                     }
                 })

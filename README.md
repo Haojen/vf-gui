@@ -7,9 +7,9 @@ pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开�
 
 * [文档(documentation)](https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/)
 
-* [API](https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/globals.html)
-
 * [示例(Examples)](https://vipkid-edu.github.io/pixi-vfui-docs/play)
+
+* [API](https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/globals.html)
 
 * [源码(Github)](https://github.com/vipkid-edu/pixi-vfui/)
 

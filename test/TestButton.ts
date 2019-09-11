@@ -1,15 +1,10 @@
 
-import vfui from "../src/index";
-import TestApplication from "./TestApplication"
+import vfui from "./index";
 
-export default class TestButton {
+export default  class TestButton {
 
-    public constructor() {
-
-    }
-
-    public load() {
-        new TestApplication(this, this.onLoad)
+    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+        this.onLoad(app,uiStage)
     }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
@@ -61,13 +56,13 @@ export default class TestButton {
     }
 
     private onClick(e: vfui.Interaction.InteractionEvent, button: vfui.Button) {
-        button.label = "点击" + e.type;
+        button.label = "点击" + (e as any).type;
     }
 
     private onPress(e: vfui.Interaction.InteractionEvent, button: vfui.Button) {
-        button.label = "按下" + e.type;
+        button.label = "按下" + (e as any).type;
     }
     private onHover(e: vfui.Interaction.InteractionEvent, button: vfui.Button) {
-        button.label = "移出" + e.type;
+        button.label = "移出" + (e as any).type;
     }
 }
