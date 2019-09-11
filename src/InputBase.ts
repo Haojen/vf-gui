@@ -26,7 +26,7 @@ export default class InputBase extends UIBase{
     private _useTab = true;
     protected _usePrev = true;
     protected _useNext = true;
-    private __down = false;
+    protected __down = false;
 
     protected onPointer(e: InteractionEvent){
         switch(e.type){

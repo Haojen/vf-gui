@@ -26,10 +26,14 @@ export default class TestRect {
         vfui.TickerShared.addUpdateEvent((delta: number) => {
             count += delta;
             if (count > 50) {
-                count = 0;
-                rect.rotation += 0.1;
+                vfui.tween.removeAll();
+                new vfui.tween.Tween(rect)
+                .to({ rotation: rect.rotation + 1 }, 100)
+                .easing(vfui.tween.Easing.Linear.None)
+                .start();
             }
-        }, this)
+
+        }, this);
     }
 
 }

@@ -1,11 +1,14 @@
 import vfui from "./index";
+import updateViewSize from "./WebPlayerSize";
 
 
 
 export default class TestApplication {
 
     public constructor(thisObj: any, callback: (app: PIXI.Application, uiStage: vfui.Stage) => void) {
-        this.app = new PIXI.Application({ width: 1024, height: 768 });
+
+        this.app = new PIXI.Application({ width: 1366, height: 768 ,antialias:true});
+        updateViewSize(this.app,this.app.renderer.resolution,PIXI.utils.isWebGLSupported());      
         this.uiStage = new vfui.Stage(this.app.view.width, this.app.view.height);
         this.app.stage.addChild(this.uiStage);
         document.body.appendChild(this.app.view);
@@ -14,7 +17,7 @@ export default class TestApplication {
         this.initTest();
         
     }
-
+    
     private uiStage: vfui.Stage;
     private app: PIXI.Application;
     private thisObj: any;

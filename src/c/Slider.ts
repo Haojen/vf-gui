@@ -36,12 +36,12 @@ export default class Slider extends UIBase{
         this.addChild(this._tracklight);
         this.addChild(this._thumb);
 
-        this._thumbDrag.onPress = this.onPress;
+        this._thumbDrag.onDragPress = this.onPress;
         this._thumbDrag.onDragStart = this.onDragStart;
         this._thumbDrag.onDragMove = this.onDragMove;
         this._thumbDrag.onDragEnd = this.onDragEnd;
 
-        this._trackDrag.onPress = this.onPress;
+        this._trackDrag.onDragPress = this.onPress;
         this._trackDrag.onDragStart = this.onDragStart;
         this._trackDrag.onDragMove = this.onDragMove;
         this._trackDrag.onDragEnd = this.onDragEnd;

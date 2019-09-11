@@ -15,7 +15,6 @@ class Index{
                 new value.default(app,uiStage);
             }); 
         });
-        console.log(123);
     }
 }
 

@@ -11,9 +11,9 @@ export default  class TestButton {
         /** UI组件 按钮 */
         let button1 = this.getNewButton(uiStage);
         button1.label = "点我试试";
-        button1.on(vfui.Interaction.TouchMouseEvent.onClick, this.onClick, this);
-        button1.on(vfui.Interaction.TouchMouseEvent.onPress, this.onPress, this);
-        button1.on(vfui.Interaction.TouchMouseEvent.onHover, this.onHover, this);
+        //button1.on(vfui.Interaction.TouchMouseEvent.onClick, this.onClick, this);
+        //button1.on(vfui.Interaction.TouchMouseEvent.onPress, this.onPress, this);
+        //button1.on(vfui.Interaction.TouchMouseEvent.onHover, this.onHover, this);
 
         /** 有文字的按钮 */
         let button2 = this.getNewButton(uiStage);

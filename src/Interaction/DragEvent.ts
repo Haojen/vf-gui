@@ -53,7 +53,7 @@ export default class DragEvent {
 
     private _onDragStart(e: InteractionEvent) {
         this.id = e.data.identifier;
-        this.onPress && this.onPress.call(this.obj, e, true,this);
+        this.onDragPress && this.onDragPress.call(this.obj, e, true,this);
         if (!this.bound && this.obj.stage) {
             this.start.copyFrom(e.data.global);
             this.obj.stage.on(TouchMouseEventEnum.mousemove, this._onDragMove, this);
@@ -106,7 +106,7 @@ export default class DragEvent {
             this.dragging = false;
             this.bound = false;
             this.onDragEnd && this.onDragEnd.call(this.obj, e,this);
-            this.onPress && this.onPress.call(this.obj, e, false,this);
+            this.onDragPress && this.onDragPress.call(this.obj, e, false,this);
 
         }
     }
@@ -128,14 +128,14 @@ export default class DragEvent {
 
     public remove(){
         this.stopEvent();
-        this.onPress = undefined;
+        this.onDragPress = undefined;
         this.onDragEnd = undefined;
         this.onDragMove = undefined;
         this.onDragStart = undefined;
         this.obj.container.interactive = false;
     }
 
-    public onPress: ((e: InteractionEvent, isPressed: boolean,dragObj?: DragEvent) => void) | undefined;
+    public onDragPress: ((e: InteractionEvent, isPressed: boolean,dragObj?: DragEvent) => void) | undefined;
     public onDragEnd: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
     public onDragMove: ((e: InteractionEvent, offset: PIXI.Point,dragObj?: DragEvent) => void) | undefined 
     public onDragStart: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined

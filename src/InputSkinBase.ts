@@ -41,11 +41,13 @@ export default class InputSkinBase extends InputBase{
         this._isHover = over;
         this.currentState = "Up";
     }
-    protected onPress(){
-        this.currentState = "Down";
+    protected onPress(e: InteractionEvent,thisObj: UIBase,isPress: boolean){     
+        
+        if(isPress)
+            this.currentState = "Down";
     }
     protected onClick(){
-        this.currentState = "Down";
+        //this.currentState = "Down";
     }
     protected onMove() {
         this.currentState = "Move";
@@ -76,6 +78,9 @@ export default class InputSkinBase extends InputBase{
         return this._sourceUp;
     }
     public set sourceUp(value: string|undefined) {
+        if(value == this._sourceUp){
+            return;
+        }
         this._sourceUp = value;
         this.update();
     }
@@ -84,6 +89,9 @@ export default class InputSkinBase extends InputBase{
         return this._sourceMove;
     }
     public set sourceMove(value: string|undefined) {
+        if(value == this._sourceMove){
+            return;
+        }
         this._sourceMove = value;
         this.update();
     }
@@ -92,6 +100,9 @@ export default class InputSkinBase extends InputBase{
         return this._sourceDown;
     }
     public set sourceDown(value: string|undefined) {
+        if(value == this._sourceDown){
+            return;
+        }
         this._sourceDown = value;
         this.update();
     }
@@ -115,14 +126,10 @@ export default class InputSkinBase extends InputBase{
 
     public update(){
         const thisObj: TAny = this;
-        const source: string = thisObj["_source"+this.currentState];
-        if(source && this._background.source!==source){
-            this._background.width = this.width;
-            this._background.height = this.height;
-            this._background.source = source;
-            this.updateHitArea();
-            
-        }
+        this._background.width = this.width;
+        this._background.height = this.height;
+        this._background.source = thisObj["_source"+this.currentState];
+        this.updateHitArea();
         
     }
 }
