@@ -32,10 +32,12 @@ pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开�
 ### CDN Install
 
 Master:
+
     <script src="http://unpkg.com/pixi-vfui/dist/vfui.js"></script>
 
     <script src="http://unpkg.com/pixi-vfui/dist/vfui.min.js"></script>
 Version:
+
     <script src="http://unpkg.com/pixi-vfui@0.1.2/dist/vfui.js"></script>
     
     <script src="http://unpkg.com/pixi-vfui@0.1.2/dist/vfui.min.js"></script>
