@@ -32,10 +32,14 @@ pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开�
 ### CDN Install
 
 Master:
+
     <script src="http://unpkg.com/pixi-vfui/dist/vfui.js"></script>
+
     <script src="http://unpkg.com/pixi-vfui/dist/vfui.min.js"></script>
 Version:
+
     <script src="http://unpkg.com/pixi-vfui@0.1.2/dist/vfui.js"></script>
+    
     <script src="http://unpkg.com/pixi-vfui@0.1.2/dist/vfui.min.js"></script>
 
 ## 如何构建(How build)
@@ -99,3 +103,5 @@ Chrome debug - mac
 
 In a terminal, execute /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
 
+License
+This content is released under the (http://opensource.org/licenses/MIT) MIT License.
