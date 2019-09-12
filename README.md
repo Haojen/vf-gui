@@ -1,3 +1,6 @@
+[![npm version](https://badge.fury.io/js/pixi-vfui.svg)](https://badge.fury.io/js/pixi-vfui)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/pixi-vfui)
+
 ## pixi-vfui
 
 pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI库。 为PIXIJS提供提供基础可靠的UI组件。
@@ -18,18 +21,22 @@ pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开�
 
 >使用vfui库之前，我们默认你已经导入pixijs库，如何导入请参考网络教程。
 
-### NPM Install （未完成）
+### NPM Install
 
-    npm install vfui
+    npm install pixi-vfui
 
-#### 正确的导入方式 (The correct way to import is): （未完成）
+#### 正确的导入方式 (The correct way to import is): 
 
     import vfui from "vfui";
 
-### CDN Install （未完成）
+### CDN Install
 
-    <script src="https://xxxxxxxxx/1.0.0/vfui.min.js"></script>
-
+Master:
+    <script src="http://unpkg.com/pixi-vfui/dist/vfui.js"></script>
+    <script src="http://unpkg.com/pixi-vfui/dist/vfui.min.js"></script>
+Version:
+    <script src="http://unpkg.com/pixi-vfui@0.1.2/dist/vfui.js"></script>
+    <script src="http://unpkg.com/pixi-vfui@0.1.2/dist/vfui.min.js"></script>
 
 ## 如何构建(How build)
 
