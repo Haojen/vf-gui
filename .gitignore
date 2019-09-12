@@ -33,4 +33,5 @@ docs/
 
 
 /menu
-dist
+dist/test.js
+dist/test.js.map
