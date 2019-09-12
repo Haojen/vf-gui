@@ -1,4 +1,4 @@
-import vfui from "./index";
+import vfui from "../src/vfui";
 
 export default class TestSliceSprite {
 

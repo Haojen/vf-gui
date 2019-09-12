@@ -23,7 +23,6 @@ export default class Button extends InputSkinBase{
     public constructor(option = {width:100,height:20,tabIndex:0,tabGroup:0}){  
         super(option.width,option.height,option.tabIndex,option.tabGroup.toString());
         this.container.buttonMode = true;
-        this._clickEvent.onPress = this.onPress;
         this._text.verticalAlign = VerticalAlignEnum.middle
         this._text.horizontalAlign = HorizontalAlignEnum.center;
         this._text.style.fontSize = 18;

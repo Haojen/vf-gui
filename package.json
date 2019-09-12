@@ -9,7 +9,7 @@
     "build": "webpack",
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open --config webpack.config.js",
-    "prod": "webpack --mode production",
+    "prod": "webpack --config publish-webpack.config",
     "lint": "eslint ./src/*.* ./src/**/*.*  --fix",
     "docs": "typedoc",
     "dts": "dts-generator --project  ./  --out ./dist/vfui.d.ts"

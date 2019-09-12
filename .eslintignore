@@ -1,3 +1,5 @@
 webpack.config.js
+test-webpack.config.js
+publush-webpack.config.js
 src/c/Tween
 src/IUIBase.ts

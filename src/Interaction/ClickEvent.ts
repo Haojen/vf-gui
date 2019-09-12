@@ -14,10 +14,10 @@ import InteractionEvent, { TouchMouseEvent } from "./InteractionEvent";
  * ```
  *  可赋值方法:
  * ```
- *  onHover: ((e: InteractionEvent,over: boolean,clickEvent?: ClickEvent) => void) | undefined
- *  onPress: ((e: InteractionEvent, isPressed: boolean,clickEvent?: ClickEvent) => void) | undefined;
- *  onClick: ((e: InteractionEvent,clickEvent?: ClickEvent) => void) | undefined 
- *  onMove: ((e: InteractionEvent,clickEvent?: ClickEvent) => void) | undefined
+ *  onHover: ((e: InteractionEvent,thisOBj:UIBase,over: boolean) => void) | undefined
+ *  onPress: ((e: InteractionEvent,thisOBj:UIBase, isPressed: boolean) => void) | undefined;
+ *  onClick: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined 
+ *  onMove: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined
  * ```
  * 
  * @example 可查看 `TestSliceSprite` 示例
@@ -94,7 +94,7 @@ export default class ClickEvent {
     private _onMouseDown(e: InteractionEvent) {
         this.mouse.copyFrom(e.data.global);
         this.id = e.data.identifier;
-        this.onPress && this.onPress.call(this.obj, e, true),this.obj;
+        this.onPress && this.onPress.call(this.obj, e,this.obj, true),this.obj;
         this.emitTouchEvent(TouchMouseEvent.onPress,e,true);
         if (!this.bound) {
             this.obj.container.on(this.eventnameMouseup, this._onMouseUp,this);
@@ -109,7 +109,7 @@ export default class ClickEvent {
         if (this.double) {
             const now = performance.now();
             if (now - this.time < 210) {
-                this.onClick && this.onClick.call(this.obj, e,this);
+                this.onClick && this.onClick.call(this.obj, e,this.obj);
                 this.emitTouchEvent(TouchMouseEvent.onClick,e);
             }
             else {
@@ -141,7 +141,7 @@ export default class ClickEvent {
             }
             this.bound = false;
         }
-        this.onPress && this.onPress.call(this.obj, e, false);
+        this.onPress && this.onPress.call(this.obj, e,this.obj, false);
         this.emitTouchEvent(TouchMouseEvent.onPress,e,false);
     }
     private _onMouseUp(e: InteractionEvent) {
@@ -158,7 +158,7 @@ export default class ClickEvent {
         }
 
         if (!this.double){    
-            this.onClick && this.onClick.call(this.obj, e,this);
+            this.onClick && this.onClick.call(this.obj, e,this.obj);
             this.emitTouchEvent(TouchMouseEvent.onClick,e,false);
         }
     }
@@ -174,7 +174,7 @@ export default class ClickEvent {
             this.ishover = true;
             this.obj.container.on(TouchMouseEventEnum.mousemove, this._onMouseMove,this);
             this.obj.container.on(TouchMouseEventEnum.touchmove, this._onMouseMove,this);
-            this.onHover && this.onHover.call(this.obj, e, true,this);
+            this.onHover && this.onHover.call(this.obj, e, this.obj,true);
             this.emitTouchEvent(TouchMouseEvent.onHover,e,true);
         }
     }
@@ -184,13 +184,13 @@ export default class ClickEvent {
             this.ishover = false;
             this.obj.container.removeListener(TouchMouseEventEnum.mousemove,this. _onMouseMove,this);
             this.obj.container.removeListener(TouchMouseEventEnum.touchmove, this._onMouseMove,this);
-            this.onHover && this.onHover.call(this.obj, e, false,this);
-            this.emitTouchEvent(TouchMouseEvent.onHover,e,true);
+            this.onHover && this.onHover.call(this.obj, e, this.obj,false);
+            this.emitTouchEvent(TouchMouseEvent.onHover,e,false);
         }
     }
 
     private _onMouseMove(e: InteractionEvent) {
-        this.onMove && this.onMove.call(this.obj, e,this);
+        this.onMove && this.onMove.call(this.obj, e,this.obj);
         this.emitTouchEvent(TouchMouseEvent.onMove,e);
     }
 
@@ -225,8 +225,8 @@ export default class ClickEvent {
         this.onMove = undefined;
         this.obj.container.interactive = false;
     }
-    public onHover: ((e: InteractionEvent,over: boolean,clickEvent?: ClickEvent) => void) | undefined
-    public onPress: ((e: InteractionEvent, isPressed: boolean,clickEvent?: ClickEvent) => void) | undefined;
-    public onClick: ((e: InteractionEvent,clickEvent?: ClickEvent) => void) | undefined 
-    public onMove: ((e: InteractionEvent,clickEvent?: ClickEvent) => void) | undefined
+    public onHover: ((e: InteractionEvent,thisOBj:UIBase,over: boolean) => void) | undefined
+    public onPress: ((e: InteractionEvent,thisOBj:UIBase, isPressed: boolean) => void) | undefined;
+    public onClick: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined 
+    public onMove: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined
 }
