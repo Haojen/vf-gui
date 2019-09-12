@@ -1,4 +1,6 @@
 {
     "workbench.editor.showTabs":true,
-    "eslint.enable": true
+    "eslint.enable": true,
+    "commentTranslate.targetLanguage": "zh-CN",
+    "liveServer.settings.port":5501
 }

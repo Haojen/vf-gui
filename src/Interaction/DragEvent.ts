@@ -1,12 +1,31 @@
-import { UIBase } from "../UIBase";
+import UIBase from "../UIBase";
 import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
-import { interaction } from "pixi.js";
+import InteractionEvent from "./InteractionEvent";
+
 
 /**
- * 拖动相关的事件处理订阅类
+ * 多拽相关的事件处理类
+ * 
+ *  可侦听事件(未实现):
+ * ```
+ *  {InteractionEvent}.DraggableEvent.onDragPress
+ *  {InteractionEvent}.DraggableEvent.onDragStart
+ *  {InteractionEvent}.DraggableEvent.onDragMove
+ *  {InteractionEvent}.DraggableEvent.onDragEnd
+ * ```
+ *  可赋值方法:
+ * ```
+ * onPress: ((e: InteractionEvent, isPressed: boolean,dragObj?: DragEvent) => void) | undefined;
+ * onDragEnd: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
+ * onDragMove: ((e: InteractionEvent, offset: PIXI.Point,dragObj?: DragEvent) => void) | undefined 
+ * onDragStart: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
+ * ```
+ * 
+ * @example 可查看 `Slider` 源码
+ * 
  * @since 1.0.0
  */
-export class DragEvent {
+export default class DragEvent {
 
     public constructor(obj: UIBase) {
         this.obj = obj;
@@ -32,9 +51,9 @@ export class DragEvent {
     }
 
 
-    private _onDragStart(e: interaction.InteractionEvent) {
+    private _onDragStart(e: InteractionEvent) {
         this.id = e.data.identifier;
-        this.onPress && this.onPress.call(this.obj, e, true);
+        this.onDragPress && this.onDragPress.call(this.obj, e, true,this);
         if (!this.bound && this.obj.stage) {
             this.start.copyFrom(e.data.global);
             this.obj.stage.on(TouchMouseEventEnum.mousemove, this._onDragMove, this);
@@ -50,7 +69,7 @@ export class DragEvent {
         e.data.originalEvent.preventDefault();
     }
 
-    private _onDragMove(e: interaction.InteractionEvent) {
+    private _onDragMove(e: InteractionEvent) {
         if (e.data.identifier !== this.id) return;
         this.mouse.copyFrom(e.data.global);
         this.offset.set(this.mouse.x - this.start.x, this.mouse.y - this.start.y);
@@ -67,13 +86,14 @@ export class DragEvent {
                     return;
                 }
             }
-            this.onDragStart && this.onDragStart.call(this.obj, e);
+            
+            this.onDragStart && this.onDragStart.call(this.obj, e,this);
             this.dragging = true;
         }
-        this.onDragMove && this.onDragMove.call(this.obj, e, this.offset);
+        this.onDragMove && this.onDragMove.call(this.obj, e, this.offset,this);
     }
 
-    private _onDragEnd(e: interaction.InteractionEvent) {
+    private _onDragEnd(e: InteractionEvent) {
         if (e.data.identifier !== this.id) return;
         if (this.bound && this.obj.stage) {
             this.obj.stage.removeListener(TouchMouseEventEnum.mousemove, this._onDragMove, this);
@@ -85,8 +105,8 @@ export class DragEvent {
             this.obj.stage.removeListener(TouchMouseEventEnum.touchcancel, this._onDragEnd, this);
             this.dragging = false;
             this.bound = false;
-            this.onDragEnd && this.onDragEnd.call(this.obj, e);
-            this.onPress && this.onPress.call(this.obj, e, false);
+            this.onDragEnd && this.onDragEnd.call(this.obj, e,this);
+            this.onDragPress && this.onDragPress.call(this.obj, e, false,this);
 
         }
     }
@@ -106,8 +126,17 @@ export class DragEvent {
         this.obj.container.removeListener(TouchMouseEventEnum.touchstart, this._onDragStart, this);
     }
 
-    public onPress: ((e: interaction.InteractionEvent, isPressed: boolean) => void) | undefined;
-    public onDragEnd: ((e: interaction.InteractionEvent) => void) | undefined
-    public onDragMove: ((e: interaction.InteractionEvent, offset: PIXI.Point) => void) | undefined 
-    public onDragStart: ((e: interaction.InteractionEvent) => void) | undefined
+    public remove(){
+        this.stopEvent();
+        this.onDragPress = undefined;
+        this.onDragEnd = undefined;
+        this.onDragMove = undefined;
+        this.onDragStart = undefined;
+        this.obj.container.interactive = false;
+    }
+
+    public onDragPress: ((e: InteractionEvent, isPressed: boolean,dragObj?: DragEvent) => void) | undefined;
+    public onDragEnd: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
+    public onDragMove: ((e: InteractionEvent, offset: PIXI.Point,dragObj?: DragEvent) => void) | undefined 
+    public onDragStart: ((e: InteractionEvent,dragObj?: DragEvent) => void) | undefined
 }

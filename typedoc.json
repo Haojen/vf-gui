@@ -1,0 +1,17 @@
+{
+    "name":"pixi-vfui",
+    "mode": "file",
+    "src": [
+        "./src/"
+    ],
+    "out": "./docs",
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "excludeExternals": true,
+    "ignoreCompilerErrors":true,
+    "exclude":[
+        "**/*.d.ts",
+        "**/*+(index|.spec|.e2e).ts"
+    ],
+    "json":"./docs/json/out.json"
+}

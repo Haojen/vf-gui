@@ -1,11 +1,12 @@
-import { UISettings } from "./UISettings";
-import { Stage } from "./Stage";
+import UISettings from "./UISettings";
+import Stage from "./Stage";
 import { HorizontalAlignEnum, VerticalAlignEnum } from "./Enum/AlignEnum";
-import { DragEvent } from "./Interaction/DragEvent";
-import { interaction } from "pixi.js";
+import DragEvent from "./Interaction/DragEvent";
 import * as DragDropController from "./Interaction/DragDropController";
-import { DraggableEventEnum } from "./Enum/DraggableEventEnum";
-import { TouchMouseEventEnum } from "./Enum/TouchMouseEventEnum";
+import { TouchMouseEventEnum, } from "./Enum/TouchMouseEventEnum";
+import { uid } from "./Utils";
+import InteractionEvent,{DraggableEvent} from "./Interaction/InteractionEvent";
+import ContainerBase from "./c/ContainerBase";
 
 /**
  * UI的顶级类，基础的UI对象
@@ -16,31 +17,43 @@ import { TouchMouseEventEnum } from "./Enum/TouchMouseEventEnum";
  * @param height {Number} Height UI对象的高度
  * @since 1.0.0
  */
-export class UIBase extends PIXI.utils.EventEmitter {
-
-    public constructor(width: number | string, height: number | string) {
+export default class UIBase extends PIXI.utils.EventEmitter {
+    /**
+     * 构造函数
+     * @param width 宽 数字或百分比, 不传默认0
+     * @param height 高 数字或百分比,不传默认0
+     */
+    public constructor(width?: number | string, height?: number | string) {
         super();
-        this.container = new PIXI.Container();
+        this.uuid = uid();
+        this.container = new ContainerBase();
+        this.container.name = this.constructor.name;
         this.setting = new UISettings();
-
+        if(width && height)
+            this.setDefaultSize(width,height)
+    }
+    /** 设置默认的宽高，一般使用情况在构造函数中，并不会触发组件刷新 */
+    public setDefaultSize(width: number | string, height: number | string){
         const widthItem = this.getPetValue(width);
-        if (widthItem.num) {
+        if (widthItem.num!== undefined) {
             this.setting.width = widthItem.num;
         } else {
             this.setting.widthPct = widthItem.pct;
         }
 
         const heightItem = this.getPetValue(height);
-        if (heightItem.num) {
+        if (heightItem.num!== undefined) {
             this.setting.height = heightItem.num;
         } else {
             this.setting.heightPct = heightItem.pct;
         }
     }
+    public uuid: string;
+    public name = "";
     /** 
      * 当前的显示容器 
      */
-    public container: PIXI.Container;
+    public container: ContainerBase;
     /** 
      * UI对象的显示属性集合 
      */
@@ -53,7 +66,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 
      * 父容器 
      */
-    public parent: UIBase | undefined;
+    public parent: UIBase | Stage| undefined;
     /**  
      * 舞台引用
      */
@@ -79,8 +92,14 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     public dirty = true;
     /** 测量值 */
-    protected _width = 0;
-    protected _height = 0;
+    /**
+     * @private
+     */
+    public _width = 0;
+    /**
+     * @private
+     */
+    public _height = 0;
     protected _minWidth: number | undefined;
     protected _minHeight: number | undefined;
     protected _maxWidth: number | undefined;
@@ -98,7 +117,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 覆盖缓动播放时的位置 */
     protected _dragPosition: PIXI.Point | undefined;
     /** 动态属性，避免其他类注入 */
-    public attach: {[key: string]: object|number|string} = {};
+    public attach: {[key: string]: object|number|string|Function} = {};
     /**
      * 上次的宽度（未使用，丢弃）
      */
@@ -138,6 +157,11 @@ export class UIBase extends PIXI.utils.EventEmitter {
         } else {
             pct = undefined;
         }
+        if(num)
+            num = Math.max(num,0);
+        if(pct){
+            pct = Math.max(pct,0);
+        }
         return { num, pct };
     }
     /** 获取设置X */
@@ -159,7 +183,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set widthPet(value: string){
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num !== undefined) {
             this.setting.width = item.num;
         } else {
             this.setting.widthPct = item.pct;
@@ -169,11 +193,13 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /**
      * 设置宽度,整数
      */
-    set width(value: number) {
+    public set width(value: number) {
+        value = Math.max(value,0);
         this.setting.width = value;
+        this.setting.widthPct = undefined;
         this.updatesettings(true);
     }
-    get width() {
+    public get width() {
         return this.setting.width;
     }
     /** 
@@ -195,7 +221,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set heightPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.height = item.num;
         } else {
             this.setting.heightPct = item.pct;
@@ -206,7 +232,9 @@ export class UIBase extends PIXI.utils.EventEmitter {
      * 设置高度，数字
      */
     set height(value: number) {
+        value = Math.max(value,0);
         this.setting.height = value;
+        this.setting.heightPct = undefined;
         this.updatesettings(true);
     }
     get height() {
@@ -231,7 +259,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set minWidthPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.minWidth = item.num;
         } else {
             this.setting.minWidthPct = item.pct;
@@ -267,7 +295,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set minHeightPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.minHeight = item.num;
         } else {
             this.setting.minHeightPct = item.pct;
@@ -301,7 +329,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set maxWidthPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.maxWidth = item.num;
         } else {
             this.setting.maxWidthPct = item.pct;
@@ -335,7 +363,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set maxHeightPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.maxHeight = item.num;
         } else {
             this.setting.maxHeightPct = item.pct;
@@ -369,7 +397,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set anchorLeftPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.anchorLeft = item.num;
         } else {
             this.setting.anchorLeftPct = item.pct;
@@ -403,7 +431,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set anchorRightPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.anchorRight = item.num;
         } else {
             this.setting.anchorRightPct = item.pct;
@@ -437,7 +465,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set anchorTopPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.anchorTop = item.num;
         } else {
             this.setting.anchorTopPct = item.pct;
@@ -471,7 +499,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set anchorBottomPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.anchorBottom = item.num;
         } else {
             this.setting.anchorBottomPct = item.pct;
@@ -504,7 +532,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 设置距离左边距 百分比 */
     set leftPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.left = item.num;
         } else {
             this.setting.leftPct = item.pct;
@@ -536,7 +564,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     /** 设置右边距百分比 */
     set rightPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.right = item.num;
         } else {
             this.setting.rightPct = item.pct;
@@ -570,7 +598,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set topPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.top = item.num;
         } else {
             this.setting.topPct = item.pct;
@@ -604,7 +632,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
      */
     set bottomPct(value: string) {
         const item = this.getPetValue(value);
-        if (item.num) {
+        if (item.num!== undefined) {
             this.setting.bottom = item.num;
         } else {
             this.setting.bottomPct = item.pct;
@@ -674,14 +702,14 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this.setting.horizontalAlign;
     }
     /**
-     * 显示对象填充色
+     * 显示对象填充色 0xFFFFFF
      */
     set tint(value: number) {
         this.setting.tint = value;
         this.update();
     }
     get tint() {
-        return this.setting.tint || 0;
+        return this.setting.tint || NaN;
     }
     /**
      * 获取设置透明度
@@ -694,7 +722,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this.setting.alpha;
     }
     /**
-     * 获取设置旋转
+     * 获取设置旋转 (弧度)
      */
     set rotation(value: number) {
         this.setting.rotation = value;
@@ -702,6 +730,16 @@ export class UIBase extends PIXI.utils.EventEmitter {
     }
     get rotation() {
         return this.setting.rotation || 0;
+    }
+    /**
+     * 获取设置旋转 (角度)
+     */
+    set angle(value: number) {
+        this.setting.angle = value;
+        this.container.angle = value;
+    }
+    get angle() {
+        return this.setting.angle || 0;
     }
     /**
      * 设置混合模式参考，PIXI.BLEND_MODES
@@ -918,6 +956,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
     get interactiveChildren() {
         return this.container.interactiveChildren;
     }
+    
     /**
      * 绘制渲染对象
      * @param updateChildren 是否渲染子节点，true渲染
@@ -938,20 +977,33 @@ export class UIBase extends PIXI.utils.EventEmitter {
         this.update();
         if (updateChildren) this.updateChildren();
     }
+
+    protected dalayDrawTimeId = -1;
+    /**
+     * 延迟渲染，PIXI还没找到下一帧事件，后续修改，注意生命周期结束的销毁
+     */
+    protected set dalayDraw(isDalay: boolean){
+        if(!isDalay){
+            window.clearTimeout(this.dalayDrawTimeId);
+            this.dalayDrawTimeId = -1;
+        }
+        if(this.dalayDrawTimeId!==-1){
+            return;
+        }
+        this.dalayDrawTimeId = window.setTimeout(() => {
+            this.update();
+            this.dalayDrawTimeId = -1;
+        }, 30);
+    }
+    
+
     /**
      * 更新方法，其他组件重写
      */
     public update() {
 
     }
-    /**
-     * 渲染父容器
-     */
-    public updateParent() {
-        if (this.parent && this.parent.updatesettings) {
-            this.parent.updatesettings(false, true);
-        }
-    }
+
     /** 
      * 更新渲染设置属性
      */
@@ -982,7 +1034,6 @@ export class UIBase extends PIXI.utils.EventEmitter {
 
         let pivotXOffset = this.pivotX * this._width;
         let pivotYOffset = this.pivotY * this._height;
-
         if (this.pixelPerfect) {
             pivotXOffset = Math.round(pivotXOffset);
             pivotYOffset = Math.round(pivotYOffset);
@@ -1024,7 +1075,6 @@ export class UIBase extends PIXI.utils.EventEmitter {
                 this.container.position.x = 0;
             }
         }
-
 
         if (this.verticalAlign === undefined) {
             //get anchors (use top bottom if conflict)
@@ -1091,7 +1141,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
             this.container.position.x = this._dragPosition.x;
             this.container.position.y = this._dragPosition.y;
         }
-
+        
         //scale
         this.container.scale.x = this.setting.scaleX;
         this.container.scale.y = this.setting.scaleY;
@@ -1110,7 +1160,15 @@ export class UIBase extends PIXI.utils.EventEmitter {
             this.container.position.x = Math.round(this.container.position.x);
             this.container.position.y = Math.round(this.container.position.y);
         }
-
+        
+    }
+    /**
+     * 渲染父容器
+     */
+    public updateParent() {
+        if (this.parent && this.parent.updatesettings) {
+            this.parent.updatesettings(false, true);
+        }
     }
     /** 
      * 更新所有子节点
@@ -1124,54 +1182,88 @@ export class UIBase extends PIXI.utils.EventEmitter {
      * 添加UI元件，可以同时添加多个如addChild(a,b,c,d)
      * @param UIObject 要添加的UI组件
      */
-    public addChild(... UIObject: UIBase[]) {
-        const argumentsLength = UIObject.length;
-        if (argumentsLength > 1) {
-            for (let i = 0; i < argumentsLength; i++) {
-                this.addChild(UIObject[i]);
-            }
-        }
-        else {
-            const item  = UIObject[0];
-            if (item.parent) {
-                item.parent.removeChild(item);
-            }
+    public addChild(UIObject: UIBase) {
+        // const argumentsLength = UIObject.length;
+        // if (argumentsLength > 1) {
+        //     for (let i = 0; i < argumentsLength; i++) {
+        //         this.addChild(UIObject[i]);
+        //     }
+        // }
+        // else {
+        //     const item  = UIObject[0];
+        //     if (item.parent) {
+        //         item.parent.removeChild(item);
+        //     }
 
-            item.parent = this;
-            this.container.addChild(item.container);
-            this.children.push(item);
-            this.updatesettings(true, true);
+        //     item.parent = this;
+        //     this.container.addChild(item.container);
+        //     this.children.push(item);
+        //     this.updatesettings(true, true);
+        // }
+        const item  = UIObject;
+        if (item.parent) {
+            item.parent.removeChild(item);
         }
 
+        item.parent = this;
+        this.container.addChild(item.container);
+        this.children.push(item);
+        this.updatesettings(true, true);
         return UIObject;
+    }
+    public addChildAt(item: UIBase, index: number){
+        if (item.parent) {
+            item.parent.removeChild(item);
+        }
+
+        item.parent = this;
+        this.container.addChildAt(item.container,index);
+        this.children.splice(index,0,item);
+        this.updatesettings(true, true);
+        return item;
     }
     /**
      * 移除已添加的UI组件，可以同时移除多个如addChild(a,b,c,d)
      * @param UIObject 要移除的UI组件
      */
-    public removeChild(...UIObject: UIBase[]) {
-        const argumentLenght = UIObject.length;
-        if (argumentLenght > 1) {
-            for (let i = 0; i < argumentLenght; i++) {
-                this.removeChild(UIObject[i]);
-            }
-        }
-        else {
-            const item  = UIObject[0];
-            const index = this.children.indexOf(item);
-            if (index !== -1) {
-                const oldUIParent = item.parent;
-                //var oldParent = UIObject.container.parent;
-                item.container.parent.removeChild(item.container);
-                this.children.splice(index, 1);
-                item.parent = undefined;
+    public removeChild(UIObject: UIBase) {
+        // const argumentLenght = UIObject.length;
+        // if (argumentLenght > 1) {
+        //     for (let i = 0; i < argumentLenght; i++) {
+        //         this.removeChild(UIObject[i]);
+        //     }
+        // }
+        // else {
+        //     const item  = UIObject[0];
+        //     const index = this.children.indexOf(item);
+        //     if (index !== -1) {
+        //         const oldUIParent = item.parent;
+        //         //var oldParent = UIObject.container.parent;
+        //         item.container.parent.removeChild(item.container);
+        //         this.children.splice(index, 1);
+        //         item.parent = undefined;
 
-                //oldParent._recursivePostUpdateTransform();
-                setTimeout(() => { //hack but cant get the transforms to update propertly otherwice?
-                    if (oldUIParent && oldUIParent.updatesettings)
-                        oldUIParent.updatesettings(true, true);
-                }, 0);
-            }
+        //         //oldParent._recursivePostUpdateTransform();
+        //         setTimeout(() => { //hack but cant get the transforms to update propertly otherwice?
+        //             if (oldUIParent && oldUIParent.updatesettings)
+        //                 oldUIParent.updatesettings(true, true);
+        //         }, 0);
+        //     }
+        // }
+        const item  = UIObject;
+        const index = this.children.indexOf(item);
+        if (index !== -1) {
+            const oldUIParent = item.parent;
+            //var oldParent = UIObject.container.parent;
+            item.container.parent.removeChild(item.container);
+            this.children.splice(index, 1);
+            item.parent = undefined;
+
+            //oldParent._recursivePostUpdateTransform();
+            setTimeout(() => { //hack but cant get the transforms to update propertly otherwice?
+                if (oldUIParent && oldUIParent.updatesettings)
+                    oldUIParent.updatesettings(true, true);
+            }, 0);
         }
     }
     /**
@@ -1206,7 +1298,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
 
             this._dragPosition = new PIXI.Point();
             this.drag = new DragEvent(this);
-            this.drag.onDragStart = (e: interaction.InteractionEvent) => {
+            this.drag.onDragStart = (e: InteractionEvent) => {
                 const added = DragDropController.add(this, e);
                 if (!this.dragging && added) {
                     this.dragging = true;
@@ -1227,22 +1319,22 @@ export class UIBase extends PIXI.utils.EventEmitter {
                     } else {
                         stageOffset.set(0);
                     }
-                    this.emit(DraggableEventEnum.draggablestart, e);
+                    this.emit(DraggableEvent.onDragStart, e);
                 }
             };
 
 
-            this.drag.onDragMove = (e: interaction.InteractionEvent, offset) => {
+            this.drag.onDragMove = (e: InteractionEvent, offset: PIXI.Point) => {
                 if (this.dragging && this._dragPosition) {
                     this._dragPosition.set(containerStart.x + offset.x - stageOffset.x, containerStart.y + offset.y - stageOffset.y);
                     this.x = this._dragPosition.x;
                     this.y = this._dragPosition.y;
-                    this.emit(DraggableEventEnum.draggablemove, e);
+                    this.emit(DraggableEvent.onDragMove, e);
                 }
 
             };
 
-            this.drag.onDragEnd = (e: interaction.InteractionEvent) => {
+            this.drag.onDragEnd = (e: InteractionEvent) => {
                 if (this.dragging) {
                     this.dragging = false;
                     //Return to container after 0ms if not picked up by a droppable
@@ -1263,7 +1355,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
                                 this.parent.addChild(this);
                             }
                         }
-                        this.emit(DraggableEventEnum.draggableend, e);
+                        this.emit(DraggableEvent.onDragEnd, e);
                     }, 0);
                 }
 
@@ -1290,7 +1382,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
         }
     }
 
-    private onDrop(e: interaction.InteractionEvent) {
+    private onDrop(e: InteractionEvent) {
         const item = DragDropController.getEventItem(e, this.dropGroup);
         if (item && item.dragging) {
             item.dragging = false;

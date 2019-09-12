@@ -1,4 +1,4 @@
-import { UIBase } from "./UIBase";
+import UIBase from "./UIBase";
 
 /**
  * UI的舞台对象，展示所有UI组件
@@ -10,7 +10,7 @@ import { UIBase } from "./UIBase";
  * @param height {Number} 舞台高度
  * @since 1.0.0
  */
-export class Stage extends PIXI.Container {
+export default class Stage extends PIXI.Container {
 
     public constructor(width: number, height: number) {
         super();
@@ -53,7 +53,7 @@ export class Stage extends PIXI.Container {
      */
     public initialized = true;
 
-    private _width: number = 0;
+    public _width: number = 0;
     public get width(): number {
         return this._width;
     }
@@ -64,7 +64,7 @@ export class Stage extends PIXI.Container {
         }
     }
 
-    private _height: number = 0;
+    public _height: number = 0;
     public get height(): number {
         return this._height;
     }
@@ -73,6 +73,69 @@ export class Stage extends PIXI.Container {
             this._height = value;
             this.resize();
         }
+    }
+    /** 添加显示对象，需集成UIBASE */
+    public addChild<T>(... UIObject: T[]): T {
+
+        const argumentsLength = UIObject.length;
+        if (argumentsLength > 1) {
+            for (let i = 0; i < argumentsLength; i++) {
+                this.addChild(UIObject[i]);
+            }
+        }
+        else {
+            if(UIObject[0] instanceof UIBase){
+                const item: TAny = UIObject[0];
+                if (item.parent) {
+                    item.parent.removeChild(item);
+                }
+                item.parent = this;
+                this.UIChildren.push(item as UIBase);
+                super.addChild(item.container);
+                item.updatesettings(true);
+            }else{
+                throw "stage addChild arg not vfui";
+            }
+        }
+        return UIObject[0];
+    }
+
+    public addChildAt<T>(item: T, index: number){
+        if(item instanceof UIBase){
+            if (item.parent) {
+                item.parent.removeChild(item);
+            }
+            item.parent = this;
+            super.addChildAt(item.container,index);
+            this.UIChildren.splice(index,0,item);
+            item.updatesettings(true);
+        }else{
+            throw "stage addChildAt arg not vfui";
+        }
+        return item;
+    }
+    public removeChild<T>(... UIObject: T[]): T {
+        const argumentLenght = UIObject.length;
+        if (argumentLenght > 1) {
+            for (let i = 0; i < argumentLenght; i++) {
+                this.removeChild(UIObject[i]);
+            }
+        }
+        else {
+            
+            if(!(UIObject[0] instanceof UIBase)){
+                throw "stage removeChild arg not vfui";
+            }
+            const item: TAny = UIObject[0];
+            const index = this.UIChildren.indexOf(item as UIBase);
+            if (index !== -1) {
+                item.container.parent.removeChild(item.container);
+                this.UIChildren.splice(index, 1);
+                item.parent = undefined;
+            }
+
+        }
+        return UIObject[0];
     }
 
     public resize(width?: number, height?: number): void {
@@ -112,5 +175,13 @@ export class Stage extends PIXI.Container {
         for (let i = 0; i < this.UIChildren.length; i++)
             this.UIChildren[i].updatesettings(true, false);
     }
+
+
+    /** 没有功能实现，内部编辑器 */
+    public updatesettings(){
+
+    }
+    /** 没有功能实现，内部编辑器 */
+    public container = new PIXI.Container;
 
 }

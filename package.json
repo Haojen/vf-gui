@@ -1,27 +1,27 @@
 {
-  "name": "pixi-vfui",
+  "name": "vfui",
   "version": "1.0.0",
   "description": "[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)",
-  "main": "index.js",
+  "main": "dist/vfui.js",
+  "types": "dist/vfui.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "webpack --config test-webpack.config.js",
     "build": "webpack",
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open --config webpack.config.js",
-    "dev": "webpack --mode development",
-    "docs": "typedoc --out ./docs/ ./src/ --ignoreCompilerErrors --excludeExternals --exclude **/*.d.ts",
-    "lint": "eslint ./src/** --fix"
+    "prod": "webpack --mode production",
+    "lint": "eslint ./src/*.* ./src/**/*.*  --fix",
+    "docs": "typedoc",
+    "dts": "dts-generator --project  ./  --out ./dist/vfui.d.ts"
   },
   "keywords": [
+    "vfui",
     "pixi-ui",
     "pixi-vfui",
     "ts"
   ],
   "files": [
     "dist/",
-    "src/",
-    "CONTRIBUTING.md",
-    "LICENSE",
     "package.json",
     "README.md"
   ],
@@ -39,8 +39,10 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
-    "eslint": "^6.1.0",
+    "emoji-regex": "^8.0.0",
+    "eslint": "^6.3.0",
     "eslint-plugin-typescript": "^0.14.0",
+    "typedoc": "^0.15.0",
     "typescript": "^3.5.3",
     "typescript-eslint-parser": "^22.0.0",
     "webpack": "^4.39.2"

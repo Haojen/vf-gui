@@ -1,11 +1,11 @@
 import { HorizontalAlignEnum, VerticalAlignEnum } from "./Enum/AlignEnum";
-import { UIBase } from "./UIBase";
+import UIBase from "./UIBase";
 
 /** 
  * 基础的显示数据类型 
  * @since 1.0.0
  */
-export class UISettings {
+export default class UISettings {
     /** 宽度 */
     public width = 0;
     /** 高度 */
@@ -76,6 +76,7 @@ export class UISettings {
     public horizontalAlign: HorizontalAlignEnum | undefined;
     /* 旋转 */
     public rotation: number | undefined;
+    public angle: number| undefined;
     /* 混合模式 */
     public blendMode: PIXI.BLEND_MODES | undefined;
     /** 色调 */
