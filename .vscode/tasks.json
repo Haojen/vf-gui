@@ -17,6 +17,12 @@
             "script": "test",
             "label": "test",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "prod",
+            "label": "prod",
+            "problemMatcher": []
         }
     ]
 }

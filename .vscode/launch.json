@@ -35,6 +35,16 @@
             "webRoot": "${workspaceFolder}",
             "preLaunchTask":"test",
         },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "port": 9222,
+            "name": "Publish",
+            "url": "http://127.0.0.1:5501/test.html?type=TestTween",
+            "sourceMaps": true,
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask":"prod",
+        },
         {  
             "type": "chrome",
             "request": "launch",
