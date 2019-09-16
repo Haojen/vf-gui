@@ -1,6 +1,6 @@
 {
   "name": "pixi-vfui",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)",
   "main": "dist/vfui.js",
   "types": "dist/vfui.d.ts",
