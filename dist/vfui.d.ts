@@ -1292,6 +1292,7 @@ declare module 'c/SliceSprite' {
 	     * @see https://docs.cocos.com/creator/manual/zh/ui/sliced-sprite.html
 	     */
 	    constructor();
+	    protected _nineSlice: PIXI.NineSlicePlane | undefined;
 	    protected _texture: PIXI.Texture | undefined;
 	    protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
 	    /**
@@ -1305,6 +1306,26 @@ declare module 'c/SliceSprite' {
 	     * 边角宽度，要9切的范围
 	    */
 	    borderWidth: number;
+	    private _leftWidth;
+	    /**
+	     * 获取设置距离左边宽度
+	     */
+	    leftWidth: number;
+	    private _topHeight;
+	    /**
+	     * 获取设置距离顶部宽度
+	     */
+	    topHeight: number;
+	    private _rightWidth;
+	    /**
+	     * 获取设置距离右边宽度
+	     */
+	    rightWidth: number;
+	    private _bottomHeight;
+	    /**
+	     * 获取设置距离底部宽度
+	     */
+	    bottomHeight: number;
 	    /**
 	     * 是否水平切
 	    */
@@ -1313,37 +1334,12 @@ declare module 'c/SliceSprite' {
 	      * 是否垂直切
 	     */
 	    verticalSlice: boolean;
-	    /**
-	      * 图片展示方式，平铺或拉伸
-	      * @default false 拉伸
-	     */
-	    tile: boolean;
-	    private ftl;
-	    private ftr;
-	    private fbl;
-	    private fbr;
-	    private ft;
-	    private fb;
-	    private fl;
-	    private fr;
-	    private ff;
-	    private stl;
-	    private str;
-	    private sbl;
-	    private sbr;
-	    private st;
-	    private sb;
-	    private sl;
-	    private sr;
-	    private sf;
 	    /** 边框 */
 	    private bw;
 	    private vs;
 	    private hs;
-	    private _tile;
-	    private t;
-	    private f;
-	    protected updateLayer(): void;
+	    protected createSlice(): void;
+	    protected drawSlicePlane(): void;
 	    update(): void;
 	}
 
@@ -2246,7 +2242,7 @@ declare module 'c/Slider' {
 declare module 'c/ScrollBar' {
 	import Slider from 'c/Slider';
 	import ScrollingContainer from 'c/ScrollingContainer';
-	import { SliceSprite } from 'UI';
+	import SliceSprite from 'c/SliceSprite';
 	/**
 	 * UI 带有滚动条的容器
 	 */
@@ -2692,7 +2688,57 @@ declare module 'InputSkinBase' {
 	}
 
 }
+interface Lifecycle {
+    load(): void;
+    /**
+     * 释放，回收
+     */
+    release(): void;
+    /**
+     * 释放，彻底释放
+     * @param destroyWebGL 释放WEBGL资源，与本地资源，可能破坏其他显示对象
+     */
+    destroy(destroyWebGL?: boolean): void;
+}
+/**
+ * 生命周期的接口
+ */
+interface LifecycleHook {
+    /**
+     * 初始化完成，只执行一次
+     */
+    onInit(): void;
+    /**
+     * 加载完成
+     */
+    onLoad(): void;
+    /**
+     * 回收，释放
+     */
+    onRelease(): void;
+    /**
+     * 添加到舞台
+     */
+    onAddStage(): void;
+    /**
+     * 移出舞台
+     */
+    onRemoveStage(): void;
+    /**
+     * 显示对象初始化完成，只执行一次
+     */
+    onViewInit(): void;
+    /**
+     * 释放指令
+     */
+    onDestroy(): void;
+}
 declare module 'index' {
+	import * as vfui from 'UI';
+	export default vfui;
+
+}
+declare module 'pixi-vfui' {
 	import * as vfui from 'UI';
 	export default vfui;
 

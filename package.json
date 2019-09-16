@@ -1,6 +1,6 @@
 {
   "name": "pixi-vfui",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)",
   "main": "dist/vfui.js",
   "types": "dist/vfui.d.ts",
@@ -10,6 +10,7 @@
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open --config webpack.config.js",
     "prod": "webpack --config publish-webpack.config",
+    "npmPublish":"npm publish -registry=https://registry.npmjs.org",
     "lint": "eslint ./src/*.* ./src/**/*.*  --fix",
     "docs": "typedoc",
     "dts": "dts-generator --project  ./  --out ./dist/vfui.d.ts"

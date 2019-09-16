@@ -1,7 +1,7 @@
 import Slider from "./Slider";
 import ScrollingContainer from "./ScrollingContainer";
 import * as tween from "./Tween/index";
-import { SliceSprite } from "../UI";
+import SliceSprite from "./SliceSprite";
 
 /**
  * UI 带有滚动条的容器

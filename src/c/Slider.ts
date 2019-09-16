@@ -26,10 +26,9 @@ export default class Slider extends UIBase{
         this._track.borderWidth = trackBorderWidth;
         this._thumb = new SliceSprite();
         this._thumb.borderWidth = thumbBorderWidth;
-        if(this._thumb) {
-            this._thumb.pivot = 0.5;
-            this._thumb.container.buttonMode = true;
-        }
+        this._thumb.pivot = 0.5;
+        this._thumb.container.buttonMode = true;
+
         this._tracklight = new SliceSprite();
         this._tracklight.borderWidth = tracklightBorderWidth;
         this.addChild(this._track);
@@ -113,17 +112,17 @@ export default class Slider extends UIBase{
     }
     public set sourceThumb(value) {
         this._sourceThumb = value;
+        this._thumb.visible = false;
         this._thumb.off(SliceSprite.SourceCompleteEvent,this.onThumbLoadComplete,this);
         this._thumb.once(SliceSprite.SourceCompleteEvent,this.onThumbLoadComplete,this);
         this._thumb.source = value;
-        this._thumb.visible = false;
     }
 
     //rectangle:PIXI.Rectangle,source?:SliceSprite
     protected  onThumbLoadComplete(rectangle: PIXI.Rectangle,source: SliceSprite){
-        source.visible = true;
         source.width = rectangle.width;
         source.height = rectangle.height;
+        source.visible = true;
         this.update();
     }
 

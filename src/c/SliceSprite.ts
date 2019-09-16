@@ -37,6 +37,8 @@ export default class SliceSprite extends UIBase {
         }
         this._source = value;
         if(value instanceof  PIXI.Texture){
+            this._texture = value;
+            this.createSlice();
             this.emit(SliceSprite.SourceCompleteEvent,value.frame,this);
         }else{
             if(this._texture){
@@ -45,13 +47,13 @@ export default class SliceSprite extends UIBase {
             this._texture = PIXI.Texture.from(value);
             if(this._texture.width>1 && this._texture.height>1){
                 if(this._texture){
-                    this.updatesettings(true);     
+                    this.createSlice();
                     this.emit(SliceSprite.SourceCompleteEvent,this._texture.frame,this);      
                 }
             }else{
                 this._texture.once("update",()=>{
                     if(this._texture){
-                        this.updatesettings(true);
+                        this.createSlice();
                         this.emit(SliceSprite.SourceCompleteEvent,this._texture.frame,this);
                     }
                 },this);
@@ -68,8 +70,8 @@ export default class SliceSprite extends UIBase {
         this._leftWidth = value;
         this._rightWidth = value;
         this._bottomHeight = value;
+        this.drawSlicePlane();
 
-        this.updatesettings(true);
     }
     public get borderWidth() {
         return this.bw;
@@ -84,6 +86,7 @@ export default class SliceSprite extends UIBase {
     }
     public set leftWidth(value) {
         this._leftWidth = value;
+        this.drawSlicePlane();
     }
     private _topHeight = 0;
     /**
@@ -94,6 +97,7 @@ export default class SliceSprite extends UIBase {
     }
     public set topHeight(value) {
         this._topHeight = value;
+        this.drawSlicePlane();
     }
     private _rightWidth = 0;
     /**
@@ -104,6 +108,7 @@ export default class SliceSprite extends UIBase {
     }
     public set rightWidth(value) {
         this._rightWidth = value;
+        this.drawSlicePlane();
     }
     private _bottomHeight = 0;
     /**
@@ -114,6 +119,7 @@ export default class SliceSprite extends UIBase {
     }
     public set bottomHeight(value) {
         this._bottomHeight = value;
+        this.drawSlicePlane();
     }
     /** 
      * 是否水平切
@@ -121,7 +127,7 @@ export default class SliceSprite extends UIBase {
     public set horizontalSlice(value: boolean) {
         this.hs = value;
         this.setting.minWidth = this.bw * 2;
-        this.updatesettings(true);
+        this.drawSlicePlane();
     }
     public get horizontalSlice() {
         return this.hs;
@@ -132,7 +138,7 @@ export default class SliceSprite extends UIBase {
     public set verticalSlice(value: boolean) {
         this.vs = value;
         this.setting.minHeight = this.bw * 2;
-        this.updatesettings(true);
+        this.drawSlicePlane();
     }
     public get verticalSlice() {
         return this.vs;
@@ -143,18 +149,28 @@ export default class SliceSprite extends UIBase {
     private vs = true;
     private hs = true;
 
-    protected updateLayer(){
-
+    protected createSlice(){
         if(this._texture == null){
             return;
         }
-        this._nineSlice = new PIXI.NineSlicePlane(this._texture, this._leftWidth, this._topHeight, this._rightWidth, this._bottomHeight);
-        this._nineSlice.name = "NineSlicePlane";
+        this.container.removeChildren();
+        this._nineSlice = new PIXI.NineSlicePlane(this._texture);
+        this.drawSlicePlane();
+        //跳过编译器
+        this.container.addChild(this._nineSlice);
+        this.dalayDraw = true;
+    }
+    protected drawSlicePlane(){
+        if(this._nineSlice === undefined){
+            return;
+        }
         const nineSlicePlane = this._nineSlice;
-        const bw = this.bw;
-        //get frames
         if (this.vs && this.hs) {
             //默认
+            nineSlicePlane.topHeight = this._topHeight;
+            nineSlicePlane.bottomHeight = this._bottomHeight;
+            nineSlicePlane.leftWidth = this._leftWidth;
+            nineSlicePlane.rightWidth = this._rightWidth;
         }
         else if (this.hs) {
             nineSlicePlane.leftWidth = this._leftWidth;
@@ -164,16 +180,11 @@ export default class SliceSprite extends UIBase {
             nineSlicePlane.topHeight = this._topHeight;
             nineSlicePlane.bottomHeight = this._bottomHeight;
         }
-
-        //make sprites
-        //跳过编译器
-        this.container.removeChildren();
-        this.container.addChild(nineSlicePlane);
-        
     }
 
+
     public update() {
-        this.updateLayer();
+
         const nineSlicePlane = this._nineSlice;
         if(nineSlicePlane === undefined){
             return;
