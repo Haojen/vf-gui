@@ -4983,6 +4983,8 @@ var SliceSprite = /** @class */ (function (_super) {
             }
             this._source = value;
             if (value instanceof PIXI.Texture) {
+                this._texture = value;
+                this.createSlice();
                 this.emit(SliceSprite.SourceCompleteEvent, value.frame, this);
             }
             else {
@@ -4992,14 +4994,14 @@ var SliceSprite = /** @class */ (function (_super) {
                 this._texture = PIXI.Texture.from(value);
                 if (this._texture.width > 1 && this._texture.height > 1) {
                     if (this._texture) {
-                        this.updatesettings(true);
+                        this.createSlice();
                         this.emit(SliceSprite.SourceCompleteEvent, this._texture.frame, this);
                     }
                 }
                 else {
                     this._texture.once("update", function () {
                         if (_this._texture) {
-                            _this.updatesettings(true);
+                            _this.createSlice();
                             _this.emit(SliceSprite.SourceCompleteEvent, _this._texture.frame, _this);
                         }
                     }, this);
@@ -5022,7 +5024,7 @@ var SliceSprite = /** @class */ (function (_super) {
             this._leftWidth = value;
             this._rightWidth = value;
             this._bottomHeight = value;
-            this.updatesettings(true);
+            this.drawSlicePlane();
         },
         enumerable: true,
         configurable: true
@@ -5036,6 +5038,7 @@ var SliceSprite = /** @class */ (function (_super) {
         },
         set: function (value) {
             this._leftWidth = value;
+            this.drawSlicePlane();
         },
         enumerable: true,
         configurable: true
@@ -5049,6 +5052,7 @@ var SliceSprite = /** @class */ (function (_super) {
         },
         set: function (value) {
             this._topHeight = value;
+            this.drawSlicePlane();
         },
         enumerable: true,
         configurable: true
@@ -5062,6 +5066,7 @@ var SliceSprite = /** @class */ (function (_super) {
         },
         set: function (value) {
             this._rightWidth = value;
+            this.drawSlicePlane();
         },
         enumerable: true,
         configurable: true
@@ -5075,6 +5080,7 @@ var SliceSprite = /** @class */ (function (_super) {
         },
         set: function (value) {
             this._bottomHeight = value;
+            this.drawSlicePlane();
         },
         enumerable: true,
         configurable: true
@@ -5089,7 +5095,7 @@ var SliceSprite = /** @class */ (function (_super) {
         set: function (value) {
             this.hs = value;
             this.setting.minWidth = this.bw * 2;
-            this.updatesettings(true);
+            this.drawSlicePlane();
         },
         enumerable: true,
         configurable: true
@@ -5104,22 +5110,33 @@ var SliceSprite = /** @class */ (function (_super) {
         set: function (value) {
             this.vs = value;
             this.setting.minHeight = this.bw * 2;
-            this.updatesettings(true);
+            this.drawSlicePlane();
         },
         enumerable: true,
         configurable: true
     });
-    SliceSprite.prototype.updateLayer = function () {
+    SliceSprite.prototype.createSlice = function () {
         if (this._texture == null) {
             return;
         }
-        this._nineSlice = new PIXI.NineSlicePlane(this._texture, this._leftWidth, this._topHeight, this._rightWidth, this._bottomHeight);
-        this._nineSlice.name = "NineSlicePlane";
+        this.container.removeChildren();
+        this._nineSlice = new PIXI.NineSlicePlane(this._texture);
+        this.drawSlicePlane();
+        //跳过编译器
+        this.container.addChild(this._nineSlice);
+        this.dalayDraw = true;
+    };
+    SliceSprite.prototype.drawSlicePlane = function () {
+        if (this._nineSlice === undefined) {
+            return;
+        }
         var nineSlicePlane = this._nineSlice;
-        var bw = this.bw;
-        //get frames
         if (this.vs && this.hs) {
             //默认
+            nineSlicePlane.topHeight = this._topHeight;
+            nineSlicePlane.bottomHeight = this._bottomHeight;
+            nineSlicePlane.leftWidth = this._leftWidth;
+            nineSlicePlane.rightWidth = this._rightWidth;
         }
         else if (this.hs) {
             nineSlicePlane.leftWidth = this._leftWidth;
@@ -5129,13 +5146,8 @@ var SliceSprite = /** @class */ (function (_super) {
             nineSlicePlane.topHeight = this._topHeight;
             nineSlicePlane.bottomHeight = this._bottomHeight;
         }
-        //make sprites
-        //跳过编译器
-        this.container.removeChildren();
-        this.container.addChild(nineSlicePlane);
     };
     SliceSprite.prototype.update = function () {
-        this.updateLayer();
         var nineSlicePlane = this._nineSlice;
         if (nineSlicePlane === undefined) {
             return;
@@ -5239,10 +5251,8 @@ var Slider = /** @class */ (function (_super) {
         _this._track.borderWidth = trackBorderWidth;
         _this._thumb = new SliceSprite_1.default();
         _this._thumb.borderWidth = thumbBorderWidth;
-        if (_this._thumb) {
-            _this._thumb.pivot = 0.5;
-            _this._thumb.container.buttonMode = true;
-        }
+        _this._thumb.pivot = 0.5;
+        _this._thumb.container.buttonMode = true;
         _this._tracklight = new SliceSprite_1.default();
         _this._tracklight.borderWidth = tracklightBorderWidth;
         _this.addChild(_this._track);
@@ -5295,19 +5305,19 @@ var Slider = /** @class */ (function (_super) {
         },
         set: function (value) {
             this._sourceThumb = value;
+            this._thumb.visible = false;
             this._thumb.off(SliceSprite_1.default.SourceCompleteEvent, this.onThumbLoadComplete, this);
             this._thumb.once(SliceSprite_1.default.SourceCompleteEvent, this.onThumbLoadComplete, this);
             this._thumb.source = value;
-            this._thumb.visible = false;
         },
         enumerable: true,
         configurable: true
     });
     //rectangle:PIXI.Rectangle,source?:SliceSprite
     Slider.prototype.onThumbLoadComplete = function (rectangle, source) {
-        source.visible = true;
         source.width = rectangle.width;
         source.height = rectangle.height;
+        source.visible = true;
         this.update();
     };
     Object.defineProperty(Slider.prototype, "vertical", {
