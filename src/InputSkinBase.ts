@@ -40,11 +40,13 @@ export default class InputSkinBase extends InputBase{
     protected onHover(e: InteractionEvent,thisObj: UIBase,over: boolean){
         this._isHover = over;
         this.currentState = "Up";
+       
     }
     protected onPress(e: InteractionEvent,thisObj: UIBase,isPress: boolean){     
-        
         if(isPress)
             this.currentState = "Down";
+        else
+            this.currentState = "Up";
     }
     protected onClick(){
         //this.currentState = "Down";

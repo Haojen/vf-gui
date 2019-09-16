@@ -103,3 +103,5 @@ Chrome debug - mac
 
 In a terminal, execute /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
 
+License
+This content is released under the (http://opensource.org/licenses/MIT) MIT License.
