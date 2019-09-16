@@ -22,6 +22,8 @@ module.exports = {
     },
     output: {
         filename: 'vfui.js',
+        library: "pixi-vfui",
+        libraryTarget: "umd",
         path: path.resolve(__dirname, 'dist')
     },
     devServer: {
