@@ -10,6 +10,7 @@
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open --config webpack.config.js",
     "prod": "webpack --config publish-webpack.config",
+    "npmPublish":"npm publish -registry=https://registry.npmjs.org",
     "lint": "eslint ./src/*.* ./src/**/*.*  --fix",
     "docs": "typedoc",
     "dts": "dts-generator --project  ./  --out ./dist/vfui.d.ts"
