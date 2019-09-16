@@ -1719,7 +1719,7 @@ var UIBase = /** @class */ (function (_super) {
         _this.dalayDrawTimeId = -1;
         _this.uuid = Utils_1.uid();
         _this.container = new ContainerBase_1.default();
-        _this.container.name = _this.constructor.name;
+        //this.container.name = this.constructor.name;
         _this.setting = new UISettings_1.default();
         if (width && height)
             _this.setDefaultSize(width, height);
