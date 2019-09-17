@@ -21,7 +21,9 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js']
     },
     output: {
-        filename: 'vfui.js',
+        filename: 'pixi-vfui.js',
+        library: "pixi-vfui",
+        //libraryTarget: "umd",
         path: path.resolve(__dirname, 'dist')
     },
     devServer: {

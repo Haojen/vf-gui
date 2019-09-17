@@ -3,7 +3,7 @@ import { VerticalAlignEnum, HorizontalAlignEnum } from "./Enum/AlignEnum";
 import ClickEvent from "./Interaction/ClickEvent";
 import InteractionEvent, { TouchMouseEvent } from "./Interaction/InteractionEvent";
 import SliceSprite from "./c/SliceSprite";
-import { UIBase } from "./UI";
+import UIBase from './UIBase';
 
 /**
  * UI 按钮显 示对象

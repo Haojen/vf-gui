@@ -5,6 +5,7 @@
 
 pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI库。 为PIXIJS提供提供基础可靠的UI组件。
 
+
 ## 学习(Learn) 
 
 
@@ -27,20 +28,30 @@ pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开�
 
 #### 正确的导入方式 (The correct way to import is): 
 
-    import vfui from "vfui";
+    import Button from "pixi-vfui/dist/c/Button";
+
+    其他组件导入方式可查看“组件”部分
+
 
 ### CDN Install
 
+推荐使用ES6标准方式导入，使用CDN命名空间方式导入，请注意.d.ts的编写以及创建方式为：
+
+    vfui.Button
+    vfui.CheckBox
+    vfui.xxxxxx
+
 Master:
 
-    <script src="http://unpkg.com/pixi-vfui/dist/vfui.js"></script>
+    <script src="http://unpkg.com/pixi-vfui/dist/pixi-vfui.js"></script>
 
-    <script src="http://unpkg.com/pixi-vfui/dist/vfui.min.js"></script>
+    <script src="http://unpkg.com/pixi-vfui/dist/pixi-vfui.min.js"></script>
+    
 Version:
 
-    <script src="http://unpkg.com/pixi-vfui@0.1.2/dist/vfui.js"></script>
+    <script src="http://unpkg.com/pixi-vfui@0.1.6/dist/pixi-vfui.js"></script>
     
-    <script src="http://unpkg.com/pixi-vfui@0.1.2/dist/vfui.min.js"></script>
+    <script src="http://unpkg.com/pixi-vfui@0.1.6/dist/pixi-vfui.min.js"></script>
 
 ## 如何构建(How build)
 
@@ -62,22 +73,26 @@ Version:
 ## 组件(Component)
 可使用组件：
 
-    Stage - UI舞台
-    Text - 文本
-    Button - 按钮
-    CheckBox - 单选与复选
-    Slider - 滑动条
-    Container - 容器
-    ScrollingContainer - 可滑动的容器
-    ScrollBar - 带有滑动条容器
-    SortableList - 带有排序功能的列表容器
-    Sprite - 图片
-    SliceSprite - 可以设置九宫拉伸的图片
-    TilingSprite - 平铺的图片
-    TextInput - 输入文本
-    Ticker - 心跳
-    Tween - 缓动
-    Rect - 绘制矢量矩形
+导入方式 | 名称 
+-|-|-
+import Stage from "pixi-vfui/dist/Stage"  |  UI舞台 |
+import Container from "pixi-vfui/dist/c/Container";  | 容器 |
+import ScrollingContainer from "pixi-vfui/dist/c/ScrollingContainer" | 可滑动的容器 |
+import ScrollBar from "pixi-vfui/dist/c/ScrollBar" | 带有滑动条容器 |
+import SortableList from "pixi-vfui/dist/c/SortableList"  | 带有排序功能的列表容器 |
+import Sprite from "pixi-vfui/dist/c/Sprite" | 图片 |
+import TilingSprite from "pixi-vfui/dist/c/TilingSprite"  | 平铺的图片 |
+import SliceSprite from "pixi-vfui/dist/c/SliceSprite" | 九宫图片 |
+import Button from "pixi-vfui/dist/c/Button" | Button - 按钮 |
+import CheckBox from "pixi-vfui/dist/c/CheckBox" | 单选与复选 |
+import Rect from "pixi-vfui/dist/c/Rect" | 绘制矢量矩形 |
+import Text from "pixi-vfui/dist/c/Text"   | 文本 |
+import TextInput from "pixi-vfui/dist/c/TextInput"  | 输入文本 |
+import Slider from "pixi-vfui/dist/c/Slider"   | 滑动条 |
+import Ticker from "pixi-vfui/dist/Ticker" | 心跳 |
+import Tween from "pixi-vfui/dist/c/Tween/index"  | 缓动 |
+import Utils from "pixi-vfui/dist/Utils" | 工具类 |
+
 
 计划中：
 

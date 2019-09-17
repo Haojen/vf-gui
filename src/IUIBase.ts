@@ -9,6 +9,9 @@ interface Window{
     
 }
 
+declare interface ObjectConstructor {
+    assign(...objects: Object[]): Object;
+}
 
 interface ArrayConstructor {
     from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];

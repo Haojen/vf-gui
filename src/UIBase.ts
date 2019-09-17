@@ -27,7 +27,7 @@ export default class UIBase extends PIXI.utils.EventEmitter {
         super();
         this.uuid = uid();
         this.container = new ContainerBase();
-        this.container.name = this.constructor.name;
+        //this.container.name = this.constructor.name;
         this.setting = new UISettings();
         if(width && height)
             this.setDefaultSize(width,height)
