@@ -90,7 +90,7 @@ Version:
 | import TextInput from "pixi-vfui/dist/c/TextInput"  | 输入文本 |
 | import Slider from "pixi-vfui/dist/c/Slider"   | 滑动条 |
 | import Ticker from "pixi-vfui/dist/Ticker" | 心跳 |
-| mport Tween from "pixi-vfui/dist/c/Tween/index"  | 缓动 |
+| import Tween from "pixi-vfui/dist/c/Tween/index"  | 缓动 |
 | import Utils from "pixi-vfui/dist/Utils" | 工具类 |
 
 
