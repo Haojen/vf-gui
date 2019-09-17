@@ -73,25 +73,25 @@ Version:
 ## 组件(Component)
 可使用组件：
 
-导入方式 | 名称 
--|-|-
-import Stage from "pixi-vfui/dist/Stage"  |  UI舞台 |
-import Container from "pixi-vfui/dist/c/Container";  | 容器 |
-import ScrollingContainer from "pixi-vfui/dist/c/ScrollingContainer" | 可滑动的容器 |
-import ScrollBar from "pixi-vfui/dist/c/ScrollBar" | 带有滑动条容器 |
-import SortableList from "pixi-vfui/dist/c/SortableList"  | 带有排序功能的列表容器 |
-import Sprite from "pixi-vfui/dist/c/Sprite" | 图片 |
-import TilingSprite from "pixi-vfui/dist/c/TilingSprite"  | 平铺的图片 |
-import SliceSprite from "pixi-vfui/dist/c/SliceSprite" | 九宫图片 |
-import Button from "pixi-vfui/dist/c/Button" | Button - 按钮 |
-import CheckBox from "pixi-vfui/dist/c/CheckBox" | 单选与复选 |
-import Rect from "pixi-vfui/dist/c/Rect" | 绘制矢量矩形 |
-import Text from "pixi-vfui/dist/c/Text"   | 文本 |
-import TextInput from "pixi-vfui/dist/c/TextInput"  | 输入文本 |
-import Slider from "pixi-vfui/dist/c/Slider"   | 滑动条 |
-import Ticker from "pixi-vfui/dist/Ticker" | 心跳 |
-import Tween from "pixi-vfui/dist/c/Tween/index"  | 缓动 |
-import Utils from "pixi-vfui/dist/Utils" | 工具类 |
+| 导入方式    |      名称       |
+|----------|-------------|
+| import Stage from "pixi-vfui/dist/Stage"  |  UI舞台 |
+| import Container from "pixi-vfui/dist/c/Container";  | 容器 |
+| import ScrollingContainer from "pixi-vfui/dist/c/ScrollingContainer" | 可滑动的容器 |
+| import ScrollBar from "pixi-vfui/dist/c/ScrollBar" | 带有滑动条容器 |
+| import SortableList from "pixi-vfui/dist/c/SortableList"  | 带有排序功能的列表容器 |
+| import Sprite from "pixi-vfui/dist/c/Sprite" | 图片 |
+| import TilingSprite from "pixi-vfui/dist/c/TilingSprite"  | 平铺的图片 |
+| import SliceSprite from "pixi-vfui/dist/c/SliceSprite" | 九宫图片 |
+| import Button from "pixi-vfui/dist/c/Button" | Button - 按钮 |
+| import CheckBox from "pixi-vfui/dist/c/CheckBox" | 单选与复选 |
+| import Rect from "pixi-vfui/dist/c/Rect" | 绘制矢量矩形 |
+| import Text from "pixi-vfui/dist/c/Text"   | 文本 |
+| import TextInput from "pixi-vfui/dist/c/TextInput"  | 输入文本 |
+| import Slider from "pixi-vfui/dist/c/Slider"   | 滑动条 |
+| import Ticker from "pixi-vfui/dist/Ticker" | 心跳 |
+| mport Tween from "pixi-vfui/dist/c/Tween/index"  | 缓动 |
+| import Utils from "pixi-vfui/dist/Utils" | 工具类 |
 
 
 计划中：
