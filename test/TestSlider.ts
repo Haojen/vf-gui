@@ -59,7 +59,7 @@ export default class TestSlider {
         slider2.value = 50;
         uiStage.addChild(slider2);
 
-        //vfui.tween.Tween.to(slider2,{value:100},4000).delay(1000).stop();
+        //vfui.tween.Tween.to(slider2,{value:100},4000).delay(1000).stop()1;
 
     }
 

@@ -1004,6 +1004,10 @@ export default class UIBase extends PIXI.utils.EventEmitter {
 
     }
 
+    public release(){
+        
+    }
+
     /** 
      * 更新渲染设置属性
      */

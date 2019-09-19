@@ -122,7 +122,7 @@ export default class Stage extends PIXI.Container {
             const item = UIObject[0];
             const index = this.UIChildren.indexOf(item);
             if (index !== -1) {
-                item.container.parent.removeChild(item.container);
+                super.removeChild(item.container);
                 this.UIChildren.splice(index, 1);
                 item.parent = undefined;
             }

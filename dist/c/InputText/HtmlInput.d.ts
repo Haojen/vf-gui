@@ -19,7 +19,7 @@ export default class HtmlInput extends PIXI.utils.EventEmitter {
     setAttribute(key: string, value: string): void;
     select(): void;
     /** 测量，需要对象添加到body中 */
-    getDOMInputBounds(): ClientRect | DOMRect;
+    getDOMInputBounds(): DOMRect | ClientRect;
     updatePostion(top: string | number, left: string | number, transform: string, opacity?: string | number): void;
     private addDom;
     private removeDom;

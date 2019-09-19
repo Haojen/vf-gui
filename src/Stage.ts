@@ -122,14 +122,13 @@ export default class Stage extends PIXI.Container {
             }
         }
         else {
-            
             if(!(UIObject[0] instanceof UIBase)){
                 throw "stage removeChild arg not vfui";
             }
             const item: TAny = UIObject[0];
             const index = this.UIChildren.indexOf(item as UIBase);
             if (index !== -1) {
-                item.container.parent.removeChild(item.container);
+                super.removeChild(item.container);
                 this.UIChildren.splice(index, 1);
                 item.parent = undefined;
             }
