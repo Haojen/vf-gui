@@ -8,6 +8,13 @@ export function log(message?: string | number | object, ...optionalParams: strin
 }
 
 /**
+ * 组件获取资源 - 源路径,外部可以重写本方法
+ */
+export function getSourcePath(path:TAny){
+    return path;
+}
+
+/**
  * 快速设置矩形
  * @param sourcr 
  * @param x 

@@ -1,4 +1,5 @@
 import UIBase from "../UIBase";
+import { getSourcePath } from "../Utils";
 /**
  * UI图片显示对象，如果使用拉伸或9切，请使用 SliceSprite
  *
@@ -30,6 +31,7 @@ export default class Sprite extends UIBase {
         return this._source;
     }
     set source(value) {
+        value = getSourcePath(value);
         if (value === undefined) {
             return;
         }

@@ -1,4 +1,5 @@
 import UIBase from "../UIBase";
+import { getSourcePath } from "../Utils";
 /**
  * 动态宽高的图片,9切
  * Event: sourceComplete
@@ -30,6 +31,7 @@ export default class SliceSprite extends UIBase {
         return this._source;
     }
     set source(value) {
+        value = getSourcePath(value);
         if (value === undefined) {
             return;
         }
@@ -143,18 +145,23 @@ export default class SliceSprite extends UIBase {
         if (this._texture == null) {
             return;
         }
-        this.container.removeChildren();
+        let lastSlicePlane = this._nineSlice;
         this._nineSlice = new PIXI.NineSlicePlane(this._texture);
         this.drawSlicePlane();
         //跳过编译器
         this.container.addChild(this._nineSlice);
         this.dalayDraw = true;
+        if (lastSlicePlane) {
+            this.container.removeChild(lastSlicePlane);
+        }
     }
     drawSlicePlane() {
         if (this._nineSlice === undefined) {
             return;
         }
         const nineSlicePlane = this._nineSlice;
+        nineSlicePlane.width = this._width;
+        nineSlicePlane.height = this._height;
         if (this.vs && this.hs) {
             //默认
             nineSlicePlane.topHeight = this._topHeight;

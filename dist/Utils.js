@@ -6,6 +6,12 @@ export function log(message, ...optionalParams) {
     console.log(message, ...optionalParams);
 }
 /**
+ * 组件获取资源 - 源路径,外部可以重写本方法
+ */
+export function getSourcePath(path) {
+    return path;
+}
+/**
  * 快速设置矩形
  * @param sourcr
  * @param x
