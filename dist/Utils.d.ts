@@ -2,12 +2,13 @@
  * 工具类
  */
 /// <reference types="pixi.js" />
-/** 日志输出 */
-export declare function log(message?: string | number | object, ...optionalParams: string[] | number[] | object[]): void;
 /**
  * 组件获取资源 - 源路径,外部可以重写本方法
  */
-export declare function getSourcePath(path: TAny): any;
+export declare let _getSourcePath: Function;
+/** 日志输出 */
+export declare function log(message?: string | number | object, ...optionalParams: string[] | number[] | object[]): void;
+export declare function setSourcePath(params: (path: TAny) => {}): void;
 /**
  * 快速设置矩形
  * @param sourcr

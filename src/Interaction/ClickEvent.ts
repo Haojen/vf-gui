@@ -225,8 +225,8 @@ export default class ClickEvent {
         this.onMove = undefined;
         this.obj.container.interactive = false;
     }
-    public onHover: ((e: InteractionEvent,thisOBj:UIBase,over: boolean) => void) | undefined
-    public onPress: ((e: InteractionEvent,thisOBj:UIBase, isPressed: boolean) => void) | undefined;
-    public onClick: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined 
-    public onMove: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined
+    public onHover: ((e: InteractionEvent,thisOBj: UIBase,over: boolean) => void) | undefined
+    public onPress: ((e: InteractionEvent,thisOBj: UIBase, isPressed: boolean) => void) | undefined;
+    public onClick: ((e: InteractionEvent,thisOBj: UIBase) => void) | undefined 
+    public onMove: ((e: InteractionEvent,thisOBj: UIBase) => void) | undefined
 }

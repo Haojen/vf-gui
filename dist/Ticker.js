@@ -1,5 +1,4 @@
 import * as tween from "./c/Tween/index";
-import { now } from "./Utils";
 /**
  * 心跳，需要UI库初始化后，进行实例调用注册
  */
@@ -10,10 +9,7 @@ class Ticker extends PIXI.utils.EventEmitter {
      */
     constructor(autoStart) {
         super();
-        /** 上次运行的时间 */
-        this._lastnow = 0;
         this._disabled = true;
-        this._lastnow = now();
         if (autoStart) {
             this.disabled = false;
         }
@@ -27,18 +23,13 @@ class Ticker extends PIXI.utils.EventEmitter {
             return;
         }
         this._disabled = value;
-        if (!this._disabled) {
-            this.update(now() - this._lastnow);
-        }
     }
-    update(deltaTime) {
+    update(deltaTime, lastTime, elapsedMS) {
         if (this._disabled) {
             return;
         }
-        const _now = now();
-        tween.update(_now);
-        this.emit("update", _now - this._lastnow, deltaTime);
-        this._lastnow = _now;
+        tween.update(elapsedMS);
+        this.emit("update", deltaTime, lastTime);
     }
     /**
      * 增加更新监听器

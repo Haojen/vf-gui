@@ -1,5 +1,5 @@
 import UIBase from "../UIBase";
-import {getSourcePath} from "../Utils";
+import {_getSourcePath} from "../Utils";
 
 /**
  * 动态宽高的图片,9切
@@ -18,7 +18,7 @@ export default class SliceSprite extends UIBase {
         super();
     }
 
-    protected _nineSlice:PIXI.NineSlicePlane|undefined;
+    protected _nineSlice: PIXI.NineSlicePlane|undefined;
     protected _texture: PIXI.Texture|undefined;
     protected _source: number | string | PIXI.Texture |HTMLImageElement| HTMLCanvasElement | HTMLVideoElement|undefined;
     /** 
@@ -31,7 +31,9 @@ export default class SliceSprite extends UIBase {
         return this._source;
     }
     public set source(value: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement|undefined) {
-        value = getSourcePath(value);
+        if(_getSourcePath){
+            value = _getSourcePath(value);
+        }      
         if(value === undefined){
             return;
         }
@@ -156,7 +158,7 @@ export default class SliceSprite extends UIBase {
         if(this._texture == null){
             return;
         }
-        let lastSlicePlane = this._nineSlice;
+        const lastSlicePlane = this._nineSlice;
         this._nineSlice = new PIXI.NineSlicePlane(this._texture);
         this.drawSlicePlane();
         //跳过编译器

@@ -1,5 +1,4 @@
 import * as tween from "./c/Tween/index";
-import { now } from "./Utils";
 
 /**
  * 心跳，需要UI库初始化后，进行实例调用注册
@@ -11,13 +10,10 @@ class Ticker extends PIXI.utils.EventEmitter{
      */
     public constructor(autoStart: boolean){
         super();
-        this._lastnow =now();
         if (autoStart) {
             this.disabled = false;
         }
     }
-    /** 上次运行的时间 */
-    private _lastnow = 0;
     
     private _disabled = true;
     /** 是否关闭心跳.默认false不关闭,关闭后，缓动等组件也将关闭 */
@@ -30,19 +26,14 @@ class Ticker extends PIXI.utils.EventEmitter{
             return;
         }
         this._disabled = value;
-        if(!this._disabled){
-            this.update( now() - this._lastnow);
-        }
     }
     
-    public update(deltaTime: number) {
+    public update(deltaTime: number,lastTime: number,elapsedMS: number) {
         if (this._disabled){
             return;
         }
-        const _now = now();
-        tween.update(_now);
-        this.emit("update", _now - this._lastnow,deltaTime);
-        this._lastnow = _now;
+        tween.update(elapsedMS);
+        this.emit("update", deltaTime,lastTime);
         
     }
     /**

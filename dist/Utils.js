@@ -1,15 +1,16 @@
 /**
  * 工具类
  */
+/**
+ * 组件获取资源 - 源路径,外部可以重写本方法
+ */
+export let _getSourcePath;
 /** 日志输出 */
 export function log(message, ...optionalParams) {
     console.log(message, ...optionalParams);
 }
-/**
- * 组件获取资源 - 源路径,外部可以重写本方法
- */
-export function getSourcePath(path) {
-    return path;
+export function setSourcePath(params) {
+    _getSourcePath = params;
 }
 /**
  * 快速设置矩形

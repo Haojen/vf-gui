@@ -41,7 +41,7 @@ export default class TestApplication {
         });
     }
 
-    private updata(...params: any[]) {
-        vfui.TickerShared.update(params[0]);
+    private updata(deltaTime: number) {
+        vfui.TickerShared.update(deltaTime,this.app.ticker.lastTime,this.app.ticker.elapsedMS);
     }
 }

@@ -1323,8 +1323,6 @@ class Stage extends PIXI.Container {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shared", function() { return shared; });
 /* harmony import */ var _c_Tween_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./c/Tween/index */ "./src/c/Tween/index.ts");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Utils */ "./src/Utils.ts");
-
 
 /**
  * 心跳，需要UI库初始化后，进行实例调用注册
@@ -1336,10 +1334,7 @@ class Ticker extends PIXI.utils.EventEmitter {
      */
     constructor(autoStart) {
         super();
-        /** 上次运行的时间 */
-        this._lastnow = 0;
         this._disabled = true;
-        this._lastnow = Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["now"])();
         if (autoStart) {
             this.disabled = false;
         }
@@ -1353,18 +1348,13 @@ class Ticker extends PIXI.utils.EventEmitter {
             return;
         }
         this._disabled = value;
-        if (!this._disabled) {
-            this.update(Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["now"])() - this._lastnow);
-        }
     }
-    update(deltaTime) {
+    update(deltaTime, lastTime, elapsedMS) {
         if (this._disabled) {
             return;
         }
-        const _now = Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["now"])();
-        _c_Tween_index__WEBPACK_IMPORTED_MODULE_0__["update"](_now);
-        this.emit("update", _now - this._lastnow, deltaTime);
-        this._lastnow = _now;
+        _c_Tween_index__WEBPACK_IMPORTED_MODULE_0__["update"](elapsedMS);
+        this.emit("update", deltaTime, lastTime);
     }
     /**
      * 增加更新监听器
@@ -2901,13 +2891,14 @@ class UISettings {
 /*!**********************!*\
   !*** ./src/Utils.ts ***!
   \**********************/
-/*! exports provided: log, getSourcePath, setRectangle, now, deepCopy, hexToInt, hexToRgba, componentToHex, rgbToHex, rgbToNumber, rgbStrToNumber, numberToRgb, hexToRgb, Lerp, Round, uid, getQueryVariable */
+/*! exports provided: _getSourcePath, log, setSourcePath, setRectangle, now, deepCopy, hexToInt, hexToRgba, componentToHex, rgbToHex, rgbToNumber, rgbStrToNumber, numberToRgb, hexToRgb, Lerp, Round, uid, getQueryVariable */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_getSourcePath", function() { return _getSourcePath; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "log", function() { return log; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSourcePath", function() { return getSourcePath; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setSourcePath", function() { return setSourcePath; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setRectangle", function() { return setRectangle; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "now", function() { return now; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deepCopy", function() { return deepCopy; });
@@ -2926,15 +2917,16 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * 工具类
  */
+/**
+ * 组件获取资源 - 源路径,外部可以重写本方法
+ */
+let _getSourcePath;
 /** 日志输出 */
 function log(message, ...optionalParams) {
     console.log(message, ...optionalParams);
 }
-/**
- * 组件获取资源 - 源路径,外部可以重写本方法
- */
-function getSourcePath(path) {
-    return path;
+function setSourcePath(params) {
+    _getSourcePath = params;
 }
 /**
  * 快速设置矩形
@@ -4244,7 +4236,9 @@ class SliceSprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         return this._source;
     }
     set source(value) {
-        value = Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["getSourcePath"])(value);
+        if (_Utils__WEBPACK_IMPORTED_MODULE_1__["_getSourcePath"]) {
+            value = Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["_getSourcePath"])(value);
+        }
         if (value === undefined) {
             return;
         }
@@ -4358,7 +4352,7 @@ class SliceSprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         if (this._texture == null) {
             return;
         }
-        let lastSlicePlane = this._nineSlice;
+        const lastSlicePlane = this._nineSlice;
         this._nineSlice = new PIXI.NineSlicePlane(this._texture);
         this.drawSlicePlane();
         //跳过编译器
@@ -4858,7 +4852,9 @@ class Sprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         return this._source;
     }
     set source(value) {
-        value = Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["getSourcePath"])(value);
+        if (_Utils__WEBPACK_IMPORTED_MODULE_1__["_getSourcePath"]) {
+            value = Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["_getSourcePath"])(value);
+        }
         if (value === undefined) {
             return;
         }
@@ -6074,7 +6070,6 @@ class Tween extends PIXI.utils.EventEmitter {
         this._easingFunction = defaultEasing;
         this._easingReverse = defaultEasing;
         this._startTime = 0;
-        this._initTime = 0;
         this._delayTime = 0;
         this._repeat = 0;
         this._r = 0;
@@ -6082,7 +6077,6 @@ class Tween extends PIXI.utils.EventEmitter {
         this._yoyo = false;
         this._reversed = false;
         this._onStartCallbackFired = false;
-        this._pausedTime = 0;
         this._isFinite = true;
         this._chainedTweensCount = 0;
         this._prevTime = 0;
@@ -6137,7 +6131,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * @example tween.isPlaying() // returns `true` if tween in progress
      * @memberof vfui.Tween
      */
-    isPlaying() {
+    get isPlaying() {
         return this._isPlaying;
     }
     /**
@@ -6146,7 +6140,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * @example tween.isStarted() // returns `true` if tween in started
      * @memberof vfui.Tween
      */
-    isStarted() {
+    get isStarted() {
         return this._onStartCallbackFired;
     }
     /**
@@ -6206,7 +6200,6 @@ class Tween extends PIXI.utils.EventEmitter {
         }
         this._isPlaying = false;
         Object(_core__WEBPACK_IMPORTED_MODULE_0__["remove"])(this);
-        this._pausedTime = Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["now"])();
         return this.emit("pause" /* pause */, this.object);
     }
     /**
@@ -6219,10 +6212,8 @@ class Tween extends PIXI.utils.EventEmitter {
             return this;
         }
         this._isPlaying = true;
-        this._startTime += Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["now"])() - this._pausedTime;
-        this._initTime = this._startTime;
+        this._startTime = 0;
         Object(_core__WEBPACK_IMPORTED_MODULE_0__["add"])(this);
-        this._pausedTime = Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["now"])();
         return this.emit("play" /* play */, this.object);
     }
     /**
@@ -6238,26 +6229,6 @@ class Tween extends PIXI.utils.EventEmitter {
         return this.emit("restart" /* restart */, this.object);
     }
     /**
-     * Seek tween value by `time`. Note: Not works as excepted. PR are welcome
-     * @param {Time} time Tween update time
-     * @param {boolean=} keepPlaying When this param is set to `false`, tween pausing after seek
-     * @example tween.seek(500)
-     * @memberof vfui.Tween
-     * @deprecated Not works as excepted, so we deprecated this method
-     */
-    seek(time, keepPlaying) {
-        const { _duration, _initTime, _startTime, _reversed } = this;
-        let updateTime = _initTime + time;
-        this._isPlaying = true;
-        if (updateTime < _startTime && _startTime >= _initTime) {
-            this._startTime -= _duration;
-            this._reversed = !_reversed;
-        }
-        this.update(time, false);
-        //this.emit(TweenEvent.seek, time, this.object);
-        return keepPlaying ? this : this.pause();
-    }
-    /**
      * 设置要缓动的目标属性与持续时间
      * @param {object} properties 目标属性值
      * @param {number|Object=} [duration=1000] 持续时间
@@ -6266,6 +6237,9 @@ class Tween extends PIXI.utils.EventEmitter {
      */
     to(properties, duration = 1000) {
         this._valuesEnd = properties;
+        for (let key in properties) {
+            this._valuesStart[key] = this.object[key];
+        }
         if (typeof duration === 'function') {
             this.duration = this._duration;
         }
@@ -6348,9 +6322,9 @@ class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     start(time) {
-        this._startTime = time !== undefined ? (typeof time === 'string' ? Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["now"])() + parseFloat(time) : time) : Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["now"])();
+        this._startTime = time !== undefined ? time : 0;
         this._startTime += this._delayTime;
-        this._initTime = this._prevTime = this._startTime;
+        this._prevTime = 0;
         this._onStartCallbackFired = false;
         this._rendered = false;
         this._isPlaying = true;
@@ -6363,18 +6337,20 @@ class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     stop() {
-        let { _isPlaying, _isFinite, object, _startTime, _duration, _r, _yoyo, _reversed } = this;
+        let { _isPlaying, _isFinite, object, _duration, _r, _yoyo, _reversed } = this;
         if (!_isPlaying) {
             return this;
         }
         let atStart = _isFinite ? (_r + 1) % 2 === 1 : !_reversed;
         this._reversed = false;
         if (_yoyo && atStart) {
-            this.update(_startTime);
+            this._prevTime = _duration;
         }
         else {
-            this.update(_startTime + _duration);
+            this._prevTime = 0;
         }
+        this.update(0);
+        this._isPlaying = false;
         Object(_core__WEBPACK_IMPORTED_MODULE_0__["remove"])(this);
         return this.emit("stop" /* stop */, object);
     }
@@ -6476,7 +6452,7 @@ class Tween extends PIXI.utils.EventEmitter {
     reassignValues(time) {
         const { _valuesStart, object, _delayTime } = this;
         this._isPlaying = true;
-        this._startTime = time !== undefined ? time : Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["now"])();
+        this._startTime = time !== undefined ? time : 0;
         this._startTime += _delayTime;
         this._reversed = false;
         Object(_core__WEBPACK_IMPORTED_MODULE_0__["add"])(this);
@@ -6487,34 +6463,53 @@ class Tween extends PIXI.utils.EventEmitter {
         return this;
     }
     /**
+     * 更新动画到指定时间点，进行播放
+     * @param time
+     */
+    gotoAndPlay(time) {
+        this._prevTime = time;
+        this.update(0);
+    }
+    /**
+     * 更新动画到指定时间点，停止播放
+     * @param time
+     */
+    gotoAndStop(time) {
+        this._prevTime = time;
+        this.update(0);
+        this.pause();
+    }
+    /**
      * 更新函数，通过给定的 `time` 设置目标属性变化
-    * @param {number=} time 当前时间戳
+    * @param {number=} elapsedMS 帧间隔
     * @param {Boolean=} preserve 完成后，防止删除动画对象
      * @param {boolean=} forceTime 强制进行更新渲染，不关心时间是否匹配
      * @example tween.update(100)
      * @memberof vfui.Tween
      */
-    update(time, preserve, forceTime) {
-        let { _onStartCallbackFired, _easingFunction, _interpolationFunction, _easingReverse, _repeat, _delayTime, _reverseDelayTime, _yoyo, _reversed, _startTime, _prevTime, _duration, _valuesStart, _valuesEnd, object, _isFinite, _isPlaying, _chainedTweensCount } = this;
+    update(elapsedMS, preserve, forceTime) {
+        //console.log(time);
+        let { _onStartCallbackFired, _easingFunction, _interpolationFunction, _easingReverse, _repeat, _delayTime, _reverseDelayTime, _yoyo, _reversed, _startTime, _duration, _valuesStart, _valuesEnd, object, _isFinite, _isPlaying, _chainedTweensCount } = this;
         let elapsed;
         let currentEasing;
         let property;
         let propCount = 0;
-        time = time !== undefined ? time : Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["now"])();
+        elapsedMS = elapsedMS !== undefined ? elapsedMS : 0;
+        if (!_isPlaying || (_startTime > 0 && !forceTime)) {
+            this._startTime -= elapsedMS;
+            this._startTime = Math.max(0, this._startTime);
+            return true;
+        }
         if (!_duration) {
             elapsed = 1;
             _repeat = 0;
         }
         else {
-            let delta = time - _prevTime;
-            this._prevTime = time;
-            if (delta > _constants__WEBPACK_IMPORTED_MODULE_3__["TOO_LONG_FRAME_MS"] && Object(_core__WEBPACK_IMPORTED_MODULE_0__["isRunning"])() && Object(_core__WEBPACK_IMPORTED_MODULE_0__["isLagSmoothing"])()) {
-                time -= delta - _constants__WEBPACK_IMPORTED_MODULE_3__["FRAME_MS"];
+            this._prevTime += elapsedMS;
+            if (elapsedMS > _constants__WEBPACK_IMPORTED_MODULE_3__["TOO_LONG_FRAME_MS"] && Object(_core__WEBPACK_IMPORTED_MODULE_0__["isRunning"])() && Object(_core__WEBPACK_IMPORTED_MODULE_0__["isLagSmoothing"])()) {
+                this._prevTime -= _constants__WEBPACK_IMPORTED_MODULE_3__["FRAME_MS"];
             }
-            if (!_isPlaying || (time < _startTime && !forceTime)) {
-                return true;
-            }
-            elapsed = (time - _startTime) / _duration;
+            elapsed = (this._prevTime) / _duration;
             elapsed = elapsed > 1 ? 1 : elapsed;
             elapsed = _reversed ? 1 - elapsed : elapsed;
         }
@@ -6540,7 +6535,7 @@ class Tween extends PIXI.utils.EventEmitter {
             const _interpolationFunctionCall = _interpolationFunction[property]
                 ? _interpolationFunction[property] : typeof _interpolationFunction === 'function' ? _interpolationFunction : _Interpolation__WEBPACK_IMPORTED_MODULE_4__["default"].Linear;
             if (typeof end === 'number') {
-                object[property] = start + (end - start) * value;
+                object[property] = Math.floor(start + (end - start) * value);
             }
             else if (Array.isArray(end) && !end.isString && !Array.isArray(start)) {
                 object[property] = _interpolationFunctionCall(end, value, object[property]);
@@ -6566,8 +6561,9 @@ class Tween extends PIXI.utils.EventEmitter {
             Object(_core__WEBPACK_IMPORTED_MODULE_0__["remove"])(this);
             return false;
         }
-        this.emit("update" /* update */, object, elapsed, time);
+        this.emit("update" /* update */, object, elapsed, elapsedMS);
         if (elapsed === 1 || (_reversed && elapsed === 0)) {
+            this._prevTime = 0;
             if (_repeat > 0 && _duration > 0) {
                 if (_isFinite) {
                     this._repeat--;
@@ -6585,10 +6581,10 @@ class Tween extends PIXI.utils.EventEmitter {
                 }
                 this.emit(_yoyo && !_reversed ? "reverse" /* reverse */ : "repeat" /* repeat */, object);
                 if (_reversed && _reverseDelayTime) {
-                    this._startTime = time - _reverseDelayTime;
+                    this._startTime = _reverseDelayTime;
                 }
                 else {
-                    this._startTime = time + _delayTime;
+                    this._startTime = _delayTime;
                 }
                 return true;
             }
@@ -6601,7 +6597,7 @@ class Tween extends PIXI.utils.EventEmitter {
                 this._repeat = this._r;
                 if (_chainedTweensCount) {
                     for (let i = 0; i < _chainedTweensCount; i++) {
-                        this[_constants__WEBPACK_IMPORTED_MODULE_3__["CHAINED_TWEENS"] + i].start(time + _duration);
+                        this[_constants__WEBPACK_IMPORTED_MODULE_3__["CHAINED_TWEENS"] + i].start(this._prevTime + _duration);
                     }
                 }
                 return false;

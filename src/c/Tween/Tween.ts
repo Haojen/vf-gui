@@ -1,5 +1,5 @@
 import { add, Plugins, remove, isRunning, isLagSmoothing } from './core';
-import { now, deepCopy, uid } from "../../Utils";
+import { deepCopy, uid } from "../../Utils";
 import Easing from './Easing';
 import {
     decompose,
@@ -46,7 +46,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      * @static
      */
-    static to(object: any|any[], to: any, duration?: number) {
+    static to(object: any | any[], to: any, duration?: number) {
         return Tween.fromTo(object, to, duration)
     }
     /**
@@ -78,10 +78,9 @@ export default class Tween extends PIXI.utils.EventEmitter {
     private _duration = 1000;
     private _easingFunction = defaultEasing;
     private _easingReverse = defaultEasing;
-    private _interpolationFunction:((v: any, k: number, value: any) => any)|any;
+    private _interpolationFunction: ((v: any, k: number, value: any) => any) | any;
 
     protected _startTime = 0;
-    private _initTime = 0;
     private _delayTime = 0;
     private _repeat = 0;
     private _r = 0;
@@ -90,7 +89,6 @@ export default class Tween extends PIXI.utils.EventEmitter {
     private _reversed = false;
 
     private _onStartCallbackFired = false;
-    private _pausedTime = 0;
     private _isFinite = true;
     private _chainedTweensCount = 0;
     private _prevTime = 0;
@@ -104,7 +102,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.isPlaying() // returns `true` if tween in progress
      * @memberof vfui.Tween
      */
-    public isPlaying() {
+    public get isPlaying() {
         return this._isPlaying;
     }
 
@@ -114,20 +112,20 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.isStarted() // returns `true` if tween in started
      * @memberof vfui.Tween
      */
-    public isStarted() {
+    public get isStarted() {
         return this._onStartCallbackFired;
     }
 
     /**
      * 获取动画的开始时间
      */
-    public get startTime(){
+    public get startTime() {
         return this._startTime;
     }
     /**
      * 获取动画的开始时间
      */
-    public set startTime(value:number){
+    public set startTime(value: number) {
         this._startTime = value;
     }
     /**
@@ -138,11 +136,11 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @deprecated 不推荐使用这个方法，内部使用
      * @private
      */
-    public set duration(amount:number|Function) {
+    public set duration(amount: number | Function) {
         this._duration = typeof amount === 'function' ? amount(this._duration) : amount;
     }
-    public get duration(){
-        return this._duration ;
+    public get duration() {
+        return this._duration;
     }
 
     /**
@@ -151,7 +149,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @param {boolean=} state Set state of current reverse
      * @memberof vfui.Tween
      */
-    public reverse(state?:boolean) {
+    public reverse(state?: boolean) {
         const { _reversed } = this;
 
         this._reversed = state !== undefined ? state : !_reversed;
@@ -182,7 +180,6 @@ export default class Tween extends PIXI.utils.EventEmitter {
         this._isPlaying = false;
 
         remove(this);
-        this._pausedTime = now();
 
         return this.emit(TweenEvent.pause, this.object);
     }
@@ -198,11 +195,8 @@ export default class Tween extends PIXI.utils.EventEmitter {
         }
 
         this._isPlaying = true;
-
-        this._startTime += now() - this._pausedTime;
-        this._initTime = this._startTime;
+        this._startTime = 0;
         add(this);
-        this._pausedTime = now();
 
         return this.emit(TweenEvent.play, this.object);
     }
@@ -213,7 +207,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.restart()
      * @memberof vfui.Tween
      */
-    public restart(noDelay?:boolean) {
+    public restart(noDelay?: boolean) {
         this._repeat = this._r;
         this.reassignValues();
         add(this);
@@ -222,44 +216,20 @@ export default class Tween extends PIXI.utils.EventEmitter {
     }
 
     /**
-     * Seek tween value by `time`. Note: Not works as excepted. PR are welcome
-     * @param {Time} time Tween update time
-     * @param {boolean=} keepPlaying When this param is set to `false`, tween pausing after seek
-     * @example tween.seek(500)
-     * @memberof vfui.Tween
-     * @deprecated Not works as excepted, so we deprecated this method
-     */
-    public seek(time:number, keepPlaying?:boolean) {
-        const { _duration, _initTime, _startTime, _reversed } = this
-
-        let updateTime = _initTime + time;
-        this._isPlaying = true;
-
-        if (updateTime < _startTime && _startTime >= _initTime) {
-            this._startTime -= _duration;
-            this._reversed = !_reversed;
-        }
-
-        this.update(time, false);
-
-        //this.emit(TweenEvent.seek, time, this.object);
-
-        return keepPlaying ? this : this.pause();
-    }
-
-
-    /**
      * 设置要缓动的目标属性与持续时间
      * @param {object} properties 目标属性值
      * @param {number|Object=} [duration=1000] 持续时间
      * @example let tween = new vfui.Tween({x:0}).to({x:100}, 2000)
      * @memberof vfui.Tween
      */
-    public to(properties:any, duration = 1000) {
+    public to(properties: any, duration = 1000) {
         this._valuesEnd = properties;
-        if(typeof duration === 'function'){
+        for (let key in properties) {
+            this._valuesStart[key] = this.object[key];
+        }
+        if (typeof duration === 'function') {
             this.duration = this._duration;
-        }else{
+        } else {
             this._duration = duration;
         }
         return this;
@@ -342,14 +312,13 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.start()
      * @memberof vfui.Tween
      */
-    public start(time?:string) {
-        this._startTime = time !== undefined ? (typeof time === 'string' ? now() + parseFloat(time) : time) : now();
+    public start(time?: number) {
+        this._startTime = time !== undefined ? time : 0;
         this._startTime += this._delayTime;
-        this._initTime = this._prevTime = this._startTime;
+        this._prevTime = 0;
         this._onStartCallbackFired = false;
         this._rendered = false;
         this._isPlaying = true;
-
         add(this);
 
         return this;
@@ -361,7 +330,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     public stop() {
-        let { _isPlaying, _isFinite, object, _startTime, _duration, _r, _yoyo, _reversed } = this;
+        let { _isPlaying, _isFinite, object, _duration, _r, _yoyo, _reversed } = this;
 
         if (!_isPlaying) {
             return this;
@@ -370,12 +339,13 @@ export default class Tween extends PIXI.utils.EventEmitter {
         let atStart = _isFinite ? (_r + 1) % 2 === 1 : !_reversed;
 
         this._reversed = false;
-
         if (_yoyo && atStart) {
-            this.update(_startTime);
+            this._prevTime = _duration;
         } else {
-            this.update(_startTime + _duration);
+            this._prevTime = 0;
         }
+        this.update(0);
+        this._isPlaying = false;
         remove(this);
 
         return this.emit(TweenEvent.stop, object);
@@ -387,7 +357,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.delay(500)
      * @memberof vfui.Tween
      */
-    public delay(amount:number|Function) {
+    public delay(amount: number | Function) {
         this._delayTime = typeof amount === 'function' ? amount(this._delayTime) : amount;
 
         return this
@@ -399,7 +369,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.chainedTweens(tween1, tween2)
      * @memberof vfui.Tween
      */
-    public chainedTweens(... tween:Tween[]) {
+    public chainedTweens(...tween: Tween[]) {
         this._chainedTweensCount = tween.length;
         if (!this._chainedTweensCount) {
             return this
@@ -417,7 +387,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.repeat(5)
      * @memberof vfui.Tween
      */
-    public repeat(amount:number|Function) {
+    public repeat(amount: number | Function) {
         this._repeat = !this._duration ? 0 : typeof amount === 'function' ? amount(this._repeat) : amount
         this._r = this._repeat
         this._isFinite = isFinite(amount as number);
@@ -431,7 +401,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.reverseDelay(500)
      * @memberof vfui.Tween
      */
-    public reverseDelay(amount:number|Function) {
+    public reverseDelay(amount: number | Function) {
         this._reverseDelayTime = typeof amount === 'function' ? amount(this._reverseDelayTime) : amount;
 
         return this;
@@ -444,14 +414,14 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.yoyo(true)
      * @memberof vfui.Tween
      */
-    public yoyo(state?:boolean|Function, _easingReverse?:(k: number) => number) {
+    public yoyo(state?: boolean | Function, _easingReverse?: (k: number) => number) {
         this._yoyo = typeof state === 'function' ? state(this._yoyo) : state === null ? this._yoyo : state;
         if (!state) {
             this._reversed = false;
         }
-        if(_easingReverse){
+        if (_easingReverse) {
             this._easingReverse = _easingReverse;
-        }else{
+        } else {
             this._easingReverse = this._easingFunction;
         }
 
@@ -464,7 +434,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.easing(Easing.Elastic.InOut)
      * @memberof vfui.Tween
      */
-    public easing(_easingFunction:(k: number) => number) {
+    public easing(_easingFunction: (k: number) => number) {
         this._easingFunction = _easingFunction;
 
         return this;
@@ -489,11 +459,11 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @private
      * @memberof vfui.Tween
      */
-    public reassignValues(time?:number) {
+    public reassignValues(time?: number) {
         const { _valuesStart, object, _delayTime } = this;
 
         this._isPlaying = true;
-        this._startTime = time !== undefined ? time : now();
+        this._startTime = time !== undefined ? time : 0;
         this._startTime += _delayTime;
         this._reversed = false;
         add(this);
@@ -508,14 +478,34 @@ export default class Tween extends PIXI.utils.EventEmitter {
     }
 
     /**
+     * 更新动画到指定时间点，进行播放
+     * @param time 
+     */
+    public gotoAndPlay(time: number) {
+        this._prevTime = time;
+        this.update(0);
+    }
+
+    /**
+     * 更新动画到指定时间点，停止播放
+     * @param time 
+     */
+    public gotoAndStop(time: number) {
+        this._prevTime = time;
+        this.update(0);
+        this.pause();
+    }
+
+    /**
      * 更新函数，通过给定的 `time` 设置目标属性变化
-    * @param {number=} time 当前时间戳
+    * @param {number=} elapsedMS 帧间隔
     * @param {Boolean=} preserve 完成后，防止删除动画对象
      * @param {boolean=} forceTime 强制进行更新渲染，不关心时间是否匹配
      * @example tween.update(100)
      * @memberof vfui.Tween
      */
-    public update(time?:number, preserve?:boolean, forceTime?:boolean) {
+    public update(elapsedMS: number, preserve?: boolean, forceTime?: boolean) {
+        //console.log(time);
         let {
             _onStartCallbackFired,
             _easingFunction,
@@ -527,7 +517,6 @@ export default class Tween extends PIXI.utils.EventEmitter {
             _yoyo,
             _reversed,
             _startTime,
-            _prevTime,
             _duration,
             _valuesStart,
             _valuesEnd,
@@ -537,28 +526,30 @@ export default class Tween extends PIXI.utils.EventEmitter {
             _chainedTweensCount
         } = this;
 
-        let elapsed:number;
-        let currentEasing:any;
-        let property:string;
-        let propCount = 0
-        time = time !== undefined ? time : now();
+
+        let elapsed: number;
+        let currentEasing: any;
+        let property: string;
+        let propCount = 0;
+        elapsedMS = elapsedMS !== undefined ? elapsedMS : 0;
+
+        if (!_isPlaying || (_startTime > 0 && !forceTime)) {
+            this._startTime -= elapsedMS;
+            this._startTime = Math.max(0, this._startTime);
+            return true;
+        }
 
         if (!_duration) {
             elapsed = 1;
             _repeat = 0;
-        } else {    
+        } else {
 
-            let delta = time - _prevTime;
-            this._prevTime = time;
-            if (delta > TOO_LONG_FRAME_MS && isRunning() && isLagSmoothing()) {
-                time -= delta - FRAME_MS;
+            this._prevTime += elapsedMS;
+            if (elapsedMS > TOO_LONG_FRAME_MS && isRunning() && isLagSmoothing()) {
+                this._prevTime -= FRAME_MS;
             }
 
-            if (!_isPlaying || (time < _startTime && !forceTime)) {
-                return true;
-            }
-
-            elapsed = (time - _startTime) / _duration;
+            elapsed = (this._prevTime) / _duration;
             elapsed = elapsed > 1 ? 1 : elapsed;
             elapsed = _reversed ? 1 - elapsed : elapsed;
         }
@@ -578,18 +569,19 @@ export default class Tween extends PIXI.utils.EventEmitter {
         if (!object) {
             return true;
         }
+
         for (property in _valuesEnd) {
             const start = _valuesStart[property]
             if ((start === undefined || start === null) && !(Plugins[property] && Plugins[property].update)) {
                 continue;
             }
             const end = _valuesEnd[property];
-            const value = currentEasing[property] ? currentEasing[property](elapsed): typeof currentEasing === 'function'? currentEasing(elapsed): defaultEasing(elapsed);
-            const _interpolationFunctionCall = _interpolationFunction[property] 
-            ? _interpolationFunction[property] : typeof _interpolationFunction === 'function' ? _interpolationFunction : Interpolation.Linear;
+            const value = currentEasing[property] ? currentEasing[property](elapsed) : typeof currentEasing === 'function' ? currentEasing(elapsed) : defaultEasing(elapsed);
+            const _interpolationFunctionCall = _interpolationFunction[property]
+                ? _interpolationFunction[property] : typeof _interpolationFunction === 'function' ? _interpolationFunction : Interpolation.Linear;
 
             if (typeof end === 'number') {
-                object[property] = start + (end - start) * value;
+                object[property] = Math.floor(start + (end - start) * value);
             } else if (Array.isArray(end) && !(end as any).isString && !Array.isArray(start)) {
                 object[property] = _interpolationFunctionCall(end, value, object[property]);
             } else if (end && end.update) {
@@ -611,9 +603,10 @@ export default class Tween extends PIXI.utils.EventEmitter {
             remove(this);
             return false;
         }
-        this.emit(TweenEvent.update, object, elapsed, time);
+        this.emit(TweenEvent.update, object, elapsed, elapsedMS);
 
         if (elapsed === 1 || (_reversed && elapsed === 0)) {
+            this._prevTime = 0;
             if (_repeat > 0 && _duration > 0) {
                 if (_isFinite) {
                     this._repeat--;
@@ -633,11 +626,10 @@ export default class Tween extends PIXI.utils.EventEmitter {
                 this.emit(_yoyo && !_reversed ? TweenEvent.reverse : TweenEvent.repeat, object);
 
                 if (_reversed && _reverseDelayTime) {
-                    this._startTime = time - _reverseDelayTime;
+                    this._startTime = _reverseDelayTime;
                 } else {
-                    this._startTime = time + _delayTime;
+                    this._startTime = _delayTime;
                 }
-
                 return true;
             } else {
                 if (!preserve) {
@@ -649,7 +641,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
 
                 if (_chainedTweensCount) {
                     for (let i = 0; i < _chainedTweensCount; i++) {
-                        (this as any)[CHAINED_TWEENS + i].start(time + _duration);
+                        (this as any)[CHAINED_TWEENS + i].start(this._prevTime + _duration);
                     }
                 }
 

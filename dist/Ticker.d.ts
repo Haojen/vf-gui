@@ -8,12 +8,10 @@ declare class Ticker extends PIXI.utils.EventEmitter {
      * @param autoStart 是否自动开启心跳，默认false
      */
     constructor(autoStart: boolean);
-    /** 上次运行的时间 */
-    private _lastnow;
     private _disabled;
     /** 是否关闭心跳.默认false不关闭,关闭后，缓动等组件也将关闭 */
     disabled: boolean;
-    update(deltaTime: number): void;
+    update(deltaTime: number, lastTime: number, elapsedMS: number): void;
     /**
      * 增加更新监听器
      * @param fn 被调用的函数

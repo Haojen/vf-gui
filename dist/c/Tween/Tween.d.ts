@@ -48,7 +48,6 @@ export default class Tween extends PIXI.utils.EventEmitter {
     private _easingReverse;
     private _interpolationFunction;
     protected _startTime: number;
-    private _initTime;
     private _delayTime;
     private _repeat;
     private _r;
@@ -56,7 +55,6 @@ export default class Tween extends PIXI.utils.EventEmitter {
     private _yoyo;
     private _reversed;
     private _onStartCallbackFired;
-    private _pausedTime;
     private _isFinite;
     private _chainedTweensCount;
     private _prevTime;
@@ -68,14 +66,14 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.isPlaying() // returns `true` if tween in progress
      * @memberof vfui.Tween
      */
-    isPlaying(): boolean;
+    readonly isPlaying: boolean;
     /**
      * 是否开始播放
      * @return {boolean} State of started of tween
      * @example tween.isStarted() // returns `true` if tween in started
      * @memberof vfui.Tween
      */
-    isStarted(): boolean;
+    readonly isStarted: boolean;
     /**
      * 获取动画的开始时间
      */
@@ -126,15 +124,6 @@ export default class Tween extends PIXI.utils.EventEmitter {
      */
     restart(noDelay?: boolean): boolean;
     /**
-     * Seek tween value by `time`. Note: Not works as excepted. PR are welcome
-     * @param {Time} time Tween update time
-     * @param {boolean=} keepPlaying When this param is set to `false`, tween pausing after seek
-     * @example tween.seek(500)
-     * @memberof vfui.Tween
-     * @deprecated Not works as excepted, so we deprecated this method
-     */
-    seek(time: number, keepPlaying?: boolean): boolean | this;
-    /**
      * 设置要缓动的目标属性与持续时间
      * @param {object} properties 目标属性值
      * @param {number|Object=} [duration=1000] 持续时间
@@ -155,7 +144,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.start()
      * @memberof vfui.Tween
      */
-    start(time?: string): this;
+    start(time?: number): this;
     /**
      * 停止缓动
      * @example tween.stop()
@@ -219,12 +208,22 @@ export default class Tween extends PIXI.utils.EventEmitter {
      */
     reassignValues(time?: number): this;
     /**
+     * 更新动画到指定时间点，进行播放
+     * @param time
+     */
+    gotoAndPlay(time: number): void;
+    /**
+     * 更新动画到指定时间点，停止播放
+     * @param time
+     */
+    gotoAndStop(time: number): void;
+    /**
      * 更新函数，通过给定的 `time` 设置目标属性变化
-    * @param {number=} time 当前时间戳
+    * @param {number=} elapsedMS 帧间隔
     * @param {Boolean=} preserve 完成后，防止删除动画对象
      * @param {boolean=} forceTime 强制进行更新渲染，不关心时间是否匹配
      * @example tween.update(100)
      * @memberof vfui.Tween
      */
-    update(time?: number, preserve?: boolean, forceTime?: boolean): boolean;
+    update(elapsedMS: number, preserve?: boolean, forceTime?: boolean): boolean;
 }

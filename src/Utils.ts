@@ -2,16 +2,18 @@
  * 工具类
  */
 
+/**
+ * 组件获取资源 - 源路径,外部可以重写本方法
+ */
+export let _getSourcePath: Function;
+
 /** 日志输出 */
 export function log(message?: string | number | object, ...optionalParams: string[] | number[] | object[]) {
     console.log(message, ...optionalParams);
 }
 
-/**
- * 组件获取资源 - 源路径,外部可以重写本方法
- */
-export function getSourcePath(path:TAny){
-    return path;
+export function setSourcePath(params: (path: TAny) => {}) {
+    _getSourcePath = params;
 }
 
 /**
