@@ -2,6 +2,8 @@ import { add, get, getAll, isRunning, FrameThrottle, ToggleLagSmoothing, Plugins
 import Easing from './Easing';
 import Interpolation from './Interpolation';
 import * as utils from './constants';
+import { TweenEvent } from "../../Interaction/InteractionEvent";
 import Tween from './Tween';
-export { Plugins, get, getAll, removeAll, remove, removeDisplay, add, update, isRunning, FrameThrottle, ToggleLagSmoothing, Tween, Easing, Interpolation, utils };
+import Timeline from './Timeline';
+export { Plugins, get, getAll, removeAll, remove, removeDisplay, add, update, isRunning, FrameThrottle, ToggleLagSmoothing, Tween, Easing, Interpolation, TweenEvent, Timeline, utils };
 //# sourceMappingURL=index.js.map

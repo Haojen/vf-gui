@@ -1,7 +1,8 @@
-import { add, Plugins, remove, isRunning, isLagSmoothing } from './core';
+import { add, remove, isRunning, isLagSmoothing } from './core';
 import { deepCopy, uid } from "../../Utils";
 import Easing from './Easing';
-import { decompose, decomposeString, recompose, SET_NESTED, CHAINED_TWEENS, FRAME_MS, TOO_LONG_FRAME_MS } from './constants';
+import { decompose, recompose, FRAME_MS, TOO_LONG_FRAME_MS } from './constants';
+import { TweenEvent } from '../../Interaction/InteractionEvent';
 import Interpolation from "./Interpolation";
 const defaultEasing = Easing.Linear.None;
 /**
@@ -22,16 +23,17 @@ export default class Tween extends PIXI.utils.EventEmitter {
         this._startTime = 0;
         this._delayTime = 0;
         this._repeat = 0;
-        this._r = 0;
+        this._initRepeat = 0;
         this._isPlaying = false;
         this._yoyo = false;
         this._reversed = false;
         this._onStartCallbackFired = false;
         this._isFinite = true;
-        this._chainedTweensCount = 0;
         this._prevTime = 0;
         this._rendered = false;
         this._reverseDelayTime = 0;
+        /** 附加数据 */
+        this.data = {};
         this.id = uid();
         this.object = object;
         this._valuesStart = Array.isArray(object) ? [] : {};
@@ -78,7 +80,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
     /**
      * 是否在播放中
      * @return {boolean}
-     * @example tween.isPlaying() // returns `true` if tween in progress
+     * @example tween.isPlaying()
      * @memberof vfui.Tween
      */
     get isPlaying() {
@@ -86,8 +88,8 @@ export default class Tween extends PIXI.utils.EventEmitter {
     }
     /**
      * 是否开始播放
-     * @return {boolean} State of started of tween
-     * @example tween.isStarted() // returns `true` if tween in started
+     * @return {boolean}
+     * @example tween.isStarted()
      * @memberof vfui.Tween
      */
     get isStarted() {
@@ -122,7 +124,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
     /**
      * 逆向缓动
      * @example tween.reverse()
-     * @param {boolean=} state Set state of current reverse
+     * @param {boolean=} state 是否逆向
      * @memberof vfui.Tween
      */
     reverse(state) {
@@ -132,8 +134,8 @@ export default class Tween extends PIXI.utils.EventEmitter {
     }
     /**
      * 当前动画是否逆转
-     * @return {boolean} State of reversed
-     * @example tween.reversed() // returns `true` if tween in reversed state
+     * @return {boolean}
+     * @example tween.reversed() true逆向中
      * @memberof vfui.Tween
      */
     reversed() {
@@ -150,7 +152,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
         }
         this._isPlaying = false;
         remove(this);
-        return this.emit("pause" /* pause */, this.object);
+        return this.emit(TweenEvent.pause, this.object);
     }
     /**
      * 播放或恢复播放
@@ -164,19 +166,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
         this._isPlaying = true;
         this._startTime = 0;
         add(this);
-        return this.emit("play" /* play */, this.object);
-    }
-    /**
-     * 从初始值，重新模仿
-     * @param {boolean=} noDelay 如果为 `true`, 重新启动缓动，排除 `delay`
-     * @example tween.restart()
-     * @memberof vfui.Tween
-     */
-    restart(noDelay) {
-        this._repeat = this._r;
-        this.reassignValues();
-        add(this);
-        return this.emit("restart" /* restart */, this.object);
+        return this.emit(TweenEvent.play, this.object);
     }
     /**
      * 设置要缓动的目标属性与持续时间
@@ -187,78 +177,19 @@ export default class Tween extends PIXI.utils.EventEmitter {
      */
     to(properties, duration = 1000) {
         this._valuesEnd = properties;
-        for (let key in properties) {
-            this._valuesStart[key] = this.object[key];
-        }
-        if (typeof duration === 'function') {
-            this.duration = this._duration;
-        }
-        else {
-            this._duration = duration;
-        }
+        this._duration = duration;
         return this;
     }
-    /**
-     *
-     * Renders and computes value at first render
-     * @private
-     * @memberof vfui.Tween
-     */
     render() {
         if (this._rendered) {
             return this;
         }
         let { _valuesStart, _valuesEnd, object } = this;
-        SET_NESTED(object);
-        SET_NESTED(_valuesEnd);
         if (!_valuesStart.processed) {
             for (const property in _valuesEnd) {
                 let start = object && object[property] && deepCopy(object[property]);
-                let end = _valuesEnd[property];
-                if (Plugins[property] && Plugins[property].init) {
-                    Plugins[property].init.call(this, start, end, property, object);
-                    if (start === undefined && _valuesStart[property]) {
-                        start = _valuesStart[property];
-                    }
-                    if (Plugins[property].skipProcess) {
-                        continue;
-                    }
-                }
-                if ((typeof start === 'number' && isNaN(start)) ||
-                    start === null ||
-                    end === null ||
-                    start === false ||
-                    end === false ||
-                    start === undefined ||
-                    end === undefined ||
-                    start === end) {
-                    continue;
-                }
-                _valuesStart[property] = start;
-                if (Array.isArray(end)) {
-                    if (!Array.isArray(start)) {
-                        end.unshift(start);
-                        for (let i = 0, len = end.length; i < len; i++) {
-                            if (typeof end[i] === 'string') {
-                                end[i] = decomposeString(end[i]);
-                            }
-                        }
-                    }
-                    else {
-                        if (end.isString && object[property].isString && !start.isString) {
-                            start.isString = true;
-                        }
-                        else {
-                            decompose(property, object, _valuesStart, _valuesEnd);
-                        }
-                    }
-                }
-                else {
-                    decompose(property, object, _valuesStart, _valuesEnd);
-                }
-                if (typeof start === 'number' && typeof end === 'string' && end[1] === '=') {
-                    continue;
-                }
+                _valuesStart[property] = start || 0;
+                decompose(property, object, _valuesStart, _valuesEnd);
             }
             _valuesStart.processed = true;
         }
@@ -267,7 +198,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
     }
     /**
      * 开始执行缓动
-     * @param {number|string} time setting manual time instead of Current browser timestamp or like `+1000` relative to current timestamp
+     * @param {number|string} time 要开始的时间，延迟值
      * @example tween.start()
      * @memberof vfui.Tween
      */
@@ -287,11 +218,11 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     stop() {
-        let { _isPlaying, _isFinite, object, _duration, _r, _yoyo, _reversed } = this;
+        let { _isPlaying, _isFinite, object, _duration, _initRepeat, _yoyo, _reversed } = this;
         if (!_isPlaying) {
             return this;
         }
-        let atStart = _isFinite ? (_r + 1) % 2 === 1 : !_reversed;
+        let atStart = _isFinite ? (_initRepeat + 1) % 2 === 1 : !_reversed;
         this._reversed = false;
         if (_yoyo && atStart) {
             this._prevTime = _duration;
@@ -302,7 +233,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
         this.update(0);
         this._isPlaying = false;
         remove(this);
-        return this.emit("stop" /* stop */, object);
+        return this.emit(TweenEvent.stop, object);
     }
     /**
      * 设置延迟执行时间
@@ -311,23 +242,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     delay(amount) {
-        this._delayTime = typeof amount === 'function' ? amount(this._delayTime) : amount;
-        return this;
-    }
-    /**
-     * 链式执行
-     * @param {any} arguments Arguments list
-     * @example tween.chainedTweens(tween1, tween2)
-     * @memberof vfui.Tween
-     */
-    chainedTweens(...tween) {
-        this._chainedTweensCount = tween.length;
-        if (!this._chainedTweensCount) {
-            return this;
-        }
-        for (let i = 0, len = this._chainedTweensCount; i < len; i++) {
-            this[CHAINED_TWEENS + i] = tween[i];
-        }
+        this._delayTime = amount;
         return this;
     }
     /**
@@ -337,8 +252,8 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     repeat(amount) {
-        this._repeat = !this._duration ? 0 : typeof amount === 'function' ? amount(this._repeat) : amount;
-        this._r = this._repeat;
+        this._repeat = !this._duration ? 0 : amount;
+        this._initRepeat = this._repeat;
         this._isFinite = isFinite(amount);
         return this;
     }
@@ -349,7 +264,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     reverseDelay(amount) {
-        this._reverseDelayTime = typeof amount === 'function' ? amount(this._reverseDelayTime) : amount;
+        this._reverseDelayTime = amount;
         return this;
     }
     /**
@@ -395,24 +310,6 @@ export default class Tween extends PIXI.utils.EventEmitter {
         return this;
     }
     /**
-     * 为 Tween#restart 或 Timeline 重新分配时间
-     * @private
-     * @memberof vfui.Tween
-     */
-    reassignValues(time) {
-        const { _valuesStart, object, _delayTime } = this;
-        this._isPlaying = true;
-        this._startTime = time !== undefined ? time : 0;
-        this._startTime += _delayTime;
-        this._reversed = false;
-        add(this);
-        for (const property in _valuesStart) {
-            const start = _valuesStart[property];
-            object[property] = start;
-        }
-        return this;
-    }
-    /**
      * 更新动画到指定时间点，进行播放
      * @param time
      */
@@ -430,6 +327,14 @@ export default class Tween extends PIXI.utils.EventEmitter {
         this.pause();
     }
     /**
+     * 更新动画到指定时间点，停止播放
+     * @param time
+     */
+    gotoAndEnd() {
+        this._prevTime = this._duration;
+        this.update(0);
+    }
+    /**
      * 更新函数，通过给定的 `time` 设置目标属性变化
     * @param {number=} elapsedMS 帧间隔
     * @param {Boolean=} preserve 完成后，防止删除动画对象
@@ -438,18 +343,15 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     update(elapsedMS, preserve, forceTime) {
-        //console.log(time);
-        let { _onStartCallbackFired, _easingFunction, _interpolationFunction, _easingReverse, _repeat, _delayTime, _reverseDelayTime, _yoyo, _reversed, _startTime, _duration, _valuesStart, _valuesEnd, object, _isFinite, _isPlaying, _chainedTweensCount } = this;
-        let elapsed;
-        let currentEasing;
-        let property;
-        let propCount = 0;
-        elapsedMS = elapsedMS !== undefined ? elapsedMS : 0;
+        let { _onStartCallbackFired, _easingFunction, _interpolationFunction, _easingReverse, _repeat, _delayTime, _reverseDelayTime, _yoyo, _reversed, _startTime, _duration, _valuesStart, _valuesEnd, object, _isFinite, _isPlaying } = this;
         if (!_isPlaying || (_startTime > 0 && !forceTime)) {
             this._startTime -= elapsedMS;
             this._startTime = Math.max(0, this._startTime);
             return true;
         }
+        let elapsed;
+        let currentEasing;
+        let property;
         if (!_duration) {
             elapsed = 1;
             _repeat = 0;
@@ -468,50 +370,31 @@ export default class Tween extends PIXI.utils.EventEmitter {
                 this.render();
                 this._rendered = true;
             }
-            this.emit("start" /* start */, object);
+            this.emit(TweenEvent.start, object);
             this._onStartCallbackFired = true;
         }
         currentEasing = _reversed ? _easingReverse || _easingFunction : _easingFunction;
-        if (!object) {
-            return true;
-        }
         for (property in _valuesEnd) {
             const start = _valuesStart[property];
-            if ((start === undefined || start === null) && !(Plugins[property] && Plugins[property].update)) {
-                continue;
-            }
             const end = _valuesEnd[property];
             const value = currentEasing[property] ? currentEasing[property](elapsed) : typeof currentEasing === 'function' ? currentEasing(elapsed) : defaultEasing(elapsed);
-            const _interpolationFunctionCall = _interpolationFunction[property]
-                ? _interpolationFunction[property] : typeof _interpolationFunction === 'function' ? _interpolationFunction : Interpolation.Linear;
             if (typeof end === 'number') {
                 object[property] = Math.floor(start + (end - start) * value);
             }
-            else if (Array.isArray(end) && !end.isString && !Array.isArray(start)) {
-                object[property] = _interpolationFunctionCall(end, value, object[property]);
+            else if (typeof end === 'boolean') {
+                object[property] = end;
+                elapsed = _reversed ? 0 : 1;
             }
-            else if (end && end.update) {
-                end.update(value);
-            }
-            else if (typeof end === 'function') {
-                object[property] = end(value);
-            }
-            else if (typeof end === 'string' && typeof start === 'number') {
-                object[property] = start + parseFloat(end[0] + end.substr(2)) * value;
-            }
-            else {
+            else { //颜色
                 recompose(property, object, _valuesStart, _valuesEnd, value, elapsed);
             }
-            if (Plugins[property] && Plugins[property].update) {
-                Plugins[property].update.call(this, object[property], start, end, value, elapsed, property);
-            }
-            propCount++;
+            // else if (Array.isArray(end) && !(end as any).isString && !Array.isArray(start)) {
+            //     const _interpolationFunctionCall = _interpolationFunction[property]
+            //     ? _interpolationFunction[property] : typeof _interpolationFunction === 'function' ? _interpolationFunction : Interpolation.Linear;
+            //     object[property] = _interpolationFunctionCall(end, value, object[property]);
+            // } 
         }
-        if (!propCount) {
-            remove(this);
-            return false;
-        }
-        this.emit("update" /* update */, object, elapsed, elapsedMS);
+        this.emit(TweenEvent.update, object, elapsed, elapsedMS);
         if (elapsed === 1 || (_reversed && elapsed === 0)) {
             this._prevTime = 0;
             if (_repeat > 0 && _duration > 0) {
@@ -521,15 +404,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
                 if (_yoyo) {
                     this._reversed = !_reversed;
                 }
-                else {
-                    for (property in _valuesEnd) {
-                        let end = _valuesEnd[property];
-                        if (typeof end === 'string' && typeof _valuesStart[property] === 'number') {
-                            _valuesStart[property] += parseFloat(end[0] + end.substr(2));
-                        }
-                    }
-                }
-                this.emit(_yoyo && !_reversed ? "reverse" /* reverse */ : "repeat" /* repeat */, object);
+                this.emit(_yoyo && !_reversed ? TweenEvent.reverse : TweenEvent.repeat, object);
                 if (_reversed && _reverseDelayTime) {
                     this._startTime = _reverseDelayTime;
                 }
@@ -543,13 +418,8 @@ export default class Tween extends PIXI.utils.EventEmitter {
                     this._isPlaying = false;
                     remove(this);
                 }
-                this.emit("complete" /* complete */, object);
-                this._repeat = this._r;
-                if (_chainedTweensCount) {
-                    for (let i = 0; i < _chainedTweensCount; i++) {
-                        this[CHAINED_TWEENS + i].start(this._prevTime + _duration);
-                    }
-                }
+                this.emit(TweenEvent.complete, object);
+                this._repeat = this._initRepeat;
                 return false;
             }
         }

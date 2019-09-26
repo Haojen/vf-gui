@@ -171,45 +171,45 @@ export declare const enum KeyEvent {
 /**
  * 缓动事件
  */
-export declare const enum TweenEvent {
+export declare const TweenEvent: {
     /**
      *
      */
-    Callback = "Callback",
+    Callback: string;
     /**
      * 每次改变
      */
-    update = "update",
+    update: string;
     /**
      * 完成
      */
-    complete = "complete",
+    complete: string;
     /**
      * 开始时
      */
-    start = "start",
+    start: string;
     /**
      * 每次重复时
      */
-    repeat = "repeat",
+    repeat: string;
     /**
      * 反向时
      */
-    reverse = "reverse",
+    reverse: string;
     /**
      * 暂停时
      */
-    pause = "pause",
+    pause: string;
     /**
      * 播放时
      */
-    play = "play",
+    play: string;
     /**
      * 重新开始时
      */
-    restart = "restart",
+    restart: string;
     /**
      * 停止时
      */
-    stop = "stop"
-}
+    stop: string;
+};

@@ -29,7 +29,7 @@ class Ticker extends PIXI.utils.EventEmitter {
             return;
         }
         tween.update(elapsedMS);
-        this.emit("update", deltaTime, lastTime);
+        this.emit("update", deltaTime, lastTime, elapsedMS);
     }
     /**
      * 增加更新监听器

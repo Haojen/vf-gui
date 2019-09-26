@@ -1,324 +1,229 @@
-import { add, remove, isRunning, isLagSmoothing } from './core'
-import { now } from "../../Utils"
-import PlaybackPosition from './PlaybackPosition'
-import Tween from './Tween'
-import { TweenEvent } from '../../Interaction/InteractionEvent';
-import { FRAME_MS, TOO_LONG_FRAME_MS } from './constants'
+import {shared as tickerShared} from '../../Ticker'
+import Easing from './Easing';
+import { now, uid } from '../../Utils';
+import { objectPoolShared } from '../../ObjectPool';
 
-let _id = 0
+class Node{
 
-/**
- * 将序列的所有元素随机排序。
- * @param a 序列数组
- */
-export const shuffle = (a: number[]) => {
-    let j: number;
-    let x: number;
-    let i: number;
-    for (i = a.length; i; i -= 1) {
-        j = Math.floor(Math.random() * i);
-        x = a[i - 1];
-        a[i - 1] = a[j];
-        a[j] = x;
+    constructor(node?:Node){
+        this.parent = node;
     }
-    return a;
-}
+    public parent:Node|undefined;
+    public start : TAny = 0;
+    public end: TAny = 0;
+    public easing:TAny;
+    public duration = 0;
+    public endFrame = 0;
+    public prevTime = 0;
+    
+    release(){
+        this.parent = undefined;
+        this.easing = undefined;
+        this.start = 0;
+        this.end = 0;
+        this.duration = 0;
+        this.endFrame = 0;
+        this.prevTime = 0;
+    }
 
+    load(){}
+    destroy(){}
+}
 /**
  * 时间轴主类
  *
- * It works same as `Tween` instance, using `.repeat`, `.restart` or `etc` works like a `Tween`, so please see `Tween` class for methods
  * @constructor
  * @class
  * @namespace tween.Timeline
- * @param {Object=} params Default params for new tweens
+ * @param {Object=} params 默认参数
  * @example let tl = new Timeline({delay:200})
  * @extends Tween
  */
-export default class Timeline extends Tween {
+export default class Timeline implements Lifecycle{
 
-    // constructor(params:TAny) {
-    //     super()
-    //     this._id = _id++;
-    //     this._startTime = params && params.startTime !== undefined ? params.startTime : now();
-    //     this._defaultParams = params;
-    //     this.position.addLabel('afterLast', this._duration);
-    //     this.position.addLabel('afterInit', this._startTime);
+    constructor() {
 
-    //     return this;
+
+    }
+    private _object:TAny;
+    private _id: number = -1;
+    private _frames = new Array<Map<string,Node>>();
+    private _frameCount = 0;
+    private _curFrame = 0;
+    private _elapsedMS = 16.666666666666; //1000/60
+    private _prevTime = 0;
+    private _duration = 60;
+    private _isStop = false;
+    private _lastNode = new Map<string,Node>();
+
+    public setDefault(object:TAny, _duration: number,_framesCount:number){
+
+        this._object = object;
+        this._duration = _duration;
+        this._elapsedMS = _duration/_framesCount;
+        this._frameCount = _framesCount;
+
+        while( this._frames &&  this._frames.length>_framesCount){
+            this._frames.pop();
+        }
+        let i = this._frames.length === 0 ? 0 :  this._frames.length;
+        for(i;i<=_framesCount;i++){
+            if(this._frames[i] === undefined)
+                this._frames[i] = new Map<string,Node>();
+        }
+        return this;
+    }
+    public addProperty(property:string,value:number|string|boolean,endFrame:number,curve?:number[]){
+        if(endFrame>this._frameCount){
+            throw "Error Timeline.addProperty overflow frame Count";
+        }
+        let parentNode = this._lastNode.get(property);
+        let node = objectPoolShared.pop(Node);
+        if(parentNode === undefined){
+            node.parent = undefined;
+        }else{
+            node.parent = parentNode;
+        }
+        let startFrame = node.parent === undefined ? 0 : (node.parent.endFrame+1);
+        node.end = value;
+        node.start = node.parent === undefined ? (this._object[property] || 0)  : node.parent.end;
+        if(curve && curve.length==1){
+            node.easing = Easing.Back.In;
+        }else{
+            node.easing = Easing.Linear.None;
+        }
+        node.duration = (endFrame - startFrame)*this._elapsedMS;
+        node.endFrame = endFrame;
+        
+        this._lastNode.set(property,node);
+
+        for (let i = startFrame; i <= endFrame; i++) {
+            this._frames[i].set(property,node);
+        }
+        
+        return this;
+    }
+
+    // public _addObject(obj:TAny,formTo:TAny,startFrame: number, endFrame: number){
+    //     let tw = new Tween(obj).to(formTo,(endFrame - startFrame) * this._elapsedMS);
+    //     this.add(tw,startFrame,endFrame);
+        
     // }
 
-    // private _id:number;
-    // private _duration = 0;
-    // private _startTime:number;
-    // private _tweens:Tween[] = [];
-    // private _defaultParams:TAny;
-    // private _onStartCallbackFired = false;
-    // public position = new PlaybackPosition();
-    // public elapsed = 0;
+    public stop(){
+        this._isStop = true;
+    }
+    public play(){
+        this._isStop = false;
+    }
+    public gotoAndPlay(frame:number){
+        this.goto(frame,false);
+    }
 
-    // public mapTotal(fn:Function) {
-    //     fn.call(this, this._tweens);
-    //     return this;
-    // }
+    public gotoAndStop(frame:number){
+        this.goto(frame,true);
+    }
 
-    // public timingOrder(fn:Function) {
-    //     const timing = fn(this._tweens.map((t) => t.startTime));
-    //     this._tweens.map((tween, i) => {
-    //         tween.startTime = timing[i];
-    //     })
-    //     return this;
-    // }
+    public goto(frame:number,isStop:boolean){
+        // this._keyFrames.forEach(value=>{
+        //     if(value<frame)
+        //         this._frames[value].forEach(value=>{
+        //             value.gotoAndEnd();
+        //         });
+        // });
+        // this._frames[frame].forEach(value=>{
+        //     const time = (frame - value.data.startFrame)*this._elapsedMS;
+        //     if(isStop){
+        //         value.gotoAndStop(time);
+        //     }else{
+        //         value.gotoAndPlay(time);
+        //     }   
+        // });
+        // this._isStop = isStop;
+    }
 
-    // public getTiming(mode:string, nodes:TAny[], params:TAny, offset = 0) {
-    //     if (mode === 'reverse') {
-    //         const { stagger } = params
-    //         const totalStagger = (stagger || 0) * (nodes.length - 1)
-    //         return nodes.map((node, i) => totalStagger - (stagger || 0) * i + offset)
-    //     } else if (mode === 'async') {
-    //         return nodes.map((node) => offset)
-    //     } else if (mode === 'sequence' || mode === 'delayed') {
-    //         let { stagger } = params
-    //         if (!stagger) {
-    //             stagger = (params.duration || 1000) / (nodes.length - 1)
-    //         }
-    //         return nodes.map((node, i) => stagger * i + offset)
-    //     } else if (mode === 'oneByOne') {
-    //         return nodes.map((node) => params.duration)
-    //     } else if (mode === 'shuffle') {
-    //         const { stagger } = params
-    //         return shuffle(nodes.map((node, i) => (stagger || 0) * i + offset))
-    //     } else {
-    //         const { stagger } = params
-    //         return nodes.map((node, i) => (stagger || 0) * i + offset)
-    //     }
-    // }
+    public update(a:number,b?:number,elapsedMS = 0) {
+        if(this._isStop){
+            return;
+        }
+        let {_curFrame,_prevTime,_frames,_frameCount,_elapsedMS} = this;
+        _curFrame =Math.round(_prevTime/_elapsedMS);
+        if(_curFrame >= _frameCount){
+            this._isStop = true;
+        }
+        if( _frames[this._curFrame] == undefined){
+            this._isStop = true;
+            return;
+        }  
+        _prevTime += elapsedMS;
+        _frames[this._curFrame ].forEach((value: Node, key: string, map: Map<string, Node>)=>{
+            if(value.start != value.end){
+                value.prevTime += elapsedMS;
+                this.updateobject(key,value);
+            }
+        },this);
+        this._curFrame = _curFrame;
+        this._prevTime = _prevTime;
+        return true
+    }
 
-    // /**
-    //  * @param {Array<Element>} nodes DOM Elements Collection (converted to Array)
-    //  * @param {object} from - Initial value
-    //  * @param {object} to - Target value
-    //  * @param {object} params - Options of tweens
-    //  * @example timeline.fromTo(nodes, {x:0}, {x:200}, {duration:1000, stagger:200})
-    //  * @memberof Timeline
-    //  * @static
-    //  */
-    // public fromTo(nodes:TAny[], to:TAny, params:TAny) {
-    //     if (nodes && nodes.length) {
-    //         if (this._defaultParams) {
-    //             params = params ? { ...this._defaultParams, ...params } : this._defaultParams;
-    //         }
-    //         const position = params.label;
-    //         const offset =typeof position === 'number' ? position : this.position.parseLabel(typeof position !== 'undefined' ? position : 'afterLast', null);
-    //         const mode = this.getTiming(params.mode, nodes, params, offset);
-    //         for (let i = 0, node, len = nodes.length; i < len; i++) {
-    //             node = nodes[i];
-    //             this.add(
-    //                 Tween.fromTo(
-    //                     node,
-    //                     typeof to === 'function' ? to(i, nodes.length) : to,
-    //                     typeof params === 'function' ? params(i, nodes.length) : params
-    //                 ),
-    //                 mode[i]
-    //             );
-    //         }
-    //     }
-    //     return this.start();
-    // }
+    public updateobject(key:string,node:Node) {
 
-    // /**
-    //  * @param {Array<Element>} nodes DOM Elements Collection (converted to Array)
-    //  * @param {object} from - Initial value
-    //  * @param {object} params - Options of tweens
-    //  * @example tl.from(nodes, {x:200}, {duration:1000, stagger:200})
-    //  * @memberof Timeline
-    //  * @static
-    //  */
-    // public from(nodes:TAny[], from:TAny, params:TAny) {
-    //     return this.fromTo(nodes, from , params);
-    // }
-    
-    // /**
-    //  * @param {Array<Element>} nodes DOM Elements Collection (converted to Array)
-    //  * @param {object} to - Target value
-    //  * @param {object} params - Options of tweens
-    //  * @example tl.to(nodes, {x:200}, {duration:1000, stagger:200})
-    //  * @memberof Timeline
-    //  * @static
-    //  */
-    // public tos(nodes:TAny[], to:TAny, params:TAny) {
-    //     return this.fromTo(nodes, to, params)
-    // }
+        let elapsed: number;
+        if (!node.duration) {
+            elapsed = 1;
+        } else {
 
-    // /**
-    //  * Add label to Timeline
-    //  * @param {string} name Label name
-    //  * @param {any} offset Label value, can be `number` and/or `string`
-    //  * @example tl.add('label1', 200)
-    //  * @memberof Timeline
-    //  */
-    // public addLabel(name:string, offset:number|string) {
-    //     this.position.addLabel(name, offset);
-    //     return this;
-    // }
+            elapsed = node.prevTime / node.duration;
+            elapsed = elapsed > 1 ? 1 : elapsed;     
+        }
 
-    // public map(fn:Function) {
-    //     for (let i = 0, len = this._tweens.length; i < len; i++) {
-    //         const _tween = this._tweens[i]
-    //         fn(_tween, i)
-    //         this._duration = Math.max(this._duration, (_tween.duration as number) + (_tween.startTime as number));
-    //     }
-    //     return this
-    // }
+        const value = node.easing(elapsed);
+        const start = node.start;
+        const end = node.end; 
 
-    // /**
-    //  * Add tween to Timeline
-    //  * @param {Tween} tween Tween instance
-    //  * @param {position} position Can be label name, number or relative number to label
-    //  * @example tl.add(new Tween(node, {x:0}).to({x:200}, 200))
-    //  * @memberof Timeline
-    //  */
-    // public add(tween, position) {
-    //     if (Array.isArray(tween)) {
-    //         tween.map((_tween) => {
-    //             this.add(_tween, position)
-    //         })
-    //         return this
-    //     } else if (typeof tween === 'object' && !(tween instanceof Tween)) {
-    //         tween = new Tween(tween.from).to(tween.to, tween)
-    //     }
+        if (typeof end === 'number') {
+            this._object[key]= Math.floor(start + (end - start) * value);
+        } else if (typeof end === 'boolean') {
+            this._object[key]= end;
+        } 
+        if (elapsed === 1) {
+            return true
+        }
 
-    //     const { _defaultParams, _duration } = this
+        return false;
+    }
 
-    //     if (_defaultParams) {
-    //         for (const method in _defaultParams) {
-    //             if (typeof tween[method] === 'function') {
-    //                 tween[method](_defaultParams[method])
-    //             }
-    //         }
-    //     }
 
-    //     const offset =
-    //         typeof position === 'number'
-    //             ? position
-    //             : this.position.parseLabel(typeof position !== 'undefined' ? position : 'afterLast', null)
-    //     tween._startTime = Math.max(this._startTime, tween._delayTime, offset)
-    //     tween._delayTime = offset
-    //     tween._isPlaying = true
-    //     this._duration = Math.max(_duration, Math.max(tween._startTime + tween._delayTime, tween._duration))
-    //     this._tweens.push(tween)
-    //     this.position.setLabel('afterLast', this._duration)
-    //     return this
-    // }
 
-    // public restart() {
-    //     this._startTime += now()
+    public load(){
+        tickerShared.removeUpdateEvent(this.update,this)
+        tickerShared.addUpdateEvent(this.update,this);
+    }
 
-    //     add(this)
 
-    //     return this.emit(TweenEvent.restart)
-    // }
+    release(){
+        tickerShared.removeUpdateEvent(this.update,this);
+        this._frames.forEach(map=>{
+            map.forEach((value: Node,)=>{
+                objectPoolShared.push(Node,value);
+            });
+            map.clear();
+        });
+        this._object = undefined;
+        this._id = -1;
 
-    // public easing(easing) {
-    //     return this.map((tween) => tween.easing(easing))
-    // }
+        this._frameCount = 0;
+        this._curFrame = 0;
+        this._elapsedMS = 16.666666666666; //1000/60
+        this._prevTime = 0;
+        this._duration = 60;
+        this._isStop = false;
+        this._lastNode.clear();
+    }
 
-    // public interpolation(interpolation) {
-    //     return this.map((tween) => tween.interpolation(interpolation))
-    // }
+    public destroy(destroyWebGL?:boolean){
 
-    // public update(time) {
-    //     const {
-    //         _tweens,
-    //         _duration,
-    //         _reverseDelayTime,
-    //         _startTime,
-    //         _reversed,
-    //         _yoyo,
-    //         _repeat,
-    //         _isFinite,
-    //         _isPlaying,
-    //         _prevTime,
-    //         _onStartCallbackFired
-    //     } = this
+    }
 
-    //     let elapsed
-
-    //     time = time !== undefined ? time : now()
-
-    //     let delta = time - _prevTime
-    //     this._prevTime = time
-    //     if (delta > TOO_LONG_FRAME_MS && isRunning() && isLagSmoothing()) {
-    //         time -= delta - FRAME_MS
-    //     }
-
-    //     if (!_isPlaying || time < _startTime) {
-    //         return true
-    //     }
-
-    //     elapsed = (time - _startTime) / _duration
-    //     elapsed = elapsed > 1 ? 1 : elapsed
-    //     elapsed = _reversed ? 1 - elapsed : elapsed
-
-    //     this.elapsed = elapsed
-
-    //     if (!_onStartCallbackFired) {
-    //         this.emit(TweenEvent.start)
-    //         this._onStartCallbackFired = true
-    //     }
-
-    //     const timing = time - _startTime
-    //     const _timing = _reversed ? _duration - timing : timing
-
-    //     let i = 0
-    //     while (i < _tweens.length) {
-    //         _tweens[i].update(_timing)
-    //         i++
-    //     }
-
-    //     this.emit(TweenEvent.update, elapsed, timing)
-
-    //     if (elapsed === 1 || (_reversed && elapsed === 0)) {
-    //         if (_repeat) {
-    //             if (_isFinite) {
-    //                 this._repeat--
-    //             }
-
-    //             this.emit(_reversed ? TweenEvent.reverse : TweenEvent.repeat)
-
-    //             if (_yoyo) {
-    //                 this._reversed = !_reversed
-    //                 this.timingOrder((timing) => timing.reverse())
-    //             }
-
-    //             if (_reversed && _reverseDelayTime) {
-    //                 this._startTime = time + _reverseDelayTime
-    //             } else {
-    //                 this._startTime = time
-    //             }
-
-    //             i = 0
-    //             while (i < _tweens.length) {
-    //                 _tweens[i].reassignValues(time)
-    //                 i++
-    //             }
-
-    //             return true
-    //         } else {
-    //             this.emit(TweenEvent.complete)
-    //             this._repeat = this._r
-
-    //             remove(this)
-    //             this._isPlaying = false
-
-    //             return false
-    //         }
-    //     }
-
-    //     return true
-    // }
-
-    // public progress(value) {
-    //     return value !== undefined ? this.update(value * this._duration) : this.elapsed
-    // }
 }

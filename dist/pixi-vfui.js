@@ -92,8 +92,11 @@ var pixi-vfui =
   !*** ./src/Enum/AlignEnum.ts ***!
   \*******************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
@@ -102,16 +105,24 @@ var pixi-vfui =
 /*!**************************!*\
   !*** ./src/InputBase.ts ***!
   \**************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InputBase; });
-/* harmony import */ var _UIBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UIBase */ "./src/UIBase.ts");
-/* harmony import */ var _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Interaction/InputController */ "./src/Interaction/InputController.ts");
 
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const UIBase_1 = __importDefault(__webpack_require__(/*! ./UIBase */ "./src/UIBase.ts"));
+const InputController = __importStar(__webpack_require__(/*! ./Interaction/InputController */ "./src/Interaction/InputController.ts"));
 /**
  * 输入对象的基础类
  *
@@ -124,7 +135,7 @@ __webpack_require__.r(__webpack_exports__);
  * @param height {number} 高度
  * @param tabIndex {(PIXI.UI.SliceSprite|PIXI.UI.Sprite)} will be used as background for input
  */
-class InputBase extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class InputBase extends UIBase_1.default {
     constructor(width, height, tabIndex, tabGroup) {
         super(width, height);
         this._focused = false;
@@ -133,7 +144,7 @@ class InputBase extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this._useNext = true;
         this.__down = false;
         this.container.interactive = true;
-        _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__["registrer"](this, tabIndex, tabGroup);
+        InputController.registrer(this, tabIndex, tabGroup);
         this.container.on("pointerdown", this.onPointer, this);
         this.container.on("pointerup", this.onPointer, this);
         this.container.on("pointerupoutside", this.onPointer, this);
@@ -156,19 +167,19 @@ class InputBase extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         const e = event;
         if (e.which === 9) {
             if (this._useTab) {
-                _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__["fireTab"]();
+                InputController.fireTab();
                 e.preventDefault();
             }
         }
         else if (e.which === 38) {
             if (this._usePrev) {
-                _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__["firePrev"]();
+                InputController.firePrev();
                 e.preventDefault();
             }
         }
         else if (e.which === 40) {
             if (this._useNext) {
-                _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__["fireNext"]();
+                InputController.fireNext();
                 e.preventDefault();
             }
         }
@@ -194,14 +205,14 @@ class InputBase extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         if (!this._focused) {
             this._focused = true;
             this._bindEvents();
-            _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__["set"](this);
+            InputController.set(this);
             this.emit("focusChanged", true);
             this.emit("focus");
         }
     }
     blur() {
         if (this._focused) {
-            _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__["clear"]();
+            InputController.clear();
             this._focused = false;
             this._clearEvents();
             this.emit("focusChanged", false);
@@ -209,6 +220,7 @@ class InputBase extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         }
     }
 }
+exports.default = InputBase;
 
 
 /***/ }),
@@ -217,18 +229,18 @@ class InputBase extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
 /*!******************************!*\
   !*** ./src/InputSkinBase.ts ***!
   \******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InputSkinBase; });
-/* harmony import */ var _InputBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InputBase */ "./src/InputBase.ts");
-/* harmony import */ var _Interaction_ClickEvent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Interaction/ClickEvent */ "./src/Interaction/ClickEvent.ts");
-/* harmony import */ var _c_SliceSprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./c/SliceSprite */ "./src/c/SliceSprite.ts");
 
-
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const InputBase_1 = __importDefault(__webpack_require__(/*! ./InputBase */ "./src/InputBase.ts"));
+const ClickEvent_1 = __importDefault(__webpack_require__(/*! ./Interaction/ClickEvent */ "./src/Interaction/ClickEvent.ts"));
+const SliceSprite_1 = __importDefault(__webpack_require__(/*! ./c/SliceSprite */ "./src/c/SliceSprite.ts"));
 /**
  * UI 按钮显 示对象
  *
@@ -240,7 +252,7 @@ __webpack_require__.r(__webpack_exports__);
  * @param [options.width=100h] {Number|String} width
  * @param [options.height=20] {Number|String} height
  */
-class InputSkinBase extends _InputBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class InputSkinBase extends InputBase_1.default {
     /**
      * 按钮构造函数
      *
@@ -249,8 +261,8 @@ class InputSkinBase extends _InputBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
     constructor(width, height, tabIndex, tabGroup) {
         super(width, height, tabIndex, tabGroup);
         this._isHover = false;
-        this._background = new _c_SliceSprite__WEBPACK_IMPORTED_MODULE_2__["default"]();
-        this._clickEvent = new _Interaction_ClickEvent__WEBPACK_IMPORTED_MODULE_1__["default"](this, true);
+        this._background = new SliceSprite_1.default();
+        this._clickEvent = new ClickEvent_1.default(this, true);
         /**
          * 组件的当前视图状态 。 后续扩展
          */
@@ -345,6 +357,7 @@ class InputSkinBase extends _InputBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this.updateHitArea();
     }
 }
+exports.default = InputSkinBase;
 
 
 /***/ }),
@@ -353,12 +366,12 @@ class InputSkinBase extends _InputBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
 /*!***************************************!*\
   !*** ./src/Interaction/ClickEvent.ts ***!
   \***************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ClickEvent; });
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
  *
@@ -558,6 +571,7 @@ class ClickEvent {
         this.obj.container.interactive = false;
     }
 }
+exports.default = ClickEvent;
 
 
 /***/ }),
@@ -566,20 +580,17 @@ class ClickEvent {
 /*!***********************************************!*\
   !*** ./src/Interaction/DragDropController.ts ***!
   \***********************************************/
-/*! exports provided: _items, add, getItem, getEventItem */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_items", function() { return _items; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "add", function() { return add; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getItem", function() { return getItem; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getEventItem", function() { return getEventItem; });
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 记录当前正在拖动的UI组件列表
  * @private
  */
-const _items = [];
+exports._items = [];
 /**
  * 添加拖动组件到控制器
  * @param item 要添加的UI组件
@@ -589,12 +600,13 @@ const _items = [];
  */
 function add(item, e) {
     item.dragDropEventId = e.data.identifier;
-    if (_items.indexOf(item) === -1) {
-        _items.push(item);
+    if (exports._items.indexOf(item) === -1) {
+        exports._items.push(item);
         return true;
     }
     return false;
 }
+exports.add = add;
 /**
  * 获取正在拖动组件
  * @param item 要获取的UI组件
@@ -602,20 +614,21 @@ function add(item, e) {
  */
 function getItem(item) {
     let index;
-    for (let i = 0; i < _items.length; i++) {
-        if (_items[i] === item) {
+    for (let i = 0; i < exports._items.length; i++) {
+        if (exports._items[i] === item) {
             index = i;
             break;
         }
     }
     if (index !== undefined) {
-        _items.splice(index, 1);
+        exports._items.splice(index, 1);
         return item;
     }
     else {
         return false;
     }
 }
+exports.getItem = getItem;
 /**
  * 根据事件对象与分组名获取拖动项
  * @param e 事件对象
@@ -624,24 +637,25 @@ function getItem(item) {
 function getEventItem(e, group) {
     let item = null, index;
     const id = e.data.identifier;
-    for (let i = 0; i < _items.length; i++) {
-        if (_items[i].dragDropEventId === id) {
-            if (group !== _items[i].dragGroup) {
+    for (let i = 0; i < exports._items.length; i++) {
+        if (exports._items[i].dragDropEventId === id) {
+            if (group !== exports._items[i].dragGroup) {
                 return false;
             }
-            item = _items[i];
+            item = exports._items[i];
             index = i;
             break;
         }
     }
     if (index !== undefined) {
-        _items.splice(index, 1);
+        exports._items.splice(index, 1);
         return item;
     }
     else {
         return false;
     }
 }
+exports.getEventItem = getEventItem;
 
 
 /***/ }),
@@ -650,12 +664,12 @@ function getEventItem(e, group) {
 /*!**************************************!*\
   !*** ./src/Interaction/DragEvent.ts ***!
   \**************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DragEvent; });
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 多拽相关的事件处理类
  *
@@ -779,6 +793,7 @@ class DragEvent {
         this.obj.container.interactive = false;
     }
 }
+exports.default = DragEvent;
 
 
 /***/ }),
@@ -787,34 +802,34 @@ class DragEvent {
 /*!**********************************!*\
   !*** ./src/Interaction/Index.ts ***!
   \**********************************/
-/*! exports provided: ClickEvent, DragDropController, DragEvent, InputController, MouseScrollEvent, InteractionEvent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ClickEvent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ClickEvent */ "./src/Interaction/ClickEvent.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ClickEvent", function() { return _ClickEvent__WEBPACK_IMPORTED_MODULE_0__["default"]; });
 
-/* harmony import */ var _DragDropController__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DragDropController */ "./src/Interaction/DragDropController.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "DragDropController", function() { return _DragDropController__WEBPACK_IMPORTED_MODULE_1__; });
-/* harmony import */ var _DragEvent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DragEvent */ "./src/Interaction/DragEvent.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DragEvent", function() { return _DragEvent__WEBPACK_IMPORTED_MODULE_2__["default"]; });
-
-/* harmony import */ var _InputController__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./InputController */ "./src/Interaction/InputController.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "InputController", function() { return _InputController__WEBPACK_IMPORTED_MODULE_3__; });
-/* harmony import */ var _MouseScrollEvent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MouseScrollEvent */ "./src/Interaction/MouseScrollEvent.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MouseScrollEvent", function() { return _MouseScrollEvent__WEBPACK_IMPORTED_MODULE_4__["default"]; });
-
-/* harmony import */ var _InteractionEvent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./InteractionEvent */ "./src/Interaction/InteractionEvent.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "InteractionEvent", function() { return _InteractionEvent__WEBPACK_IMPORTED_MODULE_5__["default"]; });
-
-
-
-
-
-
-
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const ClickEvent_1 = __importDefault(__webpack_require__(/*! ./ClickEvent */ "./src/Interaction/ClickEvent.ts"));
+exports.ClickEvent = ClickEvent_1.default;
+const DragDropController = __importStar(__webpack_require__(/*! ./DragDropController */ "./src/Interaction/DragDropController.ts"));
+exports.DragDropController = DragDropController;
+const DragEvent_1 = __importDefault(__webpack_require__(/*! ./DragEvent */ "./src/Interaction/DragEvent.ts"));
+exports.DragEvent = DragEvent_1.default;
+const InputController = __importStar(__webpack_require__(/*! ./InputController */ "./src/Interaction/InputController.ts"));
+exports.InputController = InputController;
+const MouseScrollEvent_1 = __importDefault(__webpack_require__(/*! ./MouseScrollEvent */ "./src/Interaction/MouseScrollEvent.ts"));
+exports.MouseScrollEvent = MouseScrollEvent_1.default;
+const InteractionEvent_1 = __importDefault(__webpack_require__(/*! ./InteractionEvent */ "./src/Interaction/InteractionEvent.ts"));
+exports.InteractionEvent = InteractionEvent_1.default;
 
 
 /***/ }),
@@ -823,25 +838,12 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************!*\
   !*** ./src/Interaction/InputController.ts ***!
   \********************************************/
-/*! exports provided: tabGroups, _checkGroupObject, registrer, blur, set, clear, fireTab, fireNext, firePrev, registrerCheckGroup, unRegistrerCheckGroup, updateCheckGroupSelected, getCheckGroupSelectedValue, setCheckGroupSelectedValue */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tabGroups", function() { return tabGroups; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_checkGroupObject", function() { return _checkGroupObject; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "registrer", function() { return registrer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "blur", function() { return blur; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "set", function() { return set; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clear", function() { return clear; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fireTab", function() { return fireTab; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fireNext", function() { return fireNext; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "firePrev", function() { return firePrev; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "registrerCheckGroup", function() { return registrerCheckGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unRegistrerCheckGroup", function() { return unRegistrerCheckGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateCheckGroupSelected", function() { return updateCheckGroupSelected; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCheckGroupSelectedValue", function() { return getCheckGroupSelectedValue; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setCheckGroupSelectedValue", function() { return setCheckGroupSelectedValue; });
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 记录当前正在拖动的UI组件列表
  * @private
@@ -851,12 +853,12 @@ let _currentItem;
  *
  * @private
  */
-const tabGroups = {};
+exports.tabGroups = {};
 /**
  *
  * @private
  */
-const _checkGroupObject = {
+exports._checkGroupObject = {
     groups: {},
     values: {}
 };
@@ -869,9 +871,9 @@ const _checkGroupObject = {
  */
 function registrer(item, tabIndex, tabGroup) {
     const groupName = tabGroup || "default";
-    let items = tabGroups[groupName];
+    let items = exports.tabGroups[groupName];
     if (!items)
-        items = tabGroups[groupName] = [];
+        items = exports.tabGroups[groupName] = [];
     const i = items.indexOf(item);
     if (i === -1) {
         item.attach._tabIndex = tabIndex !== undefined ? tabIndex : -1;
@@ -886,6 +888,7 @@ function registrer(item, tabIndex, tabGroup) {
         });
     }
 }
+exports.registrer = registrer;
 /** 失去焦点时 */
 function blur() {
     const obj = _currentItem;
@@ -895,15 +898,18 @@ function blur() {
         }
     }
 }
+exports.blur = blur;
 /** 设置当前输入组件 */
 function set(item) {
     blur();
     _currentItem = item;
 }
+exports.set = set;
 /** 清楚当前设置的组件 */
 function clear() {
     _currentItem = undefined;
 }
+exports.clear = clear;
 /** 一般再按下键盘tab健执行 焦点获取与设置 */
 function fireTab() {
     if (_currentItem) {
@@ -916,6 +922,7 @@ function fireTab() {
             obj.focus();
     }
 }
+exports.fireTab = fireTab;
 /** 一般再按下键盘向下箭头执行 焦点获取与设置 */
 function fireNext() {
     if (_currentItem) {
@@ -928,6 +935,7 @@ function fireNext() {
             obj.focus();
     }
 }
+exports.fireNext = fireNext;
 /** 一般再按下键盘向上箭头执行 焦点获取与设置 */
 function firePrev() {
     if (_currentItem) {
@@ -940,6 +948,7 @@ function firePrev() {
             obj.focus();
     }
 }
+exports.firePrev = firePrev;
 /**
  * 注册分组，一般用于checkBox组件的分组操作
  *
@@ -950,58 +959,62 @@ function firePrev() {
 function registrerCheckGroup(cb) {
     const name = cb.checkGroup;
     if (name) {
-        let group = _checkGroupObject.groups[name];
+        let group = exports._checkGroupObject.groups[name];
         if (!group)
-            group = _checkGroupObject.groups[name] = {};
+            group = exports._checkGroupObject.groups[name] = {};
         group[cb.uuid] = cb;
         if (cb.checked)
-            _checkGroupObject.values[name] = cb.uuid;
+            exports._checkGroupObject.values[name] = cb.uuid;
     }
 }
+exports.registrerCheckGroup = registrerCheckGroup;
 /**
  * 注销指定分组或指定分组的子项
  * @param cb CheckBox
  */
 function unRegistrerCheckGroup(cb) {
-    if (cb.checkGroup && _checkGroupObject.groups[cb.checkGroup]) {
-        delete _checkGroupObject.groups[cb.checkGroup][cb.uuid];
+    if (cb.checkGroup && exports._checkGroupObject.groups[cb.checkGroup]) {
+        delete exports._checkGroupObject.groups[cb.checkGroup][cb.uuid];
         let isKey = false;
-        for (const key in _checkGroupObject.groups[cb.checkGroup]) {
+        for (const key in exports._checkGroupObject.groups[cb.checkGroup]) {
             if (key)
                 isKey = true;
             break;
         }
         if (!isKey) {
-            delete _checkGroupObject.groups[name];
+            delete exports._checkGroupObject.groups[name];
         }
         if (cb.checked)
-            _checkGroupObject.values[name] = undefined;
+            exports._checkGroupObject.values[name] = undefined;
     }
 }
+exports.unRegistrerCheckGroup = unRegistrerCheckGroup;
 /** 更新分组中选中的checkbox组件  */
 function updateCheckGroupSelected(cb) {
     if (cb.checkGroup) {
-        const group = _checkGroupObject.groups[cb.checkGroup];
+        const group = exports._checkGroupObject.groups[cb.checkGroup];
         for (const val in group) {
             const b = group[val];
             if (b !== cb)
                 b.checked = false;
         }
-        _checkGroupObject.values[cb.checkGroup] = cb.uuid;
+        exports._checkGroupObject.values[cb.checkGroup] = cb.uuid;
     }
 }
+exports.updateCheckGroupSelected = updateCheckGroupSelected;
 /** 获取分组中选中的checkbox值 */
 function getCheckGroupSelectedValue(name) {
-    const uuid = _checkGroupObject.values[name];
+    const uuid = exports._checkGroupObject.values[name];
     if (uuid) {
-        const cb = _checkGroupObject.groups[name][uuid];
+        const cb = exports._checkGroupObject.groups[name][uuid];
         return cb.value;
     }
     return undefined;
 }
+exports.getCheckGroupSelectedValue = getCheckGroupSelectedValue;
 /** 设置选中 */
 function setCheckGroupSelectedValue(name, uuid) {
-    const group = _checkGroupObject.groups[name];
+    const group = exports._checkGroupObject.groups[name];
     if (group) {
         const cb = group[uuid];
         if (cb) {
@@ -1009,6 +1022,7 @@ function setCheckGroupSelectedValue(name, uuid) {
         }
     }
 }
+exports.setCheckGroupSelectedValue = setCheckGroupSelectedValue;
 
 
 /***/ }),
@@ -1017,12 +1031,12 @@ function setCheckGroupSelectedValue(name, uuid) {
 /*!*********************************************!*\
   !*** ./src/Interaction/InteractionEvent.ts ***!
   \*********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InteractionEvent; });
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 事件的基础类
  *
@@ -1035,6 +1049,52 @@ class InteractionEvent extends PIXI.interaction.InteractionEvent {
         super();
     }
 }
+exports.default = InteractionEvent;
+/**
+ * 缓动事件
+ */
+exports.TweenEvent = {
+    /**
+     *
+     */
+    Callback: 'Callback',
+    /**
+     * 每次改变
+     */
+    update: 'update',
+    /**
+     * 完成
+     */
+    complete: 'complete',
+    /**
+     * 开始时
+     */
+    start: 'start',
+    /**
+     * 每次重复时
+     */
+    repeat: 'repeat',
+    /**
+     * 反向时
+     */
+    reverse: 'reverse',
+    /**
+     * 暂停时
+     */
+    pause: 'pause',
+    /**
+     * 播放时
+     */
+    play: 'play',
+    /**
+     * 重新开始时
+     */
+    restart: 'restart',
+    /**
+     * 停止时
+     */
+    stop: 'stop'
+};
 
 
 /***/ }),
@@ -1043,14 +1103,13 @@ class InteractionEvent extends PIXI.interaction.InteractionEvent {
 /*!*********************************************!*\
   !*** ./src/Interaction/MouseScrollEvent.ts ***!
   \*********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MouseScrollEvent; });
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Utils */ "./src/Utils.ts");
 
+Object.defineProperty(exports, "__esModule", { value: true });
+const Utils_1 = __webpack_require__(/*! ../Utils */ "./src/Utils.ts");
 /**
  * 鼠标滑轮事件
  *
@@ -1099,7 +1158,7 @@ class MouseScrollEvent {
     //e?: interaction.InteractionEvent
     _onHover() {
         if (this.mouseScrllBind === undefined) {
-            this.id = Object(_Utils__WEBPACK_IMPORTED_MODULE_0__["uid"])();
+            this.id = Utils_1.uid();
             this.mouseScrllBind = this._onMouseScroll.bind(this);
             document.addEventListener("mousewheel", this.mouseScrllBind, { passive: false });
             document.addEventListener("DOMMouseScroll", this.mouseScrllBind, { passive: false });
@@ -1126,6 +1185,63 @@ class MouseScrollEvent {
         this.stopEvent();
     }
 }
+exports.default = MouseScrollEvent;
+
+
+/***/ }),
+
+/***/ "./src/ObjectPool.ts":
+/*!***************************!*\
+  !*** ./src/ObjectPool.ts ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/** 对象池*/
+class ObjectPool {
+    constructor() {
+        /**
+         * 作为对象池的词典dict
+         */
+        this.objPoolDict = new Map();
+    }
+    /**
+     * 向对象池中放入对象，以便重复利用
+     */
+    push(keyClass, oldObj) {
+        if (oldObj === undefined) {
+            return;
+        }
+        let objs = this.objPoolDict.get(keyClass);
+        if (objs === undefined) {
+            objs = [];
+            this.objPoolDict.set(keyClass, objs);
+        }
+        if (objs.indexOf(oldObj) === -1) {
+            oldObj.release();
+            objs.push(oldObj);
+        }
+    }
+    /**
+     * 从对象池中取出需要的对象
+     * @return 取出的相应对象
+     *
+     */
+    pop(keyClass) {
+        const objs = this.objPoolDict.get(keyClass);
+        if (objs !== undefined && objs.length > 0) {
+            return objs.pop();
+        }
+        return new keyClass();
+    }
+}
+/**
+ * 对象池实例
+ */
+exports.objectPoolShared = new ObjectPool();
 
 
 /***/ }),
@@ -1134,14 +1250,16 @@ class MouseScrollEvent {
 /*!**********************!*\
   !*** ./src/Stage.ts ***!
   \**********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Stage; });
-/* harmony import */ var _UIBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UIBase */ "./src/UIBase.ts");
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const UIBase_1 = __importDefault(__webpack_require__(/*! ./UIBase */ "./src/UIBase.ts"));
 /**
  * UI的舞台对象，展示所有UI组件
  *
@@ -1220,7 +1338,7 @@ class Stage extends PIXI.Container {
             }
         }
         else {
-            if (UIObject[0] instanceof _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"]) {
+            if (UIObject[0] instanceof UIBase_1.default) {
                 const item = UIObject[0];
                 if (item.parent) {
                     item.parent.removeChild(item);
@@ -1237,7 +1355,7 @@ class Stage extends PIXI.Container {
         return UIObject[0];
     }
     addChildAt(item, index) {
-        if (item instanceof _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"]) {
+        if (item instanceof UIBase_1.default) {
             if (item.parent) {
                 item.parent.removeChild(item);
             }
@@ -1259,7 +1377,7 @@ class Stage extends PIXI.Container {
             }
         }
         else {
-            if (!(UIObject[0] instanceof _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"])) {
+            if (!(UIObject[0] instanceof UIBase_1.default)) {
                 throw "stage removeChild arg not vfui";
             }
             const item = UIObject[0];
@@ -1308,6 +1426,7 @@ class Stage extends PIXI.Container {
     updatesettings() {
     }
 }
+exports.default = Stage;
 
 
 /***/ }),
@@ -1316,14 +1435,20 @@ class Stage extends PIXI.Container {
 /*!***********************!*\
   !*** ./src/Ticker.ts ***!
   \***********************/
-/*! exports provided: shared */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shared", function() { return shared; });
-/* harmony import */ var _c_Tween_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./c/Tween/index */ "./src/c/Tween/index.ts");
 
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const tween = __importStar(__webpack_require__(/*! ./c/Tween/index */ "./src/c/Tween/index.ts"));
 /**
  * 心跳，需要UI库初始化后，进行实例调用注册
  */
@@ -1353,8 +1478,8 @@ class Ticker extends PIXI.utils.EventEmitter {
         if (this._disabled) {
             return;
         }
-        _c_Tween_index__WEBPACK_IMPORTED_MODULE_0__["update"](elapsedMS);
-        this.emit("update", deltaTime, lastTime);
+        tween.update(elapsedMS);
+        this.emit("update", deltaTime, lastTime, elapsedMS);
     }
     /**
      * 增加更新监听器
@@ -1376,7 +1501,7 @@ class Ticker extends PIXI.utils.EventEmitter {
 /**
  * Ticker 的实例
  */
-const shared = new Ticker(true);
+exports.shared = new Ticker(true);
 
 
 /***/ }),
@@ -1385,94 +1510,64 @@ const shared = new Ticker(true);
 /*!*******************!*\
   !*** ./src/UI.ts ***!
   \*******************/
-/*! exports provided: Utils, Stage, Container, ScrollingContainer, SortableList, Sprite, TilingSprite, SliceSprite, Slider, ScrollBar, Text, TextStyle, TextInput, Button, CheckBox, Rect, Interaction, UIBase, TickerShared, AlignEnum, tween */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Utils */ "./src/Utils.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "Utils", function() { return _Utils__WEBPACK_IMPORTED_MODULE_0__; });
-/* harmony import */ var _Stage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Stage */ "./src/Stage.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Stage", function() { return _Stage__WEBPACK_IMPORTED_MODULE_1__["default"]; });
 
-/* harmony import */ var _c_Container__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./c/Container */ "./src/c/Container.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Container", function() { return _c_Container__WEBPACK_IMPORTED_MODULE_2__["default"]; });
-
-/* harmony import */ var _c_ScrollingContainer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./c/ScrollingContainer */ "./src/c/ScrollingContainer.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ScrollingContainer", function() { return _c_ScrollingContainer__WEBPACK_IMPORTED_MODULE_3__["default"]; });
-
-/* harmony import */ var _c_SortableList__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./c/SortableList */ "./src/c/SortableList.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SortableList", function() { return _c_SortableList__WEBPACK_IMPORTED_MODULE_4__["default"]; });
-
-/* harmony import */ var _c_Sprite__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./c/Sprite */ "./src/c/Sprite.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Sprite", function() { return _c_Sprite__WEBPACK_IMPORTED_MODULE_5__["default"]; });
-
-/* harmony import */ var _c_TilingSprite__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./c/TilingSprite */ "./src/c/TilingSprite.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TilingSprite", function() { return _c_TilingSprite__WEBPACK_IMPORTED_MODULE_6__["default"]; });
-
-/* harmony import */ var _c_SliceSprite__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./c/SliceSprite */ "./src/c/SliceSprite.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SliceSprite", function() { return _c_SliceSprite__WEBPACK_IMPORTED_MODULE_7__["default"]; });
-
-/* harmony import */ var _c_Slider__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./c/Slider */ "./src/c/Slider.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Slider", function() { return _c_Slider__WEBPACK_IMPORTED_MODULE_8__["default"]; });
-
-/* harmony import */ var _c_ScrollBar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./c/ScrollBar */ "./src/c/ScrollBar.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ScrollBar", function() { return _c_ScrollBar__WEBPACK_IMPORTED_MODULE_9__["default"]; });
-
-/* harmony import */ var _c_Text__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./c/Text */ "./src/c/Text.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Text", function() { return _c_Text__WEBPACK_IMPORTED_MODULE_10__["default"]; });
-
-/* harmony import */ var _c_Text_TextStyle__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./c/Text/TextStyle */ "./src/c/Text/TextStyle.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TextStyle", function() { return _c_Text_TextStyle__WEBPACK_IMPORTED_MODULE_11__["default"]; });
-
-/* harmony import */ var _c_TextInput__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./c/TextInput */ "./src/c/TextInput.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TextInput", function() { return _c_TextInput__WEBPACK_IMPORTED_MODULE_12__["default"]; });
-
-/* harmony import */ var _c_Button__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./c/Button */ "./src/c/Button.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Button", function() { return _c_Button__WEBPACK_IMPORTED_MODULE_13__["default"]; });
-
-/* harmony import */ var _c_CheckBox__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./c/CheckBox */ "./src/c/CheckBox.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CheckBox", function() { return _c_CheckBox__WEBPACK_IMPORTED_MODULE_14__["default"]; });
-
-/* harmony import */ var _c_Rect__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./c/Rect */ "./src/c/Rect.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Rect", function() { return _c_Rect__WEBPACK_IMPORTED_MODULE_15__["default"]; });
-
-/* harmony import */ var _Interaction_Index__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Interaction/Index */ "./src/Interaction/Index.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "Interaction", function() { return _Interaction_Index__WEBPACK_IMPORTED_MODULE_16__; });
-/* harmony import */ var _UIBase__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./UIBase */ "./src/UIBase.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "UIBase", function() { return _UIBase__WEBPACK_IMPORTED_MODULE_17__["default"]; });
-
-/* harmony import */ var _Ticker__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Ticker */ "./src/Ticker.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TickerShared", function() { return _Ticker__WEBPACK_IMPORTED_MODULE_18__["shared"]; });
-
-/* harmony import */ var _Enum_AlignEnum__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Enum/AlignEnum */ "./src/Enum/AlignEnum.ts");
-/* harmony import */ var _Enum_AlignEnum__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(_Enum_AlignEnum__WEBPACK_IMPORTED_MODULE_19__);
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "AlignEnum", function() { return _Enum_AlignEnum__WEBPACK_IMPORTED_MODULE_19__; });
-/* harmony import */ var _c_Tween_index__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./c/Tween/index */ "./src/c/Tween/index.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "tween", function() { return _c_Tween_index__WEBPACK_IMPORTED_MODULE_20__; });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/** 请不要在编写UI组件内部使用本类 */
-
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Utils = __importStar(__webpack_require__(/*! ./Utils */ "./src/Utils.ts"));
+exports.Utils = Utils;
+const Stage_1 = __importDefault(__webpack_require__(/*! ./Stage */ "./src/Stage.ts"));
+exports.Stage = Stage_1.default;
+const Container_1 = __importDefault(__webpack_require__(/*! ./c/Container */ "./src/c/Container.ts"));
+exports.Container = Container_1.default;
+const ScrollingContainer_1 = __importDefault(__webpack_require__(/*! ./c/ScrollingContainer */ "./src/c/ScrollingContainer.ts"));
+exports.ScrollingContainer = ScrollingContainer_1.default;
+const SortableList_1 = __importDefault(__webpack_require__(/*! ./c/SortableList */ "./src/c/SortableList.ts"));
+exports.SortableList = SortableList_1.default;
+const Sprite_1 = __importDefault(__webpack_require__(/*! ./c/Sprite */ "./src/c/Sprite.ts"));
+exports.Sprite = Sprite_1.default;
+const TilingSprite_1 = __importDefault(__webpack_require__(/*! ./c/TilingSprite */ "./src/c/TilingSprite.ts"));
+exports.TilingSprite = TilingSprite_1.default;
+const SliceSprite_1 = __importDefault(__webpack_require__(/*! ./c/SliceSprite */ "./src/c/SliceSprite.ts"));
+exports.SliceSprite = SliceSprite_1.default;
+const Slider_1 = __importDefault(__webpack_require__(/*! ./c/Slider */ "./src/c/Slider.ts"));
+exports.Slider = Slider_1.default;
+const ScrollBar_1 = __importDefault(__webpack_require__(/*! ./c/ScrollBar */ "./src/c/ScrollBar.ts"));
+exports.ScrollBar = ScrollBar_1.default;
+const Text_1 = __importDefault(__webpack_require__(/*! ./c/Text */ "./src/c/Text.ts"));
+exports.Text = Text_1.default;
+const TextStyle_1 = __importDefault(__webpack_require__(/*! ./c/Text/TextStyle */ "./src/c/Text/TextStyle.ts"));
+exports.TextStyle = TextStyle_1.default;
+const TextInput_1 = __importDefault(__webpack_require__(/*! ./c/TextInput */ "./src/c/TextInput.ts"));
+exports.TextInput = TextInput_1.default;
+const Button_1 = __importDefault(__webpack_require__(/*! ./c/Button */ "./src/c/Button.ts"));
+exports.Button = Button_1.default;
+const CheckBox_1 = __importDefault(__webpack_require__(/*! ./c/CheckBox */ "./src/c/CheckBox.ts"));
+exports.CheckBox = CheckBox_1.default;
+const Rect_1 = __importDefault(__webpack_require__(/*! ./c/Rect */ "./src/c/Rect.ts"));
+exports.Rect = Rect_1.default;
+const Interaction = __importStar(__webpack_require__(/*! ./Interaction/Index */ "./src/Interaction/Index.ts"));
+exports.Interaction = Interaction;
+const UIBase_1 = __importDefault(__webpack_require__(/*! ./UIBase */ "./src/UIBase.ts"));
+exports.UIBase = UIBase_1.default;
+const Ticker_1 = __webpack_require__(/*! ./Ticker */ "./src/Ticker.ts");
+exports.TickerShared = Ticker_1.shared;
+const AlignEnum = __importStar(__webpack_require__(/*! ./Enum/AlignEnum */ "./src/Enum/AlignEnum.ts"));
+exports.AlignEnum = AlignEnum;
+const tween = __importStar(__webpack_require__(/*! ./c/Tween/index */ "./src/c/Tween/index.ts"));
+exports.tween = tween;
 
 
 /***/ }),
@@ -1481,24 +1576,28 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************!*\
   !*** ./src/UIBase.ts ***!
   \***********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UIBase; });
-/* harmony import */ var _UISettings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UISettings */ "./src/UISettings.ts");
-/* harmony import */ var _Stage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Stage */ "./src/Stage.ts");
-/* harmony import */ var _Interaction_DragEvent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Interaction/DragEvent */ "./src/Interaction/DragEvent.ts");
-/* harmony import */ var _Interaction_DragDropController__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Interaction/DragDropController */ "./src/Interaction/DragDropController.ts");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Utils */ "./src/Utils.ts");
-/* harmony import */ var _c_ContainerBase__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./c/ContainerBase */ "./src/c/ContainerBase.ts");
 
-
-
-
-
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const UISettings_1 = __importDefault(__webpack_require__(/*! ./UISettings */ "./src/UISettings.ts"));
+const Stage_1 = __importDefault(__webpack_require__(/*! ./Stage */ "./src/Stage.ts"));
+const DragEvent_1 = __importDefault(__webpack_require__(/*! ./Interaction/DragEvent */ "./src/Interaction/DragEvent.ts"));
+const DragDropController = __importStar(__webpack_require__(/*! ./Interaction/DragDropController */ "./src/Interaction/DragDropController.ts"));
+const Utils_1 = __webpack_require__(/*! ./Utils */ "./src/Utils.ts");
+const ContainerBase_1 = __importDefault(__webpack_require__(/*! ./c/ContainerBase */ "./src/c/ContainerBase.ts"));
 /**
  * UI的顶级类，基础的UI对象
  *
@@ -1574,10 +1673,10 @@ class UIBase extends PIXI.utils.EventEmitter {
          */
         this.dragging = false;
         this.dalayDrawTimeId = -1;
-        this.uuid = Object(_Utils__WEBPACK_IMPORTED_MODULE_4__["uid"])();
-        this.container = new _c_ContainerBase__WEBPACK_IMPORTED_MODULE_5__["default"]();
+        this.uuid = Utils_1.uid();
+        this.container = new ContainerBase_1.default();
         //this.container.name = this.constructor.name;
-        this.setting = new _UISettings__WEBPACK_IMPORTED_MODULE_0__["default"]();
+        this.setting = new UISettings_1.default();
         if (width && height)
             this.setDefaultSize(width, height);
     }
@@ -2744,9 +2843,9 @@ class UIBase extends PIXI.utils.EventEmitter {
             const containerStart = new PIXI.Point(), stageOffset = new PIXI.Point();
             //self = this;
             this._dragPosition = new PIXI.Point();
-            this.drag = new _Interaction_DragEvent__WEBPACK_IMPORTED_MODULE_2__["default"](this);
+            this.drag = new DragEvent_1.default(this);
             this.drag.onDragStart = (e) => {
-                const added = _Interaction_DragDropController__WEBPACK_IMPORTED_MODULE_3__["add"](this, e);
+                const added = DragDropController.add(this, e);
                 if (!this.dragging && added) {
                     this.dragging = true;
                     this.container.interactive = false;
@@ -2785,10 +2884,10 @@ class UIBase extends PIXI.utils.EventEmitter {
                     //Return to container after 0ms if not picked up by a droppable
                     setTimeout(() => {
                         this.container.interactive = true;
-                        const item = _Interaction_DragDropController__WEBPACK_IMPORTED_MODULE_3__["getItem"](this);
+                        const item = DragDropController.getItem(this);
                         if (item && this.parent) {
                             let container;
-                            if (this.parent instanceof _Stage__WEBPACK_IMPORTED_MODULE_1__["default"]) {
+                            if (this.parent instanceof Stage_1.default) {
                                 container = this.stage;
                             }
                             else {
@@ -2824,7 +2923,7 @@ class UIBase extends PIXI.utils.EventEmitter {
         }
     }
     onDrop(e) {
-        const item = _Interaction_DragDropController__WEBPACK_IMPORTED_MODULE_3__["getEventItem"](e, this.dropGroup);
+        const item = DragDropController.getEventItem(e, this.dropGroup);
         if (item && item.dragging) {
             item.dragging = false;
             item.container.interactive = true;
@@ -2837,6 +2936,7 @@ class UIBase extends PIXI.utils.EventEmitter {
         }
     }
 }
+exports.default = UIBase;
 
 
 /***/ }),
@@ -2845,12 +2945,12 @@ class UIBase extends PIXI.utils.EventEmitter {
 /*!***************************!*\
   !*** ./src/UISettings.ts ***!
   \***************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UISettings; });
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 基础的显示数据类型
  * @since 1.0.0
@@ -2883,6 +2983,7 @@ class UISettings {
         this.dragThreshold = 0;
     }
 }
+exports.default = UISettings;
 
 
 /***/ }),
@@ -2891,43 +2992,24 @@ class UISettings {
 /*!**********************!*\
   !*** ./src/Utils.ts ***!
   \**********************/
-/*! exports provided: _getSourcePath, log, setSourcePath, setRectangle, now, deepCopy, hexToInt, hexToRgba, componentToHex, rgbToHex, rgbToNumber, rgbStrToNumber, numberToRgb, hexToRgb, Lerp, Round, uid, getQueryVariable */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_getSourcePath", function() { return _getSourcePath; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "log", function() { return log; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setSourcePath", function() { return setSourcePath; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setRectangle", function() { return setRectangle; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "now", function() { return now; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deepCopy", function() { return deepCopy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hexToInt", function() { return hexToInt; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hexToRgba", function() { return hexToRgba; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "componentToHex", function() { return componentToHex; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rgbToHex", function() { return rgbToHex; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rgbToNumber", function() { return rgbToNumber; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rgbStrToNumber", function() { return rgbStrToNumber; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numberToRgb", function() { return numberToRgb; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hexToRgb", function() { return hexToRgb; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Lerp", function() { return Lerp; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Round", function() { return Round; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "uid", function() { return uid; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getQueryVariable", function() { return getQueryVariable; });
+
 /**
  * 工具类
  */
-/**
- * 组件获取资源 - 源路径,外部可以重写本方法
- */
-let _getSourcePath;
+Object.defineProperty(exports, "__esModule", { value: true });
 /** 日志输出 */
 function log(message, ...optionalParams) {
     console.log(message, ...optionalParams);
 }
+exports.log = log;
 function setSourcePath(params) {
-    _getSourcePath = params;
+    exports._getSourcePath = params;
 }
+exports.setSourcePath = setSourcePath;
 /**
  * 快速设置矩形
  * @param sourcr
@@ -2942,6 +3024,7 @@ function setRectangle(source, x, y, w, h) {
     source.width = w;
     source.height = h;
 }
+exports.setRectangle = setRectangle;
 /** 获取当前运行时时间 */
 function now() {
     if (performance !== undefined && performance.now !== undefined) {
@@ -2955,6 +3038,7 @@ function now() {
         return Date.now() - offset;
     }
 }
+exports.now = now;
 /**
  * 深度拷贝对象
  * @param source 对象元
@@ -2975,6 +3059,7 @@ function deepCopy(source) {
     }
     return source;
 }
+exports.deepCopy = deepCopy;
 /**
  * helper function to convert string hex to int or default
  *
@@ -2990,6 +3075,7 @@ function hexToInt(str, def) {
         return def;
     return result;
 }
+exports.hexToInt = hexToInt;
 //helper function to convert hex to rgba
 /**
  *
@@ -3001,6 +3087,7 @@ function hexToRgba(hex, alpha) {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? "rgba(" + parseInt(result[1], 16) + "," + parseInt(result[2], 16) + "," + parseInt(result[3], 16) + "," + alpha + ")" : false;
 }
+exports.hexToRgba = hexToRgba;
 /**
  * 转换为16位字符串，不够2位的补0，如 “01”
  * @param c 要转换的数字
@@ -3009,6 +3096,7 @@ function componentToHex(c) {
     const hex = c.toString(16);
     return hex.length == 1 ? "0" + hex : hex;
 }
+exports.componentToHex = componentToHex;
 /**
  * RGB转16进制
  * @param r 红 0-255
@@ -3018,6 +3106,7 @@ function componentToHex(c) {
 function rgbToHex(r, g, b) {
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
+exports.rgbToHex = rgbToHex;
 /**
  * RGB转number
  * @param r 红 0-255
@@ -3027,6 +3116,7 @@ function rgbToHex(r, g, b) {
 function rgbToNumber(r, g, b) {
     return r * 65536 + g * 256 + b;
 }
+exports.rgbToNumber = rgbToNumber;
 /**
  * rgb字符串形式转换
  * @param color rgb(255,255,255)
@@ -3035,6 +3125,7 @@ function rgbStrToNumber(color) {
     const colors = color.substring(4, color.length - 1).split(",");
     return rgbToNumber(parseInt(colors[0]), parseInt(colors[1]), parseInt(colors[2]));
 }
+exports.rgbStrToNumber = rgbStrToNumber;
 /**
  * 10进制转RGB
  * @param c 数
@@ -3046,6 +3137,7 @@ function numberToRgb(c) {
         b: c % 256,
     };
 }
+exports.numberToRgb = numberToRgb;
 /**
  * hex 转 RGB，
  *
@@ -3072,6 +3164,7 @@ function hexToRgb(hex) {
         b: parseInt(result[3], 16)
     } : { r: 255, g: 255, b: 255 };
 }
+exports.hexToRgb = hexToRgb;
 /**
  * 根据amt计算当前的位置start-stop，两数差值
  * @param start 开始数值
@@ -3085,6 +3178,7 @@ function Lerp(start, stop, amt) {
         amt = 0;
     return start + (stop - start) * amt;
 }
+exports.Lerp = Lerp;
 /**
  * 四舍五入保留指定位数的小数
  * @param num 取舍的数
@@ -3094,10 +3188,12 @@ function Round(num, decimals) {
     const pow = Math.pow(10, decimals);
     return Math.round(num * pow) / pow;
 }
+exports.Round = Round;
 /** 获取全局唯一数 */
 function uid() {
     return PIXI.utils.uid().toString();
 }
+exports.uid = uid;
 /** 获取URL参数 */
 function getQueryVariable(variable) {
     const params = new URLSearchParams(location.search);
@@ -3106,6 +3202,7 @@ function getQueryVariable(variable) {
     }
     return undefined;
 }
+exports.getQueryVariable = getQueryVariable;
 
 
 /***/ }),
@@ -3114,16 +3211,17 @@ function getQueryVariable(variable) {
 /*!*************************!*\
   !*** ./src/c/Button.ts ***!
   \*************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Button; });
-/* harmony import */ var _Text__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Text */ "./src/c/Text.ts");
-/* harmony import */ var _InputSkinBase__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../InputSkinBase */ "./src/InputSkinBase.ts");
 
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Text_1 = __importDefault(__webpack_require__(/*! ./Text */ "./src/c/Text.ts"));
+const InputSkinBase_1 = __importDefault(__webpack_require__(/*! ../InputSkinBase */ "./src/InputSkinBase.ts"));
 /**
  * UI 按钮显 示对象
  *
@@ -3135,7 +3233,7 @@ __webpack_require__.r(__webpack_exports__);
  * @param [options.width=100h] {Number|String} width
  * @param [options.height=20] {Number|String} height
  */
-class Button extends _InputSkinBase__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class Button extends InputSkinBase_1.default {
     /**
      * 按钮构造函数
      *
@@ -3143,7 +3241,7 @@ class Button extends _InputSkinBase__WEBPACK_IMPORTED_MODULE_1__["default"] {
      */
     constructor(option = { width: 100, height: 20, tabIndex: 0, tabGroup: 0 }) {
         super(option.width, option.height, option.tabIndex, option.tabGroup.toString());
-        this._text = new _Text__WEBPACK_IMPORTED_MODULE_0__["default"]();
+        this._text = new Text_1.default();
         this.container.buttonMode = true;
         this._text.verticalAlign = 2 /* middle */;
         this._text.horizontalAlign = 2 /* center */;
@@ -3200,6 +3298,7 @@ class Button extends _InputSkinBase__WEBPACK_IMPORTED_MODULE_1__["default"] {
         return this._text;
     }
 }
+exports.default = Button;
 
 
 /***/ }),
@@ -3208,18 +3307,25 @@ class Button extends _InputSkinBase__WEBPACK_IMPORTED_MODULE_1__["default"] {
 /*!***************************!*\
   !*** ./src/c/CheckBox.ts ***!
   \***************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CheckBox; });
-/* harmony import */ var _Sprite__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Sprite */ "./src/c/Sprite.ts");
-/* harmony import */ var _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Interaction/InputController */ "./src/Interaction/InputController.ts");
-/* harmony import */ var _InputSkinBase__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../InputSkinBase */ "./src/InputSkinBase.ts");
 
-
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Sprite_1 = __importDefault(__webpack_require__(/*! ./Sprite */ "./src/c/Sprite.ts"));
+const InputController = __importStar(__webpack_require__(/*! ../Interaction/InputController */ "./src/Interaction/InputController.ts"));
+const InputSkinBase_1 = __importDefault(__webpack_require__(/*! ../InputSkinBase */ "./src/InputSkinBase.ts"));
 /**
  * UI 单选框与复选框，区别在于有没有时间去拆分，如果没有时间拆分就直接用这个吧，只是皮肤不同
  *
@@ -3235,7 +3341,7 @@ __webpack_require__.r(__webpack_exports__);
  * @param [options.width=20] {Number|String} width
  * @param [options.height=20] {Number|String} height
  */
-class CheckBox extends _InputSkinBase__WEBPACK_IMPORTED_MODULE_2__["default"] {
+class CheckBox extends InputSkinBase_1.default {
     /**
      * 按钮构造函数
      *
@@ -3245,7 +3351,7 @@ class CheckBox extends _InputSkinBase__WEBPACK_IMPORTED_MODULE_2__["default"] {
         super(option.width, option.height, option.tabIndex, option.tabGroup.toString());
         this._checked = false;
         this.container.buttonMode = true;
-        this._checkmark = new _Sprite__WEBPACK_IMPORTED_MODULE_0__["default"]();
+        this._checkmark = new Sprite_1.default();
         this._checkmark.verticalAlign = 2 /* middle */;
         this._checkmark.horizontalAlign = 2 /* center */;
         this._checkmark.alpha = 0;
@@ -3276,7 +3382,7 @@ class CheckBox extends _InputSkinBase__WEBPACK_IMPORTED_MODULE_2__["default"] {
      */
     get selectedValue() {
         if (this.checkGroup) {
-            return _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__["getCheckGroupSelectedValue"](this.checkGroup);
+            return InputController.getCheckGroupSelectedValue(this.checkGroup);
         }
         return undefined;
     }
@@ -3288,13 +3394,13 @@ class CheckBox extends _InputSkinBase__WEBPACK_IMPORTED_MODULE_2__["default"] {
     }
     set checkGroup(value) {
         if (value === undefined) {
-            _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__["unRegistrerCheckGroup"](this);
+            InputController.unRegistrerCheckGroup(this);
         }
         if (this._checkGroup == value) {
             return;
         }
         this._checkGroup = value; //需要在registrerCheckGroup之前
-        _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__["registrerCheckGroup"](this);
+        InputController.registrerCheckGroup(this);
     }
     /**
      * 设置是否选中
@@ -3306,7 +3412,7 @@ class CheckBox extends _InputSkinBase__WEBPACK_IMPORTED_MODULE_2__["default"] {
     set checked(value) {
         if (value !== this._checked) {
             if (this.checkGroup)
-                _Interaction_InputController__WEBPACK_IMPORTED_MODULE_1__["updateCheckGroupSelected"](this);
+                InputController.updateCheckGroupSelected(this);
             this._checked = value;
             this.update();
         }
@@ -3323,6 +3429,7 @@ class CheckBox extends _InputSkinBase__WEBPACK_IMPORTED_MODULE_2__["default"] {
         this._checkmark.source = this._sourceMark;
     }
 }
+exports.default = CheckBox;
 
 
 /***/ }),
@@ -3331,18 +3438,18 @@ class CheckBox extends _InputSkinBase__WEBPACK_IMPORTED_MODULE_2__["default"] {
 /*!****************************!*\
   !*** ./src/c/Container.ts ***!
   \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Container; });
-/* harmony import */ var _UIBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../UIBase */ "./src/UIBase.ts");
-/* harmony import */ var _Sprite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Sprite */ "./src/c/Sprite.ts");
-/* harmony import */ var _Rect__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Rect */ "./src/c/Rect.ts");
 
-
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const UIBase_1 = __importDefault(__webpack_require__(/*! ../UIBase */ "./src/UIBase.ts"));
+const Sprite_1 = __importDefault(__webpack_require__(/*! ./Sprite */ "./src/c/Sprite.ts"));
+const Rect_1 = __importDefault(__webpack_require__(/*! ./Rect */ "./src/c/Rect.ts"));
 /**
  * UI的显示容器
  *
@@ -3352,7 +3459,7 @@ __webpack_require__.r(__webpack_exports__);
  * @param width {Number} 宽度
  * @param height {Number} 高度
  */
-class Container extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class Container extends UIBase_1.default {
     constructor(width, height) {
         super(width, height);
     }
@@ -3372,10 +3479,10 @@ class Container extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         if (value === undefined) {
             this.container.mask = null;
         }
-        else if (value instanceof _Sprite__WEBPACK_IMPORTED_MODULE_1__["default"]) {
+        else if (value instanceof Sprite_1.default) {
             this.container.mask = value.img;
         }
-        else if (value instanceof _Rect__WEBPACK_IMPORTED_MODULE_2__["default"]) {
+        else if (value instanceof Rect_1.default) {
             this.container.mask = value.graphics;
         }
         else {
@@ -3387,6 +3494,7 @@ class Container extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         return this._mask;
     }
 }
+exports.default = Container;
 
 
 /***/ }),
@@ -3395,12 +3503,12 @@ class Container extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
 /*!********************************!*\
   !*** ./src/c/ContainerBase.ts ***!
   \********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ContainerBase; });
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /** 容器扩展类，后续便于做延时渲染 */
 class ContainerBase extends PIXI.Container {
     constructor() {
@@ -3414,6 +3522,7 @@ class ContainerBase extends PIXI.Container {
         }
     }
 }
+exports.default = ContainerBase;
 
 
 /***/ }),
@@ -3422,12 +3531,12 @@ class ContainerBase extends PIXI.Container {
 /*!**************************************!*\
   !*** ./src/c/InputText/HtmlInput.ts ***!
   \**************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return HtmlInput; });
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 私有的，由于PIXIJS不支持文本输入，这里以HTML方式实现
  */
@@ -3613,6 +3722,7 @@ class HtmlInput extends PIXI.utils.EventEmitter {
         this._domInput.blur();
     }
 }
+exports.default = HtmlInput;
 
 
 /***/ }),
@@ -3621,14 +3731,16 @@ class HtmlInput extends PIXI.utils.EventEmitter {
 /*!***********************!*\
   !*** ./src/c/Rect.ts ***!
   \***********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Rect; });
-/* harmony import */ var _UIBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../UIBase */ "./src/UIBase.ts");
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const UIBase_1 = __importDefault(__webpack_require__(/*! ../UIBase */ "./src/UIBase.ts"));
 /**
  * UI 矩形
  *
@@ -3637,7 +3749,7 @@ __webpack_require__.r(__webpack_exports__);
  * @memberof PIXI.UI
  * @param Texture {PIXI.Texture} 文本对象
  */
-class Rect extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class Rect extends UIBase_1.default {
     constructor() {
         super();
         this._graphicsDirty = false;
@@ -3756,6 +3868,7 @@ class Rect extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this.drawUpdate();
     }
 }
+exports.default = Rect;
 
 
 /***/ }),
@@ -3764,22 +3877,29 @@ class Rect extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
 /*!****************************!*\
   !*** ./src/c/ScrollBar.ts ***!
   \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ScrollBar; });
-/* harmony import */ var _Slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Slider */ "./src/c/Slider.ts");
-/* harmony import */ var _ScrollingContainer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ScrollingContainer */ "./src/c/ScrollingContainer.ts");
-/* harmony import */ var _Tween_index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Tween/index */ "./src/c/Tween/index.ts");
 
-
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Slider_1 = __importDefault(__webpack_require__(/*! ./Slider */ "./src/c/Slider.ts"));
+const ScrollingContainer_1 = __importDefault(__webpack_require__(/*! ./ScrollingContainer */ "./src/c/ScrollingContainer.ts"));
+const tween = __importStar(__webpack_require__(/*! ./Tween/index */ "./src/c/Tween/index.ts"));
 /**
  * UI 带有滚动条的容器
  */
-class ScrollBar extends _Slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class ScrollBar extends Slider_1.default {
     constructor(trackBorderWidth = 0, thumbBorderWidth = 0, tracklightBorderWidth = 0) {
         super(trackBorderWidth, thumbBorderWidth, tracklightBorderWidth);
         /**
@@ -3791,11 +3911,11 @@ class ScrollBar extends _Slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
     toggleHidden(hidden) {
         if (this.autohide) {
             if (hidden && !this._hidden) {
-                _Tween_index__WEBPACK_IMPORTED_MODULE_2__["Tween"].to(this, { alpha: 0 }, 200).start();
+                tween.Tween.to(this, { alpha: 0 }, 200).start();
                 this._hidden = true;
             }
             else if (!hidden && this._hidden) {
-                _Tween_index__WEBPACK_IMPORTED_MODULE_2__["Tween"].to(this, { alpha: 1 }, 200).start();
+                tween.Tween.to(this, { alpha: 1 }, 200).start();
                 this._hidden = false;
             }
         }
@@ -3817,16 +3937,16 @@ class ScrollBar extends _Slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
     }
     set scrollingContainer(value) {
         if (this._scrollingContainer) {
-            this._scrollingContainer.off(_ScrollingContainer__WEBPACK_IMPORTED_MODULE_1__["default"].ChangeEvent, this.alignToContainer, this);
-            this._scrollingContainer.off(_ScrollingContainer__WEBPACK_IMPORTED_MODULE_1__["default"].ReSizeEvent, this.alignToContainer, this);
+            this._scrollingContainer.off(ScrollingContainer_1.default.ChangeEvent, this.alignToContainer, this);
+            this._scrollingContainer.off(ScrollingContainer_1.default.ReSizeEvent, this.alignToContainer, this);
         }
         if (value == undefined) {
             this._scrollingContainer = undefined;
             return;
         }
         this._scrollingContainer = value;
-        this._scrollingContainer.on(_ScrollingContainer__WEBPACK_IMPORTED_MODULE_1__["default"].ChangeEvent, this.alignToContainer, this);
-        this._scrollingContainer.on(_ScrollingContainer__WEBPACK_IMPORTED_MODULE_1__["default"].ReSizeEvent, this.alignToContainer, this);
+        this._scrollingContainer.on(ScrollingContainer_1.default.ChangeEvent, this.alignToContainer, this);
+        this._scrollingContainer.on(ScrollingContainer_1.default.ReSizeEvent, this.alignToContainer, this);
     }
     alignToContainer() {
         if (this.scrollingContainer) {
@@ -3873,6 +3993,7 @@ class ScrollBar extends _Slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
         }
     }
 }
+exports.default = ScrollBar;
 
 
 /***/ }),
@@ -3881,35 +4002,39 @@ class ScrollBar extends _Slider__WEBPACK_IMPORTED_MODULE_0__["default"] {
 /*!*************************************!*\
   !*** ./src/c/ScrollingContainer.ts ***!
   \*************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ScrollingContainer; });
-/* harmony import */ var _Container__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Container */ "./src/c/Container.ts");
-/* harmony import */ var _Ticker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Ticker */ "./src/Ticker.ts");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Utils */ "./src/Utils.ts");
-/* harmony import */ var _Interaction_DragEvent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Interaction/DragEvent */ "./src/Interaction/DragEvent.ts");
-/* harmony import */ var _Interaction_MouseScrollEvent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Interaction/MouseScrollEvent */ "./src/Interaction/MouseScrollEvent.ts");
-/* harmony import */ var _Rect__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Rect */ "./src/c/Rect.ts");
 
-
-
-
-
-
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Container_1 = __importDefault(__webpack_require__(/*! ./Container */ "./src/c/Container.ts"));
+const Ticker = __importStar(__webpack_require__(/*! ../Ticker */ "./src/Ticker.ts"));
+const Utils = __importStar(__webpack_require__(/*! ../Utils */ "./src/Utils.ts"));
+const DragEvent_1 = __importDefault(__webpack_require__(/*! ../Interaction/DragEvent */ "./src/Interaction/DragEvent.ts"));
+const MouseScrollEvent_1 = __importDefault(__webpack_require__(/*! ../Interaction/MouseScrollEvent */ "./src/Interaction/MouseScrollEvent.ts"));
+const Utils_1 = __webpack_require__(/*! ../Utils */ "./src/Utils.ts");
+const Rect_1 = __importDefault(__webpack_require__(/*! ./Rect */ "./src/c/Rect.ts"));
 /**
  * 可滚动的容器
  */
-class ScrollingContainer extends _Container__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class ScrollingContainer extends Container_1.default {
     constructor() {
         super();
         /**
          * 遮罩
          */
-        this._maskRect = new _Rect__WEBPACK_IMPORTED_MODULE_5__["default"]();
+        this._maskRect = new Rect_1.default();
         /**
          * 内容容器
          * @private
@@ -3950,7 +4075,7 @@ class ScrollingContainer extends _Container__WEBPACK_IMPORTED_MODULE_0__["defaul
         /**
          * 临时方案，设置时间间隔，跳转容器宽高
          */
-        this._boundCached = Object(_Utils__WEBPACK_IMPORTED_MODULE_2__["now"])() - 1000;
+        this._boundCached = Utils_1.now() - 1000;
         this._lastWidth = 0;
         this._lastHeight = 0;
         this._scrollX = false;
@@ -4019,11 +4144,11 @@ class ScrollingContainer extends _Container__WEBPACK_IMPORTED_MODULE_0__["defaul
     }
     getInnerBounds(force) {
         //this is a temporary fix, because we cant rely on innercontainer height if the children is positioned > 0 y.
-        if (force || Object(_Utils__WEBPACK_IMPORTED_MODULE_2__["now"])() - this._boundCached > 1000) {
+        if (force || Utils_1.now() - this._boundCached > 1000) {
             this.innerContainer.getLocalBounds(this.innerBounds);
             this.innerBounds.height = this.innerBounds.y + this.innerContainer.height;
             this.innerBounds.width = this.innerBounds.x + this.innerContainer.width;
-            this._boundCached = Object(_Utils__WEBPACK_IMPORTED_MODULE_2__["now"])();
+            this._boundCached = Utils_1.now();
         }
         return this.innerBounds;
     }
@@ -4039,14 +4164,14 @@ class ScrollingContainer extends _Container__WEBPACK_IMPORTED_MODULE_0__["defaul
         }
         //Drag scroll
         if (this.dragScrolling) {
-            this.dragEvent = new _Interaction_DragEvent__WEBPACK_IMPORTED_MODULE_3__["default"](this);
+            this.dragEvent = new DragEvent_1.default(this);
             this.dragEvent.onDragStart = () => {
                 if (!this.scrolling) {
                     this._containerStart.copyFrom(this.innerContainer.position);
                     this._Position.copyFrom(this.innerContainer.position);
                     this.scrolling = true;
                     this.setScrollPosition();
-                    _Ticker__WEBPACK_IMPORTED_MODULE_1__["shared"].addUpdateEvent(this.updateScrollPosition, this);
+                    Ticker.shared.addUpdateEvent(this.updateScrollPosition, this);
                 }
             };
             this.dragEvent.onDragMove = (e, offset) => {
@@ -4058,7 +4183,7 @@ class ScrollingContainer extends _Container__WEBPACK_IMPORTED_MODULE_0__["defaul
             this.dragEvent.onDragEnd = () => {
                 if (this.scrolling) {
                     this.scrolling = false;
-                    _Ticker__WEBPACK_IMPORTED_MODULE_1__["shared"].removeUpdateEvent(this.updateScrollPosition, this);
+                    Ticker.shared.removeUpdateEvent(this.updateScrollPosition, this);
                 }
             };
         }
@@ -4068,7 +4193,7 @@ class ScrollingContainer extends _Container__WEBPACK_IMPORTED_MODULE_0__["defaul
             this.mouseScrollEvent = undefined;
         }
         const scrollSpeed = new PIXI.Point();
-        this.mouseScrollEvent = new _Interaction_MouseScrollEvent__WEBPACK_IMPORTED_MODULE_4__["default"](this, true);
+        this.mouseScrollEvent = new MouseScrollEvent_1.default(this, true);
         this.mouseScrollEvent.onMouseScroll = (e, delta) => {
             scrollSpeed.set(-delta.x * 0.2, -delta.y * 0.2);
             this.setScrollPosition(scrollSpeed);
@@ -4144,7 +4269,7 @@ class ScrollingContainer extends _Container__WEBPACK_IMPORTED_MODULE_0__["defaul
             min = Math.round(Math.min(0, this._width - bounds.width));
         if (!this.scrolling && Math.round(this._Speed[direction]) !== 0) {
             this._targetPosition[direction] += this._Speed[direction];
-            this._Speed[direction] = _Utils__WEBPACK_IMPORTED_MODULE_2__["Lerp"](this._Speed[direction], 0, (5 + 2.5 / Math.max(this.softness, 0.01)) * delta);
+            this._Speed[direction] = Utils.Lerp(this._Speed[direction], 0, (5 + 2.5 / Math.max(this.softness, 0.01)) * delta);
             if (this._targetPosition[direction] > 0) {
                 this._targetPosition[direction] = 0;
             }
@@ -4154,7 +4279,7 @@ class ScrollingContainer extends _Container__WEBPACK_IMPORTED_MODULE_0__["defaul
         }
         if (!this.scrolling && Math.round(this._Speed[direction]) === 0 && (this.innerContainer[direction] > 0 || this.innerContainer[direction] < min)) {
             const target = this._Position[direction] > 0 ? 0 : min;
-            this._Position[direction] = _Utils__WEBPACK_IMPORTED_MODULE_2__["Lerp"](this._Position[direction], target, (40 - (30 * this.softness)) * delta);
+            this._Position[direction] = Utils.Lerp(this._Position[direction], target, (40 - (30 * this.softness)) * delta);
             this._stop = false;
         }
         else if (this.scrolling || Math.round(this._Speed[direction]) !== 0) {
@@ -4187,6 +4312,7 @@ ScrollingContainer.ChangeEvent = "change";
  * 滑动条值发生改变后
  */
 ScrollingContainer.ReSizeEvent = "resize";
+exports.default = ScrollingContainer;
 
 
 /***/ }),
@@ -4195,21 +4321,22 @@ ScrollingContainer.ReSizeEvent = "resize";
 /*!******************************!*\
   !*** ./src/c/SliceSprite.ts ***!
   \******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SliceSprite; });
-/* harmony import */ var _UIBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../UIBase */ "./src/UIBase.ts");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Utils */ "./src/Utils.ts");
 
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const UIBase_1 = __importDefault(__webpack_require__(/*! ../UIBase */ "./src/UIBase.ts"));
+const Utils_1 = __webpack_require__(/*! ../Utils */ "./src/Utils.ts");
 /**
  * 动态宽高的图片,9切
  * Event: sourceComplete
  */
-class SliceSprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class SliceSprite extends UIBase_1.default {
     /**
      * 构造函数，如果不设置horizontalSlice，verticalSlice。 按设置的BorderWidth进行9切
      *
@@ -4236,8 +4363,8 @@ class SliceSprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         return this._source;
     }
     set source(value) {
-        if (_Utils__WEBPACK_IMPORTED_MODULE_1__["_getSourcePath"]) {
-            value = Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["_getSourcePath"])(value);
+        if (Utils_1._getSourcePath) {
+            value = Utils_1._getSourcePath(value);
         }
         if (value === undefined) {
             return;
@@ -4404,6 +4531,7 @@ class SliceSprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
 }
 /** 图片加载完成事件 */
 SliceSprite.SourceCompleteEvent = "sourceCompleteEvent";
+exports.default = SliceSprite;
 
 
 /***/ }),
@@ -4412,26 +4540,31 @@ SliceSprite.SourceCompleteEvent = "sourceCompleteEvent";
 /*!*************************!*\
   !*** ./src/c/Slider.ts ***!
   \*************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Slider; });
-/* harmony import */ var _UIBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../UIBase */ "./src/UIBase.ts");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Utils */ "./src/Utils.ts");
-/* harmony import */ var _SliceSprite__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SliceSprite */ "./src/c/SliceSprite.ts");
-/* harmony import */ var _Tween_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Tween/index */ "./src/c/Tween/index.ts");
-/* harmony import */ var _Interaction_DragEvent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Interaction/DragEvent */ "./src/Interaction/DragEvent.ts");
 
-
-
-
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const UIBase_1 = __importDefault(__webpack_require__(/*! ../UIBase */ "./src/UIBase.ts"));
+const Utils = __importStar(__webpack_require__(/*! ../Utils */ "./src/Utils.ts"));
+const SliceSprite_1 = __importDefault(__webpack_require__(/*! ./SliceSprite */ "./src/c/SliceSprite.ts"));
+const tween = __importStar(__webpack_require__(/*! ./Tween/index */ "./src/c/Tween/index.ts"));
+const DragEvent_1 = __importDefault(__webpack_require__(/*! ../Interaction/DragEvent */ "./src/Interaction/DragEvent.ts"));
 /**
  * UI 滑动条
  */
-class Slider extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class Slider extends UIBase_1.default {
     constructor(trackBorderWidth = 0, thumbBorderWidth = 0, tracklightBorderWidth = 0) {
         super();
         /**
@@ -4450,8 +4583,8 @@ class Slider extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this._sourceTrack = "";
         this._sourceTracklight = "";
         this._sourceThumb = "";
-        this._thumbDrag = new _Interaction_DragEvent__WEBPACK_IMPORTED_MODULE_4__["default"](this);
-        this._trackDrag = new _Interaction_DragEvent__WEBPACK_IMPORTED_MODULE_4__["default"](this);
+        this._thumbDrag = new DragEvent_1.default(this);
+        this._trackDrag = new DragEvent_1.default(this);
         this._startValue = 0;
         this._maxPosition = 0;
         this._localMousePosition = new PIXI.Point();
@@ -4461,13 +4594,13 @@ class Slider extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         this._maxValue = 100;
         /** 是否可以绘制布局，设置本值并不会触发绘制，只是标记*/
         this._isUpdateLayout = true;
-        this._track = new _SliceSprite__WEBPACK_IMPORTED_MODULE_2__["default"]();
+        this._track = new SliceSprite_1.default();
         this._track.borderWidth = trackBorderWidth;
-        this._thumb = new _SliceSprite__WEBPACK_IMPORTED_MODULE_2__["default"]();
+        this._thumb = new SliceSprite_1.default();
         this._thumb.borderWidth = thumbBorderWidth;
         this._thumb.pivot = 0.5;
         this._thumb.container.buttonMode = true;
-        this._tracklight = new _SliceSprite__WEBPACK_IMPORTED_MODULE_2__["default"]();
+        this._tracklight = new SliceSprite_1.default();
         this._tracklight.borderWidth = tracklightBorderWidth;
         this.addChild(this._track);
         this.addChild(this._tracklight);
@@ -4510,8 +4643,8 @@ class Slider extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
     set sourceThumb(value) {
         this._sourceThumb = value;
         this._thumb.visible = false;
-        this._thumb.off(_SliceSprite__WEBPACK_IMPORTED_MODULE_2__["default"].SourceCompleteEvent, this.onThumbLoadComplete, this);
-        this._thumb.once(_SliceSprite__WEBPACK_IMPORTED_MODULE_2__["default"].SourceCompleteEvent, this.onThumbLoadComplete, this);
+        this._thumb.off(SliceSprite_1.default.SourceCompleteEvent, this.onThumbLoadComplete, this);
+        this._thumb.once(SliceSprite_1.default.SourceCompleteEvent, this.onThumbLoadComplete, this);
         this._thumb.source = value;
     }
     //rectangle:PIXI.Rectangle,source?:SliceSprite
@@ -4559,7 +4692,7 @@ class Slider extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
      * 当前值
      */
     get value() {
-        return _Utils__WEBPACK_IMPORTED_MODULE_1__["Round"](_Utils__WEBPACK_IMPORTED_MODULE_1__["Lerp"](this._minValue, this._maxValue, this._amt), this._decimals);
+        return Utils.Round(Utils.Lerp(this._minValue, this._maxValue, this._amt), this._decimals);
     }
     set value(value) {
         this._amt = (Math.max(this._minValue, Math.min(this._maxValue, value)) - this._minValue) / (this._maxValue - this._minValue);
@@ -4598,8 +4731,8 @@ class Slider extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
                 handleSize = this._thumb._height || this._thumb.container.height;
                 val = ((this._height - handleSize) * this._amt) + (handleSize * 0.5);
                 if (soft) {
-                    _Tween_index__WEBPACK_IMPORTED_MODULE_3__["Tween"].to(this._thumb, { top: val }, 300).easing(_Tween_index__WEBPACK_IMPORTED_MODULE_3__["Easing"].Linear.None).start();
-                    _Tween_index__WEBPACK_IMPORTED_MODULE_3__["Tween"].to(this._tracklight, { height: val }, 300).easing(_Tween_index__WEBPACK_IMPORTED_MODULE_3__["Easing"].Linear.None).start();
+                    tween.Tween.to(this._thumb, { top: val }, 300).easing(tween.Easing.Linear.None).start();
+                    tween.Tween.to(this._tracklight, { height: val }, 300).easing(tween.Easing.Linear.None).start();
                 }
                 else {
                     this._thumb.top = val;
@@ -4610,8 +4743,8 @@ class Slider extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
                 handleSize = this._thumb._width || this._thumb.container.width;
                 val = ((this._width - handleSize) * this._amt) + (handleSize * 0.5);
                 if (soft) {
-                    _Tween_index__WEBPACK_IMPORTED_MODULE_3__["Tween"].to(this._thumb, { left: val }, 300).easing(_Tween_index__WEBPACK_IMPORTED_MODULE_3__["Easing"].Linear.None).start();
-                    _Tween_index__WEBPACK_IMPORTED_MODULE_3__["Tween"].to(this._tracklight, { width: val }, 300).easing(_Tween_index__WEBPACK_IMPORTED_MODULE_3__["Easing"].Linear.None).start();
+                    tween.Tween.to(this._thumb, { left: val }, 300).easing(tween.Easing.Linear.None).start();
+                    tween.Tween.to(this._tracklight, { width: val }, 300).easing(tween.Easing.Linear.None).start();
                 }
                 else {
                     this._thumb.left = val;
@@ -4686,6 +4819,7 @@ Slider.ChangeEvent = "change";
  * 滑动条值发生改变时
  */
 Slider.ChangingEvent = "changing";
+exports.default = Slider;
 
 
 /***/ }),
@@ -4694,20 +4828,28 @@ Slider.ChangingEvent = "changing";
 /*!*******************************!*\
   !*** ./src/c/SortableList.ts ***!
   \*******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SortableList; });
-/* harmony import */ var _Container__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Container */ "./src/c/Container.ts");
-/* harmony import */ var _Tween_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Tween/index */ "./src/c/Tween/index.ts");
 
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Container_1 = __importDefault(__webpack_require__(/*! ./Container */ "./src/c/Container.ts"));
+const tween = __importStar(__webpack_require__(/*! ./Tween/index */ "./src/c/Tween/index.ts"));
 /**
  * UI 可以排序的容器
  */
-class SortableList extends _Container__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class SortableList extends Container_1.default {
     constructor() {
         super();
         /**
@@ -4720,7 +4862,7 @@ class SortableList extends _Container__WEBPACK_IMPORTED_MODULE_0__["default"] {
          * @default 0
          */
         this.tweenTime = 0;
-        this.tweenEase = _Tween_index__WEBPACK_IMPORTED_MODULE_1__["Easing"].Sinusoidal.In;
+        this.tweenEase = tween.Easing.Sinusoidal.In;
         this.items = [];
         this._sortTimeout = -1;
     }
@@ -4784,7 +4926,7 @@ class SortableList extends _Container__WEBPACK_IMPORTED_MODULE_0__["default"] {
             const item = this.items[i];
             alt = !alt;
             if (this.tweenTime > 0) {
-                _Tween_index__WEBPACK_IMPORTED_MODULE_1__["Tween"].fromTo(item, { x: 0, y: y }, this.tweenTime).easing(this.tweenEase).start();
+                tween.Tween.fromTo(item, { x: 0, y: y }, this.tweenTime).easing(this.tweenEase).start();
             }
             else {
                 item.x = 0;
@@ -4803,6 +4945,7 @@ class SortableList extends _Container__WEBPACK_IMPORTED_MODULE_0__["default"] {
         }
     }
 }
+exports.default = SortableList;
 
 
 /***/ }),
@@ -4811,16 +4954,17 @@ class SortableList extends _Container__WEBPACK_IMPORTED_MODULE_0__["default"] {
 /*!*************************!*\
   !*** ./src/c/Sprite.ts ***!
   \*************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Sprite; });
-/* harmony import */ var _UIBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../UIBase */ "./src/UIBase.ts");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Utils */ "./src/Utils.ts");
 
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const UIBase_1 = __importDefault(__webpack_require__(/*! ../UIBase */ "./src/UIBase.ts"));
+const Utils_1 = __webpack_require__(/*! ../Utils */ "./src/Utils.ts");
 /**
  * UI图片显示对象，如果使用拉伸或9切，请使用 SliceSprite
  *
@@ -4829,7 +4973,7 @@ __webpack_require__.r(__webpack_exports__);
  * @memberof PIXI.UI
  * @param Texture {PIXI.Texture} 文本对象
  */
-class Sprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class Sprite extends UIBase_1.default {
     constructor(t) {
         super();
         this._anchorX = 0;
@@ -4852,8 +4996,8 @@ class Sprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         return this._source;
     }
     set source(value) {
-        if (_Utils__WEBPACK_IMPORTED_MODULE_1__["_getSourcePath"]) {
-            value = Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["_getSourcePath"])(value);
+        if (Utils_1._getSourcePath) {
+            value = Utils_1._getSourcePath(value);
         }
         if (value === undefined) {
             return;
@@ -4919,6 +5063,7 @@ class Sprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
 }
 /** 图片加载完成事件 */
 Sprite.SourceCompleteEvent = "sourceCompleteEvent";
+exports.default = Sprite;
 
 
 /***/ }),
@@ -4927,15 +5072,16 @@ Sprite.SourceCompleteEvent = "sourceCompleteEvent";
 /*!***********************!*\
   !*** ./src/c/Text.ts ***!
   \***********************/
-/*! exports provided: default, defaultLineHeight */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Text; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultLineHeight", function() { return defaultLineHeight; });
-/* harmony import */ var _UIBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../UIBase */ "./src/UIBase.ts");
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const UIBase_1 = __importDefault(__webpack_require__(/*! ../UIBase */ "./src/UIBase.ts"));
 /**
  * UI文本显示对象
  *
@@ -4947,7 +5093,7 @@ __webpack_require__.r(__webpack_exports__);
  * @param Texture {PIXI.Texture} 文本对象
  * @see https://pixijs.io/pixi-text-style
  */
-class Text extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class Text extends UIBase_1.default {
     /**
      * 文本构造函数
      * @param text 要显示的内容，默认为""
@@ -5013,6 +5159,7 @@ class Text extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
             this._text.blendMode = this.blendMode;
     }
 }
+exports.default = Text;
 /** 获得默认行高 */
 function defaultLineHeight(style) {
     const _tempText = new PIXI.Text("1", style);
@@ -5021,6 +5168,7 @@ function defaultLineHeight(style) {
     _tempText.destroy();
     return { lineHeight, textHeight };
 }
+exports.defaultLineHeight = defaultLineHeight;
 
 
 /***/ }),
@@ -5029,17 +5177,18 @@ function defaultLineHeight(style) {
 /*!*********************************!*\
   !*** ./src/c/Text/TextStyle.ts ***!
   \*********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TextStyle; });
+
+Object.defineProperty(exports, "__esModule", { value: true });
 class TextStyle extends PIXI.TextStyle {
     constructor(style) {
         super(style);
     }
 }
+exports.default = TextStyle;
 
 
 /***/ }),
@@ -5048,16 +5197,17 @@ class TextStyle extends PIXI.TextStyle {
 /*!****************************!*\
   !*** ./src/c/TextInput.ts ***!
   \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TextInput; });
-/* harmony import */ var _InputText_HtmlInput__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InputText/HtmlInput */ "./src/c/InputText/HtmlInput.ts");
-/* harmony import */ var _UIBase__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../UIBase */ "./src/UIBase.ts");
 
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const HtmlInput_1 = __importDefault(__webpack_require__(/*! ./InputText/HtmlInput */ "./src/c/InputText/HtmlInput.ts"));
+const UIBase_1 = __importDefault(__webpack_require__(/*! ../UIBase */ "./src/UIBase.ts"));
 /**
  * @example
  * new PIXI.TextInput({
@@ -5070,7 +5220,7 @@ __webpack_require__.r(__webpack_exports__);
  *  box: {...}
  * })
  */
-class TextInput extends _UIBase__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class TextInput extends UIBase_1.default {
     constructor(styles) {
         super();
         this._disabled = false;
@@ -5092,7 +5242,7 @@ class TextInput extends _UIBase__WEBPACK_IMPORTED_MODULE_1__["default"] {
             color: '#000000',
             lineHeight: '1'
         }, styles);
-        this.htmlInputShared = new _InputText_HtmlInput__WEBPACK_IMPORTED_MODULE_0__["default"](this._inputStyle.multiline);
+        this.htmlInputShared = new HtmlInput_1.default(this._inputStyle.multiline);
         this.htmlInputShared.setStyle(this._inputStyle);
         this.htmlInputShared.on("input" /* input */, this._onInputInput, this);
         this.htmlInputShared.on('focus', this._onFocused, this);
@@ -5500,6 +5650,7 @@ class TextInput extends _UIBase__WEBPACK_IMPORTED_MODULE_1__["default"] {
             && r1.height == r2.height);
     }
 }
+exports.default = TextInput;
 
 
 /***/ }),
@@ -5508,20 +5659,22 @@ class TextInput extends _UIBase__WEBPACK_IMPORTED_MODULE_1__["default"] {
 /*!*******************************!*\
   !*** ./src/c/TilingSprite.ts ***!
   \*******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TilingSprite; });
-/* harmony import */ var _UIBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../UIBase */ "./src/UIBase.ts");
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const UIBase_1 = __importDefault(__webpack_require__(/*! ../UIBase */ "./src/UIBase.ts"));
 /**
  * UI平铺显示对象,功能与官方一直，可参考官方示例
  *
  * @example https://pixijs.io/examples/#/sprite/tiling-sprite.js
  */
-class TilingSprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
+class TilingSprite extends UIBase_1.default {
     constructor(width, height) {
         super(width, height);
         this._tilePosition = new PIXI.ObservablePoint(this.update, this);
@@ -5601,6 +5754,7 @@ class TilingSprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
         }
     }
 }
+exports.default = TilingSprite;
 
 
 /***/ }),
@@ -5609,11 +5763,12 @@ class TilingSprite extends _UIBase__WEBPACK_IMPORTED_MODULE_0__["default"] {
 /*!*******************************!*\
   !*** ./src/c/Tween/Easing.ts ***!
   \*******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  *  完整的缓动曲线列表
  * @namespace tween.Easing
@@ -5809,7 +5964,7 @@ const Easing = {
         steps: (steps) => (k) => ((k * steps) | 0) / steps
     }
 };
-/* harmony default export */ __webpack_exports__["default"] = (Easing);
+exports.default = Easing;
 
 
 /***/ }),
@@ -5818,13 +5973,13 @@ const Easing = {
 /*!**************************************!*\
   !*** ./src/c/Tween/Interpolation.ts ***!
   \**************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ "./src/c/Tween/constants.ts");
 
+Object.defineProperty(exports, "__esModule", { value: true });
+const constants_1 = __webpack_require__(/*! ./constants */ "./src/c/Tween/constants.ts");
 /**
  * 差值计算列表
  * @namespace TWEEN.Interpolation
@@ -5929,11 +6084,11 @@ const Interpolation = {
             else if (typeof p0 === 'object') {
                 if (p0.length !== undefined) {
                     const isForceStringProp = typeof p0[0] === 'string' || p0.isString;
-                    if (isForceStringProp || p0[0] === _constants__WEBPACK_IMPORTED_MODULE_0__["STRING_PROP"]) {
+                    if (isForceStringProp || p0[0] === constants_1.STRING_PROP) {
                         let STRING_BUFFER = '';
                         for (let i = isForceStringProp ? 0 : 1, len = p0.length; i < len; i++) {
                             let currentValue = t === 0 ? p0[i] : t === 1 ? p1[i] : typeof p0[i] === 'number' ? p0[i] + (p1[i] - p0[i]) * t : p1[i];
-                            if ((t > 0 && t < 1 && Object(_constants__WEBPACK_IMPORTED_MODULE_0__["isRGBColor"])(p0, i)) || Object(_constants__WEBPACK_IMPORTED_MODULE_0__["isRGBColor"])(p0, i, _constants__WEBPACK_IMPORTED_MODULE_0__["RGBA"])) {
+                            if ((t > 0 && t < 1 && constants_1.isRGBColor(p0, i)) || constants_1.isRGBColor(p0, i, constants_1.RGBA)) {
                                 currentValue |= 0;
                             }
                             STRING_BUFFER += currentValue;
@@ -6003,11 +6158,11 @@ const Interpolation = {
             }
             else if (typeof p0 === 'object') {
                 if (p0.length !== undefined) {
-                    if (p0[0] === _constants__WEBPACK_IMPORTED_MODULE_0__["STRING_PROP"]) {
+                    if (p0[0] === constants_1.STRING_PROP) {
                         let STRING_BUFFER = '';
                         for (let i = 1, len = p0.length; i < len; i++) {
                             let currentValue = typeof p0[i] === 'number' ? Interpolation.Utils.CatmullRom(p0[i], p1[i], p2[i], p3[i], t) : p3[i];
-                            if (Object(_constants__WEBPACK_IMPORTED_MODULE_0__["isRGBColor"])(p0, i) || Object(_constants__WEBPACK_IMPORTED_MODULE_0__["isRGBColor"])(p0, i, _constants__WEBPACK_IMPORTED_MODULE_0__["RGBA"])) {
+                            if (constants_1.isRGBColor(p0, i) || constants_1.isRGBColor(p0, i, constants_1.RGBA)) {
                                 currentValue |= 0;
                             }
                             STRING_BUFFER += currentValue;
@@ -6028,7 +6183,220 @@ const Interpolation = {
         }
     }
 };
-/* harmony default export */ __webpack_exports__["default"] = (Interpolation);
+exports.default = Interpolation;
+
+
+/***/ }),
+
+/***/ "./src/c/Tween/Timeline.ts":
+/*!*********************************!*\
+  !*** ./src/c/Tween/Timeline.ts ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const Ticker_1 = __webpack_require__(/*! ../../Ticker */ "./src/Ticker.ts");
+const Easing_1 = __importDefault(__webpack_require__(/*! ./Easing */ "./src/c/Tween/Easing.ts"));
+const ObjectPool_1 = __webpack_require__(/*! ../../ObjectPool */ "./src/ObjectPool.ts");
+class Node {
+    constructor(node) {
+        this.start = 0;
+        this.end = 0;
+        this.duration = 0;
+        this.endFrame = 0;
+        this.prevTime = 0;
+        this.parent = node;
+    }
+    release() {
+        this.parent = undefined;
+        this.easing = undefined;
+        this.start = 0;
+        this.end = 0;
+        this.duration = 0;
+        this.endFrame = 0;
+        this.prevTime = 0;
+    }
+    load() { }
+    destroy() { }
+}
+/**
+ * 时间轴主类
+ *
+ * @constructor
+ * @class
+ * @namespace tween.Timeline
+ * @param {Object=} params 默认参数
+ * @example let tl = new Timeline({delay:200})
+ * @extends Tween
+ */
+class Timeline {
+    constructor() {
+        this._id = -1;
+        this._frames = new Array();
+        this._frameCount = 0;
+        this._curFrame = 0;
+        this._elapsedMS = 16.666666666666; //1000/60
+        this._prevTime = 0;
+        this._duration = 60;
+        this._isStop = false;
+        this._lastNode = new Map();
+    }
+    setDefault(object, _duration, _framesCount) {
+        this._object = object;
+        this._duration = _duration;
+        this._elapsedMS = _duration / _framesCount;
+        this._frameCount = _framesCount;
+        while (this._frames && this._frames.length > _framesCount) {
+            this._frames.pop();
+        }
+        let i = this._frames.length === 0 ? 0 : this._frames.length;
+        for (i; i <= _framesCount; i++) {
+            if (this._frames[i] === undefined)
+                this._frames[i] = new Map();
+        }
+        return this;
+    }
+    addProperty(property, value, endFrame, curve) {
+        if (endFrame > this._frameCount) {
+            throw "Error Timeline.addProperty overflow frame Count";
+        }
+        let parentNode = this._lastNode.get(property);
+        let node = ObjectPool_1.objectPoolShared.pop(Node);
+        if (parentNode === undefined) {
+            node.parent = undefined;
+        }
+        else {
+            node.parent = parentNode;
+        }
+        let startFrame = node.parent === undefined ? 0 : (node.parent.endFrame + 1);
+        node.end = value;
+        node.start = node.parent === undefined ? (this._object[property] || 0) : node.parent.end;
+        if (curve && curve.length == 1) {
+            node.easing = Easing_1.default.Back.In;
+        }
+        else {
+            node.easing = Easing_1.default.Linear.None;
+        }
+        node.duration = (endFrame - startFrame) * this._elapsedMS;
+        node.endFrame = endFrame;
+        this._lastNode.set(property, node);
+        for (let i = startFrame; i <= endFrame; i++) {
+            this._frames[i].set(property, node);
+        }
+        return this;
+    }
+    // public _addObject(obj:TAny,formTo:TAny,startFrame: number, endFrame: number){
+    //     let tw = new Tween(obj).to(formTo,(endFrame - startFrame) * this._elapsedMS);
+    //     this.add(tw,startFrame,endFrame);
+    // }
+    stop() {
+        this._isStop = true;
+    }
+    play() {
+        this._isStop = false;
+    }
+    gotoAndPlay(frame) {
+        this.goto(frame, false);
+    }
+    gotoAndStop(frame) {
+        this.goto(frame, true);
+    }
+    goto(frame, isStop) {
+        // this._keyFrames.forEach(value=>{
+        //     if(value<frame)
+        //         this._frames[value].forEach(value=>{
+        //             value.gotoAndEnd();
+        //         });
+        // });
+        // this._frames[frame].forEach(value=>{
+        //     const time = (frame - value.data.startFrame)*this._elapsedMS;
+        //     if(isStop){
+        //         value.gotoAndStop(time);
+        //     }else{
+        //         value.gotoAndPlay(time);
+        //     }   
+        // });
+        // this._isStop = isStop;
+    }
+    update(a, b, elapsedMS = 0) {
+        if (this._isStop) {
+            return;
+        }
+        let { _curFrame, _prevTime, _frames, _frameCount, _elapsedMS } = this;
+        _curFrame = Math.round(_prevTime / _elapsedMS);
+        if (_curFrame >= _frameCount) {
+            this._isStop = true;
+        }
+        if (_frames[this._curFrame] == undefined) {
+            this._isStop = true;
+            return;
+        }
+        _prevTime += elapsedMS;
+        _frames[this._curFrame].forEach((value, key, map) => {
+            if (value.start != value.end) {
+                value.prevTime += elapsedMS;
+                this.updateobject(key, value);
+            }
+        }, this);
+        this._curFrame = _curFrame;
+        this._prevTime = _prevTime;
+        return true;
+    }
+    updateobject(key, node) {
+        let elapsed;
+        if (!node.duration) {
+            elapsed = 1;
+        }
+        else {
+            elapsed = node.prevTime / node.duration;
+            elapsed = elapsed > 1 ? 1 : elapsed;
+        }
+        const value = node.easing(elapsed);
+        const start = node.start;
+        const end = node.end;
+        if (typeof end === 'number') {
+            this._object[key] = Math.floor(start + (end - start) * value);
+        }
+        else if (typeof end === 'boolean') {
+            this._object[key] = end;
+        }
+        if (elapsed === 1) {
+            return true;
+        }
+        return false;
+    }
+    load() {
+        Ticker_1.shared.removeUpdateEvent(this.update, this);
+        Ticker_1.shared.addUpdateEvent(this.update, this);
+    }
+    release() {
+        Ticker_1.shared.removeUpdateEvent(this.update, this);
+        this._frames.forEach(map => {
+            map.forEach((value) => {
+                ObjectPool_1.objectPoolShared.push(Node, value);
+            });
+            map.clear();
+        });
+        this._object = undefined;
+        this._id = -1;
+        this._frameCount = 0;
+        this._curFrame = 0;
+        this._elapsedMS = 16.666666666666; //1000/60
+        this._prevTime = 0;
+        this._duration = 60;
+        this._isStop = false;
+        this._lastNode.clear();
+    }
+    destroy(destroyWebGL) {
+    }
+}
+exports.default = Timeline;
 
 
 /***/ }),
@@ -6037,23 +6405,22 @@ const Interpolation = {
 /*!******************************!*\
   !*** ./src/c/Tween/Tween.ts ***!
   \******************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Tween; });
-/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core */ "./src/c/Tween/core.ts");
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Utils */ "./src/Utils.ts");
-/* harmony import */ var _Easing__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Easing */ "./src/c/Tween/Easing.ts");
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./constants */ "./src/c/Tween/constants.ts");
-/* harmony import */ var _Interpolation__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Interpolation */ "./src/c/Tween/Interpolation.ts");
 
-
-
-
-
-const defaultEasing = _Easing__WEBPACK_IMPORTED_MODULE_2__["default"].Linear.None;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(/*! ./core */ "./src/c/Tween/core.ts");
+const Utils_1 = __webpack_require__(/*! ../../Utils */ "./src/Utils.ts");
+const Easing_1 = __importDefault(__webpack_require__(/*! ./Easing */ "./src/c/Tween/Easing.ts"));
+const constants_1 = __webpack_require__(/*! ./constants */ "./src/c/Tween/constants.ts");
+const InteractionEvent_1 = __webpack_require__(/*! ../../Interaction/InteractionEvent */ "./src/Interaction/InteractionEvent.ts");
+const Interpolation_1 = __importDefault(__webpack_require__(/*! ./Interpolation */ "./src/c/Tween/Interpolation.ts"));
+const defaultEasing = Easing_1.default.Linear.None;
 /**
  * 缓动动画的主类
  * @constructor
@@ -6072,20 +6439,21 @@ class Tween extends PIXI.utils.EventEmitter {
         this._startTime = 0;
         this._delayTime = 0;
         this._repeat = 0;
-        this._r = 0;
+        this._initRepeat = 0;
         this._isPlaying = false;
         this._yoyo = false;
         this._reversed = false;
         this._onStartCallbackFired = false;
         this._isFinite = true;
-        this._chainedTweensCount = 0;
         this._prevTime = 0;
         this._rendered = false;
         this._reverseDelayTime = 0;
-        this.id = Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["uid"])();
+        /** 附加数据 */
+        this.data = {};
+        this.id = Utils_1.uid();
         this.object = object;
         this._valuesStart = Array.isArray(object) ? [] : {};
-        this._interpolationFunction = _Interpolation__WEBPACK_IMPORTED_MODULE_4__["default"].Linear;
+        this._interpolationFunction = Interpolation_1.default.Linear;
         return this;
     }
     /**
@@ -6128,7 +6496,7 @@ class Tween extends PIXI.utils.EventEmitter {
     /**
      * 是否在播放中
      * @return {boolean}
-     * @example tween.isPlaying() // returns `true` if tween in progress
+     * @example tween.isPlaying()
      * @memberof vfui.Tween
      */
     get isPlaying() {
@@ -6136,8 +6504,8 @@ class Tween extends PIXI.utils.EventEmitter {
     }
     /**
      * 是否开始播放
-     * @return {boolean} State of started of tween
-     * @example tween.isStarted() // returns `true` if tween in started
+     * @return {boolean}
+     * @example tween.isStarted()
      * @memberof vfui.Tween
      */
     get isStarted() {
@@ -6172,7 +6540,7 @@ class Tween extends PIXI.utils.EventEmitter {
     /**
      * 逆向缓动
      * @example tween.reverse()
-     * @param {boolean=} state Set state of current reverse
+     * @param {boolean=} state 是否逆向
      * @memberof vfui.Tween
      */
     reverse(state) {
@@ -6182,8 +6550,8 @@ class Tween extends PIXI.utils.EventEmitter {
     }
     /**
      * 当前动画是否逆转
-     * @return {boolean} State of reversed
-     * @example tween.reversed() // returns `true` if tween in reversed state
+     * @return {boolean}
+     * @example tween.reversed() true逆向中
      * @memberof vfui.Tween
      */
     reversed() {
@@ -6199,8 +6567,8 @@ class Tween extends PIXI.utils.EventEmitter {
             return this;
         }
         this._isPlaying = false;
-        Object(_core__WEBPACK_IMPORTED_MODULE_0__["remove"])(this);
-        return this.emit("pause" /* pause */, this.object);
+        core_1.remove(this);
+        return this.emit(InteractionEvent_1.TweenEvent.pause, this.object);
     }
     /**
      * 播放或恢复播放
@@ -6213,20 +6581,8 @@ class Tween extends PIXI.utils.EventEmitter {
         }
         this._isPlaying = true;
         this._startTime = 0;
-        Object(_core__WEBPACK_IMPORTED_MODULE_0__["add"])(this);
-        return this.emit("play" /* play */, this.object);
-    }
-    /**
-     * 从初始值，重新模仿
-     * @param {boolean=} noDelay 如果为 `true`, 重新启动缓动，排除 `delay`
-     * @example tween.restart()
-     * @memberof vfui.Tween
-     */
-    restart(noDelay) {
-        this._repeat = this._r;
-        this.reassignValues();
-        Object(_core__WEBPACK_IMPORTED_MODULE_0__["add"])(this);
-        return this.emit("restart" /* restart */, this.object);
+        core_1.add(this);
+        return this.emit(InteractionEvent_1.TweenEvent.play, this.object);
     }
     /**
      * 设置要缓动的目标属性与持续时间
@@ -6237,78 +6593,19 @@ class Tween extends PIXI.utils.EventEmitter {
      */
     to(properties, duration = 1000) {
         this._valuesEnd = properties;
-        for (let key in properties) {
-            this._valuesStart[key] = this.object[key];
-        }
-        if (typeof duration === 'function') {
-            this.duration = this._duration;
-        }
-        else {
-            this._duration = duration;
-        }
+        this._duration = duration;
         return this;
     }
-    /**
-     *
-     * Renders and computes value at first render
-     * @private
-     * @memberof vfui.Tween
-     */
     render() {
         if (this._rendered) {
             return this;
         }
         let { _valuesStart, _valuesEnd, object } = this;
-        Object(_constants__WEBPACK_IMPORTED_MODULE_3__["SET_NESTED"])(object);
-        Object(_constants__WEBPACK_IMPORTED_MODULE_3__["SET_NESTED"])(_valuesEnd);
         if (!_valuesStart.processed) {
             for (const property in _valuesEnd) {
-                let start = object && object[property] && Object(_Utils__WEBPACK_IMPORTED_MODULE_1__["deepCopy"])(object[property]);
-                let end = _valuesEnd[property];
-                if (_core__WEBPACK_IMPORTED_MODULE_0__["Plugins"][property] && _core__WEBPACK_IMPORTED_MODULE_0__["Plugins"][property].init) {
-                    _core__WEBPACK_IMPORTED_MODULE_0__["Plugins"][property].init.call(this, start, end, property, object);
-                    if (start === undefined && _valuesStart[property]) {
-                        start = _valuesStart[property];
-                    }
-                    if (_core__WEBPACK_IMPORTED_MODULE_0__["Plugins"][property].skipProcess) {
-                        continue;
-                    }
-                }
-                if ((typeof start === 'number' && isNaN(start)) ||
-                    start === null ||
-                    end === null ||
-                    start === false ||
-                    end === false ||
-                    start === undefined ||
-                    end === undefined ||
-                    start === end) {
-                    continue;
-                }
-                _valuesStart[property] = start;
-                if (Array.isArray(end)) {
-                    if (!Array.isArray(start)) {
-                        end.unshift(start);
-                        for (let i = 0, len = end.length; i < len; i++) {
-                            if (typeof end[i] === 'string') {
-                                end[i] = Object(_constants__WEBPACK_IMPORTED_MODULE_3__["decomposeString"])(end[i]);
-                            }
-                        }
-                    }
-                    else {
-                        if (end.isString && object[property].isString && !start.isString) {
-                            start.isString = true;
-                        }
-                        else {
-                            Object(_constants__WEBPACK_IMPORTED_MODULE_3__["decompose"])(property, object, _valuesStart, _valuesEnd);
-                        }
-                    }
-                }
-                else {
-                    Object(_constants__WEBPACK_IMPORTED_MODULE_3__["decompose"])(property, object, _valuesStart, _valuesEnd);
-                }
-                if (typeof start === 'number' && typeof end === 'string' && end[1] === '=') {
-                    continue;
-                }
+                let start = object && object[property] && Utils_1.deepCopy(object[property]);
+                _valuesStart[property] = start || 0;
+                constants_1.decompose(property, object, _valuesStart, _valuesEnd);
             }
             _valuesStart.processed = true;
         }
@@ -6317,7 +6614,7 @@ class Tween extends PIXI.utils.EventEmitter {
     }
     /**
      * 开始执行缓动
-     * @param {number|string} time setting manual time instead of Current browser timestamp or like `+1000` relative to current timestamp
+     * @param {number|string} time 要开始的时间，延迟值
      * @example tween.start()
      * @memberof vfui.Tween
      */
@@ -6328,7 +6625,7 @@ class Tween extends PIXI.utils.EventEmitter {
         this._onStartCallbackFired = false;
         this._rendered = false;
         this._isPlaying = true;
-        Object(_core__WEBPACK_IMPORTED_MODULE_0__["add"])(this);
+        core_1.add(this);
         return this;
     }
     /**
@@ -6337,11 +6634,11 @@ class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     stop() {
-        let { _isPlaying, _isFinite, object, _duration, _r, _yoyo, _reversed } = this;
+        let { _isPlaying, _isFinite, object, _duration, _initRepeat, _yoyo, _reversed } = this;
         if (!_isPlaying) {
             return this;
         }
-        let atStart = _isFinite ? (_r + 1) % 2 === 1 : !_reversed;
+        let atStart = _isFinite ? (_initRepeat + 1) % 2 === 1 : !_reversed;
         this._reversed = false;
         if (_yoyo && atStart) {
             this._prevTime = _duration;
@@ -6351,8 +6648,8 @@ class Tween extends PIXI.utils.EventEmitter {
         }
         this.update(0);
         this._isPlaying = false;
-        Object(_core__WEBPACK_IMPORTED_MODULE_0__["remove"])(this);
-        return this.emit("stop" /* stop */, object);
+        core_1.remove(this);
+        return this.emit(InteractionEvent_1.TweenEvent.stop, object);
     }
     /**
      * 设置延迟执行时间
@@ -6361,23 +6658,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     delay(amount) {
-        this._delayTime = typeof amount === 'function' ? amount(this._delayTime) : amount;
-        return this;
-    }
-    /**
-     * 链式执行
-     * @param {any} arguments Arguments list
-     * @example tween.chainedTweens(tween1, tween2)
-     * @memberof vfui.Tween
-     */
-    chainedTweens(...tween) {
-        this._chainedTweensCount = tween.length;
-        if (!this._chainedTweensCount) {
-            return this;
-        }
-        for (let i = 0, len = this._chainedTweensCount; i < len; i++) {
-            this[_constants__WEBPACK_IMPORTED_MODULE_3__["CHAINED_TWEENS"] + i] = tween[i];
-        }
+        this._delayTime = amount;
         return this;
     }
     /**
@@ -6387,8 +6668,8 @@ class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     repeat(amount) {
-        this._repeat = !this._duration ? 0 : typeof amount === 'function' ? amount(this._repeat) : amount;
-        this._r = this._repeat;
+        this._repeat = !this._duration ? 0 : amount;
+        this._initRepeat = this._repeat;
         this._isFinite = isFinite(amount);
         return this;
     }
@@ -6399,7 +6680,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     reverseDelay(amount) {
-        this._reverseDelayTime = typeof amount === 'function' ? amount(this._reverseDelayTime) : amount;
+        this._reverseDelayTime = amount;
         return this;
     }
     /**
@@ -6445,24 +6726,6 @@ class Tween extends PIXI.utils.EventEmitter {
         return this;
     }
     /**
-     * 为 Tween#restart 或 Timeline 重新分配时间
-     * @private
-     * @memberof vfui.Tween
-     */
-    reassignValues(time) {
-        const { _valuesStart, object, _delayTime } = this;
-        this._isPlaying = true;
-        this._startTime = time !== undefined ? time : 0;
-        this._startTime += _delayTime;
-        this._reversed = false;
-        Object(_core__WEBPACK_IMPORTED_MODULE_0__["add"])(this);
-        for (const property in _valuesStart) {
-            const start = _valuesStart[property];
-            object[property] = start;
-        }
-        return this;
-    }
-    /**
      * 更新动画到指定时间点，进行播放
      * @param time
      */
@@ -6480,6 +6743,14 @@ class Tween extends PIXI.utils.EventEmitter {
         this.pause();
     }
     /**
+     * 更新动画到指定时间点，停止播放
+     * @param time
+     */
+    gotoAndEnd() {
+        this._prevTime = this._duration;
+        this.update(0);
+    }
+    /**
      * 更新函数，通过给定的 `time` 设置目标属性变化
     * @param {number=} elapsedMS 帧间隔
     * @param {Boolean=} preserve 完成后，防止删除动画对象
@@ -6488,26 +6759,23 @@ class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     update(elapsedMS, preserve, forceTime) {
-        //console.log(time);
-        let { _onStartCallbackFired, _easingFunction, _interpolationFunction, _easingReverse, _repeat, _delayTime, _reverseDelayTime, _yoyo, _reversed, _startTime, _duration, _valuesStart, _valuesEnd, object, _isFinite, _isPlaying, _chainedTweensCount } = this;
-        let elapsed;
-        let currentEasing;
-        let property;
-        let propCount = 0;
-        elapsedMS = elapsedMS !== undefined ? elapsedMS : 0;
+        let { _onStartCallbackFired, _easingFunction, _interpolationFunction, _easingReverse, _repeat, _delayTime, _reverseDelayTime, _yoyo, _reversed, _startTime, _duration, _valuesStart, _valuesEnd, object, _isFinite, _isPlaying } = this;
         if (!_isPlaying || (_startTime > 0 && !forceTime)) {
             this._startTime -= elapsedMS;
             this._startTime = Math.max(0, this._startTime);
             return true;
         }
+        let elapsed;
+        let currentEasing;
+        let property;
         if (!_duration) {
             elapsed = 1;
             _repeat = 0;
         }
         else {
             this._prevTime += elapsedMS;
-            if (elapsedMS > _constants__WEBPACK_IMPORTED_MODULE_3__["TOO_LONG_FRAME_MS"] && Object(_core__WEBPACK_IMPORTED_MODULE_0__["isRunning"])() && Object(_core__WEBPACK_IMPORTED_MODULE_0__["isLagSmoothing"])()) {
-                this._prevTime -= _constants__WEBPACK_IMPORTED_MODULE_3__["FRAME_MS"];
+            if (elapsedMS > constants_1.TOO_LONG_FRAME_MS && core_1.isRunning() && core_1.isLagSmoothing()) {
+                this._prevTime -= constants_1.FRAME_MS;
             }
             elapsed = (this._prevTime) / _duration;
             elapsed = elapsed > 1 ? 1 : elapsed;
@@ -6518,50 +6786,31 @@ class Tween extends PIXI.utils.EventEmitter {
                 this.render();
                 this._rendered = true;
             }
-            this.emit("start" /* start */, object);
+            this.emit(InteractionEvent_1.TweenEvent.start, object);
             this._onStartCallbackFired = true;
         }
         currentEasing = _reversed ? _easingReverse || _easingFunction : _easingFunction;
-        if (!object) {
-            return true;
-        }
         for (property in _valuesEnd) {
             const start = _valuesStart[property];
-            if ((start === undefined || start === null) && !(_core__WEBPACK_IMPORTED_MODULE_0__["Plugins"][property] && _core__WEBPACK_IMPORTED_MODULE_0__["Plugins"][property].update)) {
-                continue;
-            }
             const end = _valuesEnd[property];
             const value = currentEasing[property] ? currentEasing[property](elapsed) : typeof currentEasing === 'function' ? currentEasing(elapsed) : defaultEasing(elapsed);
-            const _interpolationFunctionCall = _interpolationFunction[property]
-                ? _interpolationFunction[property] : typeof _interpolationFunction === 'function' ? _interpolationFunction : _Interpolation__WEBPACK_IMPORTED_MODULE_4__["default"].Linear;
             if (typeof end === 'number') {
                 object[property] = Math.floor(start + (end - start) * value);
             }
-            else if (Array.isArray(end) && !end.isString && !Array.isArray(start)) {
-                object[property] = _interpolationFunctionCall(end, value, object[property]);
+            else if (typeof end === 'boolean') {
+                object[property] = end;
+                elapsed = _reversed ? 0 : 1;
             }
-            else if (end && end.update) {
-                end.update(value);
+            else { //颜色
+                constants_1.recompose(property, object, _valuesStart, _valuesEnd, value, elapsed);
             }
-            else if (typeof end === 'function') {
-                object[property] = end(value);
-            }
-            else if (typeof end === 'string' && typeof start === 'number') {
-                object[property] = start + parseFloat(end[0] + end.substr(2)) * value;
-            }
-            else {
-                Object(_constants__WEBPACK_IMPORTED_MODULE_3__["recompose"])(property, object, _valuesStart, _valuesEnd, value, elapsed);
-            }
-            if (_core__WEBPACK_IMPORTED_MODULE_0__["Plugins"][property] && _core__WEBPACK_IMPORTED_MODULE_0__["Plugins"][property].update) {
-                _core__WEBPACK_IMPORTED_MODULE_0__["Plugins"][property].update.call(this, object[property], start, end, value, elapsed, property);
-            }
-            propCount++;
+            // else if (Array.isArray(end) && !(end as any).isString && !Array.isArray(start)) {
+            //     const _interpolationFunctionCall = _interpolationFunction[property]
+            //     ? _interpolationFunction[property] : typeof _interpolationFunction === 'function' ? _interpolationFunction : Interpolation.Linear;
+            //     object[property] = _interpolationFunctionCall(end, value, object[property]);
+            // } 
         }
-        if (!propCount) {
-            Object(_core__WEBPACK_IMPORTED_MODULE_0__["remove"])(this);
-            return false;
-        }
-        this.emit("update" /* update */, object, elapsed, elapsedMS);
+        this.emit(InteractionEvent_1.TweenEvent.update, object, elapsed, elapsedMS);
         if (elapsed === 1 || (_reversed && elapsed === 0)) {
             this._prevTime = 0;
             if (_repeat > 0 && _duration > 0) {
@@ -6571,15 +6820,7 @@ class Tween extends PIXI.utils.EventEmitter {
                 if (_yoyo) {
                     this._reversed = !_reversed;
                 }
-                else {
-                    for (property in _valuesEnd) {
-                        let end = _valuesEnd[property];
-                        if (typeof end === 'string' && typeof _valuesStart[property] === 'number') {
-                            _valuesStart[property] += parseFloat(end[0] + end.substr(2));
-                        }
-                    }
-                }
-                this.emit(_yoyo && !_reversed ? "reverse" /* reverse */ : "repeat" /* repeat */, object);
+                this.emit(_yoyo && !_reversed ? InteractionEvent_1.TweenEvent.reverse : InteractionEvent_1.TweenEvent.repeat, object);
                 if (_reversed && _reverseDelayTime) {
                     this._startTime = _reverseDelayTime;
                 }
@@ -6591,21 +6832,17 @@ class Tween extends PIXI.utils.EventEmitter {
             else {
                 if (!preserve) {
                     this._isPlaying = false;
-                    Object(_core__WEBPACK_IMPORTED_MODULE_0__["remove"])(this);
+                    core_1.remove(this);
                 }
-                this.emit("complete" /* complete */, object);
-                this._repeat = this._r;
-                if (_chainedTweensCount) {
-                    for (let i = 0; i < _chainedTweensCount; i++) {
-                        this[_constants__WEBPACK_IMPORTED_MODULE_3__["CHAINED_TWEENS"] + i].start(this._prevTime + _duration);
-                    }
-                }
+                this.emit(InteractionEvent_1.TweenEvent.complete, object);
+                this._repeat = this._initRepeat;
                 return false;
             }
         }
         return true;
     }
 }
+exports.default = Tween;
 
 
 /***/ }),
@@ -6614,45 +6851,33 @@ class Tween extends PIXI.utils.EventEmitter {
 /*!**********************************!*\
   !*** ./src/c/Tween/constants.ts ***!
   \**********************************/
-/*! exports provided: FRAME_MS, TOO_LONG_FRAME_MS, CHAINED_TWEENS, STRING_PROP, NUM_REGEX, decomposeString, decompose, RGB, RGBA, isRGBColor, recompose, SET_NESTED */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FRAME_MS", function() { return FRAME_MS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TOO_LONG_FRAME_MS", function() { return TOO_LONG_FRAME_MS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHAINED_TWEENS", function() { return CHAINED_TWEENS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "STRING_PROP", function() { return STRING_PROP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NUM_REGEX", function() { return NUM_REGEX; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "decomposeString", function() { return decomposeString; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "decompose", function() { return decompose; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGB", function() { return RGB; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBA", function() { return RGBA; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isRGBColor", function() { return isRGBColor; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recompose", function() { return recompose; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_NESTED", function() { return SET_NESTED; });
-/* harmony import */ var _Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../Utils */ "./src/Utils.ts");
 
+Object.defineProperty(exports, "__esModule", { value: true });
+const Utils_1 = __webpack_require__(/*! ../../Utils */ "./src/Utils.ts");
 /**
  * 卡帧后的平滑处理帧率
  */
-const FRAME_MS = 50 / 3;
+exports.FRAME_MS = 50 / 3;
 /**
  * 平滑处理允许的触发时间
  */
-const TOO_LONG_FRAME_MS = 250;
+exports.TOO_LONG_FRAME_MS = 250;
 /**
  * 链式补间动画的key前缀
  */
-const CHAINED_TWEENS = '_chainedTweens';
+exports.CHAINED_TWEENS = '_chainedTweens';
 // For String tweening stuffs
-const STRING_PROP = 'STRING_PROP';
+exports.STRING_PROP = 'STRING_PROP';
 // Also RegExp's for string tweening
-const NUM_REGEX = /\s+|([A-Za-z?().,{}:""[\]#%]+)|([-+]=+)?([-+]+)?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]=?\d+)?/g;
+exports.NUM_REGEX = /\s+|([A-Za-z?().,{}:""[\]#%]+)|([-+]=+)?([-+]+)?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]=?\d+)?/g;
 const isNaNForST = (v) => isNaN(+v) || ((v[0] === '+' || v[0] === '-') && v[1] === '=') || v === '' || v === ' ';
 const hexColor = /^#([0-9a-f]{6}|[0-9a-f]{3})$/gi;
 const hex2rgbext = (all, ...hex) => {
-    let rgb = Object(_Utils__WEBPACK_IMPORTED_MODULE_0__["hexToRgb"])(all);
+    let rgb = Utils_1.hexToRgb(all);
     return 'rgb(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ')';
 };
 function decomposeString(fromValue) {
@@ -6665,7 +6890,7 @@ function decomposeString(fromValue) {
     if (fromValue.charAt(1) === '=') {
         return fromValue;
     }
-    const hex = fromValue.replace(hexColor, hex2rgbext).match(NUM_REGEX);
+    const hex = fromValue.replace(hexColor, hex2rgbext).match(exports.NUM_REGEX);
     let value;
     if (hex) {
         value = hex.map((v) => (isNaNForST(v) ? v : +v));
@@ -6673,6 +6898,7 @@ function decomposeString(fromValue) {
     value.isString = true;
     return value;
 }
+exports.decomposeString = decomposeString;
 // Decompose value, now for only `string` that required
 function decompose(prop, obj, from, to) {
     const fromValue = from[prop];
@@ -6706,8 +6932,8 @@ function decompose(prop, obj, from, to) {
         return true;
     }
     else if (typeof fromValue === 'string' || typeof toValue === 'string') {
-        let fromValue1 = Array.isArray(fromValue) && fromValue[0] === STRING_PROP ? fromValue : decomposeString(fromValue);
-        let toValue1 = Array.isArray(toValue) && toValue[0] === STRING_PROP ? toValue : decomposeString(toValue);
+        let fromValue1 = Array.isArray(fromValue) && fromValue[0] === exports.STRING_PROP ? fromValue : decomposeString(fromValue);
+        let toValue1 = Array.isArray(toValue) && toValue[0] === exports.STRING_PROP ? toValue : decomposeString(toValue);
         if (fromValue1 === undefined) {
             return;
         }
@@ -6722,10 +6948,10 @@ function decompose(prop, obj, from, to) {
             }
         }
         i = 0;
-        if (fromValue1[0] === STRING_PROP) {
+        if (fromValue1[0] === exports.STRING_PROP) {
             fromValue1.shift();
         }
-        if (toValue1[0] === STRING_PROP) {
+        if (toValue1[0] === exports.STRING_PROP) {
             toValue1.shift();
         }
         from[prop] = fromValue1;
@@ -6745,12 +6971,14 @@ function decompose(prop, obj, from, to) {
     }
     return false;
 }
+exports.decompose = decompose;
 // Recompose value
-const RGB = 'rgb(';
-const RGBA = 'rgba(';
-function isRGBColor(v, i, r = RGB) {
+exports.RGB = 'rgb(';
+exports.RGBA = 'rgba(';
+function isRGBColor(v, i, r = exports.RGB) {
     return typeof v[i] === 'number' && (v[i - 1] === r || v[i - 3] === r || v[i - 5] === r);
 }
+exports.isRGBColor = isRGBColor;
 function recompose(prop, obj, from, to, t, originalT, stringBuffer) {
     const fromValue = stringBuffer ? from : from[prop];
     let toValue = stringBuffer ? to : to[prop];
@@ -6779,7 +7007,7 @@ function recompose(prop, obj, from, to, t, originalT, stringBuffer) {
                         : isRelative
                             ? fromValue[i] + parseFloat(toValue[i][0] + toValue[i].substr(2)) * t
                             : fromValue[i] + (toValue[i] - fromValue[i]) * t;
-                    if (isRGBColor(fromValue, i) || isRGBColor(fromValue, i, RGBA)) {
+                    if (isRGBColor(fromValue, i) || isRGBColor(fromValue, i, exports.RGBA)) {
                         currentValue |= 0;
                     }
                     STRING_BUFFER += currentValue;
@@ -6796,7 +7024,7 @@ function recompose(prop, obj, from, to, t, originalT, stringBuffer) {
             }
             return STRING_BUFFER;
         }
-        else if (Array.isArray(fromValue) && fromValue[0] !== STRING_PROP) {
+        else if (Array.isArray(fromValue) && fromValue[0] !== exports.STRING_PROP) {
             for (let i = 0, len = fromValue.length; i < len; i++) {
                 if (fromValue[i] === toValue[i] || typeof obj[prop] === 'string') {
                     continue;
@@ -6827,6 +7055,7 @@ function recompose(prop, obj, from, to, t, originalT, stringBuffer) {
     }
     return obj[prop];
 }
+exports.recompose = recompose;
 // Dot notation => Object structure converter
 // example
 // {'scale.x.y.z':'VALUE'} => {scale:{x:{y:{z:'VALUE'}}}}
@@ -6881,7 +7110,7 @@ const propExtract = function (obj, property) {
         return nested;
     }, obj);
 };
-const SET_NESTED = function (nested) {
+exports.SET_NESTED = function (nested) {
     if (typeof nested === 'object' && !!nested) {
         for (let prop in nested) {
             if (prop.indexOf('.') !== -1 || prop.indexOf('[') !== -1) {
@@ -6915,23 +7144,12 @@ const SET_NESTED = function (nested) {
 /*!*****************************!*\
   !*** ./src/c/Tween/core.ts ***!
   \*****************************/
-/*! exports provided: Plugins, add, FrameThrottle, ToggleLagSmoothing, getAll, removeAll, get, removeDisplay, remove, update, isRunning, isLagSmoothing */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Plugins", function() { return Plugins; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "add", function() { return add; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FrameThrottle", function() { return FrameThrottle; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ToggleLagSmoothing", function() { return ToggleLagSmoothing; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAll", function() { return getAll; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeAll", function() { return removeAll; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "get", function() { return get; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "removeDisplay", function() { return removeDisplay; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "remove", function() { return remove; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "update", function() { return update; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isRunning", function() { return isRunning; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isLagSmoothing", function() { return isLagSmoothing; });
+
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 缓动列表
  * @private
@@ -6964,7 +7182,7 @@ let handleLag = true;
   *
   * @static
   */
-const Plugins = {};
+exports.Plugins = {};
 /**
  * 添加对象到缓动列表
  * @param {Tween} tween Tween 实例
@@ -6983,6 +7201,7 @@ function add(tween) {
     emptyFrame = 0;
     isStarted = true;
 }
+exports.add = add;
 /**
  * 没有缓动后，设置运行多少帧后，停止
  * @param {number} frameCount=120 删除所有动画后，要运行的剩余帧
@@ -6993,6 +7212,7 @@ function add(tween) {
 function FrameThrottle(frameCount = 120) {
     powerModeThrottle = frameCount * 1.05;
 }
+exports.FrameThrottle = FrameThrottle;
 /**
  * 延时处理，针对插件、canvas、dom
  * @param {number} state=true 是否平滑处理
@@ -7003,6 +7223,7 @@ function FrameThrottle(frameCount = 120) {
 function ToggleLagSmoothing(_state = true) {
     handleLag = _state;
 }
+exports.ToggleLagSmoothing = ToggleLagSmoothing;
 /**
  * 获得所有缓动对象
  * @memberof vfui.tween
@@ -7011,6 +7232,7 @@ function ToggleLagSmoothing(_state = true) {
 function getAll() {
     return _tweens;
 }
+exports.getAll = getAll;
 /**
  * 移除所有动画对象
  * @example  vfui.tween.removeAll()
@@ -7020,6 +7242,7 @@ function removeAll() {
     _tweens.length = 0;
     isStarted = false;
 }
+exports.removeAll = removeAll;
 /**
  * 获取对象
  * @param {Tween} tween 缓动对象实例
@@ -7036,6 +7259,7 @@ function get(tween) {
     }
     return null;
 }
+exports.get = get;
 function removeDisplay(uuid) {
     for (let i = 0; i < _tweens.length; i++) {
         console.log(_tweens[i].object.uuid);
@@ -7047,6 +7271,7 @@ function removeDisplay(uuid) {
     }
     return;
 }
+exports.removeDisplay = removeDisplay;
 /**
  * 从缓动列表移除对象
  * @param {Tween} tween Tween instance
@@ -7063,6 +7288,7 @@ function remove(tween) {
         isStarted = false;
     }
 }
+exports.remove = remove;
 /**
  * 按给定时间更新缓动
  * @param {number=} time 时间戳
@@ -7096,6 +7322,7 @@ function update(time, preserve = false) {
     }
     return true;
 }
+exports.update = update;
 /**
  * 是否正在运行中
  * @return {Boolean} 只要还有缓动在运行，返回true
@@ -7105,6 +7332,7 @@ function update(time, preserve = false) {
 function isRunning() {
     return isStarted;
 }
+exports.isRunning = isRunning;
 /**
  * 返回是否开启延迟平滑状态
  * @return {Boolean}
@@ -7114,6 +7342,7 @@ function isRunning() {
 function isLagSmoothing() {
     return handleLag;
 }
+exports.isLagSmoothing = isLagSmoothing;
 
 
 /***/ }),
@@ -7122,51 +7351,46 @@ function isLagSmoothing() {
 /*!******************************!*\
   !*** ./src/c/Tween/index.ts ***!
   \******************************/
-/*! exports provided: Plugins, get, getAll, removeAll, remove, removeDisplay, add, update, isRunning, FrameThrottle, ToggleLagSmoothing, Tween, Easing, Interpolation, utils */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./core */ "./src/c/Tween/core.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Plugins", function() { return _core__WEBPACK_IMPORTED_MODULE_0__["Plugins"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "get", function() { return _core__WEBPACK_IMPORTED_MODULE_0__["get"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getAll", function() { return _core__WEBPACK_IMPORTED_MODULE_0__["getAll"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeAll", function() { return _core__WEBPACK_IMPORTED_MODULE_0__["removeAll"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "remove", function() { return _core__WEBPACK_IMPORTED_MODULE_0__["remove"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "removeDisplay", function() { return _core__WEBPACK_IMPORTED_MODULE_0__["removeDisplay"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "add", function() { return _core__WEBPACK_IMPORTED_MODULE_0__["add"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "update", function() { return _core__WEBPACK_IMPORTED_MODULE_0__["update"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isRunning", function() { return _core__WEBPACK_IMPORTED_MODULE_0__["isRunning"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "FrameThrottle", function() { return _core__WEBPACK_IMPORTED_MODULE_0__["FrameThrottle"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ToggleLagSmoothing", function() { return _core__WEBPACK_IMPORTED_MODULE_0__["ToggleLagSmoothing"]; });
-
-/* harmony import */ var _Easing__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Easing */ "./src/c/Tween/Easing.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Easing", function() { return _Easing__WEBPACK_IMPORTED_MODULE_1__["default"]; });
-
-/* harmony import */ var _Interpolation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Interpolation */ "./src/c/Tween/Interpolation.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Interpolation", function() { return _Interpolation__WEBPACK_IMPORTED_MODULE_2__["default"]; });
-
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./constants */ "./src/c/Tween/constants.ts");
-/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "utils", function() { return _constants__WEBPACK_IMPORTED_MODULE_3__; });
-/* harmony import */ var _Tween__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Tween */ "./src/c/Tween/Tween.ts");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Tween", function() { return _Tween__WEBPACK_IMPORTED_MODULE_4__["default"]; });
-
-
-
-
-
-
-
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(/*! ./core */ "./src/c/Tween/core.ts");
+exports.add = core_1.add;
+exports.get = core_1.get;
+exports.getAll = core_1.getAll;
+exports.isRunning = core_1.isRunning;
+exports.FrameThrottle = core_1.FrameThrottle;
+exports.ToggleLagSmoothing = core_1.ToggleLagSmoothing;
+exports.Plugins = core_1.Plugins;
+exports.remove = core_1.remove;
+exports.removeAll = core_1.removeAll;
+exports.removeDisplay = core_1.removeDisplay;
+exports.update = core_1.update;
+const Easing_1 = __importDefault(__webpack_require__(/*! ./Easing */ "./src/c/Tween/Easing.ts"));
+exports.Easing = Easing_1.default;
+const Interpolation_1 = __importDefault(__webpack_require__(/*! ./Interpolation */ "./src/c/Tween/Interpolation.ts"));
+exports.Interpolation = Interpolation_1.default;
+const utils = __importStar(__webpack_require__(/*! ./constants */ "./src/c/Tween/constants.ts"));
+exports.utils = utils;
+const InteractionEvent_1 = __webpack_require__(/*! ../../Interaction/InteractionEvent */ "./src/Interaction/InteractionEvent.ts");
+exports.TweenEvent = InteractionEvent_1.TweenEvent;
+const Tween_1 = __importDefault(__webpack_require__(/*! ./Tween */ "./src/c/Tween/Tween.ts"));
+exports.Tween = Tween_1.default;
+const Timeline_1 = __importDefault(__webpack_require__(/*! ./Timeline */ "./src/c/Tween/Timeline.ts"));
+exports.Timeline = Timeline_1.default;
 
 
 /***/ }),
@@ -7175,13 +7399,20 @@ __webpack_require__.r(__webpack_exports__);
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _UI__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const vfui = __importStar(__webpack_require__(/*! ./UI */ "./src/UI.ts"));
 // //注入常规兼容方法
 // if(!Array.from){
 //     Array.from = function (el: unknown[]) {
@@ -7191,8 +7422,8 @@ __webpack_require__.r(__webpack_exports__);
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
 //     return this.lastIndexOf(word, pos || 0) === 0;
 // });
-/* harmony default export */ __webpack_exports__["default"] = (_UI__WEBPACK_IMPORTED_MODULE_0__);
-window.vfui = _UI__WEBPACK_IMPORTED_MODULE_0__;
+exports.default = vfui;
+window.vfui = vfui;
 
 
 /***/ })

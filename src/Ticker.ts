@@ -33,7 +33,7 @@ class Ticker extends PIXI.utils.EventEmitter{
             return;
         }
         tween.update(elapsedMS);
-        this.emit("update", deltaTime,lastTime);
+        this.emit("update", deltaTime,lastTime,elapsedMS);
         
     }
     /**
@@ -41,7 +41,7 @@ class Ticker extends PIXI.utils.EventEmitter{
      * @param fn 被调用的函数
      * @param context 当前域
      */
-    public addUpdateEvent<T>(fn: (deltaTime: number) => void,context: T){
+    public addUpdateEvent<T>(fn: (deltaTime: number,lastTime?: number,elapsedMS?: number) => void,context: T){
         return this.on("update",fn,context);
     }
     /**
@@ -49,7 +49,7 @@ class Ticker extends PIXI.utils.EventEmitter{
      * @param fn 被调用的函数
      * @param context 当前域
      */
-    public removeUpdateEvent<T>(fn: (deltaTime: number) => void,context: T){
+    public removeUpdateEvent<T>(fn: (deltaTime: number,lastTime?: number,elapsedMS?: number) => void,context: T){
         return this.removeListener("update",fn,context);
     }
     

@@ -17,13 +17,13 @@ declare class Ticker extends PIXI.utils.EventEmitter {
      * @param fn 被调用的函数
      * @param context 当前域
      */
-    addUpdateEvent<T>(fn: (deltaTime: number) => void, context: T): this;
+    addUpdateEvent<T>(fn: (deltaTime: number, lastTime?: number, elapsedMS?: number) => void, context: T): this;
     /**
      * 移除更新监听器
      * @param fn 被调用的函数
      * @param context 当前域
      */
-    removeUpdateEvent<T>(fn: (deltaTime: number) => void, context: T): this;
+    removeUpdateEvent<T>(fn: (deltaTime: number, lastTime?: number, elapsedMS?: number) => void, context: T): this;
 }
 /**
  * Ticker 的实例
