@@ -6,6 +6,7 @@ class Node {
         this.start = 0;
         this.end = 0;
         this.duration = 0;
+        this.startFrame = 0;
         this.endFrame = 0;
         this.prevTime = 0;
         this.parent = node;
@@ -34,34 +35,37 @@ class Node {
  */
 export default class Timeline {
     constructor() {
-        this._id = -1;
+        this.id = -1;
         this._frames = new Array();
         this._frameCount = 0;
-        this._curFrame = 0;
-        this._elapsedMS = 16.666666666666; //1000/60
+        this._elapsedMS = 16.66; //1000/60
         this._prevTime = 0;
-        this._duration = 60;
+        this._duration = 0;
         this._isStop = false;
         this._lastNode = new Map();
+        this._isSetDefault = false;
     }
-    setDefault(object, _duration, _framesCount) {
+    setDefault(object, _duration, fps) {
         this._object = object;
         this._duration = _duration;
-        this._elapsedMS = _duration / _framesCount;
-        this._frameCount = _framesCount;
-        while (this._frames && this._frames.length > _framesCount) {
-            this._frames.pop();
+        this._elapsedMS = 1000 / fps;
+        let frameCount = Math.round(_duration / this._elapsedMS);
+        this._frameCount = frameCount;
+        let frames = this._frames;
+        while (frames && frames.length > frameCount) {
+            frames.pop();
         }
-        let i = this._frames.length === 0 ? 0 : this._frames.length;
-        for (i; i <= _framesCount; i++) {
-            if (this._frames[i] === undefined)
-                this._frames[i] = new Map();
+        let i = frames.length === 0 ? 0 : frames.length;
+        for (i; i <= frameCount; i++) {
+            if (frames[i] === undefined)
+                frames[i] = new Map();
         }
+        this._isSetDefault = true;
         return this;
     }
-    addProperty(property, value, endFrame, curve) {
+    addProperty(property, value, endFrame, easing) {
         if (endFrame > this._frameCount) {
-            throw "Error Timeline.addProperty overflow frame Count";
+            throw "Error Timeline.addProperty overflow frame";
         }
         let parentNode = this._lastNode.get(property);
         let node = objectPoolShared.pop(Node);
@@ -71,27 +75,23 @@ export default class Timeline {
         else {
             node.parent = parentNode;
         }
-        let startFrame = node.parent === undefined ? 0 : (node.parent.endFrame + 1);
+        node.startFrame = node.parent === undefined ? 0 : (node.parent.endFrame + 1);
         node.end = value;
         node.start = node.parent === undefined ? (this._object[property] || 0) : node.parent.end;
-        if (curve && curve.length == 1) {
-            node.easing = Easing.Back.In;
+        if (easing) {
+            node.easing = easing;
         }
         else {
             node.easing = Easing.Linear.None;
         }
-        node.duration = (endFrame - startFrame) * this._elapsedMS;
+        node.duration = (endFrame - node.startFrame) * this._elapsedMS;
         node.endFrame = endFrame;
         this._lastNode.set(property, node);
-        for (let i = startFrame; i <= endFrame; i++) {
+        for (let i = node.startFrame; i <= endFrame; i++) {
             this._frames[i].set(property, node);
         }
         return this;
     }
-    // public _addObject(obj:TAny,formTo:TAny,startFrame: number, endFrame: number){
-    //     let tw = new Tween(obj).to(formTo,(endFrame - startFrame) * this._elapsedMS);
-    //     this.add(tw,startFrame,endFrame);
-    // }
     stop() {
         this._isStop = true;
     }
@@ -104,44 +104,59 @@ export default class Timeline {
     gotoAndStop(frame) {
         this.goto(frame, true);
     }
+    seekLastNode(value, frame) {
+        if (value.parent === undefined) {
+            return value;
+        }
+        if (value.endFrame > frame) {
+            this.seekLastNode(value.parent, frame);
+        }
+        return value;
+    }
     goto(frame, isStop) {
-        // this._keyFrames.forEach(value=>{
-        //     if(value<frame)
-        //         this._frames[value].forEach(value=>{
-        //             value.gotoAndEnd();
-        //         });
-        // });
-        // this._frames[frame].forEach(value=>{
-        //     const time = (frame - value.data.startFrame)*this._elapsedMS;
-        //     if(isStop){
-        //         value.gotoAndStop(time);
-        //     }else{
-        //         value.gotoAndPlay(time);
-        //     }   
-        // });
-        // this._isStop = isStop;
+        let { _lastNode, _frames } = this;
+        _lastNode.forEach((value, key) => {
+            let node = this.seekLastNode(value, frame);
+            node.prevTime = node.duration;
+            this.updateobject(key, node);
+        }, this);
+        this._prevTime = frame * this._elapsedMS;
+        for (let i = frame; i < _frames.length; i++) {
+            _frames[i].forEach((value, key) => {
+                if (i == frame) {
+                    value.prevTime = (frame - value.startFrame) * this._elapsedMS;
+                    this.updateobject(key, value);
+                }
+                else {
+                    value.prevTime = 0;
+                }
+            }, this);
+        }
+        this._isStop = isStop;
+        if (!this._isStop) {
+            this.load();
+        }
     }
     update(a, b, elapsedMS = 0) {
         if (this._isStop) {
             return;
         }
-        let { _curFrame, _prevTime, _frames, _frameCount, _elapsedMS } = this;
-        _curFrame = Math.round(_prevTime / _elapsedMS);
-        if (_curFrame >= _frameCount) {
+        let { _prevTime, _frames, _frameCount, _elapsedMS } = this;
+        let curFrame = Math.round(_prevTime / _elapsedMS);
+        if (curFrame >= _frameCount) {
             this._isStop = true;
         }
-        if (_frames[this._curFrame] == undefined) {
+        if (_frames[curFrame] == undefined) {
             this._isStop = true;
             return;
         }
         _prevTime += elapsedMS;
-        _frames[this._curFrame].forEach((value, key, map) => {
-            if (value.start != value.end) {
+        _frames[curFrame].forEach((value, key) => {
+            if (value.start !== value.end) {
                 value.prevTime += elapsedMS;
                 this.updateobject(key, value);
             }
         }, this);
-        this._curFrame = _curFrame;
         this._prevTime = _prevTime;
         return true;
     }
@@ -169,6 +184,9 @@ export default class Timeline {
         return false;
     }
     load() {
+        if (!this._isSetDefault) {
+            throw "Error Timeline.load undefined default";
+        }
         tickerShared.removeUpdateEvent(this.update, this);
         tickerShared.addUpdateEvent(this.update, this);
     }
@@ -180,14 +198,14 @@ export default class Timeline {
             });
             map.clear();
         });
+        this.id = -1;
         this._object = undefined;
-        this._id = -1;
         this._frameCount = 0;
-        this._curFrame = 0;
         this._elapsedMS = 16.666666666666; //1000/60
         this._prevTime = 0;
-        this._duration = 60;
+        this._duration = 0;
         this._isStop = false;
+        this._isSetDefault = false;
         this._lastNode.clear();
     }
     destroy(destroyWebGL) {

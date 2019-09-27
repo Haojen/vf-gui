@@ -80,7 +80,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
     protected _startTime = 0;
     protected _delayTime = 0;
     private _repeat = 0;
-    private _initRepeat= 0;
+    private _initRepeat = 0;
     public _isPlaying = false;
     private _yoyo = false;
     private _reversed = false;
@@ -92,7 +92,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
     private _rendered = false;
     private _reverseDelayTime = 0;
     /** 附加数据 */
-    public data:{[key:string]:TAny} = {};
+    public data: { [key: string]: TAny } = {};
 
     /**
      * 是否在播放中
@@ -309,7 +309,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
      * @example tween.reverseDelay(500)
      * @memberof vfui.Tween
      */
-    public reverseDelay(amount:number) {
+    public reverseDelay(amount: number) {
         this._reverseDelayTime = amount;
 
         return this;
@@ -441,7 +441,7 @@ export default class Tween extends PIXI.utils.EventEmitter {
             elapsed = (this._prevTime) / _duration;
             elapsed = elapsed > 1 ? 1 : elapsed;
             elapsed = _reversed ? 1 - elapsed : elapsed;
-            
+
         }
         if (!_onStartCallbackFired) {
             if (!this._rendered) {

@@ -5,6 +5,7 @@ declare class Node {
     end: TAny;
     easing: TAny;
     duration: number;
+    startFrame: number;
     endFrame: number;
     prevTime: number;
     release(): void;
@@ -23,23 +24,24 @@ declare class Node {
  */
 export default class Timeline implements Lifecycle {
     constructor();
+    id: number;
     private _object;
-    private _id;
     private _frames;
     private _frameCount;
-    private _curFrame;
     private _elapsedMS;
     private _prevTime;
     private _duration;
     private _isStop;
     private _lastNode;
-    setDefault(object: TAny, _duration: number, _framesCount: number): this;
-    addProperty(property: string, value: number | string | boolean, endFrame: number, curve?: number[]): this;
+    private _isSetDefault;
+    setDefault(object: TAny, _duration: number, fps: number): this;
+    addProperty(property: string, value: number | string | boolean, endFrame: number, easing?: TAny): this;
     stop(): void;
     play(): void;
     gotoAndPlay(frame: number): void;
     gotoAndStop(frame: number): void;
-    goto(frame: number, isStop: boolean): void;
+    private seekLastNode;
+    private goto;
     update(a: number, b?: number, elapsedMS?: number): true | undefined;
     updateobject(key: string, node: Node): boolean;
     load(): void;

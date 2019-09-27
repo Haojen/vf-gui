@@ -35,3 +35,5 @@ docs/
 /menu
 dist/test.js
 dist/test.js.map
+dist/src/
+dist/test/
