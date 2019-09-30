@@ -19,5 +19,6 @@ import UIBase from "./UIBase";
 import { shared as TickerShared } from "./Ticker";
 import * as AlignEnum from "./Enum/AlignEnum";
 import * as tween from "./c/Tween/index";
+import AnimatedSprite from "./c/AnimatedSprite";
 /** 请不要在编写UI组件内部使用本类 */
-export { Utils, Stage, Container, ScrollingContainer, SortableList, Sprite, TilingSprite, SliceSprite, Slider, ScrollBar, Text, TextStyle, TextInput, Button, CheckBox, Rect, Interaction, UIBase, TickerShared, AlignEnum, tween };
+export { Utils, Stage, Container, ScrollingContainer, SortableList, Sprite, TilingSprite, SliceSprite, Slider, ScrollBar, Text, TextStyle, TextInput, Button, CheckBox, Rect, Interaction, UIBase, TickerShared, AlignEnum, tween, AnimatedSprite };
