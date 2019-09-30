@@ -11,22 +11,24 @@ export default  class TestAnimatedSprite {
 
         const loader = PIXI.Loader.shared;
         let bool = false;
-        loader.add("1_role1-sheet",'assets/1_role_sheet.json').load((loader: PIXI.Loader, resources: object) => {
+        loader.add("role",'assets/1_role_sheet.json').load((loader: PIXI.Loader, resources: any) => {
 
-            let sheet = loader.resources["1_role1-sheet"].spritesheet;
-
-            let mc = new vfui.AnimatedSprite(sheet.animations["1_role1-sheet"]);
+            let mc = new vfui.AnimatedSprite();
             mc.animationSpeed = 60;
-            mc.play();
+            mc.source = resources["role"].spritesheet;
+            mc.animationName = "1_role1-sheet";
+            mc.autoPlay = false;
+            //mc.gotoAndPlay(0);
+            //mc.loop = false;
             uiStage.addChild(mc);
 
             let ck = new vfui.Interaction.ClickEvent(mc);
             ck.onClick = ()=>{
                 bool = !bool;
                 if(bool){
-                    mc.gotoAndStop(0);
-                }else{
                     mc.gotoAndStop(1);
+                }else{
+                    mc.gotoAndStop(0);
                 }
                 
             }

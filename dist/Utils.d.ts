@@ -8,7 +8,7 @@
 export declare let _getSourcePath: Function;
 /** 日志输出 */
 export declare function log(message?: string | number | object, ...optionalParams: string[] | number[] | object[]): void;
-export declare function setSourcePath(params: (path: TAny) => {}): void;
+export declare function setSourcePath(params: (path: TAny, cls?: TAny) => {}): void;
 /**
  * 快速设置矩形
  * @param sourcr

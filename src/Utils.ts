@@ -12,7 +12,7 @@ export function log(message?: string | number | object, ...optionalParams: strin
     console.log(message, ...optionalParams);
 }
 
-export function setSourcePath(params: (path: TAny) => {}) {
+export function setSourcePath(params: (path: TAny,cls?:TAny) => {}) {
     _getSourcePath = params;
 }
 

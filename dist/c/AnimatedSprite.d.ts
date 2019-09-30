@@ -8,8 +8,19 @@ import UIBase from "../UIBase";
  * @memberof PIXI.UI
  */
 export default class AnimatedSprite extends UIBase {
-    constructor(textures: PIXI.Texture[] | PIXI.AnimatedSprite.FrameObject[], autoUpdate?: boolean | undefined);
+    constructor();
     private _animatedSprite;
+    private _animationName;
+    animationName: string;
+    /**
+     * 是否自动播放
+     */
+    autoPlay: boolean;
+    /**
+     * 设置源,loader中的PIXI.Spritesheet
+     */
+    private _source;
+    source: PIXI.Spritesheet | undefined;
     /**
      * 播放速度
     */
@@ -28,4 +39,5 @@ export default class AnimatedSprite extends UIBase {
     stop(): void;
     /** 播放 */
     play(): void;
+    update(): void;
 }
