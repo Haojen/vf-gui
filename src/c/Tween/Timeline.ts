@@ -8,6 +8,7 @@ class Node {
         this.parent = node;
     }
     public parent: Node | undefined;
+    public default = 0;
     public start: TAny = 0;
     public end: TAny = 0;
     public easing: TAny;
@@ -88,6 +89,7 @@ export default class Timeline implements Lifecycle {
         node.startFrame = node.parent === undefined ? 0 : (node.parent.endFrame + 1);
         node.end = value;
         node.start = node.parent === undefined ? (this._object[property] || 0) : node.parent.end;
+        node.default = this._object[property];
         if (easing) {
             node.easing = easing;
         } else {
@@ -194,9 +196,20 @@ export default class Timeline implements Lifecycle {
         const value = node.easing(elapsed);
         const start = node.start;
         const end = node.end;
-
         if (typeof end === 'number') {
-            this._object[key] = Math.floor(start + (end - start) * value);
+            switch(key){
+                case "x":
+                case "y":
+                case "angle":
+                    this._object[key] =node.default + Math.floor(start + (end - start) * value);
+                case "scaleX":
+                case "scaleY":
+                case "rotation":
+                    this._object[key] = node.default * Math.floor(start + (end - start) * value);
+                default:
+                    this._object[key] = Math.floor(start + (end - start) * value);
+            }
+            
         } else if (typeof end === 'boolean') {
             this._object[key] = end;
         }

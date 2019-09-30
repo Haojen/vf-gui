@@ -3,6 +3,7 @@ import { _getSourcePath } from "../Utils";
 
 /**
  * UI 序列图动画
+ * 需要设置轴点旋转，需要使用texturepacker处理轴点
  *
  * @class
  * @extends PIXI.UI.UIBase
