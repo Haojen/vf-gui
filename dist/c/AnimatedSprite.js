@@ -14,7 +14,7 @@ export default class AnimatedSprite extends UIBase {
         /**
          * 是否自动播放
          */
-        this.autoPlay = false;
+        this._autoPlay = false;
         /**
          * 播放速度
         */
@@ -30,6 +30,15 @@ export default class AnimatedSprite extends UIBase {
     set animationName(value) {
         this._animationName = value;
         this.update();
+    }
+    get autoPlay() {
+        return this._autoPlay;
+    }
+    set autoPlay(value) {
+        this._autoPlay = value;
+        if (this._curAnimation && value) {
+            this._curAnimation.sp.play();
+        }
     }
     get source() {
         return this._source;
@@ -91,6 +100,8 @@ export default class AnimatedSprite extends UIBase {
             if (_animatedSprites.size) {
                 let sp = _animatedSprites.get(_animationName);
                 if (sp) {
+                    sp.loop = this._loop;
+                    sp.animationSpeed = this._animationSpeed;
                     this.container.addChild(sp);
                     if (this.autoPlay) {
                         sp.play();
@@ -105,6 +116,8 @@ export default class AnimatedSprite extends UIBase {
                 this.container.removeChild(_curAnimation.sp);
                 let sp = _animatedSprites.get(_animationName);
                 if (sp) {
+                    sp.loop = this._loop;
+                    sp.animationSpeed = this._animationSpeed;
                     this.container.addChild(sp);
                     _curAnimation.name = _animationName;
                     _curAnimation.sp = sp;
@@ -113,11 +126,9 @@ export default class AnimatedSprite extends UIBase {
                     }
                 }
             }
-            _curAnimation.sp.loop = this._loop;
-            _curAnimation.sp.animationSpeed = this._animationSpeed;
+            this._curAnimation = _curAnimation;
+            this._animatedSprites = _animatedSprites;
         }
-        this._curAnimation = _curAnimation;
-        this._animatedSprites = _animatedSprites;
     }
 }
 //# sourceMappingURL=AnimatedSprite.js.map

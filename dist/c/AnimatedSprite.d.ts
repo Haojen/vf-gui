@@ -16,6 +16,7 @@ export default class AnimatedSprite extends UIBase {
     /**
      * 是否自动播放
      */
+    private _autoPlay;
     autoPlay: boolean;
     /**
      * 设置源,loader中的PIXI.Spritesheet

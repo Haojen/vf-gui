@@ -18,10 +18,11 @@ export default  class TestAnimatedSprite {
             let mc = new vfui.AnimatedSprite();
             mc.animationSpeed = 60;
             mc.source = resources["role"].spritesheet;
-            mc.animationName = "0";
+            mc.animationName = "1";
             mc.autoPlay = false;
             //mc.gotoAndPlay(0);
             //mc.loop = false;
+
             uiStage.addChild(mc);
 
             let ck = new vfui.Interaction.ClickEvent(mc);

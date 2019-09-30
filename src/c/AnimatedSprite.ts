@@ -27,7 +27,16 @@ export default class AnimatedSprite extends UIBase{
     /**
      * 是否自动播放
      */
-    public autoPlay = false;
+    private _autoPlay = false;
+    public get autoPlay() {
+        return this._autoPlay;
+    }
+    public set autoPlay(value) {
+        this._autoPlay = value;
+        if(this._curAnimation && value){
+            this._curAnimation.sp.play();
+        }
+    }
     /**
      * 设置源,loader中的PIXI.Spritesheet
      */
@@ -111,6 +120,8 @@ export default class AnimatedSprite extends UIBase{
             if(_animatedSprites.size){
                 let sp = _animatedSprites.get(_animationName);
                 if(sp){
+                    sp.loop = this._loop;
+                    sp.animationSpeed = this._animationSpeed;
                     this.container.addChild(sp);
                     if(this.autoPlay){
                         sp.play();
@@ -126,6 +137,8 @@ export default class AnimatedSprite extends UIBase{
                 this.container.removeChild(_curAnimation.sp);
                 let sp = _animatedSprites.get(_animationName);
                 if(sp){
+                    sp.loop = this._loop;
+                    sp.animationSpeed = this._animationSpeed;
                     this.container.addChild(sp);
                     _curAnimation.name = _animationName;
                     _curAnimation.sp = sp;
@@ -134,11 +147,9 @@ export default class AnimatedSprite extends UIBase{
                     }
                 }
             }
-            _curAnimation.sp.loop = this._loop;
-            _curAnimation.sp.animationSpeed = this._animationSpeed;
+            this._curAnimation = _curAnimation;
+            this._animatedSprites = _animatedSprites;
         }
-        this._curAnimation = _curAnimation;
-        this._animatedSprites = _animatedSprites;
     }
     
 }
