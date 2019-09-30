@@ -1,0 +1,31 @@
+{"frames": {
+
+"1_role1-sheet-0.png":
+{
+	"frame": {"x":232,"y":1,"w":195,"h":370},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":195,"h":370},
+	"sourceSize": {"w":231,"h":371}
+},
+"1_role1-sheet-1.png":
+{
+	"frame": {"x":1,"y":1,"w":229,"h":370},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":0,"w":229,"h":370},
+	"sourceSize": {"w":231,"h":371}
+}},
+"animations": {
+	"1_role1-sheet": ["1_role1-sheet-0.png","1_role1-sheet-1.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "1_role_sheet.png",
+	"format": "RGBA8888",
+	"size": {"w":428,"h":372},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:d63dae24bb89f34e91d2b6586569315f:bb4893fa5b2ddb60ab0e5f02685f0456:1cdbdd8a9adf3ebc7a02c8171d3f8154$"
+}
+}

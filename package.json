@@ -1,11 +1,11 @@
 {
   "name": "pixi-vfui",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)",
   "main": "dist/pixi-vfui.js",
   "types": "dist/pixi-vfui.d.ts",
   "scripts": {
-    "test": "webpack --config test-webpack.config.js",
+    "test": "webpack --config test-webpack.config.js --watch",
     "build": "webpack",
     "watch": "webpack --watch",
     "start": "webpack-dev-server --open --config webpack.config.js",
