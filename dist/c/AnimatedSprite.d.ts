@@ -9,7 +9,8 @@ import UIBase from "../UIBase";
  */
 export default class AnimatedSprite extends UIBase {
     constructor();
-    private _animatedSprite;
+    private _animatedSprites;
+    private _curAnimation;
     private _animationName;
     animationName: string;
     /**

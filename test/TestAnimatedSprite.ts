@@ -11,12 +11,14 @@ export default  class TestAnimatedSprite {
 
         const loader = PIXI.Loader.shared;
         let bool = false;
-        loader.add("role",'assets/1_role_sheet.json').load((loader: PIXI.Loader, resources: any) => {
+        
+        
+        loader.add("role",'assets/1_role2/1_role2.json').load((loader: PIXI.Loader, resources: any) => {
 
             let mc = new vfui.AnimatedSprite();
             mc.animationSpeed = 60;
             mc.source = resources["role"].spritesheet;
-            mc.animationName = "1_role1-sheet";
+            mc.animationName = "0";
             mc.autoPlay = false;
             //mc.gotoAndPlay(0);
             //mc.loop = false;
@@ -26,9 +28,11 @@ export default  class TestAnimatedSprite {
             ck.onClick = ()=>{
                 bool = !bool;
                 if(bool){
-                    mc.gotoAndStop(1);
+                    mc.animationName = "1";
+                    mc.play();
                 }else{
-                    mc.gotoAndStop(0);
+                    mc.animationName = "0";
+                    mc.play();
                 }
                 
             }
