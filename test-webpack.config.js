@@ -11,7 +11,7 @@ module.exports = {
         new webpack.IgnorePlugin(/pixi.js|es6-tween/)
     ],
     module: {
-        noParse: /pixi.js|es6-tween/,
+        noParse: /pixi.js/,
         rules: [
             {
                 test: /pixi.js/,
@@ -29,6 +29,8 @@ module.exports = {
     },
     output: {
         filename: 'test.js',
+        library: 'example',
+        libraryTarget: 'umd',
         path: path.resolve(__dirname, 'dist')
     },
 };

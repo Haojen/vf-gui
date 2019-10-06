@@ -1,5 +1,4 @@
-
-import vfui from "../src/vfui";
+import vfui from "../src/pixi-vfui";
 
 export default class TestPixi {
 

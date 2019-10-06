@@ -1,4 +1,4 @@
-import vfui from "../src/vfui";
+import vfui from "../src/pixi-vfui";
 
 export default class TestSortableList {
 
@@ -52,7 +52,7 @@ export default class TestSortableList {
         //============ vfui.SortableList ============= 
         let stl = new vfui.SortableList();
         stl.tweenTime = 30;
-        stl.tweenEase = vfui.tween.Easing.Cubic.Out;
+        stl.tweenEase = vfui.Easing.Cubic.Out;
         stl.desc = true;
         stl.heightPct = "100%";
         stl.widthPet = "100%";

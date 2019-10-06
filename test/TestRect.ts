@@ -1,4 +1,4 @@
-import vfui from "../src/vfui";
+import vfui from "../src/pixi-vfui";
 
 export default class TestRect {
 
@@ -26,10 +26,10 @@ export default class TestRect {
         vfui.TickerShared.addUpdateEvent((delta: number) => {
             count += delta;
             if (count > 50) {
-                vfui.tween.removeAll();
-                new vfui.tween.Tween(rect)
+                vfui.Tween.core.removeAll();
+                new vfui.Tween(rect)
                 .to({ rotation: rect.rotation + 1 }, 100)
-                .easing(vfui.tween.Easing.Linear.None)
+                .easing(vfui.Easing.Linear.None)
                 .start();
             }
 

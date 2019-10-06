@@ -1,15 +1,15 @@
-import UIBase from "../UIBase";
-import * as Utils from "../Utils";
-import SliceSprite from "./SliceSprite";
-import * as tween from "./Tween/index";
-import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
-import DragEvent from "../Interaction/DragEvent";
-import InteractionEvent from "../Interaction/InteractionEvent";
+import {UIBase} from "../core/UIBase";
+import * as Utils from "../core/Utils";
+import {SpriteSlice} from "./SpriteSlice";
+import * as tween from "./tween/index";
+import { VerticalAlignEnum, HorizontalAlignEnum } from "../enum/AlignEnum";
+import {DragEvent} from "../interaction/DragEvent";
+import {InteractionEvent} from "../interaction/InteractionEvent";
 
 /**
  * UI 滑动条
  */
-export default class Slider extends UIBase{
+export class Slider extends UIBase{
 
     /**
      * 滑动条值发生改变后
@@ -22,14 +22,14 @@ export default class Slider extends UIBase{
 
     public constructor(trackBorderWidth = 0,thumbBorderWidth = 0,tracklightBorderWidth = 0){
         super();
-        this._track = new SliceSprite();
+        this._track = new SpriteSlice();
         this._track.borderWidth = trackBorderWidth;
-        this._thumb = new SliceSprite();
+        this._thumb = new SpriteSlice();
         this._thumb.borderWidth = thumbBorderWidth;
         this._thumb.pivot = 0.5;
         this._thumb.container.buttonMode = true;
 
-        this._tracklight = new SliceSprite();
+        this._tracklight = new SpriteSlice();
         this._tracklight.borderWidth = tracklightBorderWidth;
         this.addChild(this._track);
         this.addChild(this._tracklight);
@@ -59,9 +59,9 @@ export default class Slider extends UIBase{
      */
     private _vertical = false;
     //set options
-    protected _track: SliceSprite;
-    protected _tracklight: SliceSprite;
-    protected _thumb: SliceSprite;
+    protected _track: SpriteSlice;
+    protected _tracklight: SpriteSlice;
+    protected _thumb: SpriteSlice;
 
     protected _sourceTrack = "";
     protected _sourceTracklight = "";
@@ -113,13 +113,13 @@ export default class Slider extends UIBase{
     public set sourceThumb(value) {
         this._sourceThumb = value;
         this._thumb.visible = false;
-        this._thumb.off(SliceSprite.SourceCompleteEvent,this.onThumbLoadComplete,this);
-        this._thumb.once(SliceSprite.SourceCompleteEvent,this.onThumbLoadComplete,this);
+        this._thumb.off(SpriteSlice.SourceCompleteEvent,this.onThumbLoadComplete,this);
+        this._thumb.once(SpriteSlice.SourceCompleteEvent,this.onThumbLoadComplete,this);
         this._thumb.source = value;
     }
 
     //rectangle:PIXI.Rectangle,source?:SliceSprite
-    protected  onThumbLoadComplete(rectangle: PIXI.Rectangle,source: SliceSprite){
+    protected  onThumbLoadComplete(rectangle: PIXI.Rectangle,source: SpriteSlice){
         source.width = rectangle.width;
         source.height = rectangle.height;
         source.visible = true;

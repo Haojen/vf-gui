@@ -28,14 +28,14 @@ pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开�
 
 #### 正确的导入方式 (The correct way to import is): 
 
-    import Button from "pixi-vfui/dist/c/Button";
+    import vfui from "pixi-vfui";
 
     其他组件导入方式可查看“组件”部分
 
 
 ### CDN Install
 
-推荐使用ES6标准方式导入，使用CDN命名空间方式导入，请注意.d.ts的编写以及创建方式为：
+推荐使用ES6标准方式导入，使用CDN命名空间方式导入，创建方式为：
 
     vfui.Button
     vfui.CheckBox
@@ -49,9 +49,9 @@ Master:
     
 Version:
 
-    <script src="http://unpkg.com/pixi-vfui@0.1.6/dist/pixi-vfui.js"></script>
+    <script src="http://unpkg.com/pixi-vfui@0.1.23/dist/pixi-vfui.js"></script>
     
-    <script src="http://unpkg.com/pixi-vfui@0.1.6/dist/pixi-vfui.min.js"></script>
+    <script src="http://unpkg.com/pixi-vfui@0.1.23/dist/pixi-vfui.min.js"></script>
 
 ## 如何构建(How build)
 
@@ -75,23 +75,24 @@ Version:
 
 | 导入方式    |      名称       |
 |----------|-------------|
-| import Stage from "pixi-vfui/dist/Stage"  |  UI舞台 |
-| import Container from "pixi-vfui/dist/c/Container";  | 容器 |
-| import ScrollingContainer from "pixi-vfui/dist/c/ScrollingContainer" | 可滑动的容器 |
-| import ScrollBar from "pixi-vfui/dist/c/ScrollBar" | 带有滑动条容器 |
-| import SortableList from "pixi-vfui/dist/c/SortableList"  | 带有排序功能的列表容器 |
-| import Sprite from "pixi-vfui/dist/c/Sprite" | 图片 |
-| import TilingSprite from "pixi-vfui/dist/c/TilingSprite"  | 平铺的图片 |
-| import SliceSprite from "pixi-vfui/dist/c/SliceSprite" | 九宫图片 |
-| import Button from "pixi-vfui/dist/c/Button" | Button - 按钮 |
-| import CheckBox from "pixi-vfui/dist/c/CheckBox" | 单选与复选 |
-| import Rect from "pixi-vfui/dist/c/Rect" | 绘制矢量矩形 |
-| import Text from "pixi-vfui/dist/c/Text"   | 文本 |
-| import TextInput from "pixi-vfui/dist/c/TextInput"  | 输入文本 |
-| import Slider from "pixi-vfui/dist/c/Slider"   | 滑动条 |
-| import Ticker from "pixi-vfui/dist/Ticker" | 心跳 |
-| mport Tween from "pixi-vfui/dist/c/Tween/index"  | 缓动 |
-| import Utils from "pixi-vfui/dist/Utils" | 工具类 |
+| vfui.Stage |  UI舞台 |
+| vfui.Container | 容器 |
+| vfui.ScrollingContainer | 可滑动的容器 |
+| vfui.ScrollBar | 带有滑动条容器 |
+| vfui.SortableList | 带有排序功能的列表容器 |
+| vfui.Sprite from | 图片 |
+| vfui.SpriteTiling | 平铺的图片 |
+| vfui.SpriteSlice | 九宫图片 |
+| vfui.SpriteAnimated | 序列图 |
+| vfui.Button | Button - 按钮 |
+| vfui.CheckBox | 单选与复选 |
+| vfui.Rect | 绘制矢量矩形 |
+| vfui.Text | 文本 |
+| vfui.TextInput | 输入文本 |
+| vfui.Slider | 滑动条 |
+| vfui.Ticker | 心跳 |
+| vfui.Tween | 缓动 |
+| vfui.Utils | 工具类 |
 
 
 计划中：

@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
     mode: 'development',
     devtool: 'source-map',
-    entry: './src/index.ts',
+    entry: './src/pixi-vfui.ts',
     module: {
         rules: [
             {
@@ -22,7 +22,7 @@ module.exports = {
     },
     output: {
         filename: 'pixi-vfui.js',
-        library: "pixi-vfui",
+        library: "pixivfui",
         //libraryTarget: "umd",
         path: path.resolve(__dirname, 'dist')
     },

@@ -60,8 +60,6 @@ export default function  updateViewSize(app: PIXI.Application,canvasScaleFactor 
     canvas.style.transform =  `matrix(${m.a},${m.b},${m.c},${m.d},${m.tx},${m.ty})`;
     canvas.width = stageWidth * canvasScaleX;
     canvas.height = stageHeight * canvasScaleY;
-    app.renderer.autoResize = true;
-    app.renderer.resize(canvas.width, canvas.height);
 }
 
 /**

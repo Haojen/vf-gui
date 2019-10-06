@@ -3,9 +3,9 @@
  * 
  * 触摸或鼠标操作事件 可查看 -> TouchEventEnum.TouchEnum
  * 
- * import InteractionEvent from "../Interaction/InteractionEvent",
+ * import InteractionEvent from "../interaction/InteractionEvent",
  */
-export default class InteractionEvent extends PIXI.interaction.InteractionEvent {
+export class InteractionEvent extends PIXI.interaction.InteractionEvent {
     public constructor() {
         super()
     }
@@ -14,33 +14,33 @@ export default class InteractionEvent extends PIXI.interaction.InteractionEvent 
 /**
  * 对外，封装的点击触摸事件
  * 
- * import InteractionEvent,{Mouse} from "../Interaction/InteractionEvent",
+ * import InteractionEvent,{Mouse} from "../interaction/InteractionEvent",
  */
-export const enum TouchMouseEvent {
+export const TouchMouseEvent = {
     /**
      * 移出
      * 
      * (e: InteractionEvent,thisObj:UIBase,over: boolean)=>{}
      */
-    onHover = "hover",
+    onHover : "hover",
     /**
      * 按下 
      * 
      * (e: InteractionEvent,thisObj:UIBase, isPressed: boolean)=>void
      */
-    onPress = "press",
+    onPress : "press",
     /**
      * 点击
      * 
      * (e: InteractionEvent,thisObj:UIBase)=>void
      */
-    onClick = "click",
+    onClick : "click",
     /**
      * 移动
      * 
      * (e: InteractionEvent,thisObj:UIBase)=>void
      */
-    onMove = "move",
+    onMove : "move",
 }
 
 /**
@@ -59,7 +59,7 @@ export const enum DraggableEvent {
 /** 
  * 键盘事件 驱动类KeysEvent
  * 
- * import InteractionEvent,{KeyEvent} from "../Interaction/InteractionEvent",
+ * import InteractionEvent,{KeyEvent} from "../interaction/InteractionEvent",
  */
 export const enum KeyEvent {
 
@@ -177,45 +177,45 @@ export const enum KeyEvent {
 /**
  * 缓动事件
  */
-export const enum TweenEvent {
+export const TweenEvent = {
     /**
      * 
      */
-    Callback = 'Callback',
+    Callback : 'Callback',
     /**
      * 每次改变
      */
-    update = 'update',
+    update : 'update',
     /**
      * 完成
      */
-    complete = 'complete',
+    complete : 'complete',
     /**
      * 开始时
      */
-    start = 'start',
+    start : 'start',
     /**
      * 每次重复时
      */
-    repeat = 'repeat',
+    repeat : 'repeat',
     /**
      * 反向时
      */
-    reverse = 'reverse',
+    reverse : 'reverse',
     /**
      * 暂停时
      */
-    pause = 'pause',
+    pause : 'pause',
     /**
      * 播放时
      */
-    play = 'play',
+    play : 'play',
     /**
      * 重新开始时
      */
-    restart = 'restart',
+    restart : 'restart',
     /**
      * 停止时
      */
-    stop = 'stop'
+    stop : 'stop'
 }

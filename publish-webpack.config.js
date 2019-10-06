@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     mode: 'production',
-    entry: './src/index.ts',
+    entry: './src/pixi-vfui.ts',
     module: {
         rules: [
             {
@@ -21,6 +21,7 @@ module.exports = {
     },
     output: {
         filename: 'pixi-vfui.min.js',
+        library: "pixivfui",
         path: path.resolve(__dirname, 'dist')
     },
     devServer: {

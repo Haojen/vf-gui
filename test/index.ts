@@ -1,7 +1,6 @@
-import vfui from "../src/index";
+import vfui from "../src/pixi-vfui";
 import TestApplication from "./TestApplication";
 
-export default vfui;
 
 class Index{
     public static  init(){

@@ -1,4 +1,4 @@
-import vfui from "../src/vfui";
+import vfui from "../src/pixi-vfui";
 
 export default class TestTilingSprite {
 
@@ -9,7 +9,7 @@ export default class TestTilingSprite {
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
         /** 平铺的图片，可调整内部缩放与位置 */
-        let tilingSprite = new vfui.TilingSprite();
+        let tilingSprite = new vfui.SpriteTiling();
         tilingSprite.width = 631;
         tilingSprite.height = 343;
         tilingSprite.source = "assets/pc.png";

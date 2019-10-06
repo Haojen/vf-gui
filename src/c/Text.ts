@@ -1,5 +1,5 @@
-import UIBase from "../UIBase";
-import TextStyle from "./Text/TextStyle";
+import {UIBase} from "../core/UIBase";
+import {TextStyle} from "./TextStyle";
 
 /**
  * UI文本显示对象
@@ -12,7 +12,7 @@ import TextStyle from "./Text/TextStyle";
  * @param Texture {PIXI.Texture} 文本对象
  * @see https://pixijs.io/pixi-text-style
  */
-export default class Text extends UIBase{
+export class Text extends UIBase{
     /**
      * 文本构造函数
      * @param text 要显示的内容，默认为""

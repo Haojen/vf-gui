@@ -1,6 +1,6 @@
 import HtmlInput from "./InputText/HtmlInput";
-import { KeyEvent} from "../Interaction/InteractionEvent";
-import UIBase from "../UIBase";
+import { KeyEvent} from "../interaction/InteractionEvent";
+import {UIBase} from "../core/UIBase";
 
 
 /**
@@ -15,7 +15,7 @@ import UIBase from "../UIBase";
  *  box: {...}
  * })
  */
-export default class TextInput extends UIBase {
+export class TextInput extends UIBase {
 
     constructor(styles?: TAny) {
         super();

@@ -1,5 +1,5 @@
 import { KeyEvent } from "./InteractionEvent";
-import UIBase from '../UIBase';
+import {UIBase} from "../core/UIBase";
 
 
 class KeyboardSelectEvent {

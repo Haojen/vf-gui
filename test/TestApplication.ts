@@ -1,7 +1,5 @@
-import vfui from "./index";
+import vfui from "../src/pixi-vfui";
 import updateViewSize from "./WebPlayerSize";
-
-
 
 export default class TestApplication {
 
@@ -41,7 +39,7 @@ export default class TestApplication {
         });
     }
 
-    private updata(...params: any[]) {
-        vfui.TickerShared.update(params[0]);
+    private updata(deltaTime: number) {
+        vfui.TickerShared.update(deltaTime,this.app.ticker.lastTime,this.app.ticker.elapsedMS);
     }
 }

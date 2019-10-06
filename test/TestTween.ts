@@ -1,4 +1,4 @@
-import vfui from "../src/vfui";
+import vfui from "../src/pixi-vfui";
 
 export default class TestTween {
 
@@ -24,17 +24,17 @@ export default class TestTween {
         rc.onClick = e => {
             rc.remove();
 
-            new vfui.tween.Tween(r)
+            new vfui.Tween(r)
                 .to({ x: 200 }, 2000)
                 .repeat(Infinity)
-                .easing(vfui.tween.Easing.Elastic.InOut)
+                .easing(vfui.Easing.Elastic.InOut)
                 .yoyo(true)
                 .start();
 
-            new vfui.tween.Tween(r)
+            new vfui.Tween(r)
                 .to({ angle: 90 }, 2000)
                 .repeat(Infinity)
-                .easing(vfui.tween.Easing.Quadratic.InOut)
+                .easing(vfui.Easing.Quadratic.InOut)
                 .yoyo(true)
                 .start();
 
@@ -50,12 +50,12 @@ export default class TestTween {
         rc2.onClick = e => {
             rc2.remove();
 
-            new vfui.tween.Tween({ color: "#" + r2.fill.toString(16), x: 70 })
+            new vfui.Tween({ color: "#" + r2.fill.toString(16), x: 70 })
                 .to({ color: "#00ccff", x: 200 }, 2000)
-                .easing(vfui.tween.Easing.Elastic.InOut)
+                .easing(vfui.Easing.Elastic.InOut)
                 .repeat(Infinity)
                 .yoyo(true)
-                .on(vfui.tween.TweenEvent.update, (obj: any) => {
+                .on(vfui.Tween.Event.update, (obj: any) => {
                     if (obj.color.indexOf("-") === -1) {//清除不规范色值
                         r2.fill = vfui.Utils.rgbStrToNumber(obj.color);
                         r2.x = Math.floor(obj.x);
@@ -76,9 +76,9 @@ export default class TestTween {
         rc3.onClick = e => {
             rc3.remove();
 
-            new vfui.tween.Tween(r3.style)
+            new vfui.Tween(r3.style)
                 .to({ letterSpacing: 10, fontSize: 40, fill: ["#00ccff", "#ffcc00", "#00ff00"] }, 2000)
-                .easing(vfui.tween.Easing.Quadratic.InOut)
+                .easing(vfui.Easing.Quadratic.InOut)
                 .delay(1000)
                 .repeat(Infinity)
                 .yoyo(true)

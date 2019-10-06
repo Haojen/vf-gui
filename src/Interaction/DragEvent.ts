@@ -1,6 +1,6 @@
-import UIBase from "../UIBase";
-import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
-import InteractionEvent from "./InteractionEvent";
+import {UIBase} from "../core/UIBase";
+import { TouchMouseEventEnum } from "../enum/TouchMouseEventEnum";
+import {InteractionEvent} from "./InteractionEvent";
 
 
 /**
@@ -25,7 +25,7 @@ import InteractionEvent from "./InteractionEvent";
  * 
  * @since 1.0.0
  */
-export default class DragEvent {
+export class DragEvent {
 
     public constructor(obj: UIBase) {
         this.obj = obj;

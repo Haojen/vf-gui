@@ -1,4 +1,5 @@
-import UIBase from "../UIBase";
+import {UIBase} from "../core/UIBase";
+import {_getSourcePath} from "../core/Utils";
 
 /**
  * UI图片显示对象，如果使用拉伸或9切，请使用 SliceSprite
@@ -8,7 +9,7 @@ import UIBase from "../UIBase";
  * @memberof PIXI.UI
  * @param Texture {PIXI.Texture} 文本对象
  */
-export default class Sprite extends UIBase{
+export class Sprite extends UIBase{
     
     /** 图片加载完成事件 */
     public static readonly SourceCompleteEvent = "sourceCompleteEvent";
@@ -37,6 +38,9 @@ export default class Sprite extends UIBase{
         return this._source;
     }
     public set source(value: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement|undefined) {
+        if(_getSourcePath){
+            value = _getSourcePath(value);
+        }   
         if(value === undefined){
             return;
         }
