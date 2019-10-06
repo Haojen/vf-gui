@@ -1,4 +1,4 @@
-import UIBase from "../UIBase";
+import {UIBase} from "../core/UIBase";
 
 interface CheckGroupObject{
     groups: {[key: string]: {[value: string]: CheckBox}} ;

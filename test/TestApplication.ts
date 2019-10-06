@@ -1,7 +1,5 @@
-import vfui from "./index";
+import vfui from "../src/pixi-vfui";
 import updateViewSize from "./WebPlayerSize";
-
-
 
 export default class TestApplication {
 

@@ -11,12 +11,12 @@ import {
     removeDisplay,
     update
 } from './core'
-import Easing from './Easing'
-import Interpolation from './Interpolation'
+import {Easing} from '../Easing'
+import {Interpolation} from './Interpolation'
 import * as utils from './constants'
-import {TweenEvent} from "../../Interaction/InteractionEvent"
-import Tween from './Tween'
-import Timeline from './Timeline'
+import {TweenEvent} from "../../interaction/InteractionEvent"
+import {Tween} from '../Tween'
+import {Timeline} from '../Timeline'
 export {
     Plugins,
     get,

@@ -1,6 +1,6 @@
-import UIBase from "../UIBase";
-import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
-import { uid } from "../Utils";
+import {UIBase} from "../core/UIBase";
+import { TouchMouseEventEnum } from "../enum/TouchMouseEventEnum";
+import { uid } from "../core/Utils";
 
 interface TWheelEvent extends WheelEvent{
     /** 火狐 */
@@ -25,7 +25,7 @@ interface TWheelEvent extends WheelEvent{
  * 
  * @since 1.0.0
  */
-export default class MouseScrollEvent{
+export class MouseScrollEvent{
     /**
      * 
      * @param obj 需要绑定的对象

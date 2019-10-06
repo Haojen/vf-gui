@@ -9,7 +9,7 @@ import { isRGBColor, RGBA, STRING_PROP } from './constants'
  * new vfui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
  * @memberof vfui.tween
  */
-const Interpolation = {
+export const Interpolation = {
     Linear(v: any, k: number, value: any) {
         const m = v.length - 1
         const f = m * k
@@ -212,4 +212,4 @@ const Interpolation = {
     }
 }
 
-export default Interpolation
+

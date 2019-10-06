@@ -1,6 +1,6 @@
-import UIBase from "../UIBase";
-import Sprite from "./Sprite";
-import Rect from "./Rect";
+import {UIBase} from "../core/UIBase";
+import {Sprite} from "./Sprite";
+import {Rect} from "./Rect";
 
 /**
  * UI的显示容器
@@ -11,7 +11,7 @@ import Rect from "./Rect";
  * @param width {Number} 宽度
  * @param height {Number} 高度
  */
-export default class Container extends UIBase{
+export class Container extends UIBase{
     public constructor(width?: number, height?: number){
         super(width,height);
     }

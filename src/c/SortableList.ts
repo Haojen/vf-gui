@@ -1,11 +1,11 @@
-import Container from "./Container";
-import UIBase from "../UIBase";
-import * as tween from "./Tween/index";
+import {Container} from "./Container";
+import {UIBase} from "../core/UIBase";
+import * as tween from "./tween/index";
 
 /**
  * UI 可以排序的容器
  */
-export default class SortableList extends Container{
+export class SortableList extends Container{
     public constructor(){
         super();
     }

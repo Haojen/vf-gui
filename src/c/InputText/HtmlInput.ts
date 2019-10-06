@@ -1,4 +1,4 @@
-import { KeyEvent } from "../../Interaction/InteractionEvent";
+import { KeyEvent } from "../../interaction/InteractionEvent";
 
 /**
  * 私有的，由于PIXIJS不支持文本输入，这里以HTML方式实现

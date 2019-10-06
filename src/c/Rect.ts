@@ -1,4 +1,4 @@
-import UIBase from "../UIBase";
+import {UIBase} from "../core/UIBase";
 
 /**
  * UI 矩形
@@ -8,7 +8,7 @@ import UIBase from "../UIBase";
  * @memberof PIXI.UI
  * @param Texture {PIXI.Texture} 文本对象
  */
-export default class Rect extends UIBase{
+export class Rect extends UIBase{
     public constructor(){
         super();
         this._graphics = new PIXI.Graphics();

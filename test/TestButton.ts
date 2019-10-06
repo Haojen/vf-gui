@@ -1,16 +1,14 @@
-
-import vfui from "../src/vfui";
+import vfui from "../src/pixi-vfui";
 
 export default  class TestButton {
 
     public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
         this.onLoad(app,uiStage)
     }
-
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
         /** UI组件 按钮 */
         let button1 = this.getNewButton(uiStage);
-        button1.label = "点我试试";
+        button1.label = "点我试试1";
         button1.on(vfui.Interaction.TouchMouseEvent.onClick, this.onClick, this);
         button1.on(vfui.Interaction.TouchMouseEvent.onPress, this.onPress, this);
         button1.on(vfui.Interaction.TouchMouseEvent.onHover, this.onHover, this);

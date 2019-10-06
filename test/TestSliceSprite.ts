@@ -1,4 +1,4 @@
-import vfui from "../src/vfui";
+import vfui from "../src/pixi-vfui";
 
 export default class TestSliceSprite {
 
@@ -10,7 +10,7 @@ export default class TestSliceSprite {
 
         let borderWidth = 100;
         /** 9切图，设置边距100，可观察左边纹理 */
-        let sp = new vfui.SliceSprite();
+        let sp = new vfui.SpriteSlice();
         //sp.horizontalSlice = true;
         //sp.verticalSlice = false;
         sp.source = "assets/sprite_book.jpeg"; //本地文件路径

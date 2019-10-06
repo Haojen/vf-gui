@@ -1,6 +1,6 @@
-import UIBase from "../UIBase";
-import { TouchMouseEventEnum } from "../Enum/TouchMouseEventEnum";
-import InteractionEvent, { TouchMouseEvent } from "./InteractionEvent";
+import {UIBase} from "../core/UIBase";
+import { TouchMouseEventEnum } from "../enum/TouchMouseEventEnum";
+import {InteractionEvent, TouchMouseEvent } from "./InteractionEvent";
 
 /**
  * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
@@ -24,7 +24,7 @@ import InteractionEvent, { TouchMouseEvent } from "./InteractionEvent";
  * 
  * @since 1.0.0
  */
-export default class ClickEvent {
+export class ClickEvent {
 
     /**
      * ClickEvent 构造函数

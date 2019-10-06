@@ -3,9 +3,9 @@
  * 
  * 触摸或鼠标操作事件 可查看 -> TouchEventEnum.TouchEnum
  * 
- * import InteractionEvent from "../Interaction/InteractionEvent",
+ * import InteractionEvent from "../interaction/InteractionEvent",
  */
-export default class InteractionEvent extends PIXI.interaction.InteractionEvent {
+export class InteractionEvent extends PIXI.interaction.InteractionEvent {
     public constructor() {
         super()
     }
@@ -14,33 +14,33 @@ export default class InteractionEvent extends PIXI.interaction.InteractionEvent 
 /**
  * 对外，封装的点击触摸事件
  * 
- * import InteractionEvent,{Mouse} from "../Interaction/InteractionEvent",
+ * import InteractionEvent,{Mouse} from "../interaction/InteractionEvent",
  */
-export const enum TouchMouseEvent {
+export const TouchMouseEvent = {
     /**
      * 移出
      * 
      * (e: InteractionEvent,thisObj:UIBase,over: boolean)=>{}
      */
-    onHover = "hover",
+    onHover : "hover",
     /**
      * 按下 
      * 
      * (e: InteractionEvent,thisObj:UIBase, isPressed: boolean)=>void
      */
-    onPress = "press",
+    onPress : "press",
     /**
      * 点击
      * 
      * (e: InteractionEvent,thisObj:UIBase)=>void
      */
-    onClick = "click",
+    onClick : "click",
     /**
      * 移动
      * 
      * (e: InteractionEvent,thisObj:UIBase)=>void
      */
-    onMove = "move",
+    onMove : "move",
 }
 
 /**
@@ -59,7 +59,7 @@ export const enum DraggableEvent {
 /** 
  * 键盘事件 驱动类KeysEvent
  * 
- * import InteractionEvent,{KeyEvent} from "../Interaction/InteractionEvent",
+ * import InteractionEvent,{KeyEvent} from "../interaction/InteractionEvent",
  */
 export const enum KeyEvent {
 

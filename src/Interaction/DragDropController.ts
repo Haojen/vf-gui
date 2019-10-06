@@ -1,5 +1,5 @@
-import UIBase from "../UIBase";
-import InteractionEvent from "./InteractionEvent";
+import {UIBase} from "../core/UIBase";
+import {InteractionEvent} from "./InteractionEvent";
 
 /**
  * 记录当前正在拖动的UI组件列表

@@ -1,7 +1,7 @@
-import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
-import Text from "./Text";
-import InputSkinBase from "../InputSkinBase";
-import TextStyle from "./Text/TextStyle";
+import { VerticalAlignEnum, HorizontalAlignEnum } from "../enum/AlignEnum";
+import {Text} from "./Text";
+import {InputSkinBase} from "../core/InputSkinBase";
+import {TextStyle} from "./TextStyle";
 
 /**
  * UI 按钮显 示对象
@@ -14,7 +14,7 @@ import TextStyle from "./Text/TextStyle";
  * @param [options.width=100h] {Number|String} width
  * @param [options.height=20] {Number|String} height
  */
-export default class Button extends InputSkinBase{
+export class Button extends InputSkinBase{
     /**
      * 按钮构造函数 
      * 

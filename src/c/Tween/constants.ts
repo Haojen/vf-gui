@@ -1,4 +1,4 @@
-import { hexToRgb } from "../../Utils";
+import { hexToRgb } from "../../core/Utils";
 /**
  * 卡帧后的平滑处理帧率
  */

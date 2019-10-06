@@ -1,5 +1,5 @@
 /** 容器扩展类，后续便于做延时渲染 */
-export default class ContainerBase extends PIXI.Container{
+export class ContainerBase extends PIXI.Container{
     public constructor(){
         super();
     }

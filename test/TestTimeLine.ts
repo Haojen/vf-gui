@@ -1,4 +1,4 @@
-import vfui from "../src/vfui";
+import vfui from "../src/pixi-vfui";
 
 export default class TestTimeLine {
 
@@ -21,7 +21,7 @@ export default class TestTimeLine {
             sp2.y = 10;
             uiStage.addChild(sp2);
 
-            let tl = new vfui.tween.Timeline();
+            let tl = new vfui.Timeline();
             tl.setDefault(sp2, 3000, 30);
 
             tl.addProperty("x", 200, 30);

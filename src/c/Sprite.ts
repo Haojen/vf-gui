@@ -1,5 +1,5 @@
-import UIBase from "../UIBase";
-import {_getSourcePath} from "../Utils";
+import {UIBase} from "../core/UIBase";
+import {_getSourcePath} from "../core/Utils";
 
 /**
  * UI图片显示对象，如果使用拉伸或9切，请使用 SliceSprite
@@ -9,7 +9,7 @@ import {_getSourcePath} from "../Utils";
  * @memberof PIXI.UI
  * @param Texture {PIXI.Texture} 文本对象
  */
-export default class Sprite extends UIBase{
+export class Sprite extends UIBase{
     
     /** 图片加载完成事件 */
     public static readonly SourceCompleteEvent = "sourceCompleteEvent";

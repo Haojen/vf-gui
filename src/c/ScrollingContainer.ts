@@ -1,18 +1,17 @@
-import UIBase from "../UIBase";
-import Container from "./Container";
-import { Point } from "pixi.js";
-import * as Ticker from "../Ticker";
-import * as Utils from "../Utils";
-import DragEvent from "../Interaction/DragEvent";
-import MouseScrollEvent from "../Interaction/MouseScrollEvent";
-import InteractionEvent from "../Interaction/InteractionEvent";
-import { now } from "../Utils";
-import Rect from "./Rect";
+import {UIBase} from "../core/UIBase";
+import {Container} from "./Container";
+import * as Ticker from "../core/Ticker";
+import * as Utils from "../core/Utils";
+import {DragEvent} from "../interaction/DragEvent";
+import {MouseScrollEvent} from "../interaction/MouseScrollEvent";
+import {InteractionEvent} from "../interaction/InteractionEvent";
+import { now } from "../core/Utils";
+import {Rect} from "./Rect";
 
 /**
  * 可滚动的容器
  */
-export default class ScrollingContainer extends Container {
+export class ScrollingContainer extends Container {
     public constructor() {
         super();
         this._maskRect.y = 0;
@@ -189,7 +188,7 @@ export default class ScrollingContainer extends Container {
                 }
             };
 
-            this.dragEvent.onDragMove = (e: InteractionEvent, offset: Point) => {
+            this.dragEvent.onDragMove = (e: InteractionEvent, offset: PIXI.Point) => {
                 if (this.scrollX)
                     this._targetPosition.x = this._containerStart.x + offset.x;
                 if (this.scrollY)

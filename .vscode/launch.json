@@ -53,6 +53,12 @@
             "file": "${workspaceFolder}/index.html",
             "sourceMaps": true,
             "preLaunchTask":"build"
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "node buildPublish",
+            "program": "${workspaceFolder}/test.js"
+        },
     ]
 }

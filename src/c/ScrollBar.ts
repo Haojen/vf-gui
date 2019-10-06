@@ -1,12 +1,12 @@
-import Slider from "./Slider";
-import ScrollingContainer from "./ScrollingContainer";
-import * as tween from "./Tween/index";
-import SliceSprite from "./SliceSprite";
+import {Slider} from "./Slider";
+import {ScrollingContainer} from "./ScrollingContainer";
+import * as tween from "./tween/index";
+import {SpriteSlice} from "./SpriteSlice";
 
 /**
  * UI 带有滚动条的容器
  */
-export default class ScrollBar extends Slider {
+export class ScrollBar extends Slider {
     public constructor(trackBorderWidth = 0, thumbBorderWidth = 0, tracklightBorderWidth = 0) {
         super(trackBorderWidth, thumbBorderWidth, tracklightBorderWidth);
     }
@@ -31,7 +31,7 @@ export default class ScrollBar extends Slider {
         }
     }
 
-    protected onThumbLoadComplete(rectangle: PIXI.Rectangle,source: SliceSprite){
+    protected onThumbLoadComplete(rectangle: PIXI.Rectangle,source: SpriteSlice){
         super.onThumbLoadComplete(rectangle,source);
         this.alignToContainer();
     }

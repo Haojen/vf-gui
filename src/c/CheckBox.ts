@@ -1,7 +1,7 @@
-import Sprite from "./Sprite";
-import { VerticalAlignEnum, HorizontalAlignEnum } from "../Enum/AlignEnum";
-import * as InputController from "../Interaction/InputController";
-import InputSkinBase from "../InputSkinBase";
+import {Sprite} from "./Sprite";
+import { VerticalAlignEnum, HorizontalAlignEnum } from "../enum/AlignEnum";
+import * as InputController from "../interaction/InputController";
+import {InputSkinBase} from "../core/InputSkinBase";
 
 /**
  * UI 单选框与复选框，区别在于有没有时间去拆分，如果没有时间拆分就直接用这个吧，只是皮肤不同
@@ -18,7 +18,7 @@ import InputSkinBase from "../InputSkinBase";
  * @param [options.width=20] {Number|String} width
  * @param [options.height=20] {Number|String} height
  */
-export default class CheckBox extends InputSkinBase{
+export class CheckBox extends InputSkinBase{
     /**
      * 按钮构造函数 
      * 
