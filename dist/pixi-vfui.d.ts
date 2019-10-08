@@ -2186,7 +2186,7 @@ declare module 'c/SpriteAnimated' {
 	     * 设置源,loader中的PIXI.Spritesheet
 	     */
 	    private _source;
-	    source: PIXI.Spritesheet | undefined;
+	    source: PIXI.Spritesheet | PIXI.Texture[] | undefined;
 	    /**
 	     * 播放速度
 	    */
