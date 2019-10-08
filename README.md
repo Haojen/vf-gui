@@ -49,9 +49,9 @@ Master:
     
 Version:
 
-    <script src="http://unpkg.com/pixi-vfui@0.1.23/dist/pixi-vfui.js"></script>
+    <script src="http://unpkg.com/pixi-vfui@0.1.24/dist/pixi-vfui.js"></script>
     
-    <script src="http://unpkg.com/pixi-vfui@0.1.23/dist/pixi-vfui.min.js"></script>
+    <script src="http://unpkg.com/pixi-vfui@0.1.24/dist/pixi-vfui.min.js"></script>
 
 ## 如何构建(How build)
 
