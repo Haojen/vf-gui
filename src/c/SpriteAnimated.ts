@@ -41,7 +41,7 @@ export class SpriteAnimated extends UIBase{
     /**
      * 设置源,loader中的PIXI.Spritesheet
      */
-    private _source :PIXI.Spritesheet|undefined;
+    private _source :PIXI.Spritesheet|PIXI.Texture[]|undefined;
 
     public get source() {
         return this._source;
@@ -114,8 +114,13 @@ export class SpriteAnimated extends UIBase{
    
         if(_animatedSprites === undefined || _animatedSprites.size == 0){
             _animatedSprites = new Map();
-            for(let key in _source.animations){
-                _animatedSprites.set(key, new PIXI.AnimatedSprite(_source.animations[key]));
+            if(Array.isArray(_source)){
+                _animatedSprites.set("default", new PIXI.AnimatedSprite(_source));
+                this._animationName = "default";
+            }else{
+                for(let key in _source.animations){
+                    _animatedSprites.set(key, new PIXI.AnimatedSprite(_source.animations[key]));
+                }
             }
             
             if(_animatedSprites.size){
@@ -131,7 +136,9 @@ export class SpriteAnimated extends UIBase{
                 }
             }
         }
-        
+        if(Array.isArray(_source)){
+            this._animationName = "default";
+        }
         if(_curAnimation){
             if(_curAnimation.name!==_animationName){
                 _curAnimation.sp.stop();
