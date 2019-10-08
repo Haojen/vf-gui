@@ -2045,8 +2045,14 @@ class SpriteAnimated extends UIBase_1.UIBase {
         }
         if (_animatedSprites === undefined || _animatedSprites.size == 0) {
             _animatedSprites = new Map();
-            for (let key in _source.animations) {
-                _animatedSprites.set(key, new PIXI.AnimatedSprite(_source.animations[key]));
+            if (Array.isArray(_source)) {
+                _animatedSprites.set("default", new PIXI.AnimatedSprite(_source));
+                this._animationName = "default";
+            }
+            else {
+                for (let key in _source.animations) {
+                    _animatedSprites.set(key, new PIXI.AnimatedSprite(_source.animations[key]));
+                }
             }
             if (_animatedSprites.size) {
                 let sp = _animatedSprites.get(_animationName);
@@ -2060,6 +2066,9 @@ class SpriteAnimated extends UIBase_1.UIBase {
                     _curAnimation = { name: _animationName, sp: sp };
                 }
             }
+        }
+        if (Array.isArray(_source)) {
+            this._animationName = "default";
         }
         if (_curAnimation) {
             if (_curAnimation.name !== _animationName) {
