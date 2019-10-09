@@ -46,7 +46,7 @@ export default class TestCheckBox {
         radio.sourceDown = "assets/skin/Radio/radio_down.png";
         radio.sourceMove = radio.sourceDown;
         radio.sourceMark = "assets/skin/Radio/radio_mark.png";
-        radio.on(vfui.Interaction.TouchMouseEvent.onClick, this.onClickChecBox, this);
+        radio.on(vfui.Interaction.ComponentEvent.CHANGE,this.onChange,this);
         uiStage.addChild(radio);
         return radio;
     }
@@ -61,12 +61,12 @@ export default class TestCheckBox {
         checkbox.sourceDown = "assets/skin/CheckBox/checkbox_down.png";
         checkbox.sourceMove = checkbox.sourceDown;
         checkbox.sourceMark = "assets/skin/CheckBox/checkbox_mark.png";
-        checkbox.on(vfui.Interaction.TouchMouseEvent.onClick, this.onClickChecBox, this);
+        checkbox.on(vfui.Interaction.ComponentEvent.CHANGE,this.onChange,this);
         uiStage.addChild(checkbox);
         return checkbox;
     }
 
-    private onClickChecBox(e: vfui.Interaction.InteractionEvent, checkBox: vfui.CheckBox) {
-        console.log("->", checkBox.value);
+    private onChange(checkBox: vfui.CheckBox) {
+        console.log("->", checkBox.value,checkBox.checked);
     }
 }

@@ -8,7 +8,7 @@ export default class TestTimeLine {
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
-        let sp2 = new vfui.Sprite();
+        let sp2 = new vfui.Image();
 
         //标签位图(需要可跨域)
         let img = new Image(100, 100);

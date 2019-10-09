@@ -27,7 +27,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
         super();
         this.uuid = uid();
         this.container = new ContainerBase();
-        //this.container.name = this.constructor.name;
+        this.container.name = (this.constructor as TAny).name;
         this.setting = new UISettings();
         if(width && height)
             this.setDefaultSize(width,height)
@@ -752,7 +752,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this.setting.blendMode || NaN;
     }
     /**
-     * 获取设置锚点Y的像素
+     *  旋转缩放轴点
      */
     set pivotX(value: number) {
         this.setting.pivotX = value;
@@ -763,7 +763,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this.setting.pivotX;
     }
     /**
-     * 获取设置锚点Y的像素
+     *  旋转缩放轴点
      */
     set pivotY(value: number) {
         this.setting.pivotY = value;
@@ -774,7 +774,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
         return this.setting.pivotY;
     }
     /**
-     * 锚点的像素表示法,便捷的方法，避免单独设置
+     * 旋转缩放轴点
      */
     set pivot(value: number) {
         this.setting.pivotX = value;
@@ -993,7 +993,7 @@ export class UIBase extends PIXI.utils.EventEmitter {
         this.dalayDrawTimeId = window.setTimeout(() => {
             this.update();
             this.dalayDrawTimeId = -1;
-        }, 30);
+        }, 10);
     }
     
 

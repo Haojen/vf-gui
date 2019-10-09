@@ -1,7 +1,7 @@
 import {Slider} from "./Slider";
 import {ScrollingContainer} from "./ScrollingContainer";
 import * as tween from "./tween/index";
-import {SpriteSlice} from "./SpriteSlice";
+import {Image} from "./Image";
 
 /**
  * UI 带有滚动条的容器
@@ -31,7 +31,7 @@ export class ScrollBar extends Slider {
         }
     }
 
-    protected onThumbLoadComplete(rectangle: PIXI.Rectangle,source: SpriteSlice){
+    protected onThumbLoadComplete(rectangle: PIXI.Rectangle,source: Image){
         super.onThumbLoadComplete(rectangle,source);
         this.alignToContainer();
     }

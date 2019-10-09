@@ -8,14 +8,12 @@ export default class TestTicker {
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
         /** 本地位图 */
-        let sp = new vfui.Sprite();
+        let sp = new vfui.Image();
         sp.source = "assets/sprite.png"; //本地文件路径
         sp.x = 300;
         sp.y = 300;
         sp.width = 100;
         sp.height = 100;
-        sp.anchorX = 0.5;
-        sp.anchorY = 0.5;
         uiStage.addChild(sp);
 
         this.update = (delta) => {

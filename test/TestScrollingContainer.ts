@@ -59,7 +59,7 @@ export default class TestScrollingContainer {
 
     private addSp(sc: vfui.ScrollingContainer, i: number) {
 
-        let sp = new vfui.Sprite();
+        let sp = new vfui.Image();
         sp.source = "assets/sprite.png";
         sp.y = i * 620;
         sc.addChild(sp);

@@ -14,7 +14,7 @@ export default class TestPixi {
 
         let c = new vfui.Container();
         uiStage.addChild(c);
-        let s = new vfui.Sprite();
+        let s = new vfui.Image();
         s.source = "assets/sprite.png";
         c.addChild(s);
 

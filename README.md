@@ -80,9 +80,7 @@ Version:
 | vfui.ScrollingContainer | 可滑动的容器 |
 | vfui.ScrollBar | 带有滑动条容器 |
 | vfui.SortableList | 带有排序功能的列表容器 |
-| vfui.Sprite from | 图片 |
-| vfui.SpriteTiling | 平铺的图片 |
-| vfui.SpriteSlice | 九宫图片 |
+| vfui.Image | 图片 |
 | vfui.SpriteAnimated | 序列图 |
 | vfui.Button | Button - 按钮 |
 | vfui.CheckBox | 单选与复选 |

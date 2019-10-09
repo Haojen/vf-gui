@@ -50,15 +50,14 @@ export class Timeline implements Lifecycle {
     private _frameCount = 0;
     private _elapsedMS = 16.66; //1000/60
     private _prevTime = 0;
-    private _duration = 0;
     private _isStop = false;
     private _lastNode = new Map<string, Node>();
     private _isSetDefault = false;
+    public isLoop = false;
 
     public setDefault(object: TAny, _duration: number, fps: number) {
 
         this._object = object;
-        this._duration = _duration;
         this._elapsedMS = 1000 / fps;
         let frameCount = Math.round(_duration / this._elapsedMS);
         this._frameCount = frameCount;
@@ -165,6 +164,10 @@ export class Timeline implements Lifecycle {
         let { _prevTime, _frames, _frameCount, _elapsedMS } = this;
         let curFrame = Math.round(_prevTime / _elapsedMS);
         if (curFrame >= _frameCount) {
+            if(this.isLoop){
+                this.goto(1,false);
+                return;
+            }
             this._isStop = true;
         }
         if (_frames[curFrame] == undefined) {
@@ -244,9 +247,9 @@ export class Timeline implements Lifecycle {
         this._frameCount = 0;
         this._elapsedMS = 16.666666666666; //1000/60
         this._prevTime = 0;
-        this._duration = 0;
         this._isStop = false;
         this._isSetDefault = false;
+        this.isLoop = false;
         this._lastNode.clear();
     }
 

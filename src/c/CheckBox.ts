@@ -1,6 +1,6 @@
-import {Sprite} from "./Sprite";
+import {Image} from "./Image";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../enum/AlignEnum";
-import * as InputController from "../interaction/InputController";
+import { ComponentEvent,InputController } from "../interaction/Index";
 import {InputSkinBase} from "../core/InputSkinBase";
 
 /**
@@ -27,14 +27,16 @@ export class CheckBox extends InputSkinBase{
     public constructor(option = {width:20,height:20,tabIndex:0,tabGroup:0}){  
         super(option.width,option.height,option.tabIndex,option.tabGroup.toString());
         this.container.buttonMode = true;
-        this._checkmark = new Sprite();
+        this._checkmark = new Image();
+        this._checkmark.anchorX = 0.5;
+        this._checkmark.anchorY = 0.5;
         this._checkmark.verticalAlign = VerticalAlignEnum.middle
         this._checkmark.horizontalAlign = HorizontalAlignEnum.center;
         this._checkmark.alpha = 0;
         this.addChild(this._checkmark);
     }
 
-    private _checkmark: Sprite ;
+    private _checkmark: Image ;
     private _checked = false;
     private _checkGroup: string | undefined;
     private _value: string|undefined;
@@ -98,6 +100,7 @@ export class CheckBox extends InputSkinBase{
             if (this.checkGroup)
                 InputController.updateCheckGroupSelected(this);
             this._checked = value;
+            this.emit(ComponentEvent.CHANGE,this);
             this.update();
         }
     }
@@ -113,6 +116,5 @@ export class CheckBox extends InputSkinBase{
         super.update(); 
         this._checkmark.alpha = this.checked ? 1 : 0;
         this._checkmark.source = this._sourceMark;
-        
     }
 }

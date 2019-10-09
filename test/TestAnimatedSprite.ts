@@ -1,4 +1,3 @@
-
 import vfui from "../src/pixi-vfui";
 
 export default  

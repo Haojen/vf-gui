@@ -2,7 +2,7 @@ import {InputBase} from "./InputBase";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../enum/AlignEnum";
 import {ClickEvent} from "../interaction/ClickEvent";
 import {InteractionEvent,TouchMouseEvent} from "../interaction/InteractionEvent";
-import {SpriteSlice} from "../c/SpriteSlice";
+import {Image} from "../c/Image";
 import {UIBase} from './UIBase';
 
 /**
@@ -24,12 +24,14 @@ export class InputSkinBase extends InputBase{
      */
     public constructor(width: number, height: number, tabIndex: number, tabGroup: string){  
         super(width,height,tabIndex,tabGroup);
-        this._background.widthPet = "100%";
-        this._background.heightPct = "100%";
-        this._background.pivot = 0.5;
-        this._background.verticalAlign = VerticalAlignEnum.middle
-        this._background.horizontalAlign = HorizontalAlignEnum.center;
-        this._background.borderWidth = 10;
+        let _background = this._background;
+        _background.backgroundRepeat = "nineSlice";
+        _background.widthPet = "100%";
+        _background.heightPct = "100%";
+        _background.pivot = 0.5;
+        _background.verticalAlign = VerticalAlignEnum.middle
+        _background.horizontalAlign = HorizontalAlignEnum.center;
+        _background.borderWidth = 10;
         this.addChild(this._background);
         this.on(TouchMouseEvent.onMove,this.onMove,this);
         this.on(TouchMouseEvent.onHover,this.onHover,this);
@@ -58,7 +60,7 @@ export class InputSkinBase extends InputBase{
 
 
     protected _isHover = false;
-    protected _background = new SpriteSlice();
+    protected _background = new Image();
     protected _clickEvent = new ClickEvent(this,true);
     /**
      * 组件的当前视图状态 。 后续扩展
