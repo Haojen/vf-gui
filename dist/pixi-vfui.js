@@ -113,12 +113,8 @@ const SortableList_1 = __webpack_require__(/*! ./c/SortableList */ "./src/c/Sort
 exports.SortableList = SortableList_1.SortableList;
 const ScrollBar_1 = __webpack_require__(/*! ./c/ScrollBar */ "./src/c/ScrollBar.ts");
 exports.ScrollBar = ScrollBar_1.ScrollBar;
-const Sprite_1 = __webpack_require__(/*! ./c/Sprite */ "./src/c/Sprite.ts");
-exports.Sprite = Sprite_1.Sprite;
-const SpriteTiling_1 = __webpack_require__(/*! ./c/SpriteTiling */ "./src/c/SpriteTiling.ts");
-exports.SpriteTiling = SpriteTiling_1.SpriteTiling;
-const SpriteSlice_1 = __webpack_require__(/*! ./c/SpriteSlice */ "./src/c/SpriteSlice.ts");
-exports.SpriteSlice = SpriteSlice_1.SpriteSlice;
+const Image_1 = __webpack_require__(/*! ./c/Image */ "./src/c/Image.ts");
+exports.Image = Image_1.Image;
 const SpriteAnimated_1 = __webpack_require__(/*! ./c/SpriteAnimated */ "./src/c/SpriteAnimated.ts");
 exports.SpriteAnimated = SpriteAnimated_1.SpriteAnimated;
 const Text_1 = __webpack_require__(/*! ./c/Text */ "./src/c/Text.ts");
@@ -252,8 +248,8 @@ exports.Button = Button;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Sprite_1 = __webpack_require__(/*! ./Sprite */ "./src/c/Sprite.ts");
-const InputController = __webpack_require__(/*! ../interaction/InputController */ "./src/interaction/InputController.ts");
+const Image_1 = __webpack_require__(/*! ./Image */ "./src/c/Image.ts");
+const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 const InputSkinBase_1 = __webpack_require__(/*! ../core/InputSkinBase */ "./src/core/InputSkinBase.ts");
 /**
  * UI 单选框与复选框，区别在于有没有时间去拆分，如果没有时间拆分就直接用这个吧，只是皮肤不同
@@ -280,7 +276,9 @@ class CheckBox extends InputSkinBase_1.InputSkinBase {
         super(option.width, option.height, option.tabIndex, option.tabGroup.toString());
         this._checked = false;
         this.container.buttonMode = true;
-        this._checkmark = new Sprite_1.Sprite();
+        this._checkmark = new Image_1.Image();
+        this._checkmark.anchorX = 0.5;
+        this._checkmark.anchorY = 0.5;
         this._checkmark.verticalAlign = 2 /* middle */;
         this._checkmark.horizontalAlign = 2 /* center */;
         this._checkmark.alpha = 0;
@@ -311,7 +309,7 @@ class CheckBox extends InputSkinBase_1.InputSkinBase {
      */
     get selectedValue() {
         if (this.checkGroup) {
-            return InputController.getCheckGroupSelectedValue(this.checkGroup);
+            return Index_1.InputController.getCheckGroupSelectedValue(this.checkGroup);
         }
         return undefined;
     }
@@ -323,13 +321,13 @@ class CheckBox extends InputSkinBase_1.InputSkinBase {
     }
     set checkGroup(value) {
         if (value === undefined) {
-            InputController.unRegistrerCheckGroup(this);
+            Index_1.InputController.unRegistrerCheckGroup(this);
         }
         if (this._checkGroup == value) {
             return;
         }
         this._checkGroup = value; //需要在registrerCheckGroup之前
-        InputController.registrerCheckGroup(this);
+        Index_1.InputController.registrerCheckGroup(this);
     }
     /**
      * 设置是否选中
@@ -341,8 +339,9 @@ class CheckBox extends InputSkinBase_1.InputSkinBase {
     set checked(value) {
         if (value !== this._checked) {
             if (this.checkGroup)
-                InputController.updateCheckGroupSelected(this);
+                Index_1.InputController.updateCheckGroupSelected(this);
             this._checked = value;
+            this.emit(Index_1.ComponentEvent.CHANGE, this);
             this.update();
         }
     }
@@ -374,7 +373,7 @@ exports.CheckBox = CheckBox;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
-const Sprite_1 = __webpack_require__(/*! ./Sprite */ "./src/c/Sprite.ts");
+const Image_1 = __webpack_require__(/*! ./Image */ "./src/c/Image.ts");
 const Rect_1 = __webpack_require__(/*! ./Rect */ "./src/c/Rect.ts");
 /**
  * UI的显示容器
@@ -405,8 +404,8 @@ class Container extends UIBase_1.UIBase {
         if (value === undefined) {
             this.container.mask = null;
         }
-        else if (value instanceof Sprite_1.Sprite) {
-            this.container.mask = value.img;
+        else if (value instanceof Image_1.Image) {
+            this.container.mask = value._sprite;
         }
         else if (value instanceof Rect_1.Rect) {
             this.container.mask = value.graphics;
@@ -658,6 +657,234 @@ exports.Easing = {
         steps: (steps) => (k) => ((k * steps) | 0) / steps
     }
 };
+
+
+/***/ }),
+
+/***/ "./src/c/Image.ts":
+/*!************************!*\
+  !*** ./src/c/Image.ts ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
+const Utils_1 = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
+/**
+ * 图片
+ * Event: sourceComplete
+ */
+class Image extends UIBase_1.UIBase {
+    constructor(repeat = "no-repeat") {
+        super();
+        this._isLoad = false;
+        this._anchorX = 0;
+        this._anchorY = 0;
+        this._leftWidth = 0;
+        this._topHeight = 0;
+        this._rightWidth = 0;
+        this._bottomHeight = 0;
+        this._backgroundRepeat = repeat;
+    }
+    get backgroundRepeat() {
+        return this._backgroundRepeat;
+    }
+    set backgroundRepeat(value) {
+        if (this._backgroundRepeat === value) {
+            return;
+        }
+        this._backgroundRepeat = value;
+        this.createSprite();
+    }
+    /**
+     * 获取或设置显示源
+     * 可以使key、url,PIXI.Texture | canva. 当是key时确认资源库是否存在
+     *
+     * 设置null可以传入PIXI.Texture.EMPTY
+     */
+    get source() {
+        return this._source;
+    }
+    set source(value) {
+        if (Utils_1._getSourcePath) {
+            value = Utils_1._getSourcePath(value);
+        }
+        if (value === undefined) {
+            return;
+        }
+        if (value === this._source) {
+            return;
+        }
+        this._isLoad = false;
+        this._source = value;
+        if (value instanceof PIXI.Texture) {
+            this._texture = value;
+            this._isLoad = true;
+            this.createSprite();
+            this.emit(Image.onload, value.frame, this);
+        }
+        else {
+            if (this._texture) {
+                this._texture.removeAllListeners();
+                this._texture = undefined;
+            }
+            this._texture = PIXI.Texture.from(value);
+            if (this._texture.width > 1 && this._texture.height > 1) {
+                if (this._texture) {
+                    this._isLoad = true;
+                    this.createSprite();
+                    this.emit(Image.onload, this._texture.frame, this);
+                }
+            }
+            else {
+                this._texture.once("update", () => {
+                    if (this._texture) {
+                        this._isLoad = true;
+                        this.createSprite();
+                        this.emit(Image.onload, this._texture.frame, this);
+                    }
+                }, this);
+            }
+        }
+    }
+    /** 设置X的锚点 */
+    get anchorX() {
+        return this._anchorX;
+    }
+    set anchorX(value) {
+        this._anchorX = value;
+        this.dalayDraw = true;
+    }
+    /** 设置Y的锚点 */
+    get anchorY() {
+        return this._anchorY;
+    }
+    set anchorY(value) {
+        this._anchorY = value;
+        this.dalayDraw = true;
+    }
+    /**
+     * 获取设置距离左边宽度
+     */
+    get leftWidth() {
+        return this._leftWidth;
+    }
+    set leftWidth(value) {
+        this._leftWidth = value;
+        this.dalayDraw = true;
+    }
+    /**
+     * 获取设置距离顶部宽度
+     */
+    get topHeight() {
+        return this._topHeight;
+    }
+    set topHeight(value) {
+        this._topHeight = value;
+        this.dalayDraw = true;
+    }
+    /**
+     * 获取设置距离右边宽度,no-repeat|nineSlice状态时，无效果
+     */
+    get rightWidth() {
+        return this._rightWidth;
+    }
+    set rightWidth(value) {
+        this._rightWidth = value;
+        this.dalayDraw = true;
+    }
+    /**
+     * 获取设置距离底部宽度,no-repeat|nineSlice状态时，无效果
+     */
+    get bottomHeight() {
+        return this._bottomHeight;
+    }
+    set bottomHeight(value) {
+        this._bottomHeight = value;
+        this.dalayDraw = true;
+    }
+    /**
+     * nineSlice状态时,9切时的固定值
+    */
+    set borderWidth(value) {
+        this._topHeight = value;
+        this._leftWidth = value;
+        this._rightWidth = value;
+        this._bottomHeight = value;
+    }
+    createSprite() {
+        if (this._texture === undefined) {
+            return;
+        }
+        if (!this._isLoad) {
+            return;
+        }
+        let { _sprite, _texture, _backgroundRepeat } = this;
+        if (_sprite && _sprite.parent) {
+            this.container.removeChild(_sprite);
+        }
+        if (_backgroundRepeat === "no-repeat") {
+            _sprite = new PIXI.Sprite(_texture);
+        }
+        else if (_backgroundRepeat === "repeat") {
+            _sprite = new PIXI.TilingSprite(_texture);
+        }
+        else if (this._backgroundRepeat === "nineSlice") {
+            _sprite = new PIXI.NineSlicePlane(_texture);
+        }
+        //跳过编译器
+        if (_sprite) {
+            this._sprite = _sprite;
+            this.update();
+            this.container.addChild(_sprite);
+        }
+    }
+    update() {
+        if (this._texture === undefined) {
+            return;
+        }
+        if (this._sprite === undefined) {
+            return;
+        }
+        let { _sprite, _topHeight, _bottomHeight, _leftWidth, _rightWidth } = this;
+        if (this.actualWidth === 0 && this.actualHeight === 0) {
+            _sprite.width = this._texture.frame.width;
+            _sprite.height = this._texture.frame.height;
+        }
+        else {
+            _sprite.width = this.actualWidth;
+            _sprite.height = this.actualHeight;
+        }
+        if (_sprite instanceof PIXI.TilingSprite) {
+            //_sprite.tileScale.set(1,1);
+            _sprite.tilePosition.set(this._leftWidth, this._topHeight);
+        }
+        else if (_sprite instanceof PIXI.NineSlicePlane) {
+            _sprite.leftWidth = _leftWidth;
+            _sprite.rightWidth = _rightWidth;
+            _sprite.topHeight = _topHeight;
+            _sprite.bottomHeight = _bottomHeight;
+        }
+        if (this._anchorX !== 0) {
+            _sprite.x = -this._texture.frame.width * this._anchorX;
+        }
+        if (this._anchorY !== 0) {
+            _sprite.y = -this._texture.frame.height * this._anchorY;
+        }
+        if (!isNaN(this.tint)) {
+            _sprite.tint = this.tint;
+        }
+        if (!isNaN(this.blendMode)) {
+            _sprite.blendMode = this.blendMode;
+        }
+    }
+}
+/** 图片加载完成事件 */
+Image.onload = "onload";
+exports.Image = Image;
 
 
 /***/ }),
@@ -1440,8 +1667,8 @@ exports.ScrollingContainer = ScrollingContainer;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
+const Image_1 = __webpack_require__(/*! ./Image */ "./src/c/Image.ts");
 const Utils = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
-const SpriteSlice_1 = __webpack_require__(/*! ./SpriteSlice */ "./src/c/SpriteSlice.ts");
 const tween = __webpack_require__(/*! ./tween/index */ "./src/c/tween/index.ts");
 const DragEvent_1 = __webpack_require__(/*! ../interaction/DragEvent */ "./src/interaction/DragEvent.ts");
 /**
@@ -1477,13 +1704,13 @@ class Slider extends UIBase_1.UIBase {
         this._maxValue = 100;
         /** 是否可以绘制布局，设置本值并不会触发绘制，只是标记*/
         this._isUpdateLayout = true;
-        this._track = new SpriteSlice_1.SpriteSlice();
+        this._track = new Image_1.Image("nineSlice");
         this._track.borderWidth = trackBorderWidth;
-        this._thumb = new SpriteSlice_1.SpriteSlice();
+        this._thumb = new Image_1.Image("nineSlice");
         this._thumb.borderWidth = thumbBorderWidth;
         this._thumb.pivot = 0.5;
         this._thumb.container.buttonMode = true;
-        this._tracklight = new SpriteSlice_1.SpriteSlice();
+        this._tracklight = new Image_1.Image("nineSlice");
         this._tracklight.borderWidth = tracklightBorderWidth;
         this.addChild(this._track);
         this.addChild(this._tracklight);
@@ -1526,8 +1753,8 @@ class Slider extends UIBase_1.UIBase {
     set sourceThumb(value) {
         this._sourceThumb = value;
         this._thumb.visible = false;
-        this._thumb.off(SpriteSlice_1.SpriteSlice.SourceCompleteEvent, this.onThumbLoadComplete, this);
-        this._thumb.once(SpriteSlice_1.SpriteSlice.SourceCompleteEvent, this.onThumbLoadComplete, this);
+        this._thumb.off(Image_1.Image.onload, this.onThumbLoadComplete, this);
+        this._thumb.once(Image_1.Image.onload, this.onThumbLoadComplete, this);
         this._thumb.source = value;
     }
     //rectangle:PIXI.Rectangle,source?:SliceSprite
@@ -1823,121 +2050,6 @@ exports.SortableList = SortableList;
 
 /***/ }),
 
-/***/ "./src/c/Sprite.ts":
-/*!*************************!*\
-  !*** ./src/c/Sprite.ts ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
-const Utils_1 = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
-/**
- * UI图片显示对象，如果使用拉伸或9切，请使用 SliceSprite
- *
- * @class
- * @extends PIXI.UI.UIBase
- * @memberof PIXI.UI
- * @param Texture {PIXI.Texture} 文本对象
- */
-class Sprite extends UIBase_1.UIBase {
-    constructor(t) {
-        super();
-        this._anchorX = 0;
-        this._anchorY = 0;
-        this._source = t;
-        this._sprite = new PIXI.Sprite(t);
-        this.container.addChild(this._sprite);
-    }
-    /** 获得图像 */
-    get img() {
-        return this._sprite;
-    }
-    /**
-     * 获取或设置显示源
-     * 可以使key、url,PIXI.Texture | canva. 当是key时确认资源库是否存在
-     *
-     * 设置null可以传入PIXI.Texture.EMPTY
-     */
-    get source() {
-        return this._source;
-    }
-    set source(value) {
-        if (Utils_1._getSourcePath) {
-            value = Utils_1._getSourcePath(value);
-        }
-        if (value === undefined) {
-            return;
-        }
-        if (value === this._source) {
-            return;
-        }
-        this._source = value;
-        if (value instanceof PIXI.Texture) {
-            this._sprite.texture = value;
-            this.correctionWidthAndHeight();
-            this.updatesettings(true);
-            this.emit(Sprite.SourceCompleteEvent, value.frame, this);
-        }
-        else {
-            this._sprite.texture = PIXI.Texture.from(value);
-            if (this._sprite.texture.width > 1 && this._sprite.texture.height > 1) {
-                this.correctionWidthAndHeight();
-                this.updatesettings(true);
-                this.emit(Sprite.SourceCompleteEvent, this._sprite.texture.frame, this);
-            }
-            else {
-                this._sprite.texture.once("update", () => {
-                    this.correctionWidthAndHeight();
-                    this.updatesettings(true);
-                    this.emit(Sprite.SourceCompleteEvent, this._sprite.texture.frame, this);
-                }, this);
-            }
-        }
-    }
-    correctionWidthAndHeight() {
-        if (this.setting.width == 0) {
-            this.setting.width = this._sprite.texture.width;
-        }
-        if (this.setting.height == 0) {
-            this.setting.height = this._sprite.texture.height;
-        }
-    }
-    /** 设置X的锚点 */
-    get anchorX() {
-        return this._anchorX;
-    }
-    set anchorX(value) {
-        this._anchorX = value;
-        this._sprite.anchor.x = value;
-    }
-    /** 设置Y的锚点 */
-    get anchorY() {
-        return this._anchorY;
-    }
-    set anchorY(value) {
-        this._anchorY = value;
-        this._sprite.anchor.y = value;
-    }
-    update() {
-        if (!isNaN(this.tint))
-            this._sprite.tint = this.tint;
-        if (!isNaN(this.blendMode))
-            this._sprite.blendMode = this.blendMode;
-        this._sprite.width = this._width;
-        this._sprite.height = this._height;
-    }
-}
-/** 图片加载完成事件 */
-Sprite.SourceCompleteEvent = "sourceCompleteEvent";
-exports.Sprite = Sprite;
-
-
-/***/ }),
-
 /***/ "./src/c/SpriteAnimated.ts":
 /*!*********************************!*\
   !*** ./src/c/SpriteAnimated.ts ***!
@@ -2096,323 +2208,6 @@ exports.SpriteAnimated = SpriteAnimated;
 
 /***/ }),
 
-/***/ "./src/c/SpriteSlice.ts":
-/*!******************************!*\
-  !*** ./src/c/SpriteSlice.ts ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
-const Utils_1 = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
-/**
- * 动态宽高的图片,9切
- * Event: sourceComplete
- */
-class SpriteSlice extends UIBase_1.UIBase {
-    /**
-     * 构造函数，如果不设置horizontalSlice，verticalSlice。 按设置的BorderWidth进行9切
-     *
-     * @see https://docs.cocos.com/creator/manual/zh/ui/sliced-sprite.html
-     */
-    constructor() {
-        super();
-        this._leftWidth = 0;
-        this._topHeight = 0;
-        this._rightWidth = 0;
-        this._bottomHeight = 0;
-        /** 边框 */
-        this.bw = 0;
-        this.vs = true;
-        this.hs = true;
-    }
-    /**
-     * 获取或设置显示源
-     * 可以使key、url,PIXI.Texture | canva. 当是key时确认资源库是否存在
-     *
-     * 设置null可以传入PIXI.Texture.EMPTY
-     */
-    get source() {
-        return this._source;
-    }
-    set source(value) {
-        if (Utils_1._getSourcePath) {
-            value = Utils_1._getSourcePath(value);
-        }
-        if (value === undefined) {
-            return;
-        }
-        if (value === this._source) {
-            return;
-        }
-        this._source = value;
-        if (value instanceof PIXI.Texture) {
-            this._texture = value;
-            this.createSlice();
-            this.emit(SpriteSlice.SourceCompleteEvent, value.frame, this);
-        }
-        else {
-            if (this._texture) {
-                this._texture.removeAllListeners();
-            }
-            this._texture = PIXI.Texture.from(value);
-            if (this._texture.width > 1 && this._texture.height > 1) {
-                if (this._texture) {
-                    this.createSlice();
-                    this.emit(SpriteSlice.SourceCompleteEvent, this._texture.frame, this);
-                }
-            }
-            else {
-                this._texture.once("update", () => {
-                    if (this._texture) {
-                        this.createSlice();
-                        this.emit(SpriteSlice.SourceCompleteEvent, this._texture.frame, this);
-                    }
-                }, this);
-            }
-        }
-    }
-    /**
-     * 边角宽度，要9切的范围
-    */
-    set borderWidth(value) {
-        this.bw = value;
-        this._topHeight = value;
-        this._leftWidth = value;
-        this._rightWidth = value;
-        this._bottomHeight = value;
-        this.drawSlicePlane();
-    }
-    get borderWidth() {
-        return this.bw;
-    }
-    /**
-     * 获取设置距离左边宽度
-     */
-    get leftWidth() {
-        return this._leftWidth;
-    }
-    set leftWidth(value) {
-        this._leftWidth = value;
-        this.drawSlicePlane();
-    }
-    /**
-     * 获取设置距离顶部宽度
-     */
-    get topHeight() {
-        return this._topHeight;
-    }
-    set topHeight(value) {
-        this._topHeight = value;
-        this.drawSlicePlane();
-    }
-    /**
-     * 获取设置距离右边宽度
-     */
-    get rightWidth() {
-        return this._rightWidth;
-    }
-    set rightWidth(value) {
-        this._rightWidth = value;
-        this.drawSlicePlane();
-    }
-    /**
-     * 获取设置距离底部宽度
-     */
-    get bottomHeight() {
-        return this._bottomHeight;
-    }
-    set bottomHeight(value) {
-        this._bottomHeight = value;
-        this.drawSlicePlane();
-    }
-    /**
-     * 是否水平切
-    */
-    set horizontalSlice(value) {
-        this.hs = value;
-        this.setting.minWidth = this.bw * 2;
-        this.drawSlicePlane();
-    }
-    get horizontalSlice() {
-        return this.hs;
-    }
-    /**
-      * 是否垂直切
-     */
-    set verticalSlice(value) {
-        this.vs = value;
-        this.setting.minHeight = this.bw * 2;
-        this.drawSlicePlane();
-    }
-    get verticalSlice() {
-        return this.vs;
-    }
-    createSlice() {
-        if (this._texture == null) {
-            return;
-        }
-        const lastSlicePlane = this._nineSlice;
-        this._nineSlice = new PIXI.NineSlicePlane(this._texture);
-        this.drawSlicePlane();
-        //跳过编译器
-        this.container.addChild(this._nineSlice);
-        this.dalayDraw = true;
-        if (lastSlicePlane) {
-            this.container.removeChild(lastSlicePlane);
-        }
-    }
-    drawSlicePlane() {
-        if (this._nineSlice === undefined) {
-            return;
-        }
-        const nineSlicePlane = this._nineSlice;
-        nineSlicePlane.width = this._width;
-        nineSlicePlane.height = this._height;
-        if (this.vs && this.hs) {
-            //默认
-            nineSlicePlane.topHeight = this._topHeight;
-            nineSlicePlane.bottomHeight = this._bottomHeight;
-            nineSlicePlane.leftWidth = this._leftWidth;
-            nineSlicePlane.rightWidth = this._rightWidth;
-        }
-        else if (this.hs) {
-            nineSlicePlane.leftWidth = this._leftWidth;
-            nineSlicePlane.rightWidth = this._rightWidth;
-        }
-        else { //vs
-            nineSlicePlane.topHeight = this._topHeight;
-            nineSlicePlane.bottomHeight = this._bottomHeight;
-        }
-    }
-    update() {
-        const nineSlicePlane = this._nineSlice;
-        if (nineSlicePlane === undefined) {
-            return;
-        }
-        if (nineSlicePlane) {
-            nineSlicePlane.width = this._width;
-            nineSlicePlane.height = this._height;
-            if (!isNaN(this.tint)) {
-                nineSlicePlane.tint = this.tint;
-            }
-            if (!isNaN(this.blendMode)) {
-                nineSlicePlane.blendMode = this.blendMode;
-            }
-        }
-    }
-}
-/** 图片加载完成事件 */
-SpriteSlice.SourceCompleteEvent = "sourceCompleteEvent";
-exports.SpriteSlice = SpriteSlice;
-
-
-/***/ }),
-
-/***/ "./src/c/SpriteTiling.ts":
-/*!*******************************!*\
-  !*** ./src/c/SpriteTiling.ts ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
-/**
- * UI平铺显示对象,功能与官方一直，可参考官方示例
- *
- * @example https://pixijs.io/examples/#/sprite/tiling-sprite.js
- */
-class SpriteTiling extends UIBase_1.UIBase {
-    constructor(width, height) {
-        super(width, height);
-        this._tilePosition = new PIXI.ObservablePoint(this.update, this);
-        this._tileScale = new PIXI.ObservablePoint(this.update, this);
-    }
-    /**
-     * 获取或设置显示源
-     * 可以使key、url,PIXI.Texture | canva. 当是key时确认资源库是否存在
-     *
-     * 设置null可以传入PIXI.Texture.EMPTY
-     */
-    get source() {
-        return this._source;
-    }
-    set source(value) {
-        if (value === undefined) {
-            return;
-        }
-        if (value === this._source) {
-            return;
-        }
-        this._source = value;
-        if (value instanceof PIXI.Texture) {
-            this.getNewTilingSprite(value);
-        }
-        else {
-            const t = PIXI.Texture.from(value);
-            const sprite = this.getNewTilingSprite(t);
-            sprite.texture.once("update", () => {
-                if (!this.height) {
-                    this.height = sprite.height;
-                }
-                if (!this.width) {
-                    this.width = sprite.width;
-                }
-                this.updatesettings(true);
-            }, this);
-        }
-    }
-    getNewTilingSprite(t) {
-        if (this._sprite === undefined) {
-            this._sprite = new PIXI.TilingSprite(t);
-            this.container.addChild(this._sprite);
-        }
-        else {
-            this._sprite.texture.removeAllListeners();
-            this._sprite.texture = t;
-        }
-        return this._sprite;
-    }
-    /** 获取设置位置 */
-    get tilePosition() {
-        return this._tilePosition;
-    }
-    set tilePosition(value) {
-        this._tilePosition.set(value.x, value.y);
-        this.update();
-    }
-    /** 获取设置缩放 */
-    get tileScale() {
-        return this._tileScale;
-    }
-    set tileScale(value) {
-        this._tileScale.set(value.x, value.y);
-        this.update();
-    }
-    update() {
-        if (this._sprite) {
-            if (!isNaN(this.tint))
-                this._sprite.tint = this.tint;
-            if (!isNaN(this.blendMode))
-                this._sprite.blendMode = this.blendMode;
-            this._sprite.tileScale.set(this._tileScale.x, this._tileScale.y);
-            this._sprite.tilePosition.set(this._tilePosition.y, this._tilePosition.y);
-            this._sprite.width = this._width;
-            this._sprite.height = this._height;
-        }
-    }
-}
-exports.SpriteTiling = SpriteTiling;
-
-
-/***/ }),
-
 /***/ "./src/c/Text.ts":
 /*!***********************!*\
   !*** ./src/c/Text.ts ***!
@@ -2424,6 +2219,7 @@ exports.SpriteTiling = SpriteTiling;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
+const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 /**
  * UI文本显示对象
  *
@@ -2469,7 +2265,11 @@ class Text extends UIBase_1.UIBase {
         return this._source;
     }
     set label(value) {
+        if (value === this.source) {
+            return;
+        }
         this.source = value;
+        this.emit(Index_1.ComponentEvent.CHANGE, this);
     }
     get style() {
         return this._text.style;
@@ -3047,14 +2847,13 @@ class Timeline {
         this._frameCount = 0;
         this._elapsedMS = 16.66; //1000/60
         this._prevTime = 0;
-        this._duration = 0;
         this._isStop = false;
         this._lastNode = new Map();
         this._isSetDefault = false;
+        this.isLoop = false;
     }
     setDefault(object, _duration, fps) {
         this._object = object;
-        this._duration = _duration;
         this._elapsedMS = 1000 / fps;
         let frameCount = Math.round(_duration / this._elapsedMS);
         this._frameCount = frameCount;
@@ -3152,6 +2951,10 @@ class Timeline {
         let { _prevTime, _frames, _frameCount, _elapsedMS } = this;
         let curFrame = Math.round(_prevTime / _elapsedMS);
         if (curFrame >= _frameCount) {
+            if (this.isLoop) {
+                this.goto(1, false);
+                return;
+            }
             this._isStop = true;
         }
         if (_frames[curFrame] == undefined) {
@@ -3222,9 +3025,9 @@ class Timeline {
         this._frameCount = 0;
         this._elapsedMS = 16.666666666666; //1000/60
         this._prevTime = 0;
-        this._duration = 0;
         this._isStop = false;
         this._isSetDefault = false;
+        this.isLoop = false;
         this._lastNode.clear();
     }
     destroy(destroyWebGL) {
@@ -4563,7 +4366,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const InputBase_1 = __webpack_require__(/*! ./InputBase */ "./src/core/InputBase.ts");
 const ClickEvent_1 = __webpack_require__(/*! ../interaction/ClickEvent */ "./src/interaction/ClickEvent.ts");
 const InteractionEvent_1 = __webpack_require__(/*! ../interaction/InteractionEvent */ "./src/interaction/InteractionEvent.ts");
-const SpriteSlice_1 = __webpack_require__(/*! ../c/SpriteSlice */ "./src/c/SpriteSlice.ts");
+const Image_1 = __webpack_require__(/*! ../c/Image */ "./src/c/Image.ts");
 /**
  * UI 按钮显 示对象
  *
@@ -4584,18 +4387,20 @@ class InputSkinBase extends InputBase_1.InputBase {
     constructor(width, height, tabIndex, tabGroup) {
         super(width, height, tabIndex, tabGroup);
         this._isHover = false;
-        this._background = new SpriteSlice_1.SpriteSlice();
+        this._background = new Image_1.Image();
         this._clickEvent = new ClickEvent_1.ClickEvent(this, true);
         /**
          * 组件的当前视图状态 。 后续扩展
          */
         this._currentState = "Up";
-        this._background.widthPet = "100%";
-        this._background.heightPct = "100%";
-        this._background.pivot = 0.5;
-        this._background.verticalAlign = 2 /* middle */;
-        this._background.horizontalAlign = 2 /* center */;
-        this._background.borderWidth = 10;
+        let _background = this._background;
+        _background.backgroundRepeat = "nineSlice";
+        _background.widthPet = "100%";
+        _background.heightPct = "100%";
+        _background.pivot = 0.5;
+        _background.verticalAlign = 2 /* middle */;
+        _background.horizontalAlign = 2 /* center */;
+        _background.borderWidth = 10;
         this.addChild(this._background);
         this.on(InteractionEvent_1.TouchMouseEvent.onMove, this.onMove, this);
         this.on(InteractionEvent_1.TouchMouseEvent.onHover, this.onHover, this);
@@ -5089,7 +4894,7 @@ class UIBase extends PIXI.utils.EventEmitter {
         this.dalayDrawTimeId = -1;
         this.uuid = Utils_1.uid();
         this.container = new ContainerBase_1.ContainerBase();
-        //this.container.name = this.constructor.name;
+        this.container.name = this.constructor.name;
         this.setting = new UISettings_1.UISettings();
         if (width && height)
             this.setDefaultSize(width, height);
@@ -5739,7 +5544,7 @@ class UIBase extends PIXI.utils.EventEmitter {
         return this.setting.blendMode || NaN;
     }
     /**
-     * 获取设置锚点Y的像素
+     *  旋转缩放轴点
      */
     set pivotX(value) {
         this.setting.pivotX = value;
@@ -5750,7 +5555,7 @@ class UIBase extends PIXI.utils.EventEmitter {
         return this.setting.pivotX;
     }
     /**
-     * 获取设置锚点Y的像素
+     *  旋转缩放轴点
      */
     set pivotY(value) {
         this.setting.pivotY = value;
@@ -5761,7 +5566,7 @@ class UIBase extends PIXI.utils.EventEmitter {
         return this.setting.pivotY;
     }
     /**
-     * 锚点的像素表示法,便捷的方法，避免单独设置
+     * 旋转缩放轴点
      */
     set pivot(value) {
         this.setting.pivotX = value;
@@ -5978,7 +5783,7 @@ class UIBase extends PIXI.utils.EventEmitter {
         this.dalayDrawTimeId = window.setTimeout(() => {
             this.update();
             this.dalayDrawTimeId = -1;
-        }, 30);
+        }, 10);
     }
     /**
      * 更新方法，其他组件重写
@@ -6865,6 +6670,26 @@ exports.ClickEvent = ClickEvent;
 
 /***/ }),
 
+/***/ "./src/interaction/ComponentEvent.ts":
+/*!*******************************************!*\
+  !*** ./src/interaction/ComponentEvent.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * 特定属性改变时
+ * 1. CheckBox 的 checked 改变时
+ * 2. Text 的 label 改变时
+ */
+exports.CHANGE = "CHANGE";
+
+
+/***/ }),
+
 /***/ "./src/interaction/DragDropController.ts":
 /*!***********************************************!*\
   !*** ./src/interaction/DragDropController.ts ***!
@@ -7110,6 +6935,8 @@ exports.MouseScrollEvent = MouseScrollEvent_1.MouseScrollEvent;
 const InteractionEvent_1 = __webpack_require__(/*! ./InteractionEvent */ "./src/interaction/InteractionEvent.ts");
 exports.InteractionEvent = InteractionEvent_1.InteractionEvent;
 exports.TouchMouseEvent = InteractionEvent_1.TouchMouseEvent;
+const ComponentEvent = __webpack_require__(/*! ./ComponentEvent */ "./src/interaction/ComponentEvent.ts");
+exports.ComponentEvent = ComponentEvent;
 
 
 /***/ }),

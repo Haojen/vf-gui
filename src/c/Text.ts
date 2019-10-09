@@ -1,5 +1,6 @@
 import {UIBase} from "../core/UIBase";
 import {TextStyle} from "./TextStyle";
+import { ComponentEvent } from "../interaction/Index";
 
 /**
  * UI文本显示对象
@@ -48,7 +49,11 @@ export class Text extends UIBase{
         return this._source;
     }
     public set label(value: string){
+        if(value === this.source){
+            return;
+        }
         this.source = value;
+        this.emit(ComponentEvent.CHANGE,this);
     }
 
     public get style(): TextStyle{

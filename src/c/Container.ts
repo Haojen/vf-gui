@@ -1,5 +1,5 @@
 import {UIBase} from "../core/UIBase";
-import {Sprite} from "./Sprite";
+import {Image} from "./Image";
 import {Rect} from "./Rect";
 
 /**
@@ -24,18 +24,18 @@ export class Container extends UIBase{
     }
 
 
-    private _mask: Sprite|Rect|PIXI.Sprite|PIXI.Graphics|undefined;
+    private _mask: Image|Rect|PIXI.Sprite|PIXI.Graphics|undefined;
     /**
      * 设置遮罩
      */
-    public set mask(value: Sprite|Rect|PIXI.Sprite|PIXI.Graphics|undefined){
+    public set mask(value: Image|Rect|PIXI.Sprite|PIXI.Graphics|undefined){
         if(value === this.mask){
             return;
         }
         if(value === undefined){
             this.container.mask = null;
-        }else if(value instanceof Sprite){
-            this.container.mask = value.img;
+        }else if(value instanceof Image){
+            this.container.mask = value._sprite as PIXI.Sprite;
         }else if(value instanceof Rect){
             this.container.mask = value.graphics;
         }else{

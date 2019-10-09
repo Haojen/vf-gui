@@ -4,6 +4,7 @@ import {DragEvent} from "./DragEvent";
 import * as InputController from "./InputController";
 import {MouseScrollEvent} from "./MouseScrollEvent";
 import {InteractionEvent,TouchMouseEvent} from "./InteractionEvent";
+import * as ComponentEvent from "./ComponentEvent";
 
 export {
     ClickEvent,
@@ -12,5 +13,6 @@ export {
     InputController,
     MouseScrollEvent,
     InteractionEvent,
-    TouchMouseEvent
+    TouchMouseEvent,
+    ComponentEvent
 };

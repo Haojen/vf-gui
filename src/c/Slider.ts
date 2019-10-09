@@ -1,6 +1,6 @@
 import {UIBase} from "../core/UIBase";
+import {Image} from "./Image";
 import * as Utils from "../core/Utils";
-import {SpriteSlice} from "./SpriteSlice";
 import * as tween from "./tween/index";
 import { VerticalAlignEnum, HorizontalAlignEnum } from "../enum/AlignEnum";
 import {DragEvent} from "../interaction/DragEvent";
@@ -22,14 +22,14 @@ export class Slider extends UIBase{
 
     public constructor(trackBorderWidth = 0,thumbBorderWidth = 0,tracklightBorderWidth = 0){
         super();
-        this._track = new SpriteSlice();
+        this._track = new Image("nineSlice");
         this._track.borderWidth = trackBorderWidth;
-        this._thumb = new SpriteSlice();
+        this._thumb = new Image("nineSlice");
         this._thumb.borderWidth = thumbBorderWidth;
         this._thumb.pivot = 0.5;
         this._thumb.container.buttonMode = true;
 
-        this._tracklight = new SpriteSlice();
+        this._tracklight = new Image("nineSlice");
         this._tracklight.borderWidth = tracklightBorderWidth;
         this.addChild(this._track);
         this.addChild(this._tracklight);
@@ -59,9 +59,9 @@ export class Slider extends UIBase{
      */
     private _vertical = false;
     //set options
-    protected _track: SpriteSlice;
-    protected _tracklight: SpriteSlice;
-    protected _thumb: SpriteSlice;
+    protected _track: Image;
+    protected _tracklight: Image;
+    protected _thumb: Image;
 
     protected _sourceTrack = "";
     protected _sourceTracklight = "";
@@ -113,13 +113,13 @@ export class Slider extends UIBase{
     public set sourceThumb(value) {
         this._sourceThumb = value;
         this._thumb.visible = false;
-        this._thumb.off(SpriteSlice.SourceCompleteEvent,this.onThumbLoadComplete,this);
-        this._thumb.once(SpriteSlice.SourceCompleteEvent,this.onThumbLoadComplete,this);
+        this._thumb.off(Image.onload,this.onThumbLoadComplete,this);
+        this._thumb.once(Image.onload,this.onThumbLoadComplete,this);
         this._thumb.source = value;
     }
 
     //rectangle:PIXI.Rectangle,source?:SliceSprite
-    protected  onThumbLoadComplete(rectangle: PIXI.Rectangle,source: SpriteSlice){
+    protected  onThumbLoadComplete(rectangle: PIXI.Rectangle,source: Image){
         source.width = rectangle.width;
         source.height = rectangle.height;
         source.visible = true;

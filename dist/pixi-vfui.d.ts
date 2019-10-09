@@ -872,15 +872,15 @@ declare module 'core/UIBase' {
 	     */
 	    blendMode: number;
 	    /**
-	     * 获取设置锚点Y的像素
+	     *  旋转缩放轴点
 	     */
 	    pivotX: number;
 	    /**
-	     * 获取设置锚点Y的像素
+	     *  旋转缩放轴点
 	     */
 	    pivotY: number;
 	    /**
-	     * 锚点的像素表示法,便捷的方法，避免单独设置
+	     * 旋转缩放轴点
 	     */
 	    pivot: number;
 	    /**
@@ -1575,10 +1575,10 @@ declare module 'c/Timeline' {
 	    private _frameCount;
 	    private _elapsedMS;
 	    private _prevTime;
-	    private _duration;
 	    private _isStop;
 	    private _lastNode;
 	    private _isSetDefault;
+	    isLoop: boolean;
 	    setDefault(object: TAny, _duration: number, fps: number): this;
 	    addProperty(property: string, value: number | string | boolean, endFrame: number, easing?: TAny): this;
 	    stop(): void;
@@ -1638,25 +1638,26 @@ declare module 'core/Ticker' {
 	export {};
 
 }
-declare module 'c/Sprite' {
+declare module 'c/Image' {
 	/// <reference types="pixi.js" />
-	import { UIBase } from 'core/UIBase';
+	import { UIBase } from 'core/UIBase'; type RepeatEnum = "no-repeat" | "repeat" | "nineSlice";
 	/**
-	 * UI图片显示对象，如果使用拉伸或9切，请使用 SliceSprite
-	 *
-	 * @class
-	 * @extends PIXI.UI.UIBase
-	 * @memberof PIXI.UI
-	 * @param Texture {PIXI.Texture} 文本对象
+	 * 图片
+	 * Event: sourceComplete
 	 */
-	export class Sprite extends UIBase {
+	export class Image extends UIBase {
 	    /** 图片加载完成事件 */
-	    static readonly SourceCompleteEvent = "sourceCompleteEvent";
-	    constructor(t?: PIXI.Texture);
-	    protected _sprite: PIXI.Sprite;
+	    static readonly onload = "onload";
+	    constructor(repeat?: RepeatEnum);
+	    _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
+	    protected _texture: PIXI.Texture | undefined;
 	    protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-	    /** 获得图像 */
-	    readonly img: PIXI.Sprite;
+	    protected _isLoad: boolean;
+	    /**
+	     * 设置背景方式
+	     */
+	    private _backgroundRepeat;
+	    backgroundRepeat: RepeatEnum;
 	    /**
 	     * 获取或设置显示源
 	     * 可以使key、url,PIXI.Texture | canva. 当是key时确认资源库是否存在
@@ -1664,15 +1665,40 @@ declare module 'c/Sprite' {
 	     * 设置null可以传入PIXI.Texture.EMPTY
 	     */
 	    source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-	    private correctionWidthAndHeight;
 	    private _anchorX;
 	    /** 设置X的锚点 */
 	    anchorX: number;
 	    private _anchorY;
 	    /** 设置Y的锚点 */
 	    anchorY: number;
+	    private _leftWidth;
+	    /**
+	     * 获取设置距离左边宽度
+	     */
+	    leftWidth: number;
+	    private _topHeight;
+	    /**
+	     * 获取设置距离顶部宽度
+	     */
+	    topHeight: number;
+	    private _rightWidth;
+	    /**
+	     * 获取设置距离右边宽度,no-repeat|nineSlice状态时，无效果
+	     */
+	    rightWidth: number;
+	    private _bottomHeight;
+	    /**
+	     * 获取设置距离底部宽度,no-repeat|nineSlice状态时，无效果
+	     */
+	    bottomHeight: number;
+	    /**
+	     * nineSlice状态时,9切时的固定值
+	    */
+	    borderWidth: number;
+	    protected createSprite(): void;
 	    update(): void;
 	}
+	export {};
 
 }
 declare module 'c/Rect' {
@@ -1737,7 +1763,7 @@ declare module 'c/Rect' {
 declare module 'c/Container' {
 	/// <reference types="pixi.js" />
 	import { UIBase } from 'core/UIBase';
-	import { Sprite } from 'c/Sprite';
+	import { Image } from 'c/Image';
 	import { Rect } from 'c/Rect';
 	/**
 	 * UI的显示容器
@@ -1755,7 +1781,7 @@ declare module 'c/Container' {
 	    /**
 	     * 设置遮罩
 	     */
-	    mask: Sprite | Rect | PIXI.Sprite | PIXI.Graphics | undefined;
+	    mask: Image | Rect | PIXI.Sprite | PIXI.Graphics | undefined;
 	}
 
 }
@@ -1945,78 +1971,10 @@ declare module 'c/SortableList' {
 	}
 
 }
-declare module 'c/SpriteSlice' {
-	/// <reference types="pixi.js" />
-	import { UIBase } from 'core/UIBase';
-	/**
-	 * 动态宽高的图片,9切
-	 * Event: sourceComplete
-	 */
-	export class SpriteSlice extends UIBase {
-	    /** 图片加载完成事件 */
-	    static readonly SourceCompleteEvent = "sourceCompleteEvent";
-	    /**
-	     * 构造函数，如果不设置horizontalSlice，verticalSlice。 按设置的BorderWidth进行9切
-	     *
-	     * @see https://docs.cocos.com/creator/manual/zh/ui/sliced-sprite.html
-	     */
-	    constructor();
-	    protected _nineSlice: PIXI.NineSlicePlane | undefined;
-	    protected _texture: PIXI.Texture | undefined;
-	    protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-	    /**
-	     * 获取或设置显示源
-	     * 可以使key、url,PIXI.Texture | canva. 当是key时确认资源库是否存在
-	     *
-	     * 设置null可以传入PIXI.Texture.EMPTY
-	     */
-	    source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-	    /**
-	     * 边角宽度，要9切的范围
-	    */
-	    borderWidth: number;
-	    private _leftWidth;
-	    /**
-	     * 获取设置距离左边宽度
-	     */
-	    leftWidth: number;
-	    private _topHeight;
-	    /**
-	     * 获取设置距离顶部宽度
-	     */
-	    topHeight: number;
-	    private _rightWidth;
-	    /**
-	     * 获取设置距离右边宽度
-	     */
-	    rightWidth: number;
-	    private _bottomHeight;
-	    /**
-	     * 获取设置距离底部宽度
-	     */
-	    bottomHeight: number;
-	    /**
-	     * 是否水平切
-	    */
-	    horizontalSlice: boolean;
-	    /**
-	      * 是否垂直切
-	     */
-	    verticalSlice: boolean;
-	    /** 边框 */
-	    private bw;
-	    private vs;
-	    private hs;
-	    protected createSlice(): void;
-	    protected drawSlicePlane(): void;
-	    update(): void;
-	}
-
-}
 declare module 'c/Slider' {
 	/// <reference types="pixi.js" />
 	import { UIBase } from 'core/UIBase';
-	import { SpriteSlice } from 'c/SpriteSlice';
+	import { Image } from 'c/Image';
 	import { DragEvent } from 'interaction/DragEvent';
 	import { InteractionEvent } from 'interaction/InteractionEvent';
 	/**
@@ -2045,9 +2003,9 @@ declare module 'c/Slider' {
 	     * 滑块方向
 	     */
 	    private _vertical;
-	    protected _track: SpriteSlice;
-	    protected _tracklight: SpriteSlice;
-	    protected _thumb: SpriteSlice;
+	    protected _track: Image;
+	    protected _tracklight: Image;
+	    protected _thumb: Image;
 	    protected _sourceTrack: string;
 	    protected _sourceTracklight: string;
 	    protected _sourceThumb: string;
@@ -2074,7 +2032,7 @@ declare module 'c/Slider' {
 	     * 拖拽手柄
 	     */
 	    sourceThumb: string;
-	    protected onThumbLoadComplete(rectangle: PIXI.Rectangle, source: SpriteSlice): void;
+	    protected onThumbLoadComplete(rectangle: PIXI.Rectangle, source: Image): void;
 	    /**
 	     * 是否垂直
 	     * @default false
@@ -2110,7 +2068,7 @@ declare module 'c/ScrollBar' {
 	/// <reference types="pixi.js" />
 	import { Slider } from 'c/Slider';
 	import { ScrollingContainer } from 'c/ScrollingContainer';
-	import { SpriteSlice } from 'c/SpriteSlice';
+	import { Image } from 'c/Image';
 	/**
 	 * UI 带有滚动条的容器
 	 */
@@ -2123,40 +2081,10 @@ declare module 'c/ScrollBar' {
 	    private _scrollingContainer;
 	    private _hidden;
 	    protected toggleHidden(hidden: boolean): void;
-	    protected onThumbLoadComplete(rectangle: PIXI.Rectangle, source: SpriteSlice): void;
+	    protected onThumbLoadComplete(rectangle: PIXI.Rectangle, source: Image): void;
 	    protected triggerValueChanging(): void;
 	    scrollingContainer: ScrollingContainer | undefined;
 	    protected alignToContainer(): void;
-	}
-
-}
-declare module 'c/SpriteTiling' {
-	/// <reference types="pixi.js" />
-	import { UIBase } from 'core/UIBase';
-	/**
-	 * UI平铺显示对象,功能与官方一直，可参考官方示例
-	 *
-	 * @example https://pixijs.io/examples/#/sprite/tiling-sprite.js
-	 */
-	export class SpriteTiling extends UIBase {
-	    constructor(width?: number, height?: number);
-	    private _tilePosition;
-	    private _tileScale;
-	    private _sprite;
-	    protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-	    /**
-	     * 获取或设置显示源
-	     * 可以使key、url,PIXI.Texture | canva. 当是key时确认资源库是否存在
-	     *
-	     * 设置null可以传入PIXI.Texture.EMPTY
-	     */
-	    source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-	    private getNewTilingSprite;
-	    /** 获取设置位置 */
-	    tilePosition: PIXI.Point;
-	    /** 获取设置缩放 */
-	    tileScale: PIXI.Point;
-	    update(): void;
 	}
 
 }
@@ -2244,6 +2172,163 @@ declare module 'c/TextStyle' {
 	        wordWrapWidth?: number;
 	    });
 	}
+
+}
+declare module 'interaction/ClickEvent' {
+	import { UIBase } from 'core/UIBase';
+	import { InteractionEvent } from 'interaction/InteractionEvent';
+	/**
+	 * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
+	 *
+	 *  可侦听事件:
+	 * ```
+	 *  {InteractionEvent}.TouchEvent.onHover
+	 *  {InteractionEvent}.TouchEvent.onPress
+	 *  {InteractionEvent}.TouchEvent.onClick
+	 *  {InteractionEvent}.TouchEvent.onMove
+	 * ```
+	 *  可赋值方法:
+	 * ```
+	 *  onHover: ((e: InteractionEvent,thisOBj:UIBase,over: boolean) => void) | undefined
+	 *  onPress: ((e: InteractionEvent,thisOBj:UIBase, isPressed: boolean) => void) | undefined;
+	 *  onClick: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined
+	 *  onMove: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined
+	 * ```
+	 *
+	 * @example 可查看 `TestSliceSprite` 示例
+	 *
+	 * @since 1.0.0
+	 */
+	export class ClickEvent {
+	    /**
+	     * ClickEvent 构造函数
+	     * @param obj 调用的显示对象
+	     * @param isOpenEmitEvent 是否开启事件派发，默认false，开启后，父类可以监听InteractionEvent下的TouchEvent
+	     * @param includeHover 是否监听鼠标移上与移出，默认true
+	     * @param rightMouseButton 是否开启鼠标右键点击，默认false
+	     * @param doubleClick 是否开启鼠标双击,默认false
+	     */
+	    constructor(obj: UIBase, isOpenEmitEvent?: boolean, includeHover?: boolean, rightMouseButton?: boolean, doubleClick?: boolean);
+	    private obj;
+	    id: number;
+	    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | vfui.Interaction.TouchEvent */
+	    isOpenEmitEvent: boolean;
+	    private offset;
+	    private movementX;
+	    private movementY;
+	    private ishover;
+	    private mouse;
+	    private bound;
+	    private right;
+	    private hover;
+	    private double;
+	    private time;
+	    private eventnameMousedown;
+	    private eventnameMouseup;
+	    private eventnameMouseupoutside;
+	    private startEvent;
+	    private _onMouseDown;
+	    private emitTouchEvent;
+	    private _mouseUpAll;
+	    private _onMouseUp;
+	    private _onMouseUpOutside;
+	    private _onMouseOver;
+	    private _onMouseOut;
+	    private _onMouseMove;
+	    /** 清除拖动 */
+	    stopEvent(): void;
+	    remove(): void;
+	    onHover: ((e: InteractionEvent, thisOBj: UIBase, over: boolean) => void) | undefined;
+	    onPress: ((e: InteractionEvent, thisOBj: UIBase, isPressed: boolean) => void) | undefined;
+	    onClick: ((e: InteractionEvent, thisOBj: UIBase) => void) | undefined;
+	    onMove: ((e: InteractionEvent, thisOBj: UIBase) => void) | undefined;
+	}
+
+}
+declare module 'interaction/InputController' {
+	import { UIBase } from 'core/UIBase';
+	interface CheckGroupObject {
+	    groups: {
+	        [key: string]: {
+	            [value: string]: CheckBox;
+	        };
+	    };
+	    values: {
+	        [key: string]: string | undefined;
+	    };
+	}
+	/**
+	 *
+	 * @private
+	 */
+	export const tabGroups: {
+	    [key: string]: UIBase[];
+	};
+	/**
+	 *
+	 * @private
+	 */
+	export const _checkGroupObject: CheckGroupObject;
+	/**
+	 * 注册组件
+	 * @param item
+	 * @param tabIndex 切换位置
+	 * @param tabGroup 分组名
+	 * @returns 依据tabIndex返回是否需要排序 0，-1，1
+	 */
+	export function registrer(item: UIBase, tabIndex: number, tabGroup?: string): void;
+	/** 失去焦点时 */
+	export function blur(): void;
+	/** 设置当前输入组件 */
+	export function set(item: UIBase): void;
+	/** 清楚当前设置的组件 */
+	export function clear(): void;
+	/** 一般再按下键盘tab健执行 焦点获取与设置 */
+	export function fireTab(): void;
+	/** 一般再按下键盘向下箭头执行 焦点获取与设置 */
+	export function fireNext(): void;
+	/** 一般再按下键盘向上箭头执行 焦点获取与设置 */
+	export function firePrev(): void;
+	/**
+	 * 注册分组，一般用于checkBox组件的分组操作
+	 *
+	 *  ==== 目前没有实现卸载，如果无限制创建checkbox并设置分组可能引发泄露 ====
+	 *
+	 * checkGroups = [key]:{["value"]:cb}
+	 */
+	export function registrerCheckGroup(cb: CheckBox): void;
+	/**
+	 * 注销指定分组或指定分组的子项
+	 * @param cb CheckBox
+	 */
+	export function unRegistrerCheckGroup(cb: CheckBox): void;
+	/** 更新分组中选中的checkbox组件  */
+	export function updateCheckGroupSelected(cb: CheckBox): void;
+	/** 获取分组中选中的checkbox值 */
+	export function getCheckGroupSelectedValue(name: string): string | undefined;
+	/** 设置选中 */
+	export function setCheckGroupSelectedValue(name: string, uuid: string): void;
+	export {};
+
+}
+declare module 'interaction/ComponentEvent' {
+	/**
+	 * 特定属性改变时
+	 * 1. CheckBox 的 checked 改变时
+	 * 2. Text 的 label 改变时
+	 */
+	export const CHANGE = "CHANGE";
+
+}
+declare module 'interaction/Index' {
+	import { ClickEvent } from 'interaction/ClickEvent';
+	import * as DragDropController from 'interaction/DragDropController';
+	import { DragEvent } from 'interaction/DragEvent';
+	import * as InputController from 'interaction/InputController';
+	import { MouseScrollEvent } from 'interaction/MouseScrollEvent';
+	import { InteractionEvent, TouchMouseEvent } from 'interaction/InteractionEvent';
+	import * as ComponentEvent from 'interaction/ComponentEvent';
+	export { ClickEvent, DragDropController, DragEvent, InputController, MouseScrollEvent, InteractionEvent, TouchMouseEvent, ComponentEvent };
 
 }
 declare module 'c/Text' {
@@ -2451,72 +2536,6 @@ declare module 'c/TextInput' {
 	}
 
 }
-declare module 'interaction/InputController' {
-	import { UIBase } from 'core/UIBase';
-	interface CheckGroupObject {
-	    groups: {
-	        [key: string]: {
-	            [value: string]: CheckBox;
-	        };
-	    };
-	    values: {
-	        [key: string]: string | undefined;
-	    };
-	}
-	/**
-	 *
-	 * @private
-	 */
-	export const tabGroups: {
-	    [key: string]: UIBase[];
-	};
-	/**
-	 *
-	 * @private
-	 */
-	export const _checkGroupObject: CheckGroupObject;
-	/**
-	 * 注册组件
-	 * @param item
-	 * @param tabIndex 切换位置
-	 * @param tabGroup 分组名
-	 * @returns 依据tabIndex返回是否需要排序 0，-1，1
-	 */
-	export function registrer(item: UIBase, tabIndex: number, tabGroup?: string): void;
-	/** 失去焦点时 */
-	export function blur(): void;
-	/** 设置当前输入组件 */
-	export function set(item: UIBase): void;
-	/** 清楚当前设置的组件 */
-	export function clear(): void;
-	/** 一般再按下键盘tab健执行 焦点获取与设置 */
-	export function fireTab(): void;
-	/** 一般再按下键盘向下箭头执行 焦点获取与设置 */
-	export function fireNext(): void;
-	/** 一般再按下键盘向上箭头执行 焦点获取与设置 */
-	export function firePrev(): void;
-	/**
-	 * 注册分组，一般用于checkBox组件的分组操作
-	 *
-	 *  ==== 目前没有实现卸载，如果无限制创建checkbox并设置分组可能引发泄露 ====
-	 *
-	 * checkGroups = [key]:{["value"]:cb}
-	 */
-	export function registrerCheckGroup(cb: CheckBox): void;
-	/**
-	 * 注销指定分组或指定分组的子项
-	 * @param cb CheckBox
-	 */
-	export function unRegistrerCheckGroup(cb: CheckBox): void;
-	/** 更新分组中选中的checkbox组件  */
-	export function updateCheckGroupSelected(cb: CheckBox): void;
-	/** 获取分组中选中的checkbox值 */
-	export function getCheckGroupSelectedValue(name: string): string | undefined;
-	/** 设置选中 */
-	export function setCheckGroupSelectedValue(name: string, uuid: string): void;
-	export {};
-
-}
 declare module 'core/InputBase' {
 	import { UIBase } from 'core/UIBase';
 	import { InteractionEvent } from 'interaction/InteractionEvent';
@@ -2550,82 +2569,11 @@ declare module 'core/InputBase' {
 	}
 
 }
-declare module 'interaction/ClickEvent' {
-	import { UIBase } from 'core/UIBase';
-	import { InteractionEvent } from 'interaction/InteractionEvent';
-	/**
-	 * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
-	 *
-	 *  可侦听事件:
-	 * ```
-	 *  {InteractionEvent}.TouchEvent.onHover
-	 *  {InteractionEvent}.TouchEvent.onPress
-	 *  {InteractionEvent}.TouchEvent.onClick
-	 *  {InteractionEvent}.TouchEvent.onMove
-	 * ```
-	 *  可赋值方法:
-	 * ```
-	 *  onHover: ((e: InteractionEvent,thisOBj:UIBase,over: boolean) => void) | undefined
-	 *  onPress: ((e: InteractionEvent,thisOBj:UIBase, isPressed: boolean) => void) | undefined;
-	 *  onClick: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined
-	 *  onMove: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined
-	 * ```
-	 *
-	 * @example 可查看 `TestSliceSprite` 示例
-	 *
-	 * @since 1.0.0
-	 */
-	export class ClickEvent {
-	    /**
-	     * ClickEvent 构造函数
-	     * @param obj 调用的显示对象
-	     * @param isOpenEmitEvent 是否开启事件派发，默认false，开启后，父类可以监听InteractionEvent下的TouchEvent
-	     * @param includeHover 是否监听鼠标移上与移出，默认true
-	     * @param rightMouseButton 是否开启鼠标右键点击，默认false
-	     * @param doubleClick 是否开启鼠标双击,默认false
-	     */
-	    constructor(obj: UIBase, isOpenEmitEvent?: boolean, includeHover?: boolean, rightMouseButton?: boolean, doubleClick?: boolean);
-	    private obj;
-	    id: number;
-	    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | vfui.Interaction.TouchEvent */
-	    isOpenEmitEvent: boolean;
-	    private offset;
-	    private movementX;
-	    private movementY;
-	    private ishover;
-	    private mouse;
-	    private bound;
-	    private right;
-	    private hover;
-	    private double;
-	    private time;
-	    private eventnameMousedown;
-	    private eventnameMouseup;
-	    private eventnameMouseupoutside;
-	    private startEvent;
-	    private _onMouseDown;
-	    private emitTouchEvent;
-	    private _mouseUpAll;
-	    private _onMouseUp;
-	    private _onMouseUpOutside;
-	    private _onMouseOver;
-	    private _onMouseOut;
-	    private _onMouseMove;
-	    /** 清除拖动 */
-	    stopEvent(): void;
-	    remove(): void;
-	    onHover: ((e: InteractionEvent, thisOBj: UIBase, over: boolean) => void) | undefined;
-	    onPress: ((e: InteractionEvent, thisOBj: UIBase, isPressed: boolean) => void) | undefined;
-	    onClick: ((e: InteractionEvent, thisOBj: UIBase) => void) | undefined;
-	    onMove: ((e: InteractionEvent, thisOBj: UIBase) => void) | undefined;
-	}
-
-}
 declare module 'core/InputSkinBase' {
 	import { InputBase } from 'core/InputBase';
 	import { ClickEvent } from 'interaction/ClickEvent';
 	import { InteractionEvent } from 'interaction/InteractionEvent';
-	import { SpriteSlice } from 'c/SpriteSlice';
+	import { Image } from 'c/Image';
 	import { UIBase } from 'core/UIBase';
 	/**
 	 * UI 按钮显 示对象
@@ -2650,7 +2598,7 @@ declare module 'core/InputSkinBase' {
 	    protected onClick(): void;
 	    protected onMove(): void;
 	    protected _isHover: boolean;
-	    protected _background: SpriteSlice;
+	    protected _background: Image;
 	    protected _clickEvent: ClickEvent;
 	    /**
 	     * 组件的当前视图状态 。 后续扩展
@@ -2773,16 +2721,6 @@ declare module 'c/CheckBox' {
 	}
 
 }
-declare module 'interaction/Index' {
-	import { ClickEvent } from 'interaction/ClickEvent';
-	import * as DragDropController from 'interaction/DragDropController';
-	import { DragEvent } from 'interaction/DragEvent';
-	import * as InputController from 'interaction/InputController';
-	import { MouseScrollEvent } from 'interaction/MouseScrollEvent';
-	import { InteractionEvent, TouchMouseEvent } from 'interaction/InteractionEvent';
-	export { ClickEvent, DragDropController, DragEvent, InputController, MouseScrollEvent, InteractionEvent, TouchMouseEvent };
-
-}
 declare module 'UI' {
 	import { Stage } from 'core/Stage';
 	import { UIBase } from 'core/UIBase';
@@ -2792,9 +2730,7 @@ declare module 'UI' {
 	import { ScrollingContainer } from 'c/ScrollingContainer';
 	import { SortableList } from 'c/SortableList';
 	import { ScrollBar } from 'c/ScrollBar';
-	import { Sprite } from 'c/Sprite';
-	import { SpriteTiling } from 'c/SpriteTiling';
-	import { SpriteSlice } from 'c/SpriteSlice';
+	import { Image } from 'c/Image';
 	import { SpriteAnimated } from 'c/SpriteAnimated';
 	import { Text } from 'c/Text';
 	import { TextStyle } from 'c/TextStyle';
@@ -2809,7 +2745,7 @@ declare module 'UI' {
 	import * as Interaction from 'interaction/Index';
 	import * as AlignEnum from 'enum/AlignEnum';
 	/** 请不要在编写UI组件内部使用本类 */
-	export { Utils, Stage, Container, ScrollingContainer, SortableList, Sprite, SpriteTiling, SpriteSlice, Slider, ScrollBar, Text, TextStyle, TextInput, Button, CheckBox, Rect, Interaction, UIBase, TickerShared, AlignEnum, Tween, Timeline, Easing, SpriteAnimated };
+	export { Utils, Stage, Container, ScrollingContainer, SortableList, Slider, ScrollBar, Text, TextStyle, TextInput, Button, CheckBox, Rect, Interaction, UIBase, TickerShared, AlignEnum, Tween, Timeline, Easing, Image, SpriteAnimated };
 
 }
 declare module 'pixi-vfui' {
