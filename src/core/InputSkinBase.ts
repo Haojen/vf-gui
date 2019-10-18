@@ -26,11 +26,11 @@ export class InputSkinBase extends InputBase{
         super(width,height,tabIndex,tabGroup);
         let _background = this._background;
         _background.backgroundRepeat = "nineSlice";
-        _background.widthPet = "100%";
-        _background.heightPct = "100%";
-        _background.pivot = 0.5;
-        _background.verticalAlign = VerticalAlignEnum.middle
-        _background.horizontalAlign = HorizontalAlignEnum.center;
+        // _background.widthPet = "100%";
+        // _background.heightPct = "100%";
+        // _background.pivot = 0.5;
+        // _background.verticalAlign = VerticalAlignEnum.middle
+        // _background.horizontalAlign = HorizontalAlignEnum.center;
         _background.borderWidth = 10;
         this.addChild(this._background);
         this.on(TouchMouseEvent.onMove,this.onMove,this);
@@ -130,8 +130,8 @@ export class InputSkinBase extends InputBase{
 
     public update(){
         const thisObj: TAny = this;
-        this._background.width = this.width;
-        this._background.height = this.height;
+        //this._background.width = this.width;
+        //this._background.height = this.height;
         this._background.source = thisObj["_source"+this.currentState];
         this.updateHitArea();
         

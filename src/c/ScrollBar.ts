@@ -38,11 +38,11 @@ export class ScrollBar extends Slider {
 
     protected triggerValueChanging() {
         super.triggerValueChanging();
-        if (this.scrollingContainer) {
-            const sizeAmt = this.scrollingContainer._height / this.scrollingContainer.innerContainer.height || 0.001;
-            if (sizeAmt < 1)
-                this.scrollingContainer.forcePctPosition(this.vertical ? "y" : "x", this._amt);
-        }
+        // if (this.scrollingContainer) {
+        //     const sizeAmt = this.scrollingContainer._height / this.scrollingContainer.innerContainer.height || 0.001;
+        //     if (sizeAmt < 1)
+        //         this.scrollingContainer.forcePctPosition(this.vertical ? "y" : "x", this._amt);
+        // }
     }
 
     public get scrollingContainer(): ScrollingContainer | undefined {

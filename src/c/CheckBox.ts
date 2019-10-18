@@ -30,9 +30,9 @@ export class CheckBox extends InputSkinBase{
         this._checkmark = new Image();
         this._checkmark.anchorX = 0.5;
         this._checkmark.anchorY = 0.5;
-        this._checkmark.verticalAlign = VerticalAlignEnum.middle
-        this._checkmark.horizontalAlign = HorizontalAlignEnum.center;
-        this._checkmark.alpha = 0;
+        // this._checkmark.verticalAlign = VerticalAlignEnum.middle
+        // this._checkmark.horizontalAlign = HorizontalAlignEnum.center;
+        // this._checkmark.alpha = 0;
         this.addChild(this._checkmark);
     }
 
@@ -114,7 +114,7 @@ export class CheckBox extends InputSkinBase{
 
     public update(){
         super.update(); 
-        this._checkmark.alpha = this.checked ? 1 : 0;
+        //this._checkmark.alpha = this.checked ? 1 : 0;
         this._checkmark.source = this._sourceMark;
     }
 }

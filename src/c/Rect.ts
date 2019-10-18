@@ -1,5 +1,25 @@
 import {UIBase} from "../core/UIBase";
 
+/** 自定义对象属性 */
+class CustomizeStyle{
+    _dirty = false;
+    /**
+     * 圆角
+     */
+    radius = 0;
+    /**
+     * 线条颜色
+     */
+    lineColor = 0;
+    /**
+     * 线条粗细
+     */
+    lineWidth = 0;
+    /** 颜色 */
+    color = 0;
+}
+
+
 /**
  * UI 矩形
  *
@@ -13,133 +33,49 @@ export class Rect extends UIBase{
         super();
         this._graphics = new PIXI.Graphics();
         this.container.addChild(this._graphics);
+        this.customizeStyle = new Proxy(new CustomizeStyle(), this.updateCustomizeProxyHandler);
     }
+
     private _graphics: PIXI.Graphics;
-    private _graphicsDirty = false;
-    private _radius = 0;
-    private _fill = 0xffffff;
-    private _rx = 0;
-    private _ry = 0;
+    public customizeStyle:CustomizeStyle;
 
-    private _lineWidth: number | undefined;
-    private _lineColor: number | undefined;
-
-    private drawUpdate(){
-        if(this._graphicsDirty){
-            this._graphics.clear();
-            const graphics = this._graphics;
-            graphics.lineStyle(this._lineWidth,this._lineColor);
-            graphics.beginFill(this._fill);
-            graphics.drawRoundedRect(this.rx, this.ry,this.width, this.height,this.radius);
-            graphics.endFill();
-            this._graphicsDirty = false;
-        }
-
-    }
-    
-    /** 绘制矩形方法 */
-    public drawRoundedRect(x: number,y: number,width: number,height: number,radius: number,color?: number){
-        this._radius = radius;
-        this._rx = x;
-        this._ry = y;
-        this.setDefaultSize(width,height);
-        if(color){
-            this._fill = color;
-        }
-        this._graphicsDirty = true;
-        this.updatesettings(true);
-    }
-
-    /** 获得绘制矢量源 */
-    public get graphics(){
+    public get graphics():PIXI.Graphics{
         return this._graphics;
     }
-
-    /**
-     * 圆角
-     */
-    public get radius() {
-        return this._radius;
-    }
-    public set radius(value) {
-        this._radius = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
-    }
-
-    /** 
-     * 要填充的颜色 
-     * @default 0xFFFFFF
-     * */
-    public get fill() {
-        return this._fill;
-    }
-    public set fill(value) {
-        this._fill = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
+    protected updateCustomizeProxyHandler = {
+        get(target:CustomizeStyle, key: string, receiver: any) {
+            return (target as any)[key];
+        },
+        set(target:CustomizeStyle, key: string, value: any, receiver: any) {
+            if ((target as any)[key] === value) {
+                return true;
+            }
+            target._dirty = true;
+            //let oldValue = (target as any)[key];
+            (target as any)[key] = value;
+            //target.eventEmitter.emit("ValueChangeEvent",key,value,oldValue);
+            return true;
+        }
     }
 
-    /**
-     * 线条宽度
-     */
-    public get lineWidth(): number | undefined {
-        return this._lineWidth;
-    }
-    public set lineWidth(value: number | undefined) {
-        this._lineWidth = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
-    }
-    /**
-     * 线条颜色
-     */
-    public get lineColor(): number | undefined {
-        return this._lineColor;
-    }
-    public set lineColor(value: number | undefined) {
-        this._lineColor = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
-    }
+    public update(){    
+        if(this.customizeStyle._dirty){
+            let {customizeStyle,_graphics} = this;
+            _graphics.clear();
+            _graphics.lineStyle(customizeStyle.lineWidth,customizeStyle.lineColor);
+            _graphics.beginFill(customizeStyle.color);   
+            _graphics.drawRoundedRect(0,0,this._width, this._height,customizeStyle.radius);
+            _graphics.endFill();
+            customizeStyle._dirty = false;
 
-    /**
-     * 绘制的起始坐标
-     */
-    public get rx() {
-        return this._rx;
-    }
-    public set rx(value) {
-        this._rx = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
-    }
-   
-    /**
-     * 绘制的起始坐标
-     */
-    public get ry() {
-        return this._ry;
-    }
-    public set ry(value) {
-        this._ry = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
-    } 
+            // if(this._style.tint!== undefined){
+            //     _graphics.tint
+            //     _graphics.tint = this._style.tint;
+            // }
 
-    /**
-     * 显示对象填充色 0xFFFFFF
-     */
-    public set tint(value: number) {
-        this._graphics.tint = value;
-        this.setting.tint = value;
+            if(this.blendMode!== undefined){
+                _graphics.blendMode = this.blendMode;
+            }
+        }
     }
-    public get tint() {
-        return this.setting.tint || NaN;
-    }
-
-    public update(){
-        this.drawUpdate();
-    }
-    
 }

@@ -70,8 +70,8 @@ export class TextInput extends UIBase {
             //this._surrogate.width = this.actualWidth;
             //this._surrogate.height = this.actualHeight;
         }
-        this.setInputStyle("width",this.actualWidth.toString() + "px");
-        this.setInputStyle("height",this.actualHeight.toString() + "px");
+        this.setInputStyle("width",this.width + "px");
+        this.setInputStyle("height",this.height + "px");
     }
     
     /**

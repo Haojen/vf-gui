@@ -7,6 +7,24 @@ export default class TestRect {
     }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+
+          
+        // let rect = new vfui.Rect();
+        // rect.style.left = 0;
+        // rect.style.top = 0;
+        // rect.style.right = 100;
+        // rect.style.width = 100;//占位
+        // rect.style.height = 100;
+        // rect.style.position = "fixed";
+        // //rect.style.center = "center";
+        // // rect.style.scaleX = 1.5;
+        // // rect.style.scaleY = 1.5;
+
+        // rect.customizeStyle.color = 0xffffff;
+        // rect.customizeStyle.lineColor = 0xff00cc;
+        // rect.customizeStyle.lineWidth = 1;
+        // rect.customizeStyle.radius = 10;
+
         /** 绘制矩形 */
         let rect = new vfui.Rect();
         rect.x = 200;

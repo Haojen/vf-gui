@@ -9,7 +9,8 @@
       "dom",
       "es2015.promise",
       "es2015.collection",
-      "es2015.iterable"
+      "es2015.iterable",
+      "es2015.proxy"
     ],                             /* Specify library files to be included in the compilation. */
     //"noEmitHelpers":true,
     "allowJs": false,                       /* Allow javascript files to be compiled. */

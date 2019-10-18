@@ -8,7 +8,7 @@ export default class TestApplication {
         this.app = new PIXI.Application({ width: 1366, height: 768 ,antialias:true});
         updateViewSize(this.app,this.app.renderer.resolution,PIXI.utils.isWebGLSupported());      
         this.uiStage = new vfui.Stage(this.app.view.width, this.app.view.height);
-        this.app.stage.addChild(this.uiStage);
+        this.app.stage.addChild(this.uiStage.container);
         document.body.appendChild(this.app.view);
         this.thisObj = thisObj;
         this.callback = callback;

@@ -7,40 +7,178 @@ export default class TestContainer {
     }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
-        /** UI组件的 容器 */
-        let container = new vfui.Container();
-        container.x = 100;
-        container.y = 100;
-        uiStage.addChild(container);
-        let rect = new vfui.Rect();
-        rect.drawRoundedRect(0, 0, 50, 50, 10);
-        container.addChild(rect);
 
-        /** 坐标别名 */
+        /** 单背景色 */
+        let container1 = new vfui.Container();
+        container1.name = "1";
+        container1.style.left = 100;
+        container1.style.top = 100;
+        container1.style.width = 100;
+        container1.style.height = 100;
+        container1.style.backgroundColor = 100;
+        uiStage.addChild(container1);
+
+        /** 不重复的背景 no-repeat */
         let container2 = new vfui.Container();
-        container2.top = 150;
-        container2.left = 150;
+        container2.name = "2";
+        container2.style.left = 240;
+        container2.style.top = 100;
+        container2.style.width = 100;
+        container2.style.height = 100;
+        container2.style.backgroundRepeat = "no-repeat";
+        container2.style.backgroundColor = 0xffffff;
+        container2.style.backgroundImage = "assets/pc.png";
+        container2.style.backgroundPositionX = 20;
+        container2.style.backgroundPositionY = 0;
+        container2.style.backgroundSize = [50,50];
         uiStage.addChild(container2);
+
+         /** 重复的背景 */
+         let container3 = new vfui.Container();
+         container3.name = "3";
+         container3.style.left = 380;
+         container3.style.top = 100;
+         container3.style.width = 100;
+         container3.style.height = 100;
+         container3.style.backgroundRepeat = "repeat";
+         container3.style.backgroundColor = 0xffffff;
+         container3.style.backgroundImage = "assets/pc.png";
+         container3.style.backgroundPositionX = 20;
+         container3.style.backgroundPositionY = 0;
+         uiStage.addChild(container3);
+
+         /** 百分比设置元素位置与宽高 */
+         let container4 = new vfui.Container();
+         container4.name = "4";
+         container4.style.left =  100 / (vfui.Stage.Ins.width / 100) + "%";// left = 100
+         container4.style.top = 250 / (vfui.Stage.Ins.height / 100) + "%";// top = 250
+         container4.style.width = 100 / (vfui.Stage.Ins.width / 100) + "%";// width = 100
+         container4.style.height = 100 / (vfui.Stage.Ins.height / 100) + "%";// height = 100
+         container4.style.backgroundColor = 0xffffff;
+         uiStage.addChild(container4);
+
+        /** 百分比设置最大高度与宽度*/
+        let container5 = new vfui.Container();
+        container5.name = "5";
+        container5.style.left =  240;
+        container5.style.top = 250;
+        container5.style.width = 1000;
+        container5.style.height = 1000;
+        container5.style.maxWidth = 100;
+        container5.style.maxHeight = 100;
+        container5.style.backgroundColor = 0xffffff;
+        uiStage.addChild(container5);
+
+        /** 百分比设置最小高度与宽度*/
+        let container6 = new vfui.Container();
+        container6.name = "6";
+        container6.style.left =  380;
+        container6.style.top = 250;
+        container6.style.width = 10;
+        container6.style.height = 10;
+        container6.style.minWidth = 100;
+        container6.style.minHeight = 100;
+        container6.style.backgroundColor = 0xffffff;
+        uiStage.addChild(container6);
+
+
+        /** 容器中填充内容*/
+        let container7 = new vfui.Container();
+        container7.name = "7";
+        container7.style.left =  100;
+        container7.style.top = 380;
+        container7.style.width = 500;
+        container7.style.height = 100;
+        container7.style.backgroundColor = 0xffffff;
+        uiStage.addChild(container7);
+        for(let i=0;i<5;i++){
+            let rect1 = new vfui.Rect();
+            rect1.style.left = i * 60;
+            rect1.style.top = 0;
+            rect1.style.height = 50;
+            rect1.style.width = 50;
+            rect1.customizeStyle.color = 0x000000;
+            rect1.customizeStyle.radius = 10;
+            container7.addChild(rect1);
+        }
+
         let rect2 = new vfui.Rect();
-        rect2.drawRoundedRect(0, 0, 50, 50, 10, 0x00ffff);
-        container2.addChild(rect2);
+        rect2.style.left = 400;
+        rect2.style.top = 0;
+        rect2.style.height = 50;
+        rect2.style.width = 50;
+        rect2.customizeStyle.color = 0x000000;
+        rect2.customizeStyle.radius = 10;
+        container7.addChild(rect2)
 
-        /** 锚点布局 */
-        let container3 = new vfui.Container();
-        container3.anchorTop = 200;
-        container3.anchorLeft = 100;
-        uiStage.addChild(container3);
-        let rect3 = new vfui.Rect();
-        rect3.drawRoundedRect(0, 0, 50, 50, 10, 0x00ffff);
-        container3.addChild(rect3);
+         /** 顶部  白色 */
+         let containerTop = new vfui.Container();
+         containerTop.name = "top";
+         containerTop.style.alpha = 0.7;
+         containerTop.style.top = 0;
+         containerTop.style.left = 0;
+         containerTop.style.right = 0;
+         containerTop.style.height = 50;
+         containerTop.style.backgroundColor = 0xffffff;
+         uiStage.addChild(containerTop);
 
-        /** 百分比 */
-        let container4 = new vfui.Container();
-        container4.topPct = "20%";
-        container4.leftPct = "5%";
-        uiStage.addChild(container4);
-        let rect4 = new vfui.Rect();
-        rect4.drawRoundedRect(0, 0, 50, 50, 10, 0x00ffff);
-        container4.addChild(rect4);
+         /** 左边  红色 */
+         let containerLeft = new vfui.Container();
+         containerLeft.name = "left";
+         containerLeft.style.alpha = 0.7;
+         containerLeft.style.left = 0;
+         containerLeft.style.top = 0;
+         containerLeft.style.bottom = 0;
+         containerLeft.style.width = 50;
+         containerLeft.style.backgroundColor = 0xf44336;
+         uiStage.addChild(containerLeft);
+
+         /** 右边  蓝色 */
+         let containerRight = new vfui.Container();
+         containerRight.name = "right";
+         containerRight.style.alpha = 0.7;
+         containerRight.style.top = 0;
+         containerRight.style.right = 0;
+         containerRight.style.bottom = 0;
+         containerRight.style.width = 50;
+         containerRight.style.backgroundColor = 100;
+         uiStage.addChild(containerRight);
+
+        /** 底部  绿色 */
+        let containerBottom = new vfui.Container();
+        containerBottom.name = "bottom";
+        containerBottom.style.alpha = 0.7;
+        containerBottom.style.left = 0;
+        containerBottom.style.right = 0;
+        containerBottom.style.bottom = 0;
+        containerBottom.style.height = 50;
+        containerBottom.style.backgroundColor = 0x4caf50;
+        uiStage.addChild(containerBottom);
+
+        //container1.container.pivot.set(0.5,0.5);
+        //rect2.graphics.pivot.set(25,25);
+
+        rect2.container.pivot.set(25,25);
+
+        let count = 1;
+        vfui.TickerShared.addUpdateEvent(() => {
+            if(count == 100){
+                count = -100;
+            }
+            
+            rect2.container.rotation += Math.PI/180;
+            //rect2.container.angle += 1;
+            // container1.style.backgroundColor = count;
+
+            // container2.style.backgroundPositionX = count;
+            // container2.style.backgroundPositionY = count;
+
+            // container3.style.backgroundPositionX = count;
+            // container3.style.backgroundPositionY = count;
+            count++;
+            //console.log(rect.customizeStyle.x);
+        }, this);
+        
+
     }
 }

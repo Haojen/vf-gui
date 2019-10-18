@@ -26,7 +26,7 @@ export class Slider extends UIBase{
         this._track.borderWidth = trackBorderWidth;
         this._thumb = new Image("nineSlice");
         this._thumb.borderWidth = thumbBorderWidth;
-        this._thumb.pivot = 0.5;
+        // this._thumb.pivot = 0.5;
         this._thumb.container.buttonMode = true;
 
         this._tracklight = new Image("nineSlice");
@@ -111,18 +111,18 @@ export class Slider extends UIBase{
         return this._sourceThumb;
     }
     public set sourceThumb(value) {
-        this._sourceThumb = value;
-        this._thumb.visible = false;
-        this._thumb.off(Image.onload,this.onThumbLoadComplete,this);
-        this._thumb.once(Image.onload,this.onThumbLoadComplete,this);
-        this._thumb.source = value;
+        // this._sourceThumb = value;
+        // this._thumb.visible = false;
+        // this._thumb.off(Image.onload,this.onThumbLoadComplete,this);
+        // this._thumb.once(Image.onload,this.onThumbLoadComplete,this);
+        // this._thumb.source = value;
     }
 
     //rectangle:PIXI.Rectangle,source?:SliceSprite
     protected  onThumbLoadComplete(rectangle: PIXI.Rectangle,source: Image){
-        source.width = rectangle.width;
-        source.height = rectangle.height;
-        source.visible = true;
+        // source.width = rectangle.width;
+        // source.height = rectangle.height;
+        // source.visible = true;
         this.update();
     }
 
@@ -177,59 +177,59 @@ export class Slider extends UIBase{
 
     protected updateLayout(){
 
-        if(!this._isUpdateLayout){
-            return;
-        }
-        this._track.widthPet = "100%";
-        this._track.heightPct = "100%";
+        // if(!this._isUpdateLayout){
+        //     return;
+        // }
+        // this._track.widthPet = "100%";
+        // this._track.heightPct = "100%";
 
-        if (this.vertical) {
-            this._thumb.horizontalAlign = HorizontalAlignEnum.center;
-            this._thumb.verticalAlign = undefined;
-            this._tracklight.horizontalAlign = HorizontalAlignEnum.center;
-            this._tracklight.verticalAlign = undefined;
-            this._tracklight.widthPet = "100%";
-        }else {
-            this._thumb.verticalAlign = VerticalAlignEnum.middle;
-            this._thumb.horizontalAlign = undefined;
-            this._tracklight.verticalAlign = VerticalAlignEnum.middle;
-            this._tracklight.horizontalAlign = undefined;
-            this._tracklight.heightPct = "100%";
-        }
-        this._isUpdateLayout = false;
+        // if (this.vertical) {
+        //     this._thumb.horizontalAlign = HorizontalAlignEnum.center;
+        //     this._thumb.verticalAlign = undefined;
+        //     this._tracklight.horizontalAlign = HorizontalAlignEnum.center;
+        //     this._tracklight.verticalAlign = undefined;
+        //     this._tracklight.widthPet = "100%";
+        // }else {
+        //     this._thumb.verticalAlign = VerticalAlignEnum.middle;
+        //     this._thumb.horizontalAlign = undefined;
+        //     this._tracklight.verticalAlign = VerticalAlignEnum.middle;
+        //     this._tracklight.horizontalAlign = undefined;
+        //     this._tracklight.heightPct = "100%";
+        // }
+        // this._isUpdateLayout = false;
     }
     public update (soft?: boolean) {
-        this.updateLayout();
+        // this.updateLayout();
 
-        let handleSize: number;
-        let val: number;
-        if(this._thumb){
-            if (this.vertical) {
-                handleSize = this._thumb._height || this._thumb.container.height;
-                val = ((this._height - handleSize) * this._amt) + (handleSize * 0.5);
-                if (soft) {
+        // let handleSize: number;
+        // let val: number;
+        // if(this._thumb){
+        //     if (this.vertical) {
+        //         handleSize = this._thumb._height || this._thumb.container.height;
+        //         val = ((this._height - handleSize) * this._amt) + (handleSize * 0.5);
+        //         if (soft) {
                     
-                    tween.Tween.to(this._thumb,{ top: val },300).easing(tween.Easing.Linear.None).start();
-                    tween.Tween.to(this._tracklight, { height: val },300).easing(tween.Easing.Linear.None).start();
-                }
-                else {
-                    this._thumb.top = val;
-                    this._tracklight.height = val;
-                }
-            }
-            else {
-                handleSize = this._thumb._width || this._thumb.container.width;
-                val = ((this._width - handleSize) * this._amt) + (handleSize * 0.5);
-                if (soft) {
-                    tween.Tween.to(this._thumb,{ left: val },300).easing(tween.Easing.Linear.None).start();
-                    tween.Tween.to(this._tracklight, { width: val },300).easing(tween.Easing.Linear.None).start();
-                }
-                else {
-                    this._thumb.left = val;
-                    this._tracklight.width = val;
-                }
-            }
-        }
+        //             tween.Tween.to(this._thumb,{ top: val },300).easing(tween.Easing.Linear.None).start();
+        //             tween.Tween.to(this._tracklight, { height: val },300).easing(tween.Easing.Linear.None).start();
+        //         }
+        //         else {
+        //             this._thumb.top = val;
+        //             this._tracklight.height = val;
+        //         }
+        //     }
+        //     else {
+        //         handleSize = this._thumb._width || this._thumb.container.width;
+        //         val = ((this._width - handleSize) * this._amt) + (handleSize * 0.5);
+        //         if (soft) {
+        //             tween.Tween.to(this._thumb,{ left: val },300).easing(tween.Easing.Linear.None).start();
+        //             tween.Tween.to(this._tracklight, { width: val },300).easing(tween.Easing.Linear.None).start();
+        //         }
+        //         else {
+        //             this._thumb.left = val;
+        //             this._tracklight.width = val;
+        //         }
+        //     }
+        // }
     }
 
     protected onPress (event: InteractionEvent,isPressed: boolean,dragEvent?: DragEvent) {
@@ -244,10 +244,10 @@ export class Slider extends UIBase{
     }
 
     protected onDragStart (event: InteractionEvent) {
-        if(this._thumb && this._thumbDrag && this._thumbDrag.id == event.data.identifier){
-            this._startValue = this._amt;
-            this._maxPosition = this.vertical ? this._height - this._thumb._height : this._width - this._thumb._width;
-        }
+        // if(this._thumb && this._thumbDrag && this._thumbDrag.id == event.data.identifier){
+        //     this._startValue = this._amt;
+        //     this._maxPosition = this.vertical ? this._height - this._thumb._height : this._width - this._thumb._width;
+        // }
     }
 
     protected onDragMove (event: InteractionEvent,offset: PIXI.Point) {
@@ -274,11 +274,11 @@ export class Slider extends UIBase{
             this._track.container.toLocal(mousePosition, undefined, this._localMousePosition, true);
         }     
         if(this._thumb){
-            const newPos = this.vertical ? this._localMousePosition.y - this._thumb._height * 0.5 : this._localMousePosition.x - this._thumb._width * 0.5;
-            const maxPos = this.vertical ? this._height - this._thumb._height : this._width - this._thumb._width;
-            this._amt = !maxPos ? 0 : Math.max(0, Math.min(1, newPos / maxPos));
-            this.update(soft);
-            this.triggerValueChanging();
+            // const newPos = this.vertical ? this._localMousePosition.y - this._thumb._height * 0.5 : this._localMousePosition.x - this._thumb._width * 0.5;
+            // const maxPos = this.vertical ? this._height - this._thumb._height : this._width - this._thumb._width;
+            // this._amt = !maxPos ? 0 : Math.max(0, Math.min(1, newPos / maxPos));
+            // this.update(soft);
+            // this.triggerValueChanging();
         }
     }
 

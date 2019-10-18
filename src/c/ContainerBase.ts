@@ -9,7 +9,7 @@ export class ContainerBase extends PIXI.Container{
     public render(renderer: PIXI.Renderer): void{
         super.render(renderer);
         if(this.isEmitRender){
-            this.emit("render",renderer);
+            this.emit("renderChange",renderer);
         }
     }
 }

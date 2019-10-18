@@ -15,6 +15,7 @@ export class Image extends UIBase {
     public constructor(repeat:RepeatEnum = "no-repeat") {
         super();
         this._backgroundRepeat = repeat;
+        this.container.skew
     }
 
     public _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
@@ -195,13 +196,13 @@ export class Image extends UIBase {
         }
 
         let { _sprite, _topHeight, _bottomHeight, _leftWidth, _rightWidth } = this;
-        if(this.actualWidth === 0 && this.actualHeight === 0){
-            _sprite.width = this._texture.frame.width;
-            _sprite.height =  this._texture.frame.height;
-        }else{
-            _sprite.width = this.actualWidth;
-            _sprite.height = this.actualHeight;
-        }
+        // if(this.actualWidth === 0 && this.actualHeight === 0){
+        //     _sprite.width = this._texture.frame.width;
+        //     _sprite.height =  this._texture.frame.height;
+        // }else{
+        //     _sprite.width = this.actualWidth;
+        //     _sprite.height = this.actualHeight;
+        // }
 
         if (_sprite instanceof PIXI.TilingSprite) {
             //_sprite.tileScale.set(1,1);
@@ -219,13 +220,13 @@ export class Image extends UIBase {
             _sprite.y = -this._texture.frame.height * this._anchorY;
         }
 
-        if (!isNaN(this.tint)) {
-            _sprite.tint = this.tint;
-        }
+        // if (!isNaN(this.tint)) {
+        //     _sprite.tint = this.tint;
+        // }
 
-        if (!isNaN(this.blendMode)) {
-            _sprite.blendMode = this.blendMode;
-        }
+        // if (!isNaN(this.blendMode)) {
+        //     _sprite.blendMode = this.blendMode;
+        // }
     }
 
 }

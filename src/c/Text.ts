@@ -23,7 +23,7 @@ export class Text extends UIBase{
         super();
         this._source = text;
         this._text = new PIXI.Text(text,TextStyle);
-        this.setDefaultSize(this._text.width,this._text.height);
+        //this.setDefaultSize(this._text.width,this._text.height);
         this.container.addChild(this._text);
     }
     private _text: PIXI.Text;
@@ -56,12 +56,12 @@ export class Text extends UIBase{
         this.emit(ComponentEvent.CHANGE,this);
     }
 
-    public get style(): TextStyle{
-        return this._text.style;
-    }
-    public set style(value: TextStyle){
-        this._text.style = value;
-    }
+    // public get style(): TextStyle{
+    //     return this._text.style;
+    // }
+    // public set style(value: TextStyle){
+    //     this._text.style = value;
+    // }
 
     public get textWidth(){
         return this._text.getBounds().width;
@@ -75,19 +75,19 @@ export class Text extends UIBase{
 
     public baseupdate() {
         const bounds = this._text.getBounds();
-        this.setting.width = bounds.width;
-        this.setting.widthPct = undefined;
-        this.setting.height = bounds.height;
-        this.setting.heightPct = undefined;
-        super.baseupdate();
+        // this.setting.width = bounds.width;
+        // this.setting.widthPct = undefined;
+        // this.setting.height = bounds.height;
+        // this.setting.heightPct = undefined;
+        // super.baseupdate();
     }
 
     public update(){
-        if (!isNaN(this.tint))
-            this._text.tint = this.tint;
+        // if (!isNaN(this.tint))
+        //     this._text.tint = this.tint;
 
-        if (!isNaN(this.blendMode))
-            this._text.blendMode = this.blendMode;
+        // if (!isNaN(this.blendMode))
+        //     this._text.blendMode = this.blendMode;
     }
 }
 /** 获得默认行高 */
