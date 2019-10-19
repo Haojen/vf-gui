@@ -1,8 +1,11 @@
 import {UIBase} from "../core/UIBase";
+import { BaseFields } from "../layout/BaseFields";
 
-/** 自定义对象属性 */
-class CustomizeStyle{
-    _dirty = false;
+/** Rect 对象的自有字段 */
+class Fields extends BaseFields{
+    public constructor(){
+        super();
+    }
     /**
      * 圆角
      */
@@ -15,7 +18,9 @@ class CustomizeStyle{
      * 线条粗细
      */
     lineWidth = 0;
-    /** 颜色 */
+    /** 
+     * 颜色 
+     */
     color = 0;
 }
 
@@ -33,40 +38,33 @@ export class Rect extends UIBase{
         super();
         this._graphics = new PIXI.Graphics();
         this.container.addChild(this._graphics);
-        this.customizeStyle = new Proxy(new CustomizeStyle(), this.updateCustomizeProxyHandler);
+        this.fields = new Fields().proxyData; 
     }
+    public readonly fields: Fields;
 
-    private _graphics: PIXI.Graphics;
-    public customizeStyle:CustomizeStyle;
+    protected _graphics: PIXI.Graphics;
+
+
+
 
     public get graphics():PIXI.Graphics{
         return this._graphics;
     }
-    protected updateCustomizeProxyHandler = {
-        get(target:CustomizeStyle, key: string, receiver: any) {
-            return (target as any)[key];
-        },
-        set(target:CustomizeStyle, key: string, value: any, receiver: any) {
-            if ((target as any)[key] === value) {
-                return true;
-            }
-            target._dirty = true;
-            //let oldValue = (target as any)[key];
-            (target as any)[key] = value;
-            //target.eventEmitter.emit("ValueChangeEvent",key,value,oldValue);
-            return true;
-        }
+
+    public getMaskSprite(){
+        return this._graphics;
     }
 
+
     public update(){    
-        if(this.customizeStyle._dirty){
-            let {customizeStyle,_graphics} = this;
+        if(this.fields.dirty.dirty){
+            let {fields,_graphics} = this;
             _graphics.clear();
-            _graphics.lineStyle(customizeStyle.lineWidth,customizeStyle.lineColor);
-            _graphics.beginFill(customizeStyle.color);   
-            _graphics.drawRoundedRect(0,0,this._width, this._height,customizeStyle.radius);
+            _graphics.lineStyle(fields.lineWidth,fields.lineColor);
+            _graphics.beginFill(fields.color);   
+            _graphics.drawRoundedRect(0,0,this._width, this._height,fields.radius);
             _graphics.endFill();
-            customizeStyle._dirty = false;
+            fields.dirty.dirty = false;
 
             // if(this._style.tint!== undefined){
             //     _graphics.tint

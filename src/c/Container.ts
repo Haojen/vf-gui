@@ -17,32 +17,17 @@ export class Container extends UIBase{
         this._background = new PIXI.Graphics();
         //跳过uiChildren
         this.container.addChild(this._background);
-        this._style.eventEmitter.on("ValueChangeEvent",this.onStyleValueChangeEvent,this);
 
     }
 
     protected _background:PIXI.Graphics;
-    protected _dirtyBackgroundColor = false;
-    protected _dirtyBackgroundImage = false;
-    protected _dirtyBackgroundPostion = false;
-
-    private onStyleValueChangeEvent(key:string,value:TAny){
-        if(key === "backgroundColor"){
-            this._dirtyBackgroundColor = true;
-            return;
-        }
-        if(key === "backgroundImage"){
-            this._dirtyBackgroundImage = true;
-            return;
-        }
-        this._dirtyBackgroundPostion = true;
-    }
 
     public update(){
-        if(this._dirtyBackgroundColor){
+        if(this._style.dirty.background){
             let {_style,_background} = this;
-            _background.clear();
-            if(_style.backgroundColor!==undefined){
+            _style.dirty.background = false;
+
+            if(_style.backgroundColor!==undefined && _style.backgroundColor!=_style._oldValue.backgroundColor){
                 _background.clear();
                 if(typeof _style.backgroundColor === "number"){
                     _background.beginFill(_style.backgroundColor);
@@ -52,61 +37,52 @@ export class Container extends UIBase{
                 _background.drawRoundedRect(0,0,this._width,this._height,0);
                 _background.endFill();
             }
-            this._dirtyBackgroundColor = false;
-        }
-        if(this._dirtyBackgroundImage){
-            let {_style,_background} = this;
-            _background.removeChildren();
-            let backgroundImage:PIXI.Texture|undefined;
-            if(_style.backgroundImage instanceof PIXI.Texture){
-                backgroundImage = _style.backgroundImage;
-            }else if(typeof _style.backgroundImage === "string"){
-                let url = _style.backgroundImage;
-                if (_getSourcePath) {
-                    url = _getSourcePath(url);
+
+            if(_style.backgroundImage!==undefined && _style.backgroundImage!=_style._oldValue.backgroundImage){
+                _background.removeChildren();
+                let backgroundImage:PIXI.Texture|undefined;
+                if(_style.backgroundImage instanceof PIXI.Texture){
+                    backgroundImage = _style.backgroundImage;
+                }else if(typeof _style.backgroundImage === "string"){
+                    let url = _style.backgroundImage;
+                    if (_getSourcePath) {
+                        url = _getSourcePath(url);
+                    }
+                    backgroundImage = PIXI.Texture.from(url);
                 }
-                backgroundImage = PIXI.Texture.from(url);
-            }
-            if(backgroundImage){
-                let sprite: PIXI.TilingSprite|PIXI.NineSlicePlane|PIXI.Sprite;
-                if (_style.backgroundRepeat === "repeat") {
-                    sprite = new PIXI.TilingSprite(backgroundImage);
-                } else{
-                    sprite = new PIXI.Sprite(backgroundImage);
+                if(backgroundImage){
+                    let sprite: PIXI.TilingSprite|PIXI.NineSlicePlane|PIXI.Sprite;
+                    if (_style.backgroundRepeat === "repeat") {
+                        sprite = new PIXI.TilingSprite(backgroundImage);
+                    } else{
+                        sprite = new PIXI.Sprite(backgroundImage);
+                    }
+                    _background.addChild(sprite);
+                    const maskGraphics = new PIXI.Graphics();
+                    maskGraphics.beginFill(0xFF3300);
+                    maskGraphics.drawRect(0,0, this._width,  this._height);
+                    maskGraphics.endFill();
+                    _background.addChild(maskGraphics);
+                    _background.mask = maskGraphics;      
                 }
-                _background.addChild(sprite);
-
-                const maskGraphics = new PIXI.Graphics();
-                maskGraphics.beginFill(0xFF3300);
-                maskGraphics.drawRect(0,0, this._width,  this._height);
-                maskGraphics.endFill();
-                _background.addChild(maskGraphics);
-                _background.mask = maskGraphics;
-                
             }
-            this._dirtyBackgroundImage = false;
+
+            if(_background.children.length>0){
+
+                let sprite = _background.getChildAt(0) as PIXI.Sprite;
+                if(sprite instanceof PIXI.TilingSprite){
+                    sprite.tilePosition.set(_style.backgroundPositionX || 0,_style.backgroundPositionY || 0); 
+                }else{
+                    if(_style.backgroundSize!==undefined){
+                        sprite.width =_style.backgroundSize[0];
+                        sprite.height = _style.backgroundSize[1];
+                    }
+                    sprite.position.set(_style.backgroundPositionX || 0, _style.backgroundPositionY || 0) ;
+                }   
+            }
+
         }
-        let {_style,_background} = this;
-        if( this._dirtyBackgroundPostion && _background.children.length>0){
-
-            let sprite = _background.getChildAt(0) as PIXI.Sprite;
-            if(sprite instanceof PIXI.TilingSprite){
-                sprite.tilePosition.x = _style.backgroundPositionX || 0;
-                sprite.tilePosition.y = _style.backgroundPositionY || 0;   
-            }else{
-                sprite.x = _style.backgroundPositionX || 0;
-                sprite.y = _style.backgroundPositionY || 0;
-                if(_style.backgroundSize!==undefined){
-                    sprite.width =_style.backgroundSize[0];
-                    sprite.height = _style.backgroundSize[1];
-                } 
-            }   
-
-
-            this._dirtyBackgroundPostion = false;
-        }
-
-        
+          
     }
     
     public release() {

@@ -22,6 +22,10 @@ export function formatStyleValue(style:CSSStyle,key: string, parentValue: number
  *
  */
 export function updateDisplayList(component: UIBase, _style: CSSStyle) {
+    if(!_style.dirty.dirty){
+        return;
+    }
+    _style.dirty.dirty = false;
     let { container } = component;
 
     let x = 0;
@@ -30,8 +34,8 @@ export function updateDisplayList(component: UIBase, _style: CSSStyle) {
     let parentHeight = 0;
     let parentWidth = 0;
     if (component.parent instanceof UIBase) {
-        parentWidth = component.parent.style.width;
-        parentHeight = component.parent.style.height;
+        parentWidth = component.parent.width;
+        parentHeight = component.parent.height;
     } else if (component.parent instanceof Stage) {
         parentWidth = component.parent.width;
         parentHeight = component.parent.height;
@@ -83,14 +87,6 @@ export function updateDisplayList(component: UIBase, _style: CSSStyle) {
 
     }
 
-    //后期优化，可以放到外面，赋值时，调整一次即可
-    if (_style.pivotX || _style.pivotY) {
-        container.children.forEach(value => {
-            value.x = -_style.pivotX * width;
-            value.y = -_style.pivotY * height;
-        });
-    }
-
     //make pixel perfect
     if (component.pixelPerfect) {
         width = Math.round(width);
@@ -110,7 +106,7 @@ export function updateDisplayList(component: UIBase, _style: CSSStyle) {
     }
     component.width = width;
     component.height = height;
-    container.setTransform(x, y, _style.scaleX, _style.scaleY, _style.rotate, _style.skewX, _style.skewY);
+    container.setTransform(x + _style.pivotX, y+_style.pivotY, _style.scaleX, _style.scaleY, _style.rotate, _style.skewX, _style.skewY,_style.pivotX,_style.pivotY);
 
 }
 

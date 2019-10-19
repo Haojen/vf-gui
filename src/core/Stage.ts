@@ -8,7 +8,7 @@ import { Core } from "./Core";
  * @memberof PIXI.UI
  * @param width {Number} 舞台宽度
  * @param height {Number} 舞台高度
- * @since 1.0.0
+ * @since 1.0.0  
  */
 export class Stage extends Core{
 
@@ -20,7 +20,7 @@ export class Stage extends Core{
         this.stage = this;
         this.hitArea = new PIXI.Rectangle(0, 0, 0, 0);
         Stage._stage = this;
-        this.resize(width, height);
+
     }
 
     private static _stage:Stage;

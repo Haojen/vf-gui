@@ -8,41 +8,52 @@ export default class TestImage {
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
-        let img = new vfui.Image();
-        img.source = "assets/pc.png";
-        //"no-repeat" | "repeat" | "nineSlice" 默认 "no-repeat";
-        img.width = 100;
-        img.height = 100;
-        img.y = 0;
-        uiStage.addChild(img);
+        
+        let img1 = new vfui.Image();
+        img1.style.left =  100;
+        img1.style.top = 100;
+        img1.style.width = 380;
+        img1.style.height = 160;
+        img1.fields.src = "assets/mask/bg2.png";
+        uiStage.addChild(img1);
+
+        /** 容器中填充内容与遮罩 */
+        let container = new vfui.Container();
+        container.name = "7";
+        container.style.left =  100;
+        container.style.top = 100;
+        container.style.backgroundColor = 0xffffff;
+        container.style.maskImage = "assets/mask/clear1.png";
+        container.style.maskSize = [0,0];
+        container.style.maskPosition = [-100,-100];
+        uiStage.addChild(container);
 
         let img2 = new vfui.Image();
-        img2.source = "assets/pc.png";
-        //"no-repeat" | "repeat" | "nineSlice" 默认 "no-repeat";
-        img2.backgroundRepeat = "repeat";
-        img2.width = 1000;
-        img2.height = 200;
-        img2.y = 120;
-        img2.leftWidth = 100;
-        img2.topHeight = 100;
-        uiStage.addChild(img2);
+        img2.style.width = 380;
+        img2.style.height = 160;
+        img2.fields.src = "assets/mask/bg.jpg";
+        container.addChild(img2);
 
+        /** 样式宽高为0时，适配原始图片宽高 */
         let img3 = new vfui.Image();
-        img3.source = "assets/skin/ToggleSwitch/on.png";
-        //"no-repeat" | "repeat" | "nineSlice" 默认 "no-repeat";
-        img3.backgroundRepeat = "nineSlice";
-        img3.width = 1000;
-        img3.height = 27;
-        img3.y = 400;
-        img3.leftWidth =  img3.rightWidth = 10;
+        img3.style.left = 100;
+        img3.style.top = 350;
+        img3.style.width = 0;
+        img3.style.height = 0;
+        img3.fields.src = "assets/mask/bg.jpg";
+        img3.fields.tint = 0xffcc00;//填充颜色
         uiStage.addChild(img3);
 
         let count = 0;
         vfui.TickerShared.addUpdateEvent(() => {
-            count += 0.005;
-            //位置
-            img2.leftWidth += 1;
-            img2.topHeight += 1;
+
+            if(count == 700){
+                count = 0;
+            }
+            if (container.style.maskSize && container.style.maskSize[0]<1200) {
+                container.style.maskSize = [count,count];
+            }
+            count++;
         }, this);
     }
 }

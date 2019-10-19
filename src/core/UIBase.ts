@@ -1,4 +1,3 @@
-import { Stage } from "./Stage";
 import { DragEvent } from "../interaction/DragEvent";
 import * as DragDropController from "../interaction/DragDropController";
 import { TouchMouseEventEnum, } from "../enum/TouchMouseEventEnum";
@@ -56,6 +55,10 @@ export class UIBase extends Core {
     * @default
     */
     public pixelPerfect = true;
+
+    /** 遮罩，设置遮罩后，组件内部的索引位置可能产生变化 */
+    public mask?: PIXI.Graphics | PIXI.Sprite;
+    
     /** 
      * 可拖动初始化
      *  @default
@@ -96,8 +99,11 @@ export class UIBase extends Core {
     public set blendMode(value: PIXI.BLEND_MODES | undefined) {
         if (value !== this._blendMode) {
             this._blendMode = value;
-            this.update();
+            this.updateBlendMode();
         }
+    }
+    public updateBlendMode(){
+        
     }
     /** 
      * 组件渲染后，才会有值 
@@ -125,7 +131,7 @@ export class UIBase extends Core {
     public get width() {
         return this._width;
     }
-    public set width(value:number) {
+    public set width(value: number) {
         this._width = value;
     }
 
@@ -136,7 +142,7 @@ export class UIBase extends Core {
     public get height() {
         return this._height;
     }
-    public set height(value:number) {
+    public set height(value: number) {
         this._height = value;
     }
     /** 
@@ -213,6 +219,11 @@ export class UIBase extends Core {
      */
     public dropGroup: string | undefined;
 
+    /** 子类实现，可以被当做遮罩的组件 */
+    public getMaskSprite():undefined|TAny{
+        return null;
+    }
+
     /**
      * 绘制渲染对象
      * @param updateChildren 是否渲染子节点，true渲染
@@ -231,8 +242,7 @@ export class UIBase extends Core {
         if (updateParent) {
             this.updateParent();
         }
-        this.updateBaseLayout();
-        this.update();
+        this.onRenderer();
         if (updateChildren) {
             this.updateChildren();
         }
@@ -240,33 +250,35 @@ export class UIBase extends Core {
 
 
     protected updateStyleProxyHandler = {
-        get(target: CSSStyle, key: string, receiver: any) {
-            return (target as any)[key];
+        get(target: CSSStyle, key: string, receiver: TAny) {
+            return (target as TAny)[key];
         },
-        set(target: CSSStyle, key: string, value: any, receiver: any) {
-            if ((target as any)[key] === value) {
+        set(target: CSSStyle, key: string, value: TAny, receiver: TAny) {
+            if ((target as TAny)[key] === value) {
                 return true;
             }
-            target._valuesPct[key] = 0;
-            if (typeof value === "string" && value.indexOf("%") !== -1) {
-                target._valuesPct[key] = parseFloat(value.replace('%', '')) * 0.01 || 0;
-            }
-            target._dirty = true;
-            let oldValue = (target as any)[key];
-            (target as any)[key] = value;
-            target.eventEmitter.emit("ValueChangeEvent",key,value,oldValue);
+ 
+            target.dirtyCheck(key,value);
+
+            let oldValue = (target as TAny)[key];
+            (target as TAny)._oldValue[key] = oldValue;
+            (target as TAny)[key] = value;
+            target.eventEmitter.emit("ValueChangeEvent", key, value, oldValue);
             return true;
         }
     }
 
     protected onRenderer() {
-        this.updateBaseLayout();
-        this.update();
+        let { _style } = this;
+        this.updateBaseLayout(_style);
+        this.updateMask(_style);
+        this.updateAlpha(_style);
+        this.update(_style);
     }
 
-    protected updateBaseLayout() {
+    protected updateBaseLayout(_style:CSSStyle) {
 
-        if (!this._style._dirty) {
+        if (!_style.dirty.dirty) {
             return;
         }
         console.log("updateBaseLayout");
@@ -280,21 +292,93 @@ export class UIBase extends Core {
             return;
         }
 
-        updateDisplayList(this,this._style);
-
-        this._style._dirty = false;
+        updateDisplayList(this, _style);
 
     }
 
+    public updateMask(_style:CSSStyle) {
+        
+        if (_style.dirty.mask) {
+            console.log("updateMask");
+            let {container } = this;
+            _style.dirty.mask = false;
+
+            if (this.mask && _style.maskImage !== _style._oldValue.maskImage && this.mask) {
+                if(_style._oldValue.maskImage instanceof UIBase){
+                    this.removeChild(_style._oldValue.maskImage);
+                }else{
+                    container.removeChild(this.mask);
+                }
+                
+                this.mask = undefined;
+            }
+
+            if (_style.maskImage && this.mask === undefined) {
+                if (_style.maskImage instanceof PIXI.Graphics) {
+                    this.mask = _style.maskImage;
+                    container.mask = this.mask;
+                    container.addChild(this.mask);
+                }else if(_style.maskImage instanceof UIBase){
+                    //后期组件完成后补充，矢量与位图组件
+                    this.mask = _style.maskImage.getMaskSprite();
+                    container.mask = this.mask || null;
+                    if(container.mask) this.addChild(_style.maskImage);
+                }else{
+                    this.mask = PIXI.Sprite.from(_style.maskImage);
+                    container.mask = this.mask;
+                    container.addChild(this.mask);
+                }
+            }
+
+            if (this.mask) {
+                if (_style.maskPosition !== undefined) {
+                    this.mask.position.set(_style.maskPosition[0], _style.maskPosition[1]);
+
+                }
+                if (_style.maskSize !== undefined) {
+                    (this.mask as PIXI.Sprite).width
+                    this.mask.width = _style.maskSize[0];
+                    this.mask.height = _style.maskSize[1];
+                }
+            }
+        }
+    }
+
+    public updateAlpha(_style:CSSStyle){
+        if(_style.dirty.alpha){
+            console.log("updateAlpha");
+            let {container } = this;
+            _style.dirty.alpha = false;
+            container.alpha = _style.alpha;
+            container.visible = _style.visible;
+        }
+    }
     /**
      * 更新方法，其他组件重写
      */
-    public update() {
+    public update(_style:CSSStyle) {
 
     }
 
     public release() {
-        this.container.removeAllListeners();
+        let {_style,container} = this;
+        container.off("renderChange", this.onRenderer, this);
+        container.mask = null;
+
+        if(_style.maskImage instanceof UIBase){
+            _style.maskImage.release();
+            this.mask = undefined;
+        }
+
+        if(this.mask){
+            container.removeChild(this.mask);
+            this.mask.destroy();
+            this.mask = undefined;
+        }
+
+        if(this.parent){
+            this.parent.removeChild(this);
+        }
     }
 
     /**
