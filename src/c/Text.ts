@@ -6,10 +6,10 @@ import { CSSStyle } from "../layout/CSSStyle";
 
 
 const updateFieldsProxyHandler = {
-    get(target: Fields, key: string, receiver: TAny) {
+    get(target: TextFields, key: string, receiver: TAny) {
         return (target as TAny)[key];
     },
-    set(target: Fields, key: string, value: TAny, receiver: TAny) {
+    set(target: TextFields, key: string, value: TAny, receiver: TAny) {
         if ((target as TAny)[key] === value) {
             return true;
         }
@@ -30,7 +30,7 @@ const updateFieldsProxyHandler = {
 }
 
 /** Image 对象的自有字段 */
-class Fields extends BaseFields {
+export class TextFields extends BaseFields {
 
     public constructor() {
         super(updateFieldsProxyHandler);
@@ -80,9 +80,9 @@ class Fields extends BaseFields {
     /** 内部填充 */
     public padding?: number;
     /** 描边颜色 */
-    public textStrokeColor?: string | number;
+    public stroke?: string | number;
     /** 描边的笔触粗细值 */
-    public textStrokeThickness = 0;
+    public strokeThickness = 0;
 
     /** 是否设置投影 */
     public dropShadow = false;
@@ -96,6 +96,8 @@ class Fields extends BaseFields {
     public dropShadowColor = 0x000000;
     /** 投影深度 */
     public dropShadowDistance = 5;
+    /** 中文换行 */
+    public breakWords = true;
 
 }
 
@@ -120,11 +122,21 @@ export class Text extends UIBase {
         super();
         this._text = new PIXI.Text(text);
         this.container.addChild(this._text);
-        this.fields = new Fields().proxyData;
+        this._fields = new TextFields().proxyData;
     }
 
-    public readonly fields: Fields;
-    private _text: PIXI.Text;
+    protected  _fields: TextFields;
+    protected _text: PIXI.Text;
+
+    public set fields(value:TextFields){
+        this._fields = value.proxyData;
+        for(let key in this._fields.dirty){
+            (this._fields.dirty as TAny)[key] = true;
+        }
+    }
+    public get fields(){
+        return this._fields;
+    }
 
     public update(_style: CSSStyle) {
         let {fields} = this;
@@ -132,7 +144,7 @@ export class Text extends UIBase {
         if(fields.dirty.dirty){
             fields.dirty.dirty = false;
             for(let key in this.fields){
-                if(key == "_proxy" || key == "dirty"){
+                if(key === "_proxy" || key === "dirty"){
                     continue;
                 }
                 this._text.style[key] = (this.fields as TAny)[key];
@@ -143,6 +155,16 @@ export class Text extends UIBase {
             fields.dirty.text = false;
             this._text.text = fields.text;
             this.emit(ComponentEvent.CHANGE,this);
+            if(this._width == 0){
+                this._width = this._text.width;
+            }else{
+                this._text.width = this._width ;
+            }
+            if(this._height == 0){
+                this._height = this._text.height;
+            }else{
+                this._text.height = this._height ;
+            }
         }
 
         if(fields.dirty.color){
