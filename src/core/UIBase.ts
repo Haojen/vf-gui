@@ -278,10 +278,6 @@ export class UIBase extends Core {
 
     protected updateBaseLayout(_style:CSSStyle) {
 
-        if (!_style.dirty.dirty) {
-            return;
-        }
-        console.log("updateBaseLayout");
         if (!this.parent) {
             return;
         }

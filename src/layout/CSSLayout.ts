@@ -25,6 +25,9 @@ export function updateDisplayList(component: UIBase, _style: CSSStyle) {
     if(!_style.dirty.dirty){
         return;
     }
+
+    //console.log("updateBaseLayout");
+
     _style.dirty.dirty = false;
     let { container } = component;
 
@@ -104,6 +107,7 @@ export function updateDisplayList(component: UIBase, _style: CSSStyle) {
             container.zIndex = _style.zIndex;
         }
     }
+    //return;
     component.width = width;
     component.height = height;
     container.setTransform(x + _style.pivotX, y+_style.pivotY, _style.scaleX, _style.scaleY, _style.rotate*(Math.PI/180), _style.skewX, _style.skewY,_style.pivotX,_style.pivotY);
