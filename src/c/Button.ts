@@ -1,88 +1,98 @@
-import { VerticalAlignEnum, HorizontalAlignEnum } from "../enum/AlignEnum";
-import {Text} from "./Text";
-import {InputSkinBase} from "../core/InputSkinBase";
-import {TextStyle} from "./TextStyle";
+import {Label} from "./Label";
+import {Image} from "./Image";
+import { InputBase } from "../core/InputBase";
+import { BaseFields } from "../layout/BaseFields";
+import { CSSStyle } from "../layout/CSSStyle";
+import { ComponentEvent } from "../interaction/Index";
 
+
+/** Image 对象的自有字段 */
+class Fields extends BaseFields{
+
+    public constructor(){
+        super();
+    }
+
+    /**
+     * 按钮的文字
+     */
+    text = "";
+    /** 
+     * 状态皮肤，
+     */
+    up?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    down?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    move?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    disabled?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 状态展示 */
+    readonly img = new Image();
+    /** 文字展示 */
+    readonly label = new Label();
+}
 /**
  * UI 按钮显 示对象
- *
- * @class
- * @extends PIXI.UI.InputBase
- * @memberof PIXI.UI
- * @param [options.tabIndex=0] {Number} input tab index
- * @param [options.tabGroup=0] {Number|String} input tab group
- * @param [options.width=100h] {Number|String} width
- * @param [options.height=20] {Number|String} height
  */
-export class Button extends InputSkinBase{
-    /**
-     * 按钮构造函数 
-     * 
-     * @param option width:100,height:20,tabIndex:0,tabGroup:0,
-     */
-    public constructor(option = {width:100,height:20,tabIndex:0,tabGroup:0}){  
-        super(option.width,option.height,option.tabIndex,option.tabGroup.toString());
-        this.container.buttonMode = true;
-        // this._text.verticalAlign = VerticalAlignEnum.middle
-        // this._text.horizontalAlign = HorizontalAlignEnum.center;
-        // this._text.style.fontSize = 18;
-        // this._text.style.fill = 0xFFFFFF;
-        // this._text.top = 8;
-        // this._text.left = 8;
-        // this._text.right = 8;
-        // this._text.bootom = 8;
-        // this.addChild(this._text);   
+export class Button extends InputBase{
+
+    public constructor() {
+        super();
+        let fields = this.fields = new Fields().proxyData; 
+        fields.img.fields.fillMode = "scale";
+        fields.img.fields.scale9Grid = [3,3,3,3];
+        this.addChild(fields.img);
+
+        fields.label.fields.fontSize = 18;
+        fields.label.on(ComponentEvent.CHANGE,this.onLabelChange,this);
+        this.addChild(fields.label);
     }
 
-    public _text = new Text();
+    public readonly fields: Fields;
 
-    protected initialize() {
-        super.initialize();
-        this.container.interactiveChildren = false;
+    protected _oldState = "";
+
+    public update(_style:CSSStyle) {
+        let {fields} = this;
+        if(fields.dirty.dirty){
+            fields.dirty.dirty = false;
+
+            if(fields.label.fields.text !== fields.text){
+                fields.label.fields.text = fields.text;
+            }
+            this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
+        }
+
+        if(this.currentState !== this._oldState){
+            this._oldState = this.currentState;
+            fields.img.style.width = this._width;
+            fields.img.style.height = this._height;
+            fields.img.fields.src = (fields as TAny)[this.currentState];
+        }
     }
 
-    /**
-     * 获取或设置文本内容
-     */
-    public get label(): string{
-        return this._text.label;
-    }
-    public set label(value: string){
-        this._text.label = value;
+    public updateBlendMode() {
+        if (this.blendMode) {
+            this.blendMode = this.blendMode;
+        }
     }
 
-    /** 设置颜色 */
-    // public get labelColor(){
-    //     return this._text.style.fill.toString();
-    // }
-    // public set labelColor(value: string){
-    //     this._text.style.fill = value;
-    // }
+    public release() {
+        super.release();
+        this.fields.label.off(ComponentEvent.CHANGE,this.onLabelChange,this);
+        this.removeChild(this.fields.img);
+        this.removeChild(this.fields.label);
+    }
 
-    // /** 设置文字大小 */
-    // public get labelSize(){
-    //     return this._text.style.fontSize as number;
-    // }
-    // public set labelSize(value: number){
-    //     this._text.style.fontSize = value;
-    // }
-    // /** 设置文字居中方式 */
-    // public get labelHorizontalAlign(){
-    //     return this._text.horizontalAlign || HorizontalAlignEnum.center;
-    // }      
-    // public set labelHorizontalAlign(value: number){
-    //     this._text.horizontalAlign = value;
-    // }
-
-    /** 设置文字复杂样式 */
-    // public get labelStyle(){
-    //     return this._text.style;
-    // }
-    // public set labelStyle(value: TextStyle){
-    //     this._text.style = value;
-    // }
-
-    public get text(){
-        return this._text;
+    protected onLabelChange(label:Label){
+        label.style.left = this.width -  label.width >>1;
+        label.style.top = this.height -  label.height >>1;
     }
 }

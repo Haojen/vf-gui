@@ -251,57 +251,11 @@ export function dirtyCheck(target: CSSStyle, key: string, value: TAny) {
 export type Position = "absolute" | "fixed" | "static";
 
 /** 对齐方式 父级如果是grid布局，会忽略当前居中模式 */
-export type Align = "left" | "right" | "right" | "bottom" | "top" | "center";
+export type Align = "left" | "right"  | "bottom" | "top" | "center";
 
 /** 布局模式 */
 export type Display = "block" | "grid";
 
-/** 文本  */
-export class Text extends CSSStyle {
-    
-    /** 
-     * 文本颜色，16进制 
-     * */
-    public color?: number;
-    /** 文本对齐,不存在（top，bottom） */
-    public textAlign: Align = "left";
-    /** 行高 */
-    public lineHeight?: number
-    /** 字体 */
-    public fontFamily?: string | string[];
-    /** 字体大小 */
-    public fontSize?: number | string;
-    /** 字体样式 */
-    public fontStyle?: "normal" | "italic" | "oblique" | "initial" | "inherit";
-    /**  字体变形，普通或小写  */
-    public fontVariant?: "normal" | "small-caps" | "initial" | "inherit";
-    /** 字体粗细 */
-    public fontWeight?: 'normal' | 'bold' | 'bolder' | 'lighter' | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
-    /** 字符间距 */
-    public letterSpacing?: number;
-    /** 内部填充 */
-    public padding?: number;
-    /** 描边颜色 */
-    public textStrokeColor?: string | number;
-    /** 描边的笔触粗细值 */
-    public textStrokeThickness = 0;
-    /** 是否自动换行 */
-    public wordWrap = false;
-    /** 自动换行的宽度 */
-    public wordWrapWidth?: number;
-    /** 是否设置投影 */
-    public dropShadow = false;
-    /** 投影的alpha值 */
-    public dropShadowAlpha = false;
-    /** 是否设置投影 */
-    public dropShadowAngle = Math.PI / 6;
-    /** 投影的模糊半径 */
-    public dropShadowBlur = 0;
-    /** 投影填充颜色值 */
-    public dropShadowColor = 0x000000;
-    /** 投影深度 */
-    public dropShadowDistance = 5;
-}
 
 /*
 CSS3.0 所有样式属性

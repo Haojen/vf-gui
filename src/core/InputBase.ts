@@ -1,6 +1,6 @@
 import {UIBase} from "./UIBase";
-import * as InputController from "../interaction/InputController";
-import {InteractionEvent} from "../interaction/InteractionEvent";
+import { ClickEvent,InteractionEvent,InputController, TouchMouseEvent } from "../interaction/Index";
+import { Stage } from "./Stage";
 /**
  * 输入对象的基础类
  * 
@@ -14,33 +14,51 @@ import {InteractionEvent} from "../interaction/InteractionEvent";
  * @param tabIndex {(PIXI.UI.SliceSprite|PIXI.UI.Sprite)} will be used as background for input
  */
 export class InputBase extends UIBase{
-    public constructor(width: number, height: number, tabIndex: number, tabGroup: string){
-        super(width,height);
-        this.container.interactive = true;
-        InputController.registrer(this, tabIndex, tabGroup);
-        this.container.on("pointerdown",this.onPointer,this);
-        this.container.on("pointerup",this.onPointer,this);
-        this.container.on("pointerupoutside",this.onPointer,this);
+    public constructor(){
+        super();
+        //this.container.interactive = true;
+        this.container.interactiveChildren = false;
+
+        this.on(TouchMouseEvent.onMove,this.onMove,this);
+        this.on(TouchMouseEvent.onHover,this.onHover,this);
+        this.on(TouchMouseEvent.onPress,this.onPress,this);
+        this.on(TouchMouseEvent.onClick,this.onClick,this);
+
     }
+
+    protected _clickEvent = new ClickEvent(this,true);;
+    protected currentState:"up"|"move"|"down"|"disabled" = "up";
+    protected _tabIndex:undefined|number;
+    protected _tabGroup:undefined|string;
+
     protected _focused = false;
-    private _useTab = true;
+    protected _useTab = true;
     protected _usePrev = true;
     protected _useNext = true;
-    protected __down = false;
+    protected _down = false;
 
-    protected onPointer(e: InteractionEvent){
-        switch(e.type){
-            case "pointerdown":
-                this.focus();
-                this.__down = true;
-                break;
-            case "pointerup":
-                this.__down = false;
-                break;
-            case "pointerupoutside":
-                this.__down = false;
-                break;
+    protected onMove() {
+        if(this._down){
+            return;
         }
+        this.currentState = "move";
+    }
+    protected onHover(e: InteractionEvent,thisObj: UIBase,over: boolean){
+        this.currentState = "up";
+       
+    }
+    protected onPress(e: InteractionEvent,thisObj: UIBase,isPress: boolean){
+        this._down = isPress;  
+        if(isPress){
+            this.focus();
+            this.currentState = "down";
+        }else{
+            this.currentState = "up";
+        }
+            
+    }
+    protected onClick(){
+        //this.currentState = "up";
     }
 
     protected keyDownEvent (event: WheelEvent|Event) {
@@ -66,22 +84,23 @@ export class InputBase extends UIBase{
     }
 
     protected documentMouseDown(){
-        if (!this.__down)
+        if (this.currentState!== "down"){
             this.blur();
+        }    
     }
 
     private keyDownEventBind: TAny;
     protected _bindEvents() {
-        if (this.stage) {
-            this.stage.on("pointerdown", this.documentMouseDown,this);
+        if (Stage.Ins) {
+            Stage.Ins.on("pointerdown", this.documentMouseDown,this);
             this.keyDownEventBind = this.keyDownEvent.bind(this);
             document.addEventListener("keydown", this.keyDownEventBind);
         }
     }
 
     protected _clearEvents(){
-        if (this.stage) {
-            this.stage.off("pointerdown", this.documentMouseDown,this);
+        if (Stage.Ins) {
+            Stage.Ins.off("pointerdown", this.documentMouseDown,this);
             document.removeEventListener("keydown", this.keyDownEventBind);
         }
     }
@@ -93,7 +112,6 @@ export class InputBase extends UIBase{
             InputController.set(this);
             this.emit("focusChanged", true);
             this.emit("focus");
-
         }
     }
 
@@ -108,4 +126,23 @@ export class InputBase extends UIBase{
         }
     }
 
+    public release() {
+        super.release();
+        this.off(TouchMouseEvent.onMove,this.onMove,this);
+        this.off(TouchMouseEvent.onHover,this.onHover,this);
+        this.off(TouchMouseEvent.onPress,this.onPress,this);
+        this.off(TouchMouseEvent.onClick,this.onClick,this);
+        if(this.keyDownEventBind)
+            document.removeEventListener("keydown", this.keyDownEventBind);
+        if(this.documentMouseDown && Stage.Ins)
+            Stage.Ins.off("pointerdown", this.documentMouseDown,this);
+    }
+
+    public setTabIndex(index:number|undefined,group:string|undefined){
+        this._tabIndex = index;
+        this._tabGroup = group;
+        if(index!==undefined && group!==undefined){
+            InputController.registrer(this,index,group)
+        }
+    }
 }

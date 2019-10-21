@@ -16,6 +16,16 @@ export function setSourcePath(params: (path: TAny,cls?:TAny) => {}) {
     _getSourcePath = params;
 }
 
+export function getTexture(src:TAny){
+    if(_getSourcePath){
+        src = _getSourcePath(src);
+    }
+    if(src instanceof PIXI.Texture){
+        return src;
+    }
+    return PIXI.Texture.from(src);
+}
+
 /**
  * 快速设置矩形
  * @param sourcr 

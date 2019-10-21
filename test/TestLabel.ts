@@ -1,6 +1,6 @@
 import vfui from "../src/pixi-vfui";
 
-export default class TestText {
+export default class TestLabel {
 
     public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
         this.onLoad(app,uiStage)
@@ -9,7 +9,7 @@ export default class TestText {
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
         /** 基础文本展示 */
-        let basicText = new vfui.Text();
+        let basicText = new vfui.Label();
         basicText.style.left = 100;
         basicText.style.top = 100;
         basicText.fields.text = "Basic text in vfui-ui 33434"
@@ -17,7 +17,7 @@ export default class TestText {
         uiStage.addChild(basicText);
 
         /** 手动换行文本展示 "\n" */
-        let nText = new vfui.Text();
+        let nText = new vfui.Label();
         nText.style.left = 100;
         nText.style.top = 200;
         nText.fields.text = "你好，\n世界！"
@@ -25,7 +25,7 @@ export default class TestText {
         uiStage.addChild(nText);
 
         /** 高级样式文本,换行的宽度为 fields.wordWrapWidth = 600; */
-        let richText = new vfui.Text();
+        let richText = new vfui.Label();
         richText.style.left = 100
         richText.style.top = 300;
         richText.fields = this.getFields();
@@ -36,7 +36,7 @@ export default class TestText {
 
     private getFields(){
         // //自定义样式
-        let fields = new vfui.TextFields();
+        let fields = new vfui.LabelFields();
         fields.fontFamily = 'Arial';
         fields.fontSize=   36;
         fields.fontStyle = 'italic';

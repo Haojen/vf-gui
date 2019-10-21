@@ -1,12 +1,9 @@
-import { DragEvent } from "../interaction/DragEvent";
-import * as DragDropController from "../interaction/DragDropController";
+import { DragEvent,DragDropController,InteractionEvent  } from "../interaction/Index";
+import { DraggableEvent } from "../interaction/InteractionEvent";
 import { TouchMouseEventEnum, } from "../enum/TouchMouseEventEnum";
-import { uid } from "./Utils";
-import { InteractionEvent, DraggableEvent } from "../interaction/InteractionEvent";
-
+import { uid, getTexture } from "./Utils";
 import { CSSStyle} from "../layout/CSSStyle";
 import { updateDisplayList } from "../layout/CSSLayout";
-
 import { Core } from "./Core";
 
 /**
@@ -320,7 +317,8 @@ export class UIBase extends Core {
                     container.mask = this.mask || null;
                     if(container.mask) this.addChild(_style.maskImage);
                 }else{
-                    this.mask = PIXI.Sprite.from(_style.maskImage);
+                    
+                    this.mask = PIXI.Sprite.from(getTexture(_style.maskImage));
                     container.mask = this.mask;
                     container.addChild(this.mask);
                 }
@@ -477,8 +475,8 @@ export class UIBase extends Core {
     protected clearDroppable() {
         if (this.dropInitialized) {
             this.dropInitialized = false;
-            this.container.removeListener(TouchMouseEventEnum.mouseup, this.onDrop, this);
-            this.container.removeListener(TouchMouseEventEnum.touchend, this.onDrop, this);
+            this.container.off(TouchMouseEventEnum.mouseup, this.onDrop, this);
+            this.container.off(TouchMouseEventEnum.touchend, this.onDrop, this);
         }
     }
 

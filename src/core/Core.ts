@@ -19,10 +19,6 @@ export class Core extends PIXI.utils.EventEmitter{
      * 父容器 
      */
     public parent: UIBase | Stage | undefined;
-    /**  
-     * 舞台引用
-     */
-    public stage: Stage | undefined;
     /**
      * 节点列表
      */

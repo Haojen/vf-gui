@@ -6,10 +6,10 @@ import { CSSStyle } from "../layout/CSSStyle";
 
 
 const updateFieldsProxyHandler = {
-    get(target: TextFields, key: string, receiver: TAny) {
+    get(target: LabelFields, key: string, receiver: TAny) {
         return (target as TAny)[key];
     },
-    set(target: TextFields, key: string, value: TAny, receiver: TAny) {
+    set(target: LabelFields, key: string, value: TAny, receiver: TAny) {
         if ((target as TAny)[key] === value) {
             return true;
         }
@@ -30,7 +30,7 @@ const updateFieldsProxyHandler = {
 }
 
 /** Image 对象的自有字段 */
-export class TextFields extends BaseFields {
+export class LabelFields extends BaseFields {
 
     public constructor() {
         super(updateFieldsProxyHandler);
@@ -112,7 +112,7 @@ export class TextFields extends BaseFields {
  * @param Texture {PIXI.Texture} 文本对象
  * @see https://pixijs.io/pixi-text-style
  */
-export class Text extends UIBase {
+export class Label extends UIBase {
     /**
      * 文本构造函数
      * @param text 要显示的内容，默认为""
@@ -122,13 +122,14 @@ export class Text extends UIBase {
         super();
         this._text = new PIXI.Text(text);
         this.container.addChild(this._text);
-        this._fields = new TextFields().proxyData;
+        this._fields = new LabelFields().proxyData;
     }
 
-    protected  _fields: TextFields;
+    protected  _fields: LabelFields;
     protected _text: PIXI.Text;
 
-    public set fields(value:TextFields){
+
+    public set fields(value:LabelFields){
         this._fields = value.proxyData;
         for(let key in this._fields.dirty){
             (this._fields.dirty as TAny)[key] = true;
@@ -154,7 +155,6 @@ export class Text extends UIBase {
         if(fields.dirty.text){
             fields.dirty.text = false;
             this._text.text = fields.text;
-            this.emit(ComponentEvent.CHANGE,this);
             if(this._width == 0){
                 this._width = this._text.width;
             }else{
@@ -165,6 +165,7 @@ export class Text extends UIBase {
             }else{
                 this._text.height = this._height ;
             }
+            this.emit(ComponentEvent.CHANGE,this);
         }
 
         if(fields.dirty.color){

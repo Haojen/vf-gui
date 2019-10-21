@@ -1,5 +1,5 @@
 import { UIBase } from "../core/UIBase";
-import { _getSourcePath } from "../core/Utils";
+import { _getSourcePath, getTexture } from "../core/Utils";
 import { BaseFields } from "../layout/BaseFields";
 import { CSSStyle } from "../layout/CSSStyle";
 
@@ -16,8 +16,10 @@ class Fields extends BaseFields{
     src:number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
     /**
      * 矩形区域，它定义素材对象的九个缩放区域。
+     * 
      * fillMode = scale 时，[leftWidth,rightWidth,topHeight,bottomHeight]
-     * fillMode = repeat 是，[x,y,scalex,scaley]
+     * 
+     * fillMode = repeat 是，[scalex,scaley,x,y]
      */
     scale9Grid?:number[];
     /**
@@ -57,7 +59,7 @@ export class Image extends UIBase {
 
     public update(_style:CSSStyle) {
         if(this.fields.dirty.dirty){
-            console.log("update");
+            //console.log("update");
             let {fields,_sprite,_texture,container,_source} = this;
             fields.dirty.dirty = false;
             if(fields.src === undefined){
@@ -76,22 +78,31 @@ export class Image extends UIBase {
 
             if(fields.src && fields.src !== _source){
                 this._source = _source = fields.src;
-                if(fields.src instanceof PIXI.Texture){
-                    this._texture = _texture = fields.src;
-                }else{
-                    this._texture = _texture = PIXI.Texture.from(fields.src);
-                }
+                this._texture = _texture = getTexture(fields.src);
                 this._texture.once("update", () => {
                     this.syncImageSize();
                     this.emit(Image.onload, this);
                 }, this);
                 if (fields.fillMode === "no-repeat") {
-                    _sprite = new PIXI.Sprite(_texture);
+                    if(_sprite instanceof PIXI.Sprite){
+                        _sprite.texture = _texture;
+                    }else{
+                        _sprite = new PIXI.Sprite(_texture);
+                    }
                 } else if (fields.fillMode === "repeat") {
-                    _sprite = new PIXI.TilingSprite(_texture);
+                    if(_sprite instanceof PIXI.TilingSprite){
+                        _sprite.texture = _texture;
+                    }else{
+                        _sprite = new PIXI.TilingSprite(_texture);
+                    }          
                 } else if (fields.fillMode === "scale") {
-                    _sprite = new PIXI.NineSlicePlane(_texture);
+                    if(_sprite instanceof PIXI.NineSlicePlane){
+                        _sprite.texture = _texture;
+                    }else{
+                        _sprite = new PIXI.NineSlicePlane(_texture);
+                    }
                 }
+                
                 this._sprite = _sprite;
             }
 

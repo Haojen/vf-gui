@@ -13,12 +13,14 @@ import { Core } from "./Core";
 export class Stage extends Core{
 
     public constructor(width: number, height: number) {
-        super();
-        this.container.name = "Stage";
+        super(); 
         this._width = width;
         this._height = height;
         this.stage = this;
-        this.hitArea = new PIXI.Rectangle(0, 0, 0, 0);
+        this.container.name = "Stage";
+        this.container.hitArea = new PIXI.Rectangle(0, 0, width, height);
+        this.container.interactive = true;
+        this.container.interactiveChildren = true;
         Stage._stage = this;
 
     }
@@ -28,11 +30,10 @@ export class Stage extends Core{
         return Stage._stage;
     }
 
-    /**
-     * 可交互区域
+    /**  
+     * 舞台引用
      */
-    public hitArea = new PIXI.Rectangle(0, 0, 0, 0);
-
+    public stage: Stage | undefined;
     public _width: number = 0;
     public get width(): number {
         return this._width;
@@ -57,9 +58,7 @@ export class Stage extends Core{
 
     public resize(): void {
 
-        this.hitArea.width = this._width;
-        this.hitArea.height = this._height;
-        this.container.hitArea = this.hitArea;
+        this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
         this.updateChildren();
     }
 

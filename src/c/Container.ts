@@ -1,5 +1,5 @@
 import {UIBase} from "../core/UIBase";
-import { _getSourcePath, hexToInt } from "../core/Utils";
+import { _getSourcePath, hexToInt, getTexture } from "../core/Utils";
 
 /**
  * UI的显示容器
@@ -44,11 +44,7 @@ export class Container extends UIBase{
                 if(_style.backgroundImage instanceof PIXI.Texture){
                     backgroundImage = _style.backgroundImage;
                 }else if(typeof _style.backgroundImage === "string"){
-                    let url = _style.backgroundImage;
-                    if (_getSourcePath) {
-                        url = _getSourcePath(url);
-                    }
-                    backgroundImage = PIXI.Texture.from(url);
+                    backgroundImage = getTexture(_style.backgroundImage);
                 }
                 if(backgroundImage){
                     let sprite: PIXI.TilingSprite|PIXI.NineSlicePlane|PIXI.Sprite;

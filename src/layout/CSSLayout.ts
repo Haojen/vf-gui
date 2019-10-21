@@ -1,5 +1,5 @@
 import { UIBase } from "../core/UIBase";
-import { CSSStyle } from "./CSSStyle";
+import { CSSStyle, Align } from "./CSSStyle";
 import { Stage } from "../UI";
 
 
@@ -107,9 +107,13 @@ export function updateDisplayList(component: UIBase, _style: CSSStyle) {
             container.zIndex = _style.zIndex;
         }
     }
+
     //return;
     component.width = width;
     component.height = height;
+    // if(component.align){
+    //     let point = centerAlign(width,height,parentWidth, parentHeight)
+    // }
     container.setTransform(x + _style.pivotX, y+_style.pivotY, _style.scaleX, _style.scaleY, _style.rotate*(Math.PI/180), _style.skewX, _style.skewY,_style.pivotX,_style.pivotY);
 
 }
@@ -155,4 +159,15 @@ export function getChildBoundsSize(
         y = parentHeight - height - bottom;
 
     return { width, height,x,y };
+}
+
+
+export function centerAlign(width: number, height: number,parentWidth:number,parentHeight:number, align:Align = "center"){
+    let x = 0;
+    let y = 0;
+    if(align == "center"){
+        x = parentWidth - width >>1;
+        y = parentHeight - height >>1;
+    }
+    return {x,y};
 }
