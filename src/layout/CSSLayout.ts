@@ -106,7 +106,7 @@ export function updateDisplayList(component: UIBase, _style: CSSStyle) {
     }
     component.width = width;
     component.height = height;
-    container.setTransform(x + _style.pivotX, y+_style.pivotY, _style.scaleX, _style.scaleY, _style.rotate, _style.skewX, _style.skewY,_style.pivotX,_style.pivotY);
+    container.setTransform(x + _style.pivotX, y+_style.pivotY, _style.scaleX, _style.scaleY, _style.rotate*(Math.PI/180), _style.skewX, _style.skewY,_style.pivotX,_style.pivotY);
 
 }
 

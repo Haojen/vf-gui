@@ -460,7 +460,7 @@ export class Tween extends PIXI.utils.EventEmitter {
             const value = currentEasing[property] ? currentEasing[property](elapsed) : typeof currentEasing === 'function' ? currentEasing(elapsed) : defaultEasing(elapsed);
 
             if (typeof end === 'number') {
-                object[property] = Math.floor(start + (end - start) * value);
+                object[property] = start + (end - start) * value;
             } else if (typeof end === 'boolean') {
                 object[property] = end;
                 elapsed = _reversed ? 0 : 1;
