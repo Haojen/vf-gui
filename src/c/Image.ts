@@ -31,6 +31,15 @@ class ImageProps extends BaseProps{
      * 填充颜色值
      */
     tint?:number;
+
+    /**
+     * 锚点，调整位图的坐标中点 0-1
+     */
+    anchorX?:number;
+        /**
+     * 锚点，调整位图的坐标中点 0-1
+     */
+    anchorY?:number;
 }
 
 /**
@@ -45,13 +54,17 @@ export class Image extends UIBase {
 
     public constructor() {
         super();
-        this.initProps();
     }
+
+    protected _props?:TAny;
+    protected _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
+    protected _texture: PIXI.Texture | undefined;
+    protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
 
     protected initProps(){
 
     }
-    public _props?:TAny;
+
     /** 子类可以重写 */
     public get props():ImageProps{
 
@@ -65,12 +78,17 @@ export class Image extends UIBase {
         return this._props;
     }
 
-    protected _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
-    protected _texture: PIXI.Texture | undefined;
-    protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-
     public getMaskSprite(){
         return this._sprite;
+    }
+
+    public set width(value: number) {
+        this._width = value;
+        this.syncImageSize();
+    }
+    public set height(value: number) {
+        this._height = value;
+        this.syncImageSize();
     }
 
     public update(_style:CSSStyle) {
@@ -147,7 +165,6 @@ export class Image extends UIBase {
                     container.addChild(_sprite);
                 }
                 this.syncImageSize();
-
                 if(props.tint!==undefined){
                     _sprite.tint = props.tint;
                 }
@@ -158,7 +175,7 @@ export class Image extends UIBase {
     protected syncImageSize(){
         let {_sprite,_texture} = this;
         if(_sprite){
-            if(this._width>0){
+            if(this._width>1){
                 _sprite.width = this._width;
             }else{
                 if(_texture && _texture.width > 1){ 
@@ -167,12 +184,18 @@ export class Image extends UIBase {
                 
             }
 
-            if(this._height>0){
+            if(this._height>1){
                 _sprite.height = this._height;
             }else{
                 if(_texture && _texture.height > 1){ 
                     this._height = _sprite.height = _texture.frame.height;
                 }
+            }
+            if(this.props.anchorX){
+                _sprite.x = -Math.floor( _sprite.width * this.props.anchorX);
+            }
+            if(this.props.anchorY){
+                _sprite.y = -Math.floor( _sprite.height * this.props.anchorY);
             }
         }
     }

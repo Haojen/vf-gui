@@ -125,7 +125,7 @@ export class Label extends UIBase {
 
     }
     protected _text: PIXI.Text;
-    public _props:TAny = null;
+    protected _props:TAny = null;
 
     protected initProps(){
 

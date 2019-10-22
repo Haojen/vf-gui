@@ -251,7 +251,7 @@ export function dirtyCheck(target: CSSStyle, key: string, value: TAny) {
 export type Position = "absolute" | "fixed" | "static";
 
 /** 对齐方式 父级如果是grid布局，会忽略当前居中模式 */
-export type Align = "left" | "right"  | "bottom" | "top" | "center";
+export type Align = "left" | "right"  | "bottom" | "top" | "center" | "middle";
 
 /** 布局模式 */
 export type Display = "block" | "grid";

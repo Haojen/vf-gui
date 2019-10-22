@@ -44,6 +44,7 @@ export class ButtonProps extends BaseProps{
     /** 文字展示 */
     readonly label = new Label();
 }
+
 /**
  * 按钮
  */
@@ -53,6 +54,10 @@ export class Button extends InputBase{
         super();
         this.container.buttonMode = true;
     }
+
+    protected _props?:TAny;
+    protected _oldState = "";
+    protected _selectedStr : "AndSelected"|"" = "";
 
     protected initProps(){
         let props = this.props; 
@@ -66,7 +71,6 @@ export class Button extends InputBase{
         return props;
     }
 
-    protected _props?:TAny;
     /** 子类可以重写 */
     public get props():ButtonProps{
 
@@ -79,11 +83,6 @@ export class Button extends InputBase{
 
         return this._props;
     }
-
-
-    protected _oldState = "";
-
-    protected _selectedStr : "AndSelected"|"" = "";
 
     public update(_style:CSSStyle) {
         let {props} = this;

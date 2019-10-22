@@ -163,11 +163,10 @@ export function getChildBoundsSize(
 
 
 export function centerAlign(width: number, height: number,parentWidth:number,parentHeight:number, align:Align = "center"){
-    let x = 0;
-    let y = 0;
+    let point = {x:0,y:0};
     if(align == "center"){
-        x = parentWidth - width >>1;
-        y = parentHeight - height >>1;
+        point.x = parentWidth - width >>1;
+        point.y = parentHeight - height >>1;
     }
-    return {x,y};
+    return point;
 }
