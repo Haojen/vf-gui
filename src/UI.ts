@@ -13,7 +13,7 @@ import {Image} from "./c/Image";
 import {SpriteAnimated} from "./c/SpriteAnimated";
 
 
-import {Label,LabelFields} from "./c/Label";
+import {Label,LabelProps} from "./c/Label";
 import {TextInput} from "./c/TextInput";
 
 import {Slider} from "./c/Slider";
@@ -30,5 +30,5 @@ import * as AlignEnum from "./enum/AlignEnum";
 
 /** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,SortableList,Slider,
-    ScrollBar,Label,LabelFields,TextInput,Button,CheckBox,Rect,Interaction,
+    ScrollBar,Label,LabelProps,TextInput,Button,CheckBox,Rect,Interaction,
     UIBase,TickerShared,AlignEnum,Tween,Timeline,Easing,Image,SpriteAnimated};

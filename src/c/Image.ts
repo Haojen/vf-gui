@@ -1,10 +1,10 @@
 import { UIBase } from "../core/UIBase";
 import { _getSourcePath, getTexture } from "../core/Utils";
-import { BaseFields } from "../layout/BaseFields";
+import { BaseProps } from "../layout/BaseProps";
 import { CSSStyle } from "../layout/CSSStyle";
 
 /** Image 对象的自有字段 */
-class Fields extends BaseFields{
+class ImageProps extends BaseProps{
 
     public constructor(){
         super();
@@ -45,10 +45,26 @@ export class Image extends UIBase {
 
     public constructor() {
         super();
-        this.fields = new Fields().proxyData; 
+        this.initProps();
     }
 
-    public readonly fields: Fields;
+    protected initProps(){
+
+    }
+    public _props?:TAny;
+    /** 子类可以重写 */
+    public get props():ImageProps{
+
+        if(this._props){
+            return this._props;
+        }
+
+        this._props = new ImageProps().proxyData;
+        this.initProps();
+
+        return this._props;
+    }
+
     protected _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
     protected _texture: PIXI.Texture | undefined;
     protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
@@ -58,11 +74,11 @@ export class Image extends UIBase {
     }
 
     public update(_style:CSSStyle) {
-        if(this.fields.dirty.dirty){
+        if(this.props.dirty.dirty){
             //console.log("update");
-            let {fields,_sprite,_texture,container,_source} = this;
-            fields.dirty.dirty = false;
-            if(fields.src === undefined){
+            let {props,_sprite,_texture,container,_source} = this;
+            props.dirty.dirty = false;
+            if(props.src === undefined){
                 if(_sprite && _sprite.parent){
                     container.removeChild(_sprite);
                     _sprite.destroy();
@@ -76,26 +92,26 @@ export class Image extends UIBase {
                 return;
             }
 
-            if(fields.src && fields.src !== _source){
-                this._source = _source = fields.src;
-                this._texture = _texture = getTexture(fields.src);
+            if(props.src && props.src !== _source){
+                this._source = _source = props.src;
+                this._texture = _texture = getTexture(props.src);
                 this._texture.once("update", () => {
                     this.syncImageSize();
                     this.emit(Image.onload, this);
                 }, this);
-                if (fields.fillMode === "no-repeat") {
+                if (props.fillMode === "no-repeat") {
                     if(_sprite instanceof PIXI.Sprite){
                         _sprite.texture = _texture;
                     }else{
                         _sprite = new PIXI.Sprite(_texture);
                     }
-                } else if (fields.fillMode === "repeat") {
+                } else if (props.fillMode === "repeat") {
                     if(_sprite instanceof PIXI.TilingSprite){
                         _sprite.texture = _texture;
                     }else{
                         _sprite = new PIXI.TilingSprite(_texture);
                     }          
-                } else if (fields.fillMode === "scale") {
+                } else if (props.fillMode === "scale") {
                     if(_sprite instanceof PIXI.NineSlicePlane){
                         _sprite.texture = _texture;
                     }else{
@@ -106,22 +122,22 @@ export class Image extends UIBase {
                 this._sprite = _sprite;
             }
 
-            if(fields.scale9Grid){
+            if(props.scale9Grid){
                 if (_sprite instanceof PIXI.TilingSprite) {
-                    _sprite.tileScale.set(fields.scale9Grid[0],fields.scale9Grid[1]);
-                    _sprite.tilePosition.set(fields.scale9Grid[2],fields.scale9Grid[3]);
+                    _sprite.tileScale.set(props.scale9Grid[0],props.scale9Grid[1]);
+                    _sprite.tilePosition.set(props.scale9Grid[2],props.scale9Grid[3]);
                 } else if (_sprite instanceof PIXI.NineSlicePlane) {
-                    if(fields.scale9Grid[0] !== undefined){
-                        _sprite.leftWidth = fields.scale9Grid[0];
+                    if(props.scale9Grid[0] !== undefined){
+                        _sprite.leftWidth = props.scale9Grid[0];
                     }
-                    if(fields.scale9Grid[1] !== undefined){
-                        _sprite.rightWidth = fields.scale9Grid[1];
+                    if(props.scale9Grid[1] !== undefined){
+                        _sprite.rightWidth = props.scale9Grid[1];
                     }
-                    if(fields.scale9Grid[2] !== undefined){
-                        _sprite.topHeight = fields.scale9Grid[2];
+                    if(props.scale9Grid[2] !== undefined){
+                        _sprite.topHeight = props.scale9Grid[2];
                     }
-                    if(fields.scale9Grid[3] !== undefined){
-                        _sprite.bottomHeight = fields.scale9Grid[3];
+                    if(props.scale9Grid[3] !== undefined){
+                        _sprite.bottomHeight = props.scale9Grid[3];
                     }
                 }
             }
@@ -132,8 +148,8 @@ export class Image extends UIBase {
                 }
                 this.syncImageSize();
 
-                if(fields.tint!==undefined){
-                    _sprite.tint = fields.tint;
+                if(props.tint!==undefined){
+                    _sprite.tint = props.tint;
                 }
             }
         }

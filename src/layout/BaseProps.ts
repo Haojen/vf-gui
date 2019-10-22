@@ -1,6 +1,6 @@
 /** 默认的自定义字段基础代理 */
 
-export const defaultUpdateFieldsProxyHandler = {
+export const defaultUpdatePropsProxyHandler = {
     get(target:TAny, key: string, receiver: TAny) {
         return (target as TAny)[key];
     },
@@ -14,7 +14,7 @@ export const defaultUpdateFieldsProxyHandler = {
     }
 }
 
-export class BaseFields{
+export class BaseProps{
     public dirty  = {dirty:false};
     private _proxy = {data:this};
 
@@ -22,11 +22,11 @@ export class BaseFields{
         return this._proxy.data;
     }
     
-    constructor(updateFieldsProxyHandler?:TAny){
-        if(updateFieldsProxyHandler){
-            this._proxy.data = new Proxy(this, updateFieldsProxyHandler);
+    constructor(updatePropsProxyHandler?:TAny){
+        if(updatePropsProxyHandler){
+            this._proxy.data = new Proxy(this, updatePropsProxyHandler);
         }else{
-            this._proxy.data = new Proxy(this, defaultUpdateFieldsProxyHandler);
+            this._proxy.data = new Proxy(this, defaultUpdatePropsProxyHandler);
         }
     }
 }

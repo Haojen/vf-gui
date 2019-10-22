@@ -1,8 +1,8 @@
 import {UIBase} from "../core/UIBase";
-import { BaseFields } from "../layout/BaseFields";
+import { BaseProps } from "../layout/BaseProps";
 
 /** Rect 对象的自有字段 */
-class Fields extends BaseFields{
+class RectProps extends BaseProps{
     public constructor(){
         super();
     }
@@ -38,13 +38,27 @@ export class Rect extends UIBase{
         super();
         this._graphics = new PIXI.Graphics();
         this.container.addChild(this._graphics);
-        this.fields = new Fields().proxyData; 
     }
-    public readonly fields: Fields;
+
+    protected _props?:TAny;
+    /** 子类可以重写 */
+    public get props():RectProps{
+
+        if(this._props){
+            return this._props;
+        }
+
+        this._props = new RectProps().proxyData;
+        this.initProps();
+
+        return this._props;
+    }
+
+    protected initProps(){
+
+    }
 
     protected _graphics: PIXI.Graphics;
-
-
 
 
     public get graphics():PIXI.Graphics{
@@ -57,14 +71,14 @@ export class Rect extends UIBase{
 
 
     public update(){    
-        if(this.fields.dirty.dirty){
-            let {fields,_graphics} = this;
+        if(this.props.dirty.dirty){
+            let {props,_graphics} = this;
             _graphics.clear();
-            _graphics.lineStyle(fields.lineWidth,fields.lineColor);
-            _graphics.beginFill(fields.color);   
-            _graphics.drawRoundedRect(0,0,this._width, this._height,fields.radius);
+            _graphics.lineStyle(props.lineWidth,props.lineColor);
+            _graphics.beginFill(props.color);   
+            _graphics.drawRoundedRect(0,0,this._width, this._height,props.radius);
             _graphics.endFill();
-            fields.dirty.dirty = false;
+            props.dirty.dirty = false;
 
             // if(this._style.tint!== undefined){
             //     _graphics.tint

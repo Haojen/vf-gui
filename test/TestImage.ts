@@ -14,7 +14,7 @@ export default class TestImage {
         img1.style.top = 100;
         img1.style.width = 380;
         img1.style.height = 160;
-        img1.fields.src = "assets/mask/bg2.png";
+        img1.props.src = "assets/mask/bg2.png";
         uiStage.addChild(img1);
 
         /** 容器中填充内容与遮罩 */
@@ -31,7 +31,7 @@ export default class TestImage {
         let img2 = new vfui.Image();
         img2.style.width = 380;
         img2.style.height = 160;
-        img2.fields.src = "assets/mask/bg.jpg";
+        img2.props.src = "assets/mask/bg.jpg";
         container.addChild(img2);
 
         /** 样式宽高为0时，适配原始图片宽高 */
@@ -40,8 +40,8 @@ export default class TestImage {
         img3.style.top = 350;
         img3.style.width = 0;
         img3.style.height = 0;
-        img3.fields.src = "assets/mask/bg.jpg";
-        img3.fields.tint = 0xffcc00;//填充颜色
+        img3.props.src = "assets/mask/bg.jpg";
+        img3.props.tint = 0xffcc00;//填充颜色
         uiStage.addChild(img3);
 
         let count = 0;

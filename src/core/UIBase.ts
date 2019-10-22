@@ -231,7 +231,7 @@ export class UIBase extends Core {
             if (this.parent == null) {
                 return;
             }
-            if (this.parent.stage !== null && this.parent.initialized) {
+            if (this.parent.initialized) {
                 this.initialize();
             }
         }
@@ -381,7 +381,6 @@ export class UIBase extends Core {
      */
     protected initialize() {
         this.initialized = true;
-        this.stage = this.parent && this.parent.stage;
         if (this.draggable) {
             this.initDraggable();
         }

@@ -7,63 +7,74 @@ export default class TestCheckBox {
     }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
-        /** UI组件 复选框 */
-        let checkbox = this.getNewCheckBox(uiStage);
-        checkbox.value = "1";
-        //checkbox.checkGroup = "a1";
-        let checkbox2 = this.getNewCheckBox(uiStage);
-        checkbox2.value = "2";
-        //checkbox2.checkGroup = "a1";
-        checkbox2.x = 130;
-        let checkbox3 = this.getNewCheckBox(uiStage);
-        checkbox3.value = "3";
-        //checkbox3.checkGroup = "a1";
-        checkbox3.x = 160;
 
-        //单选
+        /** 复选框 */
+        let checkbox = this.getNewCheckBox(uiStage);
+        checkbox.props.value = "1";
+
+        let checkbox2 = this.getNewCheckBox(uiStage);
+        checkbox2.props.value = "2";
+        checkbox2.style.left = 130;
+
+        let checkbox3 = this.getNewCheckBox(uiStage);
+        checkbox3.props.value = "3";
+        checkbox3.style.left = 160;
+
+        //单选,通过设置分组区分
         let radio = this.getNewRadio(uiStage);
         radio.value = "r1";
         radio.checkGroup = "a1";
 
         let radio2 = this.getNewRadio(uiStage);
         radio2.value = "r2";
-        radio2.x = 130;
+        radio2.style.left = 130;
         radio2.checkGroup = "a1";
 
         let radio3 = this.getNewRadio(uiStage);
         radio3.value = "r3";
-        radio3.x = 160;
+        radio3.style.left = 160;
         radio3.checkGroup = "a1";
 
     }
-    private getNewRadio(uiStage: vfui.Stage) {
-        let radio = new vfui.CheckBox();
-        radio.x = 100;
-        radio.y = 150;
-        radio.width = 23;
-        radio.height = 23;
-        radio.sourceUp = "assets/skin/Radio/radio_up.png";
-        radio.sourceDown = "assets/skin/Radio/radio_down.png";
-        radio.sourceMove = radio.sourceDown;
-        radio.sourceMark = "assets/skin/Radio/radio_mark.png";
-        radio.on(vfui.Interaction.ComponentEvent.CHANGE,this.onChange,this);
-        uiStage.addChild(radio);
-        return radio;
-    }
+
 
     private getNewCheckBox(uiStage: vfui.Stage) {
         let checkbox = new vfui.CheckBox();
-        checkbox.x = 100;
-        checkbox.y = 100;
-        checkbox.width = 23;
-        checkbox.height = 23;
-        checkbox.sourceUp = "assets/skin/CheckBox/checkbox_up.png";
-        checkbox.sourceDown = "assets/skin/CheckBox/checkbox_down.png";
-        checkbox.sourceMove = checkbox.sourceDown;
-        checkbox.sourceMark = "assets/skin/CheckBox/checkbox_mark.png";
+        checkbox.style.top = 100;
+        checkbox.style.left = 100;
+        checkbox.style.width = 23;
+        checkbox.style.height = 23;
+        checkbox.props.up = "assets/skin/CheckBox/unselect.png";
+        checkbox.props.down = "assets/skin/CheckBox/unselect.png";
+        checkbox.props.move ="assets/skin/CheckBox/unselect.png";
+        checkbox.props.disabled = "assets/skin/CheckBox/unselect.png";
+        checkbox.props.upAndSelected = "assets/skin/CheckBox/select_up.png";
+        checkbox.props.downAndSelected = "assets/skin/CheckBox/select_down.png";
+        checkbox.props.moveAndSelected = "assets/skin/CheckBox/select_down.png";
+        checkbox.props.disabledAndSelected = "assets/skin/CheckBox/select_disabled.png";
         checkbox.on(vfui.Interaction.ComponentEvent.CHANGE,this.onChange,this);
         uiStage.addChild(checkbox);
         return checkbox;
+    }
+
+
+    private getNewRadio(uiStage: vfui.Stage) {
+        let radio = new vfui.CheckBox();
+        radio.style.top = 150;
+        radio.style.left = 100;
+        radio.style.width = 22;
+        radio.style.height = 22;
+        radio.props.up = "assets/skin/Radio/unselect.png";
+        radio.props.down = "assets/skin/Radio/unselect.png";
+        radio.props.move ="assets/skin/Radio/unselect.png";
+        radio.props.disabled = "assets/skin/Radio/unselect.png";
+        radio.props.upAndSelected = "assets/skin/Radio/select_up.png";
+        radio.props.downAndSelected = "assets/skin/Radio/select_down.png";
+        radio.props.moveAndSelected = "assets/skin/Radio/select_down.png";
+        radio.props.disabledAndSelected = "assets/skin/Radio/select_disabled.png";
+        radio.on(vfui.Interaction.ComponentEvent.CHANGE,this.onChange,this);
+        uiStage.addChild(radio);
+        return radio;
     }
 
     private onChange(checkBox: vfui.CheckBox) {

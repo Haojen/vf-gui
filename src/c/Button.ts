@@ -1,13 +1,19 @@
+/**
+ * 按钮组件
+ */
+
 import {Label} from "./Label";
 import {Image} from "./Image";
 import { InputBase } from "../core/InputBase";
-import { BaseFields } from "../layout/BaseFields";
+import { BaseProps } from "../layout/BaseProps";
 import { CSSStyle } from "../layout/CSSStyle";
 import { ComponentEvent } from "../interaction/Index";
 
 
-/** Image 对象的自有字段 */
-class Fields extends BaseFields{
+/** 
+ * 按钮自定义字段
+ */
+export class ButtonProps extends BaseProps{
 
     public constructor(){
         super();
@@ -39,42 +45,62 @@ class Fields extends BaseFields{
     readonly label = new Label();
 }
 /**
- * UI 按钮显 示对象
+ * 按钮
  */
 export class Button extends InputBase{
 
     public constructor() {
         super();
-        let fields = this.fields = new Fields().proxyData; 
-        fields.img.fields.fillMode = "scale";
-        fields.img.fields.scale9Grid = [3,3,3,3];
-        this.addChild(fields.img);
-
-        fields.label.fields.fontSize = 18;
-        fields.label.on(ComponentEvent.CHANGE,this.onLabelChange,this);
-        this.addChild(fields.label);
+        this.container.buttonMode = true;
     }
 
-    public readonly fields: Fields;
+    protected initProps(){
+        let props = this.props; 
+        props.img.props.fillMode = "scale";
+        props.img.props.scale9Grid = [3,3,3,3];
+        this.addChild(props.img);
+
+        props.label.props.fontSize = 18;
+        props.label.on(ComponentEvent.CHANGE,this.onLabelChange,this);
+        this.addChild(props.label);
+        return props;
+    }
+
+    protected _props?:TAny;
+    /** 子类可以重写 */
+    public get props():ButtonProps{
+
+        if(this._props){
+            return this._props;
+        }
+
+        this._props = new ButtonProps().proxyData;
+        this.initProps();
+
+        return this._props;
+    }
+
 
     protected _oldState = "";
 
-    public update(_style:CSSStyle) {
-        let {fields} = this;
-        if(fields.dirty.dirty){
-            fields.dirty.dirty = false;
+    protected _selectedStr : "AndSelected"|"" = "";
 
-            if(fields.label.fields.text !== fields.text){
-                fields.label.fields.text = fields.text;
+    public update(_style:CSSStyle) {
+        let {props} = this;
+        if(props.dirty.dirty){
+            props.dirty.dirty = false;
+
+            if(props.label.props.text !== props.text){
+                props.label.props.text = props.text;
             }
             this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
         }
 
         if(this.currentState !== this._oldState){
             this._oldState = this.currentState;
-            fields.img.style.width = this._width;
-            fields.img.style.height = this._height;
-            fields.img.fields.src = (fields as TAny)[this.currentState];
+            props.img.style.width = this._width;
+            props.img.style.height = this._height;
+            props.img.props.src = (props as TAny)[this.currentState + this._selectedStr];
         }
     }
 
@@ -86,9 +112,9 @@ export class Button extends InputBase{
 
     public release() {
         super.release();
-        this.fields.label.off(ComponentEvent.CHANGE,this.onLabelChange,this);
-        this.removeChild(this.fields.img);
-        this.removeChild(this.fields.label);
+        this.props.label.off(ComponentEvent.CHANGE,this.onLabelChange,this);
+        this.removeChild(this.props.img);
+        this.removeChild(this.props.label);
     }
 
     protected onLabelChange(label:Label){

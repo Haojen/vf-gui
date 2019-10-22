@@ -1,15 +1,15 @@
 import { UIBase } from "../core/UIBase";
 import { ComponentEvent } from "../interaction/Index";
-import { BaseFields } from "../layout/BaseFields";
+import { BaseProps } from "../layout/BaseProps";
 import { CSSStyle } from "../layout/CSSStyle";
 
 
 
-const updateFieldsProxyHandler = {
-    get(target: LabelFields, key: string, receiver: TAny) {
+const updatepropsProxyHandler = {
+    get(target: LabelProps, key: string, receiver: TAny) {
         return (target as TAny)[key];
     },
-    set(target: LabelFields, key: string, value: TAny, receiver: TAny) {
+    set(target: LabelProps, key: string, value: TAny, receiver: TAny) {
         if ((target as TAny)[key] === value) {
             return true;
         }
@@ -30,10 +30,10 @@ const updateFieldsProxyHandler = {
 }
 
 /** Image 对象的自有字段 */
-export class LabelFields extends BaseFields {
+export class LabelProps extends BaseProps {
 
     public constructor() {
-        super(updateFieldsProxyHandler);
+        super(updatepropsProxyHandler);
     }
     public dirty = { dirty: false, text: false, color: false };
     /**
@@ -43,7 +43,7 @@ export class LabelFields extends BaseFields {
     /** 
      * 文本颜色，16进制 
      * */
-    public color?:string | string[] | number | number[] | CanvasGradient | CanvasPattern;
+    public color?:string | string[] | number | number[] | CanvasGradient | CanvasPattern = 0xfffff0;
 
 
     /** 字符间距 */
@@ -122,39 +122,51 @@ export class Label extends UIBase {
         super();
         this._text = new PIXI.Text(text);
         this.container.addChild(this._text);
-        this._fields = new LabelFields().proxyData;
-    }
 
-    protected  _fields: LabelFields;
+    }
     protected _text: PIXI.Text;
+    public _props:TAny = null;
 
+    protected initProps(){
 
-    public set fields(value:LabelFields){
-        this._fields = value.proxyData;
-        for(let key in this._fields.dirty){
-            (this._fields.dirty as TAny)[key] = true;
-        }
     }
-    public get fields(){
-        return this._fields;
+    
+    /** 子类可以重写 */
+    public get props():LabelProps{
+
+        if(this._props){
+            return this._props;
+        }
+
+        this._props = new LabelProps().proxyData;
+        this.initProps();
+
+        return this._props;
+    }
+
+    public set props(value:LabelProps){
+        this._props = value.proxyData;
+        for(let key in this._props.dirty){
+            (this._props.dirty as TAny)[key] = true;
+        }
     }
 
     public update(_style: CSSStyle) {
-        let {fields} = this;
+        let {props} = this;
 
-        if(fields.dirty.dirty){
-            fields.dirty.dirty = false;
-            for(let key in this.fields){
+        if(props.dirty.dirty){
+            props.dirty.dirty = false;
+            for(let key in this.props){
                 if(key === "_proxy" || key === "dirty"){
                     continue;
                 }
-                this._text.style[key] = (this.fields as TAny)[key];
+                this._text.style[key] = (this.props as TAny)[key];
             }
         }
 
-        if(fields.dirty.text){
-            fields.dirty.text = false;
-            this._text.text = fields.text;
+        if(props.dirty.text){
+            props.dirty.text = false;
+            this._text.text = props.text;
             if(this._width == 0){
                 this._width = this._text.width;
             }else{
@@ -168,10 +180,10 @@ export class Label extends UIBase {
             this.emit(ComponentEvent.CHANGE,this);
         }
 
-        if(fields.dirty.color){
-            fields.dirty.color = false;
-            if(fields.color)
-                (this._text.style as PIXI.TextStyle).fill = fields.color;
+        if(props.dirty.color){
+            props.dirty.color = false;
+            if(props.color!==undefined)
+                (this._text.style as PIXI.TextStyle).fill = props.color;
         }
     }
 
