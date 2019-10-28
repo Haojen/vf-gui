@@ -42,10 +42,15 @@ export class MouseScrollEvent{
     private preventDefault: boolean;
     private delta = new PIXI.Point();
     private mouseScrllBind: ((_e: TWheelEvent | Event) => void | undefined) | undefined;
+    private isStop = true;
 
-    private startEvent() {
-        this.obj.container.on(TouchMouseEventEnum.mouseover, this._onHover, this);
-        this.obj.container.on(TouchMouseEventEnum.mouseout, this._onMouseOut, this);
+    public startEvent() {
+        if(this.isStop){
+            this.obj.container.on(TouchMouseEventEnum.mouseover, this._onHover, this);
+            this.obj.container.on(TouchMouseEventEnum.mouseout, this._onMouseOut, this);
+            this.isStop = false;
+        }
+
     }
 
     private _onMouseScroll(_e: TWheelEvent|Event) {
@@ -88,6 +93,7 @@ export class MouseScrollEvent{
         }
         this.obj.container.removeListener('mouseover',this. _onHover,this);
         this.obj.container.removeListener('mouseout', this._onMouseOut,this);
+        this.isStop = true;
     }
 
     public remove(){

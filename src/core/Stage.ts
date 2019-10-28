@@ -22,8 +22,10 @@ export class Stage extends Core{
         this.container.interactive = true;
         this.container.interactiveChildren = true;
         Stage._stage = this;
+        this.initialized = true;
 
     }
+    
 
     private static _stage:Stage;
     public static get Ins(){
@@ -56,6 +58,7 @@ export class Stage extends Core{
         }
     }
 
+    
     public resize(): void {
 
         this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);

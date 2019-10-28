@@ -11,3 +11,13 @@ export const CHANGE = "CHANGE";
  * slider 滑动时
  */
 export const CHANGEING = "CHANGEING";
+
+/**
+ * 容器被添加在到父级时触发
+ */
+export const ADDED = "ADDED";
+
+/**
+ * 容器被从父级移除时触发
+ */
+export const REMOVEED = "REMOVEED";

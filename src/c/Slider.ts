@@ -186,7 +186,7 @@ export class Slider extends UIBase{
                 props.tracklightImg.props.src = props.tracklight; 
             }
             this.updateLayout();
-            if(props.value != this._lastChanging){
+            if(props.value != this._lastChange){
                 this.value = this.props.value;
             }
         }
@@ -269,9 +269,11 @@ export class Slider extends UIBase{
     }
 
     protected triggerValueChange() {
-        this.emit(ComponentEvent.CHANGE,this, this.value,this._lastChange);
-        if (this._lastChange != this.value) {
-            this._lastChange = this.value;
+        let value = this.value;
+        this.emit(ComponentEvent.CHANGE,this, value,this._lastChange);
+        if (this._lastChange != value) {
+            this._lastChange = value;
+            this.props.value = this._lastChange;
         }
     }
 

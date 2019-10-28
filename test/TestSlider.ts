@@ -35,6 +35,21 @@ export default class TestSlider {
         uiStage.addChild(slider2);
         slider2.props.value = 50;
 
+        /** 进度条 vertical = true */
+        let slider3 = new vfui.Slider();
+        slider3.props.vertical = false;
+        //slider3.props.thumb = "assets/skin/Slider/thumb.png";
+        slider3.props.track = "assets/skin/Slider/track.png";
+        slider3.props.tracklight = "assets/skin/Slider/tracklight.png";
+        slider3.style.width = 300;
+        slider3.style.height = 10;
+        slider3.style.top = 450;
+        slider3.style.left = 50;
+        slider3.props.value = 50; 
+        uiStage.addChild(slider3);
+
+        
+
 
         let changeText = new vfui.Label("slider");
         changeText.style.top= 100;
@@ -47,6 +62,21 @@ export default class TestSlider {
         changingText.style.left = 150;
         changingText.props.color = 0xff00cc;
         uiStage.addChild(changingText);
+
+        let progressText = new vfui.Label("slider3");
+        progressText.style.top = 430;
+        progressText.style.left = 150;
+        progressText.props.color = 0xff00cc;
+        uiStage.addChild(progressText);
+
+        let count = 0;
+        vfui.TickerShared.addUpdateEvent(()=>{
+            if(count>100){
+                count = 0;
+            }
+            slider3.value = count;
+            count++;
+        },this)
 
 
         slider.on(vfui.Interaction.ComponentEvent.CHANGE, (slider:vfui.CheckBox,curValue: number) => {
@@ -63,6 +93,9 @@ export default class TestSlider {
             changingText.props.text = "changing:" + curValue;
         });
 
+        slider3.on(vfui.Interaction.ComponentEvent.CHANGE, (slider:vfui.CheckBox,curValue: number) => {
+            progressText.props.text = "progress:" + curValue;
+        });
 
     }
 

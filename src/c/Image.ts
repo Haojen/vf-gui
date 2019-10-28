@@ -78,10 +78,6 @@ export class Image extends UIBase {
         return this._props;
     }
 
-    public getMaskSprite(){
-        return this._sprite;
-    }
-
     public set width(value: number) {
         this._width = value;
         this.syncImageSize();
@@ -117,23 +113,27 @@ export class Image extends UIBase {
                     this.syncImageSize();
                     this.emit(Image.onload, this);
                 }, this);
-                if (props.fillMode === "no-repeat") {
-                    if(_sprite instanceof PIXI.Sprite){
-                        _sprite.texture = _texture;
-                    }else{
-                        _sprite = new PIXI.Sprite(_texture);
-                    }
-                } else if (props.fillMode === "repeat") {
-                    if(_sprite instanceof PIXI.TilingSprite){
-                        _sprite.texture = _texture;
-                    }else{
-                        _sprite = new PIXI.TilingSprite(_texture);
-                    }          
-                } else if (props.fillMode === "scale") {
-                    if(_sprite instanceof PIXI.NineSlicePlane){
-                        _sprite.texture = _texture;
-                    }else{
-                        _sprite = new PIXI.NineSlicePlane(_texture);
+                if(!PIXI.utils.isWebGLSupported()){
+                    _sprite = PIXI.Sprite.from(this._texture);
+                }else{
+                    if (props.fillMode === "no-repeat") {
+                        if(_sprite instanceof PIXI.Sprite){
+                            _sprite.texture = _texture;
+                        }else{
+                            _sprite = new PIXI.Sprite(_texture);
+                        }
+                    } else if (props.fillMode === "repeat") {
+                        if(_sprite instanceof PIXI.TilingSprite){
+                            _sprite.texture = _texture;
+                        }else{
+                            _sprite = new PIXI.TilingSprite(_texture);
+                        }          
+                    } else if (props.fillMode === "scale") {
+                        if(_sprite instanceof PIXI.NineSlicePlane){
+                            _sprite.texture = _texture;
+                        }else{
+                            _sprite = new PIXI.NineSlicePlane(_texture);
+                        }
                     }
                 }
                 

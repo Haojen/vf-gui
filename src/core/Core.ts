@@ -1,6 +1,7 @@
 import { ContainerBase } from "../c/ContainerBase";
 import { UIBase } from "./UIBase";
 import { Stage } from "../UI";
+import { ComponentEvent } from "../interaction/Index";
 
 export class Core extends PIXI.utils.EventEmitter{
  
@@ -42,6 +43,7 @@ export class Core extends PIXI.utils.EventEmitter{
         this.container.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
         this.updatesettings(true, true);
+        this.emit(ComponentEvent.ADDED,this);
         return item;
     }
 
@@ -64,6 +66,8 @@ export class Core extends PIXI.utils.EventEmitter{
                 if (oldUIParent && oldUIParent.updatesettings)
                     oldUIParent.updatesettings(true, true);
             }, 0);
+
+            this.emit(ComponentEvent.REMOVEED,this);
         }
     }
 

@@ -1,5 +1,6 @@
 import {UIBase} from "../core/UIBase";
 import { _getSourcePath, hexToInt, getTexture } from "../core/Utils";
+import { CSSStyle } from "../layout/CSSStyle";
 
 /**
  * UI的显示容器
@@ -15,6 +16,7 @@ export class Container extends UIBase{
         super(width,height);
         this._childrenStartIndex = 1;
         this._background = new PIXI.Graphics();
+        this._background.name = "background";
         //跳过uiChildren
         this.container.addChild(this._background);
 
@@ -22,9 +24,9 @@ export class Container extends UIBase{
 
     protected _background:PIXI.Graphics;
 
-    public update(){
-        if(this._style.dirty.background){
-            let {_style,_background} = this;
+    public update(_style:CSSStyle){
+        if(_style.dirty.background){
+            let {_background} = this;
             _style.dirty.background = false;
 
             if(_style.backgroundColor!==undefined && _style.backgroundColor!=_style._oldValue.backgroundColor){

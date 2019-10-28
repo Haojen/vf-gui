@@ -65,12 +65,24 @@ export class Rect extends UIBase{
         return this._graphics;
     }
 
-    public getMaskSprite(){
-        return this._graphics;
+    public get width() {
+        return this._width;
+    }
+    public set width(value: number) {
+        this._width = value;
+        this._graphics.width = value;
     }
 
+    public get height() {
+        return this._height;
+    }
+    public set height(value: number) {
+        this._height = value;
+        this._graphics.height = value;
+    }
 
     public update(){    
+
         if(this.props.dirty.dirty){
             let {props,_graphics} = this;
             _graphics.clear();

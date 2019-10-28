@@ -54,7 +54,7 @@ export class UIBase extends Core {
     public pixelPerfect = true;
 
     /** 遮罩，设置遮罩后，组件内部的索引位置可能产生变化 */
-    public mask?: PIXI.Graphics | PIXI.Sprite;
+    public mask?: PIXI.Graphics | PIXI.Sprite ;
     
     /** 
      * 可拖动初始化
@@ -216,11 +216,6 @@ export class UIBase extends Core {
      */
     public dropGroup: string | undefined;
 
-    /** 子类实现，可以被当做遮罩的组件 */
-    public getMaskSprite():undefined|TAny{
-        return null;
-    }
-
     /**
      * 绘制渲染对象
      * @param updateChildren 是否渲染子节点，true渲染
@@ -313,9 +308,11 @@ export class UIBase extends Core {
                     container.addChild(this.mask);
                 }else if(_style.maskImage instanceof UIBase){
                     //后期组件完成后补充，矢量与位图组件
-                    this.mask = _style.maskImage.getMaskSprite();
+                    _style.maskImage.parent = this;
+                    this.mask = _style.maskImage.container as TAny;
+                    _style.maskImage.container.name = "mask";
                     container.mask = this.mask || null;
-                    if(container.mask) this.addChild(_style.maskImage);
+                    if(container.mask) container.addChildAt(this.mask as PIXI.DisplayObject,0);
                 }else{
                     
                     this.mask = PIXI.Sprite.from(getTexture(_style.maskImage));
@@ -325,15 +322,27 @@ export class UIBase extends Core {
             }
 
             if (this.mask) {
-                if (_style.maskPosition !== undefined) {
-                    this.mask.position.set(_style.maskPosition[0], _style.maskPosition[1]);
 
+                if(_style.maskImage instanceof UIBase){
+                    if (_style.maskPosition !== undefined) {
+                        _style.maskImage.x = _style.maskPosition[0];
+                        _style.maskImage.y =  _style.maskPosition[1];
+                    }
+                    if (_style.maskSize !== undefined) {
+                        _style.maskImage.style.width = _style.maskSize[0];
+                        _style.maskImage.style.height = _style.maskSize[1];
+                    }
+                }else{
+                    if (_style.maskPosition !== undefined) {
+                        this.mask.position.set(_style.maskPosition[0], _style.maskPosition[1]);
+    
+                    }
+                    if (_style.maskSize !== undefined) {
+                        this.mask.width = _style.maskSize[0];
+                        this.mask.height = _style.maskSize[1];
+                    }
                 }
-                if (_style.maskSize !== undefined) {
-                    (this.mask as PIXI.Sprite).width
-                    this.mask.width = _style.maskSize[0];
-                    this.mask.height = _style.maskSize[1];
-                }
+
             }
         }
     }
