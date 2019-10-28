@@ -5,9 +5,6 @@ import * as Utils from "./core/Utils";
 
 import {Container} from "./c/Container";
 import {ScrollingContainer} from "./c/ScrollingContainer";
-import {SortableList} from "./c/SortableList";
-import {ScrollBar} from "./c/ScrollBar";
-
 
 import {Image} from "./c/Image";
 import {SpriteAnimated} from "./c/SpriteAnimated";
@@ -29,6 +26,6 @@ import * as Interaction from "./interaction/Index";
 import * as AlignEnum from "./enum/AlignEnum";
 
 /** 请不要在编写UI组件内部使用本类 */
-export {Utils,Stage,Container,ScrollingContainer,SortableList,Slider,
-    ScrollBar,Label,LabelProps,TextInput,Button,CheckBox,Rect,Interaction,
+export {Utils,Stage,Container,ScrollingContainer,Slider,
+    Label,LabelProps,TextInput,Button,CheckBox,Rect,Interaction,
     UIBase,TickerShared,AlignEnum,Tween,Timeline,Easing,Image,SpriteAnimated};

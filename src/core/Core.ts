@@ -140,6 +140,10 @@ export class Core extends PIXI.utils.EventEmitter{
         return this.container.cacheAsBitmap;
     }
 
+    /** 清除全部事件 */
+    public offAll(event?: string | symbol){
+        return this.removeAllListeners(event);
+    }
 
 
 }

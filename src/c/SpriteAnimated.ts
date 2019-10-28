@@ -1,5 +1,48 @@
 import {UIBase} from "../core/UIBase";
-import { _getSourcePath } from "../core/Utils";
+import { _getSourcePath, log, getTexture } from "../core/Utils";
+import { BaseProps } from "../layout/BaseProps";
+import { ComponentEvent } from "../interaction/Index";
+
+
+
+/** 
+ * 按钮自定义字段
+ */
+class SpriteAnimatedProps extends BaseProps{
+
+    public constructor(){
+        super();
+    }
+    /**
+     * 要播放的动作名
+     */
+    animationName = "default";
+    /**
+     * 序列图路径，或序列图数组
+     */
+    src:PIXI.Spritesheet|PIXI.Texture[]|undefined;
+    /**
+     * 动画速度
+     */
+    animationSpeed = 0.1;
+    /** 
+     * 是的循环
+     */
+    loop = true;
+    /** 
+     * 是否播放中
+     */
+    playing = false;
+    /**
+     * 锚点，调整位图的坐标中点 0-1, 可通过 TexturePacker输出sheet图并设置好 anchor
+     */
+    anchorX?:number;
+        /**
+     * 锚点，调整位图的坐标中点 0-1, 可通过 TexturePacker输出sheet图并设置好 anchor
+     */
+    anchorY?:number;
+}
+
 
 /**
  * UI 序列图动画
@@ -12,152 +55,133 @@ import { _getSourcePath } from "../core/Utils";
 export class SpriteAnimated extends UIBase{
     public constructor(){
         super();
+        this._animatedSprites = new Map();
     }
 
-    private _animatedSprites: Map<string,PIXI.AnimatedSprite>|undefined;
-    private _curAnimation:{name:string,sp:PIXI.AnimatedSprite}|undefined;
-    private _animationName = "";
-    public get animationName(): string {
-        return this._animationName;
-    }
-    public set animationName(value: string) {
-        this._animationName = value;
-        this.update();
+    protected initProps(){
+        // let props = this.props; 
     }
 
-    /**
-     * 是否自动播放
-     */
-    private _autoPlay = false;
-    public get autoPlay() {
-        return this._autoPlay;
-    }
-    public set autoPlay(value) {
-        this._autoPlay = value;
-        if(this._curAnimation && value){
-            this._curAnimation.sp.play();
+    /** 子类可以重写 */
+    public get props():SpriteAnimatedProps{
+
+        if(this._props){
+            return this._props;
         }
-    }
-    /**
-     * 设置源,loader中的PIXI.Spritesheet
-     */
-    private _source :PIXI.Spritesheet|PIXI.Texture[]|undefined;
 
-    public get source() {
-        return this._source;
-    }
-    public set source(value) {
-        if(_getSourcePath){
-            value = _getSourcePath(value,SpriteAnimated);
-        }   
-        this._source = value;
-        this.update();
+        this._props = new SpriteAnimatedProps().proxyData;
+        this.initProps();
+
+        return this._props;
     }
 
-    /** 
-     * 播放速度
-    */
-    private _animationSpeed = 1;
-    public get animationSpeed() {
-        return this._animationSpeed;
-    }
-    public set animationSpeed(value) {
-        this._animationSpeed = value;
-        this.dalayDraw = true;
-    }
+    protected _props?:TAny;   
 
-    /**
-     * 是否循环
-     */
-    private _loop = true;
-    public get loop() {
-        return this._loop;
-    }
-    public set loop(value) {
-        this._loop = value;
-        this.dalayDraw = true;
-    }
 
+    protected _src:PIXI.Spritesheet|PIXI.Texture[]|undefined;
+
+    private _animatedSprites: Map<string,PIXI.AnimatedSprite>;
+
+    private _lastAnimatedName = "";
+
+    private _curFrameNumber = 0;
+   
     /** 跳转到第N帧并播放 */
     public gotoAndPlay(frameNumber: number){
-        if(this._curAnimation)
-            this._curAnimation.sp.gotoAndPlay(frameNumber);
+        this._curFrameNumber = frameNumber;    
+        this.props.playing = true;
     }
 
     /** 跳转到第N帧并停止 */
     public gotoAndStop(frameNumber: number){
-        if(this._curAnimation)
-            this._curAnimation.sp.gotoAndStop(frameNumber);
+
+        this._curFrameNumber = frameNumber;
+        this.props.playing = false;
     }
 
     /** 停止 */
     public stop(){
-        if(this._curAnimation)
-            this._curAnimation.sp.stop();
+        this._curFrameNumber = 0;
+        this.props.playing = false;
     }
 
     /** 播放 */
     public play(){
-        if(this._curAnimation)
-            this._curAnimation.sp.play();
-   
+        this._curFrameNumber = 0;
+        this.props.playing = true;
     }
 
     public update(){
-        let {_source,_animationName,_animatedSprites,_curAnimation} = this;
-        if(_source === undefined){
+        let {props,_animatedSprites} = this;
+        if(!props.dirty.dirty){
             return;
         }
-        if(_animationName === ""){
-            return;
-        }
-   
-        if(_animatedSprites === undefined || _animatedSprites.size == 0){
-            _animatedSprites = new Map();
-            if(Array.isArray(_source)){
-                _animatedSprites.set("default", new PIXI.AnimatedSprite(_source));
-                this._animationName = "default";
+        props.dirty.dirty = false;
+
+        let animatedSp = _animatedSprites.get(this._lastAnimatedName);
+        if(this._lastAnimatedName !== props.animationName){
+            if(animatedSp && animatedSp.parent){
+                animatedSp.stop();
+                animatedSp.parent.removeChild(animatedSp);
+            }
+            this._lastAnimatedName = props.animationName;
+        } 
+
+        if(props.src && props.src != this._src){
+            this._src = props.src;
+            if(Array.isArray(props.src)){
+                let textures: PIXI.Texture[] = [];
+                if(typeof props.src[0] === "number"){
+                    props.src.forEach(value=>{
+                        textures.push(getTexture(value));
+                    });
+                }else{
+                    textures = props.src;
+                }
+                _animatedSprites.set("default", new PIXI.AnimatedSprite(textures));
             }else{
-                for(let key in _source.animations){
-                    _animatedSprites.set(key, new PIXI.AnimatedSprite(_source.animations[key]));
-                }
-            }
-            
-            if(_animatedSprites.size){
-                let sp = _animatedSprites.get(_animationName);
-                if(sp){
-                    sp.loop = this._loop;
-                    sp.animationSpeed = this._animationSpeed;
-                    this.container.addChild(sp);
-                    if(this.autoPlay){
-                        sp.play();
-                    }
-                    _curAnimation = {name:_animationName,sp:sp};
+                for(let key in props.src.animations){
+                    _animatedSprites.set(key, new PIXI.AnimatedSprite(props.src.animations[key]));
                 }
             }
         }
-        if(Array.isArray(_source)){
-            this._animationName = "default";
-        }
-        if(_curAnimation){
-            if(_curAnimation.name!==_animationName){
-                _curAnimation.sp.stop();
-                this.container.removeChild(_curAnimation.sp);
-                let sp = _animatedSprites.get(_animationName);
-                if(sp){
-                    this.container.addChild(sp);
-                    _curAnimation.name = _animationName;
-                    _curAnimation.sp = sp;
-                    if(this.autoPlay){
-                        sp.play();
-                    }
+
+
+        animatedSp = _animatedSprites.get(props.animationName);
+        if(animatedSp == undefined){
+            log("Error SpriteAnimated -> _animatedSprites[props.animationName] == undefined ");
+        }else{
+            if(animatedSp.parent == undefined){
+                animatedSp.onLoop = ()=>{
+                    this.emit(ComponentEvent.LOOP,this);
                 }
+                animatedSp.onComplete = ()=>{
+                    this.emit(ComponentEvent.COMPLETE,this);
+                }
+                this._curFrameNumber = 0;
+                animatedSp.anchor.set(this.props.anchorX,this.props.anchorY);
+                this.container.addChild(animatedSp);
+                this.emit(ComponentEvent.CHANGE,this);
             }
-            _curAnimation.sp.loop = this._loop;
-            _curAnimation.sp.animationSpeed = this._animationSpeed;
-            this._curAnimation = _curAnimation;
-            this._animatedSprites = _animatedSprites;
+            animatedSp.loop = props.loop;
+            animatedSp.animationSpeed = props.animationSpeed;
+
+            if(this.props.playing){
+                animatedSp.gotoAndPlay(this._curFrameNumber);
+            }else{
+                animatedSp.gotoAndStop(this._curFrameNumber);
+            }
         }
+    }
+
+    public release(){
+        super.release();
+        this._animatedSprites.forEach(element => {
+            if(element.parent){
+                element.parent.removeChild(element);
+            }
+            element.destroy();
+        });
     }
     
 }
