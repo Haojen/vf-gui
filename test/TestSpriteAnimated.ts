@@ -1,8 +1,7 @@
 import vfui from "../src/pixi-vfui";
-import { ComponentEvent } from "../src/interaction/Index";
 
 export default
-    class TestAnimatedSprite {
+    class TestSpriteAnimated {
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
@@ -32,11 +31,11 @@ export default
 
         }
 
-        sheetAnimated.on(ComponentEvent.LOOP,(sa:vfui.SpriteAnimated)=>{
+        sheetAnimated.on(vfui.Interaction.ComponentEvent.LOOP,(sa:vfui.SpriteAnimated)=>{
             console.log("LOOP");
         });
 
-        sheetAnimated.on(ComponentEvent.COMPLETE,(sa:vfui.SpriteAnimated)=>{
+        sheetAnimated.on(vfui.Interaction.ComponentEvent.COMPLETE,(sa:vfui.SpriteAnimated)=>{
             console.log("COMPLETE");
         });
     }

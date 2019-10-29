@@ -1,4 +1,5 @@
 import { Core } from "./Core";
+import {shared as TickerShared} from "./Ticker";
 
 /**
  * UI的舞台对象，展示所有UI组件
@@ -30,6 +31,19 @@ export class Stage extends Core{
     private static _stage: Stage;
     public static get Ins(){
         return Stage._stage;
+    }
+    
+    public releaseAll(){
+        for(let i=0;i<this.uiChildren.length;i++){
+            let ui = this.uiChildren[i];
+            ui.offAll();
+            ui.release();
+            ui.releaseAll();
+        }
+        this.uiChildren = [];
+        this.container.removeAllListeners();
+        this.container.removeChildren();
+        TickerShared.removeAllListeners();
     }
 
     /**  

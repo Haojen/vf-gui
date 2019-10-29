@@ -129,9 +129,8 @@ export default class TestContainer {
 
 
         vfui.TickerShared.addUpdateEvent(() => {
-            container6.style.rotation += Math.PI / 180;
+            container6.style.rotation += 1;
         }, this);
-
 
     }
 }

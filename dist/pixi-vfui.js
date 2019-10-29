@@ -3996,6 +3996,13 @@ class Core extends PIXI.utils.EventEmitter {
             this.emit(Index_1.ComponentEvent.REMOVEED, this);
         }
     }
+    removeChildren(beginIndex, endIndex) {
+        let start = beginIndex ? beginIndex + this._childrenStartIndex : this._childrenStartIndex;
+        let end = endIndex ? endIndex - this._childrenStartIndex : this.uiChildren.length - this._childrenStartIndex;
+        for (let i = start; i < end; i++) {
+            this.removeChild(this.uiChildren[i]);
+        }
+    }
     /**
      * 渲染父容器
      */
@@ -4281,6 +4288,7 @@ exports.objectPoolShared = new ObjectPool();
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Core_1 = __webpack_require__(/*! ./Core */ "./src/core/Core.ts");
+const Ticker_1 = __webpack_require__(/*! ./Ticker */ "./src/core/Ticker.ts");
 /**
  * UI的舞台对象，展示所有UI组件
  *
@@ -4308,6 +4316,18 @@ class Stage extends Core_1.Core {
     }
     static get Ins() {
         return Stage._stage;
+    }
+    releaseAll() {
+        for (let i = 0; i < this.uiChildren.length; i++) {
+            let ui = this.uiChildren[i];
+            ui.offAll();
+            ui.release();
+            ui.releaseAll();
+        }
+        this.uiChildren = [];
+        this.container.removeAllListeners();
+        this.container.removeChildren();
+        Ticker_1.shared.removeAllListeners();
     }
     get width() {
         return this._width;
@@ -4626,7 +4646,6 @@ class UIBase extends Core_1.Core {
     }
     updateMask(_style, renderer) {
         if (_style.dirty.mask) {
-            console.log("updateMask");
             const { container } = this;
             _style.dirty.mask = false;
             if (this.mask && _style.maskImage !== _style._oldValue.maskImage && this.mask) {
@@ -4677,6 +4696,7 @@ class UIBase extends Core_1.Core {
                     if (_style.maskSize !== undefined) {
                         this.mask.width = _style.maskSize[0];
                         this.mask.height = _style.maskSize[1];
+                        this.mask.updateTransform();
                     }
                 }
             }
@@ -4712,6 +4732,17 @@ class UIBase extends Core_1.Core {
         if (this.parent) {
             this.parent.removeChild(this);
         }
+    }
+    releaseAll() {
+        for (let i = 0; i < this.uiChildren.length; i++) {
+            let ui = this.uiChildren[i];
+            ui.offAll();
+            ui.release();
+            ui.releaseAll();
+        }
+        this.uiChildren = [];
+        this.container.removeAllListeners();
+        this.container.removeChildren();
     }
     /**
      * Initializes the object when its added to an UIStage

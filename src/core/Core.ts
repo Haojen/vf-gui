@@ -152,7 +152,6 @@ export class Core extends PIXI.utils.EventEmitter{
         return this.removeAllListeners(event);
     }
 
-
 }
 
 

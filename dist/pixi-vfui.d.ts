@@ -1050,6 +1050,7 @@ declare module 'core/UIBase' {
 	     */
 	    update(_style: CSSStyle, renderer?: PIXI.Renderer): void;
 	    release(): void;
+	    releaseAll(): void;
 	    /**
 	     * Initializes the object when its added to an UIStage
 	     * 将对象添加到UIStage时，进行的初始化方法
@@ -1095,6 +1096,7 @@ declare module 'core/Core' {
 	     * @param UIObject 要移除的UI组件
 	     */
 	    removeChild(item: UIBase): void;
+	    removeChildren(beginIndex?: number | undefined, endIndex?: number | undefined): void;
 	    /**
 	     * 渲染父容器
 	     */
@@ -1129,34 +1131,6 @@ declare module 'core/Core' {
 	    cacheAsBitmap: boolean;
 	    /** 清除全部事件 */
 	    offAll(event?: string | symbol): this;
-	}
-
-}
-declare module 'core/Stage' {
-	import { Core } from 'core/Core';
-	/**
-	 * UI的舞台对象，展示所有UI组件
-	 *
-	 * @class
-	 * @extends PIXI.UI.Container
-	 * @memberof PIXI.UI
-	 * @param width {Number} 舞台宽度
-	 * @param height {Number} 舞台高度
-	 * @since 1.0.0
-	 */
-	export class Stage extends Core {
-	    constructor(width: number, height: number);
-	    private static _stage;
-	    static readonly Ins: Stage;
-	    /**
-	     * 舞台引用
-	     */
-	    stage: Stage | undefined;
-	    _width: number;
-	    width: number;
-	    _height: number;
-	    height: number;
-	    resize(): void;
 	}
 
 }
@@ -1731,6 +1705,35 @@ declare module 'core/Ticker' {
 	 */
 	export const shared: Ticker;
 	export {};
+
+}
+declare module 'core/Stage' {
+	import { Core } from 'core/Core';
+	/**
+	 * UI的舞台对象，展示所有UI组件
+	 *
+	 * @class
+	 * @extends PIXI.UI.Container
+	 * @memberof PIXI.UI
+	 * @param width {Number} 舞台宽度
+	 * @param height {Number} 舞台高度
+	 * @since 1.0.0
+	 */
+	export class Stage extends Core {
+	    constructor(width: number, height: number);
+	    private static _stage;
+	    static readonly Ins: Stage;
+	    releaseAll(): void;
+	    /**
+	     * 舞台引用
+	     */
+	    stage: Stage | undefined;
+	    _width: number;
+	    width: number;
+	    _height: number;
+	    height: number;
+	    resize(): void;
+	}
 
 }
 declare module 'c/Container' {

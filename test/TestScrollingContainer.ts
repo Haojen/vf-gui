@@ -1,5 +1,4 @@
 import vfui from "../src/pixi-vfui";
-import pixivfui from "../src/pixi-vfui";
 
 export default class TestScrollingContainer {
 

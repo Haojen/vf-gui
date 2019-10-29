@@ -287,7 +287,6 @@ export class UIBase extends Core {
     public updateMask(_style: CSSStyle,renderer?: PIXI.Renderer) {
         
         if (_style.dirty.mask) {
-            console.log("updateMask");
             const {container } = this;
             _style.dirty.mask = false;
 
@@ -340,6 +339,7 @@ export class UIBase extends Core {
                     if (_style.maskSize !== undefined) {
                         this.mask.width = _style.maskSize[0];
                         this.mask.height = _style.maskSize[1];
+                        this.mask.updateTransform();
                     }
                 }
 
@@ -382,6 +382,18 @@ export class UIBase extends Core {
         if(this.parent){
             this.parent.removeChild(this);
         }
+    }
+
+    public releaseAll(){
+        for(let i=0;i<this.uiChildren.length;i++){
+            let ui = this.uiChildren[i];
+            ui.offAll();
+            ui.release();
+            ui.releaseAll();
+        }
+        this.uiChildren = [];
+        this.container.removeAllListeners();
+        this.container.removeChildren();
     }
 
     /**
