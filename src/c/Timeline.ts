@@ -1,6 +1,7 @@
 import { shared as tickerShared } from '../core/Ticker'
 import {Easing} from './Easing';
 import { objectPoolShared } from '../core/ObjectPool';
+import { ComponentEvent } from '../interaction/Index';
 
 class Node {
 
@@ -40,9 +41,9 @@ class Node {
  * @example let tl = new Timeline({delay:200})
  * @extends Tween
  */
-export class Timeline implements Lifecycle {
+export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
 
-    constructor() { }
+    constructor() { super() }
 
     public id: number = -1;
     private _object: TAny;
@@ -53,7 +54,7 @@ export class Timeline implements Lifecycle {
     private _isStop = false;
     private _lastNode = new Map<string, Node>();
     private _isSetDefault = false;
-    public isLoop = false;
+    public loop = false;
 
     public setDefault(object: TAny, _duration: number, fps: number) {
 
@@ -164,11 +165,13 @@ export class Timeline implements Lifecycle {
         let { _prevTime, _frames, _frameCount, _elapsedMS } = this;
         let curFrame = Math.round(_prevTime / _elapsedMS);
         if (curFrame >= _frameCount) {
-            if(this.isLoop){
+            if(this.loop){
+                this.emit(ComponentEvent.LOOP,this);
                 this.goto(1,false);
                 return;
             }
             this._isStop = true;
+            this.emit(ComponentEvent.COMPLETE,this);
         }
         if (_frames[curFrame] == undefined) {
             this._isStop = true;
@@ -249,7 +252,7 @@ export class Timeline implements Lifecycle {
         this._prevTime = 0;
         this._isStop = false;
         this._isSetDefault = false;
-        this.isLoop = false;
+        this.loop = false;
         this._lastNode.clear();
     }
 
