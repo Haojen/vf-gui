@@ -1,5 +1,4 @@
 import { UIBase } from "../core/UIBase";
-import { _getSourcePath } from "../core/Utils";
 
 /**
  * 图片
@@ -13,9 +12,9 @@ export class Graphics extends UIBase {
         this.container.addChild(this._props);
     }
 
-    public readonly _props:PIXI.Graphics;
+    public readonly _props: PIXI.Graphics;
 
-    public get props():PIXI.Graphics{
+    public get props(): PIXI.Graphics{
         return this._props;
     }
 

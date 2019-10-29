@@ -1,5 +1,5 @@
 import {UIBase} from "../core/UIBase";
-import {Image} from "./Image";
+import {Image as VfuiImage} from "./Image";
 import * as Utils from "../core/Utils";
 import {DragEvent,InteractionEvent, ComponentEvent} from "../interaction/Index";
 import { BaseProps } from "../layout/BaseProps";
@@ -46,9 +46,9 @@ class SliderProps extends BaseProps{
     tracklight?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
  
     /** 状态展示 */
-    readonly trackImg = new Image();
-    readonly thumbImg = new Image();
-    readonly tracklightImg = new Image();
+    readonly trackImg = new VfuiImage();
+    readonly thumbImg = new VfuiImage();
+    readonly tracklightImg = new VfuiImage();
     
 }
 
@@ -72,7 +72,7 @@ export class Slider extends UIBase{
         this._trackDrag.onDragEnd = this.onDragEnd;
     }
 
-    protected _props?:TAny;
+    protected _props?: TAny;
     protected _oldState = "";
 
     /** 
@@ -85,9 +85,9 @@ export class Slider extends UIBase{
      */
     protected _decimals = 0;
 
-    protected _track:TAny;
-    protected _thumb:TAny;
-    protected _tracklight:TAny;
+    protected _track: TAny;
+    protected _thumb: TAny;
+    protected _tracklight: TAny;
 
     protected _startValue = 0;
     protected _maxPosition = 0;
@@ -100,17 +100,17 @@ export class Slider extends UIBase{
 
     protected initProps(){
 
-        let props = this.props; 
+        const props = this.props; 
 
         props.thumbImg.props.anchorX = 0.5;
         props.thumbImg.props.anchorY = 0.5;
-        props.thumbImg.on(Image.onload,this.onImgload, this);
+        props.thumbImg.on(VfuiImage.onload,this.onImgload, this);
 
         props.trackImg.props.fillMode = "scale";
         props.trackImg.props.scale9Grid = [2,2,2,2];
         props.trackImg.style.width = "100%";
         props.trackImg.style.height = "100%";
-        props.trackImg.on(Image.onload,this.onImgload, this);
+        props.trackImg.on(VfuiImage.onload,this.onImgload, this);
 
         props.tracklightImg.props.fillMode = "scale";
         props.tracklightImg.props.scale9Grid = [2,2,2,2];
@@ -122,7 +122,7 @@ export class Slider extends UIBase{
         return props;
     }
     /** 子类可以重写 */
-    public get props():SliderProps{
+    public get props(): SliderProps{
 
         if(this._props){
             return this._props;
@@ -153,8 +153,8 @@ export class Slider extends UIBase{
     }
 
     protected updateLayout(){
-        let thumbImg = this.props.thumbImg;
-        let tracklightImg = this.props.tracklightImg;
+        const thumbImg = this.props.thumbImg;
+        const tracklightImg = this.props.tracklightImg;
         if (this.props.vertical) {
             //thumbImg.style.top =this._amt; 
             thumbImg.style.left = this._width >> 1;
@@ -169,8 +169,8 @@ export class Slider extends UIBase{
     }
 
 
-    public update(_style:CSSStyle) {
-        let props = this.props;
+    public update(_style: CSSStyle) {
+        const props = this.props;
         if(props.dirty.dirty){
             props.dirty.dirty = false;
             if(props.track !== this._track){
@@ -193,11 +193,11 @@ export class Slider extends UIBase{
 
     }
 
-    protected updatePosition(soft?:boolean){
+    protected updatePosition(soft?: boolean){
 
         let val = 0;
-        let thumbImg = this.props.thumbImg;
-        let tracklightImg = this.props.tracklightImg;
+        const thumbImg = this.props.thumbImg;
+        const tracklightImg = this.props.tracklightImg;
 
         if (this.props.vertical) {
             val = this._height * this._amt;
@@ -269,7 +269,7 @@ export class Slider extends UIBase{
     }
 
     protected triggerValueChange() {
-        let value = this.value;
+        const value = this.value;
         this.emit(ComponentEvent.CHANGE,this, value,this._lastChange);
         if (this._lastChange != value) {
             this._lastChange = value;

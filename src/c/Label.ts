@@ -6,10 +6,10 @@ import { CSSStyle } from "../layout/CSSStyle";
 
 
 const updatepropsProxyHandler = {
-    get(target: LabelProps, key: string, receiver: TAny) {
+    get(target: LabelProps, key: string) {
         return (target as TAny)[key];
     },
-    set(target: LabelProps, key: string, value: TAny, receiver: TAny) {
+    set(target: LabelProps, key: string, value: TAny) {
         if ((target as TAny)[key] === value) {
             return true;
         }
@@ -43,7 +43,7 @@ export class LabelProps extends BaseProps {
     /** 
      * 文本颜色，16进制 
      * */
-    public color?:string | string[] | number | number[] | CanvasGradient | CanvasPattern = 0xfffff0;
+    public color?: string | string[] | number | number[] | CanvasGradient | CanvasPattern = 0xfffff0;
 
 
     /** 字符间距 */
@@ -125,14 +125,14 @@ export class Label extends UIBase {
 
     }
     protected _text: PIXI.Text;
-    protected _props:TAny = null;
+    protected _props: TAny = null;
 
     protected initProps(){
 
     }
     
     /** 子类可以重写 */
-    public get props():LabelProps{
+    public get props(): LabelProps{
 
         if(this._props){
             return this._props;
@@ -144,19 +144,19 @@ export class Label extends UIBase {
         return this._props;
     }
 
-    public set props(value:LabelProps){
+    public set props(value: LabelProps){
         this._props = value.proxyData;
-        for(let key in this._props.dirty){
+        for(const key in this._props.dirty){
             (this._props.dirty as TAny)[key] = true;
         }
     }
 
     public update(_style: CSSStyle) {
-        let {props} = this;
+        const {props} = this;
 
         if(props.dirty.dirty){
             props.dirty.dirty = false;
-            for(let key in this.props){
+            for(const key in this.props){
                 if(key === "_proxy" || key === "dirty"){
                     continue;
                 }

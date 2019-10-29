@@ -21,7 +21,7 @@ class CheckBoxFields extends ButtonProps{
     /**
      * 设置值
      */
-    value?:string;
+    value?: string;
     /** 
      * 设置是否选中 
      * */
@@ -29,11 +29,11 @@ class CheckBoxFields extends ButtonProps{
     /** 
      * 设置分组的名 
      * */
-    checkGroup?:string;
+    checkGroup?: string;
     /**
      * 获取或设置选中的值
      */
-    selectedValue?:string;
+    selectedValue?: string;
     /** 
      * 选中状态皮肤，
      */
@@ -60,7 +60,7 @@ export class CheckBox extends Button{
         super();
     }
 
-    public get props():CheckBoxFields{
+    public get props(): CheckBoxFields{
 
         if(this._props){
             return this._props;
@@ -152,7 +152,7 @@ export class CheckBox extends Button{
     //     super.release();
     // }
 
-    protected onLabelChange(label:Label){
+    protected onLabelChange(label: Label){
         label.style.left = this.width;
         label.style.top =  this.height - label.height >> 1;
     }

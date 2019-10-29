@@ -60,9 +60,9 @@ export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
 
         this._object = object;
         this._elapsedMS = 1000 / fps;
-        let frameCount = Math.round(_duration / this._elapsedMS);
+        const frameCount = Math.round(_duration / this._elapsedMS);
         this._frameCount = frameCount;
-        let frames = this._frames;
+        const frames = this._frames;
         while (frames && frames.length > frameCount) {
             frames.pop();
         }
@@ -78,8 +78,8 @@ export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
         if (endFrame > this._frameCount) {
             throw "Error Timeline.addProperty overflow frame";
         }
-        let parentNode = this._lastNode.get(property);
-        let node = objectPoolShared.pop(Node);
+        const parentNode = this._lastNode.get(property);
+        const node = objectPoolShared.pop(Node);
         if (parentNode === undefined) {
             node.parent = undefined;
         } else {
@@ -89,7 +89,7 @@ export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
         node.startFrame = node.parent === undefined ? 0 : (node.parent.endFrame + 1);
         node.end = value;
         node.start = node.parent === undefined ? (this._object[property] || 0) : node.parent.end;
-        node.default = this._object[property];
+        node.default = this._object[property] || 0;
         if (easing) {
             node.easing = easing;
         } else {
@@ -133,9 +133,9 @@ export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
 
     private goto(frame: number, isStop: boolean) {
 
-        let { _lastNode, _frames } = this;
+        const { _lastNode, _frames } = this;
         _lastNode.forEach((value: Node, key: string) => {
-            let node = this.seekLastNode(value, frame);
+            const node = this.seekLastNode(value, frame);
             node.prevTime = node.duration;
             this.updateobject(key, node);
         }, this);
@@ -162,8 +162,10 @@ export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
         if (this._isStop) {
             return;
         }
-        let { _prevTime, _frames, _frameCount, _elapsedMS } = this;
-        let curFrame = Math.round(_prevTime / _elapsedMS);
+        let _prevTime = this._prevTime;
+        const { _frames, _frameCount, _elapsedMS } = this;
+        const curFrame = Math.round(_prevTime / _elapsedMS);
+        
         if (curFrame >= _frameCount) {
             if(this.loop){
                 this.emit(ComponentEvent.LOOP,this);
@@ -208,10 +210,12 @@ export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
                 case "y":
                 case "angle":
                     this._object[key] =node.default + Math.floor(start + (end - start) * value);
+                    break;
                 case "scaleX":
                 case "scaleY":
                 case "rotation":
                     this._object[key] = node.default * Math.floor(start + (end - start) * value);
+                    break;
                 default:
                     this._object[key] = Math.floor(start + (end - start) * value);
             }
@@ -255,9 +259,4 @@ export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
         this.loop = false;
         this._lastNode.clear();
     }
-
-    public destroy(destroyWebGL?: boolean) {
-
-    }
-
 }

@@ -1,5 +1,45 @@
-import { _getSourcePath } from "../core/Utils";
 import { UIBase } from "../UI";
+
+
+/**
+ * 脏数据检测
+ * @param target 
+ * @param key 
+ * @param value 
+ */
+export function dirtyCheck(target: CSSStyle, key: string, value: TAny) {
+
+    if (typeof value === "string" && value.indexOf("%") !== -1) {
+        target._valuesPct[key] = parseFloat(value.replace('%', '')) * 0.01 || 0;
+    } else {
+        target._valuesPct[key] = 0;
+    }
+
+    switch (key) {
+        case "tint":
+        case "alpha":
+        case "visible":
+            target.dirty.alpha = true;
+            break;
+        case "maskImage":
+        case "maskPosition":
+        case "maskSize":
+            target.dirty.mask = true;
+            break;
+        case "backgroundColor":
+        case "backgroundImage":
+        case "backgroundPositionX":
+        case "backgroundPositionY":
+        case "backgroundRepeat":
+        case "backgroundSize":
+            //需要背景的组件，自己实现
+            target.dirty.background = true;
+            break;
+        default:
+            target.dirty.dirty = true;
+    }
+}
+
 
 /**
  * 组件样式表
@@ -33,7 +73,7 @@ export class CSSStyle {
     /** 
      * 存放上次的值 
      * */
-    public _oldValue: CSSStyle = ({} as TAny);
+    public _oldValue: CSSStyle|TAny = {};
     /** 
      * 内部百分比转换至 
      * */
@@ -194,45 +234,6 @@ export class CSSStyle {
 
     public dirtyCheck(key: string, value: TAny) {
         dirtyCheck(this, key, value);
-    }
-}
-
-/**
- * 脏数据检测
- * @param target 
- * @param key 
- * @param value 
- */
-export function dirtyCheck(target: CSSStyle, key: string, value: TAny) {
-
-    if (typeof value === "string" && value.indexOf("%") !== -1) {
-        target._valuesPct[key] = parseFloat(value.replace('%', '')) * 0.01 || 0;
-    } else {
-        target._valuesPct[key] = 0;
-    }
-
-    switch (key) {
-        case "tint":
-        case "alpha":
-        case "visible":
-            target.dirty.alpha = true;
-            break;
-        case "maskImage":
-        case "maskPosition":
-        case "maskSize":
-            target.dirty.mask = true;
-            break;
-        case "backgroundColor":
-        case "backgroundImage":
-        case "backgroundPositionX":
-        case "backgroundPositionY":
-        case "backgroundRepeat":
-        case "backgroundSize":
-            //需要背景的组件，自己实现
-            target.dirty.background = true;
-            break;
-        default:
-            target.dirty.dirty = true;
     }
 }
 

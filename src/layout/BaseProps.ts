@@ -1,10 +1,10 @@
 /** 默认的自定义字段基础代理 */
 
 export const defaultUpdatePropsProxyHandler = {
-    get(target:TAny, key: string, receiver: TAny) {
+    get(target: TAny, key: string) {
         return (target as TAny)[key];
     },
-    set(target:TAny, key: string, value: TAny, receiver: TAny) {
+    set(target: TAny, key: string, value: TAny,) {
         if ((target as TAny)[key] === value) {
             return true;
         }
@@ -22,7 +22,7 @@ export class BaseProps{
         return this._proxy.data;
     }
     
-    constructor(updatePropsProxyHandler?:TAny){
+    constructor(updatePropsProxyHandler?: TAny){
         if(updatePropsProxyHandler){
             this._proxy.data = new Proxy(this, updatePropsProxyHandler);
         }else{

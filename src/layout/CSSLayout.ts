@@ -6,122 +6,19 @@ import { Stage } from "../UI";
 /** 
  * 格式化值（int,%）到组件 
  */
-export function formatStyleValue(style:CSSStyle,key: string, parentValue: number) {
+export function formatStyleValue(style: CSSStyle,key: string, parentValue: number) {
     if (style._valuesPct[key]) {
         return  Math.round(style._valuesPct[key] * parentValue);
     } else {
-        return (style as any)[key];
+        return (style as TAny)[key];
     }
 }
 
-/**
- * 调整目标的元素的大小并定位这些元素。
- *
- * @param width 指定目标在目标坐标中的宽度（以像素为单位）。
- * @param height 指定组件在目标坐标中的高度（以像素为单位）。
- *
- */
-export function updateDisplayList(component: UIBase, _style: CSSStyle) {
-    if(!_style.dirty.dirty){
-        return;
-    }
-
-    //console.log("updateBaseLayout");
-
-    _style.dirty.dirty = false;
-    let { container } = component;
-
-    let x = 0;
-    let y = 0;
-
-    let parentHeight = 0;
-    let parentWidth = 0;
-    if (component.parent instanceof UIBase) {
-        parentWidth = component.parent.width;
-        parentHeight = component.parent.height;
-    } else if (component.parent instanceof Stage) {
-        parentWidth = component.parent.width;
-        parentHeight = component.parent.height;
-    }
-
-    if(_style.position === "fixed"){
-        parentWidth = Stage.Ins.width;
-        parentHeight = Stage.Ins.height;
-    }
-
-    let width = formatStyleValue(_style,"width", parentWidth);
-    let minWidth = formatStyleValue(_style,"minWidth", parentWidth);
-    let maxWidth = formatStyleValue(_style,"maxWidth", parentWidth);
-
-    let height = formatStyleValue(_style,"height", parentHeight);
-    let minHeight = formatStyleValue(_style,"minHeight", parentHeight);
-    let maxHeight = formatStyleValue(_style,"maxHeight", parentHeight);
-
-    let left = formatStyleValue(_style,"left", parentWidth);
-    let top = formatStyleValue(_style,"top", parentHeight);
-    let right = formatStyleValue(_style,"right", parentWidth);
-    let bottom = formatStyleValue(_style,"bottom", parentHeight);
-
-    if (_style.display === "block") {
-        if (_style.position === "absolute") {
-
-            let bounds = getChildBoundsSize(left, right, top, bottom,width,height, parentWidth, parentHeight, maxWidth, minWidth, maxHeight, minHeight);
-            width = bounds.width;
-            height = bounds.height;
-            x = bounds.x;
-            y = bounds.y;
-
-        } else if (_style.position === "fixed") {//fixed
-
-            let bounds = getChildBoundsSize(left, right, top, bottom,width,height, Stage.Ins.width, Stage.Ins.height, maxWidth, minWidth, maxHeight, minHeight);
-            width = bounds.width;
-            height = bounds.height;
-            x = bounds.x;
-            y = bounds.y;
-            
-            let globalPosition = container.toLocal(new PIXI.Point(x, y));
-            x = globalPosition.x;
-            y = globalPosition.y;
-        } else {
-            x = left;
-            y = top;
-        }
-    } else {//style.display = grid
-
-    }
-
-    //make pixel perfect
-    if (component.pixelPerfect) {
-        width = Math.round(width);
-        height = Math.round(height);
-        x = Math.round(x);
-        y = Math.round(y);
-    }
-
-    container.alpha = _style.alpha;
-    container.visible = _style.visibility === "hidden" ? false : true;
-
-    if (_style.zIndex !== -1) {
-        if (component.parent) {
-            component.parent.container.sortableChildren = true;
-            container.zIndex = _style.zIndex;
-        }
-    }
-
-    //return;
-    component.width = width;
-    component.height = height;
-    // if(component.align){
-    //     let point = centerAlign(width,height,parentWidth, parentHeight)
-    // }
-    container.setTransform(x + _style.pivotX, y+_style.pivotY, _style.scaleX, _style.scaleY, _style.rotate*(Math.PI/180), _style.skewX, _style.skewY,_style.pivotX,_style.pivotY);
-
-}
 
 /** 计算节点的宽高位置 */
 export function getChildBoundsSize(
     left: number, right: number, top: number, bottom: number,
-    width: number, height: number,parentWidth:number,parentHeight:number,
+    width: number, height: number,parentWidth: number,parentHeight: number,
     maxWidth: number, minWidth: number, maxHeight: number, minHeight: number
 ) {
     let x = 0;
@@ -162,11 +59,116 @@ export function getChildBoundsSize(
 }
 
 
-export function centerAlign(width: number, height: number,parentWidth:number,parentHeight:number, align:Align = "center"){
-    let point = {x:0,y:0};
+export function centerAlign(width: number, height: number,parentWidth: number,parentHeight: number, align: Align = "center"){
+    const point = {x:0,y:0};
     if(align == "center"){
         point.x = parentWidth - width >>1;
         point.y = parentHeight - height >>1;
     }
     return point;
 }
+
+/**
+ * 调整目标的元素的大小并定位这些元素。
+ *
+ * @param width 指定目标在目标坐标中的宽度（以像素为单位）。
+ * @param height 指定组件在目标坐标中的高度（以像素为单位）。
+ *
+ */
+export function updateDisplayList(component: UIBase, _style: CSSStyle) {
+    if(!_style.dirty.dirty){
+        return;
+    }
+
+    //console.log("updateBaseLayout");
+
+    _style.dirty.dirty = false;
+    const { container } = component;
+
+    let x = 0;
+    let y = 0;
+
+    let parentHeight = 0;
+    let parentWidth = 0;
+    if (component.parent instanceof UIBase) {
+        parentWidth = component.parent.width;
+        parentHeight = component.parent.height;
+    } else if (component.parent instanceof Stage) {
+        parentWidth = component.parent.width;
+        parentHeight = component.parent.height;
+    }
+
+    if(_style.position === "fixed"){
+        parentWidth = Stage.Ins.width;
+        parentHeight = Stage.Ins.height;
+    }
+
+    let width = formatStyleValue(_style,"width", parentWidth);
+    const minWidth = formatStyleValue(_style,"minWidth", parentWidth);
+    const maxWidth = formatStyleValue(_style,"maxWidth", parentWidth);
+
+    let height = formatStyleValue(_style,"height", parentHeight);
+    const minHeight = formatStyleValue(_style,"minHeight", parentHeight);
+    const maxHeight = formatStyleValue(_style,"maxHeight", parentHeight);
+
+    const left = formatStyleValue(_style,"left", parentWidth);
+    const top = formatStyleValue(_style,"top", parentHeight);
+    const right = formatStyleValue(_style,"right", parentWidth);
+    const bottom = formatStyleValue(_style,"bottom", parentHeight);
+
+    if (_style.display === "block") {
+        if (_style.position === "absolute") {
+
+            const bounds = getChildBoundsSize(left, right, top, bottom,width,height, parentWidth, parentHeight, maxWidth, minWidth, maxHeight, minHeight);
+            width = bounds.width;
+            height = bounds.height;
+            x = bounds.x;
+            y = bounds.y;
+
+        } else if (_style.position === "fixed") {//fixed
+
+            const bounds = getChildBoundsSize(left, right, top, bottom,width,height, Stage.Ins.width, Stage.Ins.height, maxWidth, minWidth, maxHeight, minHeight);
+            width = bounds.width;
+            height = bounds.height;
+            x = bounds.x;
+            y = bounds.y;
+            
+            const globalPosition = container.toLocal(new PIXI.Point(x, y));
+            x = globalPosition.x;
+            y = globalPosition.y;
+        } else {
+            x = left;
+            y = top;
+        }
+    } else {//style.display = grid
+
+    }
+
+    //make pixel perfect
+    if (component.pixelPerfect) {
+        width = Math.round(width);
+        height = Math.round(height);
+        x = Math.round(x);
+        y = Math.round(y);
+    }
+
+    container.alpha = _style.alpha;
+    container.visible = _style.visibility === "hidden" ? false : true;
+
+    if (_style.zIndex !== -1) {
+        if (component.parent) {
+            component.parent.container.sortableChildren = true;
+            container.zIndex = _style.zIndex;
+        }
+    }
+
+    //return;
+    component.width = width;
+    component.height = height;
+    // if(component.align){
+    //     let point = centerAlign(width,height,parentWidth, parentHeight)
+    // }
+    container.setTransform(x + _style.pivotX, y+_style.pivotY, _style.scaleX, _style.scaleY, _style.rotate*(Math.PI/180), _style.skewX, _style.skewY,_style.pivotX,_style.pivotY);
+
+}
+

@@ -6,7 +6,6 @@ import {DragEvent} from "../interaction/DragEvent";
 import {MouseScrollEvent} from "../interaction/MouseScrollEvent";
 import {InteractionEvent} from "../interaction/InteractionEvent";
 import { now } from "../core/Utils";
-import {Rect} from "./Rect";
 import { BaseProps } from "../layout/BaseProps";
 import { ComponentEvent } from "../interaction/Index";
 import { ContainerBase } from "./ContainerBase";
@@ -67,7 +66,7 @@ export class ScrollingContainer extends Container {
         this.container.name = "ScrollingContainer";
         this._innerContainer.name = "innerContainer";
 
-        let _graphics = new PIXI.Graphics();
+        const _graphics = new PIXI.Graphics();
         _graphics.clear();
         _graphics.beginFill(0xffcc00);   
         _graphics.drawRoundedRect(0,0,200,200,0);
@@ -99,7 +98,7 @@ export class ScrollingContainer extends Container {
         };
 
         const scrollSpeed = new PIXI.Point();
-        this.mouseScrollEvent.onMouseScroll = (e: WheelEvent,delta:PIXI.Point) => {
+        this.mouseScrollEvent.onMouseScroll = (e: WheelEvent,delta: PIXI.Point) => {
             scrollSpeed.set(-delta.x * 0.2, -delta.y * 0.2);
             this.setScrollPosition(scrollSpeed);
         };
@@ -114,7 +113,7 @@ export class ScrollingContainer extends Container {
     }
 
     /** 子类可以重写 */
-    public get props():ScrollingContainerProps{
+    public get props(): ScrollingContainerProps{
 
         if(this._props){
             return this._props;
@@ -126,7 +125,7 @@ export class ScrollingContainer extends Container {
         return this._props;
     }
 
-    protected _props?:TAny;    
+    protected _props?: TAny;    
     /**
      * 内容容器
      * @private
@@ -165,7 +164,7 @@ export class ScrollingContainer extends Container {
     private _Speed = new PIXI.Point();
     private _stop = false;
 
-    public update(_style:CSSStyle) {
+    public update(_style: CSSStyle) {
         super.update(_style);
         if (this._lastWidth != this._width || this._lastHeight != this._height) {
             const _of = this.props.expandMask;
@@ -199,7 +198,7 @@ export class ScrollingContainer extends Container {
             item.parent.removeChild(item);
         }
 
-        item.parent = this as any;    
+        item.parent = this as TAny;    
         this._innerContainer.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
         this.updatesettings(true, true);

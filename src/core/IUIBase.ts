@@ -10,7 +10,7 @@ interface Window{
 }
 
 declare interface ObjectConstructor {
-    assign(...objects: Object[]): Object;
+    assign(...objects: Record<string, any>[]): Record<string, any>;
 }
 
 interface ArrayConstructor {
@@ -30,23 +30,23 @@ interface TUIBase{
 
 interface InputStyle{
     [propName: string]: any;
-    fontFamily: string,
+    fontFamily: string;
     fontSize?: string;
-    fontWeight?:string
-    fontVariant:"normal"|"small-caps"|"inherit"
-    color: '#000000',
-    padding: string,
-    multiline:boolean;
-    fontStyle:"normal"|"italic"|"oblique"|"inherit"
-    letterSpacing:number,
-    textIndent:string,
+    fontWeight?: string;
+    fontVariant: "normal"|"small-caps"|"inherit";
+    color: '#000000';
+    padding: string;
+    multiline: boolean;
+    fontStyle: "normal"|"italic"|"oblique"|"inherit";
+    letterSpacing: number;
+    textIndent: string;
 
-    position: 'absolute',
-    background: 'none',
-    border: 'none',
-    outline: 'none',
-    transformOrigin: '0 0',
-    lineHeight: '1'
+    position: 'absolute';
+    background: 'none';
+    border: 'none';
+    outline: 'none';
+    transformOrigin: '0 0';
+    lineHeight: '1';
 }
 
 interface CheckBox{

@@ -27,9 +27,9 @@ export class InputBase extends UIBase{
     }
 
     protected _clickEvent = new ClickEvent(this,true);;
-    protected currentState:"up"|"move"|"down"|"disabled" = "up";
-    protected _tabIndex:undefined|number;
-    protected _tabGroup:undefined|string;
+    protected currentState: "up"|"move"|"down"|"disabled" = "up";
+    protected _tabIndex: undefined|number;
+    protected _tabGroup: undefined|string;
 
     protected _focused = false;
     protected _useTab = true;
@@ -43,7 +43,8 @@ export class InputBase extends UIBase{
         }
         this.currentState = "move";
     }
-    protected onHover(e: InteractionEvent,thisObj: UIBase,over: boolean){
+    //e: InteractionEvent,thisObj: UIBase,over: boolean
+    protected onHover(){
         this.currentState = "up";
        
     }
@@ -138,7 +139,7 @@ export class InputBase extends UIBase{
             Stage.Ins.off("pointerdown", this.documentMouseDown,this);
     }
 
-    public setTabIndex(index:number|undefined,group:string|undefined){
+    public setTabIndex(index: number|undefined,group: string|undefined){
         this._tabIndex = index;
         this._tabGroup = group;
         if(index!==undefined && group!==undefined){

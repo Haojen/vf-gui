@@ -16,7 +16,7 @@ export class TextInputProps extends BaseProps{
      */
     fontSize = 25;
 
-    fontFamily:string|undefined;
+    fontFamily: string|undefined;
 
     color = 0x26272e;
     /**
@@ -114,14 +114,14 @@ export class TextInput extends InputBase {
     }
 
     protected initProps(){
-        let props = this.props; 
+        const props = this.props; 
         props.img.props.fillMode = "scale";
         props.img.props.scale9Grid = [3,3,3,3];
         this.addChildAt(props.img,0);
     }
 
     /** 子类可以重写 */
-    public get props():TextInputProps{
+    public get props(): TextInputProps{
 
         if(this._props){
             return this._props;
@@ -133,7 +133,7 @@ export class TextInput extends InputBase {
         return this._props;
     }
 
-    protected _props?:TAny;   
+    protected _props?: TAny;   
     protected _oldState = "";
 
     private htmlInputShared: HtmlInput;
@@ -159,9 +159,9 @@ export class TextInput extends InputBase {
     protected state = 'DEFAULT';
     
     // GETTERS & SETTERS
-    public update(_style:CSSStyle,renderer: PIXI.Renderer){
+    public update(_style: CSSStyle,renderer?: PIXI.Renderer){
 
-        let {props,htmlInputShared} = this;
+        const {props,htmlInputShared} = this;
 
         if(this.props.dirty.dirty){
             this.props.dirty.dirty = false;
@@ -176,15 +176,15 @@ export class TextInput extends InputBase {
             this.setInputStyle("width",this._width + "px");
             this.setInputStyle("height",this._height + "px");
             this.setInputStyle("color", "#" + componentToHex(props.color));
-    
-            this.render(renderer);
+            if(renderer)
+                this.render(renderer);
         }
 
         if(this.currentState !== this._oldState){
             if(!props.enabled){
                 this.currentState = "disabled";
             }
-            let currentState = (props as TAny)[this.currentState];
+            const currentState = (props as TAny)[this.currentState];
             if(currentState){
                 this._oldState = this.currentState;
                 props.img.props.src = currentState;

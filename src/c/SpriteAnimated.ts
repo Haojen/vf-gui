@@ -1,5 +1,5 @@
 import {UIBase} from "../core/UIBase";
-import { _getSourcePath, log, getTexture } from "../core/Utils";
+import { log, getTexture } from "../core/Utils";
 import { BaseProps } from "../layout/BaseProps";
 import { ComponentEvent } from "../interaction/Index";
 
@@ -20,7 +20,7 @@ class SpriteAnimatedProps extends BaseProps{
     /**
      * 序列图路径，或序列图数组
      */
-    src:PIXI.Spritesheet|PIXI.Texture[]|undefined;
+    src: PIXI.Spritesheet|PIXI.Texture[]|undefined;
     /**
      * 动画速度
      */
@@ -36,11 +36,11 @@ class SpriteAnimatedProps extends BaseProps{
     /**
      * 锚点，调整位图的坐标中点 0-1, 可通过 TexturePacker输出sheet图并设置好 anchor
      */
-    anchorX?:number;
-        /**
+    anchorX?: number;
+    /**
      * 锚点，调整位图的坐标中点 0-1, 可通过 TexturePacker输出sheet图并设置好 anchor
      */
-    anchorY?:number;
+    anchorY?: number;
 }
 
 
@@ -63,7 +63,7 @@ export class SpriteAnimated extends UIBase{
     }
 
     /** 子类可以重写 */
-    public get props():SpriteAnimatedProps{
+    public get props(): SpriteAnimatedProps{
 
         if(this._props){
             return this._props;
@@ -75,10 +75,10 @@ export class SpriteAnimated extends UIBase{
         return this._props;
     }
 
-    protected _props?:TAny;   
+    protected _props?: TAny;   
 
 
-    protected _src:PIXI.Spritesheet|PIXI.Texture[]|undefined;
+    protected _src: PIXI.Spritesheet|PIXI.Texture[]|undefined;
 
     private _animatedSprites: Map<string,PIXI.AnimatedSprite>;
 
@@ -112,7 +112,7 @@ export class SpriteAnimated extends UIBase{
     }
 
     public update(){
-        let {props,_animatedSprites} = this;
+        const {props,_animatedSprites} = this;
         if(!props.dirty.dirty){
             return;
         }
@@ -140,7 +140,7 @@ export class SpriteAnimated extends UIBase{
                 }
                 _animatedSprites.set("default", new PIXI.AnimatedSprite(textures));
             }else{
-                for(let key in props.src.animations){
+                for(const key in props.src.animations){
                     _animatedSprites.set(key, new PIXI.AnimatedSprite(props.src.animations[key]));
                 }
             }

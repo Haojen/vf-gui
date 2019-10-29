@@ -1,5 +1,5 @@
 import { UIBase } from "../core/UIBase";
-import { _getSourcePath, getTexture } from "../core/Utils";
+import { getTexture } from "../core/Utils";
 import { BaseProps } from "../layout/BaseProps";
 import { CSSStyle } from "../layout/CSSStyle";
 
@@ -13,7 +13,7 @@ class ImageProps extends BaseProps{
     /**
      * 图像路径或位图对象
      */
-    src:number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+    src: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
     /**
      * 矩形区域，它定义素材对象的九个缩放区域。
      * 
@@ -21,25 +21,25 @@ class ImageProps extends BaseProps{
      * 
      * fillMode = repeat 是，[scalex,scaley,x,y]
      */
-    scale9Grid?:number[];
+    scale9Grid?: number[];
     /**
      * 填充模式
      * 设置scale后，可设置scale9Grid进行调整缩放区域
      */
-    fillMode?:"no-repeat"|"repeat"|"scale" = "no-repeat";
+    fillMode?: "no-repeat"|"repeat"|"scale" = "no-repeat";
     /**
      * 填充颜色值
      */
-    tint?:number;
+    tint?: number;
 
     /**
      * 锚点，调整位图的坐标中点 0-1
      */
-    anchorX?:number;
-        /**
+    anchorX?: number;
+    /**
      * 锚点，调整位图的坐标中点 0-1
      */
-    anchorY?:number;
+    anchorY?: number;
 }
 
 /**
@@ -56,7 +56,7 @@ export class Image extends UIBase {
         super();
     }
 
-    protected _props?:TAny;
+    protected _props?: TAny;
     protected _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
     protected _texture: PIXI.Texture | undefined;
     protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
@@ -66,7 +66,7 @@ export class Image extends UIBase {
     }
 
     /** 子类可以重写 */
-    public get props():ImageProps{
+    public get props(): ImageProps{
 
         if(this._props){
             return this._props;
@@ -87,10 +87,12 @@ export class Image extends UIBase {
         this.syncImageSize();
     }
 
-    public update(_style:CSSStyle) {
+    public update(_style: CSSStyle) {
         if(this.props.dirty.dirty){
             //console.log("update");
-            let {props,_sprite,_texture,container,_source} = this;
+            const props = this.props;
+            const container = this.container;
+            let {_sprite,_texture,_source} = this;
             props.dirty.dirty = false;
             if(props.src === undefined){
                 if(_sprite && _sprite.parent){
@@ -173,7 +175,7 @@ export class Image extends UIBase {
     }
 
     protected syncImageSize(){
-        let {_sprite,_texture} = this;
+        const {_sprite,_texture} = this;
         if(_sprite){
             if(this._width>1){
                 _sprite.width = this._width;

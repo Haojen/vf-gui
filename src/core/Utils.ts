@@ -12,11 +12,11 @@ export function log(message?: string | number | object, ...optionalParams: strin
     console.log(message, ...optionalParams);
 }
 
-export function setSourcePath(params: (path: TAny,cls?:TAny) => {}) {
+export function setSourcePath(params: (path: TAny,cls?: TAny) => {}) {
     _getSourcePath = params;
 }
 
-export function getTexture(src:TAny){
+export function getTexture(src: TAny){
     if(_getSourcePath){
         src = _getSourcePath(src);
     }

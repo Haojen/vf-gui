@@ -26,11 +26,11 @@ class RectProps extends BaseProps{
     /**
      * 锚点，调整位图的坐标中点 0-1
      */
-    anchorX?:number;
-        /**
+    anchorX?: number;
+    /**
      * 锚点，调整位图的坐标中点 0-1
      */
-    anchorY?:number;
+    anchorY?: number;
 }
 
 
@@ -49,9 +49,9 @@ export class Rect extends UIBase{
         this.container.addChild(this._graphics);
     }
 
-    protected _props?:TAny;
+    protected _props?: TAny;
     /** 子类可以重写 */
-    public get props():RectProps{
+    public get props(): RectProps{
 
         if(this._props){
             return this._props;
@@ -70,7 +70,7 @@ export class Rect extends UIBase{
     protected _graphics: PIXI.Graphics;
 
 
-    public get graphics():PIXI.Graphics{
+    public get graphics(): PIXI.Graphics{
         return this._graphics;
     }
 
@@ -93,7 +93,7 @@ export class Rect extends UIBase{
     public update(){    
 
         if(this.props.dirty.dirty){
-            let {props,_graphics} = this;
+            const {props,_graphics} = this;
             _graphics.clear();
             _graphics.lineStyle(props.lineWidth,props.lineColor);
             _graphics.beginFill(props.color);   

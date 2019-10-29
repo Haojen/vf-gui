@@ -55,12 +55,12 @@ export class Button extends InputBase{
         this.container.buttonMode = true;
     }
 
-    protected _props?:TAny;
+    protected _props?: TAny;
     protected _oldState = "";
-    protected _selectedStr : "AndSelected"|"" = "";
+    protected _selectedStr: "AndSelected"|"" = "";
 
     protected initProps(){
-        let props = this.props; 
+        const props = this.props; 
         props.img.props.fillMode = "scale";
         props.img.props.scale9Grid = [3,3,3,3];
         this.addChild(props.img);
@@ -72,7 +72,7 @@ export class Button extends InputBase{
     }
 
     /** 子类可以重写 */
-    public get props():ButtonProps{
+    public get props(): ButtonProps{
 
         if(this._props){
             return this._props;
@@ -84,8 +84,8 @@ export class Button extends InputBase{
         return this._props;
     }
 
-    public update(_style:CSSStyle) {
-        let {props} = this;
+    public update(_style: CSSStyle) {
+        const {props} = this;
         if(props.dirty.dirty){
             props.dirty.dirty = false;
 
@@ -116,7 +116,7 @@ export class Button extends InputBase{
         this.removeChild(this.props.label);
     }
 
-    protected onLabelChange(label:Label){
+    protected onLabelChange(label: Label){
         label.style.left = this.width -  label.width >>1;
         label.style.top = this.height -  label.height >>1;
     }

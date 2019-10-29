@@ -21,7 +21,7 @@ export class UIBase extends Core {
      * @param width 宽 数字或百分比, 不传默认0
      * @param height 高 数字或百分比,不传默认0
      */
-    public constructor(width?: number, height?: number) {
+    public constructor() {
         super();
         this.uuid = uid();
         this.container.name = (this.constructor as TAny).name;
@@ -252,7 +252,7 @@ export class UIBase extends Core {
  
             target.dirtyCheck(key,value);
 
-            let oldValue = (target as TAny)[key];
+            const oldValue = (target as TAny)[key];
             (target as TAny)._oldValue[key] = oldValue;
             (target as TAny)[key] = value;
             target.eventEmitter.emit("ValueChangeEvent", key, value, oldValue);
@@ -260,15 +260,15 @@ export class UIBase extends Core {
         }
     }
 
-    protected onRenderer(renderer: PIXI.Renderer) {
-        let { _style } = this;
+    protected onRenderer(renderer?: PIXI.Renderer) {
+        const { _style } = this;
         this.updateBaseLayout(_style,renderer);
         this.updateMask(_style,renderer);
         this.updateAlpha(_style,renderer);
         this.update(_style,renderer);
     }
 
-    protected updateBaseLayout(_style:CSSStyle,renderer: PIXI.Renderer) {
+    protected updateBaseLayout(_style: CSSStyle,renderer?: PIXI.Renderer) {
 
         if (!this.parent) {
             return;
@@ -284,11 +284,11 @@ export class UIBase extends Core {
 
     }
 
-    public updateMask(_style:CSSStyle,renderer: PIXI.Renderer) {
+    public updateMask(_style: CSSStyle,renderer?: PIXI.Renderer) {
         
         if (_style.dirty.mask) {
             console.log("updateMask");
-            let {container } = this;
+            const {container } = this;
             _style.dirty.mask = false;
 
             if (this.mask && _style.maskImage !== _style._oldValue.maskImage && this.mask) {
@@ -347,10 +347,10 @@ export class UIBase extends Core {
         }
     }
 
-    public updateAlpha(_style:CSSStyle,renderer: PIXI.Renderer){
+    public updateAlpha(_style: CSSStyle,renderer?: PIXI.Renderer){
         if(_style.dirty.alpha){
             console.log("updateAlpha");
-            let {container } = this;
+            const {container } = this;
             _style.dirty.alpha = false;
             container.alpha = _style.alpha;
             container.visible = _style.visible;
@@ -359,12 +359,12 @@ export class UIBase extends Core {
     /**
      * 更新方法，其他组件重写
      */
-    public update(_style:CSSStyle,renderer: PIXI.Renderer) {
+    public update(_style: CSSStyle,renderer?: PIXI.Renderer) {
 
     }
 
     public release() {
-        let {_style,container} = this;
+        const {_style,container} = this;
         container.off("renderChange", this.onRenderer, this);
         container.mask = null;
 
@@ -460,7 +460,7 @@ export class UIBase extends Core {
                         this.container.interactive = true;
                         const item = DragDropController.getItem(this);
                         if (item && this.parent) {
-                            let container = this.parent.container;
+                            const container = this.parent.container;
                             if (container)
                                 container.toLocal(this.container.position, this.container.parent);
                             if (container != this.container) {

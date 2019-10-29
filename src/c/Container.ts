@@ -1,5 +1,5 @@
 import {UIBase} from "../core/UIBase";
-import { _getSourcePath, hexToInt, getTexture } from "../core/Utils";
+import { hexToInt, getTexture } from "../core/Utils";
 import { CSSStyle } from "../layout/CSSStyle";
 
 /**
@@ -12,8 +12,8 @@ import { CSSStyle } from "../layout/CSSStyle";
  * @param height {Number} 高度
  */
 export class Container extends UIBase{
-    public constructor(width?: number, height?: number){
-        super(width,height);
+    public constructor(){
+        super();
         this._childrenStartIndex = 1;
         this._background = new PIXI.Graphics();
         this._background.name = "background";
@@ -22,11 +22,11 @@ export class Container extends UIBase{
 
     }
 
-    protected _background:PIXI.Graphics;
+    protected _background: PIXI.Graphics;
 
-    public update(_style:CSSStyle){
+    public update(_style: CSSStyle){
         if(_style.dirty.background){
-            let {_background} = this;
+            const {_background} = this;
             _style.dirty.background = false;
 
             if(_style.backgroundColor!==undefined && _style.backgroundColor!=_style._oldValue.backgroundColor){
@@ -42,7 +42,7 @@ export class Container extends UIBase{
 
             if(_style.backgroundImage!==undefined && _style.backgroundImage!=_style._oldValue.backgroundImage){
                 _background.removeChildren();
-                let backgroundImage:PIXI.Texture|undefined;
+                let backgroundImage: PIXI.Texture|undefined;
                 if(_style.backgroundImage instanceof PIXI.Texture){
                     backgroundImage = _style.backgroundImage;
                 }else if(typeof _style.backgroundImage === "string"){
@@ -67,7 +67,7 @@ export class Container extends UIBase{
 
             if(_background.children.length>0){
 
-                let sprite = _background.getChildAt(0) as PIXI.Sprite;
+                const sprite = _background.getChildAt(0) as PIXI.Sprite;
                 if(sprite instanceof PIXI.TilingSprite){
                     sprite.tilePosition.set(_style.backgroundPositionX || 0,_style.backgroundPositionY || 0); 
                 }else{

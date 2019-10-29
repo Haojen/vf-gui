@@ -26,7 +26,7 @@ export class Core extends PIXI.utils.EventEmitter{
     public uiChildren: UIBase[] = [];
 
     /** 没有功能实现，内部编辑器 */
-    public container:ContainerBase;
+    public container: ContainerBase;
 
     /** 添加显示对象，需集成UIBASE */
     public addChild(item: UIBase) {
@@ -39,7 +39,7 @@ export class Core extends PIXI.utils.EventEmitter{
             item.parent.removeChild(item);
         }
 
-        item.parent = this as any;    
+        item.parent = this as TAny;    
         this.container.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
         this.updatesettings(true, true);
@@ -71,7 +71,7 @@ export class Core extends PIXI.utils.EventEmitter{
         }
     }
 
-   /**
+    /**
      * 渲染父容器
      */
     public updateParent() {

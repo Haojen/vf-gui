@@ -27,7 +27,7 @@ export class Stage extends Core{
     }
     
 
-    private static _stage:Stage;
+    private static _stage: Stage;
     public static get Ins(){
         return Stage._stage;
     }
