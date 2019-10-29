@@ -2575,7 +2575,7 @@ class Timeline extends PIXI.utils.EventEmitter {
         node.startFrame = node.parent === undefined ? 0 : (node.parent.endFrame + 1);
         node.end = value;
         node.start = node.parent === undefined ? (this._object[property] || 0) : node.parent.end;
-        node.default = this._object[property];
+        node.default = this._object[property] || 0;
         if (easing) {
             node.easing = easing;
         }
@@ -2639,7 +2639,8 @@ class Timeline extends PIXI.utils.EventEmitter {
         if (this._isStop) {
             return;
         }
-        const { _prevTime, _frames, _frameCount, _elapsedMS } = this;
+        let _prevTime = this._prevTime;
+        const { _frames, _frameCount, _elapsedMS } = this;
         const curFrame = Math.round(_prevTime / _elapsedMS);
         if (curFrame >= _frameCount) {
             if (this.loop) {
@@ -2654,13 +2655,14 @@ class Timeline extends PIXI.utils.EventEmitter {
             this._isStop = true;
             return;
         }
-        this._prevTime += elapsedMS;
+        _prevTime += elapsedMS;
         _frames[curFrame].forEach((value, key) => {
             if (value.start !== value.end) {
                 value.prevTime += elapsedMS;
                 this.updateobject(key, value);
             }
         }, this);
+        this._prevTime = _prevTime;
         return true;
     }
     updateobject(key, node) {
