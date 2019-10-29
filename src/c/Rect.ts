@@ -22,6 +22,15 @@ class RectProps extends BaseProps{
      * 颜色 
      */
     color = 0;
+
+    /**
+     * 锚点，调整位图的坐标中点 0-1
+     */
+    anchorX?:number;
+        /**
+     * 锚点，调整位图的坐标中点 0-1
+     */
+    anchorY?:number;
 }
 
 
@@ -88,7 +97,8 @@ export class Rect extends UIBase{
             _graphics.clear();
             _graphics.lineStyle(props.lineWidth,props.lineColor);
             _graphics.beginFill(props.color);   
-            _graphics.drawRoundedRect(0,0,this._width, this._height,props.radius);
+            
+            _graphics.drawRoundedRect(props.anchorX?-props.anchorX*this._width:0,props.anchorY?-props.anchorY*this._height:0,this._width, this._height,props.radius);
             _graphics.endFill();
             props.dirty.dirty = false;
 
