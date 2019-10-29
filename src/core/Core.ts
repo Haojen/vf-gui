@@ -71,6 +71,13 @@ export class Core extends PIXI.utils.EventEmitter{
         }
     }
 
+    public removeChildren(beginIndex?: number | undefined, endIndex?: number | undefined){
+        let start = beginIndex?beginIndex+ this._childrenStartIndex:this._childrenStartIndex;
+        let end = endIndex?endIndex- this._childrenStartIndex:this.uiChildren.length - this._childrenStartIndex;
+        for(let i = start;i<end;i++){
+            this.removeChild(this.uiChildren[i]);
+        }
+    }
     /**
      * 渲染父容器
      */
