@@ -1,23 +1,70 @@
 import HtmlInput from "./InputText/HtmlInput";
 import { KeyEvent} from "../interaction/InteractionEvent";
-import {UIBase} from "../core/UIBase";
+import { BaseProps } from "../layout/BaseProps";
+import { CSSStyle } from "../layout/CSSStyle";
+import {  componentToHex } from "../core/Utils";
+import { InputBase } from "../core/InputBase";
+import { Image } from "./Image";
 
 
+export class TextInputProps extends BaseProps{
+    public constructor(){
+        super();
+    }
+    /**
+     * 设置字体大小
+     */
+    fontSize = 25;
+
+    fontFamily:string|undefined;
+
+    color = 0x26272e;
+    /**
+     * 设置文本
+     */
+    text = '';
+    /**
+     * 预览文字
+     */
+    placeholder = '';
+    /** 
+     * 状态皮肤，
+     */
+    up?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    down?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    move?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    disabled?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 是否可交互
+     */
+    enabled = true;
+    /**
+     * 设置最大可输入
+     */
+    maxLength = 99999;
+    /** 
+     * 过滤表达式
+     */
+    restrict: RegExp | undefined;
+    /** 状态展示 */
+    readonly img = new Image();
+}
 /**
  * @example
- * new PIXI.TextInput({     
- * input: {
- *      fontSize: '25pt',
- *      padding: '14px',
- *      width: '500px',
- *      color: '#26272E'
- *  }, 
- *  box: {...}
- * })
+ * new PIXI.TextInput
  */
-export class TextInput extends UIBase {
+export class TextInput extends InputBase {
 
-    constructor(styles?: TAny) {
+    constructor(multiline = false) {
         super();
 
         this._inputStyle = Object.assign(
@@ -31,7 +78,9 @@ export class TextInput extends UIBase {
                 color: '#000000',
                 lineHeight: '1'
             },
-            styles
+            {
+                multiline:multiline
+            }
         ) as TAny;
         
         this.htmlInputShared = new HtmlInput(this._inputStyle.multiline);
@@ -40,161 +89,114 @@ export class TextInput extends UIBase {
         this.htmlInputShared.on('focus',this._onFocused,this);
         this.htmlInputShared.on('blur',this._onBlurred,this);
 
-        this.substituteText = true;
-        this._setState('DEFAULT'); 
-        this.container.isEmitRender = true;
-        this.container.on("render",this.render,this);
+        this._textHitbox = new PIXI.Graphics();
+        this._textHitbox.name = "_textHitbox";
+        this._textHitbox.alpha = 0;
+        this._textHitbox.interactive = true;
+        this._textHitbox.cursor = 'text';
+        this._textHitbox.on('pointerdown', this._ontextFocus,this);
+        this.container.addChild(this._textHitbox);
 
+        this._textMask = new PIXI.Graphics();
+        this._textMask.name = "_textMask";
+        this.container.addChild(this._textMask);
+
+        this._text = new PIXI.Text('', {});
+        this._text.name = "_text";
+        this._text.visible = false;
+        this.container.addChild(this._text);
+
+        this._text.mask = this._textMask;
+
+        this._domVisible = false;
+        
+        this.container.interactiveChildren = true;
     }
+
+    protected initProps(){
+        let props = this.props; 
+        props.img.props.fillMode = "scale";
+        props.img.props.scale9Grid = [3,3,3,3];
+        this.addChildAt(props.img,0);
+    }
+
+    /** 子类可以重写 */
+    public get props():TextInputProps{
+
+        if(this._props){
+            return this._props;
+        }
+
+        this._props = new TextInputProps().proxyData;
+        this.initProps();
+
+        return this._props;
+    }
+
+    protected _props?:TAny;   
+    protected _oldState = "";
+
     private htmlInputShared: HtmlInput;
-    private _inputStyle: InputStyle;
-    private _disabled = false;
-    private _maxLength = NaN;
-    private _previous: {canvasBounds: TAny;worldTransform: TAny;worldAlpha: TAny;worldVisible: TAny}|TAny = {};
-    private _domVisible = true;
-    private _placeholder = '';
-    private _placeholderColor = 0xa9a9a9;
-    private _substituted = false;
+   
     private _lastRenderer: PIXI.Renderer|undefined;
     private _resolution = 1;
     private _canvasBounds:  { top: number; left: number; width: number; height: number}|undefined;
-    private _surrogateHitbox: PIXI.Graphics|undefined;
-    private _surrogateMask: PIXI.Graphics|undefined;
-    private _surrogate: PIXI.Text|undefined;
+    private _previous: {canvasBounds: TAny;worldTransform: TAny;worldAlpha: TAny;worldVisible: TAny}|TAny = {};
+
+    private _inputStyle: InputStyle;
+    /**
+     * 预览文字的样式
+     */
+    private placeholderColor = 0xa9a9a9;
+    private _domVisible = true;
+    
+    private _textHitbox: PIXI.Graphics;
+    private _textMask: PIXI.Graphics;
+    private _text: PIXI.Text;
+
+
     private _fontMetrics: PIXI.IFontMetrics|undefined;
     protected state = 'DEFAULT';
     
     // GETTERS & SETTERS
-    public update(){
-        if(this._surrogate){
-            //this._surrogate.width = this.actualWidth;
-            //this._surrogate.height = this.actualHeight;
-        }
-        this.setInputStyle("width",this.width + "px");
-        this.setInputStyle("height",this.height + "px");
-    }
+    public update(_style:CSSStyle,renderer: PIXI.Renderer){
+
+        let {props,htmlInputShared} = this;
+
+        if(this.props.dirty.dirty){
+            this.props.dirty.dirty = false;
+            htmlInputShared.maxlength = props.maxLength;
+            htmlInputShared.placeholder = props.placeholder;
+            htmlInputShared.disabled = !props.enabled;
+            htmlInputShared.restrict = props.restrict;
+            htmlInputShared.value = props.text;
     
-    /**
-     * 预览文字
-     */
-    public get placeholder() {
-        return this._placeholder;
-    }
-    public set placeholder(text) {
-        this._placeholder = text;
-        if (this._substituted) {
-            this._updateSurrogate()
-            this.htmlInputShared.placeholder = '';
-        } else {
-            this.htmlInputShared.placeholder = text;
-        }
-    }
-
-    /**
-     * 设置不可用
-     */
-    public get disabled() {
-        return this._disabled;
-    }
-    public set disabled(value) {
-        this._disabled = value;
-        this.htmlInputShared.disabled = value;
-        this._setState(value ? 'DISABLED' : 'DEFAULT')
-    }
-
-    /**
-     * 设置最大可输入
-     */
-    public get maxLength() {
-        return this._maxLength;
-    }
-    public set maxLength(value) {
-        this._maxLength = value;
-        this.htmlInputShared.setAttribute('maxlength', value.toString());
-    }
-    /** 
-     * 过滤表达式
-     */
-    public get restrict() {
-        return this.htmlInputShared.restrict;
-    }
-    public set restrict(regex) {
-        this.htmlInputShared.restrict = regex;
-    }
-    /**
-     * 设置字体大小
-     */
-    public get fontSize() {
-        if(this._inputStyle.fontSize == null){
-            return NaN;
-        }
-        return parseInt(this._inputStyle.fontSize);
-    }
-    public set fontSize(value: number) {
-        const str = value + "px";
-        this.setInputStyle("fontSize",str);
-    }
-    /** 设置字体 */
-    public get fontFamily() {
-        return this._inputStyle.fontFamily;
-    }
-    public set fontFamily(value: string) {
-        this.setInputStyle("fontFamily",value);
-    }
+            this.setInputStyle("fontFamily",props.fontFamily);
+            this.setInputStyle("fontSize",props.fontSize + "px");
+            this.setInputStyle("width",this._width + "px");
+            this.setInputStyle("height",this._height + "px");
+            this.setInputStyle("color", "#" + componentToHex(props.color));
     
-    /**
-     * 设置字体颜色
-     */
-    public get fill() {
-        if(this._inputStyle.color == null){
-            return "";
+            this.render(renderer);
         }
-        return this._inputStyle.color;
-    }
-    public set fill(value: string) {
-        this.setInputStyle("color",value.toString());
-    }
-    
-    /** 
-     * 设置文本 
-     */
-    public get text() {
-        return this.htmlInputShared.value;
-    }
-    public set text(text) {
-        this.htmlInputShared.value = text;
-        if (this._substituted) this._updateSurrogate();
-    }
 
- 
-    private get substituteText() {
-        return this._substituted;
-    }
-    private set substituteText(substitute) {
-        if (this._substituted == substitute)
-            return;
-
-        this._substituted = substitute;
-
-        if (substitute) {
-            this._createSurrogate();
-            this._domVisible = false;
-        } else {
-            this._destroySurrogate();
-            this._domVisible = true;
+        if(this.currentState !== this._oldState){
+            if(!props.enabled){
+                this.currentState = "disabled";
+            }
+            let currentState = (props as TAny)[this.currentState];
+            if(currentState){
+                this._oldState = this.currentState;
+                props.img.props.src = currentState;
+            }
         }
-        this.placeholder = this._placeholder;
-        this._update();
+
     }
 
     /** 
      * 设置焦点 
      */
     public focus() {
-        this.htmlInputShared.setStyle(this._inputStyle);
-        if (this._substituted && !this._domVisible)
-            this.htmlInputShared.visible = true;
-        this.htmlInputShared.value = this.text;
         this.htmlInputShared.focus();
 
     }
@@ -206,33 +208,19 @@ export class TextInput extends UIBase {
     }
 
     /**
-     * 全选
-     */
-    public select() {
-        this.focus()
-        this.htmlInputShared.select();
-    }
-
-    /**
      * 设置css style样式
      * @param key 健
      * @param value 值
      */
-    public setInputStyle(key: TAny, value: TAny) {
+    private setInputStyle(key: TAny, value: TAny) {
         this._inputStyle[key] = value;
         this.htmlInputShared.setStyleValue(key,value);
-        if (this._substituted && (key === 'fontFamily' || key === 'fontSize'))
-            this._updateFontMetrics();
-
-        if (this._lastRenderer)
-            this._update();
     }
 
 
     // SETUP
     private _onInputInput() {
-        if (this._substituted)
-            this._updateSubstitution();
+        this._updateSubstitution();
     }
 
     private _onFocused() {
@@ -246,9 +234,21 @@ export class TextInput extends UIBase {
 
     private  _setState(state: string) {
         this.state = state;
-        if (this._substituted)
-            this._updateSubstitution();
+        this._updateSubstitution();
     }
+
+    private _updateSubstitution() {
+        if (this.state === 'FOCUSED') {
+            this._domVisible = true;
+            this._text.visible = false;
+        } else {
+            this._domVisible = false;
+            this._text.visible = true;
+        }
+        this._updateDOMInput();
+        this._updatetext();
+    }
+
 
     // RENDER & UPDATE
     // for pixi v5
@@ -260,29 +260,10 @@ export class TextInput extends UIBase {
         this._resolution = renderer.resolution;
         this._lastRenderer = renderer;
         this._canvasBounds = this._getCanvasBounds();
-        if (this._needsUpdate())
-            this._update();
-    }
-
-    private _update() {
-        this._updateDOMInput();
-        if (this._substituted) this._updateSurrogate();
-        
-    }
-
-    private _updateSubstitution() {
-        if (this.state === 'FOCUSED') {
-            this._domVisible = true;
-            if(this._surrogate)
-                this._surrogate.visible = false;
-            this.text.length === 0
-        } else {
-            this._domVisible = false;
-            if(this._surrogate)
-                this._surrogate.visible = true;
+        if (this._needsUpdate()){
+            this._updateSubstitution();
         }
-        this._updateDOMInput();
-        this._updateSurrogate();
+           
     }
 
     private _updateDOMInput() {
@@ -309,83 +290,42 @@ export class TextInput extends UIBase {
         )
     }
 
-    // INPUT SUBSTITUTION
-    private _createSurrogate() {
-        this._surrogateHitbox = new PIXI.Graphics();
-        this._surrogateHitbox.name = "_surrogateHitbox";
-        this._surrogateHitbox.alpha = 0;
-        this._surrogateHitbox.interactive = true;
-        this._surrogateHitbox.cursor = 'text';
-        this._surrogateHitbox.on('pointerdown', this._onSurrogateFocus,this);
-        this.container.addChild(this._surrogateHitbox);
+    private _updatetext() {
 
-        this._surrogateMask = new PIXI.Graphics();
-        this._surrogateMask.name = "_surrogateMask";
-        this.container.addChild(this._surrogateMask);
-
-        this._surrogate = new PIXI.Text('', {});
-        this._surrogate.name = "_surrogate";
-        this.container.addChild(this._surrogate);
-
-        this._surrogate.mask = this._surrogateMask;
-
-        this._updateFontMetrics();
-        this._updateSurrogate();
-    }
-
-    private _updateSurrogate() {
-        const padding = this._deriveSurrogatePadding();
+        const padding = this._derivetextPadding();
         const inputBounds = this.htmlInputShared.getDOMInputBounds();
-        if(this._surrogate){
-            this._surrogate.style = this._deriveSurrogateStyle();
-            this._surrogate.style.padding = Math.max(... padding);
-            this._surrogate.y = this._inputStyle.multiline ? padding[0] : (inputBounds.height - this._surrogate.height) / 2;
-            this._surrogate.x = padding[3];
-            if(this._inputStyle.multiline){
-                this._surrogate.style.wordWrap = true;
-                this._surrogate.style.wordWrapWidth = inputBounds.width;
-                this._surrogate.style.breakWords = true;
-            }
-            this._surrogate.text = this._deriveSurrogateText();
+
+        this._text.style = this._derivetextStyle();
+        this._text.style.padding = Math.max(... padding);
+        this._text.y = this._inputStyle.multiline ? padding[0] : (inputBounds.height - this._text.height) / 2;
+        this._text.x = padding[3];
+        if(this._inputStyle.multiline){
+            this._text.style.wordWrap = true;
+            this._text.style.wordWrapWidth = inputBounds.width;
+            this._text.style.breakWords = true;
         }
-        this._updateSurrogateHitbox(inputBounds);
-        this._updateSurrogateMask(inputBounds, padding);
+
+        this._text.text = this._derivetextText();
+        this.props.text = this._text.text;
+        this.props.dirty.dirty = false;
+
+        this._textHitbox.clear();
+        this._textHitbox.beginFill(0);
+        this._textHitbox.drawRect(0, 0, inputBounds.width, inputBounds.height);
+        this._textHitbox.endFill();
+        this._textHitbox.interactive = this.props.enabled;
+
+        this._textMask.clear();
+        this._textMask.beginFill(0);
+        this._textMask.drawRect(padding[3], 0, inputBounds.width - padding[3] - padding[1], inputBounds.height);
+        this._textMask.endFill();
+
+        this.props.img.style.width =  inputBounds.width;
+        this.props.img.style.height = inputBounds.height;
     }
 
-    private _updateSurrogateHitbox(bounds: ClientRect) {
-        if(this._surrogateHitbox){
-            this._surrogateHitbox.clear();
-            this._surrogateHitbox.beginFill(0);
-            this._surrogateHitbox.drawRect(0, 0, bounds.width, bounds.height);
-            this._surrogateHitbox.endFill();
-            this._surrogateHitbox.interactive = !this._disabled;
-        }
-    }
 
-    private _updateSurrogateMask(bounds: ClientRect, padding: number[]) {
-        if(this._surrogateMask){
-            this._surrogateMask.clear();
-            this._surrogateMask.beginFill(0);
-            this._surrogateMask.drawRect(padding[3], 0, bounds.width - padding[3] - padding[1], bounds.height);
-            this._surrogateMask.endFill();
-        }
-    }
-
-    private _destroySurrogate() {
-        if (!this._surrogate) return;
-        if (!this._surrogateHitbox) return
-
-        this.container.removeChild(this._surrogate);
-        this.container.removeChild(this._surrogateHitbox);
-
-        this._surrogate.destroy();
-        this._surrogateHitbox && this._surrogateHitbox.destroy();
-
-        this._surrogate = undefined;
-        this._surrogateHitbox = undefined;
-    }
-
-    private _onSurrogateFocus() {
+    private _ontextFocus() {
         this.htmlInputShared.visible = true;
         //sometimes the input is not being focused by the mouseclick
         setTimeout(this._ensureFocus.bind(this), 10);
@@ -396,7 +336,7 @@ export class TextInput extends UIBase {
             this.focus();
     }
 
-    private _deriveSurrogateStyle() {
+    private _derivetextStyle() {
         const style: TAny = new PIXI.TextStyle()
 
         for (const key in this._inputStyle) {
@@ -424,12 +364,12 @@ export class TextInput extends UIBase {
         }
         
         if (this.htmlInputShared.value.length === 0)
-            style.fill = this._placeholderColor;
+            style.fill = this.placeholderColor;
 
         return style;
     }
 
-    private _deriveSurrogatePadding() {
+    private _derivetextPadding() {
         const indent = this._inputStyle.textIndent ? parseFloat(this._inputStyle.textIndent) : 0
 
         if (this._inputStyle.padding && this._inputStyle.padding.length > 0) {
@@ -454,15 +394,15 @@ export class TextInput extends UIBase {
         return [0, 0, 0, indent];
     }
 
-    private _deriveSurrogateText() {
-        return this.htmlInputShared.value.length === 0 ? this._placeholder : this.htmlInputShared.value;
+    private _derivetextText() {
+        return this.htmlInputShared.value.length === 0 ? this.props.placeholder : this.htmlInputShared.value;
     }
 
-    private _updateFontMetrics() {
-        const style = this._deriveSurrogateStyle();
-        const font = style.toFontString();
-        this._fontMetrics = PIXI.TextMetrics.measureFont(font);
-    }
+    // private _updateFontMetrics() {
+    //     const style = this._derivetextStyle();
+    //     const font = style.toFontString();
+    //     this._fontMetrics = PIXI.TextMetrics.measureFont(font);
+    // }
 
     // HELPER FUNCTIONS
 
@@ -519,5 +459,23 @@ export class TextInput extends UIBase {
             && r1.height == r2.height
         )
     }
+
+    public release() {
+
+        super.release();
+
+        this.container.removeChild(this._text);
+        this.container.removeChild(this._textHitbox);
+
+        this.props.img.release();
+
+        this._text.destroy();
+        this._textHitbox && this._textHitbox.destroy();
+
+        this.htmlInputShared.release();
+
+    }
+
+    
 }
 

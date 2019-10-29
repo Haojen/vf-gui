@@ -106,6 +106,9 @@ export function hexToRgba(hex: string, alpha: number) {
  */
 export function componentToHex(c: number) {
     const hex = c.toString(16);
+    if(hex.length ==4){
+        return "00" + hex;
+    }
     return hex.length == 1 ? "0" + hex : hex;
 }
 /**

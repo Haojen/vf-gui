@@ -260,15 +260,15 @@ export class UIBase extends Core {
         }
     }
 
-    protected onRenderer() {
+    protected onRenderer(renderer: PIXI.Renderer) {
         let { _style } = this;
-        this.updateBaseLayout(_style);
-        this.updateMask(_style);
-        this.updateAlpha(_style);
-        this.update(_style);
+        this.updateBaseLayout(_style,renderer);
+        this.updateMask(_style,renderer);
+        this.updateAlpha(_style,renderer);
+        this.update(_style,renderer);
     }
 
-    protected updateBaseLayout(_style:CSSStyle) {
+    protected updateBaseLayout(_style:CSSStyle,renderer: PIXI.Renderer) {
 
         if (!this.parent) {
             return;
@@ -284,7 +284,7 @@ export class UIBase extends Core {
 
     }
 
-    public updateMask(_style:CSSStyle) {
+    public updateMask(_style:CSSStyle,renderer: PIXI.Renderer) {
         
         if (_style.dirty.mask) {
             console.log("updateMask");
@@ -347,7 +347,7 @@ export class UIBase extends Core {
         }
     }
 
-    public updateAlpha(_style:CSSStyle){
+    public updateAlpha(_style:CSSStyle,renderer: PIXI.Renderer){
         if(_style.dirty.alpha){
             console.log("updateAlpha");
             let {container } = this;
@@ -359,7 +359,7 @@ export class UIBase extends Core {
     /**
      * 更新方法，其他组件重写
      */
-    public update(_style:CSSStyle) {
+    public update(_style:CSSStyle,renderer: PIXI.Renderer) {
 
     }
 
