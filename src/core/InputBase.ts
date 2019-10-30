@@ -1,6 +1,46 @@
 import {UIBase} from "./UIBase";
 import { ClickEvent,InteractionEvent,InputController, TouchMouseEvent } from "../interaction/Index";
 import { Stage } from "./Stage";
+import { BaseProps } from "../layout/BaseProps";
+
+/** 基础的皮肤状态 */
+export class InputBaseProp extends BaseProps{
+    public constructor(updatePropsProxyHandler?: TAny){
+        super(updatePropsProxyHandler);
+    }
+     /** 
+     * 状态皮肤，
+     */
+    up?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    down?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    move?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    disabled?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 选中状态皮肤，
+     */
+    upAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 选中状态皮肤，
+     */
+    downAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 选中状态皮肤，
+     */
+    moveAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 选中状态皮肤，
+     */
+    disabledAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+}
 /**
  * 输入对象的基础类
  * 
@@ -26,7 +66,7 @@ export class InputBase extends UIBase{
 
     }
 
-    protected _clickEvent = new ClickEvent(this,true);;
+    protected clickEvent = new ClickEvent(this,true);;
     protected currentState: "up"|"move"|"down"|"disabled" = "up";
     protected _tabIndex: undefined|number;
     protected _tabGroup: undefined|string;
@@ -38,6 +78,7 @@ export class InputBase extends UIBase{
     protected _down = false;
 
     protected onMove() {
+
         if(this._down){
             return;
         }

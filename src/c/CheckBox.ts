@@ -34,22 +34,6 @@ class CheckBoxFields extends ButtonProps{
      * 获取或设置选中的值
      */
     selectedValue?: string;
-    /** 
-     * 选中状态皮肤，
-     */
-    upAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 选中状态皮肤，
-     */
-    downAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 选中状态皮肤，
-     */
-    moveAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 选中状态皮肤，
-     */
-    disabledAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 }
 /**
  * UI 按钮显 示对象

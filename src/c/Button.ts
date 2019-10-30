@@ -4,7 +4,7 @@
 
 import {Label} from "./Label";
 import {Image} from "./Image";
-import { InputBase } from "../core/InputBase";
+import { InputBase, InputBaseProp } from "../core/InputBase";
 import { BaseProps } from "../layout/BaseProps";
 import { CSSStyle } from "../layout/CSSStyle";
 import { ComponentEvent } from "../interaction/Index";
@@ -13,7 +13,7 @@ import { ComponentEvent } from "../interaction/Index";
 /** 
  * 按钮自定义字段
  */
-export class ButtonProps extends BaseProps{
+export class ButtonProps extends InputBaseProp{
 
     public constructor(){
         super();
@@ -23,22 +23,6 @@ export class ButtonProps extends BaseProps{
      * 按钮的文字
      */
     text = "";
-    /** 
-     * 状态皮肤，
-     */
-    up?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 状态皮肤，
-     */
-    down?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 状态皮肤，
-     */
-    move?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 状态皮肤，
-     */
-    disabled?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
     /** 状态展示 */
     readonly img = new Image();
     /** 文字展示 */

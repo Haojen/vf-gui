@@ -26,6 +26,16 @@ export function getTexture(src: TAny){
     return PIXI.Texture.from(src);
 }
 
+export function getSound(src: TAny){
+    if(_getSourcePath){
+        src = _getSourcePath(src);
+    }
+    if(src instanceof PIXI.sound.Sound){
+        return src;
+    }
+    return PIXI.sound.Sound.from(src);
+}
+
 /**
  * 快速设置矩形
  * @param sourcr 

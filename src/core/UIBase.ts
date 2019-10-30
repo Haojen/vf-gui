@@ -1,10 +1,11 @@
-import { DragEvent,DragDropController,InteractionEvent  } from "../interaction/Index";
+import { DragEvent,DragDropController,InteractionEvent, GroupController  } from "../interaction/Index";
 import { DraggableEvent } from "../interaction/InteractionEvent";
 import { TouchMouseEventEnum, } from "../enum/TouchMouseEventEnum";
 import { uid, getTexture } from "./Utils";
 import { CSSStyle} from "../layout/CSSStyle";
 import { updateDisplayList } from "../layout/CSSLayout";
 import { Core } from "./Core";
+
 
 /**
  * UI的顶级类，基础的UI对象
@@ -39,6 +40,24 @@ export class UIBase extends Core {
      * 自定义组价名
      */
     public name = "";
+    /**
+     * 分组
+     */
+    private _groupName?: string;
+    public get groupName() {
+        return this._groupName;
+    }
+    public set groupName(value) {
+  
+        if(value === undefined){     
+            GroupController.unRegistrerGroup(this);
+        }
+        if(this._groupName == value){
+            return;
+        }
+        this._groupName = value;
+        GroupController.registrerGroup(this);
+    }
     /** 
      * 原始样式属性
      */
@@ -55,7 +74,16 @@ export class UIBase extends Core {
 
     /** 遮罩，设置遮罩后，组件内部的索引位置可能产生变化 */
     public mask?: PIXI.Graphics | PIXI.Sprite ;
+
+
+
+
     
+    /** 
+     * 动态属性，避免其他类注入 
+     */
+    public attach: { [key: string]: object | number | string | Function } = {};
+
     /** 
      * 可拖动初始化
      *  @default
@@ -71,10 +99,6 @@ export class UIBase extends Core {
      * 
      */
     public _dragPosition: PIXI.Point | undefined;
-    /** 
-     * 动态属性，避免其他类注入 
-     */
-    public attach: { [key: string]: object | number | string | Function } = {};
     /** 
      * 是否拖动中
      * @default
@@ -382,6 +406,8 @@ export class UIBase extends Core {
         if(this.parent){
             this.parent.removeChild(this);
         }
+
+        GroupController.unRegistrerGroup(this);
     }
 
     public releaseAll(){

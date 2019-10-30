@@ -28,7 +28,7 @@ class SpriteAnimatedProps extends BaseProps{
     /** 
      * 是的循环
      */
-    loop = true;
+    loop = false;
     /** 
      * 是否播放中
      */
@@ -77,7 +77,6 @@ export class SpriteAnimated extends UIBase{
 
     protected _props?: TAny;   
 
-
     protected _src: PIXI.Spritesheet|PIXI.Texture[]|undefined;
 
     private _animatedSprites: Map<string,PIXI.AnimatedSprite>;
@@ -111,6 +110,19 @@ export class SpriteAnimated extends UIBase{
         this.props.playing = true;
     }
 
+    /** 
+     * 添加动画 
+     */
+    public addAnimated(animationName:string,textures: PIXI.Texture[]){
+        let sp = this._animatedSprites.get(animationName);
+        if(sp && sp.parent){
+            sp.parent.removeChild(sp);
+            sp.removeAllListeners();
+            sp.destroy();
+        }
+        this._animatedSprites.set(animationName,new PIXI.AnimatedSprite(textures));
+    }
+
     public update(){
         const {props,_animatedSprites} = this;
         if(!props.dirty.dirty){
@@ -127,7 +139,7 @@ export class SpriteAnimated extends UIBase{
             this._lastAnimatedName = props.animationName;
         } 
 
-        if(props.src && props.src != this._src){
+        if(props.src!=undefined && props.src != this._src){
             this._src = props.src;
             if(Array.isArray(props.src)){
                 let textures: PIXI.Texture[] = [];
@@ -138,10 +150,10 @@ export class SpriteAnimated extends UIBase{
                 }else{
                     textures = props.src;
                 }
-                _animatedSprites.set("default", new PIXI.AnimatedSprite(textures));
+                this.addAnimated("default",textures);
             }else{
                 for(const key in props.src.animations){
-                    _animatedSprites.set(key, new PIXI.AnimatedSprite(props.src.animations[key]));
+                    this.addAnimated(key,props.src.animations[key]);
                 }
             }
         }
@@ -149,7 +161,7 @@ export class SpriteAnimated extends UIBase{
 
         animatedSp = _animatedSprites.get(props.animationName);
         if(animatedSp == undefined){
-            log("Error SpriteAnimated -> _animatedSprites[props.animationName] == undefined ");
+            log(`Warning SpriteAnimated -> _animatedSprites[${props.animationName}] == undefined`);
         }else{
             if(animatedSp.parent == undefined){
                 animatedSp.onLoop = ()=>{
@@ -180,8 +192,11 @@ export class SpriteAnimated extends UIBase{
             if(element.parent){
                 element.parent.removeChild(element);
             }
+            element.removeAllListeners();
             element.destroy();
         });
+        this._src = undefined;
+        this.props.src = undefined;
     }
     
 }

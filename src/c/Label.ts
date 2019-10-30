@@ -110,7 +110,7 @@ export class LabelProps extends BaseProps {
  * @extends PIXI.UI.UIBase
  * @memberof PIXI.UI
  * @param Texture {PIXI.Texture} 文本对象
- * @see https://pixijs.io/pixi-text-style
+ * @see
  */
 export class Label extends UIBase {
     /**

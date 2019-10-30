@@ -24,10 +24,13 @@ import {Tween} from "./c/Tween";
 import {Timeline} from "./c/Timeline";
 import {Easing} from "./c/Easing";
 
+import {Sound} from "./c/Sound";
+
 import * as Interaction from "./interaction/Index";
 import * as AlignEnum from "./enum/AlignEnum";
+
 
 /** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,Slider,
     Label,LabelProps,TextInput,Button,CheckBox,Rect,Graphics,Interaction,
-    UIBase,TickerShared,AlignEnum,Tween,Timeline,Easing,Image,SpriteAnimated};
+    UIBase,TickerShared,AlignEnum,Tween,Timeline,Easing,Image,SpriteAnimated,Sound};
