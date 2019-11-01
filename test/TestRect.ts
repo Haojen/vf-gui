@@ -16,10 +16,10 @@ export default class TestRect {
         rect.style.width = 100;
         rect.style.height = 100;
 
-        rect.props.color = 0xffffff;
-        rect.props.lineColor = 0xff00cc;
-        rect.props.lineWidth = 1;
-        rect.props.radius = 10; //圆角
+        rect.color = 0xffffff;
+        rect.lineColor = 0xff00cc;
+        rect.lineWidth = 1;
+        rect.radius = 10; //圆角
 
         uiStage.addChild(rect);
     }

@@ -5,17 +5,21 @@ export default
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
+		/** 序列帧动画，设置spritesheet方式填充，或[texture1,textures2]方式 */
         let sheetAnimated = new vfui.SpriteAnimated();
         sheetAnimated.style.left = 200;
         sheetAnimated.style.top = 500;
 
-        sheetAnimated.props.animationSpeed = 0.1;
-        sheetAnimated.props.animationName = "1";
-        sheetAnimated.props.loop = true;
-        sheetAnimated.props.src = PIXI.Loader.shared.resources["role"].spritesheet; //方式1，有可使用位图数组填充
-        sheetAnimated.props.anchorX = 0.5;
-        sheetAnimated.props.anchorY = 1;
-        //sheetAnimated.props.src =[spritesheet.textures["1_role2-sheet1.png"],spritesheet.textures["1_role2-sheet2.png"]];
+        sheetAnimated.animationSpeed = 0.1;
+        sheetAnimated.animationName = "1";
+        sheetAnimated.loop = true;
+        sheetAnimated.src = PIXI.Loader.shared.resources["role"].spritesheet; //方式1，有可使用位图数组填充
+        sheetAnimated.anchorX = 0.5;
+		sheetAnimated.anchorY = 1;
+		
+		// let spritesheet = PIXI.Loader.shared.resources["role"].spritesheet;
+		// sheetAnimated.animationName = "default";
+        // sheetAnimated.src =[spritesheet.textures["1_role2-sheet1.png"],spritesheet.textures["1_role2-sheet2.png"]];
         
         sheetAnimated.play();
 
@@ -23,14 +27,18 @@ export default
 
         let clickAnimated = new vfui.Interaction.ClickEvent(sheetAnimated);
         clickAnimated.onClick = () => {
-            if (sheetAnimated.props.animationName == "0") {
-                sheetAnimated.props.animationName = "1";
+            if (sheetAnimated.animationName == "0") {
+                sheetAnimated.animationName = "1";
             } else {
-                sheetAnimated.props.animationName = "0";
+                sheetAnimated.animationName = "0";
             }
 
         }
 
+        sheetAnimated.on(vfui.Interaction.ComponentEvent.CHANGE,(sa:vfui.SpriteAnimated)=>{
+            console.log("CHANGE");
+		});
+		
         sheetAnimated.on(vfui.Interaction.ComponentEvent.LOOP,(sa:vfui.SpriteAnimated)=>{
             console.log("LOOP");
         });

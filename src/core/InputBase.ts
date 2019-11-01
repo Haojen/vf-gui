@@ -1,57 +1,9 @@
 import {UIBase} from "./UIBase";
-import { ClickEvent,InteractionEvent,InputController, TouchMouseEvent } from "../interaction/Index";
+import { ClickEvent,InteractionEvent,InputController, TouchMouseEvent, ComponentEvent } from "../interaction/Index";
 import { Stage } from "./Stage";
-import { BaseProps } from "../layout/BaseProps";
 
-/** 基础的皮肤状态 */
-export class InputBaseProp extends BaseProps{
-    public constructor(updatePropsProxyHandler?: TAny){
-        super(updatePropsProxyHandler);
-    }
-     /** 
-     * 状态皮肤，
-     */
-    up?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 状态皮肤，
-     */
-    down?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 状态皮肤，
-     */
-    move?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 状态皮肤，
-     */
-    disabled?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 选中状态皮肤，
-     */
-    upAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 选中状态皮肤，
-     */
-    downAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 选中状态皮肤，
-     */
-    moveAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 选中状态皮肤，
-     */
-    disabledAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-}
 /**
  * 输入对象的基础类
- * 
- * base object for all Input type objects
- *
- * @class
- * @extends PIXI.UI.UIBase
- * @memberof PIXI.UI
- * @param width {number} 宽度
- * @param height {number} 高度
- * @param tabIndex {(PIXI.UI.SliceSprite|PIXI.UI.Sprite)} will be used as background for input
  */
 export class InputBase extends UIBase{
     public constructor(){
@@ -67,7 +19,17 @@ export class InputBase extends UIBase{
     }
 
     protected clickEvent = new ClickEvent(this,true);;
-    protected currentState: "up"|"move"|"down"|"disabled" = "up";
+    private _currentState: "up" | "move" | "down" | "disabled" = "up";
+    protected get currentState(): "up" | "move" | "down" | "disabled" {
+        return this._currentState;
+    }
+    protected set currentState(value: "up" | "move" | "down" | "disabled") {
+        if(this._currentState == value){
+            return;
+        }
+        this._currentState = value;
+        this.emit(ComponentEvent.STATE_CHANGE,this,value);
+    }
     protected _tabIndex: undefined|number;
     protected _tabGroup: undefined|string;
 
@@ -76,6 +38,39 @@ export class InputBase extends UIBase{
     protected _usePrev = true;
     protected _useNext = true;
     protected _down = false;
+
+    /** 
+     * 状态皮肤，
+     */
+    public up?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    public down?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    public move?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 状态皮肤，
+     */
+    public disabled?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 选中状态皮肤，
+     */
+    public upAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 选中状态皮肤，
+     */
+    public downAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 选中状态皮肤，
+     */
+    public moveAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    /** 
+     * 选中状态皮肤，
+     */
+    public disabledAndSelected?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 
     protected onMove() {
 

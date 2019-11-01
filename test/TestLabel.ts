@@ -12,31 +12,31 @@ export default class TestLabel {
         let basicText = new vfui.Label();
         basicText.style.left = 100;
         basicText.style.top = 100;
-        basicText.props.text = "Basic text in vfui-ui 33434"
-        basicText.props.color = "#FFF";
+        basicText.style.color = "#FFF";
+        basicText.text = "Basic text in vfui-ui 33434"
         uiStage.addChild(basicText);
 
         /** 手动换行文本展示 "\n" */
         let nText = new vfui.Label();
         nText.style.left = 100;
         nText.style.top = 200;
-        nText.props.text = "你好，\n世界！"
-        nText.props.color =[0xffffff,0xffcc00];
+        nText.style.color =[0xffffff,0xffcc00];
+        nText.text = "你好，\n世界！"
         uiStage.addChild(nText);
 
         /** 高级样式文本,换行的宽度为 fields.wordWrapWidth = 600; */
         let richText = new vfui.Label();
         richText.style.left = 100
         richText.style.top = 300;
-        richText.props = this.getFields();
-        richText.props.text = '包含了换行与多种自定义样式的组件,包含了换行与多种自定义样式的组件,包含了换行与多种自定义样式的组件';
+        richText.fontCssStyle = this.getFontCssStyle();
+        richText.text = '包含了换行与多种自定义样式的组件,包含了换行与多种自定义样式的组件,包含了换行与多种自定义样式的组件';
         uiStage.addChild(richText);
 
     }
 
-    private getFields(){
+    private getFontCssStyle(){
         // //自定义样式
-        let fields = new vfui.LabelProps();
+        let fields = {} as any;
         fields.fontFamily = 'Arial';
         fields.fontSize=   36;
         fields.fontStyle = 'italic';

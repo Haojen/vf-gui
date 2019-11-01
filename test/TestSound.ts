@@ -1,22 +1,66 @@
 import vfui from "../src/pixi-vfui";
+import { ComponentEvent } from "../src/interaction/Index";
 
 export default class TestSound {
 
-    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
-        this.onLoad(app,uiStage)
-    }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
         let sound = new vfui.Sound();
-        sound.style.width = 100;
-        sound.style.height =100;
-        sound.props.up = "./assets/skin/Sound/up.png";
-        sound.props.down = "./assets/skin/Sound/down.png";
-        sound.props.move = "./assets/skin/Sound/move.png";
-        sound.props.src = "./assets/test.mp3";
-        sound.play();
+        sound.x = 100;
+        sound.y = 100;
+        sound.width = 100;
+        sound.height =100;
+        sound.sheetSkin = PIXI.Loader.shared.resources["soundskin"].spritesheet;//spritesheet格式中animations需要包含play与stop动作
+        sound.loop = true;
+        sound.volume = 100;
+        sound.autoPlay = false;
+        sound.groupName = "a1";//属于a1组的音频互斥
+        sound.src = "./assets/test.mp3";
         uiStage.addChild(sound);
+
+        setTimeout(() => {
+            sound.pause();
+        }, 2000);
+
+        setTimeout(() => {
+            sound.resume();
+        }, 4000);
+
+        sound.on(ComponentEvent.CHANGEING,(sd:vfui.Sound,progress:number)=>{
+            //console.log("CHANGEING",progress,sd.duration);
+        });
+
+        sound.on(ComponentEvent.LOOP,(sd:vfui.Sound)=>{
+            console.log("LOOP"); //sound.loop = true时
+        });
+
+        sound.on(ComponentEvent.COMPLETE,(sd:vfui.Sound)=>{
+            console.log("COMPLETE"); //sound.loop = false时
+        });
+
+
+        let sound2 = new vfui.Sound();
+        sound2.x = 220;
+        sound2.y = 100;
+        sound2.width = 100;
+        sound2.height =100;
+        sound2.sheetSkin = PIXI.Loader.shared.resources["soundskin"].spritesheet;//spritesheet格式中animations需要包含play与stop动作
+        sound2.loop = true;
+        sound2.volume = 100;
+        sound2.autoPlay = false;
+        sound2.groupName = "a1";//属于a1组的音频互斥
+        sound2.src = "./assets/test.mp3";
+        uiStage.addChild(sound2);
+    }
+
+    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+        
+        const loader = PIXI.Loader.shared;
+
+        loader.add("soundskin", 'assets/skin/Sound/sound.json').load((loader: PIXI.Loader, resources: any) => {
+            this.onLoad(app, uiStage);
+        });
     }
 
 }

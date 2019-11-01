@@ -1,21 +1,16 @@
 import { UIBase } from "../core/UIBase";
 
 /**
- * 图片
- * Event: sourceComplete
+ * 矢量绘制
  */
 export class Graphics extends UIBase {
 
     public constructor(geometry?: PIXI.GraphicsGeometry | undefined) {
         super();
-        this._props = new PIXI.Graphics(geometry);
-        this.container.addChild(this._props);
+        this.graphics = new PIXI.Graphics(geometry);
+        this.container.addChild(this.graphics);
     }
 
-    public readonly _props: PIXI.Graphics;
-
-    public get props(): PIXI.Graphics{
-        return this._props;
-    }
+    public readonly graphics: PIXI.Graphics;
 
 }

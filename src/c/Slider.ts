@@ -2,55 +2,10 @@ import {UIBase} from "../core/UIBase";
 import {Image as VfuiImage} from "./Image";
 import * as Utils from "../core/Utils";
 import {DragEvent,InteractionEvent, ComponentEvent} from "../interaction/Index";
-import { BaseProps } from "../layout/BaseProps";
-import { CSSStyle } from "../layout/CSSStyle";
 import { Tween } from "./Tween";
 import { Easing } from "./Easing";
+import { addDrawList } from "../layout/CSSSSystem";
 
-
-/** 
- * 按钮自定义字段
- */
-class SliderProps extends BaseProps{
-
-    public constructor(){
-        super();
-    }
-    /**
-     * 当前值
-     */
-    value = 0;
-    /**
-     * 最小值
-     */
-    minValue = 0;
-    /**
-     * 最大值
-     */
-    maxValue = 100;
-    /**
-     * 是否垂直,滑块方向
-     */
-    vertical = false;
-    /** 
-     * 背景
-     */
-    track?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 手柄
-     */
-    thumb?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 进度
-     */
-    tracklight?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
- 
-    /** 状态展示 */
-    readonly trackImg = new VfuiImage();
-    readonly thumbImg = new VfuiImage();
-    readonly tracklightImg = new VfuiImage();
-    
-}
 
 
 /**
@@ -70,11 +25,27 @@ export class Slider extends UIBase{
         this._trackDrag.onDragStart = this.onDragStart;
         this._trackDrag.onDragMove = this.onDragMove;
         this._trackDrag.onDragEnd = this.onDragEnd;
+
+        this.thumbImg.container.name = "thumbImg";
+        this.thumbImg.anchorX = 0.5;
+        this.thumbImg.anchorY = 0.5;
+        this.thumbImg.on(ComponentEvent.COMPLETE,this.onImgload, this);
+
+        this.trackImg.container.name = "trackImg";
+        this.trackImg.fillMode = "scale";
+        this.trackImg.scale9Grid = [2,2,2,2];
+        this.trackImg.style.width = "100%";
+        this.trackImg.style.height = "100%";
+        this.trackImg.on(ComponentEvent.COMPLETE,this.onImgload, this);
+
+        this.tracklightImg.container.name = "tracklightImg";
+        this.tracklightImg.fillMode = "scale";
+        this.tracklightImg.scale9Grid = [2,2,2,2];
+
+        this.addChild(this.trackImg);
+        this.addChild(this.tracklightImg);
+        this.addChild(this.thumbImg);
     }
-
-    protected _props?: TAny;
-    protected _oldState = "";
-
     /** 
      * 当前值 
      */
@@ -85,10 +56,6 @@ export class Slider extends UIBase{
      */
     protected _decimals = 0;
 
-    protected _track: TAny;
-    protected _thumb: TAny;
-    protected _tracklight: TAny;
-
     protected _startValue = 0;
     protected _maxPosition = 0;
     protected _localMousePosition = new PIXI.Point();
@@ -98,127 +65,156 @@ export class Slider extends UIBase{
     private _thumbDrag = new DragEvent(this);
     private _trackDrag = new DragEvent(this);
 
-    protected initProps(){
+    /** 状态展示 */
+    readonly trackImg = new VfuiImage();
+    readonly thumbImg = new VfuiImage();
+    readonly tracklightImg = new VfuiImage();
 
-        const props = this.props; 
-
-        props.thumbImg.props.anchorX = 0.5;
-        props.thumbImg.props.anchorY = 0.5;
-        props.thumbImg.on(VfuiImage.onload,this.onImgload, this);
-
-        props.trackImg.props.fillMode = "scale";
-        props.trackImg.props.scale9Grid = [2,2,2,2];
-        props.trackImg.style.width = "100%";
-        props.trackImg.style.height = "100%";
-        props.trackImg.on(VfuiImage.onload,this.onImgload, this);
-
-        props.tracklightImg.props.fillMode = "scale";
-        props.tracklightImg.props.scale9Grid = [2,2,2,2];
-
-        this.addChild(props.trackImg);
-        this.addChild(props.tracklightImg);
-        this.addChild(props.thumbImg);
-
-        return props;
-    }
-    /** 子类可以重写 */
-    public get props(): SliderProps{
-
-        if(this._props){
-            return this._props;
-        }
-
-        this._props = new SliderProps().proxyData;
-        this.initProps();
-
-        return this._props;
-    }
-
-  
-    /** 
-     * 当前值 
+    private _value = 0;
+    /**
+     * 当前值
      */
     public get value() {
-        return Utils.Round(Utils.Lerp(this.props.minValue, this.props.maxValue, this._amt), this._decimals);
+        return Utils.Round(Utils.Lerp(this.minValue, this.maxValue, this._amt), this._decimals);
     }
     public set value(value: number) {
-        this._amt = (Math.max(this.props.minValue, Math.min(this.props.maxValue, value)) - this.props.minValue) / (this.props.maxValue - this.props.minValue);
+        this._value = value;
+        addDrawList("valueSystem",this,this.valueSystem);
+    }
+
+    protected valueSystem(){
+        this._amt = (Math.max(this.minValue, Math.min(this.maxValue, this._value)) - this.minValue) / (this.maxValue - this.minValue);
         this.updatePosition();
         this.triggerValueChange();
         this.triggerValueChanging();
     }
+
+    /**
+     * 最小值
+     */
+    private _minValue = 0;
+    public get minValue() {
+        return this._minValue;
+    }
+    public set minValue(value) {
+        this._minValue = value;
+    }
+    /**
+     * 最大值
+     */
+    private _maxValue = 100;
+    public get maxValue() {
+        return this._maxValue;
+    }
+    public set maxValue(value) {
+        this._maxValue = value;
+    }
+    /**
+     * 是否垂直,滑块方向
+     */
+    private _vertical = false;
+    public get vertical() {
+        return this._vertical;
+    }
+    public set vertical(value) {
+        this._vertical = value;
+        this.updateLayout();
+    }
+    /** 
+     * 背景
+     */
+    private _track?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public get track(){
+        return this._track;
+    }
+    public set track(value) {
+        if(value !== this._track){
+            this._track = value;
+            this.trackImg.src = value; 
+        }
+    }
+    /** 
+     * 手柄
+     */
+    private _thumb?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public get thumb() {
+        return this._thumb;
+    }
+    public set thumb(value) {
+        if(value !== this._thumb){
+            this._thumb = value;
+            this.thumbImg.src = value; 
+        }
+    }
+    /** 
+     * 进度
+     */
+    private _tracklight?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public get tracklight() {
+        return this._tracklight;
+    }
+    public set tracklight(value) {
+        if(value !== this._tracklight){
+            this._tracklight = value;
+            this.tracklightImg.src = value; 
+        }
+    }
+
+    public release(){
+        super.release();
+        this.trackImg.release();
+        this.thumbImg.release();
+        this.tracklightImg.release();
+    }
+
 
     private onImgload(){
         this.updateLayout();
     }
 
     protected updateLayout(){
-        const thumbImg = this.props.thumbImg;
-        const tracklightImg = this.props.tracklightImg;
-        if (this.props.vertical) {
+        const thumbImg = this.thumbImg;
+        const tracklightImg = this.tracklightImg;
+        if (this.vertical) {
             //thumbImg.style.top =this._amt; 
-            thumbImg.style.left = this._width >> 1;
-            tracklightImg.style.width =this._width;
+            thumbImg.x = this._width >> 1;
+            tracklightImg.width =this._width;
             //tracklightImg.style.height = this._amt * this.height;
         }else {
-            thumbImg.style.top =this._height >> 1;
+            thumbImg.y =this._height >> 1;
             //thumbImg.style.left = this._amt; 
-            tracklightImg.style.height =this._height;
+            tracklightImg.height =this._height;
             //tracklightImg.style.width =  this._amt * this.width;
         }
     }
 
 
-    public update(_style: CSSStyle) {
-        const props = this.props;
-        if(props.dirty.dirty){
-            props.dirty.dirty = false;
-            if(props.track !== this._track){
-                this._track = props.track; 
-                props.trackImg.props.src = props.track; 
-            }
-            if(props.thumb !== this._thumb){
-                this._thumb = props.thumb; 
-                props.thumbImg.props.src = props.thumb; 
-            }
-            if(props.tracklight !== this._tracklight){
-                this._tracklight = props.tracklight; 
-                props.tracklightImg.props.src = props.tracklight; 
-            }
-            this.updateLayout();
-            if(props.value != this._lastChange){
-                this.value = this.props.value;
-            }
-        }
-
-    }
-
     protected updatePosition(soft?: boolean){
 
         let val = 0;
-        const thumbImg = this.props.thumbImg;
-        const tracklightImg = this.props.tracklightImg;
+        const thumbImg = this.thumbImg;
+        const tracklightImg = this.tracklightImg;
 
-        if (this.props.vertical) {
+        if (this.vertical) {
             val = this._height * this._amt;
             if (soft) {
-                Tween.to(thumbImg.style,{ top: val },300).easing(Easing.Linear.None).start();
-                Tween.to(tracklightImg.style, { height: val },300).easing(Easing.Linear.None).start();
+                Tween.to(thumbImg,{ y: val },300).easing(Easing.Linear.None).start();
+                Tween.to(tracklightImg, { height: val },300).easing(Easing.Linear.None).start();
             }
             else {
-                thumbImg.style.top = val;
-                tracklightImg.style.height = val;
+                thumbImg.y = val;
+                tracklightImg.height = val;
             }
         }
         else {
             val = this._width* this._amt;
             if (soft) {
-                Tween.to(thumbImg.style,{ left: val },300).easing(Easing.Linear.None).start();
-                Tween.to(tracklightImg.style, { width: val },300).easing(Easing.Linear.None).start();
+                Tween.to(thumbImg,{ x: val },300).easing(Easing.Linear.None).start();
+                Tween.to(tracklightImg, { width: val },300).easing(Easing.Linear.None).start();
             }
             else {
-                thumbImg.style.left = val;
-                tracklightImg.style.width = val;
+                thumbImg.x = val;
+                tracklightImg.width = val;
             }
         }
     }
@@ -235,13 +231,13 @@ export class Slider extends UIBase{
     protected onDragStart (event: InteractionEvent) {
         if(this._thumbDrag.id == event.data.identifier){
             this._startValue = this._amt;
-            this._maxPosition = this.props.vertical ? this._height : this._width;
+            this._maxPosition = this.vertical ? this._height : this._width;
         }
     }
 
     protected onDragMove (event: InteractionEvent,offset: PIXI.Point) {
         if(this._thumbDrag.id == event.data.identifier){
-            this._amt = !this._maxPosition ? 0 : Math.max(0, Math.min(1, this._startValue + ((this.props.vertical ? offset.y : offset.x) / this._maxPosition)));
+            this._amt = !this._maxPosition ? 0 : Math.max(0, Math.min(1, this._startValue + ((this.vertical ? offset.y : offset.x) / this._maxPosition)));
             this.triggerValueChanging();
             this.updatePosition();
         }else if(this._trackDrag && this._trackDrag.id == event.data.identifier){
@@ -259,10 +255,10 @@ export class Slider extends UIBase{
         }
     }
     protected updatePositionToMouse (mousePosition: PIXI.Point, soft: boolean) {
-        this.props.trackImg.container.toLocal(mousePosition, undefined, this._localMousePosition, true);
+        this.trackImg.container.toLocal(mousePosition, undefined, this._localMousePosition, true);
 
-        const newPos = this.props.vertical ? this._localMousePosition.y  : this._localMousePosition.x;
-        const maxPos = this.props.vertical ? this._height: this._width ;
+        const newPos = this.vertical ? this._localMousePosition.y  : this._localMousePosition.x;
+        const maxPos = this.vertical ? this._height: this._width ;
         this._amt = !maxPos ? 0 : Math.max(0, Math.min(1, newPos / maxPos));
         this.updatePosition(soft);
         this.triggerValueChanging();
@@ -273,14 +269,14 @@ export class Slider extends UIBase{
         this.emit(ComponentEvent.CHANGE,this, value,this._lastChange);
         if (this._lastChange != value) {
             this._lastChange = value;
-            this.props.value = this._lastChange;
         }
     }
 
     protected triggerValueChanging() {
-        this.emit(ComponentEvent.CHANGEING,this, this.value,this._lastChanging);
-        if (this._lastChanging != this.value) {
-            this._lastChanging = this.value;
+        const value = this.value;
+        this.emit(ComponentEvent.CHANGEING,this, value,this._lastChanging);
+        if (this._lastChanging != value) {
+            this._lastChanging = value;
         }
     }
 }

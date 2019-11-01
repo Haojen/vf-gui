@@ -13,6 +13,7 @@ export default class TestTimeLine {
         uiStage.addChild(sheep.shape);
 
         let sheepline = new vfui.Timeline();
+        //设置动画对象、时间、帧率
         sheepline.setDefault(sheep, 3000, 30);
         sheepline.addProperty("progress", 100, 30);
         sheepline.addProperty("progress", 200, 40,vfui.Easing.Linear.None);
@@ -37,19 +38,24 @@ export default class TestTimeLine {
         });
 
         let slider = new vfui.Slider();
-        slider.props.vertical = false;
-        slider.props.thumb = "assets/skin/Slider/thumb.png";
-        slider.props.track = "assets/skin/Slider/track.png";
-        slider.props.tracklight = "assets/skin/Slider/tracklight.png";
-        slider.props.proxyData.maxValue = 90;
+        slider.vertical = false;
+        slider.thumb = "assets/skin/Slider/thumb.png";
+        slider.track = "assets/skin/Slider/track.png";
+        slider.tracklight = "assets/skin/Slider/tracklight.png";
+        slider.maxValue = 90;
         slider.style.width = 500;
         slider.style.height = 10;
         slider.style.bottom = 50;
         slider.style.left = 150;
-        slider.props.value = 0; 
+        slider.value = 0; 
         uiStage.addChild(slider);
 
+        let count = 0
         slider.on(vfui.Interaction.ComponentEvent.CHANGEING, (slider:vfui.CheckBox,curValue: number) => {
+            if(count == 0){
+                count++;
+                return;
+            }
             sheepline.loop = false;
             sheepline.gotoAndStop(curValue);
         });
@@ -61,7 +67,7 @@ export default class TestTimeLine {
 class Sheep{
 
     public constructor(){
-        this.shape.props.lineStyle(1,0xff00cc);
+        this.shape.graphics.lineStyle(1,0xff00cc);
     }
 
     private _lastPoint:number[] = [];
@@ -90,8 +96,8 @@ class Sheep{
         
         if(this.oldValue>this.curValue){
             this.oldValue = 0;
-            this.shape.props.clear();
-            this.shape.props.lineStyle(1,0xff00cc);
+            this.shape.graphics.clear();
+            this.shape.graphics.lineStyle(1,0xff00cc);
         }
 
         for(let i = this.oldValue;i<this.curValue;i++){
@@ -108,20 +114,20 @@ class Sheep{
             this._lastPoint = [];
         }
         if(this._lastPoint.length>0){
-            g.props.moveTo(this._lastPoint[0],this._lastPoint[1]);
+            g.graphics.moveTo(this._lastPoint[0],this._lastPoint[1]);
         }
         switch(paths[i]){
             case "M":
                 this._lastPoint = [parseFloat(paths[i+1]),parseFloat(paths[i+2])];
-                g.props.moveTo(parseFloat(paths[i+1]),parseFloat(paths[i+2]));
+                g.graphics.moveTo(parseFloat(paths[i+1]),parseFloat(paths[i+2]));
                 break;
             case "L":
                 this._lastPoint = [parseFloat(paths[i+1]),parseFloat(paths[i+2])];
-                g.props.lineTo(parseFloat(paths[i+1]),parseFloat(paths[i+2]));
+                g.graphics.lineTo(parseFloat(paths[i+1]),parseFloat(paths[i+2]));
                 break;
             case "C":
                 this._lastPoint = [parseFloat(paths[i+5]),parseFloat(paths[i+6])];
-                g.props.bezierCurveTo(parseFloat(paths[i+1]),parseFloat(paths[i+2]),parseFloat(paths[i+3]),parseFloat(paths[i+4]),parseFloat(paths[i+5]),parseFloat(paths[i+6]));
+                g.graphics.bezierCurveTo(parseFloat(paths[i+1]),parseFloat(paths[i+2]),parseFloat(paths[i+3]),parseFloat(paths[i+4]),parseFloat(paths[i+5]),parseFloat(paths[i+6]));
                 break;
                                         
         }

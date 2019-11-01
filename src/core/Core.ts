@@ -69,6 +69,7 @@ export class Core extends PIXI.utils.EventEmitter{
 
             this.emit(ComponentEvent.REMOVEED,this);
         }
+        return item;
     }
 
     public removeChildren(beginIndex?: number | undefined, endIndex?: number | undefined){

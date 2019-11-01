@@ -1,149 +1,142 @@
-import { UIBase } from "../core/UIBase";
-import { getSound, getTexture } from "../core/Utils";
-import { BaseProps } from "../layout/BaseProps";
+import { getSound } from "../core/Utils";
 import { CSSStyle } from "../layout/CSSStyle";
 import { SpriteAnimated } from "./SpriteAnimated";
-import { InputBaseProp, InputBase } from "../core/InputBase";
-import { GroupController } from "../interaction/Index";
+import { GroupController, ComponentEvent } from "../interaction/Index";
+import { InputBase } from "../core/InputBase";
 export const $sounds = new Map<string,PIXI.sound.Sound>();
-// isLoaded: boolean;
-//         isPlaying: boolean;
-//         autoPlay: boolean;
-//         singleInstance: boolean;
-//         preload: boolean;
-//         url: string;
-//         options: Options;
-//         media: IMedia;
-//         static from(source: string | Options | ArrayBuffer | HTMLAudioElement): Sound;
-//         constructor(media: IMedia, options: Options);
-//         readonly context: IMediaContext;
-//         pause(): Sound;
-//         resume(): Sound;
-//         paused: boolean;
-//         speed: number;
-//         filters: Filter[];
-//         addSprites(alias: string, data: SoundSpriteData): SoundSprite;
-//         addSprites(sprites: {
-//             [id: string]: SoundSpriteData;
-//         }): SoundSprites;
-//         destroy(): void;
-//         removeSprites(alias?: string): Sound;
-//         readonly isPlayable: boolean;
-//         stop(): Sound;
-//         play(alias: string, callback?: CompleteCallback): IMediaInstance | Promise<IMediaInstance>;
-//         play(source?: string | PlayOptions | CompleteCallback,
-//              callback?: CompleteCallback): IMediaInstance | Promise<IMediaInstance>;
-//         refresh(): void;
-//         refreshPaused(): void;
-//         volume: number;
-//         muted: boolean;
-//         loop: boolean;
-//         readonly instances: IMediaInstance[];
-//         readonly sprites: SoundSprites;
-//         readonly duration: number;
-//         autoPlayStart(): IMediaInstance;
-
-
-const updatepropsProxyHandler = {
-    set(target: SoundProps, key: string, value: TAny) {
-        if ((target as TAny)[key] === value) {
-            return true;
-        }
-        target.dirty.dirty = true;
-        switch (key) {
-            case "src":
-                target.dirty.src = true;
-                break;
-            case "autoPlay":
-            case "volume":
-            case "loop":
-                target.dirty.volume = true;
-                break;
-            default:
-                target.dirty.skin = true;
-
-        }
-        (target as TAny)[key] = value;
-        return true;
-    }
-}
-
-/** 对象的自有字段 */
-class SoundProps extends InputBaseProp {
-
-    public constructor() {
-        super(updatepropsProxyHandler);
-    }
-    public dirty = { dirty: false, src: false, volume: false,skin:false };
-    /**
-     * 音频
-     */
-    src: number | string | PIXI.sound.Options | ArrayBuffer | HTMLAudioElement | undefined;
-    /**
-     * 是否自动播放
-     */
-    autoPlay = false;
-    /**
-     * 音量
-     */
-    volume = 100;
-    /**
-     * 是否循环
-     */
-    loop = false;
-    /** 
-     * 播放中或其他行进中的状态，可以使序列图数组
-     */
-    playingAnimated?: string | number | PIXI.Texture | string[] | number[] | PIXI.Texture[];
-    /**
-     * 状态展示
-     */
-    readonly spriteAnimated = new SpriteAnimated();
-}
 
 /**
  * 音频组件
- * 状态目前只有
  */
 export class Sound extends InputBase {
-
-    /** 图片加载完成事件 */
-    public static readonly onload = "onload";
 
 
     public constructor() {
         super();
+        let sp = this.spriteAnimated;
+        sp.loop = true;
+        this.addChild(sp);
     }
 
-    protected _props?: TAny;
+
     protected _sound: PIXI.sound.Sound | undefined;
     protected _mediaInstance:PIXI.sound.IMediaInstance | undefined;
-    protected _source: number | string | PIXI.sound.Options | ArrayBuffer | HTMLAudioElement | undefined;
-    protected _oldState = "";
-    protected _playing = false;
 
-    protected initProps() {
-        let props = this.props;
-        props.spriteAnimated.props.loop = true;
-        // props.spriteAnimated.props.anchorX = 0.5;
-        // props.spriteAnimated.props.anchorY = 0.5;
-        this.addChild(props.spriteAnimated);
+    /**
+     * 状态展示
+     */
+    readonly spriteAnimated = new SpriteAnimated();
+
+    /**
+     * 是否自动播放
+     * @default false
+     */
+    public autoPlay = false;
+    /**
+     * 播放的动画
+     */
+    private _sheetSkin?: PIXI.Spritesheet;
+    public get sheetSkin(){
+        return this._sheetSkin;
     }
-
-    /** 子类可以重写 */
-    public get props(): SoundProps {
-
-        if (this._props) {
-            return this._props;
+    public set sheetSkin(value) {
+        this._sheetSkin = value;
+        this.spriteAnimated.src = value;
+    }
+ 
+    public get duration(){
+        if( this._sound ){
+            return this._sound.duration;
         }
-
-        this._props = new SoundProps().proxyData;
-        this.initProps();
-
-        return this._props;
+        return 0;
     }
-    
-    public async play(){
+
+    private _src: number | string | PIXI.sound.Options | ArrayBuffer | HTMLAudioElement | undefined;
+    /**
+     * 音频源
+     */
+    public get src() {
+        return this._src;
+    }
+    public set src(src) {
+        if(src === this.src){
+            return;
+        }
+        this.releaseSound();
+        this._src = src;
+        if(src){
+            let sound = this._sound = getSound(src);
+            sound.loop = this.loop;
+            sound.volume = this.volume;
+            sound.speed = this.speed;
+            if(this.autoPlay){
+                this.play();
+            }else{
+                this.stop();
+            }
+
+        }
+    }
+
+    private _speed = 1;
+    /**
+     * 设置播放速度
+     */
+    public get speed() {
+        return this._speed;
+    }
+    public set speed(value) {
+        this._speed = value;
+        if( this._sound ){
+            this._sound.speed = value;
+        }
+    }
+
+    private _volume = 100;
+    /**
+     * 音量
+     * @default 100
+     */
+    public get volume() {
+        return this._volume;
+    }
+    public set volume(value) {
+        this._volume = value;
+        if( this._sound ){
+            this._sound.volume = value;
+        }
+    }
+
+    private _loop = false;
+    /**
+     * 是否循环
+     * @default false
+     */
+    public get loop() {
+        return this._loop;
+    }
+    public set loop(value) {
+        this._loop = value;
+        if( this._sound ){
+            this._sound.loop = value;
+        }
+    }
+
+    protected _curProgress = 0;
+    protected _playing = false;
+    public get isPlaying(){
+        if(this._sound){
+            return this._sound.isPlaying;
+        }
+        return false;
+    }
+
+
+
+    public async play(start = 0,end?:number){
+        if(this._sound && this._sound.isPlaying){
+            return;
+        }
         let uiObjects = GroupController.getGroup(this.groupName);
         if(uiObjects){
             for(let key in uiObjects){
@@ -154,15 +147,25 @@ export class Sound extends InputBase {
             }
         }
         if(this._mediaInstance){
-            this._mediaInstance.off('progress',this.progress,this);
-            this._mediaInstance.off('end',this.progress,this);
+            this._mediaInstance.off('progress',this.onProgress,this);
+            this._mediaInstance.off('end',this.onEnd,this);
         }
         if(this._sound){
-            let sound = await this._sound.play();
-            sound.on('progress',this.progress,this);
-            sound.on('end',this.end,this);
+            
+            let sound = this._mediaInstance = await this._sound.play( {
+                start: start,
+                end: end
+            });
+
+            sound.on('progress',this.onProgress,this);
+            sound.on('end',this.onEnd,this);
         }
+        
         this._playing = true;
+        if(this._sheetSkin){
+            this.spriteAnimated.animationName = "play";
+            this.spriteAnimated.play();
+        }
     }
 
     public stop(){
@@ -170,111 +173,72 @@ export class Sound extends InputBase {
             this._sound.stop();
         }
         this._playing = false;
+        if(this._sheetSkin){
+            this.spriteAnimated.animationName = "stop";
+            this.spriteAnimated.stop();
+        }
     }
 
     /**
      * 恢复播放
      */
     public resume(){
-        if(this._sound){
-            this._sound.resume();
-        }
+        this.play(this._curProgress);
     }
 
     /**
      * 暂停播放
      */
     public pause(){
-        if(this._sound){
-            this._sound.pause();
+        if(this._mediaInstance &&  this._sound){
+            this._curProgress = this._mediaInstance.progress * this._sound.duration;
         }
+        this.stop();
     }
 
     public update(_style: CSSStyle) {
-
-        const props = this.props;
-        if (props.dirty.dirty) {
-            props.dirty.dirty = false;
-            let sound = this._sound;
-
-            if (props.dirty.src) {
-                props.dirty.volume = false;
-                if (props.src === undefined) {
-                    this.releaseSound();
-                    return;
-                }
-
-                if (props.src && props.src !== this._source) {
-                    this._source = props.src;
-                    sound = this._sound = getSound(props.src);
-                    sound.loop = props.loop;
-                    sound.volume = props.volume;
-                    sound.autoPlay = props.autoPlay;
-                    if(props.autoPlay || this._playing){
-                        console.log(sound.loop,sound.autoPlay,sound.volume);
-                        this.play();
-                    }else{
-                        this.stop();
-                    }
-                }
-            }
-
-            if (props.dirty.volume) {
-                props.dirty.volume = false;
-                if (sound) {
-                    sound.loop = props.loop;
-                    sound.volume = props.volume;
-                    sound.autoPlay = props.autoPlay;
-                }
-            }
-            this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
-        }
-
-        
-        if (this.currentState !== this._oldState) {
-            this._oldState = this.currentState;
-            props.spriteAnimated.style.width = this._width;
-            props.spriteAnimated.style.height = this._height;
-            let src = (props as TAny)[this.currentState];
-            if(src!=undefined){
-                if(Array.isArray(src)){
-                    let textures:PIXI.Texture[] = [];
-                    src.forEach(value=>{
-                        textures.push(getTexture(value));
-                    })
-                    props.spriteAnimated.props.src = textures;
-                }else{
-                    props.spriteAnimated.props.src = [getTexture(src)];
-                }
-            }
-        }
-
-
-    }
-
-    private progress(rogress:number, duratio:number) {
-        console.log(rogress,duratio);
-    }
-    private end() {
-        console.log("end");
+        this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
     }
 
     public release() {
         super.release();
         this.releaseSound();
-        this.props.spriteAnimated.release();
+        this.offAll();
+        this.spriteAnimated.release();
     }
 
     private releaseSound() {
         if(this._mediaInstance){
-            this._mediaInstance.off('progress',this.progress,this);
-            this._mediaInstance.off('end',this.progress,this);
+            this._mediaInstance.off('progress',this.onProgress,this);
+            this._mediaInstance.off('end',this.onEnd,this);
         }
         if (this._sound) {
             this.removeAllListeners();
             this._sound.stop();
             this._sound.destroy();
             this._sound = undefined;
+        }
+    }
+
+    private onProgress(progress:number, duration:number) {
+        this._curProgress = progress*duration;
+        if(this.listenerCount(ComponentEvent.CHANGEING)>0){
+            this.emit(ComponentEvent.CHANGEING,this,this._curProgress);
+        }
+    }
+    private onEnd() {
+        if(this.loop){
+            this.emit(ComponentEvent.LOOP,this);
+        }else{
+            this.emit(ComponentEvent.COMPLETE,this);
+        }
+    }
+
+    protected onClick(){
+        if(this.isPlaying){
+            this.stop();
+        }else{
+            this.play();
         }
     }
 

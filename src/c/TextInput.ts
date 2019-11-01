@@ -1,63 +1,13 @@
 import HtmlInput from "./InputText/HtmlInput";
-import { KeyEvent} from "../interaction/InteractionEvent";
-import { BaseProps } from "../layout/BaseProps";
+import { KeyEvent } from "../interaction/InteractionEvent";
 import { CSSStyle } from "../layout/CSSStyle";
-import {  componentToHex } from "../core/Utils";
+import { componentToHex } from "../core/Utils";
 import { InputBase } from "../core/InputBase";
 import { Image } from "./Image";
+import { addDrawList } from "../layout/CSSSSystem";
+import { ComponentEvent } from "../interaction/Index";
 
 
-export class TextInputProps extends BaseProps{
-    public constructor(){
-        super();
-    }
-    /**
-     * 设置字体大小
-     */
-    fontSize = 25;
-
-    fontFamily: string|undefined;
-
-    color = 0x26272e;
-    /**
-     * 设置文本
-     */
-    text = '';
-    /**
-     * 预览文字
-     */
-    placeholder = '';
-    /** 
-     * 状态皮肤，
-     */
-    up?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 状态皮肤，
-     */
-    down?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 状态皮肤，
-     */
-    move?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 状态皮肤，
-     */
-    disabled?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
-    /** 
-     * 是否可交互
-     */
-    enabled = true;
-    /**
-     * 设置最大可输入
-     */
-    maxLength = 99999;
-    /** 
-     * 过滤表达式
-     */
-    restrict: RegExp | undefined;
-    /** 状态展示 */
-    readonly img = new Image();
-}
 /**
  * @example
  * new PIXI.TextInput
@@ -75,26 +25,31 @@ export class TextInput extends InputBase {
                 outline: 'none',
                 transformOrigin: '0 0',
                 padding: '5px 8px',
-                color: '#000000',
-                lineHeight: '1'
+                color: '#26272e',
+                lineHeight: '1',
+                fontSize: "25px"
             },
             {
-                multiline:multiline
+                multiline: multiline
             }
         ) as TAny;
-        
+
         this.htmlInputShared = new HtmlInput(this._inputStyle.multiline);
         this.htmlInputShared.setStyle(this._inputStyle);
-        this.htmlInputShared.on(KeyEvent.input,this._onInputInput,this);
-        this.htmlInputShared.on('focus',this._onFocused,this);
-        this.htmlInputShared.on('blur',this._onBlurred,this);
+        this.htmlInputShared.on(KeyEvent.input, this._onInputInput, this);
+        this.htmlInputShared.on('focus', this._onFocused, this);
+        this.htmlInputShared.on('blur', this._onBlurred, this);
+
+        this.img.fillMode = "scale";
+        this.img.scale9Grid = [3, 3, 3, 3];
+        this.addChild(this.img);
 
         this._textHitbox = new PIXI.Graphics();
         this._textHitbox.name = "_textHitbox";
         this._textHitbox.alpha = 0;
         this._textHitbox.interactive = true;
         this._textHitbox.cursor = 'text';
-        this._textHitbox.on('pointerdown', this._ontextFocus,this);
+        this._textHitbox.on('pointerdown', this._ontextFocus, this);
         this.container.addChild(this._textHitbox);
 
         this._textMask = new PIXI.Graphics();
@@ -109,87 +64,109 @@ export class TextInput extends InputBase {
         this._text.mask = this._textMask;
 
         this._domVisible = false;
-        
+
         this.container.interactiveChildren = true;
+
+        this.on(ComponentEvent.STATE_CHANGE,this.onStateChange,this);
     }
 
-    protected initProps(){
-        const props = this.props; 
-        props.img.props.fillMode = "scale";
-        props.img.props.scale9Grid = [3,3,3,3];
-        this.addChildAt(props.img,0);
-    }
-
-    /** 子类可以重写 */
-    public get props(): TextInputProps{
-
-        if(this._props){
-            return this._props;
-        }
-
-        this._props = new TextInputProps().proxyData;
-        this.initProps();
-
-        return this._props;
-    }
-
-    protected _props?: TAny;   
     protected _oldState = "";
 
-    private htmlInputShared: HtmlInput;
-   
-    private _lastRenderer: PIXI.Renderer|undefined;
-    private _resolution = 1;
-    private _canvasBounds:  { top: number; left: number; width: number; height: number}|undefined;
-    private _previous: {canvasBounds: TAny;worldTransform: TAny;worldAlpha: TAny;worldVisible: TAny}|TAny = {};
+    protected htmlInputShared: HtmlInput;
 
-    private _inputStyle: InputStyle;
+    protected _lastRenderer: PIXI.Renderer | undefined;
+    protected _resolution = 1;
+    protected _canvasBounds: { top: number; left: number; width: number; height: number } | undefined;
+    protected _previous: { canvasBounds: TAny; worldTransform: TAny; worldAlpha: TAny; worldVisible: TAny } | TAny = {};
+
+    protected _inputStyle: InputStyle;
     /**
      * 预览文字的样式
      */
-    private placeholderColor = 0xa9a9a9;
-    private _domVisible = true;
-    
-    private _textHitbox: PIXI.Graphics;
-    private _textMask: PIXI.Graphics;
-    private _text: PIXI.Text;
+    protected placeholderColor = 0xa9a9a9;
+    protected _domVisible = true;
+
+    protected _textHitbox: PIXI.Graphics;
+    protected _textMask: PIXI.Graphics;
+    protected _text: PIXI.Text;
 
 
-    private _fontMetrics: PIXI.IFontMetrics|undefined;
+    protected _fontMetrics: PIXI.IFontMetrics | undefined;
     protected state = 'DEFAULT';
-    
+
+    /**
+     * 设置文本
+     */
+    public get text() {
+        return this._text.text;
+    }
+    public set text(value) {
+        this._text.text = value;
+        addDrawList("update",this,this.updateSystem);
+    }
+    /**
+     * 预览文字
+     */
+    private _placeholder = '';
+    public get placeholder() {
+        return this._placeholder;
+    }
+    public set placeholder(value) {
+        this._placeholder = value;
+        addDrawList("update",this,this.updateSystem);
+    }
+    /**
+     * 设置最大可输入
+     */
+    private _maxLength = 99999;
+    public get maxLength() {
+        return this._maxLength;
+    }
+    public set maxLength(value) {
+        this._maxLength = value;
+        addDrawList("update",this,this.updateSystem);
+    }
+    /** 
+     * 过滤表达式
+     */
+    private _restrict: RegExp | undefined;
+    public get restrict(): RegExp | undefined {
+        return this._restrict;
+    }
+    public set restrict(value: RegExp | undefined) {
+        this._restrict = value;
+        addDrawList("update",this,this.updateSystem);
+    }
+
+    /** 
+     * 状态展示
+    */
+    public readonly img = new Image();
+
+
     // GETTERS & SETTERS
-    public update(_style: CSSStyle,renderer?: PIXI.Renderer){
+    public update(_style: CSSStyle, renderer?: PIXI.Renderer) {
 
-        const {props,htmlInputShared} = this;
-
-        if(this.props.dirty.dirty){
-            this.props.dirty.dirty = false;
-            htmlInputShared.maxlength = props.maxLength;
-            htmlInputShared.placeholder = props.placeholder;
-            htmlInputShared.disabled = !props.enabled;
-            htmlInputShared.restrict = props.restrict;
-            htmlInputShared.value = props.text;
-    
-            this.setInputStyle("fontFamily",props.fontFamily);
-            this.setInputStyle("fontSize",props.fontSize + "px");
-            this.setInputStyle("width",this._width + "px");
-            this.setInputStyle("height",this._height + "px");
-            this.setInputStyle("color", "#" + componentToHex(props.color));
-            if(renderer)
-                this.render(renderer);
+        if(renderer === undefined){
+            return;
         }
+        const { htmlInputShared } = this;
 
-        if(this.currentState !== this._oldState){
-            if(!props.enabled){
-                this.currentState = "disabled";
-            }
-            const currentState = (props as TAny)[this.currentState];
-            if(currentState){
-                this._oldState = this.currentState;
-                props.img.props.src = currentState;
-            }
-        }
+        htmlInputShared.maxlength = this.maxLength;
+        htmlInputShared.placeholder = this.placeholder;
+        htmlInputShared.disabled = !this.enabled;
+        htmlInputShared.restrict = this.restrict;
+
+        this.setInputStyle("fontFamily", this.style.fontFamily);
+        this.setInputStyle("fontSize", this.style.fontSize);
+        this.setInputStyle("color", this.style.color);
+
+        this.setInputStyle("width", this._width + "px");
+        this.setInputStyle("height", this._height + "px");
+       
+        this.render(renderer);
+
+        this.onStateChange(this, this.currentState);
 
     }
 
@@ -212,11 +189,31 @@ export class TextInput extends InputBase {
      * @param key 健
      * @param value 值
      */
-    private setInputStyle(key: TAny, value: TAny) {
+    public setInputStyle(key: TAny, value: TAny) {
+        if (key === "fontSize") {
+            value = value + "px";
+        }
+        if (key === "color") {
+            value = "#" + componentToHex(value);
+        }
         this._inputStyle[key] = value;
-        this.htmlInputShared.setStyleValue(key,value);
+        this.htmlInputShared.setStyleValue(key, value);
     }
 
+    protected onStateChange(ui: TextInput, state: string) {
+        if (this._oldState == state) {
+            return;
+        }
+        if (!this.enabled) {
+            this.currentState = "disabled";
+        }
+        this._oldState = state;
+        let img = this.img;
+        img.src = (this as TAny)[state];
+    }
+    protected updateSystem(){
+        //一次空的执行，为了触发update
+    }
 
     // SETUP
     private _onInputInput() {
@@ -232,7 +229,7 @@ export class TextInput extends InputBase {
     }
 
 
-    private  _setState(state: string) {
+    private _setState(state: string) {
         this.state = state;
         this._updateSubstitution();
     }
@@ -260,10 +257,10 @@ export class TextInput extends InputBase {
         this._resolution = renderer.resolution;
         this._lastRenderer = renderer;
         this._canvasBounds = this._getCanvasBounds();
-        if (this._needsUpdate()){
+        if (this._needsUpdate()) {
             this._updateSubstitution();
         }
-           
+
     }
 
     private _updateDOMInput() {
@@ -271,9 +268,9 @@ export class TextInput extends InputBase {
             return;
         const cb = this._canvasBounds;
         const transform = this._pixiMatrixToCSS(this._getDOMRelativeWorldTransform());
-        this.htmlInputShared.updatePostion(cb.top,cb.left,transform,this.container.worldAlpha);
+        this.htmlInputShared.updatePostion(cb.top, cb.left, transform, this.container.worldAlpha);
         this.htmlInputShared.visible = this.container.worldVisible && this._domVisible;
-        
+
         this._previous.canvasBounds = this._canvasBounds;
         this._previous.worldTransform = this.container.worldTransform.clone();
         this._previous.worldAlpha = this.container.worldAlpha;
@@ -296,32 +293,30 @@ export class TextInput extends InputBase {
         const inputBounds = this.htmlInputShared.getDOMInputBounds();
 
         this._text.style = this._derivetextStyle();
-        this._text.style.padding = Math.max(... padding);
+        this._text.style.padding = Math.max(...padding);
         this._text.y = this._inputStyle.multiline ? padding[0] : (inputBounds.height - this._text.height) / 2;
         this._text.x = padding[3];
-        if(this._inputStyle.multiline){
+        if (this._inputStyle.multiline) {
             this._text.style.wordWrap = true;
             this._text.style.wordWrapWidth = inputBounds.width;
             this._text.style.breakWords = true;
         }
 
         this._text.text = this._derivetextText();
-        this.props.text = this._text.text;
-        this.props.dirty.dirty = false;
 
         this._textHitbox.clear();
         this._textHitbox.beginFill(0);
         this._textHitbox.drawRect(0, 0, inputBounds.width, inputBounds.height);
         this._textHitbox.endFill();
-        this._textHitbox.interactive = this.props.enabled;
+        this._textHitbox.interactive = this.enabled;
 
         this._textMask.clear();
         this._textMask.beginFill(0);
         this._textMask.drawRect(padding[3], 0, inputBounds.width - padding[3] - padding[1], inputBounds.height);
         this._textMask.endFill();
 
-        this.props.img.style.width =  inputBounds.width;
-        this.props.img.style.height = inputBounds.height;
+        this.img.width = inputBounds.width;
+        this.img.height = inputBounds.height;
     }
 
 
@@ -362,7 +357,7 @@ export class TextInput extends InputBase {
             style.wordWrap = true;
             style.wordWrapWidth = this.htmlInputShared.getDOMInputBounds().width;
         }
-        
+
         if (this.htmlInputShared.value.length === 0)
             style.fill = this.placeholderColor;
 
@@ -395,7 +390,7 @@ export class TextInput extends InputBase {
     }
 
     private _derivetextText() {
-        return this.htmlInputShared.value.length === 0 ? this.props.placeholder : this.htmlInputShared.value;
+        return this.htmlInputShared.value.length === 0 ? this.placeholder : this.htmlInputShared.value;
     }
 
     // private _updateFontMetrics() {
@@ -411,7 +406,7 @@ export class TextInput extends InputBase {
     }
 
     private _getCanvasBounds() {
-        if(this._lastRenderer){
+        if (this._lastRenderer) {
             const rect = this._lastRenderer.view.getBoundingClientRect();
             const bounds = { top: rect.top, left: rect.left, width: rect.width, height: rect.height };
             bounds.left += window.scrollX;
@@ -422,10 +417,10 @@ export class TextInput extends InputBase {
     }
 
     private _getDOMRelativeWorldTransform() {
-        if(this._lastRenderer){
+        if (this._lastRenderer) {
             const canvasBounds = this._lastRenderer.view.getBoundingClientRect();
             const matrix = this.container.worldTransform.clone();
-    
+
             matrix.scale(this._resolution, this._resolution);
             matrix.scale(canvasBounds.width / this._lastRenderer.width,
                 canvasBounds.height / this._lastRenderer.height)
@@ -467,15 +462,17 @@ export class TextInput extends InputBase {
         this.container.removeChild(this._text);
         this.container.removeChild(this._textHitbox);
 
-        this.props.img.release();
+        this.img.release();
 
         this._text.destroy();
         this._textHitbox && this._textHitbox.destroy();
 
         this.htmlInputShared.release();
 
+        this.offAll(ComponentEvent.STATE_CHANGE);
+
     }
 
-    
+
 }
 

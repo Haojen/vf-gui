@@ -10,18 +10,19 @@ export default class TestCheckBox {
 
         /** 复选框 */
         let checkbox = this.getNewCheckBox(uiStage);
-        checkbox.props.value = "1";
+        checkbox.value = "1";
 
         let checkbox2 = this.getNewCheckBox(uiStage);
-        checkbox2.props.value = "2";
+        checkbox2.value = "2";
         checkbox2.style.left = 130;
 
         let checkbox3 = this.getNewCheckBox(uiStage);
-        checkbox3.props.value = "3";
+        checkbox3.value = "3";
         checkbox3.style.left = 160;
 
         //单选,通过设置分组区分
         let radio = this.getNewRadio(uiStage);
+        radio.checked = true;
         radio.value = "r1";
         radio.checkGroup = "a1";
 
@@ -44,14 +45,14 @@ export default class TestCheckBox {
         checkbox.style.left = 100;
         checkbox.style.width = 23;
         checkbox.style.height = 23;
-        checkbox.props.up = "assets/skin/CheckBox/unselect.png";
-        checkbox.props.down = "assets/skin/CheckBox/unselect.png";
-        checkbox.props.move ="assets/skin/CheckBox/unselect.png";
-        checkbox.props.disabled = "assets/skin/CheckBox/unselect.png";
-        checkbox.props.upAndSelected = "assets/skin/CheckBox/select_up.png";
-        checkbox.props.downAndSelected = "assets/skin/CheckBox/select_down.png";
-        checkbox.props.moveAndSelected = "assets/skin/CheckBox/select_down.png";
-        checkbox.props.disabledAndSelected = "assets/skin/CheckBox/select_disabled.png";
+        checkbox.up = "assets/skin/CheckBox/unselect.png";
+        checkbox.down = "assets/skin/CheckBox/unselect.png";
+        checkbox.move ="assets/skin/CheckBox/unselect.png";
+        checkbox.disabled = "assets/skin/CheckBox/unselect.png";
+        checkbox.upAndSelected = "assets/skin/CheckBox/select_up.png";
+        checkbox.downAndSelected = "assets/skin/CheckBox/select_down.png";
+        checkbox.moveAndSelected = "assets/skin/CheckBox/select_down.png";
+        checkbox.disabledAndSelected = "assets/skin/CheckBox/select_disabled.png";
         checkbox.on(vfui.Interaction.ComponentEvent.CHANGE,this.onChange,this);
         uiStage.addChild(checkbox);
         return checkbox;
@@ -64,14 +65,14 @@ export default class TestCheckBox {
         radio.style.left = 100;
         radio.style.width = 22;
         radio.style.height = 22;
-        radio.props.up = "assets/skin/Radio/unselect.png";
-        radio.props.down = "assets/skin/Radio/unselect.png";
-        radio.props.move ="assets/skin/Radio/unselect.png";
-        radio.props.disabled = "assets/skin/Radio/unselect.png";
-        radio.props.upAndSelected = "assets/skin/Radio/select_up.png";
-        radio.props.downAndSelected = "assets/skin/Radio/select_down.png";
-        radio.props.moveAndSelected = "assets/skin/Radio/select_down.png";
-        radio.props.disabledAndSelected = "assets/skin/Radio/select_disabled.png";
+        radio.up = "assets/skin/Radio/unselect.png";
+        radio.down = "assets/skin/Radio/unselect.png";
+        radio.move ="assets/skin/Radio/unselect.png";
+        radio.disabled = "assets/skin/Radio/unselect.png";
+        radio.upAndSelected = "assets/skin/Radio/select_up.png";
+        radio.downAndSelected = "assets/skin/Radio/select_down.png";
+        radio.moveAndSelected = "assets/skin/Radio/select_down.png";
+        radio.disabledAndSelected = "assets/skin/Radio/select_disabled.png";
         radio.on(vfui.Interaction.ComponentEvent.CHANGE,this.onChange,this);
         uiStage.addChild(radio);
         return radio;

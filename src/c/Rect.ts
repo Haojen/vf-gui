@@ -1,115 +1,102 @@
 import {UIBase} from "../core/UIBase";
-import { BaseProps } from "../layout/BaseProps";
-
-/** Rect 对象的自有字段 */
-class RectProps extends BaseProps{
-    public constructor(){
-        super();
-    }
-    /**
-     * 圆角
-     */
-    radius = 0;
-    /**
-     * 线条颜色
-     */
-    lineColor = 0;
-    /**
-     * 线条粗细
-     */
-    lineWidth = 0;
-    /** 
-     * 颜色 
-     */
-    color = 0;
-
-    /**
-     * 锚点，调整位图的坐标中点 0-1
-     */
-    anchorX?: number;
-    /**
-     * 锚点，调整位图的坐标中点 0-1
-     */
-    anchorY?: number;
-}
-
+import { addDrawList } from "../layout/CSSSSystem";
 
 /**
  * UI 矩形
- *
- * @class
- * @extends PIXI.UI.UIBase
- * @memberof PIXI.UI
- * @param Texture {PIXI.Texture} 文本对象
  */
 export class Rect extends UIBase{
     public constructor(){
         super();
-        this._graphics = new PIXI.Graphics();
-        this.container.addChild(this._graphics);
+        this.graphics = new PIXI.Graphics();
+        this.container.addChild(this.graphics);
     }
 
-    protected _props?: TAny;
-    /** 子类可以重写 */
-    public get props(): RectProps{
+    public readonly graphics: PIXI.Graphics;
 
-        if(this._props){
-            return this._props;
-        }
-
-        this._props = new RectProps().proxyData;
-        this.initProps();
-
-        return this._props;
+    /**
+     * 圆角
+     */
+    private _radius = 0;
+    public get radius() {
+        return this._radius;
     }
-
-    protected initProps(){
-
+    public set radius(value) {
+        this._radius = value;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
-
-    protected _graphics: PIXI.Graphics;
-
-
-    public get graphics(): PIXI.Graphics{
-        return this._graphics;
+    /**
+     * 线条颜色
+     */
+    private _lineColor = 0;
+    public get lineColor() {
+        return this._lineColor;
     }
-
-    public get width() {
-        return this._width;
+    public set lineColor(value) {
+        this._lineColor = value;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
-    public set width(value: number) {
-        this._width = value;
-        this._graphics.width = value;
+    /**
+     * 线条粗细
+     */
+    private _lineWidth = 0;
+    public get lineWidth() {
+        return this._lineWidth;
     }
-
-    public get height() {
-        return this._height;
+    public set lineWidth(value) {
+        this._lineWidth = value;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
-    public set height(value: number) {
-        this._height = value;
-        this._graphics.height = value;
+    /** 
+     * 颜色 
+     */
+    private _color = 0;
+    public get color() {
+        return this._color;
     }
+    public set color(value) {
+        this._color = value;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
+    }
+    /**
+     * 锚点，调整位图的坐标中点 0-1
+     */
+    private _anchorX?: number;
+    public get anchorX() {
+        return this._anchorX;
+    }
+    public set anchorX(value) {
+        this._anchorX = value;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
+    }
+    /**
+     * 锚点，调整位图的坐标中点 0-1
+     */
+    private _anchorY?: number;
+    public get anchorY() {
+        return this._anchorY;
+    }
+    public set anchorY(value) {
+        this._anchorY = value;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
+    }
+    
 
     public update(){    
+        this.graphics.width = this.width;
+        this.graphics.width = this.height;
+    }
 
-        if(this.props.dirty.dirty){
-            const {props,_graphics} = this;
-            _graphics.clear();
-            _graphics.lineStyle(props.lineWidth,props.lineColor);
-            _graphics.beginFill(props.color);   
-            
-            _graphics.drawRoundedRect(props.anchorX?-props.anchorX*this._width:0,props.anchorY?-props.anchorY*this._height:0,this._width, this._height,props.radius);
-            _graphics.endFill();
-            props.dirty.dirty = false;
+    public release(){
+        super.release();
+        this.graphics.parent.removeChild(this.graphics).destroy();
+    }
 
-            // if(this._style.tint!== undefined){
-            //     _graphics.tint
-            //     _graphics.tint = this._style.tint;
-            // }
-
-            if(this.blendMode!== undefined){
-                _graphics.blendMode = this.blendMode;
-            }
-        }
+    protected drawRoundedRectSystem(rect:Rect,key:string){
+        rect.graphics.clear();
+        rect.graphics.lineStyle(rect.lineWidth,rect.lineColor);
+        rect.graphics.beginFill(rect.color);   
+        
+        rect.graphics.drawRoundedRect(rect.anchorX?-rect.anchorX*this._width:0,rect.anchorY?-rect.anchorY*this._height:0,this._width, this._height,rect.radius);
+        rect.graphics.endFill();
     }
 }

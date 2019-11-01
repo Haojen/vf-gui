@@ -9,32 +9,9 @@
 
 import {Label} from "./Label";
 import { ComponentEvent, InputController } from "../interaction/Index";
-import { ButtonProps, Button } from "./Button";
+import {  Button } from "./Button";
 
 
-/** Image 对象的自有字段 */
-class CheckBoxFields extends ButtonProps{
-
-    public constructor(){
-        super();
-    } 
-    /**
-     * 设置值
-     */
-    value?: string;
-    /** 
-     * 设置是否选中 
-     * */
-    checked = false;
-    /** 
-     * 设置分组的名 
-     * */
-    checkGroup?: string;
-    /**
-     * 获取或设置选中的值
-     */
-    selectedValue?: string;
-}
 /**
  * UI 按钮显 示对象
  */
@@ -44,16 +21,14 @@ export class CheckBox extends Button{
         super();
     }
 
-    public get props(): CheckBoxFields{
-
-        if(this._props){
-            return this._props;
-        }
-
-        this._props = new CheckBoxFields().proxyData;
-        this.initProps();
-        return this._props;
-    }
+    /**
+     * 设置值
+     */
+    private _value = "";
+    /** 
+     * 设置是否选中 
+     * */
+    private _checked = false;
 
     /** 
      * 获取或设置当前选中的值
@@ -69,16 +44,16 @@ export class CheckBox extends Button{
      * 设置分组名
      */
     public get checkGroup(): string | undefined {
-        return  this.props.checkGroup;
+        return  this._groupName;
     }
     public set checkGroup(value: string | undefined) {
         if(value === undefined){     
             InputController.unRegistrerCheckGroup(this)
         }
-        if(this.props.checkGroup == value){
+        if(this._groupName == value){
             return;
         }
-        this.props.checkGroup = value;//需要在registrerCheckGroup之前
+        this._groupName = value;//需要在registrerCheckGroup之前
         InputController.registrerCheckGroup(this);
     }
 
@@ -86,13 +61,13 @@ export class CheckBox extends Button{
      * 获取设置默认值 
      */
     public get value() {
-        return this.props.value;
+        return this._value;
     }
     public set value(value) {
-        if(value === this.props.value){
+        if(value === this._value){
             return;
         }
-        this.props.value = value;
+        this._value = value;
     }
 
     /** 
@@ -100,10 +75,10 @@ export class CheckBox extends Button{
      * @default false
      */
     public get checked() {
-        return this.props.checked;
+        return this._checked;
     }
     public set checked(value) {
-        if (value !==  this.props.checked) {
+        if (value !==  this._checked) {
             if (this.checkGroup)
                 InputController.updateCheckGroupSelected(this);
             
@@ -114,8 +89,9 @@ export class CheckBox extends Button{
                 
                 this._selectedStr = "";
             }
-            this.props.checked = value;
+            this._checked = value;
             this.emit(ComponentEvent.CHANGE,this);
+            this.onStateChange(this,this.currentState);
         }
     }
 
@@ -126,15 +102,6 @@ export class CheckBox extends Button{
             return;
         this.checked = !this.checked;
     }
-
-
-    // public update(_style:CSSStyle) {
-    //     super.update(_style);
-    // }
-
-    // public release() {
-    //     super.release();
-    // }
 
     protected onLabelChange(label: Label){
         label.style.left = this.width;

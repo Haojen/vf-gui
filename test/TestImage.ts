@@ -14,7 +14,7 @@ export default class TestImage {
         img1.style.top = 100;
         img1.style.width = 380;
         img1.style.height = 160;
-        img1.props.src = "assets/mask/bg2.png";
+        img1.src = "assets/mask/bg2.png";
         uiStage.addChild(img1);
 
         //彩色
@@ -26,17 +26,18 @@ export default class TestImage {
         img2.style.maskImage = "assets/mask/clear1.png";
         img2.style.maskSize = [100,100];
         img2.style.maskPosition = [-70,-70];
-        img2.props.src = "assets/mask/bg.jpg";
+        img2.src = "assets/mask/bg.jpg";
         uiStage.addChild(img2);
 
         /** 样式宽高为0时，适配原始图片宽高 */
         let img3 = new vfui.Image();
-        img3.style.left = 100;
-        img3.style.top = 350;
-        img3.style.width = 0;
-        img3.style.height = 0;
-        img3.props.src = "assets/mask/bg.jpg";
-        img3.props.tint = 0xffcc00;//填充颜色
+        img3.x = 100;
+        img3.y = 350;
+        img3.width = 0;
+        img3.height = 0;
+        img3.src = "assets/mask/bg.jpg";
+        img3.tint = 0xffcc00;//填充颜色
+        //img3.visible = false;
         uiStage.addChild(img3);
 
         let count = 0;

@@ -75,15 +75,10 @@ export function centerAlign(width: number, height: number,parentWidth: number,pa
  * @param height 指定组件在目标坐标中的高度（以像素为单位）。
  *
  */
-export function updateDisplayList(component: UIBase, _style: CSSStyle) {
-    if(!_style.dirty.dirty){
-        return;
-    }
+export function updateDisplayList(component: UIBase) {
 
-    //console.log("updateBaseLayout");
-
-    _style.dirty.dirty = false;
     const { container } = component;
+    const _style = component.style;
 
     let x = 0;
     let y = 0;
@@ -152,23 +147,9 @@ export function updateDisplayList(component: UIBase, _style: CSSStyle) {
         y = Math.round(y);
     }
 
-    container.alpha = _style.alpha;
-    container.visible = _style.visibility === "hidden" ? false : true;
-
-    if (_style.zIndex !== -1) {
-        if (component.parent) {
-            component.parent.container.sortableChildren = true;
-            container.zIndex = _style.zIndex;
-        }
-    }
-
-    //return;
     component.width = width;
     component.height = height;
-    // if(component.align){
-    //     let point = centerAlign(width,height,parentWidth, parentHeight)
-    // }
-    container.setTransform(x + _style.pivotX, y+_style.pivotY, _style.scaleX, _style.scaleY, _style.rotate*(Math.PI/180), _style.skewX, _style.skewY,_style.pivotX,_style.pivotY);
-
+    component.x = x;
+    component.y = y;
 }
 
