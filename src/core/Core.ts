@@ -47,6 +47,10 @@ export class Core extends PIXI.utils.EventEmitter{
         return item;
     }
 
+    public getChildAt(index:number){
+        return this.uiChildren[index] || undefined;
+    }
+
     /**
      * 移除已添加的UI组件，可以同时移除多个如addChild(a,b,c,d)
      * @param UIObject 要移除的UI组件

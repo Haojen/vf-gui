@@ -1,11 +1,28 @@
 import { CSSStyle } from "./CSSStyle";
 import { UIBase, Label } from "../UI";
-import { getTexture, componentToHex } from "../core/Utils";
+import { getTexture } from "../core/Utils";
 import { updateDisplayList } from "./CSSLayout";
 import { TextInput } from "../c/TextInput";
 
 export let CSSFunction: TAny = {};
 
+export const updateStyleProxyHandler = {
+    get(target: CSSStyle, key: string, receiver: TAny) {
+        return (target as TAny)[key];
+    },
+    set(target: CSSStyle, key: string, value: TAny, receiver: TAny) {
+        if ((target as TAny)[key] === value) {
+            return true;
+        }
+        //const oldValue = (target as TAny)[key];
+        (target as TAny)[key] = value;
+        //target.eventEmitter.emit("ValueChangeEvent", key, value, oldValue);
+        addDrawList(key, target.parent);
+        return true;
+    }
+}
+
+//
 export function addDrawList(key: string, uibase: UIBase,fun?:Function) {
     uibase.container.isEmitRender = true;
     if(fun){
@@ -33,27 +50,7 @@ export function updateDrawList(uibase: UIBase){
         uibase.delayDrawList.delete(key);
     });
     uibase.container.isEmitRender = false;
-}
-
-export const updateStyleProxyHandler = {
-    get(target: CSSStyle, key: string, receiver: TAny) {
-        return (target as TAny)[key];
-    },
-    set(target: CSSStyle, key: string, value: TAny, receiver: TAny) {
-        if ((target as TAny)[key] === value) {
-            return true;
-        }
-        if (typeof value === "string" && value.indexOf("%") !== -1) {
-            target._valuesPct[key] = parseFloat(value.replace('%', '')) * 0.01 || 0;
-        } else {
-            target._valuesPct[key] = 0;
-        }
-        //const oldValue = (target as TAny)[key];
-        (target as TAny)[key] = value;
-        //target.eventEmitter.emit("ValueChangeEvent", key, value, oldValue);
-        addDrawList(key, target.parent);
-        return true;
-    }
+    uibase.delayRenderedComplete = true;
 }
 
 /** ===================== 更新布局  ===================== */

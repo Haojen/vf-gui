@@ -6,16 +6,13 @@ import { UIBase } from "../UI";
 export class CSSStyle {
 
     public parent:TAny;
-
-    /** 
-     * 内部百分比转换至 
-     * */
-    public _valuesPct: { [key: string]: number } = {};
     /** 
      * 事件发送
      * */
     public eventEmitter = new PIXI.utils.EventEmitter();
 
+    public hCenter?:number;
+    public vCenter ?:number;
 
     /** 
      * 表示显示对象的宽度，以像素为单位。
@@ -99,20 +96,57 @@ export class CSSStyle {
      */
     public pivotY = 0;
 
+
+    
+
     /** 
      * 规定元素的定位类型。
      * */
     public position: Position = "absolute";
     /** 
      * 规定元素的显示类型。布局模式 
+     * 
+     * grid 模式下，子节点会忽略left,top,right，bottom,width,height等
+     * 
+     * none 模式下，忽略style
      * */
     public display: Display = "block";
-    /** 
-     * grid布局中行列 auto 根据父级自动计算 
-     * */
-    public gridRows?: number | "auto";
-    public gridColumns?: number | "auto";
-    public gridSize?: number[];
+    /**
+     * 在容器里面的水平位置（左中右）
+     */
+    public justifyContent?: "flex-start"|"flex-end"|"center";
+    /**
+     * 在容器里面的垂直位置（上中下）
+     */
+    public alignContent?: "flex-start"|"flex-end"|"center";
+    /**
+     * 基于 网格列的维度，去定义网格线的名称和网格轨道的尺寸大小。
+     * 
+     * 方式一 [80,90,100]|["30%","40%","30%"] 第一列宽度80，第二列宽度，第三列宽度100
+     * 
+     * 方式二 ["repeat",3,100] 三列，宽度都为100像素
+     */
+    public gridTemplateColumns?: number[]|string[]; 
+    /**
+     * 设置列间距
+     */
+    public gridColumnGap?:number;
+    /**
+     * 基于 网格行的维度，去定义网格线的名称和网格轨道的尺寸大小。
+     * 
+     * 方式一 [80,90,100]|["30%","40%","30%"] 第一行高度80，第二行高度90，第三行行高度100
+     * 
+     * 方式二 ["repeat",3,100] 三行，宽度都为100像素
+     */
+    public gridTemplateRows?: number[]|string[];
+    /**
+     * 设置行间距
+     */
+    public gridRowGap?:number;
+
+
+
+
 
     /**
       * 调整元素的色调，取消设置0xFFFFFF
@@ -255,7 +289,7 @@ export type Position = "absolute" | "fixed" | "static";
 export type Align = "left" | "right"  | "bottom" | "top" | "center" | "middle";
 
 /** 布局模式 */
-export type Display = "block" | "grid";
+export type Display = "none"|"block" | "grid";
 
 
 /*

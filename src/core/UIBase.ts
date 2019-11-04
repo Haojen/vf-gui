@@ -3,7 +3,6 @@ import { DraggableEvent } from "../interaction/InteractionEvent";
 import { TouchMouseEventEnum, } from "../enum/TouchMouseEventEnum";
 import { uid } from "./Utils";
 import { CSSStyle} from "../layout/CSSStyle";
-import { updateDisplayList } from "../layout/CSSLayout";
 import { Core } from "./Core";
 import { updateStyleProxyHandler, addDrawList, updateDrawList } from "../layout/CSSSSystem";
 
@@ -57,6 +56,10 @@ export class UIBase extends Core {
      * 延迟渲染的列表
      */
     public delayDrawList = new Map<string,Function>();
+    /**
+     * 延迟渲染是否完成
+     */
+    public delayRenderedComplete = false;
     /**
      * 分组
      */
