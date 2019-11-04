@@ -47,7 +47,7 @@ export class Core extends PIXI.utils.EventEmitter{
         return item;
     }
 
-    public getChildAt(index:number){
+    public getChildAt(index: number){
         return this.uiChildren[index] || undefined;
     }
 
@@ -77,8 +77,8 @@ export class Core extends PIXI.utils.EventEmitter{
     }
 
     public removeChildren(beginIndex?: number | undefined, endIndex?: number | undefined){
-        let start = beginIndex?beginIndex+ this._childrenStartIndex:this._childrenStartIndex;
-        let end = endIndex?endIndex- this._childrenStartIndex:this.uiChildren.length - this._childrenStartIndex;
+        const start = beginIndex?beginIndex+ this._childrenStartIndex:this._childrenStartIndex;
+        const end = endIndex?endIndex- this._childrenStartIndex:this.uiChildren.length - this._childrenStartIndex;
         for(let i = start;i<end;i++){
             this.removeChild(this.uiChildren[i]);
         }

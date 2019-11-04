@@ -13,14 +13,14 @@ export class Sound extends InputBase {
 
     public constructor() {
         super();
-        let sp = this.spriteAnimated;
+        const sp = this.spriteAnimated;
         sp.loop = true;
         this.addChild(sp);
     }
 
 
     protected _sound: PIXI.sound.Sound | undefined;
-    protected _mediaInstance:PIXI.sound.IMediaInstance | undefined;
+    protected _mediaInstance: PIXI.sound.IMediaInstance | undefined;
 
     /**
      * 状态展示
@@ -65,7 +65,7 @@ export class Sound extends InputBase {
         this.releaseSound();
         this._src = src;
         if(src){
-            let sound = this._sound = getSound(src);
+            const sound = this._sound = getSound(src);
             sound.loop = this.loop;
             sound.volume = this.volume;
             sound.speed = this.speed;
@@ -133,13 +133,13 @@ export class Sound extends InputBase {
 
 
 
-    public async play(start = 0,end?:number){
+    public async play(start = 0,end?: number){
         if(this._sound && this._sound.isPlaying){
             return;
         }
-        let uiObjects = GroupController.getGroup(this.groupName);
+        const uiObjects = GroupController.getGroup(this.groupName);
         if(uiObjects){
-            for(let key in uiObjects){
+            for(const key in uiObjects){
                 if(uiObjects[key] instanceof Sound){
                     (uiObjects[key] as Sound).stop();
                 }
@@ -152,7 +152,7 @@ export class Sound extends InputBase {
         }
         if(this._sound){
             
-            let sound = this._mediaInstance = await this._sound.play( {
+            const sound = this._mediaInstance = await this._sound.play( {
                 start: start,
                 end: end
             });
@@ -220,7 +220,7 @@ export class Sound extends InputBase {
         }
     }
 
-    private onProgress(progress:number, duration:number) {
+    private onProgress(progress: number, duration: number) {
         this._curProgress = progress*duration;
         if(this.listenerCount(ComponentEvent.CHANGEING)>0){
             this.emit(ComponentEvent.CHANGEING,this,this._curProgress);

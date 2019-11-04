@@ -91,7 +91,7 @@ export class Rect extends UIBase{
         this.graphics.parent.removeChild(this.graphics).destroy();
     }
 
-    protected drawRoundedRectSystem(rect:Rect,key:string){
+    protected drawRoundedRectSystem(rect: Rect,key: string){
         rect.graphics.clear();
         rect.graphics.lineStyle(rect.lineWidth,rect.lineColor);
         rect.graphics.beginFill(rect.color);   

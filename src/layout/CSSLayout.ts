@@ -3,7 +3,7 @@ import { CSSStyle } from "./CSSStyle";
 import { Stage } from "../UI";
 import { updateBlockLayout } from "./CSSBlockLayout";
 
-export let $Rectangle = new PIXI.Rectangle();
+export const $Rectangle = new PIXI.Rectangle();
 /**
  * 布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸
  */
@@ -13,15 +13,15 @@ export function formatRelative(value: number | string | undefined, total: number
     if (value == undefined) {
         return NaN;
     }
-    if (typeof value == "number") {
-        return <number>value;
+    if (typeof value === "number") {
+        return value;
     }
-    let str = <string>value;
-    let index = str.indexOf("%");
+    const str = value;
+    const index = str.indexOf("%");
     if (index == -1) {
         return +str;
     }
-    let percent = +str.substring(0, index);
+    const percent = +str.substring(0, index);
     return percent * 0.01 * total;
 }
 
@@ -42,12 +42,12 @@ export function getLayoutBoundsSize(target: UIBase, layoutWidth: number, layoutH
         parentHeight = target.parent.height;
     }
 
-    let x = 0;
-    let y = 0;
-    let maxWidth = formatRelative(target.style.maxWidth,parentWidth);
-    let maxHeight = formatRelative(target.style.maxHeight,parentHeight);
-    let minWidth = formatRelative(target.style.minWidth,parentWidth);
-    let minHeight = formatRelative(target.style.minHeight,parentHeight);
+    const x = 0;
+    const y = 0;
+    const maxWidth = formatRelative(target.style.maxWidth,parentWidth);
+    const maxHeight = formatRelative(target.style.maxHeight,parentHeight);
+    const minWidth = formatRelative(target.style.minWidth,parentWidth);
+    const minHeight = formatRelative(target.style.minHeight,parentHeight);
     let width = layoutWidth;
     let height = layoutHeight;
 
@@ -82,7 +82,7 @@ export function updateDisplayList(target: UIBase) {
 }
 
 function getColumnRowValue(gridTemplate: number[] | string[] | undefined, parentValue: number) {
-    let list: number[] = [0];
+    const list: number[] = [0];
     if (gridTemplate) {
         if (gridTemplate[0] === "repeat") {
             for (let i = 0; i < gridTemplate[1]; i++) {

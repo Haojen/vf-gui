@@ -60,7 +60,7 @@ export class ScrollingContainer extends Container {
         };
 
     }
-   /**
+    /**
      * 是否启动拖拽滚动
      * @default true
      */

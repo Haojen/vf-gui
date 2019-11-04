@@ -47,7 +47,7 @@ export class UIBase extends Core {
     /** 
      * 背景 
      */
-    public background?:PIXI.Graphics;
+    public background?: PIXI.Graphics;
     /** 
      * 遮罩，设置遮罩后，组件内部的索引位置可能产生变化 
      */
@@ -453,7 +453,7 @@ export class UIBase extends Core {
 
     public releaseAll(){
         for(let i=0;i<this.uiChildren.length;i++){
-            let ui = this.uiChildren[i];
+            const ui = this.uiChildren[i];
             ui.offAll();
             ui.release();
             ui.releaseAll();

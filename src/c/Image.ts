@@ -130,13 +130,13 @@ export class Image extends UIBase {
 
         if(src && src !== this._source){
             this._source  = src;
-            let texture = this._texture = getTexture(src);
+            const texture = this._texture = getTexture(src);
             texture.once("update", () => {
                 this.syncImageSize();
                 this.emit(ComponentEvent.COMPLETE, this);
             }, this);
 
-            let sprite:PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined = this._sprite;
+            let sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined = this._sprite;
 
             if(!PIXI.utils.isWebGLSupported()){
                 sprite = PIXI.Sprite.from(texture);

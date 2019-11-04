@@ -23,7 +23,7 @@ export class Label extends UIBase {
 
     }
 
-    public readonly sprite:PIXI.Text;
+    public readonly sprite: PIXI.Text;
     /**
      * 文本内容
      */
@@ -36,7 +36,7 @@ export class Label extends UIBase {
         addDrawList("text",this,this.textSystem);
     }
 
-    public set fontCssStyle(value:TAny){
+    public set fontCssStyle(value: TAny){
         if(value.color){
             value.fill = value.color;
         }
@@ -46,7 +46,7 @@ export class Label extends UIBase {
 
     public release(){
         super.release();
-        let sprite = this.sprite;
+        const sprite = this.sprite;
         if(sprite && sprite.parent){
             sprite.parent.removeChild(sprite).destroy();
         }

@@ -7,13 +7,13 @@ import { Stage } from "../core/Stage";
  * 可以使用子代的x,y 属性，或使用约束来定位每个子代。
  */
 
-export function updateBlockLayout(target:UIBase): void {
+export function updateBlockLayout(target: UIBase): void {
 
     if(target.parent == undefined){
         return;
     }
     
-    let style = target.style;
+    const style = target.style;
 
     let maxX = 0;
     let maxY = 0;
@@ -26,14 +26,14 @@ export function updateBlockLayout(target:UIBase): void {
         unscaledHeight = Stage.Ins.height;
     }
     
-    let hCenter = formatRelative(style.hCenter, unscaledWidth * 0.5);
-    let vCenter = formatRelative(style.vCenter, unscaledHeight * 0.5);
-    let left = formatRelative(style.left, unscaledWidth);
-    let right = formatRelative(style.right, unscaledWidth);
-    let top = formatRelative(style.top, unscaledHeight);
-    let bottom = formatRelative(style.bottom, unscaledHeight);
-    let percentWidth = formatRelative(style.width, unscaledWidth);
-    let percentHeight =formatRelative(style.height, unscaledHeight);
+    const hCenter = formatRelative(style.hCenter, unscaledWidth * 0.5);
+    const vCenter = formatRelative(style.vCenter, unscaledHeight * 0.5);
+    const left = formatRelative(style.left, unscaledWidth);
+    const right = formatRelative(style.right, unscaledWidth);
+    const top = formatRelative(style.top, unscaledHeight);
+    const bottom = formatRelative(style.bottom, unscaledHeight);
+    const percentWidth = formatRelative(style.width, unscaledWidth);
+    const percentHeight =formatRelative(style.height, unscaledHeight);
 
     let childWidth = NaN;
     let childHeight = NaN;
@@ -52,7 +52,7 @@ export function updateBlockLayout(target:UIBase): void {
         childHeight = percentHeight;
     }
 
-    let bounds  = getLayoutBoundsSize(target,childWidth, childHeight);
+    const bounds  = getLayoutBoundsSize(target,childWidth, childHeight);
 
     let elementWidth = bounds.width;
     let elementHeight = bounds.height;

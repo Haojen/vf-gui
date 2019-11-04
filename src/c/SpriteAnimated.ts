@@ -132,8 +132,8 @@ export class SpriteAnimated extends UIBase{
     /** 
      * 添加动画 
      */
-    public addAnimated(animationName:string,textures: PIXI.Texture[]){
-        let sp = this._animatedSprites.get(animationName);
+    public addAnimated(animationName: string,textures: PIXI.Texture[]){
+        const sp = this._animatedSprites.get(animationName);
         if(sp && sp.parent){
             sp.parent.removeChild(sp);
             sp.removeAllListeners();
@@ -164,7 +164,7 @@ export class SpriteAnimated extends UIBase{
         const src = this.src;
         if(src){
             if(Array.isArray(src)){
-                let textures: PIXI.Texture[] = [];
+                const textures: PIXI.Texture[] = [];
                 src.forEach(value=>{
                     textures.push(getTexture(value));
                 });

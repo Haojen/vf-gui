@@ -26,7 +26,7 @@ export function registrerGroup(ui: UIBase) {
  */
 export function unRegistrerGroup(ui: UIBase) {
     if (ui.groupName) {
-        let group = _GroupObject.get(ui.groupName);
+        const group = _GroupObject.get(ui.groupName);
         if (group) {
             delete group[ui.uuid];
         }
@@ -42,7 +42,7 @@ export function unRegistrerGroup(ui: UIBase) {
 }
 
 /** 设置选中 */
-export function getGroup(name?: string): { [key: string]: UIBase; } | undefined {
+export function getGroup(name?: string): { [key: string]: UIBase } | undefined {
     if (name == undefined) {
         return undefined;
     }

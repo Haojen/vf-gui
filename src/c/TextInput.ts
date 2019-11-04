@@ -208,7 +208,7 @@ export class TextInput extends InputBase {
             this.currentState = "disabled";
         }
         this._oldState = state;
-        let img = this.img;
+        const img = this.img;
         img.src = (this as TAny)[state];
     }
     protected updateSystem(){

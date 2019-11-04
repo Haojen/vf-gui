@@ -4,7 +4,39 @@ import { getTexture } from "../core/Utils";
 import { updateDisplayList } from "./CSSLayout";
 import { TextInput } from "../c/TextInput";
 
-export let CSSFunction: TAny = {};
+export const CSSFunction: TAny = {};
+
+
+export function addDrawList(key: string, uibase: UIBase,fun?: Function) {
+    uibase.container.isEmitRender = true;
+    if(fun){
+        uibase.delayDrawList.set(key, fun);
+        return;
+    }
+    const efunction = CSSFunction[key];
+    if (efunction) {
+        if(typeof efunction === "string"){
+            uibase.delayDrawList.set(efunction, CSSFunction[efunction]);
+        }else{
+            uibase.delayDrawList.set(key, CSSFunction[key]);
+        }    
+    }
+}
+
+export function updateDrawList(uibase: UIBase){
+    const updateDisplayList = uibase.delayDrawList.get("updateDisplayList");
+    if(updateDisplayList){
+        updateDisplayList(uibase);
+        uibase.delayDrawList.delete("updateDisplayList");
+    }
+    uibase.delayDrawList.forEach((value: Function, key: string, map: Map<string, Function>) => {
+        value.call(uibase,uibase,key);
+        uibase.delayDrawList.delete(key);
+    });
+    uibase.container.isEmitRender = false;
+    uibase.delayRenderedComplete = true;
+}
+
 
 export const updateStyleProxyHandler = {
     get(target: CSSStyle, key: string, receiver: TAny) {
@@ -22,36 +54,6 @@ export const updateStyleProxyHandler = {
     }
 }
 
-//
-export function addDrawList(key: string, uibase: UIBase,fun?:Function) {
-    uibase.container.isEmitRender = true;
-    if(fun){
-        uibase.delayDrawList.set(key, fun);
-        return;
-    }
-    let efunction = CSSFunction[key];
-    if (efunction) {
-        if(typeof efunction === "string"){
-            uibase.delayDrawList.set(efunction, CSSFunction[efunction]);
-        }else{
-            uibase.delayDrawList.set(key, CSSFunction[key]);
-        }    
-    }
-}
-
-export function updateDrawList(uibase: UIBase){
-    let updateDisplayList = uibase.delayDrawList.get("updateDisplayList");
-    if(updateDisplayList){
-        updateDisplayList(uibase);
-        uibase.delayDrawList.delete("updateDisplayList");
-    }
-    uibase.delayDrawList.forEach((value: Function, key: string, map: Map<string, Function>) => {
-        value.call(uibase,uibase,key);
-        uibase.delayDrawList.delete(key);
-    });
-    uibase.container.isEmitRender = false;
-    uibase.delayRenderedComplete = true;
-}
 
 /** ===================== 更新布局  ===================== */
 
@@ -304,7 +306,7 @@ CSSFunction.skewY = (uibase: UIBase) => {
 
 
 /** ===================== font  ===================== */
-function updateFontStyle(ui:Label|TextInput,key:string){
+function updateFontStyle(ui: Label|TextInput,key: string){
     if(ui instanceof Label){
         ui.sprite.style[key] = (ui.style as TAny)[key];
     }else{
@@ -312,7 +314,7 @@ function updateFontStyle(ui:Label|TextInput,key:string){
     }
     
 }
-CSSFunction.color = (ui:Label|TextInput,key:string) =>{
+CSSFunction.color = (ui: Label|TextInput,key: string) =>{
     if(ui instanceof Label){
         ui.sprite.style.fill = (ui.style as TAny)[key];
     }else{

@@ -44,7 +44,7 @@ export class Button extends InputBase{
     
     public update(_style: CSSStyle) {
         this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
-        let img = this.img;
+        const img = this.img;
         img.width = this._width;
         img.height = this._height;
         this.onStateChange(this,this.currentState);
@@ -62,12 +62,12 @@ export class Button extends InputBase{
         label.y = this.height -  label.height >>1;
     }
 
-    protected onStateChange(label: Button,state:string){
+    protected onStateChange(label: Button,state: string){
         if(this._oldState == state){
             return;
         }
         this._oldState = state;
-        let img = this.img;
+        const img = this.img;
         img.src = (this as TAny)[state + this._selectedStr];
     }
 }

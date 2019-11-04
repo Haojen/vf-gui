@@ -5,14 +5,14 @@ import { UIBase } from "../UI";
  */
 export class CSSStyle {
 
-    public parent:TAny;
+    public parent: TAny;
     /** 
      * 事件发送
      * */
     public eventEmitter = new PIXI.utils.EventEmitter();
 
-    public hCenter?:number;
-    public vCenter ?:number;
+    public hCenter?: number;
+    public vCenter?: number;
 
     /** 
      * 表示显示对象的宽度，以像素为单位。
@@ -130,7 +130,7 @@ export class CSSStyle {
     /**
      * 设置列间距
      */
-    public gridColumnGap?:number;
+    public gridColumnGap?: number;
     /**
      * 基于 网格行的维度，去定义网格线的名称和网格轨道的尺寸大小。
      * 
@@ -142,7 +142,7 @@ export class CSSStyle {
     /**
      * 设置行间距
      */
-    public gridRowGap?:number;
+    public gridRowGap?: number;
 
 
 
