@@ -1,145 +1,102 @@
 import {UIBase} from "../core/UIBase";
+import { addDrawList } from "../layout/CSSSSystem";
 
 /**
  * UI 矩形
- *
- * @class
- * @extends PIXI.UI.UIBase
- * @memberof PIXI.UI
- * @param Texture {PIXI.Texture} 文本对象
  */
 export class Rect extends UIBase{
     public constructor(){
         super();
-        this._graphics = new PIXI.Graphics();
-        this.container.addChild(this._graphics);
-    }
-    private _graphics: PIXI.Graphics;
-    private _graphicsDirty = false;
-    private _radius = 0;
-    private _fill = 0xffffff;
-    private _rx = 0;
-    private _ry = 0;
-
-    private _lineWidth: number | undefined;
-    private _lineColor: number | undefined;
-
-    private drawUpdate(){
-        if(this._graphicsDirty){
-            this._graphics.clear();
-            const graphics = this._graphics;
-            graphics.lineStyle(this._lineWidth,this._lineColor);
-            graphics.beginFill(this._fill);
-            graphics.drawRoundedRect(this.rx, this.ry,this.width, this.height,this.radius);
-            graphics.endFill();
-            this._graphicsDirty = false;
-        }
-
-    }
-    
-    /** 绘制矩形方法 */
-    public drawRoundedRect(x: number,y: number,width: number,height: number,radius: number,color?: number){
-        this._radius = radius;
-        this._rx = x;
-        this._ry = y;
-        this.setDefaultSize(width,height);
-        if(color){
-            this._fill = color;
-        }
-        this._graphicsDirty = true;
-        this.updatesettings(true);
+        this.graphics = new PIXI.Graphics();
+        this.container.addChild(this.graphics);
     }
 
-    /** 获得绘制矢量源 */
-    public get graphics(){
-        return this._graphics;
-    }
+    public readonly graphics: PIXI.Graphics;
 
     /**
      * 圆角
      */
+    private _radius = 0;
     public get radius() {
         return this._radius;
     }
     public set radius(value) {
         this._radius = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
-    }
-
-    /** 
-     * 要填充的颜色 
-     * @default 0xFFFFFF
-     * */
-    public get fill() {
-        return this._fill;
-    }
-    public set fill(value) {
-        this._fill = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
-    }
-
-    /**
-     * 线条宽度
-     */
-    public get lineWidth(): number | undefined {
-        return this._lineWidth;
-    }
-    public set lineWidth(value: number | undefined) {
-        this._lineWidth = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
     /**
      * 线条颜色
      */
-    public get lineColor(): number | undefined {
+    private _lineColor = 0;
+    public get lineColor() {
         return this._lineColor;
     }
-    public set lineColor(value: number | undefined) {
+    public set lineColor(value) {
         this._lineColor = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
-
     /**
-     * 绘制的起始坐标
+     * 线条粗细
      */
-    public get rx() {
-        return this._rx;
+    private _lineWidth = 0;
+    public get lineWidth() {
+        return this._lineWidth;
     }
-    public set rx(value) {
-        this._rx = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
+    public set lineWidth(value) {
+        this._lineWidth = value;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
-   
+    /** 
+     * 颜色 
+     */
+    private _color = 0;
+    public get color() {
+        return this._color;
+    }
+    public set color(value) {
+        this._color = value;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
+    }
     /**
-     * 绘制的起始坐标
+     * 锚点，调整位图的坐标中点 0-1
      */
-    public get ry() {
-        return this._ry;
+    private _anchorX?: number;
+    public get anchorX() {
+        return this._anchorX;
     }
-    public set ry(value) {
-        this._ry = value;
-        this._graphicsDirty = true;
-        this.dalayDraw = true;
-    } 
-
+    public set anchorX(value) {
+        this._anchorX = value;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
+    }
     /**
-     * 显示对象填充色 0xFFFFFF
+     * 锚点，调整位图的坐标中点 0-1
      */
-    public set tint(value: number) {
-        this._graphics.tint = value;
-        this.setting.tint = value;
+    private _anchorY?: number;
+    public get anchorY() {
+        return this._anchorY;
     }
-    public get tint() {
-        return this.setting.tint || NaN;
-    }
-
-    public update(){
-        this.drawUpdate();
+    public set anchorY(value) {
+        this._anchorY = value;
+        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
     
+
+    public update(){    
+        this.graphics.width = this.width;
+        this.graphics.width = this.height;
+    }
+
+    public release(){
+        super.release();
+        this.graphics.parent.removeChild(this.graphics).destroy();
+    }
+
+    protected drawRoundedRectSystem(rect: Rect,key: string){
+        rect.graphics.clear();
+        rect.graphics.lineStyle(rect.lineWidth,rect.lineColor);
+        rect.graphics.beginFill(rect.color);   
+        
+        rect.graphics.drawRoundedRect(rect.anchorX?-rect.anchorX*this._width:0,rect.anchorY?-rect.anchorY*this._height:0,this._width, this._height,rect.radius);
+        rect.graphics.endFill();
+    }
 }

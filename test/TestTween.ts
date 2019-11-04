@@ -8,85 +8,89 @@ export default class TestTween {
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
-        let t = new vfui.Text("点击方块，进行缓动演示");
-        t.style.fill = "#FFFFFF";
-        t.y = 50;
-        uiStage.addChild(t);
+        let root = new vfui.Container();
+        root.style.backgroundColor = 0x136086;
+        root.style.height = 10;
+        root.style.width = 100;
+        root.style.bottom = 0;
+        root.style.left = "50%";
+        root.style.pivotX = 5;
+        root.style.pivotY = 5;
+        root.style.rotation = -95;
+        uiStage.addChild(root);
+
+        new vfui.Tween(root.style).to({rotation:-85},2000)
+        .repeat(Infinity)
+        .easing(vfui.Easing.Linear.None)
+        .yoyo(true)
+        .start(0);
 
 
-        /** 常规缓动 + 反向 + 无限循环 */
-        let r = new vfui.Rect();
-        r.y = 150;
-        r.x = 70;
-        r.drawRoundedRect(-50, -50, 100, 100, 5, 0xffcc00);
-        uiStage.addChild(r);
-        let rc = new vfui.Interaction.ClickEvent(r);
-        rc.onClick = e => {
-            rc.remove();
-
-            new vfui.Tween(r)
-                .to({ x: 200 }, 2000)
-                .repeat(Infinity)
-                .easing(vfui.Easing.Elastic.InOut)
-                .yoyo(true)
-                .start();
-
-            new vfui.Tween(r)
-                .to({ angle: 90 }, 2000)
-                .repeat(Infinity)
-                .easing(vfui.Easing.Quadratic.InOut)
-                .yoyo(true)
-                .start();
-
-        }
-
-        /** 颜色过度缓动 */
-        let r2 = new vfui.Rect();
-        r2.y = 280;
-        r2.x = 70;
-        r2.drawRoundedRect(-50, -50, 100, 100, 5, 0xffcc00);
-        uiStage.addChild(r2);
-        let rc2 = new vfui.Interaction.ClickEvent(r2);
-        rc2.onClick = e => {
-            rc2.remove();
-
-            new vfui.Tween({ color: "#" + r2.fill.toString(16), x: 70 })
-                .to({ color: "#00ccff", x: 200 }, 2000)
-                .easing(vfui.Easing.Elastic.InOut)
-                .repeat(Infinity)
-                .yoyo(true)
-                .on(vfui.Tween.Event.update, (obj: any) => {
-                    if (obj.color.indexOf("-") === -1) {//清除不规范色值
-                        r2.fill = vfui.Utils.rgbStrToNumber(obj.color);
-                        r2.x = Math.floor(obj.x);
-                    }
-                })
-                .start();
-
-
-        }
-
-
-        //文字样式,延迟执行
-        let r3 = new vfui.Text("文字样式变化", new vfui.TextStyle({ fill: ["#FFFFFF", "#FFFFFF", "#FFFFFF"] }));
-        r3.y = 380;
-        r3.x = 20;
-        uiStage.addChild(r3);
-        let rc3 = new vfui.Interaction.ClickEvent(r3);
-        rc3.onClick = e => {
-            rc3.remove();
-
-            new vfui.Tween(r3.style)
-                .to({ letterSpacing: 10, fontSize: 40, fill: ["#00ccff", "#ffcc00", "#00ff00"] }, 2000)
-                .easing(vfui.Easing.Quadratic.InOut)
-                .delay(1000)
-                .repeat(Infinity)
-                .yoyo(true)
-                .start();
-
-
-
-        }
-
+        let rootNode = new Node(undefined,root);
+        this.createBiTree(rootNode,0);
     }
-}  
+
+
+    protected createBiTree(node:Node, layer:number) {
+        if(layer>7){
+            return;
+        }
+        node.leftChild = new Node(node);
+        node.leftChild.isLeft = true;
+        node.leftChild.div.style.rotation = 35;
+        this.createBiTree(node.leftChild, ++layer);
+        node.rightChild = new Node(node);
+        node.rightChild.div.style.rotation = -35;
+        this.createBiTree(node.rightChild, layer);
+    }
+
+
+}
+
+
+class Node {
+    public constructor(parent?: Node,root?:vfui.Container) {
+        let div = this.div;
+        div.style.backgroundColor = 0x4caf50;
+        div.style.height = 10;
+        div.style.width = 100;
+        div.style.left = 100;
+        div.style.top = 0;
+        div.style.pivotX = 5;
+        div.style.pivotY = 5;
+        div.style.scaleX = 0.9;
+        div.style.scaleY = 0.9;
+
+        new vfui.Tween(div.style).to({rotation:0,scaleX:0.1,scaleY:0.1},7000)
+        .repeat(Infinity)
+        .easing(vfui.Easing.Linear.None)
+        .yoyo(true)
+        .start().delay(2000);
+
+        new vfui.Tween({ color: "#4caf50"})
+        .to({ color: "#136086" }, 7000)
+        .repeat(Infinity)
+        .easing(vfui.Easing.Quadratic.InOut)
+        .yoyo(true)
+        .on(vfui.Tween.Event.update, (obj: any) => {
+            if (obj.color.indexOf("-") === -1) {
+                div.style.backgroundColor = vfui.Utils.rgbStrToNumber(obj.color);
+            }
+        })
+        .start();
+
+        if(root){
+            root.addChild(div);
+        }else{
+            this.parent = parent;
+            parent.div.addChild(div);
+        }
+        
+    }
+
+    public div = new vfui.Container();
+    public parent:Node;
+    public isLeft = false;
+    public leftChild:Node = null;
+    public rightChild:Node = null;
+}

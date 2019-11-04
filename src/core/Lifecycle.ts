@@ -5,11 +5,6 @@ interface Lifecycle{
      * 释放，回收
      */
     release(): void;
-    /**
-     * 释放，彻底释放
-     * @param destroyWebGL 释放WEBGL资源，与本地资源，可能破坏其他显示对象
-     */
-    destroy(destroyWebGL?: boolean): void;
 }
 /**
  * 生命周期的接口

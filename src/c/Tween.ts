@@ -28,35 +28,35 @@ export class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      * @static
      */
-    static fromTo(object: any, to: any, duration?: number) {
+    static fromTo(object: TAny, to: TAny, duration?: number) {
         const tween = new Tween(object).to(to, duration);
         return tween;
     }
     /**
      * Easier way calling constructor only applies the `to` value, useful for CSS Animation
-     * @param {any} object object
+     * @param {TAny} object object
      * @param {object} to - Target value
      * @param {object} params - Options of tweens
      * @example Tween.to(myObject, {x:200}, 1000)
      * @memberof vfui.Tween
      * @static
      */
-    static to(object: any | any[], to: any, duration?: number) {
+    static to(object: TAny | TAny[], to: TAny, duration?: number) {
         return Tween.fromTo(object, to, duration)
     }
     /**
      * Easier way calling constructor only applies the `from` value, useful for CSS Animation
-     * @param {any} object object
+     * @param {TAny} object object
      * @param {object} from - Initial value
      * @param {object} params - Options of tweens
      * @example Tween.from(myObject, {x:200}, 1000)
      * @memberof vfui.Tween
      * @static
      */
-    static from(object: any, from: any, duration?: number) {
+    static from(object: TAny, from: TAny, duration?: number) {
         return Tween.fromTo(object, from, duration)
     }
-    constructor(object?: any) {
+    constructor(object?: TAny) {
         super();
 
         this.id = uid();
@@ -67,13 +67,13 @@ export class Tween extends PIXI.utils.EventEmitter {
     }
 
     public id: string;
-    public object: any;
-    private _valuesEnd: any = null;
-    private _valuesStart: any;
+    public object: TAny;
+    private _valuesEnd: TAny = null;
+    private _valuesStart: TAny;
     protected _duration = 1000;
     private _easingFunction = defaultEasing;
     private _easingReverse = defaultEasing;
-    private _interpolationFunction: ((v: any, k: number, value: any) => any) | any;
+    private _interpolationFunction: ((v: TAny, k: number, value: TAny) => TAny) | TAny;
 
     protected _startTime = 0;
     protected _delayTime = 0;
@@ -204,7 +204,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * @example let tween = new vfui.Tween({x:0}).to({x:100}, 2000)
      * @memberof vfui.Tween
      */
-    public to(properties: any, duration = 1000) {
+    public to(properties: TAny, duration = 1000) {
         this._valuesEnd = properties;
         this._duration = duration;
         return this;
@@ -215,11 +215,11 @@ export class Tween extends PIXI.utils.EventEmitter {
         if (this._rendered) {
             return this;
         }
-        let { _valuesStart, _valuesEnd, object } = this;
+        const { _valuesStart, _valuesEnd, object } = this;
 
         if (!_valuesStart.processed) {
             for (const property in _valuesEnd) {
-                let start = object && object[property] && deepCopy(object[property]);
+                const start = object && object[property] && deepCopy(object[property]);
                 _valuesStart[property] = start || 0;
                 decompose(property, object, _valuesStart, _valuesEnd);
             }
@@ -255,13 +255,13 @@ export class Tween extends PIXI.utils.EventEmitter {
      * @memberof vfui.Tween
      */
     public stop() {
-        let { _isPlaying, _isFinite, object, _duration, _initRepeat, _yoyo, _reversed } = this;
+        const { _isPlaying, _isFinite, object, _duration, _initRepeat, _yoyo, _reversed } = this;
 
         if (!_isPlaying) {
             return this;
         }
 
-        let atStart = _isFinite ? (_initRepeat + 1) % 2 === 1 : !_reversed;
+        const atStart = _isFinite ? (_initRepeat + 1) % 2 === 1 : !_reversed;
 
         this._reversed = false;
         if (_yoyo && atStart) {
@@ -352,7 +352,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * @example tween.interpolation(Interpolation.Bezier)
      * @memberof vfui.Tween
      */
-    public interpolation(_interpolationFunction: (v: any, k: number, value: any) => any) {
+    public interpolation(_interpolationFunction: (v: TAny, k: number, value: TAny) => TAny) {
         if (typeof _interpolationFunction === 'function') {
             this._interpolationFunction = _interpolationFunction;
         }
@@ -397,12 +397,10 @@ export class Tween extends PIXI.utils.EventEmitter {
      */
     public update(elapsedMS: number, preserve?: boolean, forceTime?: boolean) {
 
-        let {
+        const {
             _onStartCallbackFired,
             _easingFunction,
-            _interpolationFunction,
             _easingReverse,
-            _repeat,
             _delayTime,
             _reverseDelayTime,
             _yoyo,
@@ -423,9 +421,8 @@ export class Tween extends PIXI.utils.EventEmitter {
         }
 
         let elapsed: number;
-        let currentEasing: any;
         let property: string;
-
+        let _repeat = this._repeat;
         if (!_duration) {
             elapsed = 1;
             _repeat = 0;
@@ -452,7 +449,7 @@ export class Tween extends PIXI.utils.EventEmitter {
             this._onStartCallbackFired = true;
         }
 
-        currentEasing = _reversed ? _easingReverse || _easingFunction : _easingFunction;
+        const currentEasing: TAny = _reversed ? _easingReverse || _easingFunction : _easingFunction;
 
         for (property in _valuesEnd) {
             const start = _valuesStart[property]
@@ -460,14 +457,14 @@ export class Tween extends PIXI.utils.EventEmitter {
             const value = currentEasing[property] ? currentEasing[property](elapsed) : typeof currentEasing === 'function' ? currentEasing(elapsed) : defaultEasing(elapsed);
 
             if (typeof end === 'number') {
-                object[property] = Math.floor(start + (end - start) * value);
+                object[property] = start + (end - start) * value;
             } else if (typeof end === 'boolean') {
                 object[property] = end;
                 elapsed = _reversed ? 0 : 1;
             } else {//颜色
                 recompose(property, object, _valuesStart, _valuesEnd, value, elapsed);
             }
-            // else if (Array.isArray(end) && !(end as any).isString && !Array.isArray(start)) {
+            // else if (Array.isArray(end) && !(end as TAny).isString && !Array.isArray(start)) {
             //     const _interpolationFunctionCall = _interpolationFunction[property]
             //     ? _interpolationFunction[property] : typeof _interpolationFunction === 'function' ? _interpolationFunction : Interpolation.Linear;
             //     object[property] = _interpolationFunctionCall(end, value, object[property]);

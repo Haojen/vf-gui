@@ -1,6 +1,7 @@
 import { shared as tickerShared } from '../core/Ticker'
 import {Easing} from './Easing';
 import { objectPoolShared } from '../core/ObjectPool';
+import { ComponentEvent } from '../interaction/Index';
 
 class Node {
 
@@ -40,9 +41,9 @@ class Node {
  * @example let tl = new Timeline({delay:200})
  * @extends Tween
  */
-export class Timeline implements Lifecycle {
+export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
 
-    constructor() { }
+    constructor() { super() }
 
     public id: number = -1;
     private _object: TAny;
@@ -53,15 +54,15 @@ export class Timeline implements Lifecycle {
     private _isStop = false;
     private _lastNode = new Map<string, Node>();
     private _isSetDefault = false;
-    public isLoop = false;
+    public loop = false;
 
     public setDefault(object: TAny, _duration: number, fps: number) {
 
         this._object = object;
         this._elapsedMS = 1000 / fps;
-        let frameCount = Math.round(_duration / this._elapsedMS);
+        const frameCount = Math.round(_duration / this._elapsedMS);
         this._frameCount = frameCount;
-        let frames = this._frames;
+        const frames = this._frames;
         while (frames && frames.length > frameCount) {
             frames.pop();
         }
@@ -77,8 +78,8 @@ export class Timeline implements Lifecycle {
         if (endFrame > this._frameCount) {
             throw "Error Timeline.addProperty overflow frame";
         }
-        let parentNode = this._lastNode.get(property);
-        let node = objectPoolShared.pop(Node);
+        const parentNode = this._lastNode.get(property);
+        const node = objectPoolShared.pop(Node);
         if (parentNode === undefined) {
             node.parent = undefined;
         } else {
@@ -88,7 +89,7 @@ export class Timeline implements Lifecycle {
         node.startFrame = node.parent === undefined ? 0 : (node.parent.endFrame + 1);
         node.end = value;
         node.start = node.parent === undefined ? (this._object[property] || 0) : node.parent.end;
-        node.default = this._object[property];
+        node.default = this._object[property] || 0;
         if (easing) {
             node.easing = easing;
         } else {
@@ -132,9 +133,9 @@ export class Timeline implements Lifecycle {
 
     private goto(frame: number, isStop: boolean) {
 
-        let { _lastNode, _frames } = this;
+        const { _lastNode, _frames } = this;
         _lastNode.forEach((value: Node, key: string) => {
-            let node = this.seekLastNode(value, frame);
+            const node = this.seekLastNode(value, frame);
             node.prevTime = node.duration;
             this.updateobject(key, node);
         }, this);
@@ -161,14 +162,18 @@ export class Timeline implements Lifecycle {
         if (this._isStop) {
             return;
         }
-        let { _prevTime, _frames, _frameCount, _elapsedMS } = this;
-        let curFrame = Math.round(_prevTime / _elapsedMS);
+        let _prevTime = this._prevTime;
+        const { _frames, _frameCount, _elapsedMS } = this;
+        const curFrame = Math.round(_prevTime / _elapsedMS);
+        
         if (curFrame >= _frameCount) {
-            if(this.isLoop){
+            if(this.loop){
+                this.emit(ComponentEvent.LOOP,this);
                 this.goto(1,false);
                 return;
             }
             this._isStop = true;
+            this.emit(ComponentEvent.COMPLETE,this);
         }
         if (_frames[curFrame] == undefined) {
             this._isStop = true;
@@ -205,10 +210,12 @@ export class Timeline implements Lifecycle {
                 case "y":
                 case "angle":
                     this._object[key] =node.default + Math.floor(start + (end - start) * value);
+                    break;
                 case "scaleX":
                 case "scaleY":
                 case "rotation":
                     this._object[key] = node.default * Math.floor(start + (end - start) * value);
+                    break;
                 default:
                     this._object[key] = Math.floor(start + (end - start) * value);
             }
@@ -249,12 +256,7 @@ export class Timeline implements Lifecycle {
         this._prevTime = 0;
         this._isStop = false;
         this._isSetDefault = false;
-        this.isLoop = false;
+        this.loop = false;
         this._lastNode.clear();
     }
-
-    public destroy(destroyWebGL?: boolean) {
-
-    }
-
 }

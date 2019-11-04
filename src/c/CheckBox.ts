@@ -1,54 +1,60 @@
-import {Image} from "./Image";
-import { VerticalAlignEnum, HorizontalAlignEnum } from "../enum/AlignEnum";
-import { ComponentEvent,InputController } from "../interaction/Index";
-import {InputSkinBase} from "../core/InputSkinBase";
-
 /**
- * UI 单选框与复选框，区别在于有没有时间去拆分，如果没有时间拆分就直接用这个吧，只是皮肤不同
+ * 单选框与复选框组件，没有时间去拆分，区别只是皮肤与分组不同
  * 
- * box不需要设置设置组
+ * checbox 不需要设置设置组
  * 
  * radio 需要设置分组
  *
- * @class
- * @extends PIXI.UI.InputBase
- * @memberof PIXI.UI
- * @param [options.tabIndex=0] {Number} input tab index
- * @param [options.tabGroup=0] {Number|String} input tab group
- * @param [options.width=20] {Number|String} width
- * @param [options.height=20] {Number|String} height
  */
-export class CheckBox extends InputSkinBase{
+
+import {Label} from "./Label";
+import { ComponentEvent, InputController } from "../interaction/Index";
+import {  Button } from "./Button";
+
+
+/**
+ * UI 按钮显 示对象
+ */
+export class CheckBox extends Button{
+
+    public constructor() {
+        super();
+    }
+
     /**
-     * 按钮构造函数 
-     * 
-     * @param option width:100,height:20,tabIndex:0,tabGroup:0,
+     * 设置值
      */
-    public constructor(option = {width:20,height:20,tabIndex:0,tabGroup:0}){  
-        super(option.width,option.height,option.tabIndex,option.tabGroup.toString());
-        this.container.buttonMode = true;
-        this._checkmark = new Image();
-        this._checkmark.anchorX = 0.5;
-        this._checkmark.anchorY = 0.5;
-        this._checkmark.verticalAlign = VerticalAlignEnum.middle
-        this._checkmark.horizontalAlign = HorizontalAlignEnum.center;
-        this._checkmark.alpha = 0;
-        this.addChild(this._checkmark);
-    }
-
-    private _checkmark: Image ;
+    private _value = "";
+    /** 
+     * 设置是否选中 
+     * */
     private _checked = false;
-    private _checkGroup: string | undefined;
-    private _value: string|undefined;
 
-    protected _sourceMark: string|undefined;
-    /** 勾选图 */
-    public get sourceMark() {
-        return this._sourceMark;
+    /** 
+     * 获取或设置当前选中的值
+     */
+    public get selectedValue() {
+        if(this.checkGroup){
+            return InputController.getCheckGroupSelectedValue(this.checkGroup);
+        }
+        return undefined;
     }
-    public set sourceMark(value: string|undefined) {
-        this._sourceMark = value;
-        this.update();
+
+    /** 
+     * 设置分组名
+     */
+    public get checkGroup(): string | undefined {
+        return  this._groupName;
+    }
+    public set checkGroup(value: string | undefined) {
+        if(value === undefined){     
+            InputController.unRegistrerCheckGroup(this)
+        }
+        if(this._groupName == value){
+            return;
+        }
+        this._groupName = value;//需要在registrerCheckGroup之前
+        InputController.registrerCheckGroup(this);
     }
 
     /** 
@@ -63,31 +69,7 @@ export class CheckBox extends InputSkinBase{
         }
         this._value = value;
     }
-    /** 
-     * 获取或设置当前选中的值
-     */
-    public get selectedValue() {
-        if(this.checkGroup){
-            return InputController.getCheckGroupSelectedValue(this.checkGroup);
-        }
-        return undefined;
-    }
-    /** 
-     * 设置分组名
-     */
-    public get checkGroup(): string | undefined {
-        return this._checkGroup;
-    }
-    public set checkGroup(value: string | undefined) {
-        if(value === undefined){     
-            InputController.unRegistrerCheckGroup(this)
-        }
-        if(this._checkGroup == value){
-            return;
-        }
-        this._checkGroup = value;//需要在registrerCheckGroup之前
-        InputController.registrerCheckGroup(this);
-    }
+
     /** 
      * 设置是否选中 
      * @default false
@@ -96,14 +78,23 @@ export class CheckBox extends InputSkinBase{
         return this._checked;
     }
     public set checked(value) {
-        if (value !== this._checked) {
+        if (value !==  this._checked) {
             if (this.checkGroup)
                 InputController.updateCheckGroupSelected(this);
+            
+            this._oldState = "";
+            if(value){
+                this._selectedStr = "AndSelected";
+            }else{
+                
+                this._selectedStr = "";
+            }
             this._checked = value;
             this.emit(ComponentEvent.CHANGE,this);
-            this.update();
+            this.onStateChange(this,this.currentState);
         }
     }
+
 
     protected onClick(){
         super.onClick();
@@ -112,9 +103,8 @@ export class CheckBox extends InputSkinBase{
         this.checked = !this.checked;
     }
 
-    public update(){
-        super.update(); 
-        this._checkmark.alpha = this.checked ? 1 : 0;
-        this._checkmark.source = this._sourceMark;
+    protected onLabelChange(label: Label){
+        label.style.left = this.width;
+        label.style.top =  this.height - label.height >> 1;
     }
 }

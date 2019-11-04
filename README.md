@@ -9,11 +9,11 @@ pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开�
 ## 学习(Learn) 
 
 
-* [文档(documentation)](https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/)
+* [文档(documentation)](https://vipkid-edu.github.io/pixi-vfui-docs/0.5.0/)
 
 * [示例(Examples)](https://vipkid-edu.github.io/pixi-vfui-docs/play)
 
-* [API](https://vipkid-edu.github.io/pixi-vfui-docs/0.1.0/globals.html)
+* [API](https://vipkid-edu.github.io/pixi-vfui-docs/0.5.0/globals.html)
 
 * [源码(Github)](https://github.com/vipkid-edu/pixi-vfui/)
 
@@ -26,20 +26,15 @@ pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开�
 
     npm install pixi-vfui
 
-#### 正确的导入方式 (The correct way to import is): 
+#### ES6 导入方式 (The correct way to import is): 
 
     import vfui from "pixi-vfui";
 
-    其他组件导入方式可查看“组件”部分
+### 创建方式为：
 
+    let button = new  vfui.Button();
 
 ### CDN Install
-
-推荐使用ES6标准方式导入，使用CDN命名空间方式导入，创建方式为：
-
-    vfui.Button
-    vfui.CheckBox
-    vfui.xxxxxx
 
 Master:
 
@@ -49,9 +44,9 @@ Master:
     
 Version:
 
-    <script src="http://unpkg.com/pixi-vfui@0.1.24/dist/pixi-vfui.js"></script>
+    <script src="http://unpkg.com/pixi-vfui@0.5.0/dist/pixi-vfui.js"></script>
     
-    <script src="http://unpkg.com/pixi-vfui@0.1.24/dist/pixi-vfui.min.js"></script>
+    <script src="http://unpkg.com/pixi-vfui@0.5.0/dist/pixi-vfui.min.js"></script>
 
 ## 如何构建(How build)
 
@@ -71,6 +66,9 @@ Version:
 
 
 ## 组件(Component)
+
+使用示例：https://vipkid-edu.github.io/pixi-vfui-docs/play
+
 可使用组件：
 
 | 导入方式    |      名称       |
@@ -78,24 +76,24 @@ Version:
 | vfui.Stage |  UI舞台 |
 | vfui.Container | 容器 |
 | vfui.ScrollingContainer | 可滑动的容器 |
-| vfui.ScrollBar | 带有滑动条容器 |
-| vfui.SortableList | 带有排序功能的列表容器 |
 | vfui.Image | 图片 |
-| vfui.SpriteAnimated | 序列图 |
-| vfui.Button | Button - 按钮 |
-| vfui.CheckBox | 单选与复选 |
-| vfui.Rect | 绘制矢量矩形 |
-| vfui.Text | 文本 |
+| vfui.Label | 文本 |
 | vfui.TextInput | 输入文本 |
-| vfui.Slider | 滑动条 |
+| vfui.Graphics | 绘制矢量 |
+| vfui.Rect | 绘制矢量矩形 |
+| vfui.Button | 按钮 |
+| vfui.CheckBox | 单选与复选 |
+| vfui.SpriteAnimated | 序列图 |
+| vfui.Slider | 滑动/进度条 |
 | vfui.Ticker | 心跳 |
 | vfui.Tween | 缓动 |
+| vfui.Timeline | 缓动 |
+| vfui.Sound | 音频 |
 | vfui.Utils | 工具类 |
 
 
 计划中：
 
-    Sound - 音频
     Recording/Audio - 麦克风
     Spine/DB - 龙骨
     Video - 视频
@@ -117,5 +115,6 @@ Chrome debug - mac
 
 In a terminal, execute /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222
 
-License
+### License
+
 This content is released under the (http://opensource.org/licenses/MIT) MIT License.

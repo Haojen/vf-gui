@@ -7,22 +7,9 @@ export default class TestTicker {
     }
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
-        /** 本地位图 */
-        let sp = new vfui.Image();
-        sp.source = "assets/sprite.png"; //本地文件路径
-        sp.x = 300;
-        sp.y = 300;
-        sp.width = 100;
-        sp.height = 100;
-        uiStage.addChild(sp);
-
-        this.update = (delta) => {
-            console.log(delta);//两帧间隔毫秒
-            sp.rotation += 0.01;
-        }
-        if (this.update) {
-            vfui.TickerShared.addUpdateEvent(this.update, this);
-        }
+       
+        //添加心跳
+        vfui.TickerShared.addUpdateEvent(this.update, this);
 
         //两秒后卸载当前跳
         // setTimeout(() => {
@@ -37,5 +24,7 @@ export default class TestTicker {
         // }, 2000);
     }
 
-    private update: ((n: number) => void) | undefined;
+    private update(n: number){
+
+    }
 }

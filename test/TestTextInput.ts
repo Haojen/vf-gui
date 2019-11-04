@@ -8,28 +8,39 @@ export default class TestTextInput {
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
-        /** 文本输入组件 */
-        let textInput1 = new vfui.TextInput({multiline:false});
-        textInput1.top = 10;
-        textInput1.width = 300;
-        textInput1.height = 30;
-        textInput1.fontSize = 24;//"32px"
-        textInput1.fill = "#00ffcc";
-        textInput1.fontFamily = "微软雅黑";
-        textInput1.placeholder = "单行输入文本...";
-        //textInput2.disabled = true;
-        uiStage.addChild(textInput1);
+        /** 单行输入 TextInput(false) */
+        let textInput = new vfui.TextInput(false);
+        textInput.style.left = 100;
+        textInput.style.top = 100;
+        textInput.style.width = 300;
+        textInput.style.height = 30;
+        textInput.style.fontSize = 24;//"32px"
+        textInput.style.fontFamily = "微软雅黑";
+        textInput.style.color = 0x00ffcc;
+        textInput.placeholder = "单行输入文本...";
+        textInput.maxLength = 15;
+        textInput.restrict = new RegExp('\\w+') ;//由数字、26个英文字母或者下划线组成的字符串
+        textInput.up = "assets/skin/TextInput/up.png";
+        textInput.down = "assets/skin/TextInput/down.png";
+        textInput.move = "assets/skin/TextInput/down.png";
+        textInput.disabled = "assets/skin/TextInput/disabled.png";
+        //textInput.props.enabled = false;
+        uiStage.addChild(textInput);
 
-        let textInput2 = new vfui.TextInput({multiline:true});
-        textInput2.top = 100;
-        textInput2.width = 300;
-        textInput2.height = 100;
-        textInput2.fontSize = 24;//"32px"
-        textInput2.fill = "red";
-        textInput2.fontFamily = "微软雅黑";
-        textInput2.placeholder = "多行输入...";
-        //textInput2.disabled = true;
-        uiStage.addChild(textInput2);
+        /** 多行输入 TextInput(true) */
+        let multilineInput = new vfui.TextInput(true);
+        multilineInput.style.top = 200;
+        multilineInput.style.left = 100;
+        multilineInput.style.width = 300;
+        multilineInput.style.height = 150;
+        multilineInput.style.fontSize = 24;//"32px"
+        multilineInput.style.fontFamily = "微软雅黑";
+        multilineInput.style.color = 0xffffff;
+        multilineInput.placeholder = "多行输入文本...";
+        multilineInput.up = "assets/skin/TextInput/up.png";
+        multilineInput.down = "assets/skin/TextInput/down.png";
+        multilineInput.move = "assets/skin/TextInput/down.png";
+        uiStage.addChild(multilineInput);
 
     }
 }

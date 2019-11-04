@@ -1,88 +1,73 @@
-import { VerticalAlignEnum, HorizontalAlignEnum } from "../enum/AlignEnum";
-import {Text} from "./Text";
-import {InputSkinBase} from "../core/InputSkinBase";
-import {TextStyle} from "./TextStyle";
+import {Label} from "./Label";
+import {Image} from "./Image";
+import { InputBase } from "../core/InputBase";
+import { CSSStyle } from "../layout/CSSStyle";
+import { ComponentEvent } from "../interaction/Index";
+
 
 /**
- * UI 按钮显 示对象
- *
- * @class
- * @extends PIXI.UI.InputBase
- * @memberof PIXI.UI
- * @param [options.tabIndex=0] {Number} input tab index
- * @param [options.tabGroup=0] {Number|String} input tab group
- * @param [options.width=100h] {Number|String} width
- * @param [options.height=20] {Number|String} height
+ * 按钮
  */
-export class Button extends InputSkinBase{
-    /**
-     * 按钮构造函数 
-     * 
-     * @param option width:100,height:20,tabIndex:0,tabGroup:0,
-     */
-    public constructor(option = {width:100,height:20,tabIndex:0,tabGroup:0}){  
-        super(option.width,option.height,option.tabIndex,option.tabGroup.toString());
+export class Button extends InputBase{
+
+    public constructor() {
+        super();
         this.container.buttonMode = true;
-        this._text.verticalAlign = VerticalAlignEnum.middle
-        this._text.horizontalAlign = HorizontalAlignEnum.center;
-        this._text.style.fontSize = 18;
-        this._text.style.fill = 0xFFFFFF;
-        this._text.top = 8;
-        this._text.left = 8;
-        this._text.right = 8;
-        this._text.bootom = 8;
-        this.addChild(this._text);   
+        this.img.fillMode = "scale";
+        this.img.scale9Grid = [3,3,3,3];
+        this.addChild(this.img);
+
+        this.label.sprite.style.fontSize = 18;
+        this.label.on(ComponentEvent.CHANGE,this.onLabelChange,this);
+        this.addChild(this.label);
+
+        this.on(ComponentEvent.STATE_CHANGE,this.onStateChange,this);
     }
 
-    public _text = new Text();
+    protected _selectedStr: "AndSelected"|"" = "";
+    protected _oldState = "";
 
-    protected initialize() {
-        super.initialize();
-        this.container.interactiveChildren = false;
-    }
 
-    /**
-     * 获取或设置文本内容
-     */
-    public get label(): string{
-        return this._text.label;
-    }
-    public set label(value: string){
-        this._text.label = value;
-    }
+    /** 状态展示 */
+    public readonly img = new Image();
+    /** 文字展示 */
+    public readonly label = new Label();
 
-    /** 设置颜色 */
-    public get labelColor(){
-        return this._text.style.fill.toString();
+    public get text() {
+        return this.label.text;
     }
-    public set labelColor(value: string){
-        this._text.style.fill = value;
+    public set text(value) {
+
+        this.label.text = value;
     }
 
-    /** 设置文字大小 */
-    public get labelSize(){
-        return this._text.style.fontSize as number;
-    }
-    public set labelSize(value: number){
-        this._text.style.fontSize = value;
-    }
-    /** 设置文字居中方式 */
-    public get labelHorizontalAlign(){
-        return this._text.horizontalAlign || HorizontalAlignEnum.center;
-    }      
-    public set labelHorizontalAlign(value: number){
-        this._text.horizontalAlign = value;
+    
+    public update(_style: CSSStyle) {
+        this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
+        const img = this.img;
+        img.width = this._width;
+        img.height = this._height;
+        this.onStateChange(this,this.currentState);
     }
 
-    /** 设置文字复杂样式 */
-    public get labelStyle(){
-        return this._text.style;
-    }
-    public set labelStyle(value: TextStyle){
-        this._text.style = value;
+    public release() {
+        super.release();
+        this.offAll(ComponentEvent.STATE_CHANGE);
+        this.img.release();
+        this.label.release();
     }
 
-    public get text(){
-        return this._text;
+    protected onLabelChange(label: Label){
+        label.x = this.width -  label.width >>1;
+        label.y = this.height -  label.height >>1;
+    }
+
+    protected onStateChange(label: Button,state: string){
+        if(this._oldState == state){
+            return;
+        }
+        this._oldState = state;
+        const img = this.img;
+        img.src = (this as TAny)[state + this._selectedStr];
     }
 }

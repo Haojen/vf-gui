@@ -6,7 +6,10 @@ import {DragEvent} from "../interaction/DragEvent";
 import {MouseScrollEvent} from "../interaction/MouseScrollEvent";
 import {InteractionEvent} from "../interaction/InteractionEvent";
 import { now } from "../core/Utils";
-import {Rect} from "./Rect";
+import { ComponentEvent } from "../interaction/Index";
+import { ContainerBase } from "./ContainerBase";
+import { CSSStyle } from "../layout/CSSStyle";
+
 
 /**
  * 可滚动的容器
@@ -14,48 +17,68 @@ import {Rect} from "./Rect";
 export class ScrollingContainer extends Container {
     public constructor() {
         super();
-        this._maskRect.y = 0;
-        this.addChild(this._maskRect);
-        this.container.addChild(this.innerContainer);
-        this.container.name = "ScrollingContainer.container";
-        this.innerContainer.name = "ScrollingContainer.innerContainer";
-        this.mask = this._maskRect.graphics;
-    }
-    /**
-     * 滑动条值发生改变后
-     */
-    public static readonly ChangeEvent= "change";
-    /**
-     * 滑动条值发生改变后
-     */
-    public static readonly ReSizeEvent= "resize";
-    /**
-     * 遮罩
-     */
-    private _maskRect = new Rect();
-    /**
-     * 内容容器
-     * @private
-     */
-    public innerContainer = new PIXI.Container();
-    /**
-     * 内容的宽高
-     */
-    public innerBounds = new PIXI.Rectangle();
+        this._childrenStartIndex = 0;
+        this.container.addChild(this._innerContainer);
+        this.container.name = "ScrollingContainer";
+        this._innerContainer.name = "innerContainer";
 
+        const _graphics = new PIXI.Graphics();
+        _graphics.clear();
+        _graphics.beginFill(0xffcc00);   
+        _graphics.drawRoundedRect(0,0,200,200,0);
+        _graphics.endFill();
+        this.style.maskImage =_graphics;   
+
+        this.dragEvent.onDragStart = () => {
+            if (!this.scrolling) {
+                this._containerStart.copyFrom(this._innerContainer.position);
+                this._Position.copyFrom(this._innerContainer.position);
+                this.scrolling = true;
+                this.setScrollPosition();
+                Ticker.shared.addUpdateEvent(this.updateScrollPosition, this);
+            }
+        };
+
+        this.dragEvent.onDragMove = (e: InteractionEvent, offset: PIXI.Point) => {
+            if (this.scrollX)
+                this._targetPosition.x = this._containerStart.x + offset.x;
+            if (this.scrollY)
+                this._targetPosition.y = this._containerStart.y + offset.y;
+        };
+
+        this.dragEvent.onDragEnd = () => {
+            if (this.scrolling) {
+                this.scrolling = false;
+                Ticker.shared.removeUpdateEvent(this.updateScrollPosition, this);
+            }
+        };
+
+        const scrollSpeed = new PIXI.Point();
+        this.mouseScrollEvent.onMouseScroll = (e: WheelEvent,delta: PIXI.Point) => {
+            scrollSpeed.set(-delta.x * 0.2, -delta.y * 0.2);
+            this.setScrollPosition(scrollSpeed);
+        };
+
+    }
     /**
      * 是否启动拖拽滚动
      * @default true
      */
-    public dragScrolling = true;
-    /** 
-     * 拖动处理类
-     */
-    private dragEvent: DragEvent | undefined;
-    /**
-     * 鼠标滚动
-     */
-    private mouseScrollEvent: MouseScrollEvent | undefined;
+    private _dragScrolling = true;
+    public get dragScrolling() {
+        return this._dragScrolling;
+    }
+    public set dragScrolling(value) {
+        this._dragScrolling = value;
+        //Drag scroll and Mouse scroll
+        if (value) {
+            this.mouseScrollEvent.startEvent();
+            this.dragEvent.startEvent();
+        }else{
+            this.mouseScrollEvent.stopEvent();
+            this.dragEvent.stopEvent();
+        }
+    }
     /**
      * 滚动的阻力或柔度 (0-1) 
      * @default 0.5
@@ -75,6 +98,33 @@ export class ScrollingContainer extends Container {
      * @default false
      */
     public animating = false;
+    /** 
+     * 是否启用水平滚动 
+     * @default false
+     */
+    public scrollX = false;
+    /**
+     * 是否滚动中
+     */
+    public scrollY = false;
+    
+    /**
+     * 内容容器
+     * @private
+     */
+    private _innerContainer = new ContainerBase();
+    /**
+     * 内容的宽高
+     */
+    public innerBounds = new PIXI.Rectangle();
+    /** 
+     * 拖动处理类
+     */
+    private dragEvent = new DragEvent(this);
+    /**
+     * 鼠标滚动
+     */
+    private mouseScrollEvent = new MouseScrollEvent(this,true);
     /**
      * 是否滚动中
      */
@@ -86,40 +136,27 @@ export class ScrollingContainer extends Container {
 
     private _lastWidth = 0;
     private _lastHeight = 0;
-    private _scrollX = false;
-    private _scrollY = false;
+
     private _isInitScrolling = false;
-    /** 
-     * 是否启用水平滚动 
-     * @default false
-     */
-    public get scrollX() {
-        return this._scrollX;
-    }
-    public set scrollX(value) {
-        this._scrollX = value;
-    }
 
-    /**
-     * 是否启用垂直滚动
-     * @default false
-     */
-    public get scrollY() {
-        return this._scrollY;
-    }
-    public set scrollY(value) {
-        this._scrollY = value;
-    }
+    private _containerStart = new PIXI.Point();
+    private _targetPosition = new PIXI.Point();
+    private _lastPosition = new PIXI.Point();
+    private _Position = new PIXI.Point();
+    private _Speed = new PIXI.Point();
+    private _stop = false;
 
-    public update() {
+    public update(_style: CSSStyle) {
+        super.update(_style);
         if (this._lastWidth != this._width || this._lastHeight != this._height) {
             const _of = this.expandMask;
-            this._maskRect.drawRoundedRect(_of, -_of, this._width + _of, this._height + _of, this.radius,0xFFFFFF);
+            this.style.maskPosition = [_of,_of];
+            this.style.maskSize = [ this._width,this._height];
             this._lastWidth = this._width;
             this._lastHeight = this._height;
+            this.setScrollPosition();
         }
-
-        this.setScrollPosition();
+        
     }
 
     protected setScrollPosition(speed?: PIXI.Point) {
@@ -129,40 +166,41 @@ export class ScrollingContainer extends Container {
 
         if (!this.animating) {
             this.animating = true;
-            this._lastPosition.copyFrom(this.innerContainer.position);
-            this._targetPosition.copyFrom(this.innerContainer.position);
+            this._lastPosition.copyFrom(this._innerContainer.position);
+            this._targetPosition.copyFrom(this._innerContainer.position);
             this.updateScrollPosition(0);
         }
     }
 
-    public addChild(uiObject: UIBase) {
-        super.addChild(uiObject);
-        if(uiObject != this._maskRect){
-            this.innerContainer.addChild(uiObject.container);
-        } 
-        this.getInnerBounds(true); //make sure bounds is updated instantly when a child is added
-        return uiObject;
-    }
 
+    public addChildAt(item: UIBase, index: number) {
+
+        if (item.parent) {
+            item.parent.removeChild(item);
+        }
+
+        item.parent = this as TAny;    
+        this._innerContainer.addChildAt(item.container, index);
+        this.uiChildren.splice(index, 0, item);
+        this.updatesettings(true, true);
+        this.getInnerBounds(true);
+        this.emit(ComponentEvent.ADDED,this);
+        return item;
+    }
 
     protected getInnerBounds(force?: boolean) {
 
         //this is a temporary fix, because we cant rely on innercontainer height if the children is positioned > 0 y.
         if (force || now() - this._boundCached > 1000) {
-            this.innerContainer.getLocalBounds(this.innerBounds);
-            this.innerBounds.height = this.innerBounds.y + this.innerContainer.height;
-            this.innerBounds.width = this.innerBounds.x + this.innerContainer.width;
+            this._innerContainer.getLocalBounds(this.innerBounds);
+            this.innerBounds.height = this.innerBounds.y + this._innerContainer.height;
+            this.innerBounds.width = this.innerBounds.x + this._innerContainer.width;
             this._boundCached = now();
         }
         return this.innerBounds;
     }
 
-    private _containerStart = new PIXI.Point();
-    private _targetPosition = new PIXI.Point();
-    private _lastPosition = new PIXI.Point();
-    private _Position = new PIXI.Point();
-    private _Speed = new PIXI.Point();
-    private _stop = false;
+
 
     protected initialize(){
         super.initialize();
@@ -171,53 +209,12 @@ export class ScrollingContainer extends Container {
     protected initScrolling() {
 
         this._isInitScrolling = true;
-        if (this.dragEvent) {
-            this.dragEvent.remove();
-            this.dragEvent = undefined;
-        }
-        //Drag scroll
-        if (this.dragScrolling) {
-            this.dragEvent = new DragEvent(this);
-            this.dragEvent.onDragStart = () => {
-                if (!this.scrolling) {
-                    this._containerStart.copyFrom(this.innerContainer.position);
-                    this._Position.copyFrom(this.innerContainer.position);
-                    this.scrolling = true;
-                    this.setScrollPosition();
-                    Ticker.shared.addUpdateEvent(this.updateScrollPosition, this);
-                }
-            };
 
-            this.dragEvent.onDragMove = (e: InteractionEvent, offset: PIXI.Point) => {
-                if (this.scrollX)
-                    this._targetPosition.x = this._containerStart.x + offset.x;
-                if (this.scrollY)
-                    this._targetPosition.y = this._containerStart.y + offset.y;
-            };
-
-            this.dragEvent.onDragEnd = () => {
-                if (this.scrolling) {
-                    this.scrolling = false;
-                    Ticker.shared.removeUpdateEvent(this.updateScrollPosition, this);
-                }
-            };
-        }
-        //Mouse scroll
-        if(this.mouseScrollEvent ){
-            this.mouseScrollEvent.remove();
-            this.mouseScrollEvent = undefined;
-        }
-        const scrollSpeed = new PIXI.Point();
-        this.mouseScrollEvent = new MouseScrollEvent(this, true);
-        this.mouseScrollEvent.onMouseScroll = (e: WheelEvent,delta) => {
-            scrollSpeed.set(-delta.x * 0.2, -delta.y * 0.2);
-            this.setScrollPosition(scrollSpeed);
-        };
         this.updateScrollBars();
     }
 
     protected updateScrollBars() {
-        this.emit(ScrollingContainer.ChangeEvent,this)
+        this.emit(ComponentEvent.CHANGE,this)
     }
 
 
@@ -229,12 +226,12 @@ export class ScrollingContainer extends Container {
     public forcePctPosition(direction: "x" | "y", pct: number) {
         const bounds = this.getInnerBounds();
         if (this.scrollX && direction == "x") {
-            this.innerContainer.position[direction] = -((bounds.width - this._width) * pct);
+            this._innerContainer.position[direction] = -((bounds.width - this._width) * pct);
         }
         if (this.scrollY && direction == "y") {
-            this.innerContainer[direction] = -((bounds.height - this._height) * pct);
+            this._innerContainer[direction] = -((bounds.height - this._height) * pct);
         }
-        this._Position[direction] = this._targetPosition[direction] = this.innerContainer.position[direction];
+        this._Position[direction] = this._targetPosition[direction] = this._innerContainer.position[direction];
     }
 
     /** 根据焦点设置位置 */
@@ -244,32 +241,32 @@ export class ScrollingContainer extends Container {
         let dif;
         if (this.scrollX) {
             const x = Math.max(0, (Math.min(bounds.width, pos.x)));
-            if (x + this.innerContainer.x > this._width) {
+            if (x + this._innerContainer.x > this._width) {
                 dif = x - this._width;
-                this.innerContainer.x = -dif;
+                this._innerContainer.x = -dif;
             }
-            else if (x + this.innerContainer.x < 0) {
-                dif = x + this.innerContainer.x;
-                this.innerContainer.x -= dif;
+            else if (x + this._innerContainer.x < 0) {
+                dif = x + this._innerContainer.x;
+                this._innerContainer.x -= dif;
             }
         }
 
         if (this.scrollY) {
             const y = Math.max(0, (Math.min(bounds.height, pos.y)));
 
-            if (y + this.innerContainer.y > this._height) {
+            if (y + this._innerContainer.y > this._height) {
                 dif = y - this._height;
-                this.innerContainer.y = -dif;
+                this._innerContainer.y = -dif;
             }
-            else if (y + this.innerContainer.y < 0) {
-                dif = y + this.innerContainer.y;
-                this.innerContainer.y -= dif;
+            else if (y + this._innerContainer.y < 0) {
+                dif = y + this._innerContainer.y;
+                this._innerContainer.y -= dif;
             }
         }
 
-        this._lastPosition.copyFrom(this.innerContainer.position);
-        this._targetPosition.copyFrom(this.innerContainer.position);
-        this._Position.copyFrom(this.innerContainer.position);
+        this._lastPosition.copyFrom(this._innerContainer.position);
+        this._targetPosition.copyFrom(this._innerContainer.position);
+        this._Position.copyFrom(this._innerContainer.position);
         this.updateScrollBars();
     }
 
@@ -309,7 +306,7 @@ export class ScrollingContainer extends Container {
             }
         }
         
-        if (!this.scrolling && Math.round(this._Speed[direction]) === 0 && (this.innerContainer[direction] > 0 || this.innerContainer[direction] < min)) {
+        if (!this.scrolling && Math.round(this._Speed[direction]) === 0 && (this._innerContainer[direction] > 0 || this._innerContainer[direction] < min)) {
             const target = this._Position[direction] > 0 ? 0 : min;
             this._Position[direction] = Utils.Lerp(this._Position[direction], target, (40 - (30 * this.softness)) * delta);
             this._stop = false;
@@ -334,7 +331,7 @@ export class ScrollingContainer extends Container {
             this._stop = false;
         }
 
-        this.innerContainer.position[direction] = Math.round(this._Position[direction]);
+        this._innerContainer.position[direction] = Math.round(this._Position[direction]);
 
         this.updateScrollBars();
     }
