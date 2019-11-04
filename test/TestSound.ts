@@ -1,5 +1,4 @@
 import vfui from "../src/pixi-vfui";
-import { ComponentEvent } from "../src/interaction/Index";
 
 export default class TestSound {
 
@@ -28,15 +27,16 @@ export default class TestSound {
             sound.resume();
         }, 4000);
 
-        sound.on(ComponentEvent.CHANGEING,(sd:vfui.Sound,progress:number)=>{
+
+        sound.on(vfui.Interaction.ComponentEvent.CHANGEING,(sd:vfui.Sound,progress:number)=>{
             //console.log("CHANGEING",progress,sd.duration);
         });
 
-        sound.on(ComponentEvent.LOOP,(sd:vfui.Sound)=>{
+        sound.on(vfui.Interaction.ComponentEvent.LOOP,(sd:vfui.Sound)=>{
             console.log("LOOP"); //sound.loop = true时
         });
 
-        sound.on(ComponentEvent.COMPLETE,(sd:vfui.Sound)=>{
+        sound.on(vfui.Interaction.ComponentEvent.COMPLETE,(sd:vfui.Sound)=>{
             console.log("COMPLETE"); //sound.loop = false时
         });
 

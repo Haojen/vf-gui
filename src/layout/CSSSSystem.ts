@@ -49,7 +49,8 @@ export const updateStyleProxyHandler = {
         //const oldValue = (target as TAny)[key];
         (target as TAny)[key] = value;
         //target.eventEmitter.emit("ValueChangeEvent", key, value, oldValue);
-        addDrawList(key, target.parent);
+        if(target.parent)
+            addDrawList(key, target.parent);
         return true;
     }
 }

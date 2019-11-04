@@ -220,7 +220,7 @@ export class CSSStyle {
     /** 
      * 文本颜色，16进制 
      * */
-    public color?: number = 0xfffff0;
+    public color?: number|number[] = 0xfffff0;
     /** 字符间距 */
     public letterSpacing?: number;
     /** 

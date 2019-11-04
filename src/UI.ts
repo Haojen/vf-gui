@@ -10,7 +10,7 @@ import {Image} from "./c/Image";
 import {SpriteAnimated} from "./c/SpriteAnimated";
 
 
-import {Label,LabelProps} from "./c/Label";
+import {Label} from "./c/Label";
 import {TextInput} from "./c/TextInput";
 
 import {Slider} from "./c/Slider";
@@ -32,5 +32,5 @@ import * as AlignEnum from "./enum/AlignEnum";
 
 /** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,Slider,
-    Label,LabelProps,TextInput,Button,CheckBox,Rect,Graphics,Interaction,
+    Label,TextInput,Button,CheckBox,Rect,Graphics,Interaction,
     UIBase,TickerShared,AlignEnum,Tween,Timeline,Easing,Image,SpriteAnimated,Sound};

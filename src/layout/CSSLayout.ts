@@ -65,6 +65,14 @@ export function getLayoutBoundsSize(target: UIBase, layoutWidth: number, layoutH
     if (!isNaN(minHeight) && height < minHeight) {
         height = minHeight;
     }
+
+    if(isNaN(width)){
+        width = 0;
+    }
+    if(isNaN(height)){
+        height = 0;
+    }
+
     return {width,height,x,y};
 }
 

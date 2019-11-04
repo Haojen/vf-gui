@@ -12,7 +12,7 @@ export default class TestLabel {
         let basicText = new vfui.Label();
         basicText.style.left = 100;
         basicText.style.top = 100;
-        basicText.style.color = "#FFF";
+        basicText.style.color = 0xffffff;
         basicText.text = "Basic text in vfui-ui 33434"
         uiStage.addChild(basicText);
 
