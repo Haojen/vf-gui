@@ -9,7 +9,7 @@ export default class TestSound {
         let sound = new vfui.Sound();
         sound.x = 100;
         sound.y = 100;
-        sound.width = 100;
+        sound.width = 100; //音频组件本身没有点击区域（0，0），设置宽高后会设置新的点击区域
         sound.height =100;
         sound.sheetSkin = PIXI.Loader.shared.resources["soundskin"].spritesheet;//spritesheet格式中animations需要包含play与stop动作
         sound.loop = true;
@@ -18,6 +18,7 @@ export default class TestSound {
         sound.groupName = "a1";//属于a1组的音频互斥
         sound.src = "./assets/test.mp3";
         uiStage.addChild(sound);
+        //sound.play();
 
         setTimeout(() => {
             sound.pause();

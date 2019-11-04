@@ -192,21 +192,27 @@ export class SpriteAnimated extends UIBase{
             return;
         }
         const lastAnimated = this._animatedSprites.get(this._lastAnimatedName);
-        if(lastAnimated && lastAnimated.parent){
-            lastAnimated.stop();
-            lastAnimated.parent.removeChild(lastAnimated);
-        }
-        this._lastAnimatedName = this.animationName;
-
         animatedSp.onLoop = ()=>{
             this.emit(ComponentEvent.LOOP,this);
         }
         animatedSp.onComplete = ()=>{
             this.emit(ComponentEvent.COMPLETE,this);
         }
+        if(animatedSp.parent == undefined){
+            setTimeout(() => {
+                //绘制会闪烁，与下一帧渲染有关，先临时解决，设置setTimeout
+                this.container.addChild(animatedSp);
+            }, 0);
+            
+        }
+        
+        if(lastAnimated && lastAnimated.parent){
+            lastAnimated.stop();
+            lastAnimated.parent.removeChild(lastAnimated);
+        }
+        this._lastAnimatedName = this.animationName;
 
         this._curFrameNumber = 0;
-        this.container.addChild(animatedSp);
         this.emit(ComponentEvent.CHANGE,this,this.animationName);
 
 
