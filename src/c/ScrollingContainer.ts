@@ -6,54 +6,10 @@ import {DragEvent} from "../interaction/DragEvent";
 import {MouseScrollEvent} from "../interaction/MouseScrollEvent";
 import {InteractionEvent} from "../interaction/InteractionEvent";
 import { now } from "../core/Utils";
-import { BaseProps } from "../layout/BaseProps";
 import { ComponentEvent } from "../interaction/Index";
 import { ContainerBase } from "./ContainerBase";
 import { CSSStyle } from "../layout/CSSStyle";
 
-
-/** 
- * 滚动容器自定义字段
- */
-class ScrollingContainerProps extends BaseProps{
-
-    public constructor(){
-        super();
-    }
-    /**
-     * 是否启动拖拽滚动
-     * @default true
-     */
-    dragScrolling = true;
-    /**
-     * 滚动的阻力或柔度 (0-1) 
-     * @default 0.5
-     */
-    softness = 0.5;
-    /** 
-     * 滚动条的圆角半径 设置0时，滚动条为直角长方形
-     * @default 0
-     */
-    radius = 0;
-    /**
-     * 遮罩的扩充范围
-     */
-    expandMask = 0;
-    /** 
-     * 是否开启滚动动画 
-     * @default false
-     */
-    animating = false;
-    /** 
-     * 是否启用水平滚动 
-     * @default false
-     */
-    scrollX = false;
-    /**
-     * 是否滚动中
-     */
-    scrollY = false;
-}
 
 /**
  * 可滚动的容器
@@ -84,9 +40,9 @@ export class ScrollingContainer extends Container {
         };
 
         this.dragEvent.onDragMove = (e: InteractionEvent, offset: PIXI.Point) => {
-            if (this.props.scrollX)
+            if (this.scrollX)
                 this._targetPosition.x = this._containerStart.x + offset.x;
-            if (this.props.scrollY)
+            if (this.scrollY)
                 this._targetPosition.y = this._containerStart.y + offset.y;
         };
 
@@ -103,29 +59,55 @@ export class ScrollingContainer extends Container {
             this.setScrollPosition(scrollSpeed);
         };
 
-        this.dragEvent.stopEvent();
-        this.mouseScrollEvent.stopEvent();
-
     }
-
-    protected initProps(){
-        // let props = this.props; 
+   /**
+     * 是否启动拖拽滚动
+     * @default true
+     */
+    private _dragScrolling = true;
+    public get dragScrolling() {
+        return this._dragScrolling;
     }
-
-    /** 子类可以重写 */
-    public get props(): ScrollingContainerProps{
-
-        if(this._props){
-            return this._props;
+    public set dragScrolling(value) {
+        this._dragScrolling = value;
+        //Drag scroll and Mouse scroll
+        if (value) {
+            this.mouseScrollEvent.startEvent();
+            this.dragEvent.startEvent();
+        }else{
+            this.mouseScrollEvent.stopEvent();
+            this.dragEvent.stopEvent();
         }
-
-        this._props = new ScrollingContainerProps().proxyData;
-        this.initProps();
-
-        return this._props;
     }
-
-    protected _props?: TAny;    
+    /**
+     * 滚动的阻力或柔度 (0-1) 
+     * @default 0.5
+     */
+    public softness = 0.5;
+    /** 
+     * 滚动条的圆角半径 设置0时，滚动条为直角长方形
+     * @default 0
+     */
+    public radius = 0;
+    /**
+     * 遮罩的扩充范围
+     */
+    public expandMask = 0;
+    /** 
+     * 是否开启滚动动画 
+     * @default false
+     */
+    public animating = false;
+    /** 
+     * 是否启用水平滚动 
+     * @default false
+     */
+    public scrollX = false;
+    /**
+     * 是否滚动中
+     */
+    public scrollY = false;
+    
     /**
      * 内容容器
      * @private
@@ -167,14 +149,13 @@ export class ScrollingContainer extends Container {
     public update(_style: CSSStyle) {
         super.update(_style);
         if (this._lastWidth != this._width || this._lastHeight != this._height) {
-            const _of = this.props.expandMask;
+            const _of = this.expandMask;
             this.style.maskPosition = [_of,_of];
             this.style.maskSize = [ this._width,this._height];
             this._lastWidth = this._width;
             this._lastHeight = this._height;
             this.setScrollPosition();
         }
-
         
     }
 
@@ -183,8 +164,8 @@ export class ScrollingContainer extends Container {
             this._Speed = speed;
         }
 
-        if (!this.props.animating) {
-            this.props.animating = true;
+        if (!this.animating) {
+            this.animating = true;
             this._lastPosition.copyFrom(this._innerContainer.position);
             this._targetPosition.copyFrom(this._innerContainer.position);
             this.updateScrollPosition(0);
@@ -228,15 +209,6 @@ export class ScrollingContainer extends Container {
     protected initScrolling() {
 
         this._isInitScrolling = true;
-        
-        //Drag scroll and Mouse scroll
-        if (this.props.dragScrolling) {
-            this.mouseScrollEvent.startEvent();
-            this.dragEvent.startEvent();
-        }else{
-            this.mouseScrollEvent.stopEvent();
-            this.dragEvent.stopEvent();
-        }
 
         this.updateScrollBars();
     }
@@ -253,10 +225,10 @@ export class ScrollingContainer extends Container {
      */
     public forcePctPosition(direction: "x" | "y", pct: number) {
         const bounds = this.getInnerBounds();
-        if (this.props.scrollX && direction == "x") {
+        if (this.scrollX && direction == "x") {
             this._innerContainer.position[direction] = -((bounds.width - this._width) * pct);
         }
-        if (this.props.scrollY && direction == "y") {
+        if (this.scrollY && direction == "y") {
             this._innerContainer[direction] = -((bounds.height - this._height) * pct);
         }
         this._Position[direction] = this._targetPosition[direction] = this._innerContainer.position[direction];
@@ -267,7 +239,7 @@ export class ScrollingContainer extends Container {
         const bounds = this.getInnerBounds();
 
         let dif;
-        if (this.props.scrollX) {
+        if (this.scrollX) {
             const x = Math.max(0, (Math.min(bounds.width, pos.x)));
             if (x + this._innerContainer.x > this._width) {
                 dif = x - this._width;
@@ -279,7 +251,7 @@ export class ScrollingContainer extends Container {
             }
         }
 
-        if (this.props.scrollY) {
+        if (this.scrollY) {
             const y = Math.max(0, (Math.min(bounds.height, pos.y)));
 
             if (y + this._innerContainer.y > this._height) {
@@ -301,10 +273,10 @@ export class ScrollingContainer extends Container {
 
     protected updateScrollPosition(delta: number) {
         this._stop = true;
-        if (this.props.scrollX) this.updateDirection("x", delta);
-        if (this.props.scrollY) this.updateDirection("y", delta);
+        if (this.scrollX) this.updateDirection("x", delta);
+        if (this.scrollY) this.updateDirection("y", delta);
         if (stop) {
-            this.props.animating = false;
+            this.animating = false;
         }
     }
 
@@ -322,7 +294,7 @@ export class ScrollingContainer extends Container {
         if (!this.scrolling && Math.round(this._Speed[direction]) !== 0) {
 
             this._targetPosition[direction] += this._Speed[direction];
-            this._Speed[direction] = Utils.Lerp(this._Speed[direction], 0, (5 + 2.5 / Math.max(this.props.softness, 0.01)) * delta);
+            this._Speed[direction] = Utils.Lerp(this._Speed[direction], 0, (5 + 2.5 / Math.max(this.softness, 0.01)) * delta);
 
             if (this._targetPosition[direction] > 0) {
                 this._targetPosition[direction] = 0;
@@ -336,7 +308,7 @@ export class ScrollingContainer extends Container {
         
         if (!this.scrolling && Math.round(this._Speed[direction]) === 0 && (this._innerContainer[direction] > 0 || this._innerContainer[direction] < min)) {
             const target = this._Position[direction] > 0 ? 0 : min;
-            this._Position[direction] = Utils.Lerp(this._Position[direction], target, (40 - (30 * this.props.softness)) * delta);
+            this._Position[direction] = Utils.Lerp(this._Position[direction], target, (40 - (30 * this.softness)) * delta);
             this._stop = false;
         }
         else if (this.scrolling || Math.round(this._Speed[direction]) !== 0) {
@@ -347,11 +319,11 @@ export class ScrollingContainer extends Container {
             }
             if (this._targetPosition[direction] > 0) {
                 this._Speed[direction] = 0;
-                this._Position[direction] = 100 * this.props.softness * (1 - Math.exp(this._targetPosition[direction] / -200));
+                this._Position[direction] = 100 * this.softness * (1 - Math.exp(this._targetPosition[direction] / -200));
             }
             else if (this._targetPosition[direction] < min) {
                 this._Speed[direction] = 0;
-                this._Position[direction] = min - (100 * this.props.softness * (1 - Math.exp((min - this._targetPosition[direction]) / -200)));
+                this._Position[direction] = min - (100 * this.softness * (1 - Math.exp((min - this._targetPosition[direction]) / -200)));
             }
             else {
                 this._Position[direction] = this._targetPosition[direction];
