@@ -88,12 +88,12 @@ Version:
 | vfui.Ticker | 心跳 |
 | vfui.Tween | 缓动 |
 | vfui.Timeline | 缓动 |
+| vfui.Sound | 音频 |
 | vfui.Utils | 工具类 |
 
 
 计划中：
 
-    Sound - 音频
     Recording/Audio - 麦克风
     Spine/DB - 龙骨
     Video - 视频
