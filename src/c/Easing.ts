@@ -216,8 +216,8 @@ export const Easing = {
         },
 
         Out(k: number) {
-            let x = 2.75;
-            let y = 7.5625;
+            const x = 2.75;
+            const y = 7.5625;
             if (k < 1 / x) {
                 return y * k * k;
             } else if (k < 2 / x) {

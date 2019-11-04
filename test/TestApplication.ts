@@ -25,10 +25,7 @@ export default class TestApplication {
         this.resize();
         this.app.ticker.maxFPS = 60;
         this.app.ticker.add(this.updata, this);
-        const loader = PIXI.Loader.shared;
-        loader.add('assets/uisprites.json').load((loader: PIXI.Loader, resources: object) => {
-            this.callback.call(this.thisObj, this.app, this.uiStage)
-        });
+        this.callback.call(this.thisObj, this.app, this.uiStage);
     }
 
     private resize() {

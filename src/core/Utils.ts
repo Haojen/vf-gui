@@ -12,8 +12,28 @@ export function log(message?: string | number | object, ...optionalParams: strin
     console.log(message, ...optionalParams);
 }
 
-export function setSourcePath(params: (path: TAny,cls?:TAny) => {}) {
+export function setSourcePath(params: (path: TAny,cls?: TAny) => {}) {
     _getSourcePath = params;
+}
+
+export function getTexture(src: TAny){
+    if(_getSourcePath){
+        src = _getSourcePath(src);
+    }
+    if(src instanceof PIXI.Texture){
+        return src;
+    }
+    return PIXI.Texture.from(src);
+}
+
+export function getSound(src: TAny){
+    if(_getSourcePath){
+        src = _getSourcePath(src);
+    }
+    if(src instanceof PIXI.sound.Sound){
+        return src;
+    }
+    return PIXI.sound.Sound.from(src);
 }
 
 /**
@@ -96,6 +116,9 @@ export function hexToRgba(hex: string, alpha: number) {
  */
 export function componentToHex(c: number) {
     const hex = c.toString(16);
+    if(hex.length ==4){
+        return "00" + hex;
+    }
     return hex.length == 1 ? "0" + hex : hex;
 }
 /**

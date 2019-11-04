@@ -8,13 +8,16 @@ export default class TestContainer {
 
     private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
 
+        
         /** 单背景色 */
         let container1 = new vfui.Container();
+        container1.style.display = "none";
         container1.name = "1";
-        container1.style.left = 100;
-        container1.style.top = 100;
-        container1.style.width = 100;
-        container1.style.height = 100;
+        container1.x = 100;
+        container1.y = 100;
+        container1.width = 100;
+        container1.height = 100;
+        container1.style.left = 500;//display = "none"; 时，布局属性失效
         container1.style.backgroundColor = 100;
         uiStage.addChild(container1);
 
@@ -129,9 +132,9 @@ export default class TestContainer {
 
 
         vfui.TickerShared.addUpdateEvent(() => {
-            container6.style.rotation += Math.PI / 180;
+            container6.style.rotation += 1;
+            //container6.rotation += 1;
         }, this);
-
 
     }
 }

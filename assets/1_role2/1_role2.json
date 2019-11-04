@@ -6,8 +6,7 @@
 		"rotated": false,
 		"trimmed": true,
 		"spriteSourceSize": {"x":19,"y":3,"w":255,"h":391},
-		"sourceSize": {"w":274,"h":394},
-		"anchor": {"x":0.478102,"y":0.997462}
+		"sourceSize": {"w":274,"h":394}
 	},
 	"1_role2-sheet1.png":
 	{
@@ -15,8 +14,7 @@
 		"rotated": false,
 		"trimmed": true,
 		"spriteSourceSize": {"x":0,"y":0,"w":251,"h":394},
-		"sourceSize": {"w":274,"h":394},
-		"anchor": {"x":0.485401,"y":0.997462}
+		"sourceSize": {"w":274,"h":394}
 	},
 	"1_role2-sheet2.png":
 	{
@@ -24,8 +22,7 @@
 		"rotated": false,
 		"trimmed": true,
 		"spriteSourceSize": {"x":0,"y":3,"w":251,"h":391},
-		"sourceSize": {"w":274,"h":394},
-		"anchor": {"x":0.485401,"y":0.997462}
+		"sourceSize": {"w":274,"h":394}
 	}},
 "animations": {
 	"0": ["1_role2-sheet0.png"],

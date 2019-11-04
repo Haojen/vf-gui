@@ -1,35 +1,8 @@
 import { UIBase } from "../core/UIBase";
-import { _getSourcePath } from "../core/Utils";
-import { BaseFields } from "../layout/BaseFields";
-import { CSSStyle } from "../layout/CSSStyle";
+import { getTexture } from "../core/Utils";
+import { ComponentEvent } from "../interaction/Index";
+import { addDrawList } from "../layout/CSSSSystem";
 
-/** Image 对象的自有字段 */
-class Fields extends BaseFields{
-
-    public constructor(){
-        super();
-    }
-
-    /**
-     * 图像路径或位图对象
-     */
-    src:number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
-    /**
-     * 矩形区域，它定义素材对象的九个缩放区域。
-     * fillMode = scale 时，[leftWidth,rightWidth,topHeight,bottomHeight]
-     * fillMode = repeat 是，[x,y,scalex,scaley]
-     */
-    scale9Grid?:number[];
-    /**
-     * 填充模式
-     * 设置scale后，可设置scale9Grid进行调整缩放区域
-     */
-    fillMode?:"no-repeat"|"repeat"|"scale" = "no-repeat";
-    /**
-     * 填充颜色值
-     */
-    tint?:number;
-}
 
 /**
  * 图片
@@ -37,101 +10,94 @@ class Fields extends BaseFields{
  */
 export class Image extends UIBase {
 
-    /** 图片加载完成事件 */
-    public static readonly onload = "onload";
-
 
     public constructor() {
         super();
-        this.fields = new Fields().proxyData; 
     }
 
-    public readonly fields: Fields;
     protected _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
     protected _texture: PIXI.Texture | undefined;
     protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
 
-    public getMaskSprite(){
-        return this._sprite;
+    /**
+     * 图像路径或位图对象
+     */
+    private _src: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
+    public get src(): number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined {
+        return this._src;
+    }
+    public set src(value: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined) {
+        this._src = value;
+        addDrawList("src",this,this.srcSystem);
+    }
+    /**
+     * 矩形区域，它定义素材对象的九个缩放区域。
+     * 
+     * fillMode = scale 时，[leftWidth,rightWidth,topHeight,bottomHeight]
+     * 
+     * fillMode = repeat 是，[scalex,scaley,x,y]
+     */
+    private _scale9Grid?: number[];
+    public get scale9Grid(){
+        return this._scale9Grid;
+    }
+    public set scale9Grid(value) {
+        this._scale9Grid = value;
+        addDrawList("scale9Grid",this,this.scale9GridSystem);
+    }
+    /**
+     * 填充模式
+     * 设置scale后，可设置scale9Grid进行调整缩放区域
+     */
+    private _fillMode?: "no-repeat" | "repeat" | "scale" = "no-repeat";
+    public get fillMode() {
+        return this._fillMode;
+    }
+    public set fillMode(value) {
+        this._fillMode = value;
+        this._source = undefined;
+        addDrawList("src",this,this.srcSystem);
+    }
+    /**
+     * 锚点，调整位图的坐标中点 0-1
+     */
+    private _anchorX?: number;
+    public get anchorX() {
+        return this._anchorX;
+    }
+    public set anchorX(value) {
+        this._anchorX = value;
+        addDrawList("anchor",this,this.anchorSystem);
+    }
+    /**
+     * 锚点，调整位图的坐标中点 0-1
+     */
+    private _anchorY?: number;
+    public get anchorY() {
+        return this._anchorY;
+    }
+    public set anchorY(value) {
+        this._anchorY = value;
+        addDrawList("anchor",this,this.anchorSystem);
     }
 
-    public update(_style:CSSStyle) {
-        if(this.fields.dirty.dirty){
-            console.log("update");
-            let {fields,_sprite,_texture,container,_source} = this;
-            fields.dirty.dirty = false;
-            if(fields.src === undefined){
-                if(_sprite && _sprite.parent){
-                    container.removeChild(_sprite);
-                    _sprite.destroy();
-                }
-                if(_texture){
-                    _texture.removeAllListeners();
-                }
-                _sprite = undefined;
-                _texture = undefined;
-                _source = undefined;
-                return;
-            }
+  
+    public update(){
+        this.syncImageSize();
+    }
 
-            if(fields.src && fields.src !== _source){
-                this._source = _source = fields.src;
-                if(fields.src instanceof PIXI.Texture){
-                    this._texture = _texture = fields.src;
-                }else{
-                    this._texture = _texture = PIXI.Texture.from(fields.src);
-                }
-                this._texture.once("update", () => {
-                    this.syncImageSize();
-                    this.emit(Image.onload, this);
-                }, this);
-                if (fields.fillMode === "no-repeat") {
-                    _sprite = new PIXI.Sprite(_texture);
-                } else if (fields.fillMode === "repeat") {
-                    _sprite = new PIXI.TilingSprite(_texture);
-                } else if (fields.fillMode === "scale") {
-                    _sprite = new PIXI.NineSlicePlane(_texture);
-                }
-                this._sprite = _sprite;
-            }
-
-            if(fields.scale9Grid){
-                if (_sprite instanceof PIXI.TilingSprite) {
-                    _sprite.tileScale.set(fields.scale9Grid[0],fields.scale9Grid[1]);
-                    _sprite.tilePosition.set(fields.scale9Grid[2],fields.scale9Grid[3]);
-                } else if (_sprite instanceof PIXI.NineSlicePlane) {
-                    if(fields.scale9Grid[0] !== undefined){
-                        _sprite.leftWidth = fields.scale9Grid[0];
-                    }
-                    if(fields.scale9Grid[1] !== undefined){
-                        _sprite.rightWidth = fields.scale9Grid[1];
-                    }
-                    if(fields.scale9Grid[2] !== undefined){
-                        _sprite.topHeight = fields.scale9Grid[2];
-                    }
-                    if(fields.scale9Grid[3] !== undefined){
-                        _sprite.bottomHeight = fields.scale9Grid[3];
-                    }
-                }
-            }
-
-            if(_sprite){
-                if(_sprite.parent == null){
-                    container.addChild(_sprite);
-                }
-                this.syncImageSize();
-
-                if(fields.tint!==undefined){
-                    _sprite.tint = fields.tint;
-                }
-            }
+    public release(){
+        super.release();
+        this.offAll(ComponentEvent.COMPLETE);
+        if(this._sprite && this._sprite.parent){
+            this._sprite.parent.removeChild(this._sprite).destroy();
         }
     }
 
     protected syncImageSize(){
-        let {_sprite,_texture} = this;
+        const {_sprite,_texture} = this;
         if(_sprite){
-            if(this._width>0){
+            if(this._width>1){
                 _sprite.width = this._width;
             }else{
                 if(_texture && _texture.width > 1){ 
@@ -140,14 +106,111 @@ export class Image extends UIBase {
                 
             }
 
-            if(this._height>0){
+            if(this._height>1){
                 _sprite.height = this._height;
             }else{
                 if(_texture && _texture.height > 1){ 
                     this._height = _sprite.height = _texture.frame.height;
                 }
             }
+            
+            this.anchorSystem();
         }
     }
+
+    protected srcSystem(){
+        const {container,src} = this;
+        if(src === undefined && this._sprite && this._sprite.parent){
+            container.removeChild(this._sprite);
+            this._sprite.destroy();
+        }
+        if(this._texture){
+            this._texture.removeAllListeners();
+        }
+
+        if(src && src !== this._source){
+            this._source  = src;
+            const texture = this._texture = getTexture(src);
+            texture.once("update", () => {
+                this.syncImageSize();
+                this.emit(ComponentEvent.COMPLETE, this);
+            }, this);
+
+            let sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined = this._sprite;
+
+            if(!PIXI.utils.isWebGLSupported()){
+                sprite = PIXI.Sprite.from(texture);
+            }else{
+                if (this.fillMode === "no-repeat") {
+                    if(sprite instanceof PIXI.Sprite){
+                        sprite.texture = texture;
+                    }else{
+                        sprite = new PIXI.Sprite(texture);
+                    }
+                } else if (this.fillMode === "repeat") {
+                    if(sprite instanceof PIXI.TilingSprite){
+                        sprite.texture = texture;
+                    }else{
+                        sprite = new PIXI.TilingSprite(texture);
+                    }          
+                } else if (this.fillMode === "scale") {
+                    if(sprite instanceof PIXI.NineSlicePlane){
+                        sprite.texture = texture;
+                    }else{
+                        sprite = new PIXI.NineSlicePlane(texture);
+                    }
+                }
+            }
+            if(sprite && sprite.parent == undefined){
+                this._sprite = container.addChild(sprite);
+            }  
+            this.scale9GridSystem();
+            this.syncImageSize();
+        }
+        
+    }
+
+    protected scale9GridSystem(){
+        if(this._sprite === undefined || this.scale9Grid === undefined){
+            return;
+        }
+
+        const sprite = this._sprite;
+        const scale9Grid = this.scale9Grid;
+
+        if (sprite instanceof PIXI.TilingSprite) {
+            sprite.tileScale.set(scale9Grid[0],scale9Grid[1]);
+            sprite.tilePosition.set(scale9Grid[2],scale9Grid[3]);
+        } else if (sprite instanceof PIXI.NineSlicePlane) {
+            if(scale9Grid[0] !== undefined){
+                sprite.leftWidth = scale9Grid[0];
+            }
+            if(scale9Grid[1] !== undefined){
+                sprite.rightWidth = scale9Grid[1];
+            }
+            if(scale9Grid[2] !== undefined){
+                sprite.topHeight = scale9Grid[2];
+            }
+            if(scale9Grid[3] !== undefined){
+                sprite.bottomHeight = scale9Grid[3];
+            }
+        }
+    }
+
+    protected anchorSystem(){
+        if(this._sprite === undefined){
+            return;
+        }
+        const sprite = this._sprite;
+
+        if(this.anchorX){
+            sprite.x = -Math.floor( sprite.width * this.anchorX);
+        }
+        if(this.anchorY){
+            sprite.y = -Math.floor( sprite.height * this.anchorY);
+        }
+    }
+
+
 
 }

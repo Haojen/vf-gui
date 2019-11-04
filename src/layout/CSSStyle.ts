@@ -1,4 +1,3 @@
-import { _getSourcePath } from "../core/Utils";
 import { UIBase } from "../UI";
 
 /**
@@ -6,45 +5,14 @@ import { UIBase } from "../UI";
  */
 export class CSSStyle {
 
-    public dirty = {
-        /** 
-         * 内部脏数据标记 
-         * */
-        dirty: false,
-        /**
-         * transform 脏数据标记 
-         */
-        transform: false,
-        /**
-         * 遮罩脏数据
-         */
-        mask: false,
-        /**
-         * 脏背景
-         */
-        background: false,
-        /**
-         * 常规的不需要改变的脏数据
-         */
-        alpha: false
-
-    }
-
-    /** 
-     * 存放上次的值 
-     * */
-    public _oldValue: CSSStyle = ({} as TAny);
-    /** 
-     * 内部百分比转换至 
-     * */
-    public _valuesPct: { [key: string]: number } = {};
+    public parent: TAny;
     /** 
      * 事件发送
      * */
     public eventEmitter = new PIXI.utils.EventEmitter();
 
-
-
+    public hCenter?: number;
+    public vCenter?: number;
 
     /** 
      * 表示显示对象的宽度，以像素为单位。
@@ -71,7 +39,6 @@ export class CSSStyle {
      * */
     public minHeight?: number;
 
-
     /** 
      * 设置定位元素左外边距边界与其容器左边界之间的偏移。 
      * */
@@ -89,11 +56,13 @@ export class CSSStyle {
      * */
     public bottom: number | string | undefined;
 
-    //transform start
     /** 
      * 缩放
      * */
     public scaleX = 1
+    /** 
+     * 缩放
+     * */
     public scaleY = 1
     /** 
      * 设置元素水平拉伸扭曲（角度）。
@@ -104,8 +73,13 @@ export class CSSStyle {
      * */
     public skewY = 0;
 
-    /** 设置元素旋转 （角度） */
+    /** 
+     * 设置元素旋转 （角度）
+      */
     public rotate = 0;
+    /** 
+     * 设置元素旋转 （角度）
+      */
     public get rotation() {
         return this.rotate;
     }
@@ -113,10 +87,17 @@ export class CSSStyle {
         this.rotate = value;
     }
 
-    /** 轴点 0 - 1 */
+    /** 
+     * 轴点 像素值
+     */
     public pivotX = 0;
+    /** 
+     * 轴点 像素值
+     */
     public pivotY = 0;
-    //transform end
+
+
+    
 
     /** 
      * 规定元素的定位类型。
@@ -124,14 +105,48 @@ export class CSSStyle {
     public position: Position = "absolute";
     /** 
      * 规定元素的显示类型。布局模式 
+     * 
+     * grid 模式下，子节点会忽略left,top,right，bottom,width,height等
+     * 
+     * none 模式下，忽略style
      * */
     public display: Display = "block";
-    /** 
-     * grid布局中行列 auto 根据父级自动计算 
-     * */
-    public gridRows?: number | "auto";
-    public gridColumns?: number | "auto";
-    public gridSize?: number[];
+    /**
+     * 在容器里面的水平位置（左中右）
+     */
+    public justifyContent?: "flex-start"|"flex-end"|"center";
+    /**
+     * 在容器里面的垂直位置（上中下）
+     */
+    public alignContent?: "flex-start"|"flex-end"|"center";
+    /**
+     * 基于 网格列的维度，去定义网格线的名称和网格轨道的尺寸大小。
+     * 
+     * 方式一 [80,90,100]|["30%","40%","30%"] 第一列宽度80，第二列宽度，第三列宽度100
+     * 
+     * 方式二 ["repeat",3,100] 三列，宽度都为100像素
+     */
+    public gridTemplateColumns?: number[]|string[]; 
+    /**
+     * 设置列间距
+     */
+    public gridColumnGap?: number;
+    /**
+     * 基于 网格行的维度，去定义网格线的名称和网格轨道的尺寸大小。
+     * 
+     * 方式一 [80,90,100]|["30%","40%","30%"] 第一行高度80，第二行高度90，第三行行高度100
+     * 
+     * 方式二 ["repeat",3,100] 三行，宽度都为100像素
+     */
+    public gridTemplateRows?: number[]|string[];
+    /**
+     * 设置行间距
+     */
+    public gridRowGap?: number;
+
+
+
+
 
     /**
       * 调整元素的色调，取消设置0xFFFFFF
@@ -145,6 +160,7 @@ export class CSSStyle {
      * 表示指定对象的 Alpha 透明度值。有效值为0（完全透明）～ 1（完全不透明）。
      * */
     public alpha = 1;
+
     /** 
      * 显示对象是否可见 
      * */
@@ -158,9 +174,9 @@ export class CSSStyle {
 
 
     /** 
-     * 设置元件的背景颜色。（16进制数字0xffffff | 字符串 "#ffffff"） 
+     * 设置元件的背景颜色。（16进制数字0xffffff
      * */
-    public backgroundColor?: number | string;
+    public backgroundColor?: number;
     /** 
      * 设置元素的背景图像。backgroundImage = "./xxx.png" 
      * */
@@ -185,55 +201,74 @@ export class CSSStyle {
     public backgroundSize?: number[];
 
 
-    /** 遮罩图 */
+    /** 
+     * 遮罩图 
+     */
     public maskImage?: string | PIXI.Graphics | PIXI.Texture | UIBase;
-    /** 设置位数 [x,y] */
+    /** 
+     * 设置位数 [x,y] 
+     */
     public maskPosition?: number[];
-    /** 设置遮罩位图的大小 */
+    /** 
+     * 设置遮罩位图的大小 
+     */
     public maskSize?: number[];
 
-    public dirtyCheck(key: string, value: TAny) {
-        dirtyCheck(this, key, value);
-    }
-}
 
-/**
- * 脏数据检测
- * @param target 
- * @param key 
- * @param value 
- */
-export function dirtyCheck(target: CSSStyle, key: string, value: TAny) {
 
-    if (typeof value === "string" && value.indexOf("%") !== -1) {
-        target._valuesPct[key] = parseFloat(value.replace('%', '')) * 0.01 || 0;
-    } else {
-        target._valuesPct[key] = 0;
-    }
 
-    switch (key) {
-        case "tint":
-        case "alpha":
-        case "visible":
-            target.dirty.alpha = true;
-            break;
-        case "maskImage":
-        case "maskPosition":
-        case "maskSize":
-            target.dirty.mask = true;
-            break;
-        case "backgroundColor":
-        case "backgroundImage":
-        case "backgroundPositionX":
-        case "backgroundPositionY":
-        case "backgroundRepeat":
-        case "backgroundSize":
-            //需要背景的组件，自己实现
-            target.dirty.background = true;
-            break;
-        default:
-            target.dirty.dirty = true;
-    }
+    /** 
+     * 文本颜色，16进制 
+     * */
+    public color?: number|number[] = 0xfffff0;
+    /** 字符间距 */
+    public letterSpacing?: number;
+    /** 
+     * 是否自动换行 
+     * */
+    public wordWrap = false;
+    /** 
+     * 自动换行的宽度 
+     * */
+    public wordWrapWidth?: number;
+    /** 
+     * 多行文本(wordWrap = true) - 对齐方式
+     * */
+    public textAlign: "left" | "right" | "center" = "left";
+    /** 
+     * 多行文本(wordWrap = true) - 行高 
+     * */
+    public lineHeight?: number;
+    /** 字体 示例：fontFamily = "\"Comic Sans MS\", cursive, sans-serif" */
+    public fontFamily?: string | string[];
+    /** 字体大小 */
+    public fontSize = 22;
+    /** 字体样式 */
+    public fontStyle: "normal" | "italic" | "oblique" = "normal";
+    /**  字体变形，普通或小写  */
+    public fontVariant: "normal" | "small-caps" = "normal";
+    /** 字体粗细 */
+    public fontWeight: "normal" | 'bold' | 'bolder' | 'lighter' | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 = "normal";
+    /** 内部填充 */
+    public padding?: number;
+    /** 描边颜色 */
+    public stroke?: string | number;
+    /** 描边的笔触粗细值 */
+    public strokeThickness = 0;
+    /** 是否设置投影 */
+    public dropShadow = false;
+    /** 投影的alpha值 */
+    public dropShadowAlpha = false;
+    /** 是否设置投影 */
+    public dropShadowAngle = 0;//Math.PI / 6;
+    /** 投影的模糊半径 */
+    public dropShadowBlur = 0;
+    /** 投影填充颜色值 */
+    public dropShadowColor = 0x000000;
+    /** 投影深度 */
+    public dropShadowDistance = 5;
+    /** 中文换行 */
+    public breakWords = true;
 }
 
 /**
@@ -251,57 +286,11 @@ export function dirtyCheck(target: CSSStyle, key: string, value: TAny) {
 export type Position = "absolute" | "fixed" | "static";
 
 /** 对齐方式 父级如果是grid布局，会忽略当前居中模式 */
-export type Align = "left" | "right" | "right" | "bottom" | "top" | "center";
+export type Align = "left" | "right"  | "bottom" | "top" | "center" | "middle";
 
 /** 布局模式 */
-export type Display = "block" | "grid";
+export type Display = "none"|"block" | "grid";
 
-/** 文本  */
-export class Text extends CSSStyle {
-    
-    /** 
-     * 文本颜色，16进制 
-     * */
-    public color?: number;
-    /** 文本对齐,不存在（top，bottom） */
-    public textAlign: Align = "left";
-    /** 行高 */
-    public lineHeight?: number
-    /** 字体 */
-    public fontFamily?: string | string[];
-    /** 字体大小 */
-    public fontSize?: number | string;
-    /** 字体样式 */
-    public fontStyle?: "normal" | "italic" | "oblique" | "initial" | "inherit";
-    /**  字体变形，普通或小写  */
-    public fontVariant?: "normal" | "small-caps" | "initial" | "inherit";
-    /** 字体粗细 */
-    public fontWeight?: 'normal' | 'bold' | 'bolder' | 'lighter' | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
-    /** 字符间距 */
-    public letterSpacing?: number;
-    /** 内部填充 */
-    public padding?: number;
-    /** 描边颜色 */
-    public textStrokeColor?: string | number;
-    /** 描边的笔触粗细值 */
-    public textStrokeThickness = 0;
-    /** 是否自动换行 */
-    public wordWrap = false;
-    /** 自动换行的宽度 */
-    public wordWrapWidth?: number;
-    /** 是否设置投影 */
-    public dropShadow = false;
-    /** 投影的alpha值 */
-    public dropShadowAlpha = false;
-    /** 是否设置投影 */
-    public dropShadowAngle = Math.PI / 6;
-    /** 投影的模糊半径 */
-    public dropShadowBlur = 0;
-    /** 投影填充颜色值 */
-    public dropShadowColor = 0x000000;
-    /** 投影深度 */
-    public dropShadowDistance = 5;
-}
 
 /*
 CSS3.0 所有样式属性

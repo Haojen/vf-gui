@@ -1,4 +1,5 @@
 import { Core } from "./Core";
+import {shared as TickerShared} from "./Ticker";
 
 /**
  * UI的舞台对象，展示所有UI组件
@@ -13,26 +14,42 @@ import { Core } from "./Core";
 export class Stage extends Core{
 
     public constructor(width: number, height: number) {
-        super();
-        this.container.name = "Stage";
+        super(); 
         this._width = width;
         this._height = height;
         this.stage = this;
-        this.hitArea = new PIXI.Rectangle(0, 0, 0, 0);
+        this.container.name = "Stage";
+        this.container.hitArea = new PIXI.Rectangle(0, 0, width, height);
+        this.container.interactive = true;
+        this.container.interactiveChildren = true;
         Stage._stage = this;
+        this.initialized = true;
 
     }
+    
 
-    private static _stage:Stage;
+    private static _stage: Stage;
     public static get Ins(){
         return Stage._stage;
     }
+    
+    public releaseAll(){
+        for(let i=0;i<this.uiChildren.length;i++){
+            const ui = this.uiChildren[i];
+            ui.offAll();
+            ui.release();
+            ui.releaseAll();
+        }
+        this.uiChildren = [];
+        this.container.removeAllListeners();
+        this.container.removeChildren();
+        TickerShared.removeAllListeners();
+    }
 
-    /**
-     * 可交互区域
+    /**  
+     * 舞台引用
      */
-    public hitArea = new PIXI.Rectangle(0, 0, 0, 0);
-
+    public stage: Stage | undefined;
     public _width: number = 0;
     public get width(): number {
         return this._width;
@@ -55,11 +72,10 @@ export class Stage extends Core{
         }
     }
 
+    
     public resize(): void {
 
-        this.hitArea.width = this._width;
-        this.hitArea.height = this._height;
-        this.container.hitArea = this.hitArea;
+        this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
         this.updateChildren();
     }
 

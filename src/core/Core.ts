@@ -1,6 +1,7 @@
 import { ContainerBase } from "../c/ContainerBase";
 import { UIBase } from "./UIBase";
 import { Stage } from "../UI";
+import { ComponentEvent } from "../interaction/Index";
 
 export class Core extends PIXI.utils.EventEmitter{
  
@@ -19,17 +20,13 @@ export class Core extends PIXI.utils.EventEmitter{
      * 父容器 
      */
     public parent: UIBase | Stage | undefined;
-    /**  
-     * 舞台引用
-     */
-    public stage: Stage | undefined;
     /**
      * 节点列表
      */
     public uiChildren: UIBase[] = [];
 
     /** 没有功能实现，内部编辑器 */
-    public container:ContainerBase;
+    public container: ContainerBase;
 
     /** 添加显示对象，需集成UIBASE */
     public addChild(item: UIBase) {
@@ -42,11 +39,16 @@ export class Core extends PIXI.utils.EventEmitter{
             item.parent.removeChild(item);
         }
 
-        item.parent = this as any;    
+        item.parent = this as TAny;    
         this.container.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
         this.updatesettings(true, true);
+        this.emit(ComponentEvent.ADDED,this);
         return item;
+    }
+
+    public getChildAt(index: number){
+        return this.uiChildren[index] || undefined;
     }
 
     /**
@@ -68,10 +70,20 @@ export class Core extends PIXI.utils.EventEmitter{
                 if (oldUIParent && oldUIParent.updatesettings)
                     oldUIParent.updatesettings(true, true);
             }, 0);
+
+            this.emit(ComponentEvent.REMOVEED,this);
         }
+        return item;
     }
 
-   /**
+    public removeChildren(beginIndex?: number | undefined, endIndex?: number | undefined){
+        const start = beginIndex?beginIndex+ this._childrenStartIndex:this._childrenStartIndex;
+        const end = endIndex?endIndex- this._childrenStartIndex:this.uiChildren.length - this._childrenStartIndex;
+        for(let i = start;i<end;i++){
+            this.removeChild(this.uiChildren[i]);
+        }
+    }
+    /**
      * 渲染父容器
      */
     public updateParent() {
@@ -140,7 +152,10 @@ export class Core extends PIXI.utils.EventEmitter{
         return this.container.cacheAsBitmap;
     }
 
-
+    /** 清除全部事件 */
+    public offAll(event?: string | symbol){
+        return this.removeAllListeners(event);
+    }
 
 }
 

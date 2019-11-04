@@ -5,6 +5,7 @@ import * as InputController from "./InputController";
 import {MouseScrollEvent} from "./MouseScrollEvent";
 import {InteractionEvent,TouchMouseEvent} from "./InteractionEvent";
 import * as ComponentEvent from "./ComponentEvent";
+import * as GroupController from "./GroupController";
 
 export {
     ClickEvent,
@@ -14,5 +15,6 @@ export {
     MouseScrollEvent,
     InteractionEvent,
     TouchMouseEvent,
-    ComponentEvent
+    ComponentEvent,
+    GroupController
 };

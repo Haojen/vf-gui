@@ -44,11 +44,22 @@ export default class HtmlInput extends PIXI.utils.EventEmitter{
         this._domInput.disabled = value;
     }
 
+    public get maxlength(){
+        return this._domInput.maxLength;
+    }
+
+    public set maxlength(value:number){
+        this._domInput.maxLength = value;
+    }
+
     /* 输入郑泽斌表达式 */
     public get restrict() {
         return this._restrictRegex;
     }
     public set restrict(regex) {
+        if(regex === undefined){
+            return;
+        }
         if (regex instanceof RegExp) {
             let str = regex.toString().slice(1, -1);
 
@@ -74,10 +85,6 @@ export default class HtmlInput extends PIXI.utils.EventEmitter{
 
     public setStyleValue(key:TAny,value:TAny){
         this._domInput.style[key] = value;
-    }
-
-    public setAttribute(key:string,value:string){  
-        this._domInput.setAttribute(key,value);
     }
 
     public select(){
@@ -126,7 +133,7 @@ export default class HtmlInput extends PIXI.utils.EventEmitter{
         }
     }
 
-    public destroy(){
+    public release(){
         this.removeDom();
         this.removeEvent();
         this.removeAllListeners();
@@ -194,9 +201,10 @@ export default class HtmlInput extends PIXI.utils.EventEmitter{
     }
 
     private _onInputInput(e: KeyboardEvent){
-        if (this._restrictRegex)
+        if((e as TAny).data != null){
+            if (this._restrictRegex)
             this._applyRestriction();
-
+        }
         this.emit(KeyEvent.input, this.value)
         e.preventDefault();
     }

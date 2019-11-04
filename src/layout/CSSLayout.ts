@@ -1,154 +1,123 @@
 import { UIBase } from "../core/UIBase";
 import { CSSStyle } from "./CSSStyle";
 import { Stage } from "../UI";
+import { updateBlockLayout } from "./CSSBlockLayout";
 
-
-/** 
- * 格式化值（int,%）到组件 
+export const $Rectangle = new PIXI.Rectangle();
+/**
+ * 布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸
  */
-export function formatStyleValue(style:CSSStyle,key: string, parentValue: number) {
-    if (style._valuesPct[key]) {
-        return  Math.round(style._valuesPct[key] * parentValue);
-    } else {
-        return (style as any)[key];
+
+
+export function formatRelative(value: number | string | undefined, total: number): number {
+    if (value == undefined) {
+        return NaN;
     }
+    if (typeof value === "number") {
+        return value;
+    }
+    const str = value;
+    const index = str.indexOf("%");
+    if (index == -1) {
+        return +str;
+    }
+    const percent = +str.substring(0, index);
+    return percent * 0.01 * total;
 }
 
-/**
- * 调整目标的元素的大小并定位这些元素。
- *
- * @param width 指定目标在目标坐标中的宽度（以像素为单位）。
- * @param height 指定组件在目标坐标中的高度（以像素为单位）。
- *
- */
-export function updateDisplayList(component: UIBase, _style: CSSStyle) {
-    if(!_style.dirty.dirty){
-        return;
-    }
-    _style.dirty.dirty = false;
-    let { container } = component;
 
-    let x = 0;
-    let y = 0;
+/**
+ * @private
+ * 设置组件的布局宽高
+ */
+export function getLayoutBoundsSize(target: UIBase, layoutWidth: number, layoutHeight: number) {
 
     let parentHeight = 0;
     let parentWidth = 0;
-    if (component.parent instanceof UIBase) {
-        parentWidth = component.parent.width;
-        parentHeight = component.parent.height;
-    } else if (component.parent instanceof Stage) {
-        parentWidth = component.parent.width;
-        parentHeight = component.parent.height;
+    if (target.parent instanceof UIBase) {
+        parentWidth = target.parent.width;
+        parentHeight = target.parent.height;
+    } else if (target.parent instanceof Stage) {
+        parentWidth = target.parent.width;
+        parentHeight = target.parent.height;
     }
 
-    if(_style.position === "fixed"){
-        parentWidth = Stage.Ins.width;
-        parentHeight = Stage.Ins.height;
-    }
+    const x = 0;
+    const y = 0;
+    const maxWidth = formatRelative(target.style.maxWidth,parentWidth);
+    const maxHeight = formatRelative(target.style.maxHeight,parentHeight);
+    const minWidth = formatRelative(target.style.minWidth,parentWidth);
+    const minHeight = formatRelative(target.style.minHeight,parentHeight);
+    let width = layoutWidth;
+    let height = layoutHeight;
 
-    let width = formatStyleValue(_style,"width", parentWidth);
-    let minWidth = formatStyleValue(_style,"minWidth", parentWidth);
-    let maxWidth = formatStyleValue(_style,"maxWidth", parentWidth);
-
-    let height = formatStyleValue(_style,"height", parentHeight);
-    let minHeight = formatStyleValue(_style,"minHeight", parentHeight);
-    let maxHeight = formatStyleValue(_style,"maxHeight", parentHeight);
-
-    let left = formatStyleValue(_style,"left", parentWidth);
-    let top = formatStyleValue(_style,"top", parentHeight);
-    let right = formatStyleValue(_style,"right", parentWidth);
-    let bottom = formatStyleValue(_style,"bottom", parentHeight);
-
-    if (_style.display === "block") {
-        if (_style.position === "absolute") {
-
-            let bounds = getChildBoundsSize(left, right, top, bottom,width,height, parentWidth, parentHeight, maxWidth, minWidth, maxHeight, minHeight);
-            width = bounds.width;
-            height = bounds.height;
-            x = bounds.x;
-            y = bounds.y;
-
-        } else if (_style.position === "fixed") {//fixed
-
-            let bounds = getChildBoundsSize(left, right, top, bottom,width,height, Stage.Ins.width, Stage.Ins.height, maxWidth, minWidth, maxHeight, minHeight);
-            width = bounds.width;
-            height = bounds.height;
-            x = bounds.x;
-            y = bounds.y;
-            
-            let globalPosition = container.toLocal(new PIXI.Point(x, y));
-            x = globalPosition.x;
-            y = globalPosition.y;
-        } else {
-            x = left;
-            y = top;
-        }
-    } else {//style.display = grid
-
-    }
-
-    //make pixel perfect
-    if (component.pixelPerfect) {
-        width = Math.round(width);
-        height = Math.round(height);
-        x = Math.round(x);
-        y = Math.round(y);
-    }
-
-    container.alpha = _style.alpha;
-    container.visible = _style.visibility === "hidden" ? false : true;
-
-    if (_style.zIndex !== -1) {
-        if (component.parent) {
-            component.parent.container.sortableChildren = true;
-            container.zIndex = _style.zIndex;
-        }
-    }
-    component.width = width;
-    component.height = height;
-    container.setTransform(x + _style.pivotX, y+_style.pivotY, _style.scaleX, _style.scaleY, _style.rotate, _style.skewX, _style.skewY,_style.pivotX,_style.pivotY);
-
-}
-
-/** 计算节点的宽高位置 */
-export function getChildBoundsSize(
-    left: number, right: number, top: number, bottom: number,
-    width: number, height: number,parentWidth:number,parentHeight:number,
-    maxWidth: number, minWidth: number, maxHeight: number, minHeight: number
-) {
-    let x = 0;
-    let y = 0;
-    
-    if (left !== undefined && right !== undefined) {
-        width = parentWidth - right - left;
-    }
-    if (top !== undefined && bottom !== undefined) {
-        height = parentHeight - bottom - top;
-    }
     //min/max sizes
-    if (maxWidth !== undefined && width > maxWidth) {
+    if (!isNaN(maxWidth) && width > maxWidth) {
         width = maxWidth;
     }
-    if (minWidth !== undefined && width < minWidth) {
+    if (!isNaN(minWidth) && width < minWidth) {
         width = minWidth;
     }
 
-    if (maxHeight !== undefined && height > maxHeight) {
+    if (!isNaN(maxHeight) && height > maxHeight) {
         height = maxHeight;
     }
-    if (minHeight !== undefined && height < minHeight) {
+    if (!isNaN(minHeight) && height < minHeight) {
         height = minHeight;
     }
 
-    if (left !== undefined)
-        x = left;
-    else if (right !== undefined)
-        x = parentWidth - width - right;
+    if(isNaN(width)){
+        width = 0;
+    }
+    if(isNaN(height)){
+        height = 0;
+    }
 
-    if (top !== undefined)
-        y = top;
-    else if (bottom !== undefined)
-        y = parentHeight - height - bottom;
+    return {width,height,x,y};
+}
 
-    return { width, height,x,y };
+
+/**
+ * 调整目标的元素的大小并定位这些元素。
+ */
+export function updateDisplayList(target: UIBase) {
+
+    if(target.style.display === "block"){
+        updateBlockLayout(target);
+    }else if(target.style.display === "grid"){
+        updateBlockLayout(target);
+    }
+}
+
+function getColumnRowValue(gridTemplate: number[] | string[] | undefined, parentValue: number) {
+    const list: number[] = [0];
+    if (gridTemplate) {
+        if (gridTemplate[0] === "repeat") {
+            for (let i = 0; i < gridTemplate[1]; i++) {
+                list.push(formatRelative(gridTemplate[2], parentValue));
+            }
+        } else {
+            for (let i = 0; i < gridTemplate.length; i++) {
+                list.push(formatRelative(gridTemplate[i], parentValue));
+            }
+        }
+    }
+    return list;
+}
+
+
+
+export function updateDisplayGridList(component: UIBase) {
+    if (component.style.display !== "grid") {
+        return;
+    }
+    if (component.parent == undefined) {
+        return;
+    }
+
+    const gridColumnGap = component.style.gridColumnGap || 0;
+    const gridRowGap = component.style.gridRowGap || 0;
+
+    const columnsWidth = getColumnRowValue(component.style.gridTemplateColumns, component.parent.width);
+    const rowsWidth = getColumnRowValue(component.style.gridTemplateRows, component.parent.height);
 }

@@ -1,39 +1,20 @@
 import {UIBase} from "../core/UIBase";
-import {Image} from "./Image";
+import {Image as VfuiImage} from "./Image";
 import * as Utils from "../core/Utils";
-import * as tween from "./tween/index";
-import { VerticalAlignEnum, HorizontalAlignEnum } from "../enum/AlignEnum";
-import {DragEvent} from "../interaction/DragEvent";
-import {InteractionEvent} from "../interaction/InteractionEvent";
+import {DragEvent,InteractionEvent, ComponentEvent} from "../interaction/Index";
+import { Tween } from "./Tween";
+import { Easing } from "./Easing";
+import { addDrawList } from "../layout/CSSSSystem";
+
+
 
 /**
  * UI 滑动条
  */
 export class Slider extends UIBase{
 
-    /**
-     * 滑动条值发生改变后
-     */
-    public static readonly ChangeEvent= "change";
-    /**
-     * 滑动条值发生改变时
-     */
-    public static readonly ChangingEvent= "changing";
-
-    public constructor(trackBorderWidth = 0,thumbBorderWidth = 0,tracklightBorderWidth = 0){
+    public constructor(){
         super();
-        this._track = new Image("nineSlice");
-        this._track.borderWidth = trackBorderWidth;
-        this._thumb = new Image("nineSlice");
-        this._thumb.borderWidth = thumbBorderWidth;
-        // this._thumb.pivot = 0.5;
-        this._thumb.container.buttonMode = true;
-
-        this._tracklight = new Image("nineSlice");
-        this._tracklight.borderWidth = tracklightBorderWidth;
-        this.addChild(this._track);
-        this.addChild(this._tracklight);
-        this.addChild(this._thumb);
 
         this._thumbDrag.onDragPress = this.onPress;
         this._thumbDrag.onDragStart = this.onDragStart;
@@ -44,6 +25,26 @@ export class Slider extends UIBase{
         this._trackDrag.onDragStart = this.onDragStart;
         this._trackDrag.onDragMove = this.onDragMove;
         this._trackDrag.onDragEnd = this.onDragEnd;
+
+        this.thumbImg.container.name = "thumbImg";
+        this.thumbImg.anchorX = 0.5;
+        this.thumbImg.anchorY = 0.5;
+        this.thumbImg.on(ComponentEvent.COMPLETE,this.onImgload, this);
+
+        this.trackImg.container.name = "trackImg";
+        this.trackImg.fillMode = "scale";
+        this.trackImg.scale9Grid = [2,2,2,2];
+        this.trackImg.style.width = "100%";
+        this.trackImg.style.height = "100%";
+        this.trackImg.on(ComponentEvent.COMPLETE,this.onImgload, this);
+
+        this.tracklightImg.container.name = "tracklightImg";
+        this.tracklightImg.fillMode = "scale";
+        this.tracklightImg.scale9Grid = [2,2,2,2];
+
+        this.addChild(this.trackImg);
+        this.addChild(this.tracklightImg);
+        this.addChild(this.thumbImg);
     }
     /** 
      * 当前值 
@@ -53,208 +54,192 @@ export class Slider extends UIBase{
      * 小数的保留位，0不保留
      * @default 0
      */
-    private _decimals = 0;
-    /**
-     * 滑块方向
-     */
-    private _vertical = false;
-    //set options
-    protected _track: Image;
-    protected _tracklight: Image;
-    protected _thumb: Image;
+    protected _decimals = 0;
 
-    protected _sourceTrack = "";
-    protected _sourceTracklight = "";
-    protected _sourceThumb = "";
-
+    protected _startValue = 0;
+    protected _maxPosition = 0;
+    protected _localMousePosition = new PIXI.Point();
+    protected _lastChange = 0;
+    protected _lastChanging = 0;
+    
     private _thumbDrag = new DragEvent(this);
     private _trackDrag = new DragEvent(this);
 
-    private _startValue = 0;
-    private _maxPosition = 0;
-    private _localMousePosition = new PIXI.Point();
-    private _lastChange = 0;
-    private _lastChanging = 0;
-    
-    private _minValue = 0;
-    private _maxValue = 100;
+    /** 状态展示 */
+    readonly trackImg = new VfuiImage();
+    readonly thumbImg = new VfuiImage();
+    readonly tracklightImg = new VfuiImage();
 
-    /** 是否可以绘制布局，设置本值并不会触发绘制，只是标记*/
-    protected _isUpdateLayout = true;
-    
-    /** 
-     * 背景
+    private _value = 0;
+    /**
+     * 当前值
      */
-    public get sourceTrack(){
-        return this._sourceTrack;
+    public get value() {
+        return Utils.Round(Utils.Lerp(this.minValue, this.maxValue, this._amt), this._decimals);
     }
-    public set sourceTrack(value) {
-        this._sourceTrack = value;
-        this._track.source = value;
-    }
-    
-    /** 
-     * 进度填充 
-     */
-    public get sourceTracklight() {
-        return this._sourceTracklight;
-    }
-    public set sourceTracklight(value) {
-        this._sourceTracklight = value;
-        this._tracklight.source = value;
+    public set value(value: number) {
+        this._value = value;
+        addDrawList("valueSystem",this,this.valueSystem);
     }
 
-    /** 
-     * 拖拽手柄
-     */
-    public get sourceThumb() {
-        return this._sourceThumb;
-    }
-    public set sourceThumb(value) {
-        // this._sourceThumb = value;
-        // this._thumb.visible = false;
-        // this._thumb.off(Image.onload,this.onThumbLoadComplete,this);
-        // this._thumb.once(Image.onload,this.onThumbLoadComplete,this);
-        // this._thumb.source = value;
-    }
-
-    //rectangle:PIXI.Rectangle,source?:SliceSprite
-    protected  onThumbLoadComplete(rectangle: PIXI.Rectangle,source: Image){
-        // source.width = rectangle.width;
-        // source.height = rectangle.height;
-        // source.visible = true;
-        this.update();
+    protected valueSystem(){
+        this._amt = (Math.max(this.minValue, Math.min(this.maxValue, this._value)) - this.minValue) / (this.maxValue - this.minValue);
+        this.updatePosition();
+        this.triggerValueChange();
+        this.triggerValueChanging();
     }
 
     /**
-     * 是否垂直
-     * @default false
+     * 最小值
      */
-    public get vertical() {
-        return this._vertical;
-    }
-    public set vertical(value) {
-        this._vertical = value;
-        this._isUpdateLayout = true;
-        this.update();
-    }
-
-    /** 
-     * 最小值 
-     * @default 0
-     */
+    private _minValue = 0;
     public get minValue() {
         return this._minValue;
     }
     public set minValue(value) {
         this._minValue = value;
-        this.update();
     }
-   
-    /** 
-     * 最大值 
-     * @default 100
+    /**
+     * 最大值
      */
+    private _maxValue = 100;
     public get maxValue() {
         return this._maxValue;
     }
     public set maxValue(value) {
         this._maxValue = value;
-        this.update();
+    }
+    /**
+     * 是否垂直,滑块方向
+     */
+    private _vertical = false;
+    public get vertical() {
+        return this._vertical;
+    }
+    public set vertical(value) {
+        this._vertical = value;
+        this.updateLayout();
     }
     /** 
-     * 当前值 
+     * 背景
      */
-    public get value() {
-        return Utils.Round(Utils.Lerp(this._minValue, this._maxValue, this._amt), this._decimals);
+    private _track?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public get track(){
+        return this._track;
     }
-    public set value(value: number) {
-        this._amt = (Math.max(this._minValue, Math.min(this._maxValue, value)) - this._minValue) / (this._maxValue - this._minValue);
-        this.update();
-        this.triggerValueChange();
-        this.triggerValueChanging();
+    public set track(value) {
+        if(value !== this._track){
+            this._track = value;
+            this.trackImg.src = value; 
+        }
+    }
+    /** 
+     * 手柄
+     */
+    private _thumb?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public get thumb() {
+        return this._thumb;
+    }
+    public set thumb(value) {
+        if(value !== this._thumb){
+            this._thumb = value;
+            this.thumbImg.src = value; 
+        }
+    }
+    /** 
+     * 进度
+     */
+    private _tracklight?: string | number | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+    public get tracklight() {
+        return this._tracklight;
+    }
+    public set tracklight(value) {
+        if(value !== this._tracklight){
+            this._tracklight = value;
+            this.tracklightImg.src = value; 
+        }
+    }
+
+    public release(){
+        super.release();
+        this.trackImg.release();
+        this.thumbImg.release();
+        this.tracklightImg.release();
+    }
+
+
+    private onImgload(){
+        this.updateLayout();
     }
 
     protected updateLayout(){
-
-        // if(!this._isUpdateLayout){
-        //     return;
-        // }
-        // this._track.widthPet = "100%";
-        // this._track.heightPct = "100%";
-
-        // if (this.vertical) {
-        //     this._thumb.horizontalAlign = HorizontalAlignEnum.center;
-        //     this._thumb.verticalAlign = undefined;
-        //     this._tracklight.horizontalAlign = HorizontalAlignEnum.center;
-        //     this._tracklight.verticalAlign = undefined;
-        //     this._tracklight.widthPet = "100%";
-        // }else {
-        //     this._thumb.verticalAlign = VerticalAlignEnum.middle;
-        //     this._thumb.horizontalAlign = undefined;
-        //     this._tracklight.verticalAlign = VerticalAlignEnum.middle;
-        //     this._tracklight.horizontalAlign = undefined;
-        //     this._tracklight.heightPct = "100%";
-        // }
-        // this._isUpdateLayout = false;
-    }
-    public update (soft?: boolean) {
-        // this.updateLayout();
-
-        // let handleSize: number;
-        // let val: number;
-        // if(this._thumb){
-        //     if (this.vertical) {
-        //         handleSize = this._thumb._height || this._thumb.container.height;
-        //         val = ((this._height - handleSize) * this._amt) + (handleSize * 0.5);
-        //         if (soft) {
-                    
-        //             tween.Tween.to(this._thumb,{ top: val },300).easing(tween.Easing.Linear.None).start();
-        //             tween.Tween.to(this._tracklight, { height: val },300).easing(tween.Easing.Linear.None).start();
-        //         }
-        //         else {
-        //             this._thumb.top = val;
-        //             this._tracklight.height = val;
-        //         }
-        //     }
-        //     else {
-        //         handleSize = this._thumb._width || this._thumb.container.width;
-        //         val = ((this._width - handleSize) * this._amt) + (handleSize * 0.5);
-        //         if (soft) {
-        //             tween.Tween.to(this._thumb,{ left: val },300).easing(tween.Easing.Linear.None).start();
-        //             tween.Tween.to(this._tracklight, { width: val },300).easing(tween.Easing.Linear.None).start();
-        //         }
-        //         else {
-        //             this._thumb.left = val;
-        //             this._tracklight.width = val;
-        //         }
-        //     }
-        // }
+        const thumbImg = this.thumbImg;
+        const tracklightImg = this.tracklightImg;
+        if (this.vertical) {
+            //thumbImg.style.top =this._amt; 
+            thumbImg.x = this._width >> 1;
+            tracklightImg.width =this._width;
+            //tracklightImg.style.height = this._amt * this.height;
+        }else {
+            thumbImg.y =this._height >> 1;
+            //thumbImg.style.left = this._amt; 
+            tracklightImg.height =this._height;
+            //tracklightImg.style.width =  this._amt * this.width;
+        }
     }
 
-    protected onPress (event: InteractionEvent,isPressed: boolean,dragEvent?: DragEvent) {
-        
+
+    protected updatePosition(soft?: boolean){
+
+        let val = 0;
+        const thumbImg = this.thumbImg;
+        const tracklightImg = this.tracklightImg;
+
+        if (this.vertical) {
+            val = this._height * this._amt;
+            if (soft) {
+                Tween.to(thumbImg,{ y: val },300).easing(Easing.Linear.None).start();
+                Tween.to(tracklightImg, { height: val },300).easing(Easing.Linear.None).start();
+            }
+            else {
+                thumbImg.y = val;
+                tracklightImg.height = val;
+            }
+        }
+        else {
+            val = this._width* this._amt;
+            if (soft) {
+                Tween.to(thumbImg,{ x: val },300).easing(Easing.Linear.None).start();
+                Tween.to(tracklightImg, { width: val },300).easing(Easing.Linear.None).start();
+            }
+            else {
+                thumbImg.x = val;
+                tracklightImg.width = val;
+            }
+        }
+    }
+
+    protected onPress (event: InteractionEvent,isPressed: boolean,dragEvent?: DragEvent) {     
         event.stopPropagation();
         if(this._trackDrag==dragEvent && this._trackDrag.id == event.data.identifier){
             if (isPressed){
                 this.updatePositionToMouse(event.data.global, true);
-            }
-                
+            }    
         }
     }
 
     protected onDragStart (event: InteractionEvent) {
-        // if(this._thumb && this._thumbDrag && this._thumbDrag.id == event.data.identifier){
-        //     this._startValue = this._amt;
-        //     this._maxPosition = this.vertical ? this._height - this._thumb._height : this._width - this._thumb._width;
-        // }
+        if(this._thumbDrag.id == event.data.identifier){
+            this._startValue = this._amt;
+            this._maxPosition = this.vertical ? this._height : this._width;
+        }
     }
 
     protected onDragMove (event: InteractionEvent,offset: PIXI.Point) {
-        if(this._thumbDrag && this._thumbDrag.id == event.data.identifier){
+        if(this._thumbDrag.id == event.data.identifier){
             this._amt = !this._maxPosition ? 0 : Math.max(0, Math.min(1, this._startValue + ((this.vertical ? offset.y : offset.x) / this._maxPosition)));
             this.triggerValueChanging();
-            this.update();
+            this.updatePosition();
         }else if(this._trackDrag && this._trackDrag.id == event.data.identifier){
             this.updatePositionToMouse(event.data.global, false);
         }
@@ -262,37 +247,36 @@ export class Slider extends UIBase{
     }
 
     protected onDragEnd (event: InteractionEvent) {
-        if(this._thumbDrag && this._thumbDrag.id == event.data.identifier){
+        if(this._thumbDrag.id == event.data.identifier){
             this.triggerValueChange();
-            this.update();
+            this.updatePosition();
         }else if(this._trackDrag && this._trackDrag.id == event.data.identifier){
             this.triggerValueChange();
         }
     }
     protected updatePositionToMouse (mousePosition: PIXI.Point, soft: boolean) {
-        if(this._track){
-            this._track.container.toLocal(mousePosition, undefined, this._localMousePosition, true);
-        }     
-        if(this._thumb){
-            // const newPos = this.vertical ? this._localMousePosition.y - this._thumb._height * 0.5 : this._localMousePosition.x - this._thumb._width * 0.5;
-            // const maxPos = this.vertical ? this._height - this._thumb._height : this._width - this._thumb._width;
-            // this._amt = !maxPos ? 0 : Math.max(0, Math.min(1, newPos / maxPos));
-            // this.update(soft);
-            // this.triggerValueChanging();
-        }
+        this.trackImg.container.toLocal(mousePosition, undefined, this._localMousePosition, true);
+
+        const newPos = this.vertical ? this._localMousePosition.y  : this._localMousePosition.x;
+        const maxPos = this.vertical ? this._height: this._width ;
+        this._amt = !maxPos ? 0 : Math.max(0, Math.min(1, newPos / maxPos));
+        this.updatePosition(soft);
+        this.triggerValueChanging();
     }
 
     protected triggerValueChange() {
-        this.emit("change", this.value,this._lastChange);
-        if (this._lastChange != this.value) {
-            this._lastChange = this.value;
+        const value = this.value;
+        this.emit(ComponentEvent.CHANGE,this, value,this._lastChange);
+        if (this._lastChange != value) {
+            this._lastChange = value;
         }
     }
 
     protected triggerValueChanging() {
-        this.emit("changing", this.value,this._lastChanging);
-        if (this._lastChanging != this.value) {
-            this._lastChanging = this.value;
+        const value = this.value;
+        this.emit(ComponentEvent.CHANGEING,this, value,this._lastChanging);
+        if (this._lastChanging != value) {
+            this._lastChanging = value;
         }
     }
 }
