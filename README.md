@@ -40,9 +40,9 @@ Master:
     
 Version:
 
-    <script src="http://unpkg.com/vf-gui@0.5.0/dist/vf-gui.js"></script>
+    <script src="http://unpkg.com/vf-gui@0.5.2/dist/vf-gui.js"></script>
     
-    <script src="http://unpkg.com/vf-gui@0.5.0/dist/vf-gui.min.js"></script>
+    <script src="http://unpkg.com/vf-gui@0.5.2/dist/vf-gui.min.js"></script>
 
 ### 创建方式(Use)：
 
