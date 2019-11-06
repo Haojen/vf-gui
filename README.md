@@ -30,10 +30,6 @@ pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开�
 
     import vfui from "pixi-vfui";
 
-### 创建方式为：
-
-    let button = new  vfui.Button();
-
 ### CDN Install
 
 Master:
@@ -48,9 +44,15 @@ Version:
     
     <script src="http://unpkg.com/pixi-vfui@0.5.0/dist/pixi-vfui.min.js"></script>
 
+### 创建方式(Use)：
+
+    let button = new  vfui.Button();
+
+
 ## 如何构建(How build)
 
 1. git clone https://github.com/vipkid-edu/pixi-vfui
+1. npm i
 1. setup Visual Studio Code
 1. setup Visual Studio Code Extension (Debugger for Chrome）
 1. setup Visual Studio Code Extension (ESLint）
@@ -58,11 +60,6 @@ Version:
 1. run Live Server
 1. npm run build or npm run watch
 1. view http://127.0.0.1:5501/
-
-
-## 如果你是开发人员请提交时进行`eslint`检测
-
-    npm run lint
 
 
 ## 组件(Component)
@@ -102,6 +99,12 @@ Version:
     Sequence - 动画序列图
     Accordion - 手风琴
     Http/WebSocket - 网络
+
+
+## 请提交时进行`eslint`检测
+
+    npm run lint
+
 
 ## Ohter
 

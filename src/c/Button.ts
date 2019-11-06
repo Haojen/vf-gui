@@ -7,6 +7,12 @@ import { ComponentEvent } from "../interaction/Index";
 
 /**
  * 按钮
+ * 
+ * @example let button = new vfui.Button();
+ * 
+ * @namespace vfui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestButton
  */
 export class Button extends InputBase{
 
@@ -33,6 +39,9 @@ export class Button extends InputBase{
     /** 文字展示 */
     public readonly label = new Label();
 
+    /**
+     * 设置按钮的文本内容
+     */
     public get text() {
         return this.label.text;
     }

@@ -8,9 +8,14 @@ import { addDrawList } from "../layout/CSSSSystem";
 import { ComponentEvent } from "../interaction/Index";
 
 
-/**
- * @example
- * new PIXI.TextInput
+ /**
+ * 文本输入
+ * 
+ * @example let textInput = new vfui.TextInput(true|false);//单行或多行
+ * 
+ * @namespace vfui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTextInput
  */
 export class TextInput extends InputBase {
 

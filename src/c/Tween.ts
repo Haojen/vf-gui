@@ -7,13 +7,15 @@ import { TweenEvent } from '../interaction/InteractionEvent';
 
 const defaultEasing = Easing.Linear.None;
 
-/**
- * 缓动动画的主类
- * @constructor
- * @class
- * @namespace vfui.Tween
- * @param {Object=} object 
- * @example let tween = new Tween(myObject).to({width:'300px'}, 2000).start()
+
+ /**
+ * 缓动动画
+ * 
+ * @example let tween = new vfui.Tween(myObject).to({width:'300px'}, 2000).start()
+ * 
+ * @namespace vfui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
  */
 export class Tween extends PIXI.utils.EventEmitter {
 

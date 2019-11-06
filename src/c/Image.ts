@@ -6,7 +6,12 @@ import { addDrawList } from "../layout/CSSSSystem";
 
 /**
  * 图片
- * Event: sourceComplete
+ * 
+ * @example let image = new vfui.Image();
+ * 
+ * @namespace vfui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestImage
  */
 export class Image extends UIBase {
 
