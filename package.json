@@ -1,9 +1,9 @@
 {
-  "name": "pixi-vfui",
-  "version": "0.5.0",
+  "name": "vf-gui",
+  "version": "0.5.2",
   "description": "[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)",
-  "main": "dist/pixi-vfui.js",
-  "types": "dist/pixi-vfui.d.ts",
+  "main": "dist/vf-gui.js",
+  "types": "dist/vf-gui.d.ts",
   "scripts": {
     "test": "webpack --config test-webpack.config.js --watch",
     "build": "webpack",
@@ -13,12 +13,12 @@
     "npmPublish": "npm publish -registry=https://registry.npmjs.org",
     "lint": "eslint ./src/*.* ./src/**/*.*  --fix",
     "docs": "typedoc",
-    "dts": "dts-generator --project  ./  --out ./dist/pixi-vfui.d.ts"
+    "dts": "dts-generator --project  ./  --out ./dist/vf-gui.d.ts"
   },
   "keywords": [
-    "vfui",
+    "vf-gui",
     "pixi-ui",
-    "pixi-vfui",
+    "pixi-gui",
     "pixiui",
     "pixijsui",
     "pixijs-ui",

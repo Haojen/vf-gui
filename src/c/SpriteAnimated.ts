@@ -8,9 +8,9 @@ import { addDrawList } from "../layout/CSSSSystem";
  * 
  * 支持使用texturepacker导出以及处理轴点
  * 
- * @example let spriteAnimated = new vfui.SpriteAnimated();
+ * @example let spriteAnimated = new gui.SpriteAnimated();
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSpriteAnimated
  */

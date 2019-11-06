@@ -10,9 +10,9 @@ import { addDrawList } from "../layout/CSSSSystem";
 /**
  * 滑动条/进度条
  * 
- * @example let slider = new vfui.Slider();
+ * @example let slider = new gui.Slider();
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSlider
  */

@@ -1,23 +1,23 @@
-import vfui from "../src/pixi-vfui";
+import gui from "../src/vf-gui";
 
 export default class TestLabel {
 
-    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
         this.onLoad(app,uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
         /** 基础文本展示 */
-        let basicText = new vfui.Label();
+        let basicText = new gui.Label();
         basicText.style.left = 100;
         basicText.style.top = 100;
         basicText.style.color = 0xffffff;
-        basicText.text = "Basic text in vfui-ui 33434"
+        basicText.text = "Basic text in vf-gui 33434"
         uiStage.addChild(basicText);
 
         /** 手动换行文本展示 "\n" */
-        let nText = new vfui.Label();
+        let nText = new gui.Label();
         nText.style.left = 100;
         nText.style.top = 200;
         nText.style.color =[0xffffff,0xffcc00];
@@ -25,7 +25,7 @@ export default class TestLabel {
         uiStage.addChild(nText);
 
         /** 高级样式文本,换行的宽度为 fields.wordWrapWidth = 600; */
-        let richText = new vfui.Label();
+        let richText = new gui.Label();
         richText.style.left = 100
         richText.style.top = 300;
         richText.fontCssStyle = this.getFontCssStyle();

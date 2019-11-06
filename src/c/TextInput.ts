@@ -8,12 +8,12 @@ import { addDrawList } from "../layout/CSSSSystem";
 import { ComponentEvent } from "../interaction/Index";
 
 
- /**
+/**
  * 文本输入
  * 
- * @example let textInput = new vfui.TextInput(true|false);//单行或多行
+ * @example let textInput = new gui.TextInput(true|false);//单行或多行
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTextInput
  */

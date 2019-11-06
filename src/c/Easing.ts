@@ -1,9 +1,9 @@
 /**
  * 完整的缓动曲线列表
  * 
- * @example vfui.Easing.Linear.None;
+ * @example gui.Easing.Linear.None;
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
  */

@@ -36,8 +36,6 @@ export class Stage extends Core{
     public releaseAll(){
         for(let i=0;i<this.uiChildren.length;i++){
             const ui = this.uiChildren[i];
-            ui.offAll();
-            ui.release();
             ui.releaseAll();
         }
         this.uiChildren = [];

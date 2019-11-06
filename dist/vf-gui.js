@@ -1,4 +1,4 @@
-var pixivfui =
+var vfgui =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -82,7 +82,7 @@ var pixivfui =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/pixi-vfui.ts");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/vf-gui.ts");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -159,6 +159,12 @@ const InputBase_1 = __webpack_require__(/*! ../core/InputBase */ "./src/core/Inp
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 /**
  * 按钮
+ *
+ * @example let button = new gui.Button();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestButton
  */
 class Button extends InputBase_1.InputBase {
     constructor() {
@@ -178,6 +184,9 @@ class Button extends InputBase_1.InputBase {
         this.addChild(this.label);
         this.on(Index_1.ComponentEvent.STATE_CHANGE, this.onStateChange, this);
     }
+    /**
+     * 设置按钮的文本内容
+     */
     get text() {
         return this.label.text;
     }
@@ -224,19 +233,19 @@ exports.Button = Button;
 
 "use strict";
 
-/**
- * 单选框与复选框组件，没有时间去拆分，区别只是皮肤与分组不同
- *
- * checbox 不需要设置设置组
- *
- * radio 需要设置分组
- *
- */
 Object.defineProperty(exports, "__esModule", { value: true });
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 const Button_1 = __webpack_require__(/*! ./Button */ "./src/c/Button.ts");
 /**
- * UI 按钮显 示对象
+ * 单选\复选框
+ *
+ * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
+ *
+ * @example let checkBox = new gui.CheckBox();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestCheckBox
  */
 class CheckBox extends Button_1.Button {
     constructor() {
@@ -338,13 +347,15 @@ exports.CheckBox = CheckBox;
 Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
 /**
- * UI的显示容器
+ * 基础容器
  *
- * @class
- * @extends PIXI.UI.UIBase
- * @memberof PIXI.UI
- * @param width {Number} 宽度
- * @param height {Number} 高度
+ * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
+ *
+ * @example let container = new gui.Container();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestContainer
  */
 class Container extends UIBase_1.UIBase {
     constructor() {
@@ -395,11 +406,13 @@ exports.ContainerBase = ContainerBase;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- *  完整的缓动曲线列表
- * @namespace tween.Easing
- * @example
+ * 完整的缓动曲线列表
  *
- * // then set via new vfui.Tween({x:0}).to({x:100}, 1000).easing(tween.Easing.Quadratic.InOut).start()
+ * @example gui.Easing.Linear.None;
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
  */
 exports.Easing = {
     Linear: {
@@ -606,6 +619,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
 /**
  * 矢量绘制
+ *
+ * @example let graphics = new gui.Graphics();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTimeLine
  */
 class Graphics extends UIBase_1.UIBase {
     constructor(geometry) {
@@ -635,7 +654,12 @@ const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interacti
 const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 /**
  * 图片
- * Event: sourceComplete
+ *
+ * @example let image = new gui.Image();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestImage
  */
 class Image extends UIBase_1.UIBase {
     constructor() {
@@ -1032,15 +1056,17 @@ const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 /**
- * UI文本显示对象
+ * 文本
  *
  * 中文换行特殊处理 xxxx.style.breakWords = true;
  *
- * @class
- * @extends PIXI.UI.UIBase
- * @memberof PIXI.UI
- * @param Texture {PIXI.Texture} 文本对象
- * @see
+ * 文本没有宽高，自适应
+ *
+ * @example let label = new gui.Label();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestLabel
  */
 class Label extends UIBase_1.UIBase {
     constructor(text = "") {
@@ -1110,7 +1136,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
 const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 /**
- * UI 矩形
+ * 绘制矩形或圆角矩形
+ *
+ * @example let rect = new gui.Rect();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
  */
 class Rect extends UIBase_1.UIBase {
     constructor() {
@@ -1217,6 +1249,12 @@ const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interacti
 const ContainerBase_1 = __webpack_require__(/*! ./ContainerBase */ "./src/c/ContainerBase.ts");
 /**
  * 可滚动的容器
+ *
+ * @example let scrollingContainer = new gui.ScrollingContainer();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
  */
 class ScrollingContainer extends Container_1.Container {
     constructor() {
@@ -1288,7 +1326,6 @@ class ScrollingContainer extends Container_1.Container {
         this._Position = new PIXI.Point();
         this._Speed = new PIXI.Point();
         this._stop = false;
-        this._childrenStartIndex = 0;
         this.container.addChild(this._innerContainer);
         this.container.name = "ScrollingContainer";
         this._innerContainer.name = "innerContainer";
@@ -1345,9 +1382,9 @@ class ScrollingContainer extends Container_1.Container {
         if (this._lastWidth != this._width || this._lastHeight != this._height) {
             const _of = this.expandMask;
             this.style.maskPosition = [_of, _of];
-            this.style.maskSize = [this._width, this._height];
             this._lastWidth = this._width;
             this._lastHeight = this._height;
+            this.style.maskSize = [this._width, this._height];
             this.setScrollPosition();
         }
     }
@@ -1367,11 +1404,14 @@ class ScrollingContainer extends Container_1.Container {
             item.parent.removeChild(item);
         }
         item.parent = this;
+        index = Math.min(this._innerContainer.children.length, index);
         this._innerContainer.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
         this.updatesettings(true, true);
         this.getInnerBounds(true);
-        this.emit(Index_1.ComponentEvent.ADDED, this);
+        if (this.listenerCount(Index_1.ComponentEvent.CHILD_CHANGE))
+            this.emit(Index_1.ComponentEvent.CHILD_CHANGE, this, item);
+        item.emit(Index_1.ComponentEvent.ADDED, this);
         return item;
     }
     getInnerBounds(force) {
@@ -1519,7 +1559,13 @@ const Tween_1 = __webpack_require__(/*! ./Tween */ "./src/c/Tween.ts");
 const Easing_1 = __webpack_require__(/*! ./Easing */ "./src/c/Easing.ts");
 const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 /**
- * UI 滑动条
+ * 滑动条/进度条
+ *
+ * @example let slider = new gui.Slider();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSlider
  */
 class Slider extends UIBase_1.UIBase {
     constructor() {
@@ -1781,7 +1827,13 @@ const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interacti
 const InputBase_1 = __webpack_require__(/*! ../core/InputBase */ "./src/core/InputBase.ts");
 exports.$sounds = new Map();
 /**
- * 音频组件
+ * 音频播放组件
+ *
+ * @example let sound = new gui.Sound();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSound
  */
 class Sound extends InputBase_1.InputBase {
     constructor() {
@@ -2007,12 +2059,15 @@ const Utils_1 = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 /**
- * UI 序列图动画
- * 需要设置轴点旋转，需要使用texturepacker处理轴点
+ * 序列图动画
  *
- * @class
- * @extends PIXI.UI.UIBase
- * @memberof PIXI.UI
+ * 支持使用texturepacker导出以及处理轴点
+ *
+ * @example let spriteAnimated = new gui.SpriteAnimated();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSpriteAnimated
  */
 class SpriteAnimated extends UIBase_1.UIBase {
     constructor() {
@@ -2239,8 +2294,13 @@ const Image_1 = __webpack_require__(/*! ./Image */ "./src/c/Image.ts");
 const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 /**
- * @example
- * new PIXI.TextInput
+ * 文本输入
+ *
+ * @example let textInput = new gui.TextInput(true|false);//单行或多行
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTextInput
  */
 class TextInput extends InputBase_1.InputBase {
     constructor(multiline = false) {
@@ -2621,6 +2681,9 @@ const Ticker_1 = __webpack_require__(/*! ../core/Ticker */ "./src/core/Ticker.ts
 const Easing_1 = __webpack_require__(/*! ./Easing */ "./src/c/Easing.ts");
 const ObjectPool_1 = __webpack_require__(/*! ../core/ObjectPool */ "./src/core/ObjectPool.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+/**
+ * @private
+ */
 class Node {
     constructor(node) {
         this.default = 0;
@@ -2645,14 +2708,13 @@ class Node {
     destroy() { }
 }
 /**
- * 时间轴主类
+ * 基于帧的时间轴控制类
  *
- * @constructor
- * @class
- * @namespace tween.Timeline
- * @param {Object=} params 默认参数
- * @example let tl = new Timeline({delay:200})
- * @extends Tween
+ * @example let timeline = new gui.Timeline();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTimeLine
  */
 class Timeline extends PIXI.utils.EventEmitter {
     constructor() {
@@ -2874,12 +2936,13 @@ const constants_1 = __webpack_require__(/*! ./tween/constants */ "./src/c/tween/
 const InteractionEvent_1 = __webpack_require__(/*! ../interaction/InteractionEvent */ "./src/interaction/InteractionEvent.ts");
 const defaultEasing = Easing_1.Easing.Linear.None;
 /**
- * 缓动动画的主类
- * @constructor
- * @class
- * @namespace vfui.Tween
- * @param {Object=} object
- * @example let tween = new Tween(myObject).to({width:'300px'}, 2000).start()
+ * 缓动动画
+ *
+ * @example let tween = new gui.Tween(myObject).to({width:'300px'}, 2000).start()
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
  */
 class Tween extends PIXI.utils.EventEmitter {
     constructor(object) {
@@ -2914,7 +2977,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * @param {object} to - Target value
      * @param {object} params - Options of tweens
      * @example Tween.fromTo(myObject, {x:0}, {x:200},1000)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      * @static
      */
     static fromTo(object, to, duration) {
@@ -2927,7 +2990,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * @param {object} to - Target value
      * @param {object} params - Options of tweens
      * @example Tween.to(myObject, {x:200}, 1000)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      * @static
      */
     static to(object, to, duration) {
@@ -2939,7 +3002,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * @param {object} from - Initial value
      * @param {object} params - Options of tweens
      * @example Tween.from(myObject, {x:200}, 1000)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      * @static
      */
     static from(object, from, duration) {
@@ -2949,7 +3012,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * 是否在播放中
      * @return {boolean}
      * @example tween.isPlaying()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     get isPlaying() {
         return this._isPlaying;
@@ -2958,7 +3021,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * 是否开始播放
      * @return {boolean}
      * @example tween.isStarted()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     get isStarted() {
         return this._onStartCallbackFired;
@@ -2979,7 +3042,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * 设置缓动时长
      * @param {number} amount 持续的毫秒值
      * @example tween.duration(2000)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      * @deprecated 不推荐使用这个方法，内部使用
      * @private
      */
@@ -2993,7 +3056,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * 逆向缓动
      * @example tween.reverse()
      * @param {boolean=} state 是否逆向
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     reverse(state) {
         const { _reversed } = this;
@@ -3004,7 +3067,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * 当前动画是否逆转
      * @return {boolean}
      * @example tween.reversed() true逆向中
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     reversed() {
         return this._reversed;
@@ -3012,7 +3075,7 @@ class Tween extends PIXI.utils.EventEmitter {
     /**
      * 暂停缓动
      * @example tween.pause()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     pause() {
         if (!this._isPlaying) {
@@ -3025,7 +3088,7 @@ class Tween extends PIXI.utils.EventEmitter {
     /**
      * 播放或恢复播放
      * @example tween.play()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     play() {
         if (this._isPlaying) {
@@ -3040,8 +3103,8 @@ class Tween extends PIXI.utils.EventEmitter {
      * 设置要缓动的目标属性与持续时间
      * @param {object} properties 目标属性值
      * @param {number|Object=} [duration=1000] 持续时间
-     * @example let tween = new vfui.Tween({x:0}).to({x:100}, 2000)
-     * @memberof vfui.Tween
+     * @example let tween = new gui.Tween({x:0}).to({x:100}, 2000)
+     * @memberof gui.Tween
      */
     to(properties, duration = 1000) {
         this._valuesEnd = properties;
@@ -3068,7 +3131,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * 开始执行缓动
      * @param {number|string} time 要开始的时间，延迟值
      * @example tween.start()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     start(time) {
         this._startTime = time !== undefined ? time : 0;
@@ -3083,7 +3146,7 @@ class Tween extends PIXI.utils.EventEmitter {
     /**
      * 停止缓动
      * @example tween.stop()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     stop() {
         const { _isPlaying, _isFinite, object, _duration, _initRepeat, _yoyo, _reversed } = this;
@@ -3107,7 +3170,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * 设置延迟执行时间
      * @param {number} amount 延迟等待的时间，毫秒
      * @example tween.delay(500)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     delay(amount) {
         this._delayTime = amount;
@@ -3117,7 +3180,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * 设置重复执行的次数
      * @param {number} amount 重复次数
      * @example tween.repeat(5)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     repeat(amount) {
         this._repeat = !this._duration ? 0 : amount;
@@ -3129,7 +3192,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * 设置每个重复执行过程的延迟时间，毫秒
      * @param {number} amount 延迟值
      * @example tween.reverseDelay(500)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     reverseDelay(amount) {
         this._reverseDelayTime = amount;
@@ -3140,7 +3203,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * @param {boolean} state true启动
      * @param {Function=} _easingReverse 反向时的Easing function
      * @example tween.yoyo(true)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     yoyo(state, _easingReverse) {
         this._yoyo = typeof state === 'function' ? state(this._yoyo) : state === null ? this._yoyo : state;
@@ -3159,7 +3222,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * 设置缓动函数
      * @param {Function} _easingFunction 缓动函数的公式，如果设置yoyo的第二个值会应用于逆向缓动
      * @example tween.easing(Easing.Elastic.InOut)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     easing(_easingFunction) {
         this._easingFunction = _easingFunction;
@@ -3169,7 +3232,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * 设置差值
      * @param {Function} _interpolationFunction 差值的函数
      * @example tween.interpolation(Interpolation.Bezier)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     interpolation(_interpolationFunction) {
         if (typeof _interpolationFunction === 'function') {
@@ -3208,7 +3271,7 @@ class Tween extends PIXI.utils.EventEmitter {
     * @param {Boolean=} preserve 完成后，防止删除动画对象
      * @param {boolean=} forceTime 强制进行更新渲染，不关心时间是否匹配
      * @example tween.update(100)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     update(elapsedMS, preserve, forceTime) {
         const { _onStartCallbackFired, _easingFunction, _easingReverse, _delayTime, _reverseDelayTime, _yoyo, _reversed, _startTime, _duration, _valuesStart, _valuesEnd, object, _isFinite, _isPlaying } = this;
@@ -3317,9 +3380,9 @@ const constants_1 = __webpack_require__(/*! ./constants */ "./src/c/tween/consta
  * @namespace TWEEN.Interpolation
  * @example
  *
- * let bezier = vfui.tween.Interpolation.Bezier
- * new vfui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
- * @memberof vfui.tween
+ * let bezier = gui.tween.Interpolation.Bezier
+ * new gui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
+ * @memberof gui.tween
  */
 exports.Interpolation = {
     Linear(v, k, value) {
@@ -3846,7 +3909,7 @@ let handleLag = true;
 /**
  * 插件存储器
  * @namespace tween.Plugins
- * @memberof vfui.tween
+ * @memberof gui.tween
  * @example
  * let num = Plugins.num = function (node, start, end) {
   * return t => start + (end - start) * t
@@ -3858,11 +3921,11 @@ exports.Plugins = {};
 /**
  * 添加对象到缓动列表
  * @param {Tween} tween Tween 实例
- * @memberof vfui.tween
+ * @memberof gui.tween
  * @example
- * let tween = new vfui.tween.Tween({x:0})
+ * let tween = new gui.tween.Tween({x:0})
  * tween.to({x:200}, 1000)
- * vfui.tween.add(tween)
+ * gui.tween.add(tween)
  */
 function add(tween) {
     let i = _tweens.indexOf(tween);
@@ -3877,9 +3940,9 @@ exports.add = add;
 /**
  * 没有缓动后，设置运行多少帧后，停止
  * @param {number} frameCount=120 删除所有动画后，要运行的剩余帧
- * @memberof vfui.tween
+ * @memberof gui.tween
  * @example
- * vfui.tween.FrameThrottle(60)
+ * gui.tween.FrameThrottle(60)
  */
 function FrameThrottle(frameCount = 120) {
     powerModeThrottle = frameCount * 1.05;
@@ -3888,9 +3951,9 @@ exports.FrameThrottle = FrameThrottle;
 /**
  * 延时处理，针对插件、canvas、dom
  * @param {number} state=true 是否平滑处理
- * @memberof vfui.tween
+ * @memberof gui.tween
  * @example
- * vfui.tween.ToggleLagSmoothing(false)
+ * gui.tween.ToggleLagSmoothing(false)
  */
 function ToggleLagSmoothing(_state = true) {
     handleLag = _state;
@@ -3898,8 +3961,8 @@ function ToggleLagSmoothing(_state = true) {
 exports.ToggleLagSmoothing = ToggleLagSmoothing;
 /**
  * 获得所有缓动对象
- * @memberof vfui.tween
- * vfui.tween.getAll()
+ * @memberof gui.tween
+ * gui.tween.getAll()
  */
 function getAll() {
     return _tweens;
@@ -3907,8 +3970,8 @@ function getAll() {
 exports.getAll = getAll;
 /**
  * 移除所有动画对象
- * @example  vfui.tween.removeAll()
- * @memberof vfui.tween
+ * @example  gui.tween.removeAll()
+ * @memberof gui.tween
  */
 function removeAll() {
     _tweens.length = 0;
@@ -3919,9 +3982,9 @@ exports.removeAll = removeAll;
  * 获取对象
  * @param {Tween} tween 缓动对象实例
  * @return {Tween} 返回对象或null
- * @memberof vfui.tween
+ * @memberof gui.tween
  * @example
- * vfui.tween.get(tween)
+ * gui.tween.get(tween)
  */
 function get(tween) {
     for (let i = 0; i < _tweens.length; i++) {
@@ -3934,7 +3997,6 @@ function get(tween) {
 exports.get = get;
 function removeDisplay(uuid) {
     for (let i = 0; i < _tweens.length; i++) {
-        console.log(_tweens[i].object.uuid);
         if (_tweens[i].object.uuid && uuid === _tweens[i].object.uuid) {
             _tweens[i].stop();
             remove(_tweens[i]);
@@ -3947,9 +4009,9 @@ exports.removeDisplay = removeDisplay;
 /**
  * 从缓动列表移除对象
  * @param {Tween} tween Tween instance
- * @memberof vfui.tween
+ * @memberof gui.tween
  * @example
- * vfui.tween.remove(tween)
+ * gui.tween.remove(tween)
  */
 function remove(tween) {
     const i = _tweens.indexOf(tween);
@@ -3965,9 +4027,9 @@ exports.remove = remove;
  * 按给定时间更新缓动
  * @param {number=} time 时间戳
  * @param {Boolean=} preserve 完成后，防止删除动画对象
- * @memberof vfui.tween
+ * @memberof gui.tween
  * @example
- * vfui.tween.update(500)
+ * gui.tween.update(500)
  */
 function update(time, preserve = false) {
     if (!isStarted) {
@@ -3998,8 +4060,8 @@ exports.update = update;
 /**
  * 是否正在运行中
  * @return {Boolean} 只要还有缓动在运行，返回true
- * @memberof vfui.tween
- * @example vfui.tween.isRunning()
+ * @memberof gui.tween
+ * @example gui.tween.isRunning()
  */
 function isRunning() {
     return isStarted;
@@ -4008,8 +4070,8 @@ exports.isRunning = isRunning;
 /**
  * 返回是否开启延迟平滑状态
  * @return {Boolean}
- * @memberof vfui.tween
- * @example vfui.tween.isRunning()
+ * @memberof gui.tween
+ * @example gui.tween.isRunning()
  */
 function isLagSmoothing() {
     return handleLag;
@@ -4077,8 +4139,6 @@ class Core extends PIXI.utils.EventEmitter {
          * @default
          */
         this.initialized = false;
-        /** 设置添加索引时的开始位置，一般过滤子组件的背景 */
-        this._childrenStartIndex = 0;
         /**
          * 节点列表
          */
@@ -4087,7 +4147,12 @@ class Core extends PIXI.utils.EventEmitter {
     }
     /** 添加显示对象，需集成UIBASE */
     addChild(item) {
-        return this.addChildAt(item, this.uiChildren.length + this._childrenStartIndex);
+        if (this.container.children.length !== this.uiChildren.length) {
+            return this.addChildAt(item, this.container.children.length);
+        }
+        else {
+            return this.addChildAt(item, this.uiChildren.length);
+        }
     }
     addChildAt(item, index) {
         if (item.parent) {
@@ -4097,7 +4162,9 @@ class Core extends PIXI.utils.EventEmitter {
         this.container.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
         this.updatesettings(true, true);
-        this.emit(Index_1.ComponentEvent.ADDED, this);
+        if (this.listenerCount(Index_1.ComponentEvent.CHILD_CHANGE))
+            this.emit(Index_1.ComponentEvent.CHILD_CHANGE, this, item);
+        item.emit(Index_1.ComponentEvent.ADDED, this);
         return item;
     }
     getChildAt(index) {
@@ -4120,13 +4187,15 @@ class Core extends PIXI.utils.EventEmitter {
                 if (oldUIParent && oldUIParent.updatesettings)
                     oldUIParent.updatesettings(true, true);
             }, 0);
-            this.emit(Index_1.ComponentEvent.REMOVEED, this);
+            if (this.listenerCount(Index_1.ComponentEvent.CHILD_CHANGE))
+                this.emit(Index_1.ComponentEvent.CHILD_CHANGE, this, item);
+            item.emit(Index_1.ComponentEvent.REMOVEED, this);
         }
         return item;
     }
     removeChildren(beginIndex, endIndex) {
-        const start = beginIndex ? beginIndex + this._childrenStartIndex : this._childrenStartIndex;
-        const end = endIndex ? endIndex - this._childrenStartIndex : this.uiChildren.length - this._childrenStartIndex;
+        const start = beginIndex ? beginIndex : 0;
+        const end = endIndex ? endIndex : this.uiChildren.length;
         for (let i = start; i < end; i++) {
             this.removeChild(this.uiChildren[i]);
         }
@@ -4449,8 +4518,6 @@ class Stage extends Core_1.Core {
     releaseAll() {
         for (let i = 0; i < this.uiChildren.length; i++) {
             const ui = this.uiChildren[i];
-            ui.offAll();
-            ui.release();
             ui.releaseAll();
         }
         this.uiChildren = [];
@@ -4599,9 +4666,9 @@ class UIBase extends Core_1.Core {
          */
         this.delayDrawList = new Map();
         /**
-         * 延迟渲染是否完成
+         * 是否布局渲染中
          */
-        this.delayRenderedComplete = false;
+        this.isDrawLayout = false;
         this._x = 0;
         this._y = 0;
         /**
@@ -4673,7 +4740,7 @@ class UIBase extends Core_1.Core {
         this.__styleObject.parent = this;
         this._style = new Proxy(this.__styleObject, CSSSSystem_1.updateStyleProxyHandler);
         this.container.isEmitRender = true;
-        this.container.on("renderChange", this.onRenderer, this);
+        this.container.on("renderChange", this.updateRenderer, this);
     }
     get groupName() {
         return this._groupName;
@@ -4872,12 +4939,12 @@ class UIBase extends Core_1.Core {
         if (updateParent) {
             this.updateParent();
         }
-        this.onRenderer();
+        this.updateRenderer();
         if (updateChildren) {
             this.updateChildren();
         }
     }
-    onRenderer(renderer) {
+    updateRenderer(renderer) {
         const { _style } = this;
         if (!this.parent) {
             return;
@@ -4898,7 +4965,7 @@ class UIBase extends Core_1.Core {
     release() {
         this.isRelease = true;
         const { container, mask, background } = this;
-        container.off("renderChange", this.onRenderer, this);
+        container.off("renderChange", this.updateRenderer, this);
         container.mask = null;
         if (mask) {
             if (mask instanceof UIBase) {
@@ -4921,6 +4988,8 @@ class UIBase extends Core_1.Core {
         Index_1.GroupController.unRegistrerGroup(this);
     }
     releaseAll() {
+        this.offAll();
+        this.release();
         for (let i = 0; i < this.uiChildren.length; i++) {
             const ui = this.uiChildren[i];
             ui.offAll();
@@ -5354,7 +5423,7 @@ class ClickEvent {
      */
     constructor(obj, isOpenEmitEvent, includeHover, rightMouseButton, doubleClick) {
         this.id = 0;
-        /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | vfui.Interaction.TouchEvent */
+        /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | gui.Interaction.TouchEvent */
         this.isOpenEmitEvent = false;
         this.offset = new PIXI.Point();
         this.movementX = 0;
@@ -5584,6 +5653,14 @@ exports.ADDED = "ADDED";
  * 容器被从父级移除时触发
  */
 exports.REMOVEED = "REMOVEED";
+/**
+ * 节点改变时触发，有子项被添加到容器，或有子项被删除时，触发。
+ */
+exports.CHILD_CHANGE = "CHILD_CHANGE";
+/**
+ * 绘制完成时
+ */
+exports.RENDERER_COMPLETE = "RENDERER_COMPLETE";
 
 
 /***/ }),
@@ -6401,6 +6478,102 @@ exports.updateBlockLayout = updateBlockLayout;
 
 /***/ }),
 
+/***/ "./src/layout/CSSGridLayout.ts":
+/*!*************************************!*\
+  !*** ./src/layout/CSSGridLayout.ts ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const CSSLayout_1 = __webpack_require__(/*! ./CSSLayout */ "./src/layout/CSSLayout.ts");
+function getColumnRowValue(gridTemplate, parentValue) {
+    const list = [];
+    if (gridTemplate) {
+        if (gridTemplate[0] === "repeat") {
+            for (let i = 0; i < gridTemplate[1]; i++) {
+                list.push(CSSLayout_1.formatRelative(gridTemplate[2], parentValue));
+            }
+        }
+        else {
+            for (let i = 0; i < gridTemplate.length; i++) {
+                list.push(CSSLayout_1.formatRelative(gridTemplate[i], parentValue));
+            }
+        }
+    }
+    return list;
+}
+/**
+ *  更新网格布局
+ *
+ * 单位目前只支持数值或百分比：100 ，”100%“
+ *
+ *  网格布局中，子容器的位置与宽高可能失效
+ *
+ * 关于grid布局的词汇表
+ *
+ * 格网 https://developer.mozilla.org/zh-CN/docs/Glossary/Grid
+ *
+ * 网格行 gridTemplateRows https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid-template-columns
+ *
+ * 网格列 gridTemplateColumns https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid-template-rows
+ *
+ * 网格行间距 gridRowGap   https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid-row-gap
+ *
+ * 网格列间距 gridColumnGap  https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid-column-gap
+ *
+ * 网格轴 （未实现） 支持居中方式为：justifyContent，alignContent
+ *
+ * 网格线（未实现） https://developer.mozilla.org/en-US/docs/Glossary/Grid_Lines
+ *
+ * 网格面积（未实现）https://developer.mozilla.org/zh-CN/docs/Glossary/Grid_Areas
+ */
+function updateGridLayout(target) {
+    if (target.parent == undefined) {
+        return;
+    }
+    const style = target.style;
+    const gridColumnGap = style.gridColumnGap || 0;
+    const gridRowGap = style.gridRowGap || 0;
+    const column = getColumnRowValue(style.gridTemplateColumns, target.parent.width);
+    const row = getColumnRowValue(style.gridTemplateRows, target.parent.height);
+    let child;
+    let cloumnIndex = 0;
+    let rowIndex = 0;
+    let cloumnWidth = 0;
+    let rowHeight = 0;
+    let heightTotal = 0;
+    let widthTotal = 0;
+    for (let i = 0; i < target.uiChildren.length; i++) {
+        child = target.uiChildren[i];
+        cloumnWidth = column[cloumnIndex] || 0;
+        rowHeight = row[rowIndex] || 0;
+        child.width = child.width || cloumnWidth;
+        child.height = child.height || rowHeight;
+        child.x = widthTotal;
+        child.y = heightTotal;
+        widthTotal += (cloumnWidth || child.width) + gridColumnGap;
+        cloumnIndex++;
+        if (cloumnIndex >= column.length) {
+            cloumnIndex = 0;
+            widthTotal = 0;
+            if (rowHeight !== 0) {
+                heightTotal += (rowHeight + gridRowGap);
+            }
+            else {
+                heightTotal += (child.height + gridRowGap);
+            }
+            rowIndex++;
+        }
+    }
+}
+exports.updateGridLayout = updateGridLayout;
+
+
+/***/ }),
+
 /***/ "./src/layout/CSSLayout.ts":
 /*!*********************************!*\
   !*** ./src/layout/CSSLayout.ts ***!
@@ -6414,6 +6587,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
 const UI_1 = __webpack_require__(/*! ../UI */ "./src/UI.ts");
 const CSSBlockLayout_1 = __webpack_require__(/*! ./CSSBlockLayout */ "./src/layout/CSSBlockLayout.ts");
+const CSSGridLayout_1 = __webpack_require__(/*! ./CSSGridLayout */ "./src/layout/CSSGridLayout.ts");
+const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 exports.$Rectangle = new PIXI.Rectangle();
 /**
  * 布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸
@@ -6479,47 +6654,73 @@ function getLayoutBoundsSize(target, layoutWidth, layoutHeight) {
     return { width, height, x, y };
 }
 exports.getLayoutBoundsSize = getLayoutBoundsSize;
+function updateDisplayAlign(target, targetWidth, targetHeight, marginTop = 0, marginLeft = 0) {
+    if (target.parent == undefined) {
+        return;
+    }
+    let startX = 0;
+    let startY = 0;
+    switch (target.style.justifyContent) {
+        case "center":
+            startX = target.parent.width - targetWidth >> 1;
+            break;
+        case "flex-start":
+            startX = marginLeft;
+            break;
+        case "flex-end":
+            startX = target.parent.width - targetWidth - marginLeft;
+            break;
+    }
+    switch (target.style.alignContent) {
+        case "center":
+            startY = target.parent.height - targetHeight >> 1;
+            break;
+        case "flex-start":
+            startY = marginTop;
+            break;
+        case "flex-end":
+            startY = target.parent.height - targetHeight - marginTop;
+            break;
+    }
+    if (startX !== 0)
+        target.x = startX;
+    if (startY !== 0)
+        target.y = startY;
+}
+exports.updateDisplayAlign = updateDisplayAlign;
+function onGridChildChange(gridContainer) {
+    if (gridContainer.isDrawLayout) {
+        return;
+    }
+    gridContainer.isDrawLayout = true;
+    //^ ^!请原谅我，后期有时间改
+    setTimeout(() => {
+        updateDisplayLayout(gridContainer);
+        gridContainer.isDrawLayout = false;
+    }, 5);
+}
+exports.onGridChildChange = onGridChildChange;
 /**
  * 调整目标的元素的大小并定位这些元素。
  */
-function updateDisplayList(target) {
+function updateDisplayLayout(target) {
     if (target.style.display === "block") {
         CSSBlockLayout_1.updateBlockLayout(target);
     }
     else if (target.style.display === "grid") {
         CSSBlockLayout_1.updateBlockLayout(target);
-    }
-}
-exports.updateDisplayList = updateDisplayList;
-function getColumnRowValue(gridTemplate, parentValue) {
-    const list = [0];
-    if (gridTemplate) {
-        if (gridTemplate[0] === "repeat") {
-            for (let i = 0; i < gridTemplate[1]; i++) {
-                list.push(formatRelative(gridTemplate[2], parentValue));
-            }
-        }
-        else {
-            for (let i = 0; i < gridTemplate.length; i++) {
-                list.push(formatRelative(gridTemplate[i], parentValue));
-            }
+        CSSGridLayout_1.updateGridLayout(target);
+        if (target.listeners(Index_1.ComponentEvent.CHILD_CHANGE).indexOf(onGridChildChange) == -1) {
+            target.on(Index_1.ComponentEvent.CHILD_CHANGE, onGridChildChange);
         }
     }
-    return list;
+    //^ ^!请原谅我，后期有时间改
+    setTimeout(() => {
+        const bounds = target.container.getLocalBounds();
+        updateDisplayAlign(target, bounds.width, bounds.height, target.style.gridColumnGap, target.style.gridRowGap);
+    }, 10);
 }
-function updateDisplayGridList(component) {
-    if (component.style.display !== "grid") {
-        return;
-    }
-    if (component.parent == undefined) {
-        return;
-    }
-    const gridColumnGap = component.style.gridColumnGap || 0;
-    const gridRowGap = component.style.gridRowGap || 0;
-    const columnsWidth = getColumnRowValue(component.style.gridTemplateColumns, component.parent.width);
-    const rowsWidth = getColumnRowValue(component.style.gridTemplateRows, component.parent.height);
-}
-exports.updateDisplayGridList = updateDisplayGridList;
+exports.updateDisplayLayout = updateDisplayLayout;
 
 
 /***/ }),
@@ -6537,36 +6738,50 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const UI_1 = __webpack_require__(/*! ../UI */ "./src/UI.ts");
 const Utils_1 = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
 const CSSLayout_1 = __webpack_require__(/*! ./CSSLayout */ "./src/layout/CSSLayout.ts");
+const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+exports.updateDisplayKey = "updateDisplayList";
 exports.CSSFunction = {};
-function addDrawList(key, uibase, fun) {
-    uibase.container.isEmitRender = true;
+function addDrawList(key, target, fun) {
+    target.container.isEmitRender = true;
     if (fun) {
-        uibase.delayDrawList.set(key, fun);
+        target.delayDrawList.set(key, fun);
         return;
     }
     const efunction = exports.CSSFunction[key];
     if (efunction) {
         if (typeof efunction === "string") {
-            uibase.delayDrawList.set(efunction, exports.CSSFunction[efunction]);
+            target.delayDrawList.set(efunction, exports.CSSFunction[efunction]);
         }
         else {
-            uibase.delayDrawList.set(key, exports.CSSFunction[key]);
+            target.delayDrawList.set(key, exports.CSSFunction[key]);
         }
     }
 }
 exports.addDrawList = addDrawList;
-function updateDrawList(uibase) {
-    const updateDisplayList = uibase.delayDrawList.get("updateDisplayList");
-    if (updateDisplayList) {
-        updateDisplayList(uibase);
-        uibase.delayDrawList.delete("updateDisplayList");
+function updateDrawList(target) {
+    if (target.parent == undefined) {
+        return;
     }
-    uibase.delayDrawList.forEach((value, key, map) => {
-        value.call(uibase, uibase, key);
-        uibase.delayDrawList.delete(key);
+    if (target.delayDrawList.size == 0) {
+        target.container.isEmitRender = false;
+        return;
+    }
+    let isDraw = false;
+    const updateDisplayList = target.delayDrawList.get(exports.updateDisplayKey);
+    if (updateDisplayList) {
+        CSSLayout_1.updateDisplayLayout(target);
+        target.delayDrawList.delete(exports.updateDisplayKey);
+        isDraw = true;
+    }
+    target.delayDrawList.forEach((value, key, map) => {
+        value.call(target, target, key);
+        target.delayDrawList.delete(key);
+        isDraw = true;
     });
-    uibase.container.isEmitRender = false;
-    uibase.delayRenderedComplete = true;
+    target.container.isEmitRender = false;
+    if (isDraw && target.listenerCount(Index_1.ComponentEvent.RENDERER_COMPLETE)) {
+        target.emit(Index_1.ComponentEvent.RENDERER_COMPLETE, target);
+    }
 }
 exports.updateDrawList = updateDrawList;
 exports.updateStyleProxyHandler = {
@@ -6587,7 +6802,7 @@ exports.updateStyleProxyHandler = {
 };
 /** ===================== 更新布局  ===================== */
 exports.CSSFunction.updateDisplayList = (uibase) => {
-    CSSLayout_1.updateDisplayList(uibase);
+    CSSLayout_1.updateDisplayLayout(uibase);
 };
 /** ===================== background  ===================== */
 exports.CSSFunction.backgroundPositionSize = (uibase) => {
@@ -6760,6 +6975,7 @@ exports.CSSFunction.tint = (uibase) => {
 /** ===================== transform  ===================== */
 exports.CSSFunction.transform = (uibase) => {
     uibase.container.setTransform(uibase.x + uibase.pivotX, uibase.y + uibase.pivotY, uibase.scaleX, uibase.scaleY, uibase.rotation * (Math.PI / 180), uibase.skewX, uibase.skewY, uibase.pivotX, uibase.pivotY);
+    exports.CSSFunction.backgroundColor(uibase);
 };
 /** ===================== blendMode  ===================== */
 exports.CSSFunction.blendMode = (uibase) => {
@@ -6770,55 +6986,58 @@ exports.CSSFunction.blendMode = (uibase) => {
     });
 };
 /** ===================== loayout  ===================== */
-exports.CSSFunction.width = "updateDisplayList";
-exports.CSSFunction.minWidth = "updateDisplayList";
-exports.CSSFunction.maxWidth = "updateDisplayList";
-exports.CSSFunction.height = "updateDisplayList";
-exports.CSSFunction.minHeight = "updateDisplayList";
-exports.CSSFunction.maxHeight = "updateDisplayList";
-exports.CSSFunction.left = "updateDisplayList";
-exports.CSSFunction.top = "updateDisplayList";
-exports.CSSFunction.right = "updateDisplayList";
-exports.CSSFunction.bottom = "updateDisplayList";
-exports.CSSFunction.pivotX = (uibase) => {
-    uibase.pivotX = uibase.style.pivotX;
+exports.CSSFunction.display = exports.updateDisplayKey;
+exports.CSSFunction.justifyContent = exports.updateDisplayKey;
+exports.CSSFunction.alignContent = exports.updateDisplayKey;
+exports.CSSFunction.width = exports.updateDisplayKey;
+exports.CSSFunction.minWidth = exports.updateDisplayKey;
+exports.CSSFunction.maxWidth = exports.updateDisplayKey;
+exports.CSSFunction.height = exports.updateDisplayKey;
+exports.CSSFunction.minHeight = exports.updateDisplayKey;
+exports.CSSFunction.maxHeight = exports.updateDisplayKey;
+exports.CSSFunction.left = exports.updateDisplayKey;
+exports.CSSFunction.top = exports.updateDisplayKey;
+exports.CSSFunction.right = exports.updateDisplayKey;
+exports.CSSFunction.bottom = exports.updateDisplayKey;
+exports.CSSFunction.pivotX = (target) => {
+    target.pivotX = target.style.pivotX;
 };
-exports.CSSFunction.pivotY = (uibase) => {
-    uibase.pivotY = uibase.style.pivotY;
+exports.CSSFunction.pivotY = (target) => {
+    target.pivotY = target.style.pivotY;
 };
-exports.CSSFunction.scaleX = (uibase) => {
-    uibase.scaleX = uibase.style.scaleX;
+exports.CSSFunction.scaleX = (target) => {
+    target.scaleX = target.style.scaleX;
 };
-exports.CSSFunction.scaleY = (uibase) => {
-    uibase.scaleY = uibase.style.scaleY;
+exports.CSSFunction.scaleY = (target) => {
+    target.scaleY = target.style.scaleY;
 };
-exports.CSSFunction.rotation = (uibase) => {
-    uibase.rotation = uibase.style.rotation;
+exports.CSSFunction.rotation = (target) => {
+    target.rotation = target.style.rotation;
 };
-exports.CSSFunction.skewX = (uibase) => {
-    uibase.skewX = uibase.style.skewX;
+exports.CSSFunction.skewX = (target) => {
+    target.skewX = target.style.skewX;
 };
-exports.CSSFunction.skewY = (uibase) => {
-    uibase.skewY = uibase.style.skewY;
+exports.CSSFunction.skewY = (target) => {
+    target.skewY = target.style.skewY;
 };
-exports.CSSFunction.skewY = (uibase) => {
-    uibase.skewY = uibase.style.skewY;
+exports.CSSFunction.skewY = (target) => {
+    target.skewY = target.style.skewY;
 };
 /** ===================== font  ===================== */
-function updateFontStyle(ui, key) {
-    if (ui instanceof UI_1.Label) {
-        ui.sprite.style[key] = ui.style[key];
+function updateFontStyle(target, key) {
+    if (target instanceof UI_1.Label) {
+        target.sprite.style[key] = target.style[key];
     }
     else {
-        ui.setInputStyle(key, ui.style[key]);
+        target.setInputStyle(key, target.style[key]);
     }
 }
-exports.CSSFunction.color = (ui, key) => {
-    if (ui instanceof UI_1.Label) {
-        ui.sprite.style.fill = ui.style[key];
+exports.CSSFunction.color = (target, key) => {
+    if (target instanceof UI_1.Label) {
+        target.sprite.style.fill = target.style[key];
     }
     else {
-        ui.setInputStyle(key, ui.style[key]);
+        target.setInputStyle(key, target.style[key]);
     }
 };
 exports.CSSFunction.letterSpacing = updateFontStyle;
@@ -6975,6 +7194,7 @@ class CSSStyle {
     set rotation(value) {
         this.rotate = value;
     }
+    ;
     get visibility() {
         return this.visible ? "visible" : "hidden";
     }
@@ -7293,17 +7513,17 @@ CSS3.0 所有样式属性
 
 /***/ }),
 
-/***/ "./src/pixi-vfui.ts":
-/*!**************************!*\
-  !*** ./src/pixi-vfui.ts ***!
-  \**************************/
+/***/ "./src/vf-gui.ts":
+/*!***********************!*\
+  !*** ./src/vf-gui.ts ***!
+  \***********************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const pixivfui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
+const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 // //注入常规兼容方法
 // if(!Array.from){
 //     Array.from = function (el: unknown[]) {
@@ -7313,9 +7533,9 @@ const pixivfui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
 //     return this.lastIndexOf(word, pos || 0) === 0;
 // });
-window.vfui = pixivfui;
-exports.default = pixivfui;
-// declare namespace vfui{
+window.gui = vfgui;
+exports.default = vfgui;
+// declare namespace gui{
 //     export * from "src/UI";
 // }
 
@@ -7323,4 +7543,4 @@ exports.default = pixivfui;
 /***/ })
 
 /******/ });
-//# sourceMappingURL=pixi-vfui.js.map
+//# sourceMappingURL=vf-gui.js.map

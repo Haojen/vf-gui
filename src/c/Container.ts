@@ -5,9 +5,9 @@ import {UIBase} from "../core/UIBase";
  * 
  * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
  * 
- * @example let container = new vfui.Container();
+ * @example let container = new gui.Container();
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestContainer
  */

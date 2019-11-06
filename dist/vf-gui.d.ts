@@ -287,7 +287,7 @@ declare module 'interaction/ClickEvent' {
 	    constructor(obj: UIBase, isOpenEmitEvent?: boolean, includeHover?: boolean, rightMouseButton?: boolean, doubleClick?: boolean);
 	    private obj;
 	    id: number;
-	    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | vfui.Interaction.TouchEvent */
+	    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | gui.Interaction.TouchEvent */
 	    isOpenEmitEvent: boolean;
 	    private offset;
 	    private movementX;
@@ -669,6 +669,14 @@ declare module 'interaction/ComponentEvent' {
 	 * 容器被从父级移除时触发
 	 */
 	export const REMOVEED = "REMOVEED";
+	/**
+	 * 节点改变时触发，有子项被添加到容器，或有子项被删除时，触发。
+	 */
+	export const CHILD_CHANGE = "CHILD_CHANGE";
+	/**
+	 * 绘制完成时
+	 */
+	export const RENDERER_COMPLETE = "RENDERER_COMPLETE";
 
 }
 declare module 'interaction/GroupController' {
@@ -819,7 +827,7 @@ declare module 'layout/CSSStyle' {
 	     *
 	     * 方式二 ["repeat",3,100] 三列，宽度都为100像素
 	     */
-	    gridTemplateColumns?: number[] | string[];
+	    gridTemplateColumns?: number[] | string[] | [string, number, number];
 	    /**
 	     * 设置列间距
 	     */
@@ -831,7 +839,7 @@ declare module 'layout/CSSStyle' {
 	     *
 	     * 方式二 ["repeat",3,100] 三行，宽度都为100像素
 	     */
-	    gridTemplateRows?: number[] | string[];
+	    gridTemplateRows?: number[] | string[] | [string, number, number];
 	    /**
 	     * 设置行间距
 	     */
@@ -972,6 +980,36 @@ declare module 'layout/CSSBlockLayout' {
 	export function updateBlockLayout(target: UIBase): void;
 
 }
+declare module 'layout/CSSGridLayout' {
+	import { UIBase } from 'core/UIBase';
+	/**
+	 *  更新网格布局
+	 *
+	 * 单位目前只支持数值或百分比：100 ，”100%“
+	 *
+	 *  网格布局中，子容器的位置与宽高可能失效
+	 *
+	 * 关于grid布局的词汇表
+	 *
+	 * 格网 https://developer.mozilla.org/zh-CN/docs/Glossary/Grid
+	 *
+	 * 网格行 gridTemplateRows https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid-template-columns
+	 *
+	 * 网格列 gridTemplateColumns https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid-template-rows
+	 *
+	 * 网格行间距 gridRowGap   https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid-row-gap
+	 *
+	 * 网格列间距 gridColumnGap  https://developer.mozilla.org/zh-CN/docs/Web/CSS/grid-column-gap
+	 *
+	 * 网格轴 （未实现） 支持居中方式为：justifyContent，alignContent
+	 *
+	 * 网格线（未实现） https://developer.mozilla.org/en-US/docs/Glossary/Grid_Lines
+	 *
+	 * 网格面积（未实现）https://developer.mozilla.org/zh-CN/docs/Glossary/Grid_Areas
+	 */
+	export function updateGridLayout(target: UIBase): void;
+
+}
 declare module 'layout/CSSLayout' {
 	/// <reference types="pixi.js" />
 	import { UIBase } from 'core/UIBase';
@@ -990,11 +1028,12 @@ declare module 'layout/CSSLayout' {
 	    x: number;
 	    y: number;
 	};
+	export function updateDisplayAlign(target: UIBase, targetWidth: number, targetHeight: number, marginTop?: number, marginLeft?: number): void;
+	export function onGridChildChange(gridContainer: UIBase): void;
 	/**
 	 * 调整目标的元素的大小并定位这些元素。
 	 */
-	export function updateDisplayList(target: UIBase): void;
-	export function updateDisplayGridList(component: UIBase): void;
+	export function updateDisplayLayout(target: UIBase): void;
 
 }
 declare module 'c/InputText/HtmlInput' {
@@ -1114,7 +1153,12 @@ declare module 'c/Image' {
 	import { UIBase } from 'core/UIBase';
 	/**
 	 * 图片
-	 * Event: sourceComplete
+	 *
+	 * @example let image = new gui.Image();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestImage
 	 */
 	export class Image extends UIBase {
 	    constructor();
@@ -1167,8 +1211,13 @@ declare module 'c/TextInput' {
 	import { InputBase } from 'core/InputBase';
 	import { Image } from 'c/Image';
 	/**
-	 * @example
-	 * new PIXI.TextInput
+	 * 文本输入
+	 *
+	 * @example let textInput = new gui.TextInput(true|false);//单行或多行
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTextInput
 	 */
 	export class TextInput extends InputBase {
 	    constructor(multiline?: boolean);
@@ -1267,9 +1316,10 @@ declare module 'c/TextInput' {
 declare module 'layout/CSSSSystem' {
 	import { CSSStyle } from 'layout/CSSStyle';
 	import { UIBase } from 'UI';
+	export const updateDisplayKey = "updateDisplayList";
 	export const CSSFunction: TAny;
-	export function addDrawList(key: string, uibase: UIBase, fun?: Function): void;
-	export function updateDrawList(uibase: UIBase): void;
+	export function addDrawList(key: string, target: UIBase, fun?: Function): void;
+	export function updateDrawList(target: UIBase): void;
 	export const updateStyleProxyHandler: {
 	    get(target: CSSStyle, key: string, receiver: any): any;
 	    set(target: CSSStyle, key: string, value: any, receiver: any): boolean;
@@ -1322,9 +1372,9 @@ declare module 'core/UIBase' {
 	     */
 	    delayDrawList: Map<string, Function>;
 	    /**
-	     * 延迟渲染是否完成
+	     * 是否布局渲染中
 	     */
-	    delayRenderedComplete: boolean;
+	    isDrawLayout: boolean;
 	    /**
 	     * 分组
 	     */
@@ -1487,7 +1537,7 @@ declare module 'core/UIBase' {
 	     * @param updateParent  是否渲染父容器，true渲染
 	     */
 	    updatesettings(updateChildren: boolean, updateParent?: boolean): void;
-	    protected onRenderer(renderer?: PIXI.Renderer): void;
+	    protected updateRenderer(renderer?: PIXI.Renderer): void;
 	    /**
 	     * 更新方法，其他组件重写
 	     */
@@ -1519,8 +1569,6 @@ declare module 'core/Core' {
 	     * @default
 	     */
 	    initialized: boolean;
-	    /** 设置添加索引时的开始位置，一般过滤子组件的背景 */
-	    protected _childrenStartIndex: number;
 	    /**
 	     * 父容器
 	     */
@@ -1580,11 +1628,13 @@ declare module 'core/Core' {
 }
 declare module 'c/Easing' {
 	/**
-	 *  完整的缓动曲线列表
-	 * @namespace tween.Easing
-	 * @example
+	 * 完整的缓动曲线列表
 	 *
-	 * // then set via new vfui.Tween({x:0}).to({x:100}, 1000).easing(tween.Easing.Quadratic.InOut).start()
+	 * @example gui.Easing.Linear.None;
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
 	 */
 	export const Easing: {
 	    Linear: {
@@ -1676,9 +1726,9 @@ declare module 'c/tween/Interpolation' {
 	 * @namespace TWEEN.Interpolation
 	 * @example
 	 *
-	 * let bezier = vfui.tween.Interpolation.Bezier
-	 * new vfui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
-	 * @memberof vfui.tween
+	 * let bezier = gui.tween.Interpolation.Bezier
+	 * new gui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
+	 * @memberof gui.tween
 	 */
 	export const Interpolation: {
 	    Linear(v: any, k: number, value: any): any;
@@ -1698,12 +1748,13 @@ declare module 'c/Tween' {
 	/// <reference types="pixi.js" />
 	import { add, get, getAll, remove, removeAll, removeDisplay, update } from 'c/tween/core';
 	/**
-	 * 缓动动画的主类
-	 * @constructor
-	 * @class
-	 * @namespace vfui.Tween
-	 * @param {Object=} object
-	 * @example let tween = new Tween(myObject).to({width:'300px'}, 2000).start()
+	 * 缓动动画
+	 *
+	 * @example let tween = new gui.Tween(myObject).to({width:'300px'}, 2000).start()
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
 	 */
 	export class Tween extends PIXI.utils.EventEmitter {
 	    static core: {
@@ -1718,12 +1769,7 @@ declare module 'c/Tween' {
 	    static Event: {
 	        Callback: string;
 	        update: string;
-	        complete: string; /**
-	         * 是否开始播放
-	         * @return {boolean}
-	         * @example tween.isStarted()
-	         * @memberof vfui.Tween
-	         */
+	        complete: string;
 	        start: string;
 	        repeat: string;
 	        reverse: string;
@@ -1738,7 +1784,7 @@ declare module 'c/Tween' {
 	     * @param {object} to - Target value
 	     * @param {object} params - Options of tweens
 	     * @example Tween.fromTo(myObject, {x:0}, {x:200},1000)
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     * @static
 	     */
 	    static fromTo(object: TAny, to: TAny, duration?: number): Tween;
@@ -1748,7 +1794,7 @@ declare module 'c/Tween' {
 	     * @param {object} to - Target value
 	     * @param {object} params - Options of tweens
 	     * @example Tween.to(myObject, {x:200}, 1000)
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     * @static
 	     */
 	    static to(object: TAny | TAny[], to: TAny, duration?: number): Tween;
@@ -1758,7 +1804,7 @@ declare module 'c/Tween' {
 	     * @param {object} from - Initial value
 	     * @param {object} params - Options of tweens
 	     * @example Tween.from(myObject, {x:200}, 1000)
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     * @static
 	     */
 	    static from(object: TAny, from: TAny, duration?: number): Tween;
@@ -1791,14 +1837,14 @@ declare module 'c/Tween' {
 	     * 是否在播放中
 	     * @return {boolean}
 	     * @example tween.isPlaying()
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    readonly isPlaying: boolean;
 	    /**
 	     * 是否开始播放
 	     * @return {boolean}
 	     * @example tween.isStarted()
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    readonly isStarted: boolean;
 	    /**
@@ -1812,7 +1858,7 @@ declare module 'c/Tween' {
 	     * 设置缓动时长
 	     * @param {number} amount 持续的毫秒值
 	     * @example tween.duration(2000)
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     * @deprecated 不推荐使用这个方法，内部使用
 	     * @private
 	     */
@@ -1821,34 +1867,34 @@ declare module 'c/Tween' {
 	     * 逆向缓动
 	     * @example tween.reverse()
 	     * @param {boolean=} state 是否逆向
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    reverse(state?: boolean): this;
 	    /**
 	     * 当前动画是否逆转
 	     * @return {boolean}
 	     * @example tween.reversed() true逆向中
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    reversed(): boolean;
 	    /**
 	     * 暂停缓动
 	     * @example tween.pause()
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    pause(): boolean | this;
 	    /**
 	     * 播放或恢复播放
 	     * @example tween.play()
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    play(): boolean | this;
 	    /**
 	     * 设置要缓动的目标属性与持续时间
 	     * @param {object} properties 目标属性值
 	     * @param {number|Object=} [duration=1000] 持续时间
-	     * @example let tween = new vfui.Tween({x:0}).to({x:100}, 2000)
-	     * @memberof vfui.Tween
+	     * @example let tween = new gui.Tween({x:0}).to({x:100}, 2000)
+	     * @memberof gui.Tween
 	     */
 	    to(properties: TAny, duration?: number): this;
 	    private render;
@@ -1856,34 +1902,34 @@ declare module 'c/Tween' {
 	     * 开始执行缓动
 	     * @param {number|string} time 要开始的时间，延迟值
 	     * @example tween.start()
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    start(time?: number): this;
 	    /**
 	     * 停止缓动
 	     * @example tween.stop()
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    stop(): boolean | this;
 	    /**
 	     * 设置延迟执行时间
 	     * @param {number} amount 延迟等待的时间，毫秒
 	     * @example tween.delay(500)
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    delay(amount: number): this;
 	    /**
 	     * 设置重复执行的次数
 	     * @param {number} amount 重复次数
 	     * @example tween.repeat(5)
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    repeat(amount: number): this;
 	    /**
 	     * 设置每个重复执行过程的延迟时间，毫秒
 	     * @param {number} amount 延迟值
 	     * @example tween.reverseDelay(500)
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    reverseDelay(amount: number): this;
 	    /**
@@ -1891,21 +1937,21 @@ declare module 'c/Tween' {
 	     * @param {boolean} state true启动
 	     * @param {Function=} _easingReverse 反向时的Easing function
 	     * @example tween.yoyo(true)
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    yoyo(state?: boolean | Function, _easingReverse?: (k: number) => number): this;
 	    /**
 	     * 设置缓动函数
 	     * @param {Function} _easingFunction 缓动函数的公式，如果设置yoyo的第二个值会应用于逆向缓动
 	     * @example tween.easing(Easing.Elastic.InOut)
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    easing(_easingFunction: ((k: number) => number) | TAny): this;
 	    /**
 	     * 设置差值
 	     * @param {Function} _interpolationFunction 差值的函数
 	     * @example tween.interpolation(Interpolation.Bezier)
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    interpolation(_interpolationFunction: (v: TAny, k: number, value: TAny) => TAny): this;
 	    /**
@@ -1929,7 +1975,7 @@ declare module 'c/Tween' {
 	    * @param {Boolean=} preserve 完成后，防止删除动画对象
 	     * @param {boolean=} forceTime 强制进行更新渲染，不关心时间是否匹配
 	     * @example tween.update(100)
-	     * @memberof vfui.Tween
+	     * @memberof gui.Tween
 	     */
 	    update(elapsedMS: number, preserve?: boolean, forceTime?: boolean): boolean;
 	}
@@ -1940,7 +1986,7 @@ declare module 'c/tween/core' {
 	/**
 	 * 插件存储器
 	 * @namespace tween.Plugins
-	 * @memberof vfui.tween
+	 * @memberof gui.tween
 	 * @example
 	 * let num = Plugins.num = function (node, start, end) {
 	  * return t => start + (end - start) * t
@@ -1952,80 +1998,80 @@ declare module 'c/tween/core' {
 	/**
 	 * 添加对象到缓动列表
 	 * @param {Tween} tween Tween 实例
-	 * @memberof vfui.tween
+	 * @memberof gui.tween
 	 * @example
-	 * let tween = new vfui.tween.Tween({x:0})
+	 * let tween = new gui.tween.Tween({x:0})
 	 * tween.to({x:200}, 1000)
-	 * vfui.tween.add(tween)
+	 * gui.tween.add(tween)
 	 */
 	export function add(tween: Tween): void;
 	/**
 	 * 没有缓动后，设置运行多少帧后，停止
 	 * @param {number} frameCount=120 删除所有动画后，要运行的剩余帧
-	 * @memberof vfui.tween
+	 * @memberof gui.tween
 	 * @example
-	 * vfui.tween.FrameThrottle(60)
+	 * gui.tween.FrameThrottle(60)
 	 */
 	export function FrameThrottle(frameCount?: number): void;
 	/**
 	 * 延时处理，针对插件、canvas、dom
 	 * @param {number} state=true 是否平滑处理
-	 * @memberof vfui.tween
+	 * @memberof gui.tween
 	 * @example
-	 * vfui.tween.ToggleLagSmoothing(false)
+	 * gui.tween.ToggleLagSmoothing(false)
 	 */
 	export function ToggleLagSmoothing(_state?: boolean): void;
 	/**
 	 * 获得所有缓动对象
-	 * @memberof vfui.tween
-	 * vfui.tween.getAll()
+	 * @memberof gui.tween
+	 * gui.tween.getAll()
 	 */
 	export function getAll(): Tween[];
 	/**
 	 * 移除所有动画对象
-	 * @example  vfui.tween.removeAll()
-	 * @memberof vfui.tween
+	 * @example  gui.tween.removeAll()
+	 * @memberof gui.tween
 	 */
 	export function removeAll(): void;
 	/**
 	 * 获取对象
 	 * @param {Tween} tween 缓动对象实例
 	 * @return {Tween} 返回对象或null
-	 * @memberof vfui.tween
+	 * @memberof gui.tween
 	 * @example
-	 * vfui.tween.get(tween)
+	 * gui.tween.get(tween)
 	 */
 	export function get(tween: Tween): Tween | null;
 	export function removeDisplay(uuid: string): void;
 	/**
 	 * 从缓动列表移除对象
 	 * @param {Tween} tween Tween instance
-	 * @memberof vfui.tween
+	 * @memberof gui.tween
 	 * @example
-	 * vfui.tween.remove(tween)
+	 * gui.tween.remove(tween)
 	 */
 	export function remove(tween: Tween): void;
 	/**
 	 * 按给定时间更新缓动
 	 * @param {number=} time 时间戳
 	 * @param {Boolean=} preserve 完成后，防止删除动画对象
-	 * @memberof vfui.tween
+	 * @memberof gui.tween
 	 * @example
-	 * vfui.tween.update(500)
+	 * gui.tween.update(500)
 	 */
 	export function update(time: number, preserve?: boolean): boolean;
 	/**
 	 * 是否正在运行中
 	 * @return {Boolean} 只要还有缓动在运行，返回true
-	 * @memberof vfui.tween
-	 * @example vfui.tween.isRunning()
+	 * @memberof gui.tween
+	 * @example gui.tween.isRunning()
 	 */
 	export function isRunning(): boolean;
 	/**
 	 * 返回是否开启延迟平滑状态
 	 * @return {Boolean}
-	 * @memberof vfui.tween
-	 * @example vfui.tween.isRunning()
+	 * @memberof gui.tween
+	 * @example gui.tween.isRunning()
 	 */
 	export function isLagSmoothing(): boolean;
 
@@ -2072,14 +2118,13 @@ declare module 'c/Timeline' {
 	    destroy(): void;
 	}
 	/**
-	 * 时间轴主类
+	 * 基于帧的时间轴控制类
 	 *
-	 * @constructor
-	 * @class
-	 * @namespace tween.Timeline
-	 * @param {Object=} params 默认参数
-	 * @example let tl = new Timeline({delay:200})
-	 * @extends Tween
+	 * @example let timeline = new gui.Timeline();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTimeLine
 	 */
 	export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
 	    constructor();
@@ -2183,13 +2228,15 @@ declare module 'core/Stage' {
 declare module 'c/Container' {
 	import { UIBase } from 'core/UIBase';
 	/**
-	 * UI的显示容器
+	 * 基础容器
 	 *
-	 * @class
-	 * @extends PIXI.UI.UIBase
-	 * @memberof PIXI.UI
-	 * @param width {Number} 宽度
-	 * @param height {Number} 高度
+	 * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
+	 *
+	 * @example let container = new gui.Container();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestContainer
 	 */
 	export class Container extends UIBase {
 	    constructor();
@@ -2203,6 +2250,12 @@ declare module 'c/ScrollingContainer' {
 	import { CSSStyle } from 'layout/CSSStyle';
 	/**
 	 * 可滚动的容器
+	 *
+	 * @example let scrollingContainer = new gui.ScrollingContainer();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
 	 */
 	export class ScrollingContainer extends Container {
 	    constructor();
@@ -2298,12 +2351,15 @@ declare module 'c/SpriteAnimated' {
 	/// <reference types="pixi.js" />
 	import { UIBase } from 'core/UIBase';
 	/**
-	 * UI 序列图动画
-	 * 需要设置轴点旋转，需要使用texturepacker处理轴点
+	 * 序列图动画
 	 *
-	 * @class
-	 * @extends PIXI.UI.UIBase
-	 * @memberof PIXI.UI
+	 * 支持使用texturepacker导出以及处理轴点
+	 *
+	 * @example let spriteAnimated = new gui.SpriteAnimated();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSpriteAnimated
 	 */
 	export class SpriteAnimated extends UIBase {
 	    constructor();
@@ -2370,15 +2426,17 @@ declare module 'c/Label' {
 	/// <reference types="pixi.js" />
 	import { UIBase } from 'core/UIBase';
 	/**
-	 * UI文本显示对象
+	 * 文本
 	 *
 	 * 中文换行特殊处理 xxxx.style.breakWords = true;
 	 *
-	 * @class
-	 * @extends PIXI.UI.UIBase
-	 * @memberof PIXI.UI
-	 * @param Texture {PIXI.Texture} 文本对象
-	 * @see
+	 * 文本没有宽高，自适应
+	 *
+	 * @example let label = new gui.Label();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestLabel
 	 */
 	export class Label extends UIBase {
 	    constructor(text?: string);
@@ -2400,7 +2458,13 @@ declare module 'c/Slider' {
 	import { Image as VfuiImage } from 'c/Image';
 	import { DragEvent, InteractionEvent } from 'interaction/Index';
 	/**
-	 * UI 滑动条
+	 * 滑动条/进度条
+	 *
+	 * @example let slider = new gui.Slider();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSlider
 	 */
 	export class Slider extends UIBase {
 	    constructor();
@@ -2481,6 +2545,12 @@ declare module 'c/Button' {
 	import { CSSStyle } from 'layout/CSSStyle';
 	/**
 	 * 按钮
+	 *
+	 * @example let button = new gui.Button();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestButton
 	 */
 	export class Button extends InputBase {
 	    constructor();
@@ -2490,6 +2560,9 @@ declare module 'c/Button' {
 	    readonly img: Image;
 	    /** 文字展示 */
 	    readonly label: Label;
+	    /**
+	     * 设置按钮的文本内容
+	     */
 	    text: string;
 	    update(_style: CSSStyle): void;
 	    release(): void;
@@ -2499,18 +2572,18 @@ declare module 'c/Button' {
 
 }
 declare module 'c/CheckBox' {
-	/**
-	 * 单选框与复选框组件，没有时间去拆分，区别只是皮肤与分组不同
-	 *
-	 * checbox 不需要设置设置组
-	 *
-	 * radio 需要设置分组
-	 *
-	 */
 	import { Label } from 'c/Label';
 	import { Button } from 'c/Button';
 	/**
-	 * UI 按钮显 示对象
+	 * 单选\复选框
+	 *
+	 * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
+	 *
+	 * @example let checkBox = new gui.CheckBox();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestCheckBox
 	 */
 	export class CheckBox extends Button {
 	    constructor();
@@ -2548,7 +2621,13 @@ declare module 'c/Rect' {
 	/// <reference types="pixi.js" />
 	import { UIBase } from 'core/UIBase';
 	/**
-	 * UI 矩形
+	 * 绘制矩形或圆角矩形
+	 *
+	 * @example let rect = new gui.Rect();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
 	 */
 	export class Rect extends UIBase {
 	    constructor();
@@ -2594,6 +2673,12 @@ declare module 'c/Graphics' {
 	import { UIBase } from 'core/UIBase';
 	/**
 	 * 矢量绘制
+	 *
+	 * @example let graphics = new gui.Graphics();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTimeLine
 	 */
 	export class Graphics extends UIBase {
 	    constructor(geometry?: PIXI.GraphicsGeometry | undefined);
@@ -2609,7 +2694,13 @@ declare module 'c/Sound' {
 	import { InputBase } from 'core/InputBase';
 	export const $sounds: Map<string, PIXI.sound.Sound>;
 	/**
-	 * 音频组件
+	 * 音频播放组件
+	 *
+	 * @example let sound = new gui.Sound();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSound
 	 */
 	export class Sound extends InputBase {
 	    constructor();
@@ -2721,9 +2812,9 @@ declare module 'UI' {
 	export { Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Graphics, Interaction, UIBase, TickerShared, AlignEnum, Tween, Timeline, Easing, Image, SpriteAnimated, Sound };
 
 }
-declare module 'pixi-vfui' {
-	import * as pixivfui from 'UI';
-	export default pixivfui;
+declare module 'vf-gui' {
+	import * as vfgui from 'UI';
+	export default vfgui;
 
 }
 declare module 'c/tween/PlaybackPosition' {
@@ -2742,11 +2833,10 @@ declare module 'c/tween/PlaybackPosition' {
 	}
 
 }
-/** 严禁外部使用，声明 */
 declare type TAny = any;
 interface Window {
     readonly clipboardData: DataTransfer | null;
-    vfui: any;
+    gui: any;
 }
 declare interface ObjectConstructor {
     assign(...objects: Record<string, any>[]): Record<string, any>;
@@ -2977,6 +3067,6 @@ declare module 'interaction/KeyboardEvent' {
 
 }
 
-declare namespace vfui{
+declare namespace gui{
     export * from "UI";
 }

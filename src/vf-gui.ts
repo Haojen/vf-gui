@@ -1,4 +1,4 @@
-import * as pixivfui from "./UI";
+import * as vfgui from "./UI";
 
 // //注入常规兼容方法
 // if(!Array.from){
@@ -10,8 +10,8 @@ import * as pixivfui from "./UI";
 //     return this.lastIndexOf(word, pos || 0) === 0;
 // });
 
-window.vfui = pixivfui;
-export default pixivfui;
-// declare namespace vfui{
+window.gui = vfgui;
+export default vfgui;
+// declare namespace gui{
 //     export * from "src/UI";
 // }

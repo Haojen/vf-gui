@@ -1,15 +1,15 @@
-import vfui from "../src/pixi-vfui";
+import gui from "../src/vf-gui";
 
 export default class TestSlider {
 
-    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
         this.onLoad(app,uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
         /** 水平滑动条 vertical = false */
-        let slider = new vfui.Slider();
+        let slider = new gui.Slider();
         slider.vertical = false;
         slider.thumb = "assets/skin/Slider/thumb.png";
         slider.track = "assets/skin/Slider/track.png";
@@ -23,7 +23,7 @@ export default class TestSlider {
 
 
         /** 垂直滑动条 vertical = true */
-        let slider2 = new vfui.Slider();
+        let slider2 = new gui.Slider();
         slider2.vertical = true;
         slider2.thumb = "assets/skin/Slider/thumb.png";
         slider2.track = "assets/skin/Slider/track.png";
@@ -36,7 +36,7 @@ export default class TestSlider {
         uiStage.addChild(slider2);
 
         /** 进度条 vertical = true */
-        let slider3 = new vfui.Slider();
+        let slider3 = new gui.Slider();
         slider3.vertical = false;
         //slider3.props.thumb = "assets/skin/Slider/thumb.png";
         slider3.track = "assets/skin/Slider/track.png";
@@ -51,26 +51,26 @@ export default class TestSlider {
         
 
 
-        let changeText = new vfui.Label("slider");
+        let changeText = new gui.Label("slider");
         changeText.style.top= 100;
         changeText.style.left = 150;
         changeText.style.color = 0xff00cc;
         uiStage.addChild(changeText);
 
-        let changingText = new vfui.Label("slider2");
+        let changingText = new gui.Label("slider2");
         changingText.style.top = 150;
         changingText.style.left = 150;
         changingText.style.color = 0xff00cc;
         uiStage.addChild(changingText);
 
-        let progressText = new vfui.Label("slider3");
+        let progressText = new gui.Label("slider3");
         progressText.style.top = 430;
         progressText.style.left = 150;
         progressText.style.color = 0xff00cc;
         uiStage.addChild(progressText);
 
         let count = 0;
-        vfui.TickerShared.addUpdateEvent(()=>{
+        gui.TickerShared.addUpdateEvent(()=>{
             if(count>100){
                 count = 0;
             }
@@ -79,21 +79,21 @@ export default class TestSlider {
         },this)
 
 
-        slider.on(vfui.Interaction.ComponentEvent.CHANGE, (slider:vfui.CheckBox,curValue: number) => {
+        slider.on(gui.Interaction.ComponentEvent.CHANGE, (slider:gui.CheckBox,curValue: number) => {
             changeText.text = "change:" + curValue;
         });
-        slider.on(vfui.Interaction.ComponentEvent.CHANGEING, (slider:vfui.CheckBox,curValue: number) => {
+        slider.on(gui.Interaction.ComponentEvent.CHANGEING, (slider:gui.CheckBox,curValue: number) => {
             changingText.text = "changing:" + curValue;
         })
 
-        slider2.on(vfui.Interaction.ComponentEvent.CHANGE, (slider:vfui.CheckBox,curValue: number) => {
+        slider2.on(gui.Interaction.ComponentEvent.CHANGE, (slider:gui.CheckBox,curValue: number) => {
             changeText.text = "change:" + curValue;
         });
-        slider2.on(vfui.Interaction.ComponentEvent.CHANGEING, (slider:vfui.CheckBox,curValue: number) => {
+        slider2.on(gui.Interaction.ComponentEvent.CHANGEING, (slider:gui.CheckBox,curValue: number) => {
             changingText.text = "changing:" + curValue;
         });
 
-        slider3.on(vfui.Interaction.ComponentEvent.CHANGE, (slider:vfui.CheckBox,curValue: number) => {
+        slider3.on(gui.Interaction.ComponentEvent.CHANGE, (slider:gui.CheckBox,curValue: number) => {
             progressText.text = "progress:" + curValue;
         });
 

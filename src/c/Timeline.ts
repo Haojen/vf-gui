@@ -38,9 +38,9 @@ class Node {
 /**
  * 基于帧的时间轴控制类
  * 
- * @example let timeline = new vfui.Timeline();
+ * @example let timeline = new gui.Timeline();
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTimeLine
  */

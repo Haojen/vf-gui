@@ -3,16 +3,16 @@ import { ComponentEvent } from "../interaction/Index";
 import { addDrawList } from "../layout/CSSSSystem";
 
 
- /**
+/**
  * 文本
  * 
  * 中文换行特殊处理 xxxx.style.breakWords = true;
  * 
  * 文本没有宽高，自适应
  * 
- * @example let label = new vfui.Label();
+ * @example let label = new gui.Label();
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestLabel
  */

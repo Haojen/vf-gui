@@ -8,9 +8,9 @@ import {  Button } from "./Button";
  * 
  * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
  * 
- * @example let checkBox = new vfui.CheckBox();
+ * @example let checkBox = new gui.CheckBox();
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestCheckBox
  */

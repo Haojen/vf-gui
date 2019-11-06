@@ -6,12 +6,12 @@ import { InputBase } from "../core/InputBase";
 export const $sounds = new Map<string,PIXI.sound.Sound>();
 
 
- /**
+/**
  * 音频播放组件
  * 
- * @example let sound = new vfui.Sound();
+ * @example let sound = new gui.Sound();
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSound
  */

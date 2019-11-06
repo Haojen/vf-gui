@@ -19,12 +19,12 @@ let publishOut =  execSync("npm run prod",{encoding:"utf8"});
 console.log(publishOut);
 let dtsOut =  execSync("npm run dts",{encoding:"utf8"});
 console.log(dtsOut);
-let dtsFile = fs.readFileSync("./dist/pixi-vfui.d.ts","utf8");
+let dtsFile = fs.readFileSync("./dist/vf-gui.d.ts","utf8");
 
 dtsFile += `
-declare namespace vfui{
+declare namespace gui{
     export * from "UI";
 }
 `;
 
-fs.writeFileSync("./dist/pixi-vfui.d.ts",dtsFile);
+fs.writeFileSync("./dist/vf-gui.d.ts",dtsFile);

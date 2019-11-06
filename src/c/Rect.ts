@@ -4,9 +4,9 @@ import { addDrawList } from "../layout/CSSSSystem";
 /**
  * 绘制矩形或圆角矩形
  * 
- * @example let rect = new vfui.Rect();
+ * @example let rect = new gui.Rect();
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
  */

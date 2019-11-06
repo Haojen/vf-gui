@@ -7,9 +7,9 @@ import { addDrawList } from "../layout/CSSSSystem";
 /**
  * 图片
  * 
- * @example let image = new vfui.Image();
+ * @example let image = new gui.Image();
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestImage
  */

@@ -1,16 +1,16 @@
-import vfui from "../src/pixi-vfui";
+import gui from "../src/vf-gui";
 
 export default class TestRect {
 
-    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
         this.onLoad(app, uiStage)
     }
 
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
         /** 绘制矩形 */
-        let rect = new vfui.Rect();
+        let rect = new gui.Rect();
         rect.style.left = 100;
         rect.style.top = 100;
         rect.style.width = 100;

@@ -8,9 +8,9 @@ import { ComponentEvent } from "../interaction/Index";
 /**
  * 按钮
  * 
- * @example let button = new vfui.Button();
+ * @example let button = new gui.Button();
  * 
- * @namespace vfui
+ * @namespace gui
  * 
  * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestButton
  */
