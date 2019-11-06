@@ -11,7 +11,7 @@ import { addDrawList } from "../layout/CSSSSystem";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestImage
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestImage
  */
 export class Image extends UIBase {
 

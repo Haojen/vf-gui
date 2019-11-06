@@ -1158,7 +1158,7 @@ declare module 'c/Image' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestImage
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestImage
 	 */
 	export class Image extends UIBase {
 	    constructor();
@@ -1217,7 +1217,7 @@ declare module 'c/TextInput' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTextInput
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTextInput
 	 */
 	export class TextInput extends InputBase {
 	    constructor(multiline?: boolean);
@@ -1634,7 +1634,7 @@ declare module 'c/Easing' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTween
 	 */
 	export const Easing: {
 	    Linear: {
@@ -1754,7 +1754,7 @@ declare module 'c/Tween' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTween
 	 */
 	export class Tween extends PIXI.utils.EventEmitter {
 	    static core: {
@@ -2124,7 +2124,7 @@ declare module 'c/Timeline' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTimeLine
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTimeLine
 	 */
 	export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
 	    constructor();
@@ -2236,7 +2236,7 @@ declare module 'c/Container' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestContainer
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestContainer
 	 */
 	export class Container extends UIBase {
 	    constructor();
@@ -2255,7 +2255,7 @@ declare module 'c/ScrollingContainer' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestRect
 	 */
 	export class ScrollingContainer extends Container {
 	    constructor();
@@ -2359,7 +2359,7 @@ declare module 'c/SpriteAnimated' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSpriteAnimated
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestSpriteAnimated
 	 */
 	export class SpriteAnimated extends UIBase {
 	    constructor();
@@ -2436,7 +2436,7 @@ declare module 'c/Label' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestLabel
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestLabel
 	 */
 	export class Label extends UIBase {
 	    constructor(text?: string);
@@ -2464,7 +2464,7 @@ declare module 'c/Slider' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSlider
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestSlider
 	 */
 	export class Slider extends UIBase {
 	    constructor();
@@ -2550,7 +2550,7 @@ declare module 'c/Button' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestButton
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestButton
 	 */
 	export class Button extends InputBase {
 	    constructor();
@@ -2583,7 +2583,7 @@ declare module 'c/CheckBox' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestCheckBox
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestCheckBox
 	 */
 	export class CheckBox extends Button {
 	    constructor();
@@ -2627,7 +2627,7 @@ declare module 'c/Rect' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestRect
 	 */
 	export class Rect extends UIBase {
 	    constructor();
@@ -2678,7 +2678,7 @@ declare module 'c/Graphics' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTimeLine
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTimeLine
 	 */
 	export class Graphics extends UIBase {
 	    constructor(geometry?: PIXI.GraphicsGeometry | undefined);
@@ -2700,7 +2700,7 @@ declare module 'c/Sound' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSound
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestSound
 	 */
 	export class Sound extends InputBase {
 	    constructor();

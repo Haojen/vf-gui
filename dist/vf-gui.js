@@ -164,7 +164,7 @@ const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interacti
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestButton
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestButton
  */
 class Button extends InputBase_1.InputBase {
     constructor() {
@@ -245,7 +245,7 @@ const Button_1 = __webpack_require__(/*! ./Button */ "./src/c/Button.ts");
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestCheckBox
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestCheckBox
  */
 class CheckBox extends Button_1.Button {
     constructor() {
@@ -355,7 +355,7 @@ const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestContainer
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestContainer
  */
 class Container extends UIBase_1.UIBase {
     constructor() {
@@ -412,7 +412,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTween
  */
 exports.Easing = {
     Linear: {
@@ -624,7 +624,7 @@ const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTimeLine
  */
 class Graphics extends UIBase_1.UIBase {
     constructor(geometry) {
@@ -659,7 +659,7 @@ const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layo
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestImage
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestImage
  */
 class Image extends UIBase_1.UIBase {
     constructor() {
@@ -1066,7 +1066,7 @@ const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layo
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestLabel
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestLabel
  */
 class Label extends UIBase_1.UIBase {
     constructor(text = "") {
@@ -1142,7 +1142,7 @@ const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layo
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestRect
  */
 class Rect extends UIBase_1.UIBase {
     constructor() {
@@ -1254,7 +1254,7 @@ const ContainerBase_1 = __webpack_require__(/*! ./ContainerBase */ "./src/c/Cont
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestRect
  */
 class ScrollingContainer extends Container_1.Container {
     constructor() {
@@ -1565,7 +1565,7 @@ const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layo
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSlider
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestSlider
  */
 class Slider extends UIBase_1.UIBase {
     constructor() {
@@ -1833,7 +1833,7 @@ exports.$sounds = new Map();
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSound
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestSound
  */
 class Sound extends InputBase_1.InputBase {
     constructor() {
@@ -2067,7 +2067,7 @@ const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layo
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSpriteAnimated
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestSpriteAnimated
  */
 class SpriteAnimated extends UIBase_1.UIBase {
     constructor() {
@@ -2300,7 +2300,7 @@ const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interacti
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTextInput
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTextInput
  */
 class TextInput extends InputBase_1.InputBase {
     constructor(multiline = false) {
@@ -2714,7 +2714,7 @@ class Node {
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTimeLine
  */
 class Timeline extends PIXI.utils.EventEmitter {
     constructor() {
@@ -2942,7 +2942,7 @@ const defaultEasing = Easing_1.Easing.Linear.None;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTween
  */
 class Tween extends PIXI.utils.EventEmitter {
     constructor(object) {

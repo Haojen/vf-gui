@@ -1,5 +1,5 @@
-[![npm version](https://badge.fury.io/js/pixi-vfui.svg)](https://badge.fury.io/js/pixi-vfui)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/pixi-vfui)
+[![npm version](https://badge.fury.io/js/vf-gui.svg)](https://badge.fury.io/js/vf-gui)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/vf-gui)
 
 ## vf-gui
 
@@ -9,18 +9,18 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
 ## 学习(Learn) 
 
 
-* [文档(documentation)](https://vipkid-edu.github.io/pixi-vfui-docs/0.5.0/)
+* [文档(documentation)](https://vipkid-edu.github.io/vf-gui-docs/0.5.0/)
 
-* [示例(Examples)](https://vipkid-edu.github.io/pixi-vfui-docs/play)
+* [示例(Examples)](https://vipkid-edu.github.io/vf-gui-docs/play)
 
-* [API](https://vipkid-edu.github.io/pixi-vfui-docs/0.5.0/globals.html)
+* [API](https://vipkid-edu.github.io/vf-gui-docs/0.5.0/globals.html)
 
-* [源码(Github)](https://github.com/vipkid-edu/pixi-vfui/)
+* [源码(Github)](https://github.com/vipkid-edu/vf-gui/)
 
 
 ## 安装(Setup) 
 
->使用vfui库之前，我们默认你已经导入pixijs库，如何导入请参考网络教程。
+>使用gui库之前，我们默认你已经导入pixijs库，如何导入请参考网络教程。
 
 ### NPM Install
 
@@ -51,7 +51,7 @@ Version:
 
 ## 如何构建(How build)
 
-1. git clone https://github.com/vipkid-edu/pixi-vfui
+1. git clone https://github.com/vipkid-edu/vf-gui
 1. npm i
 1. setup Visual Studio Code
 1. setup Visual Studio Code Extension (Debugger for Chrome）
@@ -64,7 +64,7 @@ Version:
 
 ## 组件(Component)
 
-使用示例：https://vipkid-edu.github.io/pixi-vfui-docs/play
+使用示例：https://vipkid-edu.github.io/vf-gui-docs/play
 
 可使用组件：
 

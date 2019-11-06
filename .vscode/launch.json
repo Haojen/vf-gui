@@ -10,7 +10,7 @@
             "request": "launch",
             "port": 9222,
             "name": "LocalHost Server Chrome",
-            "url": "http://localhost:8888/pixi-vfui",
+            "url": "http://localhost:8888/vf-gui",
             "sourceMaps": true,
             "webRoot": "${workspaceFolder}",
             "preLaunchTask":"build",
