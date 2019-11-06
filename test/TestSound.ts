@@ -1,11 +1,11 @@
-import vfui from "../src/pixi-vfui";
+import gui from "../src/vf-gui";
 
 export default class TestSound {
 
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
-        let sound = new vfui.Sound();
+        let sound = new gui.Sound();
         sound.x = 100;
         sound.y = 100;
         sound.width = 100; //音频组件本身没有点击区域（0，0），设置宽高后会设置新的点击区域
@@ -28,20 +28,20 @@ export default class TestSound {
         }, 4000);
 
 
-        sound.on(vfui.Interaction.ComponentEvent.CHANGEING,(sd:vfui.Sound,progress:number)=>{
+        sound.on(gui.Interaction.ComponentEvent.CHANGEING,(sd:gui.Sound,progress:number)=>{
             //console.log("CHANGEING",progress,sd.duration);
         });
 
-        sound.on(vfui.Interaction.ComponentEvent.LOOP,(sd:vfui.Sound)=>{
+        sound.on(gui.Interaction.ComponentEvent.LOOP,(sd:gui.Sound)=>{
             console.log("LOOP"); //sound.loop = true时
         });
 
-        sound.on(vfui.Interaction.ComponentEvent.COMPLETE,(sd:vfui.Sound)=>{
+        sound.on(gui.Interaction.ComponentEvent.COMPLETE,(sd:gui.Sound)=>{
             console.log("COMPLETE"); //sound.loop = false时
         });
 
 
-        let sound2 = new vfui.Sound();
+        let sound2 = new gui.Sound();
         sound2.x = 220;
         sound2.y = 100;
         sound2.width = 100;
@@ -55,7 +55,7 @@ export default class TestSound {
         uiStage.addChild(sound2);
     }
 
-    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
         
         const loader = PIXI.Loader.shared;
 

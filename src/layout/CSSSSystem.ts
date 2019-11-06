@@ -1,40 +1,58 @@
 import { CSSStyle } from "./CSSStyle";
 import { UIBase, Label } from "../UI";
 import { getTexture } from "../core/Utils";
-import { updateDisplayList } from "./CSSLayout";
+import { updateDisplayLayout } from "./CSSLayout";
 import { TextInput } from "../c/TextInput";
+import { ComponentEvent } from "../interaction/Index";
 
+export const updateDisplayKey = "updateDisplayList";
 export const CSSFunction: TAny = {};
 
 
-export function addDrawList(key: string, uibase: UIBase,fun?: Function) {
-    uibase.container.isEmitRender = true;
+export function addDrawList(key: string, target: UIBase,fun?: Function) {
+    target.container.isEmitRender = true;
     if(fun){
-        uibase.delayDrawList.set(key, fun);
+        target.delayDrawList.set(key, fun);
         return;
     }
     const efunction = CSSFunction[key];
     if (efunction) {
         if(typeof efunction === "string"){
-            uibase.delayDrawList.set(efunction, CSSFunction[efunction]);
+            target.delayDrawList.set(efunction, CSSFunction[efunction]);
         }else{
-            uibase.delayDrawList.set(key, CSSFunction[key]);
+            target.delayDrawList.set(key, CSSFunction[key]);
         }    
     }
 }
 
-export function updateDrawList(uibase: UIBase){
-    const updateDisplayList = uibase.delayDrawList.get("updateDisplayList");
-    if(updateDisplayList){
-        updateDisplayList(uibase);
-        uibase.delayDrawList.delete("updateDisplayList");
+export function updateDrawList(target: UIBase){
+    
+    
+    if(target.parent == undefined){
+        return;
     }
-    uibase.delayDrawList.forEach((value: Function, key: string, map: Map<string, Function>) => {
-        value.call(uibase,uibase,key);
-        uibase.delayDrawList.delete(key);
+
+    if(target.delayDrawList.size == 0 ){
+        target.container.isEmitRender = false;
+        return;
+    }
+    let isDraw = false;
+    const updateDisplayList = target.delayDrawList.get(updateDisplayKey);
+    if(updateDisplayList){
+        updateDisplayLayout(target);
+        target.delayDrawList.delete(updateDisplayKey);
+        isDraw = true;
+    }
+    target.delayDrawList.forEach((value: Function, key: string, map: Map<string, Function>) => {
+        value.call(target,target,key);
+        target.delayDrawList.delete(key);
+        isDraw = true;
     });
-    uibase.container.isEmitRender = false;
-    uibase.delayRenderedComplete = true;
+    target.container.isEmitRender = false;
+    if(isDraw && target.listenerCount(ComponentEvent.RENDERER_COMPLETE)){
+        target.emit(ComponentEvent.RENDERER_COMPLETE,target);
+    }
+    
 }
 
 
@@ -59,7 +77,7 @@ export const updateStyleProxyHandler = {
 /** ===================== 更新布局  ===================== */
 
 CSSFunction.updateDisplayList = (uibase: UIBase) => {
-    updateDisplayList(uibase)
+    updateDisplayLayout(uibase);
 }
 
 /** ===================== background  ===================== */
@@ -254,6 +272,7 @@ CSSFunction.tint = (uibase: UIBase) => {
 /** ===================== transform  ===================== */
 CSSFunction.transform = (uibase: UIBase) => {
     uibase.container.setTransform(uibase.x + uibase.pivotX,uibase.y + uibase.pivotY,uibase.scaleX,uibase.scaleY,uibase.rotation*(Math.PI/180),uibase.skewX,uibase.skewY,uibase.pivotX,uibase.pivotY);
+    CSSFunction.backgroundColor(uibase);
 }
 
 /** ===================== blendMode  ===================== */
@@ -267,59 +286,62 @@ CSSFunction.blendMode = (uibase: UIBase) => {
 
 
 /** ===================== loayout  ===================== */
-CSSFunction.width = "updateDisplayList";
-CSSFunction.minWidth = "updateDisplayList";
-CSSFunction.maxWidth= "updateDisplayList";
-CSSFunction.height = "updateDisplayList";
-CSSFunction.minHeight = "updateDisplayList";
-CSSFunction.maxHeight = "updateDisplayList";
-CSSFunction.left = "updateDisplayList";
-CSSFunction.top = "updateDisplayList";
-CSSFunction.right = "updateDisplayList";
-CSSFunction.bottom = "updateDisplayList";
+CSSFunction.display = updateDisplayKey;
+CSSFunction.justifyContent = updateDisplayKey;
+CSSFunction.alignContent = updateDisplayKey;
+CSSFunction.width = updateDisplayKey;
+CSSFunction.minWidth = updateDisplayKey;
+CSSFunction.maxWidth= updateDisplayKey;
+CSSFunction.height = updateDisplayKey;
+CSSFunction.minHeight = updateDisplayKey;
+CSSFunction.maxHeight = updateDisplayKey;
+CSSFunction.left = updateDisplayKey;
+CSSFunction.top = updateDisplayKey;
+CSSFunction.right = updateDisplayKey;
+CSSFunction.bottom = updateDisplayKey;
 
 
-CSSFunction.pivotX= (uibase: UIBase) => {
-    uibase.pivotX = uibase.style.pivotX;
+CSSFunction.pivotX= (target: UIBase) => {
+    target.pivotX = target.style.pivotX;
 }
-CSSFunction.pivotY = (uibase: UIBase) => {
-    uibase.pivotY = uibase.style.pivotY;
+CSSFunction.pivotY = (target: UIBase) => {
+    target.pivotY = target.style.pivotY;
 }
-CSSFunction.scaleX = (uibase: UIBase) => {
-    uibase.scaleX = uibase.style.scaleX;
+CSSFunction.scaleX = (target: UIBase) => {
+    target.scaleX = target.style.scaleX;
 }
-CSSFunction.scaleY = (uibase: UIBase) => {
-    uibase.scaleY = uibase.style.scaleY;
+CSSFunction.scaleY = (target: UIBase) => {
+    target.scaleY = target.style.scaleY;
 }
-CSSFunction.rotation = (uibase: UIBase) => {
-    uibase.rotation = uibase.style.rotation;
+CSSFunction.rotation = (target: UIBase) => {
+    target.rotation = target.style.rotation;
 }
-CSSFunction.skewX = (uibase: UIBase) => {
-    uibase.skewX = uibase.style.skewX;
+CSSFunction.skewX = (target: UIBase) => {
+    target.skewX = target.style.skewX;
 }
-CSSFunction.skewY = (uibase: UIBase) => {
-    uibase.skewY = uibase.style.skewY;
+CSSFunction.skewY = (target: UIBase) => {
+    target.skewY = target.style.skewY;
 }
 
-CSSFunction.skewY = (uibase: UIBase) => {
-    uibase.skewY = uibase.style.skewY;
+CSSFunction.skewY = (target: UIBase) => {
+    target.skewY = target.style.skewY;
 }
 
 
 /** ===================== font  ===================== */
-function updateFontStyle(ui: Label|TextInput,key: string){
-    if(ui instanceof Label){
-        ui.sprite.style[key] = (ui.style as TAny)[key];
+function updateFontStyle(target: Label|TextInput,key: string){
+    if(target instanceof Label){
+        target.sprite.style[key] = (target.style as TAny)[key];
     }else{
-        ui.setInputStyle(key, (ui.style as TAny)[key]);
+        target.setInputStyle(key, (target.style as TAny)[key]);
     }
     
 }
-CSSFunction.color = (ui: Label|TextInput,key: string) =>{
-    if(ui instanceof Label){
-        ui.sprite.style.fill = (ui.style as TAny)[key];
+CSSFunction.color = (target: Label|TextInput,key: string) =>{
+    if(target instanceof Label){
+        target.sprite.style.fill = (target.style as TAny)[key];
     }else{
-        ui.setInputStyle(key, (ui.style as TAny)[key]);
+        target.setInputStyle(key, (target.style as TAny)[key]);
     }
 };
 

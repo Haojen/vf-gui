@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     mode: 'production',
-    entry: './src/pixi-vfui.ts',
+    entry: './src/vf-gui.ts',
     module: {
         rules: [
             {
@@ -20,8 +20,8 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js']
     },
     output: {
-        filename: 'pixi-vfui.min.js',
-        library: "pixivfui",
+        filename: 'vf-gui.min.js',
+        library: "vfgui",
         path: path.resolve(__dirname, 'dist')
     },
     devServer: {

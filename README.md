@@ -1,9 +1,9 @@
 [![npm version](https://badge.fury.io/js/pixi-vfui.svg)](https://badge.fury.io/js/pixi-vfui)
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/pixi-vfui)
 
-## pixi-vfui
+## vf-gui
 
-pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI库。 为PIXIJS提供提供基础可靠的UI组件。
+vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI库。 为PIXIJS提供提供基础可靠的UI组件。
 
 
 ## 学习(Learn) 
@@ -24,33 +24,35 @@ pixi-vfui简称`vfui`是基于PIXIJS引擎，使用TypeScript语言开发的开�
 
 ### NPM Install
 
-    npm install pixi-vfui
+    npm install vf-gui
 
 #### ES6 导入方式 (The correct way to import is): 
 
-    import vfui from "pixi-vfui";
-
-### 创建方式为：
-
-    let button = new  vfui.Button();
+    import gui from "vf-gui";
 
 ### CDN Install
 
 Master:
 
-    <script src="http://unpkg.com/pixi-vfui/dist/pixi-vfui.js"></script>
+    <script src="http://unpkg.com/vf-gui/dist/vf-gui.js"></script>
 
-    <script src="http://unpkg.com/pixi-vfui/dist/pixi-vfui.min.js"></script>
+    <script src="http://unpkg.com/vf-gui/dist/vf-gui.min.js"></script>
     
 Version:
 
-    <script src="http://unpkg.com/pixi-vfui@0.5.0/dist/pixi-vfui.js"></script>
+    <script src="http://unpkg.com/vf-gui@0.5.2/dist/vf-gui.js"></script>
     
-    <script src="http://unpkg.com/pixi-vfui@0.5.0/dist/pixi-vfui.min.js"></script>
+    <script src="http://unpkg.com/vf-gui@0.5.2/dist/vf-gui.min.js"></script>
+
+### 创建方式(Use)：
+
+    let button = new  gui.Button();
+
 
 ## 如何构建(How build)
 
 1. git clone https://github.com/vipkid-edu/pixi-vfui
+1. npm i
 1. setup Visual Studio Code
 1. setup Visual Studio Code Extension (Debugger for Chrome）
 1. setup Visual Studio Code Extension (ESLint）
@@ -58,11 +60,6 @@ Version:
 1. run Live Server
 1. npm run build or npm run watch
 1. view http://127.0.0.1:5501/
-
-
-## 如果你是开发人员请提交时进行`eslint`检测
-
-    npm run lint
 
 
 ## 组件(Component)
@@ -73,23 +70,23 @@ Version:
 
 | 导入方式    |      名称       |
 |----------|-------------|
-| vfui.Stage |  UI舞台 |
-| vfui.Container | 容器 |
-| vfui.ScrollingContainer | 可滑动的容器 |
-| vfui.Image | 图片 |
-| vfui.Label | 文本 |
-| vfui.TextInput | 输入文本 |
-| vfui.Graphics | 绘制矢量 |
-| vfui.Rect | 绘制矢量矩形 |
-| vfui.Button | 按钮 |
-| vfui.CheckBox | 单选与复选 |
-| vfui.SpriteAnimated | 序列图 |
-| vfui.Slider | 滑动/进度条 |
-| vfui.Ticker | 心跳 |
-| vfui.Tween | 缓动 |
-| vfui.Timeline | 缓动 |
-| vfui.Sound | 音频 |
-| vfui.Utils | 工具类 |
+| gui.Stage |  UI舞台 |
+| gui.Container | 容器 |
+| gui.ScrollingContainer | 可滑动的容器 |
+| gui.Image | 图片 |
+| gui.Label | 文本 |
+| gui.TextInput | 输入文本 |
+| gui.Graphics | 绘制矢量 |
+| gui.Rect | 绘制矢量矩形 |
+| gui.Button | 按钮 |
+| gui.CheckBox | 单选与复选 |
+| gui.SpriteAnimated | 序列图 |
+| gui.Slider | 滑动/进度条 |
+| gui.Ticker | 心跳 |
+| gui.Tween | 缓动 |
+| gui.Timeline | 缓动 |
+| gui.Sound | 音频 |
+| gui.Utils | 工具类 |
 
 
 计划中：
@@ -102,6 +99,12 @@ Version:
     Sequence - 动画序列图
     Accordion - 手风琴
     Http/WebSocket - 网络
+
+
+## 请提交时进行`eslint`检测
+
+    npm run lint
+
 
 ## Ohter
 

@@ -2,7 +2,13 @@ import {UIBase} from "../core/UIBase";
 import { addDrawList } from "../layout/CSSSSystem";
 
 /**
- * UI 矩形
+ * 绘制矩形或圆角矩形
+ * 
+ * @example let rect = new gui.Rect();
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
  */
 export class Rect extends UIBase{
     public constructor(){

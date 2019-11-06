@@ -1,15 +1,15 @@
-import vfui from "../src/pixi-vfui";
+import gui from "../src/vf-gui";
 
 export default class TestTextInput {
 
-    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
         this.onLoad(app,uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
         /** 单行输入 TextInput(false) */
-        let textInput = new vfui.TextInput(false);
+        let textInput = new gui.TextInput(false);
         textInput.style.left = 100;
         textInput.style.top = 100;
         textInput.style.width = 300;
@@ -28,7 +28,7 @@ export default class TestTextInput {
         uiStage.addChild(textInput);
 
         /** 多行输入 TextInput(true) */
-        let multilineInput = new vfui.TextInput(true);
+        let multilineInput = new gui.TextInput(true);
         multilineInput.style.top = 200;
         multilineInput.style.left = 100;
         multilineInput.style.width = 300;

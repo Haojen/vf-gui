@@ -1,15 +1,15 @@
-import vfui from "../src/pixi-vfui";
+import gui from "../src/vf-gui";
 
 export default class TestImage {
 
-    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
         this.onLoad(app,uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
         //灰色
-        let img1 = new vfui.Image();
+        let img1 = new gui.Image();
         img1.style.left =  100;
         img1.style.top = 100;
         img1.style.width = 380;
@@ -18,7 +18,7 @@ export default class TestImage {
         uiStage.addChild(img1);
 
         //彩色
-        let img2 = new vfui.Image();
+        let img2 = new gui.Image();
         img2.style.left =  100;
         img2.style.top = 100;
         img2.style.width = 380;
@@ -30,7 +30,7 @@ export default class TestImage {
         uiStage.addChild(img2);
 
         /** 样式宽高为0时，适配原始图片宽高 */
-        let img3 = new vfui.Image();
+        let img3 = new gui.Image();
         img3.x = 100;
         img3.y = 350;
         img3.width = 0;
@@ -41,7 +41,7 @@ export default class TestImage {
         uiStage.addChild(img3);
 
         let count = 0;
-        vfui.TickerShared.addUpdateEvent(() => {
+        gui.TickerShared.addUpdateEvent(() => {
 
             if(count == 700){
                 count = 0;

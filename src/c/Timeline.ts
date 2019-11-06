@@ -3,6 +3,9 @@ import {Easing} from './Easing';
 import { objectPoolShared } from '../core/ObjectPool';
 import { ComponentEvent } from '../interaction/Index';
 
+/**
+ * @private
+ */
 class Node {
 
     constructor(node?: Node) {
@@ -31,15 +34,15 @@ class Node {
     load() { }
     destroy() { }
 }
+
 /**
- * 时间轴主类
- *
- * @constructor
- * @class
- * @namespace tween.Timeline
- * @param {Object=} params 默认参数
- * @example let tl = new Timeline({delay:200})
- * @extends Tween
+ * 基于帧的时间轴控制类
+ * 
+ * @example let timeline = new gui.Timeline();
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTimeLine
  */
 export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
 

@@ -1,14 +1,14 @@
-import vfui from "../src/pixi-vfui";
+import gui from "../src/vf-gui";
 
 export default class TestButton {
 
-    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
         this.onLoad(app, uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
         /** UI组件 按钮 */
-        let button1 = new vfui.Button;
+        let button1 = new gui.Button;
         button1.style.left = 100;
         button1.style.top = 100;
         button1.style.width = 100;
@@ -18,14 +18,14 @@ export default class TestButton {
         button1.down = "assets/skin/Button/button_down.png";
         button1.move = "assets/skin/Button/button_move.png";
 
-        button1.on(vfui.Interaction.TouchMouseEvent.onClick, this.onClick, this);
-        button1.on(vfui.Interaction.TouchMouseEvent.onPress, this.onPress, this);
-        button1.on(vfui.Interaction.TouchMouseEvent.onHover, this.onHover, this);
+        button1.on(gui.Interaction.TouchMouseEvent.onClick, this.onClick, this);
+        button1.on(gui.Interaction.TouchMouseEvent.onPress, this.onPress, this);
+        button1.on(gui.Interaction.TouchMouseEvent.onHover, this.onHover, this);
 
         uiStage.addChild(button1);
 
         /** 设置文字颜色 */
-        let button2 = new vfui.Button;
+        let button2 = new gui.Button;
         button2.style.left = 100;
         button2.style.top = 200;
         button2.style.width = 100;
@@ -38,7 +38,7 @@ export default class TestButton {
         uiStage.addChild(button2);
 
         /** 设置背景图样式 */
-        let button3 = new vfui.Button;
+        let button3 = new gui.Button;
         button3.style.left = 100;
         button3.style.top = 300;
         button3.style.width = 100;
@@ -53,11 +53,11 @@ export default class TestButton {
     }
 
 
-    private onClick(e: vfui.Interaction.InteractionEvent, button: vfui.Button) {
+    private onClick(e: gui.Interaction.InteractionEvent, button: gui.Button) {
         button.text = "点击" + (e as any).type;
     }
 
-    private onPress(e: vfui.Interaction.InteractionEvent, button: vfui.Button, isPress: any) {
+    private onPress(e: gui.Interaction.InteractionEvent, button: gui.Button, isPress: any) {
         if (isPress)
             button.text = "按下" + (e as any).type;
         else
@@ -65,7 +65,7 @@ export default class TestButton {
 
         console.log("onPress", isPress);
     }
-    private onHover(e: vfui.Interaction.InteractionEvent, button: vfui.Button, over: boolean) {
+    private onHover(e: gui.Interaction.InteractionEvent, button: gui.Button, over: boolean) {
         console.log("onHover", over);
         if (over)
             button.text = "移入" + (e as any).type;

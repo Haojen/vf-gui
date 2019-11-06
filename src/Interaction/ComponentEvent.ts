@@ -48,3 +48,13 @@ export const ADDED = "ADDED";
  * 容器被从父级移除时触发
  */
 export const REMOVEED = "REMOVEED";
+
+/**
+ * 节点改变时触发，有子项被添加到容器，或有子项被删除时，触发。
+ */
+export const CHILD_CHANGE = "CHILD_CHANGE";
+
+/**
+ * 绘制完成时
+ */
+export const RENDERER_COMPLETE = "RENDERER_COMPLETE";

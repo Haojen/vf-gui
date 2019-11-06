@@ -2,16 +2,19 @@ import { UIBase } from "../core/UIBase";
 import { ComponentEvent } from "../interaction/Index";
 import { addDrawList } from "../layout/CSSSSystem";
 
+
 /**
- * UI文本显示对象
+ * 文本
  * 
  * 中文换行特殊处理 xxxx.style.breakWords = true;
- *
- * @class
- * @extends PIXI.UI.UIBase
- * @memberof PIXI.UI
- * @param Texture {PIXI.Texture} 文本对象
- * @see
+ * 
+ * 文本没有宽高，自适应
+ * 
+ * @example let label = new gui.Label();
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestLabel
  */
 export class Label extends UIBase {
 

@@ -4,7 +4,7 @@ import { TouchMouseEventEnum, } from "../enum/TouchMouseEventEnum";
 import { uid } from "./Utils";
 import { CSSStyle} from "../layout/CSSStyle";
 import { Core } from "./Core";
-import { updateStyleProxyHandler, addDrawList, updateDrawList } from "../layout/CSSSSystem";
+import { updateStyleProxyHandler, addDrawList, updateDrawList, updateDisplayKey } from "../layout/CSSSSystem";
 
 
 /**
@@ -30,7 +30,7 @@ export class UIBase extends Core {
         this.__styleObject.parent = this;
         this._style = new Proxy(this.__styleObject, updateStyleProxyHandler);
         this.container.isEmitRender = true;
-        this.container.on("renderChange", this.onRenderer, this);
+        this.container.on("renderChange", this.updateRenderer, this);
     }
     /**
      * 全局唯一ID
@@ -57,9 +57,9 @@ export class UIBase extends Core {
      */
     public delayDrawList = new Map<string,Function>();
     /**
-     * 延迟渲染是否完成
+     * 是否布局渲染中
      */
-    public delayRenderedComplete = false;
+    public isDrawLayout = false;
     /**
      * 分组
      */
@@ -392,13 +392,15 @@ export class UIBase extends Core {
         if (updateParent) {
             this.updateParent();
         }
-        this.onRenderer();
+
+        this.updateRenderer();
+
         if (updateChildren) {
             this.updateChildren();
         }
     }
 
-    protected onRenderer(renderer?: PIXI.Renderer) {
+    protected updateRenderer(renderer?: PIXI.Renderer) {
         const { _style } = this;
 
         if (!this.parent) {
@@ -409,8 +411,9 @@ export class UIBase extends Core {
             this.container.setTransform(this._dragPosition.x, this._dragPosition.y);
             return;
         }
-
+    
         updateDrawList(this);
+        
         this.update(_style,renderer);
     }
 
@@ -425,7 +428,7 @@ export class UIBase extends Core {
 
         this.isRelease = true;
         const {container,mask,background} = this;
-        container.off("renderChange", this.onRenderer, this);    
+        container.off("renderChange", this.updateRenderer, this);    
         container.mask = null;
 
         if(mask){
@@ -452,6 +455,8 @@ export class UIBase extends Core {
     }
 
     public releaseAll(){
+        this.offAll();
+        this.release();
         for(let i=0;i<this.uiChildren.length;i++){
             const ui = this.uiChildren[i];
             ui.offAll();

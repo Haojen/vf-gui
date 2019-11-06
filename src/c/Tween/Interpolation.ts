@@ -5,9 +5,9 @@ import { isRGBColor, RGBA, STRING_PROP } from './constants'
  * @namespace TWEEN.Interpolation
  * @example
  *
- * let bezier = vfui.tween.Interpolation.Bezier
- * new vfui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
- * @memberof vfui.tween
+ * let bezier = gui.tween.Interpolation.Bezier
+ * new gui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
+ * @memberof gui.tween
  */
 export const Interpolation = {
     Linear(v: any, k: number, value: any) {

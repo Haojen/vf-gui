@@ -7,13 +7,15 @@ import { TweenEvent } from '../interaction/InteractionEvent';
 
 const defaultEasing = Easing.Linear.None;
 
+
 /**
- * 缓动动画的主类
- * @constructor
- * @class
- * @namespace vfui.Tween
- * @param {Object=} object 
- * @example let tween = new Tween(myObject).to({width:'300px'}, 2000).start()
+ * 缓动动画
+ * 
+ * @example let tween = new gui.Tween(myObject).to({width:'300px'}, 2000).start()
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
  */
 export class Tween extends PIXI.utils.EventEmitter {
 
@@ -25,7 +27,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * @param {object} to - Target value
      * @param {object} params - Options of tweens
      * @example Tween.fromTo(myObject, {x:0}, {x:200},1000)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      * @static
      */
     static fromTo(object: TAny, to: TAny, duration?: number) {
@@ -38,7 +40,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * @param {object} to - Target value
      * @param {object} params - Options of tweens
      * @example Tween.to(myObject, {x:200}, 1000)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      * @static
      */
     static to(object: TAny | TAny[], to: TAny, duration?: number) {
@@ -50,7 +52,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * @param {object} from - Initial value
      * @param {object} params - Options of tweens
      * @example Tween.from(myObject, {x:200}, 1000)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      * @static
      */
     static from(object: TAny, from: TAny, duration?: number) {
@@ -96,7 +98,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 是否在播放中
      * @return {boolean} 
      * @example tween.isPlaying()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public get isPlaying() {
         return this._isPlaying;
@@ -106,7 +108,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 是否开始播放
      * @return {boolean} 
      * @example tween.isStarted()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public get isStarted() {
         return this._onStartCallbackFired;
@@ -128,7 +130,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置缓动时长
      * @param {number} amount 持续的毫秒值
      * @example tween.duration(2000)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      * @deprecated 不推荐使用这个方法，内部使用
      * @private
      */
@@ -143,7 +145,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 逆向缓动
      * @example tween.reverse()
      * @param {boolean=} state 是否逆向
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public reverse(state?: boolean) {
         const { _reversed } = this;
@@ -157,7 +159,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 当前动画是否逆转
      * @return {boolean}
      * @example tween.reversed() true逆向中
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public reversed() {
         return this._reversed;
@@ -166,7 +168,7 @@ export class Tween extends PIXI.utils.EventEmitter {
     /**
      * 暂停缓动
      * @example tween.pause()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public pause() {
         if (!this._isPlaying) {
@@ -183,7 +185,7 @@ export class Tween extends PIXI.utils.EventEmitter {
     /**
      * 播放或恢复播放
      * @example tween.play()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public play() {
         if (this._isPlaying) {
@@ -201,8 +203,8 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置要缓动的目标属性与持续时间
      * @param {object} properties 目标属性值
      * @param {number|Object=} [duration=1000] 持续时间
-     * @example let tween = new vfui.Tween({x:0}).to({x:100}, 2000)
-     * @memberof vfui.Tween
+     * @example let tween = new gui.Tween({x:0}).to({x:100}, 2000)
+     * @memberof gui.Tween
      */
     public to(properties: TAny, duration = 1000) {
         this._valuesEnd = properties;
@@ -235,7 +237,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 开始执行缓动
      * @param {number|string} time 要开始的时间，延迟值
      * @example tween.start()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public start(time?: number) {
         this._startTime = time !== undefined ? time : 0;
@@ -252,7 +254,7 @@ export class Tween extends PIXI.utils.EventEmitter {
     /**
      * 停止缓动
      * @example tween.stop()
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public stop() {
         const { _isPlaying, _isFinite, object, _duration, _initRepeat, _yoyo, _reversed } = this;
@@ -280,7 +282,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置延迟执行时间
      * @param {number} amount 延迟等待的时间，毫秒
      * @example tween.delay(500)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public delay(amount: number) {
         this._delayTime = amount;
@@ -291,7 +293,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置重复执行的次数
      * @param {number} amount 重复次数
      * @example tween.repeat(5)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public repeat(amount: number) {
         this._repeat = !this._duration ? 0 : amount;
@@ -305,7 +307,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置每个重复执行过程的延迟时间，毫秒
      * @param {number} amount 延迟值
      * @example tween.reverseDelay(500)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public reverseDelay(amount: number) {
         this._reverseDelayTime = amount;
@@ -318,7 +320,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * @param {boolean} state true启动
      * @param {Function=} _easingReverse 反向时的Easing function 
      * @example tween.yoyo(true)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public yoyo(state?: boolean | Function, _easingReverse?: (k: number) => number) {
         this._yoyo = typeof state === 'function' ? state(this._yoyo) : state === null ? this._yoyo : state;
@@ -338,7 +340,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置缓动函数
      * @param {Function} _easingFunction 缓动函数的公式，如果设置yoyo的第二个值会应用于逆向缓动
      * @example tween.easing(Easing.Elastic.InOut)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public easing(_easingFunction: ((k: number) => number) | TAny) {
         this._easingFunction = _easingFunction;
@@ -350,7 +352,7 @@ export class Tween extends PIXI.utils.EventEmitter {
      * 设置差值
      * @param {Function} _interpolationFunction 差值的函数
      * @example tween.interpolation(Interpolation.Bezier)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public interpolation(_interpolationFunction: (v: TAny, k: number, value: TAny) => TAny) {
         if (typeof _interpolationFunction === 'function') {
@@ -393,7 +395,7 @@ export class Tween extends PIXI.utils.EventEmitter {
     * @param {Boolean=} preserve 完成后，防止删除动画对象
      * @param {boolean=} forceTime 强制进行更新渲染，不关心时间是否匹配
      * @example tween.update(100)
-     * @memberof vfui.Tween
+     * @memberof gui.Tween
      */
     public update(elapsedMS: number, preserve?: boolean, forceTime?: boolean) {
 

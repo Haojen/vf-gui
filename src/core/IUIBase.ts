@@ -1,11 +1,8 @@
-
-/** 严禁外部使用，声明 */
-
 declare type TAny = any;
 
 interface Window{
     readonly clipboardData: DataTransfer | null;
-    vfui: any;
+    gui: any;
     
 }
 

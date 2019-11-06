@@ -1,12 +1,12 @@
-import vfui from "../src/pixi-vfui";
+import gui from "../src/vf-gui";
 
 export default class TestScrollingContainer {
 
-    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
         this.onLoad(app,uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
         /** 滚动容器 水平拖动 */
         let scX = this.addSc(uiStage, 50, 40, "水平拖动");
@@ -23,10 +23,10 @@ export default class TestScrollingContainer {
         scXY.scrollY = true;
     }
 
-    private addSc(uiStage: vfui.Stage, x: number, y: number, label: string) {
+    private addSc(uiStage: gui.Stage, x: number, y: number, label: string) {
 
         
-        let sc = new vfui.ScrollingContainer();
+        let sc = new gui.ScrollingContainer();
         sc.style.left = x;
         sc.style.top = y;
         sc.style.width = 300;
@@ -35,12 +35,12 @@ export default class TestScrollingContainer {
         sc.softness = 0.2;
         uiStage.addChild(sc);
 
-        let title = new vfui.Label(label);
+        let title = new gui.Label(label);
         title.style.color = 0xffcc00;
         sc.addChild(title);
 
         for(let i=0;i<5;i++){
-            let sp = new vfui.Image();
+            let sp = new gui.Image();
             sp.style.top = i * 620;
             sp.src = "assets/sprite.png";
             sc.addChild(sp);

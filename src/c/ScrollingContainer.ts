@@ -13,11 +13,16 @@ import { CSSStyle } from "../layout/CSSStyle";
 
 /**
  * 可滚动的容器
+ * 
+ * @example let scrollingContainer = new gui.ScrollingContainer();
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
  */
 export class ScrollingContainer extends Container {
     public constructor() {
         super();
-        this._childrenStartIndex = 0;
         this.container.addChild(this._innerContainer);
         this.container.name = "ScrollingContainer";
         this._innerContainer.name = "innerContainer";
@@ -151,12 +156,12 @@ export class ScrollingContainer extends Container {
         if (this._lastWidth != this._width || this._lastHeight != this._height) {
             const _of = this.expandMask;
             this.style.maskPosition = [_of,_of];
-            this.style.maskSize = [ this._width,this._height];
+            
             this._lastWidth = this._width;
             this._lastHeight = this._height;
+            this.style.maskSize = [this._width,this._height];
             this.setScrollPosition();
         }
-        
     }
 
     protected setScrollPosition(speed?: PIXI.Point) {
@@ -180,11 +185,14 @@ export class ScrollingContainer extends Container {
         }
 
         item.parent = this as TAny;    
+        index = Math.min(this._innerContainer.children.length,index);
         this._innerContainer.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
         this.updatesettings(true, true);
         this.getInnerBounds(true);
-        this.emit(ComponentEvent.ADDED,this);
+        if(this.listenerCount(ComponentEvent.CHILD_CHANGE))
+            this.emit(ComponentEvent.CHILD_CHANGE,this,item);
+        item.emit(ComponentEvent.ADDED,this);
         return item;
     }
 

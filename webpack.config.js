@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
     mode: 'development',
     devtool: 'source-map',
-    entry: './src/pixi-vfui.ts',
+    entry: './src/vf-gui.ts',
     module: {
         rules: [
             {
@@ -21,8 +21,8 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js']
     },
     output: {
-        filename: 'pixi-vfui.js',
-        library: "pixivfui",
+        filename: 'vf-gui.js',
+        library: "vfgui",
         //libraryTarget: "umd",
         path: path.resolve(__dirname, 'dist')
     },

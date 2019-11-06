@@ -126,7 +126,7 @@ export class CSSStyle {
      * 
      * 方式二 ["repeat",3,100] 三列，宽度都为100像素
      */
-    public gridTemplateColumns?: number[]|string[]; 
+    public gridTemplateColumns?: number[]|string[]|[string,number,number];; 
     /**
      * 设置列间距
      */
@@ -138,7 +138,7 @@ export class CSSStyle {
      * 
      * 方式二 ["repeat",3,100] 三行，宽度都为100像素
      */
-    public gridTemplateRows?: number[]|string[];
+    public gridTemplateRows?: number[]|string[]|[string,number,number];
     /**
      * 设置行间距
      */

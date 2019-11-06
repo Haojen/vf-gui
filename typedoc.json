@@ -1,5 +1,5 @@
 {
-    "name":"pixi-vfui",
+    "name":"vf-gui",
     "mode": "file",
     "src": [
         "./src/"

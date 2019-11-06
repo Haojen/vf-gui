@@ -1,19 +1,18 @@
-/**
- * 单选框与复选框组件，没有时间去拆分，区别只是皮肤与分组不同
- * 
- * checbox 不需要设置设置组
- * 
- * radio 需要设置分组
- *
- */
-
 import {Label} from "./Label";
 import { ComponentEvent, InputController } from "../interaction/Index";
 import {  Button } from "./Button";
 
 
 /**
- * UI 按钮显 示对象
+ * 单选\复选框
+ * 
+ * 设置checkGroup后，进行分组。 分组后，可理解为复选框。
+ * 
+ * @example let checkBox = new gui.CheckBox();
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestCheckBox
  */
 export class CheckBox extends Button{
 

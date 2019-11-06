@@ -1,9 +1,11 @@
 /**
- *  完整的缓动曲线列表
- * @namespace tween.Easing
- * @example
- *
- * // then set via new vfui.Tween({x:0}).to({x:100}, 1000).easing(tween.Easing.Quadratic.InOut).start()
+ * 完整的缓动曲线列表
+ * 
+ * @example gui.Easing.Linear.None;
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTween
  */
 export const Easing = {
     Linear: {

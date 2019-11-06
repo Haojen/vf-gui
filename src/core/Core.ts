@@ -14,8 +14,6 @@ export class Core extends PIXI.utils.EventEmitter{
      * @default
      */
     public initialized = false;
-    /** 设置添加索引时的开始位置，一般过滤子组件的背景 */
-    protected _childrenStartIndex = 0;
     /** 
      * 父容器 
      */
@@ -30,7 +28,12 @@ export class Core extends PIXI.utils.EventEmitter{
 
     /** 添加显示对象，需集成UIBASE */
     public addChild(item: UIBase) {
-        return this.addChildAt(item,this.uiChildren.length + this._childrenStartIndex);
+        if(this.container.children.length!==this.uiChildren.length){
+            return this.addChildAt(item,this.container.children.length);
+        }else{
+            return this.addChildAt(item,this.uiChildren.length);
+        }
+        
     }
 
     public addChildAt(item: UIBase, index: number) {
@@ -43,7 +46,9 @@ export class Core extends PIXI.utils.EventEmitter{
         this.container.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
         this.updatesettings(true, true);
-        this.emit(ComponentEvent.ADDED,this);
+        if(this.listenerCount(ComponentEvent.CHILD_CHANGE))
+            this.emit(ComponentEvent.CHILD_CHANGE,this,item);
+        item.emit(ComponentEvent.ADDED,this);
         return item;
     }
 
@@ -70,15 +75,16 @@ export class Core extends PIXI.utils.EventEmitter{
                 if (oldUIParent && oldUIParent.updatesettings)
                     oldUIParent.updatesettings(true, true);
             }, 0);
-
-            this.emit(ComponentEvent.REMOVEED,this);
+            if(this.listenerCount(ComponentEvent.CHILD_CHANGE))
+                this.emit(ComponentEvent.CHILD_CHANGE,this,item);
+            item.emit(ComponentEvent.REMOVEED,this);
         }
         return item;
     }
 
     public removeChildren(beginIndex?: number | undefined, endIndex?: number | undefined){
-        const start = beginIndex?beginIndex+ this._childrenStartIndex:this._childrenStartIndex;
-        const end = endIndex?endIndex- this._childrenStartIndex:this.uiChildren.length - this._childrenStartIndex;
+        const start = beginIndex?beginIndex:0;
+        const end = endIndex?endIndex:this.uiChildren.length;
         for(let i = start;i<end;i++){
             this.removeChild(this.uiChildren[i]);
         }

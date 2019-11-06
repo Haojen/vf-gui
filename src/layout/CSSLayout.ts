@@ -1,7 +1,8 @@
 import { UIBase } from "../core/UIBase";
-import { CSSStyle } from "./CSSStyle";
 import { Stage } from "../UI";
 import { updateBlockLayout } from "./CSSBlockLayout";
+import { updateGridLayout } from "./CSSGridLayout";
+import { ComponentEvent } from "../interaction/Index";
 
 export const $Rectangle = new PIXI.Rectangle();
 /**
@@ -76,48 +77,73 @@ export function getLayoutBoundsSize(target: UIBase, layoutWidth: number, layoutH
     return {width,height,x,y};
 }
 
+export function updateDisplayAlign(target: UIBase,targetWidth: number,targetHeight: number,marginTop=0,marginLeft=0){
+
+    if(target.parent == undefined){
+        return;
+    }
+    let startX = 0;
+    let startY = 0;
+
+    switch(target.style.justifyContent){
+        case "center":
+            startX = target.parent.width - targetWidth >>1 ;
+            break;
+        case "flex-start":
+            startX = marginLeft;
+            break;
+        case "flex-end":
+            startX = target.parent.width - targetWidth - marginLeft;
+            break;
+
+    }
+
+    switch(target.style.alignContent){
+        case "center":
+            startY = target.parent.height - targetHeight >>1 ;
+            break;
+        case "flex-start":
+            startY = marginTop;
+            break;
+        case "flex-end":
+            startY = target.parent.height - targetHeight - marginTop;
+            break;
+
+    }
+    if(startX!==0) target.x = startX;
+    if(startY!==0) target.y = startY;
+}
+
+export function onGridChildChange(gridContainer: UIBase){
+    if(gridContainer.isDrawLayout){
+        return;
+    }
+    gridContainer.isDrawLayout = true;
+    //^ ^!请原谅我，后期有时间改
+    setTimeout(() => {
+        updateDisplayLayout(gridContainer);
+        gridContainer.isDrawLayout = false;
+    }, 5);
+}
 
 /**
  * 调整目标的元素的大小并定位这些元素。
  */
-export function updateDisplayList(target: UIBase) {
+export function updateDisplayLayout(target: UIBase) {
 
     if(target.style.display === "block"){
         updateBlockLayout(target);
     }else if(target.style.display === "grid"){
         updateBlockLayout(target);
-    }
-}
-
-function getColumnRowValue(gridTemplate: number[] | string[] | undefined, parentValue: number) {
-    const list: number[] = [0];
-    if (gridTemplate) {
-        if (gridTemplate[0] === "repeat") {
-            for (let i = 0; i < gridTemplate[1]; i++) {
-                list.push(formatRelative(gridTemplate[2], parentValue));
-            }
-        } else {
-            for (let i = 0; i < gridTemplate.length; i++) {
-                list.push(formatRelative(gridTemplate[i], parentValue));
-            }
+        updateGridLayout(target);
+        if(target.listeners(ComponentEvent.CHILD_CHANGE).indexOf(onGridChildChange)==-1){
+            target.on(ComponentEvent.CHILD_CHANGE,onGridChildChange);
         }
     }
-    return list;
+    //^ ^!请原谅我，后期有时间改
+    setTimeout(() => {
+        const bounds = target.container.getLocalBounds()
+        updateDisplayAlign(target,bounds.width,bounds.height,target.style.gridColumnGap,target.style.gridRowGap);
+    }, 10);
 }
 
-
-
-export function updateDisplayGridList(component: UIBase) {
-    if (component.style.display !== "grid") {
-        return;
-    }
-    if (component.parent == undefined) {
-        return;
-    }
-
-    const gridColumnGap = component.style.gridColumnGap || 0;
-    const gridRowGap = component.style.gridRowGap || 0;
-
-    const columnsWidth = getColumnRowValue(component.style.gridTemplateColumns, component.parent.width);
-    const rowsWidth = getColumnRowValue(component.style.gridTemplateRows, component.parent.height);
-}

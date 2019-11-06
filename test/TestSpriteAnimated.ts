@@ -1,12 +1,12 @@
-import vfui from "../src/pixi-vfui";
+import gui from "../src/vf-gui";
 
 export default
     class TestSpriteAnimated {
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
 		/** 序列帧动画，设置spritesheet方式填充，或[texture1,textures2]方式 */
-        let sheetAnimated = new vfui.SpriteAnimated();
+        let sheetAnimated = new gui.SpriteAnimated();
         sheetAnimated.style.left = 200;
         sheetAnimated.style.top = 500;
 
@@ -25,7 +25,7 @@ export default
 
         uiStage.addChild(sheetAnimated);
 
-        let clickAnimated = new vfui.Interaction.ClickEvent(sheetAnimated);
+        let clickAnimated = new gui.Interaction.ClickEvent(sheetAnimated);
         clickAnimated.onClick = () => {
             if (sheetAnimated.animationName == "0") {
                 sheetAnimated.animationName = "1";
@@ -35,20 +35,20 @@ export default
 
         }
 
-        sheetAnimated.on(vfui.Interaction.ComponentEvent.CHANGE,(sa:vfui.SpriteAnimated)=>{
+        sheetAnimated.on(gui.Interaction.ComponentEvent.CHANGE,(sa:gui.SpriteAnimated)=>{
             console.log("CHANGE");
 		});
 		
-        sheetAnimated.on(vfui.Interaction.ComponentEvent.LOOP,(sa:vfui.SpriteAnimated)=>{
+        sheetAnimated.on(gui.Interaction.ComponentEvent.LOOP,(sa:gui.SpriteAnimated)=>{
             console.log("LOOP");
         });
 
-        sheetAnimated.on(vfui.Interaction.ComponentEvent.COMPLETE,(sa:vfui.SpriteAnimated)=>{
+        sheetAnimated.on(gui.Interaction.ComponentEvent.COMPLETE,(sa:gui.SpriteAnimated)=>{
             console.log("COMPLETE");
         });
     }
 
-    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
         
         const loader = PIXI.Loader.shared;
 

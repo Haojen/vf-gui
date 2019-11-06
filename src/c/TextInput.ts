@@ -9,8 +9,13 @@ import { ComponentEvent } from "../interaction/Index";
 
 
 /**
- * @example
- * new PIXI.TextInput
+ * 文本输入
+ * 
+ * @example let textInput = new gui.TextInput(true|false);//单行或多行
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestTextInput
  */
 export class TextInput extends InputBase {
 

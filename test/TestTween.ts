@@ -1,14 +1,14 @@
-import vfui from "../src/pixi-vfui";
+import gui from "../src/vf-gui";
 
 export default class TestTween {
 
-    public constructor(app: PIXI.Application, uiStage: vfui.Stage) {
+    public constructor(app: PIXI.Application, uiStage: gui.Stage) {
         this.onLoad(app,uiStage)
     }
 
-    private onLoad(app: PIXI.Application, uiStage: vfui.Stage) {
+    private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
-        let root = new vfui.Container();
+        let root = new gui.Container();
         root.style.backgroundColor = 0x136086;
         root.style.height = 10;
         root.style.width = 100;
@@ -19,9 +19,9 @@ export default class TestTween {
         root.style.rotation = -95;
         uiStage.addChild(root);
 
-        new vfui.Tween(root.style).to({rotation:-85},2000)
+        new gui.Tween(root.style).to({rotation:-85},2000)
         .repeat(Infinity)
-        .easing(vfui.Easing.Linear.None)
+        .easing(gui.Easing.Linear.None)
         .yoyo(true)
         .start(0);
 
@@ -49,7 +49,7 @@ export default class TestTween {
 
 
 class Node {
-    public constructor(parent?: Node,root?:vfui.Container) {
+    public constructor(parent?: Node,root?:gui.Container) {
         let div = this.div;
         div.style.backgroundColor = 0x4caf50;
         div.style.height = 10;
@@ -61,20 +61,20 @@ class Node {
         div.style.scaleX = 0.9;
         div.style.scaleY = 0.9;
 
-        new vfui.Tween(div.style).to({rotation:0,scaleX:0.1,scaleY:0.1},7000)
+        new gui.Tween(div.style).to({rotation:0,scaleX:0.1,scaleY:0.1},7000)
         .repeat(Infinity)
-        .easing(vfui.Easing.Linear.None)
+        .easing(gui.Easing.Linear.None)
         .yoyo(true)
         .start().delay(2000);
 
-        new vfui.Tween({ color: "#4caf50"})
+        new gui.Tween({ color: "#4caf50"})
         .to({ color: "#136086" }, 7000)
         .repeat(Infinity)
-        .easing(vfui.Easing.Quadratic.InOut)
+        .easing(gui.Easing.Quadratic.InOut)
         .yoyo(true)
-        .on(vfui.Tween.Event.update, (obj: any) => {
+        .on(gui.Tween.Event.update, (obj: any) => {
             if (obj.color.indexOf("-") === -1) {
-                div.style.backgroundColor = vfui.Utils.rgbStrToNumber(obj.color);
+                div.style.backgroundColor = gui.Utils.rgbStrToNumber(obj.color);
             }
         })
         .start();
@@ -82,15 +82,17 @@ class Node {
         if(root){
             root.addChild(div);
         }else{
-            this.parent = parent;
-            parent.div.addChild(div);
+            if(parent){
+                this.parent = parent;
+                parent.div.addChild(div);
+            }
         }
         
     }
 
-    public div = new vfui.Container();
-    public parent:Node;
+    public div = new gui.Container();
+    public parent?:Node;
     public isLeft = false;
-    public leftChild:Node = null;
-    public rightChild:Node = null;
+    public leftChild?:Node;
+    public rightChild?:Node;
 }

@@ -4,12 +4,15 @@ import { ComponentEvent } from "../interaction/Index";
 import { addDrawList } from "../layout/CSSSSystem";
 
 /**
- * UI 序列图动画
- * 需要设置轴点旋转，需要使用texturepacker处理轴点
- *
- * @class
- * @extends PIXI.UI.UIBase
- * @memberof PIXI.UI
+ * 序列图动画
+ * 
+ * 支持使用texturepacker导出以及处理轴点
+ * 
+ * @example let spriteAnimated = new gui.SpriteAnimated();
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSpriteAnimated
  */
 export class SpriteAnimated extends UIBase{
     public constructor(){
