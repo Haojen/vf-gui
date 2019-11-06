@@ -8,7 +8,7 @@
 // "npmPublish": "npm publish -registry=https://registry.npmjs.org",
 // "lint": "eslint ./src/*.* ./src/**/*.*  --fix",
 // "docs": "typedoc",
-// "dts": "dts-generator --project  ./  --out ./dist/pixi-vfui.d.ts"
+// "dts": "dts-generator --project  ./  --out ./dist/vf-gui.d.ts"
 
 const {execSync } = require('child_process');
 const fs = require("fs");

@@ -18,7 +18,7 @@ import { CSSStyle } from "../layout/CSSStyle";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestRect
  */
 export class ScrollingContainer extends Container {
     public constructor() {

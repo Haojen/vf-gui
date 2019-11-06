@@ -9,7 +9,7 @@ import {UIBase} from "../core/UIBase";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestContainer
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestContainer
  */
 export class Container extends UIBase{
     public constructor(){

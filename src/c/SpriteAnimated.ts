@@ -12,7 +12,7 @@ import { addDrawList } from "../layout/CSSSSystem";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestSpriteAnimated
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestSpriteAnimated
  */
 export class SpriteAnimated extends UIBase{
     public constructor(){

@@ -1,7 +1,7 @@
 {
   "name": "vf-gui",
-  "version": "0.5.2",
-  "description": "[https://vipkid-edu.github.io/pixi-vfui-docs/](https://vipkid-edu.github.io/pixi-vfui-docs/)",
+  "version": "0.5.3",
+  "description": "[https://vipkid-edu.github.io/vf-gui-docs/](https://vipkid-edu.github.io/vf-gui-docs/)",
   "main": "dist/vf-gui.js",
   "types": "dist/vf-gui.d.ts",
   "scripts": {
@@ -54,10 +54,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vipkid-edu/pixi-vfui.git"
+    "url": "git+https://github.com/vipkid-edu/vf-gui.git"
   },
   "bugs": {
-    "url": "https://github.com/vipkid-edu/pixi-vfui/issues"
+    "url": "https://github.com/vipkid-edu/vf-gui/issues"
   },
-  "homepage": "https://github.com/vipkid-edu/pixi-vfui#readme"
+  "homepage": "https://github.com/vipkid-edu/vf-gui#readme"
 }

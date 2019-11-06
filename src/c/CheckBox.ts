@@ -12,7 +12,7 @@ import {  Button } from "./Button";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/pixi-vfui-docs/play/#example/0.5.0/TestCheckBox
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestCheckBox
  */
 export class CheckBox extends Button{
 
