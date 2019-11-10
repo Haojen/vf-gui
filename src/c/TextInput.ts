@@ -4,7 +4,6 @@ import { CSSStyle } from "../layout/CSSStyle";
 import { componentToHex } from "../core/Utils";
 import { InputBase } from "../core/InputBase";
 import { Image } from "./Image";
-import { addDrawList } from "../layout/CSSSSystem";
 import { ComponentEvent } from "../interaction/Index";
 
 
@@ -73,6 +72,8 @@ export class TextInput extends InputBase {
         this.container.interactiveChildren = true;
 
         this.on(ComponentEvent.STATE_CHANGE,this.onStateChange,this);
+        this.container.isEmitRender = false;
+        this.container.on("renderChange",this.updateSystem,this);
     }
 
     protected _oldState = "";
@@ -107,7 +108,7 @@ export class TextInput extends InputBase {
     }
     public set text(value) {
         this._text.text = value;
-        addDrawList("update",this,this.updateSystem);
+        this.container.isEmitRender = true;
     }
     /**
      * 预览文字
@@ -118,7 +119,7 @@ export class TextInput extends InputBase {
     }
     public set placeholder(value) {
         this._placeholder = value;
-        addDrawList("update",this,this.updateSystem);
+        this.container.isEmitRender = true;
     }
     /**
      * 设置最大可输入
@@ -129,7 +130,7 @@ export class TextInput extends InputBase {
     }
     public set maxLength(value) {
         this._maxLength = value;
-        addDrawList("update",this,this.updateSystem);
+        this.container.isEmitRender = true;
     }
     /** 
      * 过滤表达式
@@ -140,7 +141,7 @@ export class TextInput extends InputBase {
     }
     public set restrict(value: RegExp | undefined) {
         this._restrict = value;
-        addDrawList("update",this,this.updateSystem);
+        this.container.isEmitRender = true;
     }
 
     /** 
@@ -150,7 +151,7 @@ export class TextInput extends InputBase {
 
 
     // GETTERS & SETTERS
-    public update(_style: CSSStyle, renderer?: PIXI.Renderer) {
+    public updateSystem(renderer?: PIXI.Renderer) {
 
         if(renderer === undefined){
             return;
@@ -172,7 +173,7 @@ export class TextInput extends InputBase {
         this.render(renderer);
 
         this.onStateChange(this, this.currentState);
-
+        this.container.isEmitRender = false;
     }
 
     /** 
@@ -215,9 +216,6 @@ export class TextInput extends InputBase {
         this._oldState = state;
         const img = this.img;
         img.src = (this as TAny)[state];
-    }
-    protected updateSystem(){
-        //一次空的执行，为了触发update
     }
 
     // SETUP
@@ -474,6 +472,7 @@ export class TextInput extends InputBase {
 
         this.htmlInputShared.release();
 
+        this.container.off("renderChange",this.updateSystem,this);
         this.offAll(ComponentEvent.STATE_CHANGE);
 
     }

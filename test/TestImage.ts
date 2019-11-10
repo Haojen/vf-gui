@@ -33,8 +33,8 @@ export default class TestImage {
         let img3 = new gui.Image();
         img3.x = 100;
         img3.y = 350;
-        img3.width = 0;
-        img3.height = 0;
+        //img3.width = 0;
+        //img3.height = 0;
         img3.src = "assets/mask/bg.jpg";
         img3.tint = 0xffcc00;//填充颜色
         //img3.visible = false;

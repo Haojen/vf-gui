@@ -42,19 +42,24 @@ export const LOOP = "LOOP";
 /**
  * 容器被添加在到父级时触发
  */
-export const ADDED = "ADDED";
+export const ADDED = "added";
 
 /**
  * 容器被从父级移除时触发
  */
-export const REMOVEED = "REMOVEED";
+export const REMOVEED = "removed";
 
+export const RESIZE = "RESIZE";
+
+export const MOVE = "MOVE";
+
+export const CREATION_COMPLETE = "CREATION_COMPLETE";
 /**
  * 节点改变时触发，有子项被添加到容器，或有子项被删除时，触发。
  */
 export const CHILD_CHANGE = "CHILD_CHANGE";
 
 /**
- * 绘制完成时
+ * 位置，缩放等发生改变后出发
  */
-export const RENDERER_COMPLETE = "RENDERER_COMPLETE";
+export const TRANSFORM_COMPLETE = "TRANSFORM_COMPLETE";

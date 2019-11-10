@@ -59,3 +59,5 @@ class Ticker extends PIXI.utils.EventEmitter{
  * Ticker 的实例
  */
 export const shared = new Ticker(true);
+export const tickerShared = shared;
+export default tickerShared;

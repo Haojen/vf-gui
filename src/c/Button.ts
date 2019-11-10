@@ -1,7 +1,6 @@
 import {Label} from "./Label";
 import {Image} from "./Image";
 import { InputBase } from "../core/InputBase";
-import { CSSStyle } from "../layout/CSSStyle";
 import { ComponentEvent } from "../interaction/Index";
 
 
@@ -39,6 +38,7 @@ export class Button extends InputBase{
     /** 文字展示 */
     public readonly label = new Label();
 
+    private _text = "";
     /**
      * 设置按钮的文本内容
      */
@@ -46,17 +46,29 @@ export class Button extends InputBase{
         return this.label.text;
     }
     public set text(value) {
+        this._text = value;
+        this.invalidateDisplayList();
 
-        this.label.text = value;
     }
 
-    
-    public update(_style: CSSStyle) {
-        this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
+
+    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number) {
+
+        super.updateDisplayList(unscaledWidth,unscaledHeight);
+        
+        this.container.hitArea = new PIXI.Rectangle(0, 0, unscaledWidth, unscaledHeight);
+
         const img = this.img;
-        img.width = this._width;
-        img.height = this._height;
+        img.width = unscaledWidth;
+        img.height = unscaledHeight;
+
+        if(this.label.text !== this._text){
+            this.label.text = this._text;
+
+        }
+
         this.onStateChange(this,this.currentState);
+
     }
 
     public release() {
@@ -76,7 +88,6 @@ export class Button extends InputBase{
             return;
         }
         this._oldState = state;
-        const img = this.img;
-        img.src = (this as TAny)[state + this._selectedStr];
+        this.img.src = (this as TAny)[state + this._selectedStr];
     }
 }

@@ -4,8 +4,6 @@ import * as Utils from "../core/Utils";
 import {DragEvent,InteractionEvent, ComponentEvent} from "../interaction/Index";
 import { Tween } from "./Tween";
 import { Easing } from "./Easing";
-import { addDrawList } from "../layout/CSSSSystem";
-
 
 /**
  * 滑动条/进度条
@@ -84,7 +82,7 @@ export class Slider extends UIBase{
     }
     public set value(value: number) {
         this._value = value;
-        addDrawList("valueSystem",this,this.valueSystem);
+        this.valueSystem();
     }
 
     protected valueSystem(){
@@ -165,14 +163,29 @@ export class Slider extends UIBase{
         }
     }
 
+    private isExcValueSystem = false;
+    public setActualSize(w: number, h: number): void {
+        super.setActualSize(w,h);
+        if(this.trackImg.width!==w){
+            this.trackImg.width = w;
+        }
+        if(this.trackImg.height!==w){
+            this.trackImg.height = h;
+        }
+        if(!this.isExcValueSystem){
+            this.valueSystem();
+            this.isExcValueSystem = true;
+        }
+
+    }
+
     public release(){
         super.release();
         this.trackImg.release();
         this.thumbImg.release();
         this.tracklightImg.release();
     }
-
-
+    
     private onImgload(){
         this.updateLayout();
     }
@@ -203,8 +216,11 @@ export class Slider extends UIBase{
         if (this.vertical) {
             val = this._height * this._amt;
             if (soft) {
-                Tween.to(thumbImg,{ y: val },300).easing(Easing.Linear.None).start();
-                Tween.to(tracklightImg, { height: val },300).easing(Easing.Linear.None).start();
+                Tween.to({y:thumbImg.y,height:tracklightImg.height},{ y: val,height: val },300).easing(Easing.Linear.None)
+                    .on(Tween.Event.update, (obj: TAny) => {
+                        thumbImg.y = obj.y;
+                        tracklightImg.height = obj.height;
+                    }) .start();
             }
             else {
                 thumbImg.y = val;
@@ -214,8 +230,12 @@ export class Slider extends UIBase{
         else {
             val = this._width* this._amt;
             if (soft) {
-                Tween.to(thumbImg,{ x: val },300).easing(Easing.Linear.None).start();
-                Tween.to(tracklightImg, { width: val },300).easing(Easing.Linear.None).start();
+                Tween.to({x:thumbImg.x,width:tracklightImg.width},{ x: val,width: val },300).easing(Easing.Linear.None)
+                    .on(Tween.Event.update, (obj: TAny
+                    ) => {
+                        thumbImg.x = obj.x;
+                        tracklightImg.width = obj.width;
+                    }) .start();
             }
             else {
                 thumbImg.x = val;

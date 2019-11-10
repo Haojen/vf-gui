@@ -1,5 +1,4 @@
 import {UIBase} from "../core/UIBase";
-import { addDrawList } from "../layout/CSSSSystem";
 
 /**
  * 绘制矩形或圆角矩形
@@ -28,7 +27,7 @@ export class Rect extends UIBase{
     }
     public set radius(value) {
         this._radius = value;
-        addDrawList("draw",this,this.drawRoundedRectSystem);
+        this.invalidateDisplayList();
     }
     /**
      * 线条颜色
@@ -39,7 +38,6 @@ export class Rect extends UIBase{
     }
     public set lineColor(value) {
         this._lineColor = value;
-        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
     /**
      * 线条粗细
@@ -50,7 +48,6 @@ export class Rect extends UIBase{
     }
     public set lineWidth(value) {
         this._lineWidth = value;
-        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
     /** 
      * 颜色 
@@ -61,7 +58,6 @@ export class Rect extends UIBase{
     }
     public set color(value) {
         this._color = value;
-        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
     /**
      * 锚点，调整位图的坐标中点 0-1
@@ -72,7 +68,6 @@ export class Rect extends UIBase{
     }
     public set anchorX(value) {
         this._anchorX = value;
-        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
     /**
      * 锚点，调整位图的坐标中点 0-1
@@ -83,7 +78,6 @@ export class Rect extends UIBase{
     }
     public set anchorY(value) {
         this._anchorY = value;
-        addDrawList("draw",this,this.drawRoundedRectSystem);
     }
     
 
@@ -97,12 +91,19 @@ export class Rect extends UIBase{
         this.graphics.parent.removeChild(this.graphics).destroy();
     }
 
-    protected drawRoundedRectSystem(rect: Rect,key: string){
-        rect.graphics.clear();
-        rect.graphics.lineStyle(rect.lineWidth,rect.lineColor);
-        rect.graphics.beginFill(rect.color);   
+    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number) {
+
+        super.updateDisplayList(unscaledWidth,unscaledHeight);
+
+        const graphics = this.graphics;
+        graphics.clear();
+        graphics.lineStyle(this._lineWidth,this._lineColor);
+        graphics.beginFill(this._color);   
         
-        rect.graphics.drawRoundedRect(rect.anchorX?-rect.anchorX*this._width:0,rect.anchorY?-rect.anchorY*this._height:0,this._width, this._height,rect.radius);
-        rect.graphics.endFill();
+        graphics.drawRoundedRect(this._anchorX?-this._anchorX*this.width:0,this._anchorY?-this._anchorY*this.width:0,this.width, this.height,this._radius);
+        graphics.endFill();
+
     }
+
+
 }

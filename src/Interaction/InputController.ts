@@ -1,4 +1,5 @@
 import {UIBase} from "../core/UIBase";
+import { CheckBox } from "../c/CheckBox";
 
 interface CheckGroupObject{
     groups: {[key: string]: {[value: string]: CheckBox}} ;
@@ -123,10 +124,10 @@ export function registrerCheckGroup(cb: CheckBox){
         if (!group) 
             group = _checkGroupObject.groups[name] = {};
     
-        group[cb.uuid] = cb;
+        group[cb.uuid.toString()] = cb;
     
         if (cb.checked)
-            _checkGroupObject.values[name] = cb.uuid;
+            _checkGroupObject.values[name] = cb.uuid.toString();
     }
 }
 
@@ -136,7 +137,7 @@ export function registrerCheckGroup(cb: CheckBox){
  */
 export function unRegistrerCheckGroup(cb: CheckBox){
     if(cb.checkGroup && _checkGroupObject.groups[cb.checkGroup]){
-        delete _checkGroupObject.groups[cb.checkGroup][cb.uuid];
+        delete _checkGroupObject.groups[cb.checkGroup][cb.uuid.toString()];
         let isKey = false;
         for(const key in _checkGroupObject.groups[cb.checkGroup]){
             if(key) isKey = true;
@@ -158,7 +159,7 @@ export function updateCheckGroupSelected(cb: CheckBox){
             if (b !== cb)
                 b.checked = false;
         }
-        _checkGroupObject.values[cb.checkGroup] = cb.uuid;
+        _checkGroupObject.values[cb.checkGroup] = cb.uuid.toString();
     }
 }
 
@@ -166,7 +167,7 @@ export function updateCheckGroupSelected(cb: CheckBox){
 export function getCheckGroupSelectedValue(name: string){
     const uuid = _checkGroupObject.values[name];
     if(uuid){
-        const cb = _checkGroupObject.groups[name][uuid];
+        const cb = _checkGroupObject.groups[name][uuid.toString()];
         return cb.value;
     }
     return undefined;

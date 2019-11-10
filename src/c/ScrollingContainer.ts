@@ -8,7 +8,6 @@ import {InteractionEvent} from "../interaction/InteractionEvent";
 import { now } from "../core/Utils";
 import { ComponentEvent } from "../interaction/Index";
 import { ContainerBase } from "./ContainerBase";
-import { CSSStyle } from "../layout/CSSStyle";
 
 
 /**
@@ -151,15 +150,16 @@ export class ScrollingContainer extends Container {
     private _Speed = new PIXI.Point();
     private _stop = false;
 
-    public update(_style: CSSStyle) {
-        super.update(_style);
-        if (this._lastWidth != this._width || this._lastHeight != this._height) {
+
+    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number) {
+        if (this._lastWidth != unscaledWidth || this._lastHeight != unscaledHeight) {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
             const _of = this.expandMask;
             this.style.maskPosition = [_of,_of];
             
-            this._lastWidth = this._width;
-            this._lastHeight = this._height;
-            this.style.maskSize = [this._width,this._height];
+            this._lastWidth = unscaledWidth;
+            this._lastHeight = unscaledHeight;
+            this.style.maskSize = [unscaledWidth,unscaledHeight];
             this.setScrollPosition();
         }
     }

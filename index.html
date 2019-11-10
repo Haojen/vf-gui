@@ -13,8 +13,56 @@
     <canvas id="renderCanvas"></canvas>
     <script src="./node_modules/pixi.js/dist/pixi.js"></script>
     <script src="./dist/vf-gui.js"></script>
+    
+    <div style="margin-left: 120px; "  id="examples">
+        <p>Examples</p>
+        <div style="min-width: 20em;">
+            <ul>
+                <li class="" style="color: darkgray;">容器</li>
+                <li class="button" data-example="TestContainer">Container - 基础容器</li>
+                <li class="button" data-example="TestScrollingContainer">ScrollingContainer - 滑动容器</li>
+            </ul>
+            <ul>
+                <li class="" style="color: darkgray;">布局</li>
+                <li class="button" data-example="TestGridLayout">grid布局</li>
+            </ul>
+            <ul>
+                <li class="" style="color: darkgray;">控件</li>
+                <li class="button" data-example="TestLabel">Label - 文本</li>
+                <li class="button" data-example="TestImage">Image - 图片</li>
+                <li class="button" data-example="TestButton">Button - 按钮</li>
+                <li class="button" data-example="TestCheckBox">CheckBox - 单选复选框</li>
+                <li class="button" data-example="TestRect">Rect - 矩形</li>
+                <li class="button" data-example="TestTextInput">TextInput - 输入文本</li>
+                <li class="button" data-example="TestSlider">Slider - 滑动条</li>
+            </ul>
+            <ul>
+                <li class="" style="color: darkgray;">动画</li>
+                <li class="button" data-example="TestTween">Tween - 缓动</li>
+                <li class="button" data-example="TestTimeLine">TimeLine - 帧动画</li>
+                <li class="button" data-example="TestSpriteAnimated">SpriteAnimated - 序列图</li>
+                <li class="button" data-example="TestTicker">Ticker - 心跳</li>
+            </ul>
+            <ul>
+                <li class="" style="color: darkgray;">媒体</li>
+                <li class="button" data-example="TestSound">Sound - 音频</li>
+            </ul>
+        </div>
+    </div>
+
     <script>
-        
+        var buttons = document.getElementsByClassName("button");
+        for(var i = 0;i<buttons.length;i++){
+            var button = buttons[i];
+            if(button.getAttribute("data-example")!=""){
+                
+                button.style.cursor = "pointer";
+                button.onclick = function(){
+                    var link = "./test.html?type=" + this.getAttribute("data-example");
+                    window.location.href = link;
+                }
+            }
+        }
     </script>
 </body>
 </html>

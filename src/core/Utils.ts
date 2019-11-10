@@ -216,7 +216,7 @@ export function Round(num: number, decimals: number) {
 
 /** 获取全局唯一数 */
 export function uid() {
-    return PIXI.utils.uid().toString();
+    return PIXI.utils.uid();
 }
 
 /** 获取URL参数 */
@@ -226,4 +226,26 @@ export function getQueryVariable(variable: string) {
         return params.get(variable);
     }
     return undefined;
+}
+
+export function  isDeltaIdentity(m: PIXI.Matrix): boolean {
+    return (m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1);
+}
+
+
+
+export function formatRelative(value: number | string | undefined, total: number): number {
+    if (value == undefined) {
+        return NaN;
+    }
+    if (typeof value === "number") {
+        return value;
+    }
+    const str = value;
+    const index = str.indexOf("%");
+    if (index == -1) {
+        return +str;
+    }
+    const percent = +str.substring(0, index);
+    return percent * 0.01 * total;
 }

@@ -46,13 +46,6 @@ interface InputStyle{
     lineHeight: '1';
 }
 
-interface CheckBox{
-    uuid: string;
-    checkGroup: string|undefined;
-    checked: boolean;
-    value: string|undefined;
-}
-
 interface ScrollBar{
     alignToContainer: () => void;
 }

@@ -68,7 +68,7 @@ export class Tween extends PIXI.utils.EventEmitter {
         return this;
     }
 
-    public id: string;
+    public id: number;
     public object: TAny;
     private _valuesEnd: TAny = null;
     private _valuesStart: TAny;

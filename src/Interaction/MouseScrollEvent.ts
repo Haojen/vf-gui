@@ -37,7 +37,7 @@ export class MouseScrollEvent{
         obj.container.interactive = true;
         this.startEvent();
     }
-    public  id = "";
+    public  id= 0;
     private obj: UIBase
     private preventDefault: boolean;
     private delta = new PIXI.Point();

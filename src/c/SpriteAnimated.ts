@@ -1,7 +1,6 @@
 import {UIBase} from "../core/UIBase";
 import { log, getTexture } from "../core/Utils";
 import { ComponentEvent } from "../interaction/Index";
-import { addDrawList } from "../layout/CSSSSystem";
 
 /**
  * 序列图动画
@@ -37,7 +36,7 @@ export class SpriteAnimated extends UIBase{
             return;
         }
         this._animationName = value;
-        addDrawList("animatedNameSystem",this,this.animatedNameSystem);
+        this.animatedNameSystem();
     }
     /**
      * 序列图路径，或序列图数组
@@ -48,7 +47,7 @@ export class SpriteAnimated extends UIBase{
     }
     public set src(value: PIXI.Spritesheet | PIXI.Texture[] | undefined) {
         this._src = value;
-        addDrawList("srcSystem",this,this.srcSystem);
+        this.srcSystem();
     }
     /**
      * 动画速度
@@ -59,7 +58,7 @@ export class SpriteAnimated extends UIBase{
     }
     public set animationSpeed(value) {
         this._animationSpeed = value;
-        addDrawList("attribSystem",this,this.attribSystem);
+        this.attribSystem();
     }
     /** 
      * 是的循环
@@ -70,7 +69,7 @@ export class SpriteAnimated extends UIBase{
     }
     public set loop(value) {
         this._loop = value;
-        addDrawList("attribSystem",this,this.attribSystem);
+        this.attribSystem()
     }
     /** 
      * 是否播放中
@@ -89,7 +88,7 @@ export class SpriteAnimated extends UIBase{
     }
     public set anchorX(value) {
         this._anchorX = value;
-        addDrawList("attribSystem",this,this.attribSystem);
+        this.attribSystem();
     }
     /**
      * 锚点，调整位图的坐标中点 0-1, 可通过 TexturePacker输出sheet图并设置好 anchor
@@ -100,14 +99,14 @@ export class SpriteAnimated extends UIBase{
     }
     public set anchorY(value) {
         this._anchorY = value;
-        addDrawList("attribSystem",this,this.attribSystem);
+        this.attribSystem();
     }
    
     /** 跳转到第N帧并播放 */
     public gotoAndPlay(frameNumber: number){
         this._curFrameNumber = frameNumber;    
         this._playing = true;
-        addDrawList("playSystem",this,this.playSystem);
+        this.playSystem();
     }
 
     /** 跳转到第N帧并停止 */
@@ -115,21 +114,21 @@ export class SpriteAnimated extends UIBase{
 
         this._curFrameNumber = frameNumber;
         this._playing = false;
-        addDrawList("playSystem",this,this.playSystem);
+        this.playSystem();
     }
 
     /** 停止 */
     public stop(){
         this._curFrameNumber = 0;
         this._playing = false;
-        addDrawList("playSystem",this,this.playSystem);
+        this.playSystem();
     }
 
     /** 播放 */
     public play(){
         this._curFrameNumber = 0;
         this._playing = true;
-        addDrawList("playSystem",this,this.playSystem);
+        this.playSystem();
     }
 
     /** 

@@ -1,5 +1,5 @@
 import { UIBase } from "../core/UIBase";
-import { formatRelative} from "./CSSLayout";
+import { formatRelative } from "../core/Utils";
 
 function getColumnRowValue(gridTemplate: number[] | string[] | [string,number,number] |undefined, parentValue: number) {
     const list: number[] = [];
@@ -47,7 +47,9 @@ export function updateGridLayout(target: UIBase): void {
     if (target.parent == undefined) {
         return;
     }
-
+    if (target.style == undefined) {
+        return;
+    }
     const style = target.style;
 
     const gridColumnGap = style.gridColumnGap || 0;
@@ -68,7 +70,7 @@ export function updateGridLayout(target: UIBase): void {
     let widthTotal = 0;
 
     for(let i=0;i<target.uiChildren.length;i++){
-        child = target.uiChildren[i];
+        child = target.uiChildren[i] as UIBase;
 
         cloumnWidth =  column[cloumnIndex] || 0;
         rowHeight = row[rowIndex] || 0;
