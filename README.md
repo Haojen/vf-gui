@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/vf-gui.svg)](https://badge.fury.io/js/vf-gui)
+
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/vf-gui)
 
 ## vf-gui
