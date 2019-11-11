@@ -11,33 +11,23 @@ interface Lifecycle{
  */
 interface LifecycleHook{
     /**
-     * 初始化完成，只执行一次
+     * 显示对象初始化完成，只执行一次,子类重写，不可外部调用
      */
-    onInit(): void;
+    $onInit(): void;
     /**
-     * 加载完成
+     * 加载完成，不可外部调用
      */
-    onLoad(): void;
+    $onLoad(): void;
     /**
-     * 回收，释放
+     * 回收，释放完成，不可外部调用
      */
-    onRelease(): void;
+    $onRelease(): void;
     /**
-     * 添加到舞台
+     * 添加到舞台后，不可外部调用
      */
-    onAddStage(): void;
+    $onAddStage(): void;
     /**
-     * 移出舞台
+     * 移出舞台后，不可外部调用
      */
-    onRemoveStage(): void;
-    /**
-     * 显示对象初始化完成，只执行一次
-     */
-    onViewInit(): void;
-    /**
-     * 释放指令
-     */
-    onDestroy(): void;
-
-    
+    $onRemoveStage(): void;
 }

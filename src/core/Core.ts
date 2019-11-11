@@ -4,14 +4,14 @@ import { ComponentEvent } from "../interaction/Index";
 import { uid } from "./Utils";
 import { UIBase } from "../UI";
 
-export class Core extends PIXI.utils.EventEmitter {
+export class Core extends PIXI.utils.EventEmitter implements LifecycleHook,Lifecycle {
 
     public constructor() {
         super();
         this.uuid = uid();
         this.container = new ContainerBase();
-        this.container.on("added",this.onAdded,this);
-        this.container.on("removed",this.onRemoved,this);
+        this.container.on("added",this.$onAddStage,this);
+        this.container.on("removed",this.$onRemoveStage,this);
     }
     /**
      * 全局唯一ID
@@ -67,18 +67,14 @@ export class Core extends PIXI.utils.EventEmitter {
         }else{
             item.stage = this.stage;
         }
-        item.parent = this as TAny;
-        
+        item.parent = this as TAny;       
         item.$nestLevel = this.$nestLevel + 1;
-        this.updatesettings(true, true);
         this.uiChildren.splice(index, 0, item);
+        if(!item.initialized){
+            item.initialized = true;
+            item.$onInit();
+        }
         this.container.addChildAt(item.container, index);
-
-        if (this.listenerCount(ComponentEvent.CHILD_CHANGE))
-            this.emit(ComponentEvent.CHILD_CHANGE, this, item);
-
-        item.emit(ComponentEvent.ADDED, this);
-
         return item;
     }
 
@@ -87,28 +83,17 @@ export class Core extends PIXI.utils.EventEmitter {
     }
 
     /**
-     * 移除已添加的UI组件，可以同时移除多个如addChild(a,b,c,d)
+     * 移除已添加的UI组件
      * @param UIObject 要移除的UI组件
      */
     public removeChild(item: Core) {
 
         const index = this.uiChildren.indexOf(item);
         if (index !== -1) {
-            const oldUIParent = item.parent;
-            //var oldParent = UIObject.container.parent;
             item.container.parent.removeChild(item.container);
             this.uiChildren.splice(index, 1);
             item.parent = undefined;
             item.stage = undefined;
-
-            //oldParent._recursivePostUpdateTransform();
-            setTimeout(() => { //hack but cant get the transforms to update propertly otherwice?
-                if (oldUIParent && oldUIParent.updatesettings)
-                    oldUIParent.updatesettings(true, true);
-            }, 0);
-            if (this.listenerCount(ComponentEvent.CHILD_CHANGE))
-                this.emit(ComponentEvent.CHILD_CHANGE, this, item);
-            item.emit(ComponentEvent.REMOVEED, this);
         }
         return item;
     }
@@ -120,33 +105,7 @@ export class Core extends PIXI.utils.EventEmitter {
             this.removeChild(this.uiChildren[i]);
         }
     }
-    /**
-     * 渲染父容器
-     */
-    public updateParent() {
-        if (this.parent && this.parent.updatesettings) {
-            this.parent.updatesettings(false, true);
-        }
-    }
-
-    /** 
-     * 更新所有子节点
-     */
-    public updateChildren() {
-        for (let i = 0; i < this.uiChildren.length; i++) {
-            this.uiChildren[i].updatesettings(true);
-        }
-    }
-
-    /**
-     * 绘制渲染对象
-     * @param updateChildren 是否渲染子节点，true渲染
-     * @param updateParent  是否渲染父容器，true渲染
-     */
-    public updatesettings(updateChildren: boolean, updateParent?: boolean) {
-
-    }
-
+    
     /**
      * 是否绘制显示对象，如果false不进行绘制，不过仍然会进行相关的更新计算。
      * 只影响父级的递归调用。
@@ -174,15 +133,39 @@ export class Core extends PIXI.utils.EventEmitter {
         return this.removeAllListeners(event);
     }
 
-    protected onAdded(){
-        this.checkInvalidateFlag();
+    load(): void {
+        this.$onLoad();
     }
-    protected onRemoved(){
-        this.checkInvalidateFlag();
+    release(): void {
+        this.$onRelease();
     }
+
+    $onInit(){
+        this.emit(ComponentEvent.CREATION_COMPLETE,this);
+    }
+
+    $onLoad(){
+
+    }
+
+    $onRelease(){
+
+    }
+
+    $onAddStage(){
+        this.checkInvalidateFlag();
+        this.emit(ComponentEvent.ADDED, this);
+    }
+    $onRemoveStage(){
+        this.checkInvalidateFlag();
+        this.parent = undefined;
+        this.emit(ComponentEvent.REMOVEED, this);
+    }
+
     protected checkInvalidateFlag(){
 
     }
+    
 }
 
 

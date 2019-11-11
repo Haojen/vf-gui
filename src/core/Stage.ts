@@ -54,7 +54,7 @@ export class Stage extends UILayout{
     
     public resize(): void {
         this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
-        this.updateChildren();
+        //this.updateChildren();
     }
 
 }

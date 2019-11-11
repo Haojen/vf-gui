@@ -40,26 +40,23 @@ export const STATE_CHANGE= "STATE_CHANGE";
 export const LOOP = "LOOP";
 
 /**
- * 容器被添加在到父级时触发
+ * 组件被添加时
  */
 export const ADDED = "added";
 
 /**
- * 容器被从父级移除时触发
+ * 组件被移除时
  */
 export const REMOVEED = "removed";
-
+/**
+ * 组件大小改变后
+ */
 export const RESIZE = "RESIZE";
-
+/**
+ * 组件位置移动后
+ */
 export const MOVE = "MOVE";
-
+/**
+ * 组件创建完成后
+ */
 export const CREATION_COMPLETE = "CREATION_COMPLETE";
-/**
- * 节点改变时触发，有子项被添加到容器，或有子项被删除时，触发。
- */
-export const CHILD_CHANGE = "CHILD_CHANGE";
-
-/**
- * 位置，缩放等发生改变后出发
- */
-export const TRANSFORM_COMPLETE = "TRANSFORM_COMPLETE";

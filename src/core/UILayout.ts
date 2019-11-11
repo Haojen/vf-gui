@@ -324,7 +324,7 @@ export class UILayout extends Core {
         values[UIKeys.x] = x;
         values[UIKeys.y] = y;
         this.container.setTransform(x + this.pivotX,y + this.pivotY,this.scaleX,this.scaleY,this.rotation*(Math.PI/180),this.skewX,this.skewY,this.pivotX,this.pivotY);
-       
+        this.emit(ComponentEvent.MOVE,this);
         //this.container.position.set(x + this.pivotX,y+ this.pivotY);
     }
     
