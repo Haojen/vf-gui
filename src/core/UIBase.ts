@@ -4,6 +4,7 @@ import { TouchMouseEventEnum, } from "../enum/TouchMouseEventEnum";
 import { UILayout } from "./UILayout";
 import { CSSStyle} from "../layout/CSSStyle";
 import { updateDisplayLayout } from "../layout/CSSLayout";
+import { log } from "./Utils";
 
 /**
  * UI的顶级类，基础的UI对象
@@ -11,7 +12,7 @@ import { updateDisplayLayout } from "../layout/CSSLayout";
  * @class
  * @since 1.0.0
  */
-export class UIBase extends UILayout {
+export class UIBase extends UILayout implements Lifecycle {
     /**
      * 构造函数
      */
@@ -225,59 +226,6 @@ export class UIBase extends UILayout {
     public dropGroup: string | undefined;
 
     /**
-     * 绘制渲染对象
-     * @param updateChildren 是否渲染子节点，true渲染
-     * @param updateParent  是否渲染父容器，true渲染
-     */
-    public updatesettings(updateChildren: boolean, updateParent?: boolean) {
-        
-        if (this.parent == null) {
-            return;
-        }
-        
-        if (!this.initialized) {
-            this.initialized = true;
-            this.initialize();    
-            this.emit(ComponentEvent.CREATION_COMPLETE,this);
-        }
-
-        if (updateParent) {
-            //this.updateParent();
-        }
-
-        //this.updateRenderer();
-
-        if (updateChildren) {
-            //this.updateChildren();
-        }
-
-    }
-
-    // protected updateRenderer(renderer?: PIXI.Renderer) {
-    //     const { _style } = this;
-
-    //     if (!this.parent) {
-    //         return;
-    //     }
-    //     //Unrestricted dragging
-    //     if (this.dragging && !this.dragRestricted && this._dragPosition) {
-    //         this.container.setTransform(this._dragPosition.x, this._dragPosition.y);
-    //         return;
-    //     }
-    
-    //     updateDrawList(this);
-        
-    //     this.update(_style,renderer);
-    // }
-
-    /**
-     * 更新方法，其他组件重写
-     */
-    public update(_style: CSSStyle,renderer?: PIXI.Renderer) {
-
-    }
-    
-    /**
      * 更新显示列表,子类重写，实现布局
      */
     protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void {
@@ -291,14 +239,22 @@ export class UIBase extends UILayout {
         }
     }
 
-    public release() {
+    public load(){
+        this.initializeUIValues();
+        super.load();
+    }
 
-        this.isRelease = true;
+    public release() {
+        
         const {container,mask,background} = this;
-        //container.off("renderChange", this.updateRenderer, this);    
-        container.mask = null;
+
+        if(this._style){
+            this._style.release();
+            this._style = undefined;
+        }  
 
         if(mask){
+            container.mask = null;
             if(mask instanceof UIBase){
                 mask.release();
             }else{
@@ -308,7 +264,6 @@ export class UIBase extends UILayout {
         }
 
         if(background && background.parent){
-            
             background.parent.removeChild(background).destroy();
             this.background = undefined;
         }
@@ -316,9 +271,10 @@ export class UIBase extends UILayout {
         if(this.parent){
             this.parent.removeChild(this);
         }
-        //this._style.eventEmitter.removeAllListeners();
-        //this._style.parent = undefined;
+
         GroupController.unRegistrerGroup(this);
+
+        super.release();
     }
 
     public releaseAll(){
@@ -333,13 +289,12 @@ export class UIBase extends UILayout {
         this.uiChildren = [];
         this.container.removeAllListeners();
         this.container.removeChildren();
-        this.isRelease = true;
     }
 
     /**
      * 将对象添加到UIStage时，进行的初始化方法
      */
-    protected initialize() {
+    $onInit() {
 
         if (this.draggable) {
             this.initDraggable();

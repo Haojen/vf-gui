@@ -188,11 +188,8 @@ export class ScrollingContainer extends Container {
         index = Math.min(this._innerContainer.children.length,index);
         this._innerContainer.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
-        this.updatesettings(true, true);
         this.getInnerBounds(true);
-        if(this.listenerCount(ComponentEvent.CHILD_CHANGE))
-            this.emit(ComponentEvent.CHILD_CHANGE,this,item);
-        item.emit(ComponentEvent.ADDED,this);
+        
         return item;
     }
 
@@ -210,8 +207,8 @@ export class ScrollingContainer extends Container {
 
 
 
-    protected initialize(){
-        super.initialize();
+    $onInit(){
+        super.$onInit();
         this.initScrolling();
     }
     protected initScrolling() {

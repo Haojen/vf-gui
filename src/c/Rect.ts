@@ -80,12 +80,6 @@ export class Rect extends UIBase{
         this._anchorY = value;
     }
     
-
-    public update(){    
-        this.graphics.width = this.width;
-        this.graphics.width = this.height;
-    }
-
     public release(){
         super.release();
         this.graphics.parent.removeChild(this.graphics).destroy();
