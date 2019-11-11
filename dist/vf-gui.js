@@ -175,6 +175,7 @@ class Button extends InputBase_1.InputBase {
         this.img = new Image_1.Image();
         /** 文字展示 */
         this.label = new Label_1.Label();
+        this._text = "";
         this.container.buttonMode = true;
         this.img.fillMode = "scale";
         this.img.scale9Grid = [3, 3, 3, 3];
@@ -191,13 +192,18 @@ class Button extends InputBase_1.InputBase {
         return this.label.text;
     }
     set text(value) {
-        this.label.text = value;
+        this._text = value;
+        this.invalidateDisplayList();
     }
-    update(_style) {
-        this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
+    updateDisplayList(unscaledWidth, unscaledHeight) {
+        super.updateDisplayList(unscaledWidth, unscaledHeight);
+        this.container.hitArea = new PIXI.Rectangle(0, 0, unscaledWidth, unscaledHeight);
         const img = this.img;
-        img.width = this._width;
-        img.height = this._height;
+        img.width = unscaledWidth;
+        img.height = unscaledHeight;
+        if (this.label.text !== this._text) {
+            this.label.text = this._text;
+        }
         this.onStateChange(this, this.currentState);
     }
     release() {
@@ -215,8 +221,7 @@ class Button extends InputBase_1.InputBase {
             return;
         }
         this._oldState = state;
-        const img = this.img;
-        img.src = this[state + this._selectedStr];
+        this.img.src = this[state + this._selectedStr];
     }
 }
 exports.Button = Button;
@@ -360,6 +365,25 @@ const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts
 class Container extends UIBase_1.UIBase {
     constructor() {
         super();
+        this.isContainer = true;
+    }
+    /**
+     * 确定指定显示对象是 DisplayObjectContainer 实例的子项或该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
+     * 孙项、曾孙项等，每项都返回 true。
+     * @param child 要测试的子对象。
+     * @returns 如果 child 对象是 DisplayObjectContainer 的子项或容器本身，则为 true；否则为 false。
+     */
+    contains(child) {
+        while (child) {
+            if (child == this) {
+                return true;
+            }
+            if (child.parent instanceof UIBase_1.UIBase) {
+                child = child.parent;
+            }
+            return false;
+        }
+        return false;
     }
 }
 exports.Container = Container;
@@ -651,7 +675,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
 const Utils_1 = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 /**
  * 图片
  *
@@ -675,14 +698,14 @@ class Image extends UIBase_1.UIBase {
     }
     set src(value) {
         this._src = value;
-        CSSSSystem_1.addDrawList("src", this, this.srcSystem);
+        this.srcSystem();
     }
     get scale9Grid() {
         return this._scale9Grid;
     }
     set scale9Grid(value) {
         this._scale9Grid = value;
-        CSSSSystem_1.addDrawList("scale9Grid", this, this.scale9GridSystem);
+        this.scale9GridSystem();
     }
     get fillMode() {
         return this._fillMode;
@@ -690,24 +713,21 @@ class Image extends UIBase_1.UIBase {
     set fillMode(value) {
         this._fillMode = value;
         this._source = undefined;
-        CSSSSystem_1.addDrawList("src", this, this.srcSystem);
+        this.srcSystem();
     }
     get anchorX() {
         return this._anchorX;
     }
     set anchorX(value) {
         this._anchorX = value;
-        CSSSSystem_1.addDrawList("anchor", this, this.anchorSystem);
+        this.anchorSystem();
     }
     get anchorY() {
         return this._anchorY;
     }
     set anchorY(value) {
         this._anchorY = value;
-        CSSSSystem_1.addDrawList("anchor", this, this.anchorSystem);
-    }
-    update() {
-        this.syncImageSize();
+        this.anchorSystem();
     }
     release() {
         super.release();
@@ -716,25 +736,12 @@ class Image extends UIBase_1.UIBase {
             this._sprite.parent.removeChild(this._sprite).destroy();
         }
     }
-    syncImageSize() {
-        const { _sprite, _texture } = this;
-        if (_sprite) {
-            if (this._width > 1) {
-                _sprite.width = this._width;
-            }
-            else {
-                if (_texture && _texture.width > 1) {
-                    this._width = _sprite.width = _texture.frame.width;
-                }
-            }
-            if (this._height > 1) {
-                _sprite.height = this._height;
-            }
-            else {
-                if (_texture && _texture.height > 1) {
-                    this._height = _sprite.height = _texture.frame.height;
-                }
-            }
+    updateDisplayList(unscaledWidth, unscaledHeight) {
+        if (this._sprite) {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+            this.scale9GridSystem();
+            this._sprite.width = unscaledWidth;
+            this._sprite.height = unscaledHeight;
             this.anchorSystem();
         }
     }
@@ -750,8 +757,12 @@ class Image extends UIBase_1.UIBase {
         if (src && src !== this._source) {
             this._source = src;
             const texture = this._texture = Utils_1.getTexture(src);
+            if (texture.frame.width > 1 && texture.frame.height > 1) {
+                this.setMeasuredSize(texture.frame.width, texture.frame.height);
+            }
             texture.once("update", () => {
-                this.syncImageSize();
+                this.setMeasuredSize(texture.frame.width, texture.frame.height);
+                this.invalidateDisplayList();
                 this.emit(Index_1.ComponentEvent.COMPLETE, this);
             }, this);
             let sprite = this._sprite;
@@ -787,8 +798,7 @@ class Image extends UIBase_1.UIBase {
             if (sprite && sprite.parent == undefined) {
                 this._sprite = container.addChild(sprite);
             }
-            this.scale9GridSystem();
-            this.syncImageSize();
+            this.invalidateDisplayList();
         }
     }
     scale9GridSystem() {
@@ -1054,7 +1064,6 @@ exports.default = HtmlInput;
 Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 /**
  * 文本
  *
@@ -1071,20 +1080,19 @@ const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layo
 class Label extends UIBase_1.UIBase {
     constructor(text = "") {
         super();
-        /**
-         * 文本内容
-         */
-        this._text = "";
-        this.text = text;
-        this.sprite = new PIXI.Text(this.text, { breakWords: true });
+        this.sprite = new PIXI.Text(text, { breakWords: true, fill: "#ffffff" });
         this.container.addChild(this.sprite);
     }
+    /**
+     * 文本内容
+     */
     get text() {
-        return this._text;
+        return this.sprite.text;
     }
     set text(value) {
-        this._text = value;
-        CSSSSystem_1.addDrawList("text", this, this.textSystem);
+        this.sprite.text = value;
+        this.setActualSize(this.sprite.width, this.sprite.height);
+        this.emit(Index_1.ComponentEvent.CHANGE, this);
     }
     set fontCssStyle(value) {
         if (value.color) {
@@ -1100,22 +1108,6 @@ class Label extends UIBase_1.UIBase {
             sprite.parent.removeChild(sprite).destroy();
         }
         this.offAll(Index_1.ComponentEvent.CHANGE);
-    }
-    textSystem() {
-        this.sprite.text = this._text;
-        if (this._width == 0) {
-            this._width = this.sprite.width;
-        }
-        else {
-            this.sprite.width = this._width;
-        }
-        if (this._height == 0) {
-            this._height = this.sprite.height;
-        }
-        else {
-            this.sprite.height = this._height;
-        }
-        this.emit(Index_1.ComponentEvent.CHANGE, this);
     }
 }
 exports.Label = Label;
@@ -1134,7 +1126,6 @@ exports.Label = Label;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
-const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 /**
  * 绘制矩形或圆角矩形
  *
@@ -1171,42 +1162,37 @@ class Rect extends UIBase_1.UIBase {
     }
     set radius(value) {
         this._radius = value;
-        CSSSSystem_1.addDrawList("draw", this, this.drawRoundedRectSystem);
+        this.invalidateDisplayList();
     }
     get lineColor() {
         return this._lineColor;
     }
     set lineColor(value) {
         this._lineColor = value;
-        CSSSSystem_1.addDrawList("draw", this, this.drawRoundedRectSystem);
     }
     get lineWidth() {
         return this._lineWidth;
     }
     set lineWidth(value) {
         this._lineWidth = value;
-        CSSSSystem_1.addDrawList("draw", this, this.drawRoundedRectSystem);
     }
     get color() {
         return this._color;
     }
     set color(value) {
         this._color = value;
-        CSSSSystem_1.addDrawList("draw", this, this.drawRoundedRectSystem);
     }
     get anchorX() {
         return this._anchorX;
     }
     set anchorX(value) {
         this._anchorX = value;
-        CSSSSystem_1.addDrawList("draw", this, this.drawRoundedRectSystem);
     }
     get anchorY() {
         return this._anchorY;
     }
     set anchorY(value) {
         this._anchorY = value;
-        CSSSSystem_1.addDrawList("draw", this, this.drawRoundedRectSystem);
     }
     update() {
         this.graphics.width = this.width;
@@ -1216,12 +1202,14 @@ class Rect extends UIBase_1.UIBase {
         super.release();
         this.graphics.parent.removeChild(this.graphics).destroy();
     }
-    drawRoundedRectSystem(rect, key) {
-        rect.graphics.clear();
-        rect.graphics.lineStyle(rect.lineWidth, rect.lineColor);
-        rect.graphics.beginFill(rect.color);
-        rect.graphics.drawRoundedRect(rect.anchorX ? -rect.anchorX * this._width : 0, rect.anchorY ? -rect.anchorY * this._height : 0, this._width, this._height, rect.radius);
-        rect.graphics.endFill();
+    updateDisplayList(unscaledWidth, unscaledHeight) {
+        super.updateDisplayList(unscaledWidth, unscaledHeight);
+        const graphics = this.graphics;
+        graphics.clear();
+        graphics.lineStyle(this._lineWidth, this._lineColor);
+        graphics.beginFill(this._color);
+        graphics.drawRoundedRect(this._anchorX ? -this._anchorX * this.width : 0, this._anchorY ? -this._anchorY * this.width : 0, this.width, this.height, this._radius);
+        graphics.endFill();
     }
 }
 exports.Rect = Rect;
@@ -1377,14 +1365,14 @@ class ScrollingContainer extends Container_1.Container {
             this.dragEvent.stopEvent();
         }
     }
-    update(_style) {
-        super.update(_style);
-        if (this._lastWidth != this._width || this._lastHeight != this._height) {
+    updateDisplayList(unscaledWidth, unscaledHeight) {
+        if (this._lastWidth != unscaledWidth || this._lastHeight != unscaledHeight) {
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
             const _of = this.expandMask;
             this.style.maskPosition = [_of, _of];
-            this._lastWidth = this._width;
-            this._lastHeight = this._height;
-            this.style.maskSize = [this._width, this._height];
+            this._lastWidth = unscaledWidth;
+            this._lastHeight = unscaledHeight;
+            this.style.maskSize = [unscaledWidth, unscaledHeight];
             this.setScrollPosition();
         }
     }
@@ -1557,7 +1545,6 @@ const Utils = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 const Tween_1 = __webpack_require__(/*! ./Tween */ "./src/c/Tween.ts");
 const Easing_1 = __webpack_require__(/*! ./Easing */ "./src/c/Easing.ts");
-const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 /**
  * 滑动条/进度条
  *
@@ -1603,6 +1590,7 @@ class Slider extends UIBase_1.UIBase {
          * 是否垂直,滑块方向
          */
         this._vertical = false;
+        this.isExcValueSystem = false;
         this._thumbDrag.onDragPress = this.onPress;
         this._thumbDrag.onDragStart = this.onDragStart;
         this._thumbDrag.onDragMove = this.onDragMove;
@@ -1636,7 +1624,7 @@ class Slider extends UIBase_1.UIBase {
     }
     set value(value) {
         this._value = value;
-        CSSSSystem_1.addDrawList("valueSystem", this, this.valueSystem);
+        this.valueSystem();
     }
     valueSystem() {
         this._amt = (Math.max(this.minValue, Math.min(this.maxValue, this._value)) - this.minValue) / (this.maxValue - this.minValue);
@@ -1690,6 +1678,19 @@ class Slider extends UIBase_1.UIBase {
             this.tracklightImg.src = value;
         }
     }
+    setActualSize(w, h) {
+        super.setActualSize(w, h);
+        if (this.trackImg.width !== w) {
+            this.trackImg.width = w;
+        }
+        if (this.trackImg.height !== w) {
+            this.trackImg.height = h;
+        }
+        if (!this.isExcValueSystem) {
+            this.valueSystem();
+            this.isExcValueSystem = true;
+        }
+    }
     release() {
         super.release();
         this.trackImg.release();
@@ -1722,8 +1723,11 @@ class Slider extends UIBase_1.UIBase {
         if (this.vertical) {
             val = this._height * this._amt;
             if (soft) {
-                Tween_1.Tween.to(thumbImg, { y: val }, 300).easing(Easing_1.Easing.Linear.None).start();
-                Tween_1.Tween.to(tracklightImg, { height: val }, 300).easing(Easing_1.Easing.Linear.None).start();
+                Tween_1.Tween.to({ y: thumbImg.y, height: tracklightImg.height }, { y: val, height: val }, 300).easing(Easing_1.Easing.Linear.None)
+                    .on(Tween_1.Tween.Event.update, (obj) => {
+                    thumbImg.y = obj.y;
+                    tracklightImg.height = obj.height;
+                }).start();
             }
             else {
                 thumbImg.y = val;
@@ -1733,8 +1737,11 @@ class Slider extends UIBase_1.UIBase {
         else {
             val = this._width * this._amt;
             if (soft) {
-                Tween_1.Tween.to(thumbImg, { x: val }, 300).easing(Easing_1.Easing.Linear.None).start();
-                Tween_1.Tween.to(tracklightImg, { width: val }, 300).easing(Easing_1.Easing.Linear.None).start();
+                Tween_1.Tween.to({ x: thumbImg.x, width: tracklightImg.width }, { x: val, width: val }, 300).easing(Easing_1.Easing.Linear.None)
+                    .on(Tween_1.Tween.Event.update, (obj) => {
+                    thumbImg.x = obj.x;
+                    tracklightImg.width = obj.width;
+                }).start();
             }
             else {
                 thumbImg.x = val;
@@ -2057,7 +2064,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
 const Utils_1 = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 /**
  * 序列图动画
  *
@@ -2108,28 +2114,28 @@ class SpriteAnimated extends UIBase_1.UIBase {
             return;
         }
         this._animationName = value;
-        CSSSSystem_1.addDrawList("animatedNameSystem", this, this.animatedNameSystem);
+        this.animatedNameSystem();
     }
     get src() {
         return this._src;
     }
     set src(value) {
         this._src = value;
-        CSSSSystem_1.addDrawList("srcSystem", this, this.srcSystem);
+        this.srcSystem();
     }
     get animationSpeed() {
         return this._animationSpeed;
     }
     set animationSpeed(value) {
         this._animationSpeed = value;
-        CSSSSystem_1.addDrawList("attribSystem", this, this.attribSystem);
+        this.attribSystem();
     }
     get loop() {
         return this._loop;
     }
     set loop(value) {
         this._loop = value;
-        CSSSSystem_1.addDrawList("attribSystem", this, this.attribSystem);
+        this.attribSystem();
     }
     get playing() {
         return this._playing;
@@ -2139,38 +2145,38 @@ class SpriteAnimated extends UIBase_1.UIBase {
     }
     set anchorX(value) {
         this._anchorX = value;
-        CSSSSystem_1.addDrawList("attribSystem", this, this.attribSystem);
+        this.attribSystem();
     }
     get anchorY() {
         return this._anchorY;
     }
     set anchorY(value) {
         this._anchorY = value;
-        CSSSSystem_1.addDrawList("attribSystem", this, this.attribSystem);
+        this.attribSystem();
     }
     /** 跳转到第N帧并播放 */
     gotoAndPlay(frameNumber) {
         this._curFrameNumber = frameNumber;
         this._playing = true;
-        CSSSSystem_1.addDrawList("playSystem", this, this.playSystem);
+        this.playSystem();
     }
     /** 跳转到第N帧并停止 */
     gotoAndStop(frameNumber) {
         this._curFrameNumber = frameNumber;
         this._playing = false;
-        CSSSSystem_1.addDrawList("playSystem", this, this.playSystem);
+        this.playSystem();
     }
     /** 停止 */
     stop() {
         this._curFrameNumber = 0;
         this._playing = false;
-        CSSSSystem_1.addDrawList("playSystem", this, this.playSystem);
+        this.playSystem();
     }
     /** 播放 */
     play() {
         this._curFrameNumber = 0;
         this._playing = true;
-        CSSSSystem_1.addDrawList("playSystem", this, this.playSystem);
+        this.playSystem();
     }
     /**
      * 添加动画
@@ -2291,7 +2297,6 @@ const HtmlInput_1 = __webpack_require__(/*! ./InputText/HtmlInput */ "./src/c/In
 const Utils_1 = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
 const InputBase_1 = __webpack_require__(/*! ../core/InputBase */ "./src/core/InputBase.ts");
 const Image_1 = __webpack_require__(/*! ./Image */ "./src/c/Image.ts");
-const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 /**
  * 文本输入
@@ -2365,6 +2370,8 @@ class TextInput extends InputBase_1.InputBase {
         this._domVisible = false;
         this.container.interactiveChildren = true;
         this.on(Index_1.ComponentEvent.STATE_CHANGE, this.onStateChange, this);
+        this.container.isEmitRender = false;
+        this.container.on("renderChange", this.updateSystem, this);
     }
     /**
      * 设置文本
@@ -2374,31 +2381,31 @@ class TextInput extends InputBase_1.InputBase {
     }
     set text(value) {
         this._text.text = value;
-        CSSSSystem_1.addDrawList("update", this, this.updateSystem);
+        this.container.isEmitRender = true;
     }
     get placeholder() {
         return this._placeholder;
     }
     set placeholder(value) {
         this._placeholder = value;
-        CSSSSystem_1.addDrawList("update", this, this.updateSystem);
+        this.container.isEmitRender = true;
     }
     get maxLength() {
         return this._maxLength;
     }
     set maxLength(value) {
         this._maxLength = value;
-        CSSSSystem_1.addDrawList("update", this, this.updateSystem);
+        this.container.isEmitRender = true;
     }
     get restrict() {
         return this._restrict;
     }
     set restrict(value) {
         this._restrict = value;
-        CSSSSystem_1.addDrawList("update", this, this.updateSystem);
+        this.container.isEmitRender = true;
     }
     // GETTERS & SETTERS
-    update(_style, renderer) {
+    updateSystem(renderer) {
         if (renderer === undefined) {
             return;
         }
@@ -2414,6 +2421,7 @@ class TextInput extends InputBase_1.InputBase {
         this.setInputStyle("height", this._height + "px");
         this.render(renderer);
         this.onStateChange(this, this.currentState);
+        this.container.isEmitRender = false;
     }
     /**
      * 设置焦点
@@ -2452,9 +2460,6 @@ class TextInput extends InputBase_1.InputBase {
         this._oldState = state;
         const img = this.img;
         img.src = this[state];
-    }
-    updateSystem() {
-        //一次空的执行，为了触发update
     }
     // SETUP
     _onInputInput() {
@@ -2659,6 +2664,7 @@ class TextInput extends InputBase_1.InputBase {
         this._text.destroy();
         this._textHitbox && this._textHitbox.destroy();
         this.htmlInputShared.release();
+        this.container.off("renderChange", this.updateSystem, this);
         this.offAll(Index_1.ComponentEvent.STATE_CHANGE);
     }
 }
@@ -4130,10 +4136,21 @@ exports.Timeline = Timeline_1.Timeline;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const ContainerBase_1 = __webpack_require__(/*! ../c/ContainerBase */ "./src/c/ContainerBase.ts");
+const Stage_1 = __webpack_require__(/*! ./Stage */ "./src/core/Stage.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+const Utils_1 = __webpack_require__(/*! ./Utils */ "./src/core/Utils.ts");
 class Core extends PIXI.utils.EventEmitter {
     constructor() {
         super();
+        /**
+         * 自定义组价名
+         */
+        this.name = "";
+        /**
+         * @private
+         * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
+         */
+        this.$nestLevel = 0;
         /**
          * 是否初始化
          * @default
@@ -4143,9 +4160,12 @@ class Core extends PIXI.utils.EventEmitter {
          * 节点列表
          */
         this.uiChildren = [];
+        this.uuid = Utils_1.uid();
         this.container = new ContainerBase_1.ContainerBase();
+        this.container.on("added", this.onAdded, this);
+        this.container.on("removed", this.onRemoved, this);
     }
-    /** 添加显示对象，需集成UIBASE */
+    /** 添加显示对象，需集成Core */
     addChild(item) {
         if (this.container.children.length !== this.uiChildren.length) {
             return this.addChildAt(item, this.container.children.length);
@@ -4158,10 +4178,17 @@ class Core extends PIXI.utils.EventEmitter {
         if (item.parent) {
             item.parent.removeChild(item);
         }
+        if (this instanceof Stage_1.Stage) {
+            item.stage = this;
+        }
+        else {
+            item.stage = this.stage;
+        }
         item.parent = this;
-        this.container.addChildAt(item.container, index);
-        this.uiChildren.splice(index, 0, item);
+        item.$nestLevel = this.$nestLevel + 1;
         this.updatesettings(true, true);
+        this.uiChildren.splice(index, 0, item);
+        this.container.addChildAt(item.container, index);
         if (this.listenerCount(Index_1.ComponentEvent.CHILD_CHANGE))
             this.emit(Index_1.ComponentEvent.CHILD_CHANGE, this, item);
         item.emit(Index_1.ComponentEvent.ADDED, this);
@@ -4182,6 +4209,7 @@ class Core extends PIXI.utils.EventEmitter {
             item.container.parent.removeChild(item.container);
             this.uiChildren.splice(index, 1);
             item.parent = undefined;
+            item.stage = undefined;
             //oldParent._recursivePostUpdateTransform();
             setTimeout(() => {
                 if (oldUIParent && oldUIParent.updatesettings)
@@ -4224,24 +4252,6 @@ class Core extends PIXI.utils.EventEmitter {
     updatesettings(updateChildren, updateParent) {
     }
     /**
-     * 对象是否可以接收事件
-     */
-    set interactive(value) {
-        this.container.interactive = value;
-    }
-    get interactive() {
-        return this.container.interactive;
-    }
-    /**
-     * 子对象是否可以接收事件，设置false后，会绕过HitTest方法的递归
-     */
-    set interactiveChildren(value) {
-        this.container.interactiveChildren = value;
-    }
-    get interactiveChildren() {
-        return this.container.interactiveChildren;
-    }
-    /**
      * 是否绘制显示对象，如果false不进行绘制，不过仍然会进行相关的更新计算。
      * 只影响父级的递归调用。
      */
@@ -4264,6 +4274,14 @@ class Core extends PIXI.utils.EventEmitter {
     /** 清除全部事件 */
     offAll(event) {
         return this.removeAllListeners(event);
+    }
+    onAdded() {
+        this.checkInvalidateFlag();
+    }
+    onRemoved() {
+        this.checkInvalidateFlag();
+    }
+    checkInvalidateFlag() {
     }
 }
 exports.Core = Core;
@@ -4485,8 +4503,8 @@ exports.objectPoolShared = new ObjectPool();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Core_1 = __webpack_require__(/*! ./Core */ "./src/core/Core.ts");
 const Ticker_1 = __webpack_require__(/*! ./Ticker */ "./src/core/Ticker.ts");
+const UILayout_1 = __webpack_require__(/*! ./UILayout */ "./src/core/UILayout.ts");
 /**
  * UI的舞台对象，展示所有UI组件
  *
@@ -4497,13 +4515,12 @@ const Ticker_1 = __webpack_require__(/*! ./Ticker */ "./src/core/Ticker.ts");
  * @param height {Number} 舞台高度
  * @since 1.0.0
  */
-class Stage extends Core_1.Core {
+class Stage extends UILayout_1.UILayout {
     constructor(width, height) {
         super();
-        this._width = 0;
-        this._height = 0;
-        this._width = width;
-        this._height = height;
+        this.width = width;
+        this.height = height;
+        this.setActualSize(width, height);
         this.stage = this;
         this.container.name = "Stage";
         this.container.hitArea = new PIXI.Rectangle(0, 0, width, height);
@@ -4511,6 +4528,7 @@ class Stage extends Core_1.Core {
         this.container.interactiveChildren = true;
         Stage._stage = this;
         this.initialized = true;
+        this.$nestLevel = 1;
     }
     static get Ins() {
         return Stage._stage;
@@ -4524,24 +4542,6 @@ class Stage extends Core_1.Core {
         this.container.removeAllListeners();
         this.container.removeChildren();
         Ticker_1.shared.removeAllListeners();
-    }
-    get width() {
-        return this._width;
-    }
-    set width(value) {
-        if (!isNaN(value)) {
-            this._width = value;
-            this.resize();
-        }
-    }
-    get height() {
-        return this._height;
-    }
-    set height(value) {
-        if (!isNaN(value)) {
-            this._height = value;
-            this.resize();
-        }
     }
     resize() {
         this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
@@ -4617,6 +4617,8 @@ class Ticker extends PIXI.utils.EventEmitter {
  * Ticker 的实例
  */
 exports.shared = new Ticker(true);
+exports.tickerShared = exports.shared;
+exports.default = exports.tickerShared;
 
 
 /***/ }),
@@ -4632,31 +4634,21 @@ exports.shared = new Ticker(true);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const Utils_1 = __webpack_require__(/*! ./Utils */ "./src/core/Utils.ts");
+const UILayout_1 = __webpack_require__(/*! ./UILayout */ "./src/core/UILayout.ts");
 const CSSStyle_1 = __webpack_require__(/*! ../layout/CSSStyle */ "./src/layout/CSSStyle.ts");
-const Core_1 = __webpack_require__(/*! ./Core */ "./src/core/Core.ts");
-const CSSSSystem_1 = __webpack_require__(/*! ../layout/CSSSSystem */ "./src/layout/CSSSSystem.ts");
+const CSSLayout_1 = __webpack_require__(/*! ../layout/CSSLayout */ "./src/layout/CSSLayout.ts");
 /**
  * UI的顶级类，基础的UI对象
  *
  * @class
- * @extends PIXI.UI.UIBase
- * @param width {Number} Width UI对象的宽度
- * @param height {Number} Height UI对象的高度
  * @since 1.0.0
  */
-class UIBase extends Core_1.Core {
+class UIBase extends UILayout_1.UILayout {
     /**
      * 构造函数
-     * @param width 宽 数字或百分比, 不传默认0
-     * @param height 高 数字或百分比,不传默认0
      */
     constructor() {
         super();
-        /**
-         * 自定义组价名
-         */
-        this.name = "";
         /**
          * 是否不可用
          */
@@ -4669,37 +4661,6 @@ class UIBase extends Core_1.Core {
          * 是否布局渲染中
          */
         this.isDrawLayout = false;
-        this._x = 0;
-        this._y = 0;
-        /**
-         * X轴缩放
-         */
-        this._scaleX = 1;
-        /**
-         * Y轴缩放
-         */
-        this._scaleY = 1;
-        this._skewX = 0;
-        this._skewY = 0;
-        /** 锚点X的像素表示法 */
-        this._pivotX = 0;
-        /** 锚点Y的像素表示法 */
-        this._pivotY = 0;
-        this._rotation = 0;
-        this._width = 0;
-        this._height = 0;
-        /**
-         * 透明度
-         */
-        this._alpha = 1;
-        /**
-         * 是否可见
-         */
-        this._visible = true;
-        /**
-         * 是否可用
-         */
-        this.enabled = true;
         /**
         *  在不同分辨率下保持像素稳定
         * @default
@@ -4734,13 +4695,7 @@ class UIBase extends Core_1.Core {
          */
         this.dragThreshold = 0;
         this._droppable = false;
-        this.uuid = Utils_1.uid();
         this.container.name = this.constructor.name;
-        this.__styleObject = new CSSStyle_1.CSSStyle();
-        this.__styleObject.parent = this;
-        this._style = new Proxy(this.__styleObject, CSSSSystem_1.updateStyleProxyHandler);
-        this.container.isEmitRender = true;
-        this.container.on("renderChange", this.updateRenderer, this);
     }
     get groupName() {
         return this._groupName;
@@ -4755,140 +4710,50 @@ class UIBase extends Core_1.Core {
         this._groupName = value;
         Index_1.GroupController.registrerGroup(this);
     }
-    get blendMode() {
-        return this._blendMode;
-    }
-    set blendMode(value) {
-        this._blendMode = value;
-        CSSSSystem_1.addDrawList("blendMode", this);
-    }
     /**
-     * 组件渲染后，才会有值
+     * 透明度
      */
-    get x() {
-        return this._x;
+    get alpha() {
+        return this.container.alpha;
     }
-    set x(value) {
-        this._x = value;
-        this.__styleObject.left = value;
-        CSSSSystem_1.addDrawList("transform", this);
-    }
-    /**
-     * 组件渲染后，才会有值
-     */
-    get y() {
-        return this._y;
-    }
-    set y(value) {
-        this._y = value;
-        this.__styleObject.top = value;
-        CSSSSystem_1.addDrawList("transform", this);
-    }
-    get scaleX() {
-        return this._scaleX;
-    }
-    set scaleX(value) {
-        this._scaleX = value;
-        this.__styleObject.scaleX = value;
-        CSSSSystem_1.addDrawList("transform", this);
-    }
-    get scaleY() {
-        return this._scaleY;
-    }
-    set scaleY(value) {
-        this._scaleY = value;
-        this.__styleObject.scaleY = value;
-        CSSSSystem_1.addDrawList("transform", this);
-    }
-    get skewX() {
-        return this._skewX;
-    }
-    set skewX(value) {
-        this._skewX = value;
-        this.__styleObject.skewX = value;
-        CSSSSystem_1.addDrawList("transform", this);
-    }
-    get skewY() {
-        return this._skewY;
-    }
-    set skewY(value) {
-        this._skewY = value;
-        this.__styleObject.skewY = value;
-        CSSSSystem_1.addDrawList("transform", this);
-    }
-    get pivotX() {
-        return this._pivotX;
-    }
-    set pivotX(value) {
-        this._pivotX = value;
-        this.__styleObject.pivotX = value;
-        CSSSSystem_1.addDrawList("transform", this);
-    }
-    get pivotY() {
-        return this._pivotY;
-    }
-    set pivotY(value) {
-        this._pivotY = value;
-        this.__styleObject.pivotY = value;
-        CSSSSystem_1.addDrawList("transform", this);
-    }
-    get rotation() {
-        return this._rotation;
-    }
-    set rotation(value) {
-        this._rotation = value;
-        this.__styleObject.rotation = value;
-        CSSSSystem_1.addDrawList("transform", this);
-    }
-    /**
-     * 组件渲染后，才会有值,继承组件需要根据这个值确定宽高
-     */
-    get width() {
-        return this._width;
-    }
-    set width(value) {
-        this._width = value;
-        this.__styleObject.width = value;
-        this.update(this._style);
-    }
-    /**
-     * 组件渲染后，才会有值
-     */
-    get height() {
-        return this._height;
-    }
-    set height(value) {
-        this._height = value;
-        this.__styleObject.height = value;
-        this.update(this._style);
+    set alpha(value) {
+        this.container.alpha = value;
     }
     get tint() {
         return this._tint;
     }
     set tint(value) {
+        if (value === this._blendMode) {
+            return;
+        }
         this._tint = value;
-        CSSSSystem_1.addDrawList("tint", this);
+        this.container.children.forEach(childrenItem => {
+            if (childrenItem["tint"]) {
+                childrenItem["tint"] = value;
+            }
+        });
     }
-    get alpha() {
-        return this._alpha;
+    get blendMode() {
+        return this._blendMode;
     }
-    set alpha(value) {
-        this._alpha = value;
-        this.__styleObject.alpha = value;
-        CSSSSystem_1.addDrawList("alpha", this);
-    }
-    get visible() {
-        return this._visible;
-    }
-    set visible(value) {
-        this._visible = value;
-        this.__styleObject.visible = value;
-        CSSSSystem_1.addDrawList("visible", this);
+    set blendMode(value) {
+        if (value === this._blendMode) {
+            return;
+        }
+        this._blendMode = value;
+        this.container.children.forEach(childrenItem => {
+            if (childrenItem instanceof PIXI.Sprite) {
+                childrenItem.blendMode = value || PIXI.BLEND_MODES.NORMAL;
+            }
+        });
     }
     /**
      * 获取样式
      */
     get style() {
+        if (this._style == undefined) {
+            this._style = new CSSStyle_1.CSSStyle(this);
+        }
         return this._style;
     }
     /**
@@ -4928,44 +4793,57 @@ class UIBase extends Core_1.Core {
      * @param updateParent  是否渲染父容器，true渲染
      */
     updatesettings(updateChildren, updateParent) {
+        if (this.parent == null) {
+            return;
+        }
         if (!this.initialized) {
-            if (this.parent == null) {
-                return;
-            }
-            if (this.parent.initialized) {
-                this.initialize();
-            }
+            this.initialized = true;
+            this.initialize();
+            this.emit(Index_1.ComponentEvent.CREATION_COMPLETE, this);
         }
         if (updateParent) {
-            this.updateParent();
+            //this.updateParent();
         }
-        this.updateRenderer();
+        //this.updateRenderer();
         if (updateChildren) {
-            this.updateChildren();
+            //this.updateChildren();
         }
     }
-    updateRenderer(renderer) {
-        const { _style } = this;
-        if (!this.parent) {
-            return;
-        }
-        //Unrestricted dragging
-        if (this.dragging && !this.dragRestricted && this._dragPosition) {
-            this.container.setTransform(this._dragPosition.x, this._dragPosition.y);
-            return;
-        }
-        CSSSSystem_1.updateDrawList(this);
-        this.update(_style, renderer);
-    }
+    // protected updateRenderer(renderer?: PIXI.Renderer) {
+    //     const { _style } = this;
+    //     if (!this.parent) {
+    //         return;
+    //     }
+    //     //Unrestricted dragging
+    //     if (this.dragging && !this.dragRestricted && this._dragPosition) {
+    //         this.container.setTransform(this._dragPosition.x, this._dragPosition.y);
+    //         return;
+    //     }
+    //     updateDrawList(this);
+    //     this.update(_style,renderer);
+    // }
     /**
      * 更新方法，其他组件重写
      */
     update(_style, renderer) {
     }
+    /**
+     * 更新显示列表,子类重写，实现布局
+     */
+    updateDisplayList(unscaledWidth, unscaledHeight) {
+        if (this._style && this._style.display !== "none") {
+            //console.log("displayStyle",unscaledWidth,unscaledHeight,this.left,this.right,this.x,this.y);
+            CSSLayout_1.updateDisplayLayout(this, unscaledWidth, unscaledHeight);
+        }
+        else {
+            //console.log("display",this.x + this.pivotX,this.y + this.pivotY,this.scaleX,this.scaleY,this.rotation*(Math.PI/180),this.skewX,this.skewY,this.pivotX,this.pivotY);
+            this.container.setTransform(this.x + this.pivotX, this.y + this.pivotY, this.scaleX, this.scaleY, this.rotation * (Math.PI / 180), this.skewX, this.skewY, this.pivotX, this.pivotY);
+        }
+    }
     release() {
         this.isRelease = true;
         const { container, mask, background } = this;
-        container.off("renderChange", this.updateRenderer, this);
+        //container.off("renderChange", this.updateRenderer, this);    
         container.mask = null;
         if (mask) {
             if (mask instanceof UIBase) {
@@ -4983,8 +4861,8 @@ class UIBase extends Core_1.Core {
         if (this.parent) {
             this.parent.removeChild(this);
         }
-        this._style.eventEmitter.removeAllListeners();
-        this._style.parent = undefined;
+        //this._style.eventEmitter.removeAllListeners();
+        //this._style.parent = undefined;
         Index_1.GroupController.unRegistrerGroup(this);
     }
     releaseAll() {
@@ -5002,11 +4880,9 @@ class UIBase extends Core_1.Core {
         this.isRelease = true;
     }
     /**
-     * Initializes the object when its added to an UIStage
      * 将对象添加到UIStage时，进行的初始化方法
      */
     initialize() {
-        this.initialized = true;
         if (this.draggable) {
             this.initDraggable();
         }
@@ -5119,6 +4995,1421 @@ class UIBase extends Core_1.Core {
     }
 }
 exports.UIBase = UIBase;
+
+
+/***/ }),
+
+/***/ "./src/core/UIKeys.ts":
+/*!****************************!*\
+  !*** ./src/core/UIKeys.ts ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+//states
+/** 标记属性失效 */
+exports.invalidatePropertiesFlag = Symbol("invalidatePropertiesFlag");
+/** 标记大小失效 */
+exports.invalidateSizeFlag = Symbol("invalidateSizeFlag");
+/** 标记显示失效 */
+exports.invalidateDisplayListFlag = Symbol("invalidateDisplayListFlag");
+//Properties
+exports.explicitWidth = Symbol("explicitWidth");
+exports.explicitHeight = Symbol("explicitHeight");
+exports.width = Symbol("width");
+exports.height = Symbol("height");
+exports.minWidth = Symbol("minWidth");
+exports.maxWidth = Symbol("maxWidth");
+exports.minHeight = Symbol("minHeight");
+exports.maxHeight = Symbol("maxHeight");
+exports.percentWidth = Symbol("percentWidth");
+exports.percentHeight = Symbol("percentHeight");
+exports.scaleX = Symbol("scaleX");
+exports.scaleY = Symbol("scaleY");
+exports.x = Symbol("x");
+exports.y = Symbol("y");
+exports.skewX = Symbol("skewX");
+exports.skewY = Symbol("skewY");
+exports.pivotX = Symbol("pivotX");
+exports.pivotY = Symbol("pivotY");
+exports.rotation = Symbol("rotation");
+exports.measuredWidth = Symbol("measuredWidth");
+exports.measuredHeight = Symbol("measuredHeight");
+exports.oldPreferWidth = Symbol("oldPreferWidth");
+exports.oldPreferHeight = Symbol("oldPreferHeight");
+exports.oldX = Symbol("oldX");
+exports.oldY = Symbol("oldY");
+exports.oldWidth = Symbol("oldWidth");
+exports.oldHeight = Symbol("oldHeight");
+//Styles
+exports.left = Symbol("left");
+exports.right = Symbol("right");
+exports.top = Symbol("top");
+exports.bottom = Symbol("bottom");
+exports.horizontalCenter = Symbol("horizontalCenter");
+exports.verticalCenter = Symbol("verticalCenter");
+
+
+/***/ }),
+
+/***/ "./src/core/UILayout.ts":
+/*!******************************!*\
+  !*** ./src/core/UILayout.ts ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Core_1 = __webpack_require__(/*! ./Core */ "./src/core/Core.ts");
+const UIKeys = __webpack_require__(/*! ./UIKeys */ "./src/core/UIKeys.ts");
+const UIValidator_1 = __webpack_require__(/*! ./UIValidator */ "./src/core/UIValidator.ts");
+const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+const Utils_1 = __webpack_require__(/*! ./Utils */ "./src/core/Utils.ts");
+/**
+ * UI 布局的基础属性类
+ */
+class UILayout extends Core_1.Core {
+    constructor() {
+        super();
+        /**
+         * @private
+         */
+        this.$values = {};
+        this.includeInLayout = true;
+        this._interactive = true;
+        this._interactiveChildren = true;
+        this._enabled = true;
+        /**
+         * 是否可见
+         */
+        this._visible = true;
+        this.initializeUIValues();
+    }
+    /**
+     * @private
+     * 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
+     */
+    initializeUIValues() {
+        this.$values = {
+            [UIKeys.invalidatePropertiesFlag]: true,
+            [UIKeys.invalidateSizeFlag]: true,
+            [UIKeys.invalidateDisplayListFlag]: true,
+            [UIKeys.left]: NaN,
+            [UIKeys.right]: NaN,
+            [UIKeys.top]: NaN,
+            [UIKeys.bottom]: NaN,
+            [UIKeys.horizontalCenter]: NaN,
+            [UIKeys.verticalCenter]: NaN,
+            [UIKeys.percentWidth]: NaN,
+            [UIKeys.percentHeight]: NaN,
+            [UIKeys.explicitWidth]: NaN,
+            [UIKeys.explicitHeight]: NaN,
+            [UIKeys.width]: 0,
+            [UIKeys.height]: 0,
+            [UIKeys.minWidth]: 0,
+            [UIKeys.maxWidth]: 100000,
+            [UIKeys.minHeight]: 0,
+            [UIKeys.maxHeight]: 100000,
+            [UIKeys.measuredWidth]: 0,
+            [UIKeys.measuredHeight]: 0,
+            [UIKeys.oldPreferWidth]: NaN,
+            [UIKeys.oldPreferHeight]: NaN,
+            [UIKeys.x]: 0,
+            [UIKeys.y]: 0,
+            [UIKeys.oldX]: 0,
+            [UIKeys.oldY]: 0,
+            [UIKeys.oldWidth]: 0,
+            [UIKeys.oldHeight]: 0,
+            [UIKeys.scaleX]: 1,
+            [UIKeys.scaleY]: 1,
+            [UIKeys.pivotX]: 0,
+            [UIKeys.pivotY]: 0,
+            [UIKeys.rotation]: 0,
+            [UIKeys.skewX]: 0,
+            [UIKeys.skewY]: 0,
+        };
+    }
+    /**
+     * @private
+     * 检查属性失效标记并应用
+     */
+    checkInvalidateFlag() {
+        const values = this.$values;
+        if (values[UIKeys.invalidatePropertiesFlag]) {
+            UIValidator_1.default.invalidateProperties(this);
+        }
+        if (values[UIKeys.invalidateSizeFlag]) {
+            UIValidator_1.default.invalidateSize(this);
+        }
+        if (values[UIKeys.invalidateDisplayListFlag]) {
+            UIValidator_1.default.invalidateDisplayList(this);
+        }
+    }
+    /**
+     * @private
+     * 验证组件的属性
+     */
+    validateProperties() {
+        const values = this.$values;
+        if (values[UIKeys.invalidatePropertiesFlag]) {
+            this.commitProperties();
+            values[UIKeys.invalidatePropertiesFlag] = false;
+        }
+    }
+    /**
+     * @private
+     * 验证组件的尺寸
+     */
+    validateSize(recursive) {
+        if (recursive) {
+            const children = this.uiChildren;
+            if (children) {
+                const length = children.length;
+                for (let i = 0; i < length; i++) {
+                    const child = children[i];
+                    child.validateSize(true);
+                }
+            }
+        }
+        const values = this.$values;
+        if (values[UIKeys.invalidateSizeFlag]) {
+            const changed = this.measureSizes();
+            if (changed) {
+                this.invalidateDisplayList();
+                this.invalidateParentLayout();
+            }
+            if (this.parent == undefined) {
+                return;
+            }
+            values[UIKeys.invalidateSizeFlag] = false;
+        }
+    }
+    /**
+     * @private
+     * 验证子项的位置和大小，并绘制其他可视内容
+     */
+    validateDisplayList() {
+        if (this.parent == undefined) {
+            return;
+        }
+        const values = this.$values;
+        if (values[UIKeys.invalidateDisplayListFlag]) {
+            this.updateSize();
+            this.updateDisplayList(values[UIKeys.width], values[UIKeys.height]);
+            values[UIKeys.invalidateDisplayListFlag] = false;
+        }
+    }
+    /**
+     * @private
+     * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
+     */
+    commitProperties() {
+    }
+    /**
+     * @private
+     * 测量组件尺寸
+     */
+    measure() {
+    }
+    /**
+     * @private
+     * 测量组件尺寸，返回尺寸是否发生变化
+     */
+    measureSizes() {
+        let changed = false;
+        const values = this.$values;
+        if (!values[UIKeys.invalidateSizeFlag])
+            return changed;
+        this.measure();
+        const parentWidth = this.parent ? this.parent.$values[UIKeys.width] : 1;
+        const parentHeight = this.parent ? this.parent.$values[UIKeys.height] : 1;
+        const maxWidth = Utils_1.formatRelative(values[UIKeys.maxWidth], parentWidth);
+        const maxHeight = Utils_1.formatRelative(values[UIKeys.maxHeight], parentHeight);
+        const minWidth = Utils_1.formatRelative(values[UIKeys.minWidth], parentWidth);
+        const minHeight = Utils_1.formatRelative(values[UIKeys.minHeight], parentHeight);
+        //显示设置宽高，会忽略最大与最小值
+        if (isNaN(values[UIKeys.explicitWidth]) || isNaN(values[UIKeys.explicitHeight])) {
+            if (!isNaN(values[UIKeys.percentWidth])) {
+                values[UIKeys.measuredWidth] = Math.ceil(values[UIKeys.percentWidth] * parentWidth);
+            }
+            if (!isNaN(values[UIKeys.percentHeight])) {
+                values[UIKeys.measuredHeight] = Math.ceil(values[UIKeys.percentHeight] * parentHeight);
+            }
+            if (values[UIKeys.measuredWidth] < minWidth) {
+                values[UIKeys.measuredWidth] = minWidth;
+            }
+            if (values[UIKeys.measuredWidth] > maxWidth) {
+                values[UIKeys.measuredWidth] = maxWidth;
+            }
+            if (values[UIKeys.measuredHeight] < minHeight) {
+                values[UIKeys.measuredHeight] = minHeight;
+            }
+            if (values[UIKeys.measuredHeight] > maxHeight) {
+                values[UIKeys.measuredHeight] = maxHeight;
+            }
+        }
+        else {
+            if (values[UIKeys.explicitWidth] < minWidth) {
+                values[UIKeys.explicitWidth] = minWidth;
+            }
+            if (values[UIKeys.explicitWidth] > maxWidth) {
+                values[UIKeys.explicitWidth] = maxWidth;
+            }
+            if (values[UIKeys.explicitHeight] < minHeight) {
+                values[UIKeys.explicitHeight] = minHeight;
+            }
+            if (values[UIKeys.explicitHeight] > maxHeight) {
+                values[UIKeys.explicitHeight] = maxHeight;
+            }
+        }
+        const preferredW = this.getPreferredUWidth();
+        const preferredH = this.getPreferredUHeight();
+        if (preferredW !== values[UIKeys.oldPreferWidth] ||
+            preferredH !== values[UIKeys.oldPreferHeight]) {
+            values[UIKeys.oldPreferWidth] = preferredW;
+            values[UIKeys.oldPreferHeight] = preferredH;
+            changed = true;
+        }
+        return changed;
+    }
+    /**
+     * @private
+     * 设置测量结果。
+     * @param width 测量宽度
+     * @param height 测量高度
+     */
+    setMeasuredSize(width, height) {
+        const values = this.$values;
+        values[UIKeys.measuredWidth] = Math.ceil(+width || 0);
+        values[UIKeys.measuredHeight] = Math.ceil(+height || 0);
+    }
+    /**
+     * @private
+     *
+     * @returns
+     */
+    getPreferredUWidth() {
+        const values = this.$values;
+        return isNaN(values[UIKeys.explicitWidth]) ?
+            values[UIKeys.measuredWidth] : values[UIKeys.explicitWidth];
+    }
+    /**
+     * @private
+     */
+    getPreferredUHeight() {
+        const values = this.$values;
+        return isNaN(values[UIKeys.explicitHeight]) ?
+            values[UIKeys.measuredHeight] : values[UIKeys.explicitHeight];
+    }
+    /**
+     * @private
+     * 获取组件的首选尺寸,常用于父级的measure()方法中
+     * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
+     */
+    getPreferredBounds(bounds) {
+        bounds.width = this.getPreferredUWidth();
+        bounds.height = this.getPreferredUHeight();
+        bounds.x = this.$values[UIKeys.x];
+        bounds.y = this.$values[UIKeys.y];
+    }
+    /**
+    * @private
+    * 标记提交过需要延迟应用的属性，以便在稍后屏幕更新期间调用该组件的 commitProperties() 方法。
+    *
+    * 例如，要更改文本颜色和大小，如果在更改颜色后立即进行更新，然后在设置大小后再更新大小，就有些浪费。
+    * 同时更改两个属性后再使用新的大小和颜色一次性呈示文本，效率会更高。<p/>
+    *
+    * 通常，子类应覆盖 commitProperties() 方法，而不是覆盖此方法。
+     */
+    invalidateProperties() {
+        const values = this.$values;
+        if (!values[UIKeys.invalidatePropertiesFlag]) {
+            values[UIKeys.invalidatePropertiesFlag] = true;
+            UIValidator_1.default.invalidateProperties(this);
+        }
+    }
+    /**
+    * @private
+    * 标记提交过需要验证组件尺寸，以便在稍后屏幕更新期间调用该组件的 measure(),updatesize() 方法。
+    */
+    invalidateSize() {
+        const values = this.$values;
+        if (!values[UIKeys.invalidateSizeFlag]) {
+            values[UIKeys.invalidateSizeFlag] = true;
+            UIValidator_1.default.invalidateSize(this);
+        }
+    }
+    /**
+    * @private
+    * 标记需要验证显示列表，以便在稍后屏幕更新期间调用该组件的 updateDisplayList() 方法。
+    */
+    invalidateDisplayList() {
+        const values = this.$values;
+        if (!values[UIKeys.invalidateDisplayListFlag]) {
+            values[UIKeys.invalidateDisplayListFlag] = true;
+            UIValidator_1.default.invalidateDisplayList(this);
+        }
+    }
+    /**
+     * @private
+     * 标记父级容器的尺寸和显示列表为失效
+     */
+    invalidateParentLayout() {
+        const parent = this.parent;
+        if (!parent) {
+            return;
+        }
+        if (parent instanceof UILayout) {
+            parent.invalidateSize();
+            parent.invalidateDisplayList();
+        }
+    }
+    /**
+     * @private
+     * 设置组件的布局位置
+     */
+    setPosition(x, y) {
+        const values = this.$values;
+        values[UIKeys.x] = x;
+        values[UIKeys.y] = y;
+        this.container.setTransform(x + this.pivotX, y + this.pivotY, this.scaleX, this.scaleY, this.rotation * (Math.PI / 180), this.skewX, this.skewY, this.pivotX, this.pivotY);
+        //this.container.position.set(x + this.pivotX,y+ this.pivotY);
+    }
+    /**
+     * @private
+     * 设置组件的宽高。此方法不同于直接设置width,height属性，
+     * 不会影响显式标记尺寸属性
+     */
+    setActualSize(w, h) {
+        let change = false;
+        const values = this.$values;
+        if (values[UIKeys.width] !== w) {
+            values[UIKeys.width] = w;
+            change = true;
+        }
+        if (values[UIKeys.height] !== h) {
+            values[UIKeys.height] = h;
+            change = true;
+        }
+        if (change) {
+            this.invalidateDisplayList();
+            this.emit(Index_1.ComponentEvent.RESIZE, this);
+        }
+    }
+    /**
+     * @private
+     * 更新最终的组件宽高
+     */
+    updateSize() {
+        let unscaledWidth = 0;
+        let unscaledHeight = 0;
+        const values = this.$values;
+        if (!isNaN(values[UIKeys.explicitWidth])) {
+            unscaledWidth = values[UIKeys.explicitWidth];
+        }
+        else if (!isNaN(values[UIKeys.measuredWidth])) {
+            unscaledWidth = values[UIKeys.measuredWidth];
+        }
+        if (!isNaN(values[UIKeys.explicitHeight])) {
+            unscaledHeight = values[UIKeys.explicitHeight];
+        }
+        else if (!isNaN(values[UIKeys.measuredHeight])) {
+            unscaledHeight = values[UIKeys.measuredHeight];
+        }
+        this.setActualSize(unscaledWidth, unscaledHeight);
+    }
+    /**
+     * 更新显示列表,子类重写，实现布局
+     */
+    updateDisplayList(unscaledWidth, unscaledHeight) {
+    }
+    /**
+     * @private
+     * 立即应用组件及其子项的所有属性
+     */
+    validateNow() {
+        if (this.parent)
+            UIValidator_1.default.validateClient(this);
+    }
+    /**
+     * @private
+    * 验证并更新此对象的属性和布局，如果需要的话重绘对象。
+    *
+    * 通常只有当脚本执行完毕后，才会处理要求进行大量计算的处理属性。<p/>
+    *
+    * 例如，对 width 属性的设置可能会延迟，因为此设置需要重新计算这些对象的子项或父项的宽度。
+    * 如果脚本多次设置了 width 属性，则延迟处理可防止进行多次处理。此方法允许您手动覆盖此行为。
+     */
+    validateSizeNow() {
+        this.validateSize(true);
+        this.updateSize();
+    }
+    /**
+     * @private
+     * 距父级容器离左边距离
+     */
+    get left() {
+        return this.$values[UIKeys.left];
+    }
+    set left(value) {
+        if (!value || typeof value == "number") {
+            value = +value;
+        }
+        else {
+            value = value.toString().trim();
+        }
+        const values = this.$values;
+        if (values[UIKeys.left] === value)
+            return;
+        values[UIKeys.left] = value;
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 距父级容器右边距离
+     */
+    get right() {
+        return this.$values[UIKeys.right];
+    }
+    set right(value) {
+        if (!value || typeof value == "number") {
+            value = +value;
+        }
+        else {
+            value = value.toString().trim();
+        }
+        const values = this.$values;
+        if (values[UIKeys.right] === value)
+            return;
+        values[UIKeys.right] = value;
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 距父级容器顶部距离
+     */
+    get top() {
+        return this.$values[UIKeys.top];
+    }
+    set top(value) {
+        if (!value || typeof value == "number") {
+            value = +value;
+        }
+        else {
+            value = value.toString().trim();
+        }
+        const values = this.$values;
+        if (values[UIKeys.top] === value)
+            return;
+        values[UIKeys.top] = value;
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 距父级容器底部距离
+     */
+    get bottom() {
+        return this.$values[UIKeys.bottom];
+    }
+    set bottom(value) {
+        if (!value || typeof value == "number") {
+            value = +value;
+        }
+        else {
+            value = value.toString().trim();
+        }
+        const values = this.$values;
+        if (values[UIKeys.bottom] == value)
+            return;
+        values[UIKeys.bottom] = value;
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 在父级容器中距水平中心位置的距离
+     */
+    get horizontalCenter() {
+        return this.$values[UIKeys.horizontalCenter];
+    }
+    set horizontalCenter(value) {
+        if (!value || typeof value == "number") {
+            value = +value;
+        }
+        else {
+            value = value.toString().trim();
+        }
+        const values = this.$values;
+        if (values[UIKeys.horizontalCenter] === value)
+            return;
+        values[UIKeys.horizontalCenter] = value;
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 在父级容器中距竖直中心位置的距离
+     */
+    get verticalCenter() {
+        return this.$values[UIKeys.verticalCenter];
+    }
+    set verticalCenter(value) {
+        if (!value || typeof value == "number") {
+            value = +value;
+        }
+        else {
+            value = value.toString().trim();
+        }
+        const values = this.$values;
+        if (values[UIKeys.verticalCenter] === value)
+            return;
+        values[UIKeys.verticalCenter] = value;
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 相对父级容器宽度的百分比
+     */
+    get percentWidth() {
+        return this.$values[UIKeys.percentWidth];
+    }
+    set percentWidth(value) {
+        value = +value;
+        const values = this.$values;
+        if (values[UIKeys.percentWidth] === value)
+            return;
+        values[UIKeys.percentWidth] = value;
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 相对父级容器高度的百分比
+     */
+    get percentHeight() {
+        return this.$values[UIKeys.percentHeight];
+    }
+    set percentHeight(value) {
+        value = +value;
+        const values = this.$values;
+        if (values[UIKeys.percentHeight] === value)
+            return;
+        values[UIKeys.percentHeight] = value;
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 外部显式指定的宽度
+     */
+    get explicitWidth() {
+        return this.$values[UIKeys.explicitWidth];
+    }
+    /**
+     * @private
+     * 外部显式指定的高度
+     */
+    get explicitHeight() {
+        return this.$values[UIKeys.explicitHeight];
+    }
+    get _width() {
+        return this.$values[UIKeys.explicitWidth];
+    }
+    get _height() {
+        return this.$values[UIKeys.explicitHeight];
+    }
+    /**
+     * @private
+     * 组件宽度设置为undefined将使用组件的measure()方法自动计算尺寸
+     */
+    get width() {
+        //this.validateSizeNow();
+        return this.$values[UIKeys.width];
+    }
+    /**
+     * @private
+     *
+     * @param value
+     */
+    set width(value) {
+        value = +value;
+        const values = this.$values;
+        if (value < 0 || values[UIKeys.width] === value && values[UIKeys.explicitWidth] === value)
+            return;
+        values[UIKeys.explicitWidth] = value;
+        if (isNaN(value))
+            this.invalidateSize();
+        this.invalidateProperties();
+        this.invalidateDisplayList();
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
+     */
+    get height() {
+        //this.validateSizeNow();
+        return this.$values[UIKeys.height];
+    }
+    /**
+     * @private
+     *
+     * @param value
+     */
+    set height(value) {
+        value = +value;
+        const values = this.$values;
+        if (value < 0 || values[UIKeys.height] === value && values[UIKeys.explicitHeight] === value)
+            return;
+        values[UIKeys.explicitHeight] = value;
+        if (isNaN(value))
+            this.invalidateSize();
+        this.invalidateProperties();
+        this.invalidateDisplayList();
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
+     */
+    get minWidth() {
+        return this.$values[UIKeys.minWidth];
+    }
+    set minWidth(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (value < 0 || values[UIKeys.minWidth] === value) {
+            return;
+        }
+        values[UIKeys.minWidth] = value;
+        this.invalidateSize();
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 组件的最大高度。同时影响测量和自动布局的尺寸。
+     */
+    get maxWidth() {
+        return this.$values[UIKeys.maxWidth];
+    }
+    set maxWidth(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (value < 0 || values[UIKeys.maxWidth] === value) {
+            return;
+        }
+        values[UIKeys.maxWidth] = value;
+        this.invalidateSize();
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
+     */
+    get minHeight() {
+        return this.$values[UIKeys.minHeight];
+    }
+    set minHeight(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (value < 0 || values[UIKeys.minHeight] === value) {
+            return;
+        }
+        values[UIKeys.minHeight] = value;
+        this.invalidateSize();
+        this.invalidateParentLayout();
+    }
+    /**
+     * @private
+     * 组件的最大高度,同时影响测量和自动布局的尺寸。
+     */
+    get maxHeight() {
+        return this.$values[UIKeys.maxHeight];
+    }
+    set maxHeight(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (value < 0 || values[UIKeys.maxHeight] === value) {
+            return;
+        }
+        values[UIKeys.maxHeight] = value;
+        this.invalidateSize();
+        this.invalidateParentLayout();
+    }
+    get scaleX() {
+        return this.$values[UIKeys.scaleX];
+    }
+    set scaleX(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (values[UIKeys.scaleX] === value) {
+            return;
+        }
+        if (value !== this.container.scale.x) {
+            values[UIKeys.scaleX] = value;
+            this.invalidateProperties();
+            this.invalidateSize();
+            this.invalidateParentLayout();
+        }
+    }
+    get scaleY() {
+        return this.$values[UIKeys.scaleY];
+    }
+    set scaleY(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (values[UIKeys.scaleY] === value) {
+            return;
+        }
+        if (value !== this.container.scale.y) {
+            values[UIKeys.scaleY] = value;
+            this.invalidateProperties();
+            this.invalidateSize();
+            this.invalidateParentLayout();
+        }
+    }
+    get x() {
+        return this.$values[UIKeys.x];
+    }
+    set x(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (values[UIKeys.x] === value) {
+            return;
+        }
+        values[UIKeys.x] = value;
+        if (this.container.x !== value) {
+            this.container.x = value;
+            this.invalidateParentLayout();
+        }
+    }
+    get y() {
+        return this.$values[UIKeys.y];
+    }
+    set y(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (values[UIKeys.y] === value) {
+            return;
+        }
+        values[UIKeys.y] = value;
+        if (value !== this.container.y) {
+            this.container.y = value;
+            this.invalidateParentLayout();
+        }
+    }
+    get skewX() {
+        return this.$values[UIKeys.skewX];
+    }
+    set skewX(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (values[UIKeys.skewX] === value) {
+            return;
+        }
+        values[UIKeys.skewX] = value;
+        this.invalidateDisplayList();
+    }
+    get skewY() {
+        return this.$values[UIKeys.skewY];
+    }
+    set skewY(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (values[UIKeys.skewY] === value) {
+            return;
+        }
+        values[UIKeys.skewY] = value;
+        this.invalidateDisplayList();
+    }
+    get pivotX() {
+        return this.$values[UIKeys.pivotX];
+    }
+    set pivotX(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (values[UIKeys.pivotX] === value) {
+            return;
+        }
+        values[UIKeys.pivotX] = value;
+        this.invalidateDisplayList();
+    }
+    get pivotY() {
+        return this.$values[UIKeys.pivotY];
+    }
+    set pivotY(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (values[UIKeys.pivotY] === value) {
+            return;
+        }
+        values[UIKeys.pivotY] = value;
+        this.invalidateDisplayList();
+    }
+    get rotation() {
+        return this.$values[UIKeys.rotation];
+    }
+    set rotation(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (values[UIKeys.rotation] === value) {
+            return;
+        }
+        values[UIKeys.rotation] = value;
+        this.invalidateDisplayList();
+    }
+    /**
+     * 对象是否可以接收事件
+     */
+    set interactive(value) {
+        this._interactive = value;
+        if (!this._enabled) {
+            return;
+        }
+        this.container.interactive = value;
+    }
+    get interactive() {
+        return this.container.interactive;
+    }
+    /**
+     * 子对象是否可以接收事件，设置false后，会绕过HitTest方法的递归
+     */
+    set interactiveChildren(value) {
+        this._interactiveChildren = value;
+        if (!this._enabled) {
+            return;
+        }
+        this.container.interactiveChildren = value;
+    }
+    get interactiveChildren() {
+        return this.container.interactiveChildren;
+    }
+    get enabled() {
+        return this._enabled;
+    }
+    set enabled(value) {
+        if (this._enabled === value) {
+            return;
+        }
+        this._enabled = value;
+        this.container.interactive = value;
+        this.container.interactiveChildren = value;
+    }
+    get visible() {
+        return this._visible;
+    }
+    set visible(value) {
+        if (this._visible === value) {
+            return;
+        }
+        this._visible = value;
+        this.container.visible = value;
+    }
+}
+exports.UILayout = UILayout;
+
+
+/***/ }),
+
+/***/ "./src/core/UIValidator.ts":
+/*!*********************************!*\
+  !*** ./src/core/UIValidator.ts ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Ticker_1 = __webpack_require__(/*! ./Ticker */ "./src/core/Ticker.ts");
+/**
+ * @private
+ * 列表项
+ */
+class DepthBin {
+    constructor() {
+        this.map = {};
+        this.items = [];
+        this.length = 0;
+    }
+    insert(client) {
+        const hashCode = client.uuid;
+        if (this.map[hashCode]) {
+            return;
+        }
+        this.map[hashCode] = true;
+        this.length++;
+        this.items.push(client);
+    }
+    pop() {
+        const client = this.items.pop(); //使用pop会比shift有更高的性能，避免索引整体重置。
+        if (client) {
+            this.length--;
+            if (this.length === 0) {
+                this.map = {}; //清空所有key防止内存泄露
+            }
+            else {
+                this.map[client.uuid] = false;
+            }
+        }
+        return client;
+    }
+    remove(client) {
+        const index = this.items.indexOf(client);
+        if (index >= 0) {
+            this.items.splice(index, 1);
+            this.length--;
+            if (this.length === 0) {
+                this.map = {}; //清空所有key防止内存泄露
+            }
+            else {
+                this.map[client.uuid] = false;
+            }
+        }
+    }
+}
+/**
+ * @private
+ * 显示列表嵌套深度排序队列
+ */
+class DepthQueue {
+    constructor() {
+        /**
+         * 深度队列
+         */
+        this.depthBins = {};
+        /**
+         * 最小深度
+         */
+        this.minDepth = 0;
+        /**
+         * 最大深度
+         */
+        this.maxDepth = -1;
+    }
+    /**
+     * 插入一个元素
+     */
+    insert(client) {
+        const depth = client.$nestLevel;
+        if (this.maxDepth < this.minDepth) {
+            this.minDepth = this.maxDepth = depth;
+        }
+        else {
+            if (depth < this.minDepth)
+                this.minDepth = depth;
+            if (depth > this.maxDepth)
+                this.maxDepth = depth;
+        }
+        let bin = this.depthBins[depth];
+        if (!bin) {
+            bin = this.depthBins[depth] = new DepthBin();
+        }
+        bin.insert(client);
+    }
+    /**
+     * 从队列尾弹出深度最大的一个对象
+     */
+    pop() {
+        let client;
+        const minDepth = this.minDepth;
+        if (minDepth <= this.maxDepth) {
+            let bin = this.depthBins[this.maxDepth];
+            while (!bin || bin.length === 0) {
+                this.maxDepth--;
+                if (this.maxDepth < minDepth)
+                    return undefined;
+                bin = this.depthBins[this.maxDepth];
+            }
+            client = bin.pop();
+            while (!bin || bin.length == 0) {
+                this.maxDepth--;
+                if (this.maxDepth < minDepth)
+                    break;
+                bin = this.depthBins[this.maxDepth];
+            }
+        }
+        return client;
+    }
+    /**
+     * 从队列首弹出深度最小的一个对象
+     */
+    shift() {
+        let client;
+        const maxDepth = this.maxDepth;
+        if (this.minDepth <= maxDepth) {
+            let bin = this.depthBins[this.minDepth];
+            while (!bin || bin.length === 0) {
+                this.minDepth++;
+                if (this.minDepth > maxDepth)
+                    return undefined;
+                bin = this.depthBins[this.minDepth];
+            }
+            client = bin.pop();
+            while (!bin || bin.length == 0) {
+                this.minDepth++;
+                if (this.minDepth > maxDepth)
+                    break;
+                bin = this.depthBins[this.minDepth];
+            }
+        }
+        return client;
+    }
+    /**
+     * 移除大于等于指定组件层级的元素中最大的元素
+     */
+    removeLargestChild(client) {
+        const hashCode = client.uuid;
+        const nestLevel = client.$nestLevel;
+        let max = this.maxDepth;
+        const min = nestLevel;
+        while (min <= max) {
+            const bin = this.depthBins[max];
+            if (bin && bin.length > 0) {
+                if (max === nestLevel) {
+                    if (bin.map[hashCode]) {
+                        bin.remove(client);
+                        return client;
+                    }
+                }
+                else if (client["isContainer"]) {
+                    const items = bin.items;
+                    const length = bin.length;
+                    for (let i = 0; i < length; i++) {
+                        const value = items[i];
+                        if (client.contains(value)) {
+                            bin.remove(value);
+                            return value;
+                        }
+                    }
+                }
+                else {
+                    break;
+                }
+                max--;
+            }
+            else {
+                if (max == this.maxDepth) {
+                    this.maxDepth--;
+                }
+                max--;
+                if (max < min)
+                    break;
+            }
+        }
+        return undefined;
+    }
+    /**
+     * 移除大于等于指定组件层级的元素中最小的元素
+     */
+    removeSmallestChild(client) {
+        const nestLevel = client.$nestLevel;
+        let min = nestLevel;
+        const max = this.maxDepth;
+        const hashCode = client.uuid;
+        while (min <= max) {
+            const bin = this.depthBins[min];
+            if (bin && bin.length > 0) {
+                if (min === nestLevel) {
+                    if (bin.map[hashCode]) {
+                        bin.remove(client);
+                        return client;
+                    }
+                }
+                else if (client["isContainer"]) {
+                    const items = bin.items;
+                    const length = bin.length;
+                    for (let i = 0; i < length; i++) {
+                        const value = items[i];
+                        if (client.contains(value)) {
+                            bin.remove(value);
+                            return value;
+                        }
+                    }
+                }
+                else {
+                    break;
+                }
+                min++;
+            }
+            else {
+                if (min == this.minDepth)
+                    this.minDepth++;
+                min++;
+                if (min > max)
+                    break;
+            }
+        }
+        return undefined;
+    }
+    /**
+     * 队列是否为空
+     */
+    isEmpty() {
+        return this.minDepth > this.maxDepth;
+    }
+}
+/**
+ * @private
+ * 失效验证管理器
+ */
+class UIValidator extends PIXI.utils.EventEmitter {
+    /**
+     * @private
+     * 创建一个Validator对象
+     */
+    constructor() {
+        super();
+        /**
+         * @private
+         */
+        this.targetLevel = Infinity;
+        /**
+         * @private
+         */
+        this.invalidatePropertiesFlag = false;
+        /**
+         * @private
+         */
+        this.invalidateClientPropertiesFlag = false;
+        /**
+         * @private
+         */
+        this.invalidatePropertiesQueue = new DepthQueue();
+        /**
+         * @private
+         */
+        this.invalidateSizeFlag = false;
+        /**
+         * @private
+         */
+        this.invalidateClientSizeFlag = false;
+        /**
+         * @private
+         */
+        this.invalidateSizeQueue = new DepthQueue();
+        /**
+         * @private
+         */
+        this.invalidateDisplayListFlag = false;
+        /**
+         * @private
+         */
+        this.invalidateDisplayListQueue = new DepthQueue();
+        /**
+         * @private
+         * 是否已经添加了事件监听
+         */
+        this.listenersAttached = false;
+    }
+    /**
+     * @private
+     * 标记组件属性失效
+     */
+    invalidateProperties(target) {
+        if (!this.invalidatePropertiesFlag) {
+            this.invalidatePropertiesFlag = true;
+            if (!this.listenersAttached)
+                this.attachListeners();
+        }
+        if (this.targetLevel <= target.$nestLevel)
+            this.invalidateClientPropertiesFlag = true;
+        this.invalidatePropertiesQueue.insert(target);
+    }
+    /**
+     * @private
+     * 验证失效的属性
+     */
+    validateProperties() {
+        const queue = this.invalidatePropertiesQueue;
+        let target = queue.shift();
+        while (target) {
+            if (target.parent) {
+                target.validateProperties();
+            }
+            target = queue.shift();
+        }
+        if (queue.isEmpty())
+            this.invalidatePropertiesFlag = false;
+    }
+    /**
+     * @private
+     * 标记需要重新测量尺寸
+     */
+    invalidateSize(target) {
+        if (!this.invalidateSizeFlag) {
+            this.invalidateSizeFlag = true;
+            if (!this.listenersAttached)
+                this.attachListeners();
+        }
+        if (this.targetLevel <= target.$nestLevel)
+            this.invalidateClientSizeFlag = true;
+        this.invalidateSizeQueue.insert(target);
+    }
+    /**
+     * @private
+     * 测量尺寸
+     */
+    validateSize() {
+        const queue = this.invalidateSizeQueue;
+        let target = queue.pop();
+        while (target) {
+            if (target.parent) {
+                target.validateSize();
+            }
+            target = queue.pop();
+        }
+        if (queue.isEmpty())
+            this.invalidateSizeFlag = false;
+    }
+    /**
+     * @private
+     * 标记需要重新布局
+     */
+    invalidateDisplayList(client) {
+        if (!this.invalidateDisplayListFlag) {
+            this.invalidateDisplayListFlag = true;
+            if (!this.listenersAttached)
+                this.attachListeners();
+        }
+        this.invalidateDisplayListQueue.insert(client);
+    }
+    /**
+     * @private
+     * 重新布局
+     */
+    validateDisplayList() {
+        const queue = this.invalidateDisplayListQueue;
+        let client = queue.shift();
+        while (client) {
+            if (client.parent) {
+                client.validateDisplayList();
+            }
+            client = queue.shift();
+        }
+        if (queue.isEmpty())
+            this.invalidateDisplayListFlag = false;
+    }
+    /**
+     * @private
+     * 添加事件监听
+     */
+    attachListeners() {
+        Ticker_1.default.addUpdateEvent(this.doPhasedInstantiationCallBack, this);
+        this.listenersAttached = true;
+    }
+    /**
+     * @private
+     * 执行属性应用
+     */
+    doPhasedInstantiationCallBack() {
+        Ticker_1.default.removeUpdateEvent(this.doPhasedInstantiationCallBack, this);
+        this.doPhasedInstantiation();
+    }
+    /**
+     * @private
+     */
+    doPhasedInstantiation() {
+        if (this.invalidatePropertiesFlag) {
+            this.validateProperties();
+        }
+        if (this.invalidateSizeFlag) {
+            this.validateSize();
+        }
+        if (this.invalidateDisplayListFlag) {
+            this.validateDisplayList();
+        }
+        if (this.invalidatePropertiesFlag ||
+            this.invalidateSizeFlag ||
+            this.invalidateDisplayListFlag) {
+            this.attachListeners();
+        }
+        else {
+            this.listenersAttached = false;
+        }
+    }
+    /**
+     * @private
+     * 使大于等于指定组件层级的元素立即应用属性
+     * @param target 要立即应用属性的组件
+     */
+    validateClient(target) {
+        let obj;
+        let done = false;
+        const oldTargetLevel = this.targetLevel;
+        if (this.targetLevel === Infinity)
+            this.targetLevel = target.$nestLevel;
+        const propertiesQueue = this.invalidatePropertiesQueue;
+        const sizeQueue = this.invalidateSizeQueue;
+        const displayListQueue = this.invalidateDisplayListQueue;
+        while (!done) {
+            done = true;
+            obj = propertiesQueue.removeSmallestChild(target);
+            while (obj) {
+                if (obj.parent) {
+                    obj.validateProperties();
+                }
+                obj = propertiesQueue.removeSmallestChild(target);
+            }
+            if (propertiesQueue.isEmpty()) {
+                this.invalidatePropertiesFlag = false;
+            }
+            this.invalidateClientPropertiesFlag = false;
+            obj = sizeQueue.removeLargestChild(target);
+            while (obj) {
+                if (obj.parent) {
+                    obj.validateSize();
+                }
+                if (this.invalidateClientPropertiesFlag) {
+                    obj = (propertiesQueue.removeSmallestChild(target));
+                    if (obj) {
+                        propertiesQueue.insert(obj);
+                        done = false;
+                        break;
+                    }
+                }
+                obj = sizeQueue.removeLargestChild(target);
+            }
+            if (sizeQueue.isEmpty()) {
+                this.invalidateSizeFlag = false;
+            }
+            this.invalidateClientPropertiesFlag = false;
+            this.invalidateClientSizeFlag = false;
+            obj = displayListQueue.removeSmallestChild(target);
+            while (obj) {
+                if (obj.parent) {
+                    obj.validateDisplayList();
+                }
+                if (this.invalidateClientPropertiesFlag) {
+                    obj = propertiesQueue.removeSmallestChild(target);
+                    if (obj) {
+                        propertiesQueue.insert(obj);
+                        done = false;
+                        break;
+                    }
+                }
+                if (this.invalidateClientSizeFlag) {
+                    obj = sizeQueue.removeLargestChild(target);
+                    if (obj) {
+                        sizeQueue.insert(obj);
+                        done = false;
+                        break;
+                    }
+                }
+                obj = displayListQueue.removeSmallestChild(target);
+            }
+            if (displayListQueue.isEmpty()) {
+                this.invalidateDisplayListFlag = false;
+            }
+        }
+        if (oldTargetLevel === Infinity) {
+            this.targetLevel = Infinity;
+        }
+    }
+}
+const validatorShared = new UIValidator();
+exports.default = validatorShared;
 
 
 /***/ }),
@@ -5349,7 +6640,7 @@ function Round(num, decimals) {
 exports.Round = Round;
 /** 获取全局唯一数 */
 function uid() {
-    return PIXI.utils.uid().toString();
+    return PIXI.utils.uid();
 }
 exports.uid = uid;
 /** 获取URL参数 */
@@ -5361,6 +6652,26 @@ function getQueryVariable(variable) {
     return undefined;
 }
 exports.getQueryVariable = getQueryVariable;
+function isDeltaIdentity(m) {
+    return (m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1);
+}
+exports.isDeltaIdentity = isDeltaIdentity;
+function formatRelative(value, total) {
+    if (value == undefined) {
+        return NaN;
+    }
+    if (typeof value === "number") {
+        return value;
+    }
+    const str = value;
+    const index = str.indexOf("%");
+    if (index == -1) {
+        return +str;
+    }
+    const percent = +str.substring(0, index);
+    return percent * 0.01 * total;
+}
+exports.formatRelative = formatRelative;
 
 
 /***/ }),
@@ -5648,19 +6959,22 @@ exports.LOOP = "LOOP";
 /**
  * 容器被添加在到父级时触发
  */
-exports.ADDED = "ADDED";
+exports.ADDED = "added";
 /**
  * 容器被从父级移除时触发
  */
-exports.REMOVEED = "REMOVEED";
+exports.REMOVEED = "removed";
+exports.RESIZE = "RESIZE";
+exports.MOVE = "MOVE";
+exports.CREATION_COMPLETE = "CREATION_COMPLETE";
 /**
  * 节点改变时触发，有子项被添加到容器，或有子项被删除时，触发。
  */
 exports.CHILD_CHANGE = "CHILD_CHANGE";
 /**
- * 绘制完成时
+ * 位置，缩放等发生改变后出发
  */
-exports.RENDERER_COMPLETE = "RENDERER_COMPLETE";
+exports.TRANSFORM_COMPLETE = "TRANSFORM_COMPLETE";
 
 
 /***/ }),
@@ -6116,9 +7430,9 @@ function registrerCheckGroup(cb) {
         let group = exports._checkGroupObject.groups[name];
         if (!group)
             group = exports._checkGroupObject.groups[name] = {};
-        group[cb.uuid] = cb;
+        group[cb.uuid.toString()] = cb;
         if (cb.checked)
-            exports._checkGroupObject.values[name] = cb.uuid;
+            exports._checkGroupObject.values[name] = cb.uuid.toString();
     }
 }
 exports.registrerCheckGroup = registrerCheckGroup;
@@ -6128,7 +7442,7 @@ exports.registrerCheckGroup = registrerCheckGroup;
  */
 function unRegistrerCheckGroup(cb) {
     if (cb.checkGroup && exports._checkGroupObject.groups[cb.checkGroup]) {
-        delete exports._checkGroupObject.groups[cb.checkGroup][cb.uuid];
+        delete exports._checkGroupObject.groups[cb.checkGroup][cb.uuid.toString()];
         let isKey = false;
         for (const key in exports._checkGroupObject.groups[cb.checkGroup]) {
             if (key)
@@ -6152,7 +7466,7 @@ function updateCheckGroupSelected(cb) {
             if (b !== cb)
                 b.checked = false;
         }
-        exports._checkGroupObject.values[cb.checkGroup] = cb.uuid;
+        exports._checkGroupObject.values[cb.checkGroup] = cb.uuid.toString();
     }
 }
 exports.updateCheckGroupSelected = updateCheckGroupSelected;
@@ -6160,7 +7474,7 @@ exports.updateCheckGroupSelected = updateCheckGroupSelected;
 function getCheckGroupSelectedValue(name) {
     const uuid = exports._checkGroupObject.values[name];
     if (uuid) {
-        const cb = exports._checkGroupObject.groups[name][uuid];
+        const cb = exports._checkGroupObject.groups[name][uuid.toString()];
         return cb.value;
     }
     return undefined;
@@ -6318,7 +7632,7 @@ class MouseScrollEvent {
      * @param preventDefault 是否组织系统默认的事件触发
      */
     constructor(obj, preventDefault) {
-        this.id = "";
+        this.id = 0;
         this.delta = new PIXI.Point();
         this.isStop = true;
         this.obj = obj;
@@ -6380,9 +7694,9 @@ exports.MouseScrollEvent = MouseScrollEvent;
 
 /***/ }),
 
-/***/ "./src/layout/CSSBlockLayout.ts":
+/***/ "./src/layout/CSSBasicLayout.ts":
 /*!**************************************!*\
-  !*** ./src/layout/CSSBlockLayout.ts ***!
+  !*** ./src/layout/CSSBasicLayout.ts ***!
   \**************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -6390,90 +7704,199 @@ exports.MouseScrollEvent = MouseScrollEvent;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const CSSLayout_1 = __webpack_require__(/*! ./CSSLayout */ "./src/layout/CSSLayout.ts");
-const Stage_1 = __webpack_require__(/*! ../core/Stage */ "./src/core/Stage.ts");
+const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
+const UIKeys = __webpack_require__(/*! ../core/UIKeys */ "./src/core/UIKeys.ts");
 /**
- * CSSBlockLayout 类根据其各个设置彼此独立地排列布局元素。要求显式定位每个容器子代。
- * 可以使用子代的x,y 属性，或使用约束来定位每个子代。
+ * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
+ * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。
+ * 可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
+ *
  */
-function updateBlockLayout(target) {
+// export class CSSBasicLayout extends CSSLayoutBase {
+//     public constructor() {
+//         super();
+//     }
+//     public measure(): void {
+//         super.measure();
+//         measure(this.$target);
+//     }
+//     public updateDisplayList(unscaledWidth: number, unscaledHeight: number): void {
+//         super.updateDisplayList(unscaledWidth, unscaledHeight);
+//         const pos = updateDisplayList(this.$target, unscaledWidth, unscaledHeight);
+//         //if(pos)
+//         //    this.$target.setContentSize(Math.ceil(pos.x), Math.ceil(pos.y));
+//     }
+// }
+exports.$TempRectangle = new PIXI.Rectangle();
+exports.$TempPoint = new PIXI.Point();
+/**
+ * 布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸
+ */
+function formatRelative(value, total) {
+    if (value == undefined) {
+        return NaN;
+    }
+    if (typeof value === "number") {
+        return value;
+    }
+    const str = value;
+    const index = str.indexOf("%");
+    if (index == -1) {
+        return +str;
+    }
+    const percent = +str.substring(0, index);
+    return percent * 0.01 * total;
+}
+exports.formatRelative = formatRelative;
+/**
+ * @private
+ * 设置组件的布局宽高
+ */
+function getLayoutBoundsSize(target, rectangle, layoutWidth, layoutHeight) {
     if (target.parent == undefined) {
+        rectangle.width = NaN;
+        rectangle.height = NaN;
+        return rectangle;
+    }
+    const parentHeight = target.parent.width;
+    const parentWidth = target.parent.height;
+    rectangle.width = layoutWidth;
+    rectangle.height = layoutHeight;
+    const values = target.$values;
+    const maxWidth = formatRelative(values[UIKeys.maxWidth], parentWidth);
+    const maxHeight = formatRelative(values[UIKeys.maxHeight], parentHeight);
+    const minWidth = formatRelative(values[UIKeys.minWidth], parentWidth);
+    const minHeight = formatRelative(values[UIKeys.minHeight], parentHeight);
+    //min/max sizes
+    if (!isNaN(maxWidth) && rectangle.width > maxWidth) {
+        rectangle.width = maxWidth;
+    }
+    if (!isNaN(minWidth) && rectangle.width < minWidth) {
+        rectangle.width = minWidth;
+    }
+    if (!isNaN(maxHeight) && rectangle.height > maxHeight) {
+        rectangle.height = maxHeight;
+    }
+    if (!isNaN(minHeight) && rectangle.height < minHeight) {
+        rectangle.height = minHeight;
+    }
+    if (isNaN(rectangle.width)) {
+        rectangle.width = 0;
+    }
+    if (isNaN(rectangle.height)) {
+        rectangle.height = 0;
+    }
+    return rectangle;
+}
+exports.getLayoutBoundsSize = getLayoutBoundsSize;
+/**
+ * @private
+ * 一个工具方法，使用BasicLayout规则测量目标对象。
+ */
+function measure(target) {
+    if (!target) {
         return;
     }
-    const style = target.style;
-    let maxX = 0;
-    let maxY = 0;
-    let unscaledWidth = target.parent.width;
-    let unscaledHeight = target.parent.height;
-    if (style.position === "fixed") {
-        unscaledWidth = Stage_1.Stage.Ins.width;
-        unscaledHeight = Stage_1.Stage.Ins.height;
+    let width = 0;
+    let height = 0;
+    const bounds = exports.$TempRectangle;
+    const count = target.uiChildren.length;
+    for (let i = 0; i < count; i++) {
+        const layoutElement = target.getChildAt(i);
+        if (!(layoutElement instanceof UIBase_1.UIBase) || !layoutElement.includeInLayout) {
+            continue;
+        }
+        const values = layoutElement.$values;
+        const hCenter = +values[UIKeys.horizontalCenter];
+        const vCenter = +values[UIKeys.verticalCenter];
+        const left = +values[UIKeys.left];
+        const right = +values[UIKeys.right];
+        const top = +values[UIKeys.top];
+        const bottom = +values[UIKeys.bottom];
+        layoutElement.getPreferredBounds(bounds);
+        let extX;
+        let extY;
+        if (!isNaN(left) && !isNaN(right)) {
+            extX = left + right;
+        }
+        else if (!isNaN(hCenter)) {
+            extX = Math.abs(hCenter) * 2;
+        }
+        else if (!isNaN(left) || !isNaN(right)) {
+            extX = isNaN(left) ? 0 : left;
+            extX += isNaN(right) ? 0 : right;
+        }
+        else {
+            extX = bounds.x;
+        }
+        if (!isNaN(top) && !isNaN(bottom)) {
+            extY = top + bottom;
+        }
+        else if (!isNaN(vCenter)) {
+            extY = Math.abs(vCenter) * 2;
+        }
+        else if (!isNaN(top) || !isNaN(bottom)) {
+            extY = isNaN(top) ? 0 : top;
+            extY += isNaN(bottom) ? 0 : bottom;
+        }
+        else {
+            extY = bounds.y;
+        }
+        const preferredWidth = bounds.width;
+        const preferredHeight = bounds.height;
+        width = Math.ceil(Math.max(width, extX + preferredWidth));
+        height = Math.ceil(Math.max(height, extY + preferredHeight));
     }
-    const hCenter = CSSLayout_1.formatRelative(style.hCenter, unscaledWidth * 0.5);
-    const vCenter = CSSLayout_1.formatRelative(style.vCenter, unscaledHeight * 0.5);
-    const left = CSSLayout_1.formatRelative(style.left, unscaledWidth);
-    const right = CSSLayout_1.formatRelative(style.right, unscaledWidth);
-    const top = CSSLayout_1.formatRelative(style.top, unscaledHeight);
-    const bottom = CSSLayout_1.formatRelative(style.bottom, unscaledHeight);
-    const percentWidth = CSSLayout_1.formatRelative(style.width, unscaledWidth);
-    const percentHeight = CSSLayout_1.formatRelative(style.height, unscaledHeight);
-    let childWidth = NaN;
-    let childHeight = NaN;
+    target.setMeasuredSize(width, height);
+}
+exports.measure = measure;
+/**
+ * @private
+ * 一个工具方法，使用BasicLayout规则布局目标对象。
+ */
+function updateBasicDisplayList(target, unscaledWidth, unscaledHeight) {
+    if (!target)
+        return;
+    //console.log(target.container.name);
+    const values = target.$values;
+    const parentWidth = target.parent ? target.parent.$values[UIKeys.width] : 1;
+    const parentHeight = target.parent ? target.parent.$values[UIKeys.height] : 1;
+    const hCenter = formatRelative(values[UIKeys.horizontalCenter], parentWidth * 0.5);
+    const vCenter = formatRelative(values[UIKeys.verticalCenter], parentHeight * 0.5);
+    const left = formatRelative(values[UIKeys.left], parentWidth);
+    const right = formatRelative(values[UIKeys.right], parentWidth);
+    const top = formatRelative(values[UIKeys.top], parentHeight);
+    const bottom = formatRelative(values[UIKeys.bottom], parentHeight);
+    let childWidth = unscaledWidth;
+    let childHeight = unscaledHeight;
     if (!isNaN(left) && !isNaN(right)) {
-        childWidth = unscaledWidth - right - left;
-    }
-    else if (percentWidth !== 0) {
-        childWidth = percentWidth;
+        childWidth = parentWidth - right - left;
     }
     if (!isNaN(top) && !isNaN(bottom)) {
-        childHeight = unscaledHeight - bottom - top;
+        childHeight = parentHeight - bottom - top;
     }
-    else if (percentHeight != 0) {
-        childHeight = percentHeight;
-    }
-    const bounds = CSSLayout_1.getLayoutBoundsSize(target, childWidth, childHeight);
-    let elementWidth = bounds.width;
-    let elementHeight = bounds.height;
+    target.setActualSize(childWidth, childHeight);
     let childX = NaN;
     let childY = NaN;
     if (!isNaN(hCenter))
-        childX = Math.round((unscaledWidth - elementWidth) / 2 + hCenter);
+        childX = Math.round((parentWidth - childWidth) / 2 + hCenter);
     else if (!isNaN(left))
         childX = left;
     else if (!isNaN(right))
-        childX = unscaledWidth - elementWidth - right;
+        childX = parentWidth - childWidth - right;
     else
-        childX = bounds.x;
+        childX = target.x;
     if (!isNaN(vCenter))
-        childY = Math.round((unscaledHeight - elementHeight) / 2 + vCenter);
+        childY = Math.round((parentHeight - childHeight) / 2 + vCenter);
     else if (!isNaN(top))
         childY = top;
     else if (!isNaN(bottom))
-        childY = unscaledHeight - elementHeight - bottom;
+        childY = parentHeight - childHeight - bottom;
     else
-        childY = bounds.y;
-    if (style.position === "fixed") {
-        const globalPosition = target.container.toLocal(new PIXI.Point(childY, childY));
-        childY = globalPosition.x;
-        childY = globalPosition.y;
-    }
-    //make pixel perfect
-    if (target.pixelPerfect) {
-        elementWidth = Math.round(elementWidth);
-        elementHeight = Math.round(elementHeight);
-        childX = Math.round(childX);
-        childY = Math.round(childY);
-    }
-    bounds.x = childX;
-    bounds.y = childY;
-    maxX = Math.max(maxX, childX + elementWidth);
-    maxY = Math.max(maxY, childY + elementHeight);
-    target.width = bounds.width;
-    target.height = bounds.height;
-    target.x = bounds.x;
-    target.y = bounds.y;
+        childY = target.y;
+    target.setPosition(childX, childY);
 }
-exports.updateBlockLayout = updateBlockLayout;
+exports.updateBasicDisplayList = updateBasicDisplayList;
 
 
 /***/ }),
@@ -6488,18 +7911,18 @@ exports.updateBlockLayout = updateBlockLayout;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const CSSLayout_1 = __webpack_require__(/*! ./CSSLayout */ "./src/layout/CSSLayout.ts");
+const Utils_1 = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
 function getColumnRowValue(gridTemplate, parentValue) {
     const list = [];
     if (gridTemplate) {
         if (gridTemplate[0] === "repeat") {
             for (let i = 0; i < gridTemplate[1]; i++) {
-                list.push(CSSLayout_1.formatRelative(gridTemplate[2], parentValue));
+                list.push(Utils_1.formatRelative(gridTemplate[2], parentValue));
             }
         }
         else {
             for (let i = 0; i < gridTemplate.length; i++) {
-                list.push(CSSLayout_1.formatRelative(gridTemplate[i], parentValue));
+                list.push(Utils_1.formatRelative(gridTemplate[i], parentValue));
             }
         }
     }
@@ -6532,6 +7955,9 @@ function getColumnRowValue(gridTemplate, parentValue) {
  */
 function updateGridLayout(target) {
     if (target.parent == undefined) {
+        return;
+    }
+    if (target.style == undefined) {
         return;
     }
     const style = target.style;
@@ -6584,78 +8010,13 @@ exports.updateGridLayout = updateGridLayout;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
-const UI_1 = __webpack_require__(/*! ../UI */ "./src/UI.ts");
-const CSSBlockLayout_1 = __webpack_require__(/*! ./CSSBlockLayout */ "./src/layout/CSSBlockLayout.ts");
 const CSSGridLayout_1 = __webpack_require__(/*! ./CSSGridLayout */ "./src/layout/CSSGridLayout.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-exports.$Rectangle = new PIXI.Rectangle();
-/**
- * 布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸
- */
-function formatRelative(value, total) {
-    if (value == undefined) {
-        return NaN;
-    }
-    if (typeof value === "number") {
-        return value;
-    }
-    const str = value;
-    const index = str.indexOf("%");
-    if (index == -1) {
-        return +str;
-    }
-    const percent = +str.substring(0, index);
-    return percent * 0.01 * total;
-}
-exports.formatRelative = formatRelative;
-/**
- * @private
- * 设置组件的布局宽高
- */
-function getLayoutBoundsSize(target, layoutWidth, layoutHeight) {
-    let parentHeight = 0;
-    let parentWidth = 0;
-    if (target.parent instanceof UIBase_1.UIBase) {
-        parentWidth = target.parent.width;
-        parentHeight = target.parent.height;
-    }
-    else if (target.parent instanceof UI_1.Stage) {
-        parentWidth = target.parent.width;
-        parentHeight = target.parent.height;
-    }
-    const x = 0;
-    const y = 0;
-    const maxWidth = formatRelative(target.style.maxWidth, parentWidth);
-    const maxHeight = formatRelative(target.style.maxHeight, parentHeight);
-    const minWidth = formatRelative(target.style.minWidth, parentWidth);
-    const minHeight = formatRelative(target.style.minHeight, parentHeight);
-    let width = layoutWidth;
-    let height = layoutHeight;
-    //min/max sizes
-    if (!isNaN(maxWidth) && width > maxWidth) {
-        width = maxWidth;
-    }
-    if (!isNaN(minWidth) && width < minWidth) {
-        width = minWidth;
-    }
-    if (!isNaN(maxHeight) && height > maxHeight) {
-        height = maxHeight;
-    }
-    if (!isNaN(minHeight) && height < minHeight) {
-        height = minHeight;
-    }
-    if (isNaN(width)) {
-        width = 0;
-    }
-    if (isNaN(height)) {
-        height = 0;
-    }
-    return { width, height, x, y };
-}
-exports.getLayoutBoundsSize = getLayoutBoundsSize;
+const CSSBasicLayout_1 = __webpack_require__(/*! ./CSSBasicLayout */ "./src/layout/CSSBasicLayout.ts");
 function updateDisplayAlign(target, targetWidth, targetHeight, marginTop = 0, marginLeft = 0) {
     if (target.parent == undefined) {
+        return;
+    }
+    if (target.style == undefined) {
         return;
     }
     let startX = 0;
@@ -6688,37 +8049,22 @@ function updateDisplayAlign(target, targetWidth, targetHeight, marginTop = 0, ma
         target.y = startY;
 }
 exports.updateDisplayAlign = updateDisplayAlign;
-function onGridChildChange(gridContainer) {
-    if (gridContainer.isDrawLayout) {
-        return;
-    }
-    gridContainer.isDrawLayout = true;
-    //^ ^!请原谅我，后期有时间改
-    setTimeout(() => {
-        updateDisplayLayout(gridContainer);
-        gridContainer.isDrawLayout = false;
-    }, 5);
-}
-exports.onGridChildChange = onGridChildChange;
 /**
  * 调整目标的元素的大小并定位这些元素。
  */
-function updateDisplayLayout(target) {
+function updateDisplayLayout(target, unscaledWidth, unscaledHeight) {
+    if (target.style == undefined) {
+        return;
+    }
     if (target.style.display === "block") {
-        CSSBlockLayout_1.updateBlockLayout(target);
+        const pos = CSSBasicLayout_1.updateBasicDisplayList(target, unscaledWidth, unscaledHeight);
+        //console.log(pos);
     }
     else if (target.style.display === "grid") {
-        CSSBlockLayout_1.updateBlockLayout(target);
         CSSGridLayout_1.updateGridLayout(target);
-        if (target.listeners(Index_1.ComponentEvent.CHILD_CHANGE).indexOf(onGridChildChange) == -1) {
-            target.on(Index_1.ComponentEvent.CHILD_CHANGE, onGridChildChange);
-        }
     }
-    //^ ^!请原谅我，后期有时间改
-    setTimeout(() => {
-        const bounds = target.container.getLocalBounds();
-        updateDisplayAlign(target, bounds.width, bounds.height, target.style.gridColumnGap, target.style.gridRowGap);
-    }, 10);
+    const bounds = target.container.getLocalBounds();
+    updateDisplayAlign(target, bounds.width, bounds.height, target.style.gridColumnGap, target.style.gridRowGap);
 }
 exports.updateDisplayLayout = updateDisplayLayout;
 
@@ -6735,77 +8081,27 @@ exports.updateDisplayLayout = updateDisplayLayout;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const UI_1 = __webpack_require__(/*! ../UI */ "./src/UI.ts");
 const Utils_1 = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
-const CSSLayout_1 = __webpack_require__(/*! ./CSSLayout */ "./src/layout/CSSLayout.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-exports.updateDisplayKey = "updateDisplayList";
-exports.CSSFunction = {};
-function addDrawList(key, target, fun) {
-    target.container.isEmitRender = true;
-    if (fun) {
-        target.delayDrawList.set(key, fun);
-        return;
-    }
-    const efunction = exports.CSSFunction[key];
-    if (efunction) {
-        if (typeof efunction === "string") {
-            target.delayDrawList.set(efunction, exports.CSSFunction[efunction]);
-        }
-        else {
-            target.delayDrawList.set(key, exports.CSSFunction[key]);
-        }
-    }
-}
-exports.addDrawList = addDrawList;
-function updateDrawList(target) {
-    if (target.parent == undefined) {
-        return;
-    }
-    if (target.delayDrawList.size == 0) {
-        target.container.isEmitRender = false;
-        return;
-    }
-    let isDraw = false;
-    const updateDisplayList = target.delayDrawList.get(exports.updateDisplayKey);
-    if (updateDisplayList) {
-        CSSLayout_1.updateDisplayLayout(target);
-        target.delayDrawList.delete(exports.updateDisplayKey);
-        isDraw = true;
-    }
-    target.delayDrawList.forEach((value, key, map) => {
-        value.call(target, target, key);
-        target.delayDrawList.delete(key);
-        isDraw = true;
-    });
-    target.container.isEmitRender = false;
-    if (isDraw && target.listenerCount(Index_1.ComponentEvent.RENDERER_COMPLETE)) {
-        target.emit(Index_1.ComponentEvent.RENDERER_COMPLETE, target);
-    }
-}
-exports.updateDrawList = updateDrawList;
-exports.updateStyleProxyHandler = {
-    get(target, key, receiver) {
-        return target[key];
-    },
-    set(target, key, value, receiver) {
-        if (target[key] === value) {
-            return true;
-        }
-        //const oldValue = (target as TAny)[key];
-        target[key] = value;
-        //target.eventEmitter.emit("ValueChangeEvent", key, value, oldValue);
-        if (target.parent)
-            addDrawList(key, target.parent);
-        return true;
-    }
-};
-/** ===================== 更新布局  ===================== */
-exports.CSSFunction.updateDisplayList = (uibase) => {
-    CSSLayout_1.updateDisplayLayout(uibase);
-};
+const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
 /** ===================== background  ===================== */
-exports.CSSFunction.backgroundPositionSize = (uibase) => {
+function backgroundColor(uibase) {
+    if (uibase.style == undefined) {
+        return;
+    }
+    if (uibase.style.backgroundColor == undefined && uibase.background == undefined) {
+        return;
+    }
+    if (uibase.background === undefined) {
+        uibase.background = new PIXI.Graphics();
+        uibase.background.name = "background";
+        uibase.container.addChildAt(uibase.background, 0);
+    }
+}
+exports.backgroundColor = backgroundColor;
+function backgroundPositionSize(uibase) {
+    if (uibase.style == undefined) {
+        return;
+    }
     if (uibase.background && uibase.background.children.length > 0) {
         const sprite = uibase.background.getChildAt(0);
         const style = uibase.style;
@@ -6820,17 +8116,12 @@ exports.CSSFunction.backgroundPositionSize = (uibase) => {
             sprite.position.set(style.backgroundPositionX || 0, style.backgroundPositionY || 0);
         }
     }
-};
-exports.CSSFunction.backgroundPositionX = (uibase) => {
-    exports.CSSFunction.backgroundPositionSize(uibase);
-};
-exports.CSSFunction.backgroundPositionY = (uibase) => {
-    exports.CSSFunction.backgroundPositionSize(uibase);
-};
-exports.CSSFunction.backgroundSize = (uibase) => {
-    exports.CSSFunction.backgroundPositionSize(uibase);
-};
-exports.CSSFunction.backgroundRepeat = (uibase) => {
+}
+exports.backgroundPositionSize = backgroundPositionSize;
+function backgroundRepeat(uibase) {
+    if (uibase.style == undefined) {
+        return;
+    }
     const style = uibase.style;
     if (style.backgroundImage && uibase.background) {
         uibase.background.removeChildren();
@@ -6854,46 +8145,33 @@ exports.CSSFunction.backgroundRepeat = (uibase) => {
             }
             uibase.background.addChild(sprite);
             const maskGraphics = new PIXI.Graphics();
-            maskGraphics.beginFill(0xFF3300);
-            maskGraphics.drawRect(0, 0, uibase.width, uibase.height);
-            maskGraphics.endFill();
             uibase.background.addChild(maskGraphics);
             uibase.background.mask = maskGraphics;
         }
     }
-};
-exports.CSSFunction.backgroundColor = (uibase) => {
+}
+exports.backgroundRepeat = backgroundRepeat;
+function backgroundImage(uibase) {
     if (uibase.background === undefined) {
         uibase.background = new PIXI.Graphics();
         uibase.background.name = "background";
         uibase.container.addChildAt(uibase.background, 0);
     }
-    const style = uibase.style;
-    const background = uibase.background;
-    if (style.backgroundColor) {
-        background.clear();
-        background.beginFill(style.backgroundColor);
-        background.drawRoundedRect(0, 0, uibase.width, uibase.height, 0);
-        background.endFill();
-    }
-};
-exports.CSSFunction.backgroundImage = (uibase) => {
-    if (uibase.background === undefined) {
-        uibase.background = new PIXI.Graphics();
-        uibase.background.name = "background";
-        uibase.container.addChildAt(uibase.background, 0);
-    }
-    exports.CSSFunction.backgroundRepeat(uibase);
-    exports.CSSFunction.backgroundPositionSize(uibase);
-};
+    backgroundRepeat(uibase);
+    backgroundPositionSize(uibase);
+}
+exports.backgroundImage = backgroundImage;
 /** ===================== mask  ===================== */
-exports.CSSFunction.maskPosition = (uibase) => {
+function maskPosition(uibase) {
+    if (uibase.style == undefined) {
+        return;
+    }
     if (uibase.mask) {
         const style = uibase.style;
         if (style.maskPosition === undefined) {
             return;
         }
-        if (uibase.mask instanceof UI_1.UIBase) {
+        if (uibase.mask instanceof UIBase_1.UIBase) {
             uibase.mask.x = style.maskPosition[0];
             uibase.mask.y = style.maskPosition[1];
         }
@@ -6901,8 +8179,12 @@ exports.CSSFunction.maskPosition = (uibase) => {
             uibase.mask.position.set(style.maskPosition[0], style.maskPosition[1]);
         }
     }
-};
-exports.CSSFunction.maskSize = (uibase) => {
+}
+exports.maskPosition = maskPosition;
+function maskSize(uibase) {
+    if (uibase.style == undefined) {
+        return;
+    }
     if (uibase.mask) {
         const style = uibase.style;
         if (style.maskSize === undefined) {
@@ -6910,14 +8192,18 @@ exports.CSSFunction.maskSize = (uibase) => {
         }
         uibase.mask.width = style.maskSize[0];
         uibase.mask.height = style.maskSize[1];
-        if (!(uibase.mask instanceof UI_1.UIBase))
+        if (!(uibase.mask instanceof UIBase_1.UIBase))
             uibase.mask.updateTransform();
     }
-};
-exports.CSSFunction.maskImage = (uibase) => {
+}
+exports.maskSize = maskSize;
+function maskImage(uibase) {
+    if (uibase.style == undefined) {
+        return;
+    }
     uibase.container.mask = null;
     if (uibase.mask && uibase.mask.parent) {
-        if (uibase.mask instanceof UI_1.UIBase) {
+        if (uibase.mask instanceof UIBase_1.UIBase) {
             uibase.removeChild(uibase.mask);
         }
         else {
@@ -6938,7 +8224,7 @@ exports.CSSFunction.maskImage = (uibase) => {
         container.mask = uibase.mask;
         container.addChild(uibase.mask);
     }
-    else if (style.maskImage instanceof UI_1.UIBase) {
+    else if (style.maskImage instanceof UIBase_1.UIBase) {
         //后期组件完成后补充，矢量与位图组件
         uibase.mask = style.maskImage;
         uibase.mask.name = "maskImage";
@@ -6951,114 +8237,29 @@ exports.CSSFunction.maskImage = (uibase) => {
         container.mask = uibase.mask;
         container.addChild(uibase.mask);
     }
-    exports.CSSFunction.maskSize(uibase);
-    exports.CSSFunction.maskPosition(uibase);
-};
-/** ===================== alpha  ===================== */
-exports.CSSFunction.alpha = (uibase) => {
-    const style = uibase.style;
-    uibase.container.alpha = style.alpha;
-};
-/** ===================== visible  ===================== */
-exports.CSSFunction.visible = (uibase) => {
-    const style = uibase.style;
-    uibase.container.visible = style.visible;
-};
-/** ===================== tint  ===================== */
-exports.CSSFunction.tint = (uibase) => {
-    uibase.container.children.forEach(value => {
-        if (value["tint"]) {
-            value["tint"] = uibase.tint;
-        }
-    });
-};
-/** ===================== transform  ===================== */
-exports.CSSFunction.transform = (uibase) => {
-    uibase.container.setTransform(uibase.x + uibase.pivotX, uibase.y + uibase.pivotY, uibase.scaleX, uibase.scaleY, uibase.rotation * (Math.PI / 180), uibase.skewX, uibase.skewY, uibase.pivotX, uibase.pivotY);
-    exports.CSSFunction.backgroundColor(uibase);
-};
-/** ===================== blendMode  ===================== */
-exports.CSSFunction.blendMode = (uibase) => {
-    uibase.container.children.forEach(value => {
-        if (value instanceof PIXI.Sprite) {
-            value.blendMode = uibase.blendMode || PIXI.BLEND_MODES.NORMAL;
-        }
-    });
-};
-/** ===================== loayout  ===================== */
-exports.CSSFunction.display = exports.updateDisplayKey;
-exports.CSSFunction.justifyContent = exports.updateDisplayKey;
-exports.CSSFunction.alignContent = exports.updateDisplayKey;
-exports.CSSFunction.width = exports.updateDisplayKey;
-exports.CSSFunction.minWidth = exports.updateDisplayKey;
-exports.CSSFunction.maxWidth = exports.updateDisplayKey;
-exports.CSSFunction.height = exports.updateDisplayKey;
-exports.CSSFunction.minHeight = exports.updateDisplayKey;
-exports.CSSFunction.maxHeight = exports.updateDisplayKey;
-exports.CSSFunction.left = exports.updateDisplayKey;
-exports.CSSFunction.top = exports.updateDisplayKey;
-exports.CSSFunction.right = exports.updateDisplayKey;
-exports.CSSFunction.bottom = exports.updateDisplayKey;
-exports.CSSFunction.pivotX = (target) => {
-    target.pivotX = target.style.pivotX;
-};
-exports.CSSFunction.pivotY = (target) => {
-    target.pivotY = target.style.pivotY;
-};
-exports.CSSFunction.scaleX = (target) => {
-    target.scaleX = target.style.scaleX;
-};
-exports.CSSFunction.scaleY = (target) => {
-    target.scaleY = target.style.scaleY;
-};
-exports.CSSFunction.rotation = (target) => {
-    target.rotation = target.style.rotation;
-};
-exports.CSSFunction.skewX = (target) => {
-    target.skewX = target.style.skewX;
-};
-exports.CSSFunction.skewY = (target) => {
-    target.skewY = target.style.skewY;
-};
-exports.CSSFunction.skewY = (target) => {
-    target.skewY = target.style.skewY;
-};
+    maskSize(uibase);
+    maskPosition(uibase);
+}
+exports.maskImage = maskImage;
 /** ===================== font  ===================== */
-function updateFontStyle(target, key) {
-    if (target instanceof UI_1.Label) {
-        target.sprite.style[key] = target.style[key];
+function updateFontStyle(target, key, value) {
+    if (target.setInputStyle) {
+        target.setInputStyle(key, value);
     }
     else {
-        target.setInputStyle(key, target.style[key]);
+        target.sprite.style[key] = value;
     }
 }
-exports.CSSFunction.color = (target, key) => {
-    if (target instanceof UI_1.Label) {
-        target.sprite.style.fill = target.style[key];
+exports.updateFontStyle = updateFontStyle;
+function color(target, key, value) {
+    if (target.setInputStyle) {
+        target.setInputStyle(key, value);
     }
     else {
-        target.setInputStyle(key, target.style[key]);
+        target.sprite.style.fill = value;
     }
-};
-exports.CSSFunction.letterSpacing = updateFontStyle;
-exports.CSSFunction.wordWrap = updateFontStyle;
-exports.CSSFunction.wordWrapWidth = updateFontStyle;
-exports.CSSFunction.textAlign = updateFontStyle;
-exports.CSSFunction.lineHeight = updateFontStyle;
-exports.CSSFunction.fontFamily = updateFontStyle;
-exports.CSSFunction.fontStyle = updateFontStyle;
-exports.CSSFunction.fontVariant = updateFontStyle;
-exports.CSSFunction.fontWeight = updateFontStyle;
-exports.CSSFunction.padding = updateFontStyle;
-exports.CSSFunction.stroke = updateFontStyle;
-exports.CSSFunction.strokeThickness = updateFontStyle;
-exports.CSSFunction.dropShadow = updateFontStyle;
-exports.CSSFunction.dropShadowAlpha = updateFontStyle;
-exports.CSSFunction.dropShadowAngle = updateFontStyle;
-exports.CSSFunction.dropShadowBlur = updateFontStyle;
-exports.CSSFunction.dropShadowColor = updateFontStyle;
-exports.CSSFunction.dropShadowDistance = updateFontStyle;
-exports.CSSFunction.breakWords = updateFontStyle;
+}
+exports.color = color;
 
 
 /***/ }),
@@ -7073,55 +8274,28 @@ exports.CSSFunction.breakWords = updateFontStyle;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+const CSSFunction = __webpack_require__(/*! ./CSSSSystem */ "./src/layout/CSSSSystem.ts");
+const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+function formatRelative(value) {
+    if (value == undefined) {
+        return { percent: NaN, value: NaN };
+    }
+    if (typeof value === "number") {
+        return { percent: NaN, value: value };
+    }
+    const str = value;
+    const index = str.indexOf("%");
+    if (index == -1) {
+        return { percent: NaN, value: +str };
+    }
+    const percent = +str.substring(0, index);
+    return { percent: Math.min(percent * 0.01, 1), value: NaN };
+}
 /**
  * 组件样式表
  */
 class CSSStyle {
-    constructor() {
-        /**
-         * 事件发送
-         * */
-        this.eventEmitter = new PIXI.utils.EventEmitter();
-        /**
-         * 表示显示对象的宽度，以像素为单位。
-         * */
-        this.width = 0;
-        /**
-         * 表示显示对象的高度，以像素为单位。
-         * */
-        this.height = 0;
-        /**
-         * 缩放
-         * */
-        this.scaleX = 1;
-        /**
-         * 缩放
-         * */
-        this.scaleY = 1;
-        /**
-         * 设置元素水平拉伸扭曲（角度）。
-         * */
-        this.skewX = 0;
-        /**
-         * 设置元素垂直拉伸扭曲（角度）。
-         * */
-        this.skewY = 0;
-        /**
-         * 设置元素旋转 （角度）
-          */
-        this.rotate = 0;
-        /**
-         * 轴点 像素值
-         */
-        this.pivotX = 0;
-        /**
-         * 轴点 像素值
-         */
-        this.pivotY = 0;
-        /**
-         * 规定元素的定位类型。
-         * */
-        this.position = "absolute";
+    constructor(target) {
         /**
          * 规定元素的显示类型。布局模式
          *
@@ -7129,77 +8303,532 @@ class CSSStyle {
          *
          * none 模式下，忽略style
          * */
-        this.display = "block";
+        this._display = "block";
         /**
-         * 索引位
+         * 规定元素的定位类型。
          * */
-        this.zIndex = -1;
-        /**
-         * 表示指定对象的 Alpha 透明度值。有效值为0（完全透明）～ 1（完全不透明）。
-         * */
-        this.alpha = 1;
-        /**
-         * 显示对象是否可见
-         * */
-        this.visible = true;
+        this._position = "absolute";
         /**
          * 设置 backgroundImage 后，设置是否及如何重复背景图像。
          * repeat重复
          * no-repeat不重复，
          */
-        this.backgroundRepeat = "no-repeat";
+        this._backgroundRepeat = "no-repeat";
         /**
          * 文本颜色，16进制
          * */
-        this.color = 0xfffff0;
+        this._color = 0xfffff0;
         /**
          * 是否自动换行
          * */
-        this.wordWrap = false;
+        this._wordWrap = false;
         /**
          * 多行文本(wordWrap = true) - 对齐方式
          * */
-        this.textAlign = "left";
+        this._textAlign = "left";
         /** 字体大小 */
-        this.fontSize = 22;
+        this._fontSize = 22;
         /** 字体样式 */
-        this.fontStyle = "normal";
+        this._fontStyle = "normal";
         /**  字体变形，普通或小写  */
-        this.fontVariant = "normal";
+        this._fontVariant = "normal";
         /** 字体粗细 */
-        this.fontWeight = "normal";
+        this._fontWeight = "normal";
         /** 描边的笔触粗细值 */
-        this.strokeThickness = 0;
+        this._strokeThickness = 0;
         /** 是否设置投影 */
-        this.dropShadow = false;
+        this._dropShadow = false;
         /** 投影的alpha值 */
-        this.dropShadowAlpha = false;
+        this._dropShadowAlpha = false;
         /** 是否设置投影 */
-        this.dropShadowAngle = 0; //Math.PI / 6;
+        this._dropShadowAngle = 0; //Math.PI / 6;
         /** 投影的模糊半径 */
-        this.dropShadowBlur = 0;
+        this._dropShadowBlur = 0;
         /** 投影填充颜色值 */
-        this.dropShadowColor = 0x000000;
+        this._dropShadowColor = 0x000000;
         /** 投影深度 */
-        this.dropShadowDistance = 5;
+        this._dropShadowDistance = 5;
         /** 中文换行 */
-        this.breakWords = true;
+        this._breakWords = true;
+        this.parent = target;
+        target.on(Index_1.ComponentEvent.RESIZE, this.onResize, this);
+    }
+    release() {
+        this.parent.off(Index_1.ComponentEvent.RESIZE, this.onResize, this);
+    }
+    get display() {
+        return this._display;
+    }
+    set display(value) {
+        this._display = value;
+    }
+    get position() {
+        return this._position;
+    }
+    set position(value) {
+        this._position = value;
+    }
+    get justifyContent() {
+        return this._justifyContent;
+    }
+    set justifyContent(value) {
+        this._justifyContent = value;
+    }
+    get alignContent() {
+        return this._alignContent;
+    }
+    set alignContent(value) {
+        this._alignContent = value;
+    }
+    get gridTemplateColumns() {
+        return this._gridTemplateColumns;
+    }
+    set gridTemplateColumns(value) {
+        this._gridTemplateColumns = value;
+    }
+    get gridColumnGap() {
+        return this._gridColumnGap;
+    }
+    set gridColumnGap(value) {
+        this._gridColumnGap = value;
+    }
+    get gridTemplateRows() {
+        return this._gridTemplateRows;
+    }
+    set gridTemplateRows(value) {
+        this._gridTemplateRows = value;
+    }
+    get gridRowGap() {
+        return this._gridRowGap;
+    }
+    set gridRowGap(value) {
+        this._gridRowGap = value;
+    }
+    /**
+     * 表示显示对象的宽度，以像素为单位。
+     * */
+    get width() {
+        return this.parent.width;
+    }
+    set width(value) {
+        const relative = formatRelative(value);
+        this.parent.width = relative.value;
+        this.parent.percentWidth = relative.percent;
+    }
+    /**
+     * 表示显示对象的高度，以像素为单位。
+     * */
+    get height() {
+        return this.parent.height;
+    }
+    set height(value) {
+        const relative = formatRelative(value);
+        this.parent.height = relative.value;
+        this.parent.percentHeight = relative.percent;
+    }
+    /**
+     * 设置元素的最小宽度。
+     */
+    get minWidth() {
+        return this.parent.minWidth;
+    }
+    set minWidth(value) {
+        this.parent.minWidth = value;
+    }
+    /**
+     * 设置元素的最大宽度。
+     */
+    get maxWidth() {
+        return this.parent.maxWidth;
+    }
+    set maxWidth(value) {
+        this.parent.maxWidth = value;
+    }
+    /**
+     * 设置元素的最小高度。
+     */
+    get maxHeight() {
+        return this.parent.maxHeight;
+    }
+    set maxHeight(value) {
+        this.parent.maxHeight = value;
+    }
+    /**
+     * 设置元素的最大高度。
+     * */
+    get minHeight() {
+        return this.parent.minHeight;
+    }
+    set minHeight(value) {
+        this.parent.minHeight = value;
+    }
+    /**
+     * 设置定位元素左外边距边界与其容器左边界之间的偏移。
+     * */
+    get left() {
+        return this.parent.left;
+    }
+    set left(value) {
+        this.parent.left = value;
+    }
+    /**
+     * 设置定位元素的上外边距边界与其容器上边界之间的偏移。
+     * */
+    get top() {
+        return this.parent.top;
+    }
+    set top(value) {
+        this.parent.top = value;
+    }
+    /**
+     * 设置定位元素右外边距边界与其容器右边界之间的偏移。
+     * */
+    get right() {
+        return this.parent.right;
+    }
+    set right(value) {
+        this.parent.right = value;
+    }
+    /**
+     * 设置定位元素下外边距边界与其容器下边界之间的偏移。
+     * */
+    get bottom() {
+        return this.parent.bottom;
+    }
+    set bottom(value) {
+        this.parent.bottom = value;
+    }
+    /**
+     * 缩放
+     * */
+    get scaleX() {
+        return this.parent.scaleX;
+    }
+    set scaleX(value) {
+        this.parent.scaleX = value;
+    }
+    /**
+     * 缩放
+     * */
+    get scaleY() {
+        return this.parent.scaleY;
+    }
+    set scaleY(value) {
+        this.parent.scaleY = value;
+    }
+    /**
+     * 设置元素水平拉伸扭曲（角度）。
+     * */
+    get skewX() {
+        return this.parent.skewX;
+    }
+    set skewX(value) {
+        this.parent.skewX = value;
+    }
+    /**
+     * 设置元素垂直拉伸扭曲（角度）。
+     * */
+    get skewY() {
+        return this.parent.skewY;
+    }
+    set skewY(value) {
+        this.parent.skewY = value;
     }
     /**
      * 设置元素旋转 （角度）
-      */
+    */
+    get rotate() {
+        return this.parent.rotation;
+    }
+    set rotate(value) {
+        this.parent.rotation = value;
+    }
+    /**
+     * 设置元素旋转 （角度）
+    */
     get rotation() {
-        return this.rotate;
+        return this.parent.rotation;
     }
     set rotation(value) {
-        this.rotate = value;
+        this.parent.rotation = value;
     }
-    ;
+    /**
+     * 轴点 像素值
+     */
+    get pivotX() {
+        return this.parent.pivotX;
+    }
+    set pivotX(value) {
+        this.parent.pivotX = value;
+    }
+    /**
+     * 轴点 像素值
+     */
+    get pivotY() {
+        return this.parent.pivotY;
+    }
+    set pivotY(value) {
+        this.parent.pivotY = value;
+    }
+    /**
+      * 调整元素的色调，取消设置0xFFFFFF
+      */
+    get tint() {
+        return this.parent.tint;
+    }
+    set tint(value) {
+        this.parent.tint = value;
+    }
+    /**
+     * 表示指定对象的 Alpha 透明度值。有效值为0（完全透明）～ 1（完全不透明）。
+     * */
+    get alpha() {
+        return this.parent.alpha;
+    }
+    set alpha(value) {
+        this.parent.alpha = value;
+    }
+    /**
+     * 显示对象是否可见
+     * */
+    get visible() {
+        return this.parent.visible;
+    }
+    set visible(value) {
+        this.parent.visible = value;
+    }
     get visibility() {
-        return this.visible ? "visible" : "hidden";
+        return this.parent.visible ? "visible" : "hidden";
     }
     set visibility(value) {
         this.visible = value === "hidden" ? false : true;
+    }
+    get backgroundColor() {
+        return this._backgroundColor;
+    }
+    set backgroundColor(value) {
+        this._backgroundColor = value;
+        CSSFunction.backgroundColor(this.parent);
+    }
+    get backgroundImage() {
+        return this._backgroundImage;
+    }
+    set backgroundImage(value) {
+        this._backgroundImage = value;
+        CSSFunction.backgroundImage(this.parent);
+    }
+    get backgroundPositionX() {
+        return this._backgroundPositionX;
+    }
+    set backgroundPositionX(value) {
+        this._backgroundPositionX = value;
+        CSSFunction.backgroundPositionSize(this.parent);
+    }
+    get backgroundPositionY() {
+        return this._backgroundPositionY;
+    }
+    set backgroundPositionY(value) {
+        this._backgroundPositionY = value;
+        CSSFunction.backgroundPositionSize(this.parent);
+    }
+    get backgroundSize() {
+        return this._backgroundSize;
+    }
+    set backgroundSize(value) {
+        this._backgroundSize = value;
+        CSSFunction.backgroundPositionSize(this.parent);
+    }
+    get backgroundRepeat() {
+        return this._backgroundRepeat;
+    }
+    set backgroundRepeat(value) {
+        this._backgroundRepeat = value;
+        CSSFunction.backgroundRepeat(this.parent);
+    }
+    get maskImage() {
+        return this._maskImage;
+    }
+    set maskImage(value) {
+        this._maskImage = value;
+        CSSFunction.maskImage(this.parent);
+    }
+    get maskPosition() {
+        return this._maskPosition;
+    }
+    set maskPosition(value) {
+        this._maskPosition = value;
+        CSSFunction.maskPosition(this.parent);
+    }
+    get maskSize() {
+        return this._maskSize;
+    }
+    set maskSize(value) {
+        this._maskSize = value;
+        CSSFunction.maskSize(this.parent);
+    }
+    get color() {
+        return this._color;
+    }
+    set color(value) {
+        this._color = value;
+        CSSFunction.color(this.parent, "color", value);
+    }
+    get letterSpacing() {
+        return this._letterSpacing;
+    }
+    set letterSpacing(value) {
+        this._letterSpacing = value;
+        CSSFunction.updateFontStyle(this.parent, "letterSpacing", value);
+    }
+    get wordWrap() {
+        return this._wordWrap;
+    }
+    set wordWrap(value) {
+        this._wordWrap = value;
+        CSSFunction.updateFontStyle(this.parent, "wordWrap", value);
+    }
+    get wordWrapWidth() {
+        return this._wordWrapWidth;
+    }
+    set wordWrapWidth(value) {
+        this._wordWrapWidth = value;
+        CSSFunction.updateFontStyle(this.parent, "wordWrapWidth", value);
+    }
+    get textAlign() {
+        return this._textAlign;
+    }
+    set textAlign(value) {
+        this._textAlign = value;
+        CSSFunction.updateFontStyle(this.parent, "textAlign", value);
+    }
+    get lineHeight() {
+        return this._lineHeight;
+    }
+    set lineHeight(value) {
+        this._lineHeight = value;
+        CSSFunction.updateFontStyle(this.parent, "lineHeight", value);
+    }
+    get fontFamily() {
+        return this._fontFamily;
+    }
+    set fontFamily(value) {
+        this._fontFamily = value;
+        CSSFunction.updateFontStyle(this.parent, "fontFamily", value);
+    }
+    get fontSize() {
+        return this._fontSize;
+    }
+    set fontSize(value) {
+        this._fontSize = value;
+        CSSFunction.updateFontStyle(this.parent, "fontSize", value);
+    }
+    get fontStyle() {
+        return this._fontStyle;
+    }
+    set fontStyle(value) {
+        this._fontStyle = value;
+        CSSFunction.updateFontStyle(this.parent, "fontStyle", value);
+    }
+    get fontVariant() {
+        return this._fontVariant;
+    }
+    set fontVariant(value) {
+        this._fontVariant = value;
+        CSSFunction.updateFontStyle(this.parent, "fontVariant", value);
+    }
+    get fontWeight() {
+        return this._fontWeight;
+    }
+    set fontWeight(value) {
+        this._fontWeight = value;
+        CSSFunction.updateFontStyle(this.parent, "fontWeight", value);
+    }
+    get padding() {
+        return this._padding;
+    }
+    set padding(value) {
+        this._padding = value;
+        CSSFunction.updateFontStyle(this.parent, "padding", value);
+    }
+    get stroke() {
+        return this._stroke;
+    }
+    set stroke(value) {
+        this._stroke = value;
+        CSSFunction.updateFontStyle(this.parent, "stroke", value);
+    }
+    get strokeThickness() {
+        return this._strokeThickness;
+    }
+    set strokeThickness(value) {
+        this._strokeThickness = value;
+        CSSFunction.updateFontStyle(this.parent, "strokeThickness", value);
+    }
+    get dropShadow() {
+        return this._dropShadow;
+    }
+    set dropShadow(value) {
+        this._dropShadow = value;
+        CSSFunction.updateFontStyle(this.parent, "dropShadow", value);
+    }
+    get dropShadowAlpha() {
+        return this._dropShadowAlpha;
+    }
+    set dropShadowAlpha(value) {
+        this._dropShadowAlpha = value;
+        CSSFunction.updateFontStyle(this.parent, "dropShadowAlpha", value);
+    }
+    get dropShadowAngle() {
+        return this._dropShadowAngle;
+    }
+    set dropShadowAngle(value) {
+        this._dropShadowAngle = value;
+        CSSFunction.updateFontStyle(this.parent, "dropShadowAngle", value);
+    }
+    get dropShadowBlur() {
+        return this._dropShadowBlur;
+    }
+    set dropShadowBlur(value) {
+        this._dropShadowBlur = value;
+        CSSFunction.updateFontStyle(this.parent, "dropShadowBlur", value);
+    }
+    get dropShadowColor() {
+        return this._dropShadowColor;
+    }
+    set dropShadowColor(value) {
+        this._dropShadowColor = value;
+        CSSFunction.updateFontStyle(this.parent, "dropShadowColor", value);
+    }
+    get dropShadowDistance() {
+        return this._dropShadowDistance;
+    }
+    set dropShadowDistance(value) {
+        this._dropShadowDistance = value;
+        CSSFunction.updateFontStyle(this.parent, "dropShadowDistance", value);
+    }
+    get breakWords() {
+        return this._breakWords;
+    }
+    set breakWords(value) {
+        this._breakWords = value;
+        CSSFunction.updateFontStyle(this.parent, "breakWords", value);
+    }
+    onResize() {
+        const target = this.parent;
+        if (this.backgroundColor && target.background) {
+            const background = target.background;
+            background.clear();
+            background.beginFill(this.backgroundColor);
+            background.drawRoundedRect(0, 0, target.width, target.height, 0);
+            background.endFill();
+        }
+        if (target.background && target.background.mask) {
+            const mask = target.background.mask;
+            mask.clear();
+            mask.beginFill(this.backgroundColor);
+            mask.drawRoundedRect(0, 0, target.width, target.height, 0);
+            mask.endFill();
+        }
     }
 }
 exports.CSSStyle = CSSStyle;
