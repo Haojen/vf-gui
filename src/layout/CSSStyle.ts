@@ -1,275 +1,7 @@
-import { UIBase } from "../UI";
+import { UIBase } from "../core/UIBase";
+import * as CSSFunction from "./CSSSSystem";
+import { ComponentEvent } from "../interaction/Index";
 
-/**
- * 组件样式表
- */
-export class CSSStyle {
-
-    public parent: TAny;
-    /** 
-     * 事件发送
-     * */
-    public eventEmitter = new PIXI.utils.EventEmitter();
-
-    public hCenter?: number;
-    public vCenter?: number;
-
-    /** 
-     * 表示显示对象的宽度，以像素为单位。
-     * */
-    public width: string | number = 0;
-    /** 
-     * 设置元素的最小宽度。
-     * */
-    public minWidth?: number;
-    /** 
-     * 设置元素的最大宽度。
-     * */
-    public maxWidth?: number;
-    /** 
-     * 表示显示对象的高度，以像素为单位。
-     * */
-    public height: string | number = 0;
-    /** 
-     * 设置元素的最小高度。
-     * */
-    public maxHeight?: number;
-    /** 
-     * 设置元素的最大高度。
-     * */
-    public minHeight?: number;
-
-    /** 
-     * 设置定位元素左外边距边界与其容器左边界之间的偏移。 
-     * */
-    public left: number | string | undefined;
-    /** 
-     * 设置定位元素的上外边距边界与其容器上边界之间的偏移。
-     * */
-    public top: number | string | undefined;
-    /** 
-     * 设置定位元素右外边距边界与其容器右边界之间的偏移。
-     * */
-    public right: number | string | undefined;
-    /** 
-     * 设置定位元素下外边距边界与其容器下边界之间的偏移。
-     * */
-    public bottom: number | string | undefined;
-
-    /** 
-     * 缩放
-     * */
-    public scaleX = 1
-    /** 
-     * 缩放
-     * */
-    public scaleY = 1
-    /** 
-     * 设置元素水平拉伸扭曲（角度）。
-     * */
-    public skewX = 0;
-    /** 
-     * 设置元素垂直拉伸扭曲（角度）。
-     * */
-    public skewY = 0;
-
-    /** 
-     * 设置元素旋转 （角度）
-      */
-    public rotate = 0;
-    /** 
-     * 设置元素旋转 （角度）
-      */
-    public get rotation() {
-        return this.rotate;
-    }
-    public set rotation(value: number) {
-        this.rotate = value;
-    }
-
-    /** 
-     * 轴点 像素值
-     */
-    public pivotX = 0;
-    /** 
-     * 轴点 像素值
-     */
-    public pivotY = 0;
-
-
-    
-
-    /** 
-     * 规定元素的定位类型。
-     * */
-    public position: Position = "absolute";
-    /** 
-     * 规定元素的显示类型。布局模式 
-     * 
-     * grid 模式下，子节点会忽略left,top,right，bottom,width,height等
-     * 
-     * none 模式下，忽略style
-     * */
-    public display: Display = "block";
-    /**
-     * 在容器里面的水平位置（左中右）
-     */
-    public justifyContent?: "flex-start"|"flex-end"|"center";
-    /**
-     * 在容器里面的垂直位置（上中下）
-     */
-    public alignContent?: "flex-start"|"flex-end"|"center";
-    /**
-     * 基于 网格列的维度，去定义网格线的名称和网格轨道的尺寸大小。
-     * 
-     * 方式一 [80,90,100]|["30%","40%","30%"] 第一列宽度80，第二列宽度，第三列宽度100
-     * 
-     * 方式二 ["repeat",3,100] 三列，宽度都为100像素
-     */
-    public gridTemplateColumns?: number[]|string[]|[string,number,number];; 
-    /**
-     * 设置列间距
-     */
-    public gridColumnGap?: number;
-    /**
-     * 基于 网格行的维度，去定义网格线的名称和网格轨道的尺寸大小。
-     * 
-     * 方式一 [80,90,100]|["30%","40%","30%"] 第一行高度80，第二行高度90，第三行行高度100
-     * 
-     * 方式二 ["repeat",3,100] 三行，宽度都为100像素
-     */
-    public gridTemplateRows?: number[]|string[]|[string,number,number];
-    /**
-     * 设置行间距
-     */
-    public gridRowGap?: number;
-
-
-
-
-
-    /**
-      * 调整元素的色调，取消设置0xFFFFFF
-      */
-    public tint?: number;
-    /** 
-     * 索引位 
-     * */
-    public zIndex = -1;
-    /** 
-     * 表示指定对象的 Alpha 透明度值。有效值为0（完全透明）～ 1（完全不透明）。
-     * */
-    public alpha = 1;
-
-    /** 
-     * 显示对象是否可见 
-     * */
-    public visible = true;
-    public get visibility() {
-        return this.visible ? "visible" : "hidden";
-    }
-    public set visibility(value: "visible" | "hidden") {
-        this.visible = value === "hidden" ? false : true;
-    }
-
-
-    /** 
-     * 设置元件的背景颜色。（16进制数字0xffffff
-     * */
-    public backgroundColor?: number;
-    /** 
-     * 设置元素的背景图像。backgroundImage = "./xxx.png" 
-     * */
-    public backgroundImage?: PIXI.Texture | string;
-    /** 
-     * 设置 backgroundImage 后 ，设置背景图像的X位置
-     * */
-    public backgroundPositionX?: number;
-    /** 
-     * 设置 backgroundImage 后 ，设置背景图像的Y位置
-     * */
-    public backgroundPositionY?: number;
-    /** 
-     * 设置 backgroundImage 后，设置是否及如何重复背景图像。
-     * repeat重复
-     * no-repeat不重复，
-     */
-    public backgroundRepeat: "no-repeat" | "repeat" = "no-repeat";
-    /** 
-     * 设置 backgroundImage 后， 规定背景图像的尺寸。 [width,height] 
-     * */
-    public backgroundSize?: number[];
-
-
-    /** 
-     * 遮罩图 
-     */
-    public maskImage?: string | PIXI.Graphics | PIXI.Texture | UIBase;
-    /** 
-     * 设置位数 [x,y] 
-     */
-    public maskPosition?: number[];
-    /** 
-     * 设置遮罩位图的大小 
-     */
-    public maskSize?: number[];
-
-
-
-
-    /** 
-     * 文本颜色，16进制 
-     * */
-    public color?: number|number[] = 0xfffff0;
-    /** 字符间距 */
-    public letterSpacing?: number;
-    /** 
-     * 是否自动换行 
-     * */
-    public wordWrap = false;
-    /** 
-     * 自动换行的宽度 
-     * */
-    public wordWrapWidth?: number;
-    /** 
-     * 多行文本(wordWrap = true) - 对齐方式
-     * */
-    public textAlign: "left" | "right" | "center" = "left";
-    /** 
-     * 多行文本(wordWrap = true) - 行高 
-     * */
-    public lineHeight?: number;
-    /** 字体 示例：fontFamily = "\"Comic Sans MS\", cursive, sans-serif" */
-    public fontFamily?: string | string[];
-    /** 字体大小 */
-    public fontSize = 22;
-    /** 字体样式 */
-    public fontStyle: "normal" | "italic" | "oblique" = "normal";
-    /**  字体变形，普通或小写  */
-    public fontVariant: "normal" | "small-caps" = "normal";
-    /** 字体粗细 */
-    public fontWeight: "normal" | 'bold' | 'bolder' | 'lighter' | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 = "normal";
-    /** 内部填充 */
-    public padding?: number;
-    /** 描边颜色 */
-    public stroke?: string | number;
-    /** 描边的笔触粗细值 */
-    public strokeThickness = 0;
-    /** 是否设置投影 */
-    public dropShadow = false;
-    /** 投影的alpha值 */
-    public dropShadowAlpha = false;
-    /** 是否设置投影 */
-    public dropShadowAngle = 0;//Math.PI / 6;
-    /** 投影的模糊半径 */
-    public dropShadowBlur = 0;
-    /** 投影填充颜色值 */
-    public dropShadowColor = 0x000000;
-    /** 投影深度 */
-    public dropShadowDistance = 5;
-    /** 中文换行 */
-    public breakWords = true;
-}
 
 /**
  * 	定位方式
@@ -286,10 +18,678 @@ export class CSSStyle {
 export type Position = "absolute" | "fixed" | "static";
 
 /** 对齐方式 父级如果是grid布局，会忽略当前居中模式 */
-export type Align = "left" | "right"  | "bottom" | "top" | "center" | "middle";
+export type Align = "flex-start" | "flex-end" | "center";
 
 /** 布局模式 */
 export type Display = "none"|"block" | "grid";
+
+function formatRelative(value: number | string | undefined): {percent: number;value: number} {
+
+    if (value == undefined) {
+        return {percent:NaN,value:NaN};
+    }
+    if (typeof value === "number") {
+        return {percent:NaN,value:value};
+    }
+    const str = value;
+    const index = str.indexOf("%");
+    if (index == -1) {
+        return {percent:NaN,value:+str};
+    }
+    const percent = +str.substring(0, index);
+    return {percent:Math.min(percent * 0.01, 1),value:NaN};
+}
+
+/**
+ * 组件样式表
+ */
+export class CSSStyle {
+
+    public constructor(target: UIBase){
+        this.parent = target;
+        target.on(ComponentEvent.RESIZE,this.onResize,this);
+    }
+    public parent: UIBase;
+
+    public release(){
+        this.parent.off(ComponentEvent.RESIZE,this.onResize,this);
+    }  
+    /** 
+     * 规定元素的显示类型。布局模式 
+     * 
+     * grid 模式下，子节点会忽略left,top,right，bottom,width,height等
+     * 
+     * none 模式下，忽略style
+     * */
+    private _display: Display = "block";
+    public get display(): Display {
+        return this._display;
+    }
+    public set display(value: Display) {
+        this._display = value;
+    }
+    /** 
+     * 规定元素的定位类型。
+     * */
+    private _position: Position = "absolute";
+    public get position(): Position {
+        return this._position;
+    }
+    public set position(value: Position) {
+        this._position = value;
+    }
+
+    /**
+     * 在容器里面的水平位置（左中右）
+     */
+    private _justifyContent?: Align;
+    public get justifyContent(){
+        return this._justifyContent;
+    }
+    public set justifyContent(value) {
+        this._justifyContent = value;
+    }
+
+    /**
+     * 在容器里面的垂直位置（上中下）
+     */
+    private _alignContent?: Align;
+    public get alignContent() {
+        return this._alignContent;
+    }
+    public set alignContent(value) {
+        this._alignContent = value;
+    }
+    /**
+     * 基于 网格列的维度，去定义网格线的名称和网格轨道的尺寸大小。
+     * 
+     * 方式一 [80,90,100]|["30%","40%","30%"] 第一列宽度80，第二列宽度，第三列宽度100
+     * 
+     * 方式二 ["repeat",3,100] 三列，宽度都为100像素
+     */
+    private _gridTemplateColumns?: number[] | string[] | [string, number, number];
+    public get gridTemplateColumns() {
+        return this._gridTemplateColumns;
+    }
+    public set gridTemplateColumns(value) {
+        this._gridTemplateColumns = value;
+    }
+ 
+    /**
+     * 设置列间距
+     */
+    private _gridColumnGap?: number;
+    public get gridColumnGap() {
+        return this._gridColumnGap;
+    }
+    public set gridColumnGap(value) {
+        this._gridColumnGap = value;
+    }
+    /**
+     * 基于 网格行的维度，去定义网格线的名称和网格轨道的尺寸大小。
+     * 
+     * 方式一 [80,90,100]|["30%","40%","30%"] 第一行高度80，第二行高度90，第三行行高度100
+     * 
+     * 方式二 ["repeat",3,100] 三行，宽度都为100像素
+     */
+    private _gridTemplateRows?: number[] | string[] | [string, number, number];
+    public get gridTemplateRows(){
+        return this._gridTemplateRows;
+    }
+    public set gridTemplateRows(value) {
+        this._gridTemplateRows = value;
+    }
+    /**
+     * 设置行间距
+     */
+    private _gridRowGap?: number;
+    public get gridRowGap() {
+        return this._gridRowGap;
+    }
+    public set gridRowGap(value) {
+        this._gridRowGap = value;
+    }
+
+    /** 
+     * 表示显示对象的宽度，以像素为单位。
+     * */
+    public get width() {
+        return this.parent.width;
+    }
+    public set width(value: number|string) {
+        const relative = formatRelative(value);
+        this.parent.width = relative.value;
+        this.parent.percentWidth = relative.percent;
+    }
+    /** 
+     * 表示显示对象的高度，以像素为单位。
+     * */
+    public get height(){
+        return this.parent.height;
+    }
+    public set height(value: number|string) {
+        const relative = formatRelative(value);
+        this.parent.height = relative.value;
+        this.parent.percentHeight = relative.percent;
+    }
+
+    /** 
+     * 设置元素的最小宽度。
+     */
+    public get minWidth() {
+        return this.parent.minWidth;
+    }
+    public set minWidth(value) {
+        this.parent.minWidth = value;
+    }
+    /** 
+     * 设置元素的最大宽度。
+     */
+    public get maxWidth() {
+        return this.parent.maxWidth;
+    }
+    public set maxWidth(value) {
+        this.parent.maxWidth = value;
+    }
+
+    /** 
+     * 设置元素的最小高度。
+     */
+    public get maxHeight() {
+        return  this.parent.maxHeight;
+    }
+    public set maxHeight(value) {
+        this.parent.maxHeight = value;
+    }
+    /** 
+     * 设置元素的最大高度。
+     * */
+    public get minHeight() {
+        return this.parent.minHeight;
+    }
+    public set minHeight(value) {
+        this.parent.minHeight = value;
+    }
+
+    /** 
+     * 设置定位元素左外边距边界与其容器左边界之间的偏移。 
+     * */
+    public get left() {
+        return this.parent.left;
+    }
+    public set left(value) {
+        this.parent.left = value;
+    }
+    /** 
+     * 设置定位元素的上外边距边界与其容器上边界之间的偏移。
+     * */
+    public get top(){
+        return this.parent.top;
+    }
+    public set top(value) {
+        this.parent.top = value;
+    }
+    /** 
+     * 设置定位元素右外边距边界与其容器右边界之间的偏移。
+     * */
+    public get right(){
+        return this.parent.right;
+    }
+    public set right(value) {
+        this.parent.right = value;
+    }
+    /** 
+     * 设置定位元素下外边距边界与其容器下边界之间的偏移。
+     * */
+    public get bottom(){
+        return this.parent.bottom;
+    }
+    public set bottom(value) {
+        this.parent.bottom = value;
+    }
+
+    /** 
+     * 缩放
+     * */
+    public get scaleX() {
+        return this.parent.scaleX;
+    }
+    public set scaleX(value) {
+        this.parent.scaleX = value;
+    }
+    /** 
+     * 缩放
+     * */
+    public get scaleY() {
+        return this.parent.scaleY;
+    }
+    public set scaleY(value) {
+        this.parent.scaleY = value;
+    }
+    /** 
+     * 设置元素水平拉伸扭曲（角度）。
+     * */
+    public get skewX() {
+        return this.parent.skewX;
+    }
+    public set skewX(value) {
+        this.parent.skewX = value;
+    }
+    /** 
+     * 设置元素垂直拉伸扭曲（角度）。
+     * */
+    public get skewY() {
+        return this.parent.skewY;
+    }
+    public set skewY(value) {
+        this.parent.skewY = value;
+    }
+
+    /** 
+     * 设置元素旋转 （角度）
+    */
+    public get rotate() {
+        return this.parent.rotation;
+    }
+    public set rotate(value) {
+        this.parent.rotation = value;
+    }
+    /** 
+     * 设置元素旋转 （角度）
+    */
+    public get rotation() {
+        return this.parent.rotation;
+    }
+    public set rotation(value: number) {
+        this.parent.rotation = value;
+    }
+
+    /** 
+     * 轴点 像素值
+     */
+    public get pivotX() {
+        return this.parent.pivotX;
+    }
+    public set pivotX(value) {
+        this.parent.pivotX = value;
+    }
+    /** 
+     * 轴点 像素值
+     */
+    public get pivotY() {
+        return this.parent.pivotY;
+    }
+    public set pivotY(value) {
+        this.parent.pivotY = value;
+    }
+
+    /**
+      * 调整元素的色调，取消设置0xFFFFFF
+      */
+    public get tint() {
+        return  this.parent.tint;
+    }
+    public set tint(value) {
+        this.parent.tint = value;
+    }
+
+    /** 
+     * 表示指定对象的 Alpha 透明度值。有效值为0（完全透明）～ 1（完全不透明）。
+     * */
+    public get alpha() {
+        return this.parent.alpha;
+    }
+    public set alpha(value) {
+        this.parent.alpha = value;
+    }
+
+    /** 
+     * 显示对象是否可见 
+     * */
+    public get visible() {
+        return this.parent.visible;
+    }
+    public set visible(value) {
+        this.parent.visible = value;
+    }
+    public get visibility() {
+        return this.parent.visible ? "visible" : "hidden";
+    }
+    public set visibility(value: "visible" | "hidden") {
+        this.visible = value === "hidden" ? false : true;
+    }
+
+
+    /** 
+     * 设置元件的背景颜色。（16进制数字0xffffff
+     * */
+    private _backgroundColor?: number;
+    public get backgroundColor() {
+        return this._backgroundColor;
+    }
+    public set backgroundColor(value) {
+        this._backgroundColor = value;
+        CSSFunction.backgroundColor(this.parent);
+
+    }
+    
+    /** 
+     * 设置元素的背景图像。backgroundImage = "./xxx.png" 
+     * */
+    private _backgroundImage?: PIXI.Texture | string;
+    public get backgroundImage() {
+        return this._backgroundImage;
+    }
+    public set backgroundImage(value) {
+        this._backgroundImage = value;
+        CSSFunction.backgroundImage(this.parent);
+    }
+    /** 
+     * 设置 backgroundImage 后 ，设置背景图像的X位置
+     * */
+    private _backgroundPositionX?: number;
+    public get backgroundPositionX() {
+        return this._backgroundPositionX;
+    }
+    public set backgroundPositionX(value) {
+        this._backgroundPositionX = value;
+        CSSFunction.backgroundPositionSize(this.parent);
+    }
+    /** 
+     * 设置 backgroundImage 后 ，设置背景图像的Y位置
+     * */
+    private _backgroundPositionY?: number;
+    public get backgroundPositionY() {
+        return this._backgroundPositionY;
+    }
+    public set backgroundPositionY(value) {
+        this._backgroundPositionY = value;
+        CSSFunction.backgroundPositionSize(this.parent);
+    }
+    /** 
+     * 设置 backgroundImage 后， 规定背景图像的尺寸。 [width,height] 
+     * */
+    private _backgroundSize?: number[];
+    public get backgroundSize() {
+        return this._backgroundSize;
+    }
+    public set backgroundSize(value) {
+        this._backgroundSize = value;
+        CSSFunction.backgroundPositionSize(this.parent);
+    }
+    /** 
+     * 设置 backgroundImage 后，设置是否及如何重复背景图像。
+     * repeat重复
+     * no-repeat不重复，
+     */
+    private _backgroundRepeat: "no-repeat" | "repeat" = "no-repeat";
+    public get backgroundRepeat() {
+        return this._backgroundRepeat;
+    }
+    public set backgroundRepeat(value) {
+        this._backgroundRepeat = value;
+        CSSFunction.backgroundRepeat(this.parent);
+    }
+
+
+
+    /** 
+     * 遮罩图 
+     */
+    private _maskImage?: string | PIXI.Graphics | PIXI.Texture | UIBase;
+    public get maskImage(){
+        return this._maskImage;
+    }
+    public set maskImage(value) {
+        this._maskImage = value;
+        CSSFunction.maskImage(this.parent);
+    }
+    /** 
+     * 设置位数 [x,y] 
+     */
+    private _maskPosition?: number[];
+    public get maskPosition() {
+        return this._maskPosition;
+    }
+    public set maskPosition(value) {
+        this._maskPosition = value;
+        CSSFunction.maskPosition(this.parent);
+        
+    }
+    /** 
+     * 设置遮罩位图的大小 
+     */
+    private _maskSize?: number[];
+    public get maskSize(){
+        return this._maskSize;
+    }
+    public set maskSize(value) {
+        this._maskSize = value;
+        CSSFunction.maskSize(this.parent);
+    }
+
+
+
+
+    /** 
+     * 文本颜色，16进制 
+     * */
+    private _color?: number | number[] = 0xfffff0;
+    public get color() {
+        return this._color;
+    }
+    public set color(value) {
+        this._color = value;
+        CSSFunction.color(this.parent,"color",value);
+    }
+    /** 字符间距 */
+    private _letterSpacing?: number;
+    public get letterSpacing() {
+        return this._letterSpacing;
+    }
+    public set letterSpacing(value) {
+        this._letterSpacing = value;
+        CSSFunction.updateFontStyle(this.parent,"letterSpacing",value);
+    }
+    /** 
+     * 是否自动换行 
+     * */
+    private _wordWrap = false;
+    public get wordWrap() {
+        return this._wordWrap;
+    }
+    public set wordWrap(value) {
+        this._wordWrap = value;
+        CSSFunction.updateFontStyle(this.parent,"wordWrap",value);
+    }
+    /** 
+     * 自动换行的宽度 
+     * */
+    private _wordWrapWidth?: number;
+    public get wordWrapWidth() {
+        return this._wordWrapWidth;
+    }
+    public set wordWrapWidth(value) {
+        this._wordWrapWidth = value;
+        CSSFunction.updateFontStyle(this.parent,"wordWrapWidth",value);
+    }
+    /** 
+     * 多行文本(wordWrap = true) - 对齐方式
+     * */
+    private _textAlign: "left" | "right" | "center" = "left";
+    public get textAlign(){
+        return this._textAlign;
+    }
+    public set textAlign(value) {
+        this._textAlign = value;
+        CSSFunction.updateFontStyle(this.parent,"textAlign",value);
+    }
+    /** 
+     * 多行文本(wordWrap = true) - 行高 
+     * */
+    private _lineHeight?: number;
+    public get lineHeight() {
+        return this._lineHeight;
+    }
+    public set lineHeight(value) {
+        this._lineHeight = value;
+        CSSFunction.updateFontStyle(this.parent,"lineHeight",value);
+    }
+    /** 字体 示例：fontFamily = "\"Comic Sans MS\", cursive, sans-serif" */
+    private _fontFamily?: string | string[];
+    public get fontFamily(){
+        return this._fontFamily;
+    }
+    public set fontFamily(value) {
+        this._fontFamily = value;
+        CSSFunction.updateFontStyle(this.parent,"fontFamily",value);
+    }
+    /** 字体大小 */
+    private _fontSize = 22;
+    public get fontSize() {
+        return this._fontSize;
+    }
+    public set fontSize(value) {
+        this._fontSize = value;
+        CSSFunction.updateFontStyle(this.parent,"fontSize",value);
+    }
+    /** 字体样式 */
+    private _fontStyle: "normal" | "italic" | "oblique" = "normal";
+    public get fontStyle() {
+        return this._fontStyle;
+    }
+    public set fontStyle(value) {
+        this._fontStyle = value;
+        CSSFunction.updateFontStyle(this.parent,"fontStyle",value);
+    }
+    /**  字体变形，普通或小写  */
+    private _fontVariant: "normal" | "small-caps" = "normal";
+    public get fontVariant(){
+        return this._fontVariant;
+    }
+    public set fontVariant(value) {
+        this._fontVariant = value;
+        CSSFunction.updateFontStyle(this.parent,"fontVariant",value);
+    }
+    /** 字体粗细 */
+    private _fontWeight: "normal" | 'bold' | 'bolder' | 'lighter' | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 = "normal";
+    public get fontWeight(){
+        return this._fontWeight;
+    }
+    public set fontWeight(value) {
+        this._fontWeight = value;
+        CSSFunction.updateFontStyle(this.parent,"fontWeight",value);
+    }
+    /** 内部填充,只支持文字 */
+    private _padding?: number;
+    public get padding() {
+        return this._padding;
+    }
+    public set padding(value) {
+        this._padding = value;
+        CSSFunction.updateFontStyle(this.parent,"padding",value);
+    }
+    /** 描边颜色 */
+    private _stroke?: string | number;
+    public get stroke(){
+        return this._stroke;
+    }
+    public set stroke(value) {
+        this._stroke = value;
+        CSSFunction.updateFontStyle(this.parent,"stroke",value);
+    }
+    /** 描边的笔触粗细值 */
+    private _strokeThickness = 0;
+    public get strokeThickness() {
+        return this._strokeThickness;
+    }
+    public set strokeThickness(value) {
+        this._strokeThickness = value;
+        CSSFunction.updateFontStyle(this.parent,"strokeThickness",value);
+    }
+    /** 是否设置投影 */
+    private _dropShadow = false;
+    public get dropShadow() {
+        return this._dropShadow;
+    }
+    public set dropShadow(value) {
+        this._dropShadow = value;
+        CSSFunction.updateFontStyle(this.parent,"dropShadow",value);
+    }
+    /** 投影的alpha值 */
+    private _dropShadowAlpha = false;
+    public get dropShadowAlpha() {
+        return this._dropShadowAlpha;
+    }
+    public set dropShadowAlpha(value) {
+        this._dropShadowAlpha = value;
+        CSSFunction.updateFontStyle(this.parent,"dropShadowAlpha",value);
+    }
+    /** 是否设置投影 */
+    private _dropShadowAngle = 0;//Math.PI / 6;
+    public get dropShadowAngle() {
+        return this._dropShadowAngle;
+    }
+    public set dropShadowAngle(value) {
+        this._dropShadowAngle = value;
+        CSSFunction.updateFontStyle(this.parent,"dropShadowAngle",value);
+    }
+    /** 投影的模糊半径 */
+    private _dropShadowBlur = 0;
+    public get dropShadowBlur() {
+        return this._dropShadowBlur;
+    }
+    public set dropShadowBlur(value) {
+        this._dropShadowBlur = value;
+        CSSFunction.updateFontStyle(this.parent,"dropShadowBlur",value);
+    }
+    /** 投影填充颜色值 */
+    private _dropShadowColor = 0x000000;
+    public get dropShadowColor() {
+        return this._dropShadowColor;
+    }
+    public set dropShadowColor(value) {
+        this._dropShadowColor = value;
+        CSSFunction.updateFontStyle(this.parent,"dropShadowColor",value);
+    }
+    /** 投影深度 */
+    private _dropShadowDistance = 5;
+    public get dropShadowDistance() {
+        return this._dropShadowDistance;
+    }
+    public set dropShadowDistance(value) {
+        this._dropShadowDistance = value;
+        CSSFunction.updateFontStyle(this.parent,"dropShadowDistance",value);
+    }
+    /** 中文换行 */
+    private _breakWords = true;
+    public get breakWords() {
+        return this._breakWords;
+    }
+    public set breakWords(value) {
+        this._breakWords = value;
+        CSSFunction.updateFontStyle(this.parent,"breakWords",value);
+    }
+
+    private onResize(){
+        const target = this.parent;
+        if(this.backgroundColor && target.background){
+            const background = target.background;
+            background.clear();
+            background.beginFill(this.backgroundColor);
+            background.drawRoundedRect(0, 0, target.width, target.height, 0);
+            background.endFill();
+        }
+        if(target.background && target.background.mask){
+            const mask = target.background.mask as PIXI.Graphics;
+            mask.clear();
+            mask.beginFill(this.backgroundColor);
+            mask.drawRoundedRect(0, 0, target.width, target.height, 0);
+            mask.endFill();
+        }
+    }
+}
+
 
 
 /*

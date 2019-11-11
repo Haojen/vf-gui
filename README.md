@@ -9,11 +9,11 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
 ## 学习(Learn) 
 
 
-* [文档(documentation)](https://vipkid-edu.github.io/vf-gui-docs/0.5.0/)
+* [文档(documentation)](https://vipkid-edu.github.io/vf-gui-docs/0.6.0/)
 
 * [示例(Examples)](https://vipkid-edu.github.io/vf-gui-docs/play)
 
-* [API](https://vipkid-edu.github.io/vf-gui-docs/0.5.0/globals.html)
+* [API](https://vipkid-edu.github.io/vf-gui-docs/0.6.0/globals.html)
 
 * [源码(Github)](https://github.com/vipkid-edu/vf-gui/)
 
@@ -31,18 +31,18 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
     import gui from "vf-gui";
 
 ### CDN Install
+    
+Version:
+
+    <script src="http://unpkg.com/vf-gui@0.6.0/dist/vf-gui.js"></script>
+    
+    <script src="http://unpkg.com/vf-gui@0.6.0/dist/vf-gui.min.js"></script>
 
 Master:
 
     <script src="http://unpkg.com/vf-gui/dist/vf-gui.js"></script>
 
     <script src="http://unpkg.com/vf-gui/dist/vf-gui.min.js"></script>
-    
-Version:
-
-    <script src="http://unpkg.com/vf-gui@0.5.2/dist/vf-gui.js"></script>
-    
-    <script src="http://unpkg.com/vf-gui@0.5.2/dist/vf-gui.min.js"></script>
 
 ### 创建方式(Use)：
 

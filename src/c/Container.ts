@@ -16,4 +16,25 @@ export class Container extends UIBase{
         super();
     }
 
+    public isContainer = true;
+    /**
+     * 确定指定显示对象是 DisplayObjectContainer 实例的子项或该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
+     * 孙项、曾孙项等，每项都返回 true。
+     * @param child 要测试的子对象。
+     * @returns 如果 child 对象是 DisplayObjectContainer 的子项或容器本身，则为 true；否则为 false。
+     */
+    public contains(child: UIBase){
+        while (child) {
+            if (child == this) {
+                return true;
+            }
+            if(child.parent instanceof UIBase){
+                child = child.parent;
+            }
+            return false;
+            
+        }
+        return false;
+    }
+
 }

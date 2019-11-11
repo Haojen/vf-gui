@@ -9,6 +9,7 @@ export default class TestContainer {
     private onLoad(app: PIXI.Application, uiStage: gui.Stage) {
 
         
+
         /** 单背景色 */
         let container1 = new gui.Container();
         container1.style.display = "none";
@@ -17,7 +18,7 @@ export default class TestContainer {
         container1.y = 100;
         container1.width = 100;
         container1.height = 100;
-        container1.style.left = 500;//display = "none"; 时，布局属性失效
+        container1.style.left = 500;//display = "none"; 时，布局属性会失效
         container1.style.backgroundColor = 100;
         uiStage.addChild(container1);
 
@@ -53,13 +54,15 @@ export default class TestContainer {
         /** 百分比设置元素位置与宽高 */
         let container4 = new gui.Container();
         container4.name = "4";
-        container4.style.left = 100 / (gui.Stage.Ins.width / 100) + "%";
-        container4.style.top = 250 / (gui.Stage.Ins.height / 100) + "%";
-        container4.style.width = 100 / (gui.Stage.Ins.width / 100) + "%";
-        container4.style.height = 100 / (gui.Stage.Ins.height / 100) + "%";
+        container4.style.left = 100 / (uiStage.width / 100) + "%";
+        container4.style.top = 250 / (uiStage.height / 100) + "%";
+        container4.style.width = 100 / (uiStage.width / 100) + "%";
+        container4.style.height = 100 / (uiStage.height / 100) + "%";
         container4.style.backgroundColor = 0xffffff;
-        uiStage.addChild(container4);
+        console.log( container4.style.left,container4.style.top);
+        uiStage.addChild(container4,);
 
+ 
         /** 百分比设置最大高度与宽度*/
         let container5 = new gui.Container();
         container5.name = "5";
@@ -71,7 +74,7 @@ export default class TestContainer {
         container5.style.maxHeight = 100;
         container5.style.backgroundColor = 0xffffff;
         uiStage.addChild(container5);
-
+   
         /** 百分比设置最小高度与宽度,设置抽点 */
         let container6 = new gui.Container();
         container6.name = "6";

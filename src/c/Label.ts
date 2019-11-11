@@ -1,7 +1,5 @@
 import { UIBase } from "../core/UIBase";
 import { ComponentEvent } from "../interaction/Index";
-import { addDrawList } from "../layout/CSSSSystem";
-
 
 /**
  * 文本
@@ -20,8 +18,7 @@ export class Label extends UIBase {
 
     public constructor(text = "") {
         super();
-        this.text = text;
-        this.sprite = new PIXI.Text(this.text,{breakWords : true});
+        this.sprite = new PIXI.Text(text,{breakWords : true,fill:"#ffffff"});
         this.container.addChild(this.sprite);
 
     }
@@ -30,13 +27,13 @@ export class Label extends UIBase {
     /**
      * 文本内容
      */
-    private _text = "";
     public get text() {
-        return this._text;
+        return this.sprite.text;
     }
     public set text(value) {
-        this._text = value;
-        addDrawList("text",this,this.textSystem);
+        this.sprite.text = value;
+        this.setActualSize(this.sprite.width,this.sprite.height);
+        this.emit(ComponentEvent.CHANGE,this);
     }
 
     public set fontCssStyle(value: TAny){
@@ -54,21 +51,5 @@ export class Label extends UIBase {
             sprite.parent.removeChild(sprite).destroy();
         }
         this.offAll(ComponentEvent.CHANGE);
-    }
-
-    protected textSystem(){
-        this.sprite.text = this._text;
-        
-        if(this._width == 0){
-            this._width = this.sprite.width;
-        }else{
-            this.sprite.width = this._width ;
-        }
-        if(this._height == 0){
-            this._height = this.sprite.height;
-        }else{
-            this.sprite.height = this._height ;
-        }
-        this.emit(ComponentEvent.CHANGE,this);
     }
 }

@@ -1,5 +1,6 @@
-import { Core } from "./Core";
 import {shared as TickerShared} from "./Ticker";
+import { UILayout } from "./UILayout";
+import { UIBase } from "./UIBase";
 
 /**
  * UI的舞台对象，展示所有UI组件
@@ -11,12 +12,13 @@ import {shared as TickerShared} from "./Ticker";
  * @param height {Number} 舞台高度
  * @since 1.0.0  
  */
-export class Stage extends Core{
+export class Stage extends UILayout{
 
     public constructor(width: number, height: number) {
         super(); 
-        this._width = width;
-        this._height = height;
+        this.width = width;
+        this.height = height;
+        this.setActualSize(width,height);
         this.stage = this;
         this.container.name = "Stage";
         this.container.hitArea = new PIXI.Rectangle(0, 0, width, height);
@@ -24,7 +26,7 @@ export class Stage extends Core{
         this.container.interactiveChildren = true;
         Stage._stage = this;
         this.initialized = true;
-
+        this.$nestLevel = 1;
     }
     
 
@@ -35,7 +37,7 @@ export class Stage extends Core{
     
     public releaseAll(){
         for(let i=0;i<this.uiChildren.length;i++){
-            const ui = this.uiChildren[i];
+            const ui = this.uiChildren[i] as UIBase;
             ui.releaseAll();
         }
         this.uiChildren = [];
@@ -48,31 +50,9 @@ export class Stage extends Core{
      * 舞台引用
      */
     public stage: Stage | undefined;
-    public _width: number = 0;
-    public get width(): number {
-        return this._width;
-    }
-    public set width(value: number) {
-        if (!isNaN(value)) {
-            this._width = value;
-            this.resize();
-        }
-    }
-
-    public _height: number = 0;
-    public get height(): number {
-        return this._height;
-    }
-    public set height(value: number) {
-        if (!isNaN(value)) {
-            this._height = value;
-            this.resize();
-        }
-    }
-
+    
     
     public resize(): void {
-
         this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
         this.updateChildren();
     }

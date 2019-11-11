@@ -56,6 +56,7 @@ export default class TestTimeLine {
                 count++;
                 return;
             }
+            console.log(count);
             sheepline.loop = false;
             sheepline.gotoAndStop(curValue);
         });

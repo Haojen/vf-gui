@@ -1,45 +1,24 @@
-import { DragEvent,DragDropController,InteractionEvent, GroupController  } from "../interaction/Index";
+import { DragEvent,DragDropController,InteractionEvent, GroupController, ComponentEvent  } from "../interaction/Index";
 import { DraggableEvent } from "../interaction/InteractionEvent";
 import { TouchMouseEventEnum, } from "../enum/TouchMouseEventEnum";
-import { uid } from "./Utils";
+import { UILayout } from "./UILayout";
 import { CSSStyle} from "../layout/CSSStyle";
-import { Core } from "./Core";
-import { updateStyleProxyHandler, addDrawList, updateDrawList, updateDisplayKey } from "../layout/CSSSSystem";
-
+import { updateDisplayLayout } from "../layout/CSSLayout";
 
 /**
  * UI的顶级类，基础的UI对象
  *
  * @class
- * @extends PIXI.UI.UIBase
- * @param width {Number} Width UI对象的宽度
- * @param height {Number} Height UI对象的高度
  * @since 1.0.0
  */
-export class UIBase extends Core {
+export class UIBase extends UILayout {
     /**
      * 构造函数
-     * @param width 宽 数字或百分比, 不传默认0
-     * @param height 高 数字或百分比,不传默认0
      */
     public constructor() {
         super();
-        this.uuid = uid();
         this.container.name = (this.constructor as TAny).name;
-        this.__styleObject = new CSSStyle();
-        this.__styleObject.parent = this;
-        this._style = new Proxy(this.__styleObject, updateStyleProxyHandler);
-        this.container.isEmitRender = true;
-        this.container.on("renderChange", this.updateRenderer, this);
     }
-    /**
-     * 全局唯一ID
-     */
-    public readonly uuid: string;
-    /**
-     * 自定义组价名
-     */
-    public name = "";
     /**
      * 是否不可用
      */
@@ -79,188 +58,56 @@ export class UIBase extends Core {
         GroupController.registrerGroup(this);
     }
 
-    /* 混合模式 */
-    private _blendMode: PIXI.BLEND_MODES | undefined;
-    public get blendMode(): PIXI.BLEND_MODES | undefined {
-        return this._blendMode;
-    }
-    public set blendMode(value: PIXI.BLEND_MODES | undefined) {
-        this._blendMode = value;
-        addDrawList("blendMode",this);
-    }
-  
-    private _x = 0;
-    /** 
-     * 组件渲染后，才会有值 
+        
+    /**
+     * 透明度
      */
-    public get x() {
-        return this._x;
+    public get alpha() {
+        return this.container.alpha;
     }
-    public set x(value: number) {
-        this._x = value;
-        this.__styleObject.left = value;
-        addDrawList("transform",this);
+    public set alpha(value) {
+        this.container.alpha = value;
     }
 
-    private _y = 0;
-    /** 
-     * 组件渲染后，才会有值 
-     */
-    public get y() {
-        return this._y;
-    }
-    public set y(value: number) {
-        this._y = value;
-        this.__styleObject.top = value;
-        addDrawList("transform",this);
-    }
-    /** 
-     * X轴缩放 
-     */
-    private _scaleX = 1;
-    public get scaleX() {
-        return this._scaleX;
-    }
-    public set scaleX(value) {
-        this._scaleX = value;
-        this.__styleObject.scaleX = value;
-        addDrawList("transform",this);
-    }
-    /** 
-     * Y轴缩放 
-     */
-    private _scaleY = 1;
-    public get scaleY() {
-        return this._scaleY;
-    }
-    public set scaleY(value) {
-        this._scaleY = value;
-        this.__styleObject.scaleY = value;
-        addDrawList("transform",this);
-    }
-  
-    private _skewX = 0;
-    public get skewX() {
-        return this._skewX;
-    }
-    public set skewX(value) {
-        this._skewX = value;
-        this.__styleObject.skewX = value;
-        addDrawList("transform",this);
-    }
-    private _skewY = 0;
-    public get skewY() {
-        return this._skewY;
-    }
-    public set skewY(value) {
-        this._skewY = value;
-        this.__styleObject.skewY = value;
-        addDrawList("transform",this);
-    }
-    /** 锚点X的像素表示法 */
-    private _pivotX = 0;
-    public get pivotX() {
-        return this._pivotX;
-    }
-    public set pivotX(value) {
-        this._pivotX = value;
-        this.__styleObject.pivotX = value;
-        addDrawList("transform",this);
-    }
-    /** 锚点Y的像素表示法 */
-    private _pivotY = 0;
-    public get pivotY() {
-        return this._pivotY;
-    }
-    public set pivotY(value) {
-        this._pivotY = value;
-        this.__styleObject.pivotY = value;
-        addDrawList("transform",this);
-    }
 
-    private _rotation = 0;
-    public get rotation() {
-        return this._rotation;
-    }
-    public set rotation(value) {   
-        this._rotation = value;
-        this.__styleObject.rotation = value;
-        addDrawList("transform",this);
-    }
-    
-    protected _width = 0;
-    /** 
-     * 组件渲染后，才会有值,继承组件需要根据这个值确定宽高 
-     */
-    public get width() {
-        return this._width;
-    }
-    public set width(value: number) {
-        this._width = value;
-        this.__styleObject.width = value;
-        this.update(this._style);
-    }
-
-    protected _height = 0;
-    /** 
-     * 组件渲染后，才会有值 
-     */
-    public get height() {
-        return this._height;
-    }
-    public set height(value: number) {
-        this._height = value;
-        this.__styleObject.height = value;
-        this.update(this._style);
-    }
-  
     /** 色调 */
     private _tint: number | undefined;
     public get tint(): number | undefined {
         return this._tint;
     }
     public set tint(value: number | undefined) {
+        if(value === this._blendMode){
+            return;
+        }
         this._tint = value;
-        addDrawList("tint",this);
-    }
-    /**
-     * 透明度
-     */
-    protected _alpha = 1;
-    public get alpha() {
-        return this._alpha;
-    }
-    public set alpha(value) {
-        this._alpha = value;
-        this.__styleObject.alpha = value;
-        addDrawList("alpha",this);
+        this.container.children.forEach(childrenItem=>{
+            if((childrenItem as TAny)["tint"]){
+                (childrenItem as TAny)["tint"] = value;
+            }
+        });
     }
 
-    /**
-     * 是否可见
-     */
-    private _visible = true;
-    public get visible() {
-        return this._visible;
+    /* 混合模式 */
+    private _blendMode: PIXI.BLEND_MODES | undefined;
+    public get blendMode(): PIXI.BLEND_MODES | undefined {
+        return this._blendMode;
     }
-    public set visible(value) {
-        this._visible = value;
-        this.__styleObject.visible = value;
-        addDrawList("visible",this);
+    public set blendMode(value: PIXI.BLEND_MODES | undefined) {
+        if(value === this._blendMode){
+            return;
+        }
+        this._blendMode = value;
+        this.container.children.forEach(childrenItem=>{
+            if(childrenItem instanceof PIXI.Sprite){
+                childrenItem.blendMode = value || PIXI.BLEND_MODES.NORMAL;
+            }
+        });
     }
-
-    /** 
-     * 是否可用
-     */
-    public enabled = true;
-    /** 
-     * 原始样式属性
-     */
-    protected __styleObject: CSSStyle;
+  
     /** 
      * 私有样式代理 
      * */
-    protected _style: CSSStyle;
+    protected _style?: CSSStyle;
     /**
     *  在不同分辨率下保持像素稳定 
     * @default
@@ -270,6 +117,15 @@ export class UIBase extends Core {
      * 动态属性，避免其他类注入 
      */
     public attach: { [key: string]: object | number | string | Function } = {};
+    /** 
+     * 获取样式 
+     */
+    public get style(): CSSStyle{
+        if(this._style == undefined){
+            this._style = new CSSStyle(this);
+        }
+        return this._style;
+    }
 
     /** 
      * 可拖动初始化
@@ -300,12 +156,6 @@ export class UIBase extends Core {
      */
     public dragDropEventId: number | undefined;
     
-    /** 
-     * 获取样式 
-     */
-    public get style() {
-        return this._style;
-    }
 
 
     private _draggable = false;
@@ -380,42 +230,45 @@ export class UIBase extends Core {
      * @param updateParent  是否渲染父容器，true渲染
      */
     public updatesettings(updateChildren: boolean, updateParent?: boolean) {
+        
+        if (this.parent == null) {
+            return;
+        }
+        
         if (!this.initialized) {
-            if (this.parent == null) {
-                return;
-            }
-            if (this.parent.initialized) {
-                this.initialize();
-            }
+            this.initialized = true;
+            this.initialize();    
+            this.emit(ComponentEvent.CREATION_COMPLETE,this);
         }
 
         if (updateParent) {
-            this.updateParent();
+            //this.updateParent();
         }
 
-        this.updateRenderer();
+        //this.updateRenderer();
 
         if (updateChildren) {
-            this.updateChildren();
+            //this.updateChildren();
         }
+
     }
 
-    protected updateRenderer(renderer?: PIXI.Renderer) {
-        const { _style } = this;
+    // protected updateRenderer(renderer?: PIXI.Renderer) {
+    //     const { _style } = this;
 
-        if (!this.parent) {
-            return;
-        }
-        //Unrestricted dragging
-        if (this.dragging && !this.dragRestricted && this._dragPosition) {
-            this.container.setTransform(this._dragPosition.x, this._dragPosition.y);
-            return;
-        }
+    //     if (!this.parent) {
+    //         return;
+    //     }
+    //     //Unrestricted dragging
+    //     if (this.dragging && !this.dragRestricted && this._dragPosition) {
+    //         this.container.setTransform(this._dragPosition.x, this._dragPosition.y);
+    //         return;
+    //     }
     
-        updateDrawList(this);
+    //     updateDrawList(this);
         
-        this.update(_style,renderer);
-    }
+    //     this.update(_style,renderer);
+    // }
 
     /**
      * 更新方法，其他组件重写
@@ -423,12 +276,26 @@ export class UIBase extends Core {
     public update(_style: CSSStyle,renderer?: PIXI.Renderer) {
 
     }
+    
+    /**
+     * 更新显示列表,子类重写，实现布局
+     */
+    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void {
+        
+        if(this._style && this._style.display!=="none"){
+            //console.log("displayStyle",unscaledWidth,unscaledHeight,this.left,this.right,this.x,this.y);
+            updateDisplayLayout(this,unscaledWidth,unscaledHeight);
+        }else{
+            //console.log("display",this.x + this.pivotX,this.y + this.pivotY,this.scaleX,this.scaleY,this.rotation*(Math.PI/180),this.skewX,this.skewY,this.pivotX,this.pivotY);
+            this.container.setTransform(this.x + this.pivotX,this.y + this.pivotY,this.scaleX,this.scaleY,this.rotation*(Math.PI/180),this.skewX,this.skewY,this.pivotX,this.pivotY);
+        }
+    }
 
     public release() {
 
         this.isRelease = true;
         const {container,mask,background} = this;
-        container.off("renderChange", this.updateRenderer, this);    
+        //container.off("renderChange", this.updateRenderer, this);    
         container.mask = null;
 
         if(mask){
@@ -449,8 +316,8 @@ export class UIBase extends Core {
         if(this.parent){
             this.parent.removeChild(this);
         }
-        this._style.eventEmitter.removeAllListeners();
-        this._style.parent = undefined;
+        //this._style.eventEmitter.removeAllListeners();
+        //this._style.parent = undefined;
         GroupController.unRegistrerGroup(this);
     }
 
@@ -458,7 +325,7 @@ export class UIBase extends Core {
         this.offAll();
         this.release();
         for(let i=0;i<this.uiChildren.length;i++){
-            const ui = this.uiChildren[i];
+            const ui = this.uiChildren[i] as UIBase;
             ui.offAll();
             ui.release();
             ui.releaseAll();
@@ -470,11 +337,10 @@ export class UIBase extends Core {
     }
 
     /**
-     * Initializes the object when its added to an UIStage
      * 将对象添加到UIStage时，进行的初始化方法
      */
     protected initialize() {
-        this.initialized = true;
+
         if (this.draggable) {
             this.initDraggable();
         }
@@ -483,6 +349,7 @@ export class UIBase extends Core {
             this.initDroppable();
         }
     }
+
 
     protected clearDraggable() {
         if (this.dragInitialized) {
@@ -597,6 +464,5 @@ export class UIBase extends Core {
             }
         }
     }
-
 
 }
