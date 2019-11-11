@@ -843,7 +843,7 @@ declare module 'core/Core' {
 	import { ContainerBase } from 'c/ContainerBase';
 	import { Stage } from 'core/Stage';
 	import { UIBase } from 'UI';
-	export class Core extends PIXI.utils.EventEmitter {
+	export class Core extends PIXI.utils.EventEmitter implements LifecycleHook, Lifecycle {
 	    constructor();
 	    /**
 	     * 全局唯一ID
@@ -882,25 +882,11 @@ declare module 'core/Core' {
 	    addChildAt(item: Core, index: number): Core;
 	    getChildAt(index: number): Core;
 	    /**
-	     * 移除已添加的UI组件，可以同时移除多个如addChild(a,b,c,d)
+	     * 移除已添加的UI组件
 	     * @param UIObject 要移除的UI组件
 	     */
 	    removeChild(item: Core): Core;
 	    removeChildren(beginIndex?: number | undefined, endIndex?: number | undefined): void;
-	    /**
-	     * 渲染父容器
-	     */
-	    updateParent(): void;
-	    /**
-	     * 更新所有子节点
-	     */
-	    updateChildren(): void;
-	    /**
-	     * 绘制渲染对象
-	     * @param updateChildren 是否渲染子节点，true渲染
-	     * @param updateParent  是否渲染父容器，true渲染
-	     */
-	    updatesettings(updateChildren: boolean, updateParent?: boolean): void;
 	    /**
 	     * 是否绘制显示对象，如果false不进行绘制，不过仍然会进行相关的更新计算。
 	     * 只影响父级的递归调用。
@@ -913,8 +899,13 @@ declare module 'core/Core' {
 	    cacheAsBitmap: boolean;
 	    /** 清除全部事件 */
 	    offAll(event?: string | symbol): this;
-	    protected onAdded(): void;
-	    protected onRemoved(): void;
+	    load(): void;
+	    release(): void;
+	    $onInit(): void;
+	    $onLoad(): void;
+	    $onRelease(): void;
+	    $onAddStage(): void;
+	    $onRemoveStage(): void;
 	    protected checkInvalidateFlag(): void;
 	}
 
@@ -1707,7 +1698,7 @@ declare module 'core/UIBase' {
 	 * @class
 	 * @since 1.0.0
 	 */
-	export class UIBase extends UILayout {
+	export class UIBase extends UILayout implements Lifecycle {
 	    /**
 	     * 构造函数
 	     */
@@ -1833,25 +1824,16 @@ declare module 'core/UIBase' {
 	     */
 	    dropGroup: string | undefined;
 	    /**
-	     * 绘制渲染对象
-	     * @param updateChildren 是否渲染子节点，true渲染
-	     * @param updateParent  是否渲染父容器，true渲染
-	     */
-	    updatesettings(updateChildren: boolean, updateParent?: boolean): void;
-	    /**
-	     * 更新方法，其他组件重写
-	     */
-	    update(_style: CSSStyle, renderer?: PIXI.Renderer): void;
-	    /**
 	     * 更新显示列表,子类重写，实现布局
 	     */
 	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
+	    load(): void;
 	    release(): void;
 	    releaseAll(): void;
 	    /**
 	     * 将对象添加到UIStage时，进行的初始化方法
 	     */
-	    protected initialize(): void;
+	    $onInit(): void;
 	    protected clearDraggable(): void;
 	    protected initDraggable(): void;
 	    protected clearDroppable(): void;
@@ -2391,24 +2373,25 @@ declare module 'interaction/ComponentEvent' {
 	 */
 	export const LOOP = "LOOP";
 	/**
-	 * 容器被添加在到父级时触发
+	 * 组件被添加时
 	 */
 	export const ADDED = "added";
 	/**
-	 * 容器被从父级移除时触发
+	 * 组件被移除时
 	 */
 	export const REMOVEED = "removed";
+	/**
+	 * 组件大小改变后
+	 */
 	export const RESIZE = "RESIZE";
+	/**
+	 * 组件位置移动后
+	 */
 	export const MOVE = "MOVE";
+	/**
+	 * 组件创建完成后
+	 */
 	export const CREATION_COMPLETE = "CREATION_COMPLETE";
-	/**
-	 * 节点改变时触发，有子项被添加到容器，或有子项被删除时，触发。
-	 */
-	export const CHILD_CHANGE = "CHILD_CHANGE";
-	/**
-	 * 位置，缩放等发生改变后出发
-	 */
-	export const TRANSFORM_COMPLETE = "TRANSFORM_COMPLETE";
 
 }
 declare module 'interaction/GroupController' {
@@ -2680,7 +2663,7 @@ declare module 'c/ScrollingContainer' {
 	    protected setScrollPosition(speed?: PIXI.Point): void;
 	    addChildAt(item: UIBase, index: number): UIBase;
 	    protected getInnerBounds(force?: boolean): PIXI.Rectangle;
-	    protected initialize(): void;
+	    $onInit(): void;
 	    protected initScrolling(): void;
 	    protected updateScrollBars(): void;
 	    /**
@@ -3056,7 +3039,6 @@ declare module 'c/Rect' {
 	     */
 	    private _anchorY?;
 	    anchorY: number | undefined;
-	    update(): void;
 	    release(): void;
 	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
 	}
@@ -3286,33 +3268,25 @@ interface Lifecycle {
  */
 interface LifecycleHook {
     /**
-     * 初始化完成，只执行一次
+     * 显示对象初始化完成，只执行一次,子类重写，不可外部调用
      */
-    onInit(): void;
+    $onInit(): void;
     /**
-     * 加载完成
+     * 加载完成，不可外部调用
      */
-    onLoad(): void;
+    $onLoad(): void;
     /**
-     * 回收，释放
+     * 回收，释放完成，不可外部调用
      */
-    onRelease(): void;
+    $onRelease(): void;
     /**
-     * 添加到舞台
+     * 添加到舞台后，不可外部调用
      */
-    onAddStage(): void;
+    $onAddStage(): void;
     /**
-     * 移出舞台
+     * 移出舞台后，不可外部调用
      */
-    onRemoveStage(): void;
-    /**
-     * 显示对象初始化完成，只执行一次
-     */
-    onViewInit(): void;
-    /**
-     * 释放指令
-     */
-    onDestroy(): void;
+    $onRemoveStage(): void;
 }
 declare module 'core/UISettings' {
 	/// <reference types="pixi.js" />

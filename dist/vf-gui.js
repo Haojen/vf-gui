@@ -1194,10 +1194,6 @@ class Rect extends UIBase_1.UIBase {
     set anchorY(value) {
         this._anchorY = value;
     }
-    update() {
-        this.graphics.width = this.width;
-        this.graphics.width = this.height;
-    }
     release() {
         super.release();
         this.graphics.parent.removeChild(this.graphics).destroy();
@@ -1395,11 +1391,7 @@ class ScrollingContainer extends Container_1.Container {
         index = Math.min(this._innerContainer.children.length, index);
         this._innerContainer.addChildAt(item.container, index);
         this.uiChildren.splice(index, 0, item);
-        this.updatesettings(true, true);
         this.getInnerBounds(true);
-        if (this.listenerCount(Index_1.ComponentEvent.CHILD_CHANGE))
-            this.emit(Index_1.ComponentEvent.CHILD_CHANGE, this, item);
-        item.emit(Index_1.ComponentEvent.ADDED, this);
         return item;
     }
     getInnerBounds(force) {
@@ -1412,8 +1404,8 @@ class ScrollingContainer extends Container_1.Container {
         }
         return this.innerBounds;
     }
-    initialize() {
-        super.initialize();
+    $onInit() {
+        super.$onInit();
         this.initScrolling();
     }
     initScrolling() {
@@ -4162,8 +4154,8 @@ class Core extends PIXI.utils.EventEmitter {
         this.uiChildren = [];
         this.uuid = Utils_1.uid();
         this.container = new ContainerBase_1.ContainerBase();
-        this.container.on("added", this.onAdded, this);
-        this.container.on("removed", this.onRemoved, this);
+        this.container.on("added", this.$onAddStage, this);
+        this.container.on("removed", this.$onRemoveStage, this);
     }
     /** 添加显示对象，需集成Core */
     addChild(item) {
@@ -4186,38 +4178,28 @@ class Core extends PIXI.utils.EventEmitter {
         }
         item.parent = this;
         item.$nestLevel = this.$nestLevel + 1;
-        this.updatesettings(true, true);
         this.uiChildren.splice(index, 0, item);
+        if (!item.initialized) {
+            item.initialized = true;
+            item.$onInit();
+        }
         this.container.addChildAt(item.container, index);
-        if (this.listenerCount(Index_1.ComponentEvent.CHILD_CHANGE))
-            this.emit(Index_1.ComponentEvent.CHILD_CHANGE, this, item);
-        item.emit(Index_1.ComponentEvent.ADDED, this);
         return item;
     }
     getChildAt(index) {
         return this.uiChildren[index] || undefined;
     }
     /**
-     * 移除已添加的UI组件，可以同时移除多个如addChild(a,b,c,d)
+     * 移除已添加的UI组件
      * @param UIObject 要移除的UI组件
      */
     removeChild(item) {
         const index = this.uiChildren.indexOf(item);
         if (index !== -1) {
-            const oldUIParent = item.parent;
-            //var oldParent = UIObject.container.parent;
             item.container.parent.removeChild(item.container);
             this.uiChildren.splice(index, 1);
             item.parent = undefined;
             item.stage = undefined;
-            //oldParent._recursivePostUpdateTransform();
-            setTimeout(() => {
-                if (oldUIParent && oldUIParent.updatesettings)
-                    oldUIParent.updatesettings(true, true);
-            }, 0);
-            if (this.listenerCount(Index_1.ComponentEvent.CHILD_CHANGE))
-                this.emit(Index_1.ComponentEvent.CHILD_CHANGE, this, item);
-            item.emit(Index_1.ComponentEvent.REMOVEED, this);
         }
         return item;
     }
@@ -4227,29 +4209,6 @@ class Core extends PIXI.utils.EventEmitter {
         for (let i = start; i < end; i++) {
             this.removeChild(this.uiChildren[i]);
         }
-    }
-    /**
-     * 渲染父容器
-     */
-    updateParent() {
-        if (this.parent && this.parent.updatesettings) {
-            this.parent.updatesettings(false, true);
-        }
-    }
-    /**
-     * 更新所有子节点
-     */
-    updateChildren() {
-        for (let i = 0; i < this.uiChildren.length; i++) {
-            this.uiChildren[i].updatesettings(true);
-        }
-    }
-    /**
-     * 绘制渲染对象
-     * @param updateChildren 是否渲染子节点，true渲染
-     * @param updateParent  是否渲染父容器，true渲染
-     */
-    updatesettings(updateChildren, updateParent) {
     }
     /**
      * 是否绘制显示对象，如果false不进行绘制，不过仍然会进行相关的更新计算。
@@ -4275,11 +4234,27 @@ class Core extends PIXI.utils.EventEmitter {
     offAll(event) {
         return this.removeAllListeners(event);
     }
-    onAdded() {
-        this.checkInvalidateFlag();
+    load() {
+        this.$onLoad();
     }
-    onRemoved() {
+    release() {
+        this.$onRelease();
+    }
+    $onInit() {
+        this.emit(Index_1.ComponentEvent.CREATION_COMPLETE, this);
+    }
+    $onLoad() {
+    }
+    $onRelease() {
+    }
+    $onAddStage() {
         this.checkInvalidateFlag();
+        this.emit(Index_1.ComponentEvent.ADDED, this);
+    }
+    $onRemoveStage() {
+        this.checkInvalidateFlag();
+        this.parent = undefined;
+        this.emit(Index_1.ComponentEvent.REMOVEED, this);
     }
     checkInvalidateFlag() {
     }
@@ -4545,7 +4520,7 @@ class Stage extends UILayout_1.UILayout {
     }
     resize() {
         this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
-        this.updateChildren();
+        //this.updateChildren();
     }
 }
 exports.Stage = Stage;
@@ -4788,46 +4763,6 @@ class UIBase extends UILayout_1.UILayout {
         return this._droppable;
     }
     /**
-     * 绘制渲染对象
-     * @param updateChildren 是否渲染子节点，true渲染
-     * @param updateParent  是否渲染父容器，true渲染
-     */
-    updatesettings(updateChildren, updateParent) {
-        if (this.parent == null) {
-            return;
-        }
-        if (!this.initialized) {
-            this.initialized = true;
-            this.initialize();
-            this.emit(Index_1.ComponentEvent.CREATION_COMPLETE, this);
-        }
-        if (updateParent) {
-            //this.updateParent();
-        }
-        //this.updateRenderer();
-        if (updateChildren) {
-            //this.updateChildren();
-        }
-    }
-    // protected updateRenderer(renderer?: PIXI.Renderer) {
-    //     const { _style } = this;
-    //     if (!this.parent) {
-    //         return;
-    //     }
-    //     //Unrestricted dragging
-    //     if (this.dragging && !this.dragRestricted && this._dragPosition) {
-    //         this.container.setTransform(this._dragPosition.x, this._dragPosition.y);
-    //         return;
-    //     }
-    //     updateDrawList(this);
-    //     this.update(_style,renderer);
-    // }
-    /**
-     * 更新方法，其他组件重写
-     */
-    update(_style, renderer) {
-    }
-    /**
      * 更新显示列表,子类重写，实现布局
      */
     updateDisplayList(unscaledWidth, unscaledHeight) {
@@ -4840,12 +4775,18 @@ class UIBase extends UILayout_1.UILayout {
             this.container.setTransform(this.x + this.pivotX, this.y + this.pivotY, this.scaleX, this.scaleY, this.rotation * (Math.PI / 180), this.skewX, this.skewY, this.pivotX, this.pivotY);
         }
     }
+    load() {
+        this.initializeUIValues();
+        super.load();
+    }
     release() {
-        this.isRelease = true;
         const { container, mask, background } = this;
-        //container.off("renderChange", this.updateRenderer, this);    
-        container.mask = null;
+        if (this._style) {
+            this._style.release();
+            this._style = undefined;
+        }
         if (mask) {
+            container.mask = null;
             if (mask instanceof UIBase) {
                 mask.release();
             }
@@ -4861,9 +4802,8 @@ class UIBase extends UILayout_1.UILayout {
         if (this.parent) {
             this.parent.removeChild(this);
         }
-        //this._style.eventEmitter.removeAllListeners();
-        //this._style.parent = undefined;
         Index_1.GroupController.unRegistrerGroup(this);
+        super.release();
     }
     releaseAll() {
         this.offAll();
@@ -4877,12 +4817,11 @@ class UIBase extends UILayout_1.UILayout {
         this.uiChildren = [];
         this.container.removeAllListeners();
         this.container.removeChildren();
-        this.isRelease = true;
     }
     /**
      * 将对象添加到UIStage时，进行的初始化方法
      */
-    initialize() {
+    $onInit() {
         if (this.draggable) {
             this.initDraggable();
         }
@@ -5378,6 +5317,7 @@ class UILayout extends Core_1.Core {
         values[UIKeys.x] = x;
         values[UIKeys.y] = y;
         this.container.setTransform(x + this.pivotX, y + this.pivotY, this.scaleX, this.scaleY, this.rotation * (Math.PI / 180), this.skewX, this.skewY, this.pivotX, this.pivotY);
+        this.emit(Index_1.ComponentEvent.MOVE, this);
         //this.container.position.set(x + this.pivotX,y+ this.pivotY);
     }
     /**
@@ -6957,24 +6897,25 @@ exports.STATE_CHANGE = "STATE_CHANGE";
  */
 exports.LOOP = "LOOP";
 /**
- * 容器被添加在到父级时触发
+ * 组件被添加时
  */
 exports.ADDED = "added";
 /**
- * 容器被从父级移除时触发
+ * 组件被移除时
  */
 exports.REMOVEED = "removed";
+/**
+ * 组件大小改变后
+ */
 exports.RESIZE = "RESIZE";
+/**
+ * 组件位置移动后
+ */
 exports.MOVE = "MOVE";
+/**
+ * 组件创建完成后
+ */
 exports.CREATION_COMPLETE = "CREATION_COMPLETE";
-/**
- * 节点改变时触发，有子项被添加到容器，或有子项被删除时，触发。
- */
-exports.CHILD_CHANGE = "CHILD_CHANGE";
-/**
- * 位置，缩放等发生改变后出发
- */
-exports.TRANSFORM_COMPLETE = "TRANSFORM_COMPLETE";
 
 
 /***/ }),
