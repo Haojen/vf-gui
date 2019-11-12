@@ -42,7 +42,10 @@ export class Label extends UIBase {
         }
         value.breakWords = true;
         this.sprite.style = value;
+        this.invalidateSize();
+        this.invalidateDisplayList();
     }
+
 
     public release(){
         super.release();

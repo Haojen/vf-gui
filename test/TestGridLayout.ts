@@ -25,8 +25,8 @@ export default class TestGridLayout {
         red.style.gridRowGap = 10;
         red.style.justifyContent = "flex-start";
         red.style.alignContent = "flex-start";
-        red.style.width = 700;
-        red.style.height = 600;
+        //red.style.width = 700;
+        //red.style.height = 600;
         uiStage.addChild(red);
         this.addContent(red,0xf44336);
 
@@ -35,13 +35,13 @@ export default class TestGridLayout {
          yellow.name = "yellow"
          yellow.style.display = "grid";
          yellow.style.gridTemplateColumns =  ["repeat",5,30];
-         yellow.style.gridTemplateRows = ["repeat",100,20];
+         yellow.style.gridTemplateRows = ["repeat",100,50];
          yellow.style.gridColumnGap = 0;
          yellow.style.gridRowGap = 0;
          yellow.style.justifyContent = "center";
          yellow.style.alignContent = "center";
-         yellow.style.width = 700;
-         yellow.style.height = 600;
+         //yellow.style.width = 700;
+         //yellow.style.height = 600;
          uiStage.addChild(yellow);
          this.addContent(yellow,0xffeb3b);
          
@@ -61,8 +61,8 @@ export default class TestGridLayout {
         purple.style.justifyContent = "flex-end";
         purple.style.alignContent = "flex-end";
 
-        purple.style.width = 700;
-        purple.style.height = 600;
+        //purple.style.width = 700;
+        //purple.style.height = 600;
         uiStage.addChild(purple);
         this.addContent(purple,0x9c27b0);
     }
@@ -73,8 +73,8 @@ export default class TestGridLayout {
             /** 单背景色 */
             childContainer = new gui.Container();
             childContainer.name = i.toString() + "_" + color;
-            // childContainer.width = 50;
-            // childContainer.height = 50;
+            childContainer.width = 50;
+            childContainer.height = 50;
             childContainer.style.backgroundColor = color;
             parent.addChild(childContainer);
 

@@ -1,5 +1,9 @@
 
 interface Lifecycle{
+
+    /**
+     * 组件加载，暂时可能用不到
+     */
     load(): void;
     /**
      * 释放，回收

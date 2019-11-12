@@ -38,6 +38,7 @@ export class Rect extends UIBase{
     }
     public set lineColor(value) {
         this._lineColor = value;
+        this.invalidateDisplayList();
     }
     /**
      * 线条粗细
@@ -48,6 +49,7 @@ export class Rect extends UIBase{
     }
     public set lineWidth(value) {
         this._lineWidth = value;
+        this.invalidateDisplayList();
     }
     /** 
      * 颜色 
@@ -58,6 +60,7 @@ export class Rect extends UIBase{
     }
     public set color(value) {
         this._color = value;
+        this.invalidateDisplayList();
     }
     /**
      * 锚点，调整位图的坐标中点 0-1
@@ -68,6 +71,7 @@ export class Rect extends UIBase{
     }
     public set anchorX(value) {
         this._anchorX = value;
+        this.invalidateDisplayList();
     }
     /**
      * 锚点，调整位图的坐标中点 0-1
@@ -78,6 +82,17 @@ export class Rect extends UIBase{
     }
     public set anchorY(value) {
         this._anchorY = value;
+        this.invalidateDisplayList();
+    }
+
+    public drawRoundedRect(){
+        const graphics = this.graphics;
+        graphics.clear();
+        graphics.lineStyle(this._lineWidth,this._lineColor);
+        graphics.beginFill(this._color);   
+        
+        graphics.drawRoundedRect(this._anchorX?-this._anchorX*this.width:0,this._anchorY?-this._anchorY*this.width:0,this.width, this.height,this._radius);
+        graphics.endFill();
     }
     
     public release(){
@@ -86,17 +101,8 @@ export class Rect extends UIBase{
     }
 
     protected updateDisplayList(unscaledWidth: number, unscaledHeight: number) {
-
+        this.drawRoundedRect();
         super.updateDisplayList(unscaledWidth,unscaledHeight);
-
-        const graphics = this.graphics;
-        graphics.clear();
-        graphics.lineStyle(this._lineWidth,this._lineColor);
-        graphics.beginFill(this._color);   
-        
-        graphics.drawRoundedRect(this._anchorX?-this._anchorX*this.width:0,this._anchorY?-this._anchorY*this.width:0,this.width, this.height,this._radius);
-        graphics.endFill();
-
     }
 
 

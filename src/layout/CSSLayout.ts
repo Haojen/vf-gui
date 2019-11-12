@@ -2,46 +2,48 @@ import { UIBase } from "../core/UIBase";
 import { updateGridLayout } from "./CSSGridLayout";
 import { updateBasicDisplayList } from "./CSSBasicLayout";
 
+export const $TempRectangle = new PIXI.Rectangle();
 
-export function updateDisplayAlign(target: UIBase,targetWidth: number,targetHeight: number,marginTop=0,marginLeft=0){
+export function updateDisplayAlign(target: UIBase,parentWidth: number,parentHeight: number,marginTop=0,marginLeft=0){
 
-    if(target.parent == undefined){
-        return;
-    }
+
     if(target.style == undefined){
         return;
     }
+    
     let startX = 0;
     let startY = 0;
+    const bounds = target.getPreferredBounds($TempRectangle);
 
     switch(target.style.justifyContent){
         case "center":
-            startX = target.parent.width - targetWidth >>1 ;
+            startX = parentWidth - bounds.width >>1 ;
             break;
         case "flex-start":
             startX = marginLeft;
             break;
         case "flex-end":
-            startX = target.parent.width - targetWidth - marginLeft;
+            startX = parentWidth - bounds.width - marginLeft;
             break;
 
     }
 
     switch(target.style.alignContent){
         case "center":
-            startY = target.parent.height - targetHeight >>1 ;
+            startY = parentHeight - bounds.height >>1 ;
             break;
         case "flex-start":
             startY = marginTop;
             break;
         case "flex-end":
-            startY = target.parent.height - targetHeight - marginTop;
+            startY = parentHeight - bounds.height - marginTop;
             break;
 
     }
     if(startX!==0) target.x = startX;
     if(startY!==0) target.y = startY;
 }
+
 
 /**
  * 调整目标的元素的大小并定位这些元素。
@@ -57,7 +59,21 @@ export function updateDisplayLayout(target: UIBase,unscaledWidth: number, unscal
     }else if(target.style.display === "grid"){
         updateGridLayout(target);
     }
-    const bounds = target.container.getLocalBounds()
-    updateDisplayAlign(target,bounds.width,bounds.height,target.style.gridColumnGap,target.style.gridRowGap);
+    
+    if(target.isContainer){
+        
+        if (target.style.justifyContent || target.style.alignContent) {
+            if(target.parent)
+                updateDisplayAlign(target,target.parent.width,target.parent.height,target.style.gridColumnGap,target.style.gridRowGap);
+        }
+        const bounds = target.getPreferredBounds($TempRectangle);
+        let child:UIBase;
+        for(let i = 0;i<target.uiChildren.length;i++){
+            child = target.uiChildren[i] as UIBase;
+            updateDisplayAlign(child,bounds.width,bounds.height,child.style.gridColumnGap,child.style.gridRowGap);  
+        }
+        
+    }
+
 }
 

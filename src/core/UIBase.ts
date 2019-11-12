@@ -1,10 +1,8 @@
-import { DragEvent,DragDropController,InteractionEvent, GroupController, ComponentEvent  } from "../interaction/Index";
-import { DraggableEvent } from "../interaction/InteractionEvent";
-import { TouchMouseEventEnum, } from "../enum/TouchMouseEventEnum";
+import { GroupController  } from "../interaction/Index";
 import { UILayout } from "./UILayout";
 import { CSSStyle} from "../layout/CSSStyle";
 import { updateDisplayLayout } from "../layout/CSSLayout";
-import { log } from "./Utils";
+import { UIBaseDrag } from "./plugs/UIBaseDrag";
 
 /**
  * UI的顶级类，基础的UI对象
@@ -20,10 +18,7 @@ export class UIBase extends UILayout implements Lifecycle {
         super();
         this.container.name = (this.constructor as TAny).name;
     }
-    /**
-     * 是否不可用
-     */
-    public isRelease = false;
+
     /** 
      * 背景 
      */
@@ -32,14 +27,24 @@ export class UIBase extends UILayout implements Lifecycle {
      * 遮罩，设置遮罩后，组件内部的索引位置可能产生变化 
      */
     public mask?: PIXI.Graphics | PIXI.Sprite | UIBase;
-    /** 
-     * 延迟渲染的列表
-     */
-    public delayDrawList = new Map<string,Function>();
     /**
-     * 是否布局渲染中
+     * 插件列表
      */
-    public isDrawLayout = false;
+    public plugs = new Map<string,Lifecycle>();
+    /**
+     * 拖动限制门槛,小于设置的数不执行拖动,防止点击与滚动
+     */
+    public dragThreshold = 0;
+    
+    /** 
+     * 设置拖动
+     */
+    public get dragOption(){
+        if(this.plugs.has(UIBaseDrag.key)){
+            return this.plugs.get(UIBaseDrag.key) as UIBaseDrag
+        }
+        return new UIBaseDrag(this);
+    }
     /**
      * 分组
      */
@@ -128,108 +133,18 @@ export class UIBase extends UILayout implements Lifecycle {
         return this._style;
     }
 
-    /** 
-     * 可拖动初始化
-     *  @default
-     */
-    public dragInitialized = false;
-    /** 
-     * 可被掉落初始化
-     * @default
-    */
-    public dropInitialized = false;
-    /** 
-     * 覆盖缓动播放时的位置 
-     * 
-     */
-    public _dragPosition: PIXI.Point | undefined;
-    /** 
-     * 是否拖动中
-     * @default
-     */
-    public dragging = false;
-    /** 
-     * 拖动控制类 
-     */
-    public drag: DragEvent | undefined;
-    /** 
-     * 当前拖动组件的事件ID，用于处理DragDropController中多组件的选定 
-     */
-    public dragDropEventId: number | undefined;
-    
-
-
-    private _draggable = false;
-    /**
-     * 是否开启拖动
-     * @default false
-     */
-    public set draggable(value: boolean) {
-        this._draggable = value;
-        if (this.initialized) {
-            if (value)
-                this.initDraggable();
-            else
-                this.clearDraggable();
-        }
-    }
-    public get draggable() {
-        return this._draggable;
-    }
-
-    /**
-     * 是否开启限制拖动范围
-     */
-    public dragRestricted = false;
-
-    /**
-     * 限制拖动抽X抽或Y抽，需要开启dragRestricted
-     */
-    public dragRestrictAxis: "x" | "y" | undefined;
-    /**
-     * 拖动限制门槛,小于设置的数不执行拖动
-     */
-    public dragThreshold = 0;
-    /**
-     * 拖动分组
-     */
-    public dragGroup: string | undefined;
-
-    /**
-     * 拖动的容器
-     */
-    public dragContainer: PIXI.Container | UIBase | undefined;
-
-    private _droppable = false;
-    /**
-     * 是否开拖动掉落
-     */
-    public set droppable(value: boolean | undefined) {
-        this._droppable = true;
-        if (this.initialized) {
-            if (value)
-                this.initDroppable();
-            else
-                this.clearDroppable();
-        }
-    }
-    public get droppable() {
-        return this._droppable;
-    }
-    /**
-     * 接收掉落的新容器
-     */
-    public droppableReparent: UIBase | undefined;
-    /**
-     * 接收拖动掉落的分组名
-     */
-    public dropGroup: string | undefined;
-
     /**
      * 更新显示列表,子类重写，实现布局
      */
     protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void {
         
+        //Unrestricted dragging
+        // if (this.dragging && !this.dragRestricted && this._dragPosition) {
+        //     //this.container.position.x = this._dragPosition.x;
+        //     //this.container.position.y = this._dragPosition.y;
+        //     this.setPosition(this._dragPosition.x,this._dragPosition.y);
+        //     return;
+        // }
         if(this._style && this._style.display!=="none"){
             //console.log("displayStyle",unscaledWidth,unscaledHeight,this.left,this.right,this.x,this.y);
             updateDisplayLayout(this,unscaledWidth,unscaledHeight);
@@ -268,6 +183,10 @@ export class UIBase extends UILayout implements Lifecycle {
             this.background = undefined;
         }
 
+        this.plugs.forEach(value=>{
+              value.release();  
+        });
+
         if(this.parent){
             this.parent.removeChild(this);
         }
@@ -296,128 +215,7 @@ export class UIBase extends UILayout implements Lifecycle {
      */
     $onInit() {
 
-        if (this.draggable) {
-            this.initDraggable();
-        }
-
-        if (this.droppable) {
-            this.initDroppable();
-        }
     }
 
-
-    protected clearDraggable() {
-        if (this.dragInitialized) {
-            this.dragInitialized = false;
-            this.drag && this.drag.stopEvent();
-        }
-    }
-
-    protected initDraggable() {
-        if (!this.dragInitialized) {
-            this.dragInitialized = true;
-            const containerStart = new PIXI.Point(),
-                stageOffset = new PIXI.Point();
-            //self = this;
-
-            this._dragPosition = new PIXI.Point();
-            this.drag = new DragEvent(this);
-            this.drag.onDragStart = (e: InteractionEvent) => {
-                const added = DragDropController.add(this, e);
-                if (!this.dragging && added) {
-                    this.dragging = true;
-                    this.container.interactive = false;
-                    containerStart.copyFrom(this.container.position);
-                    if (this.dragContainer) {
-                        let c: PIXI.Container | undefined;
-                        if (this.dragContainer instanceof UIBase) {
-                            c = this.dragContainer.container;
-                        } else if (this.dragContainer instanceof PIXI.Container) {
-                            c = this.dragContainer;
-                        }
-                        if (c && this.parent) {
-                            //_this.container._recursivePostUpdateTransform();
-                            stageOffset.set(c.worldTransform.tx - this.parent.container.worldTransform.tx, c.worldTransform.ty - this.parent.container.worldTransform.ty);
-                            c.addChild(this.container);
-                        }
-                    } else {
-                        stageOffset.set(0);
-                    }
-                    this.emit(DraggableEvent.onDragStart, e);
-                }
-            };
-
-
-            this.drag.onDragMove = (e: InteractionEvent, offset: PIXI.Point) => {
-                if (this.dragging && this._dragPosition) {
-                    this._dragPosition.set(containerStart.x + offset.x - stageOffset.x, containerStart.y + offset.y - stageOffset.y);
-                    this.x = this._dragPosition.x;
-                    this.y = this._dragPosition.y;
-                    this.emit(DraggableEvent.onDragMove, e);
-                }
-
-            };
-
-            this.drag.onDragEnd = (e: InteractionEvent) => {
-                if (this.dragging) {
-                    this.dragging = false;
-                    //Return to container after 0ms if not picked up by a droppable
-                    setTimeout(() => {
-
-                        this.container.interactive = true;
-                        const item = DragDropController.getItem(this);
-                        if (item && this.parent) {
-                            const container = this.parent.container;
-                            if (container)
-                                container.toLocal(this.container.position, this.container.parent);
-                            if (container != this.container) {
-                                if (this.parent instanceof UIBase) {
-                                    this.parent.addChild(this);
-                                } else {
-                                    this.parent.addChild(this);
-                                }
-
-                            }
-                        }
-                        this.emit(DraggableEvent.onDragEnd, e);
-                    }, 0);
-                }
-
-            };
-        }
-    }
-
-    protected clearDroppable() {
-        if (this.dropInitialized) {
-            this.dropInitialized = false;
-            this.container.off(TouchMouseEventEnum.mouseup, this.onDrop, this);
-            this.container.off(TouchMouseEventEnum.touchend, this.onDrop, this);
-        }
-    }
-
-    protected initDroppable() {
-        if (!this.dropInitialized) {
-            this.dropInitialized = true;
-            const container = this.container;
-            //self = this;
-            this.container.interactive = true;
-            container.on(TouchMouseEventEnum.mouseup, this.onDrop, this);
-            container.on(TouchMouseEventEnum.touchend, this.onDrop, this);
-        }
-    }
-
-    private onDrop(e: InteractionEvent) {
-        const item = DragDropController.getEventItem(e, this.dropGroup);
-        if (item && item.dragging) {
-            item.dragging = false;
-            item.container.interactive = true;
-            const parent = this.droppableReparent !== undefined ? this.droppableReparent : this;
-            if (parent) {
-                parent.container.toLocal(item.container.position, item.container.parent);
-                if (parent.container != item.container.parent)
-                    parent.addChild(item);
-            }
-        }
-    }
 
 }

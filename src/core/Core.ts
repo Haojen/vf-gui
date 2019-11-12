@@ -62,11 +62,7 @@ export class Core extends PIXI.utils.EventEmitter implements LifecycleHook,Lifec
         if (item.parent) {
             item.parent.removeChild(item);
         }
-        if(this instanceof Stage){
-            item.stage = this;
-        }else{
-            item.stage = this.stage;
-        }
+        item.stage = Stage.Ins;
         item.parent = this as TAny;       
         item.$nestLevel = this.$nestLevel + 1;
         this.uiChildren.splice(index, 0, item);
@@ -74,6 +70,7 @@ export class Core extends PIXI.utils.EventEmitter implements LifecycleHook,Lifec
             item.initialized = true;
             item.$onInit();
         }
+        index = Math.min(index,this.container.children.length);
         this.container.addChildAt(item.container, index);
         return item;
     }

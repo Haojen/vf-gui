@@ -1,12 +1,18 @@
 import { UIBase } from "../core/UIBase";
 import { formatRelative } from "../core/Utils";
 
-function getColumnRowValue(gridTemplate: number[] | string[] | [string,number,number] |undefined, parentValue: number) {
+function getColumnRowValue(gridTemplate: number[] | string[] | [string, number, number] | undefined, parentValue: number) {
     const list: number[] = [];
-    if (gridTemplate) {   
+    let isInfinity = false;
+    if (gridTemplate) {
         if (gridTemplate[0] === "repeat") {
-            for (let i = 0; i < gridTemplate[1]; i++) {
-                list.push(formatRelative(gridTemplate[2], parentValue));
+            if (gridTemplate[1] === Infinity) {
+                isInfinity = true;
+                list.push(formatRelative(0, parentValue));
+            } else {
+                for (let i = 0; i < gridTemplate[1]; i++) {
+                    list.push(formatRelative(gridTemplate[2], parentValue));
+                }
             }
         } else {
             for (let i = 0; i < gridTemplate.length; i++) {
@@ -14,7 +20,7 @@ function getColumnRowValue(gridTemplate: number[] | string[] | [string,number,nu
             }
         }
     }
-    return list;
+    return { list, isInfinity };
 }
 
 /**
@@ -69,11 +75,22 @@ export function updateGridLayout(target: UIBase): void {
     let heightTotal = 0;
     let widthTotal = 0;
 
-    for(let i=0;i<target.uiChildren.length;i++){
+    for (let i = 0; i < target.uiChildren.length; i++) {
         child = target.uiChildren[i] as UIBase;
+        if (child.style.justifyContent || child.style.alignContent) {
+            continue;
+        }
+        if (column.isInfinity) {
+            cloumnWidth = column.list[0] || 0;
+        } else {
+            cloumnWidth = column.list[cloumnIndex] || 0;
+        }
 
-        cloumnWidth =  column[cloumnIndex] || 0;
-        rowHeight = row[rowIndex] || 0;
+        if (row.isInfinity) {
+            rowHeight = row.list[0] || 0;
+        } else {
+            rowHeight = row.list[rowIndex] || 0;
+        }
 
         child.width = child.width || cloumnWidth;
         child.height = child.height || rowHeight;
@@ -81,20 +98,21 @@ export function updateGridLayout(target: UIBase): void {
         child.x = widthTotal;
         child.y = heightTotal;
 
-        widthTotal +=  (cloumnWidth || child.width) + gridColumnGap;
+        widthTotal += (cloumnWidth || child.width) + gridColumnGap;
         cloumnIndex++;
-        if(cloumnIndex >= column.length){
+        if (cloumnIndex >= column.list.length) {
             cloumnIndex = 0;
             widthTotal = 0;
-            if(rowHeight!==0){
-                heightTotal += (rowHeight+gridRowGap);
-            }else{
+            if (rowHeight !== 0) {
+                heightTotal += (rowHeight + gridRowGap);
+            } else {
                 heightTotal += (child.height + gridRowGap);
             }
-            rowIndex++;
+            if (!column.isInfinity)
+                rowIndex++;
         }
-        
+
     }
-   
+
 }
 

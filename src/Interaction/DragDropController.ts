@@ -14,7 +14,7 @@ export const _items: UIBase[] = [];
  * @since 1.0.0
  */
 export function add(item: UIBase, e: InteractionEvent) {
-    item.dragDropEventId = e.data.identifier;
+    item.attach.dragDropEventId = e.data.identifier;
     if (_items.indexOf(item) === -1) {
         _items.push(item);
         return true;
@@ -53,9 +53,10 @@ export function getItem(item: UIBase) {
 export function getEventItem(e: InteractionEvent, group: string | undefined) {
     let item = null, index: number | undefined;
     const id = e.data.identifier;
+    
     for (let i = 0; i < _items.length; i++) {
-        if (_items[i].dragDropEventId === id) {
-            if (group !== _items[i].dragGroup) {
+        if (_items[i].attach.dragDropEventId === id) {
+            if (group !== _items[i].attach.dragGroup && _items[i].attach.dragGroup!=="") {
                 return false;
             }
             item = _items[i];

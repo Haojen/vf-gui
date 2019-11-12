@@ -45,6 +45,10 @@ export class DragEvent {
     private cancel = false;
     private dragging = false;
     private isStop = true;
+    /**
+     * 限制拖动抽,XY,X抽或Y抽
+     */
+    public dragRestrictAxis?: "x" | "y" ;
 
     public startEvent() {
 
@@ -57,6 +61,7 @@ export class DragEvent {
 
 
     private _onDragStart(e: InteractionEvent) {
+
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true,this);
 
@@ -84,11 +89,14 @@ export class DragEvent {
         if (!this.dragging) {
             this.movementX = Math.abs(this.offset.x);
             this.movementY = Math.abs(this.offset.y);
-            if (this.movementX === 0 && this.movementY === 0 || Math.max(this.movementX, this.movementY) < this.obj.dragThreshold) return; //thresshold
-            if (this.obj.dragRestrictAxis !== undefined) {
+            if (this.movementX === 0 && this.movementY === 0 || Math.max(this.movementX, this.movementY) < this.obj.dragThreshold) 
+                return; //thresshold
+            if (this.dragRestrictAxis !== undefined) {
                 this.cancel = false;
-                if (this.obj.dragRestrictAxis == "x" && this.movementY > this.movementX) this.cancel = true;
-                else if (this.obj.dragRestrictAxis == "y" && this.movementY <= this.movementX) this.cancel = true;
+                if (this.dragRestrictAxis == "x" && this.movementY > this.movementX) 
+                    this.cancel = true;
+                else if (this.dragRestrictAxis == "y" && this.movementY <= this.movementX) 
+                    this.cancel = true;
                 if (this.cancel) {
                     this._onDragEnd(e);
                     return;

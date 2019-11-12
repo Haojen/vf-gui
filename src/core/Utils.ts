@@ -2,23 +2,31 @@
  * 工具类
  */
 
-/**
- * 组件获取资源 - 源路径,外部可以重写本方法
- */
-export let _getSourcePath: Function;
-
 /** 日志输出 */
 export function log(message?: string | number | object, ...optionalParams: string[] | number[] | object[]) {
     console.log(message, ...optionalParams);
 }
 
+/**
+ * 组件获取资源 - 源路径,外部可以重写本方法
+ */
+export let $getSourcePath: Function;
 export function setSourcePath(params: (path: TAny,cls?: TAny) => {}) {
-    _getSourcePath = params;
+    $getSourcePath = params;
 }
 
+/**
+ * 根据显示路径，获取显示对象
+ */
+export let $getUIDisplayObjectPath: Function;
+export function setDisplayObjectPath(params: (path: TAny,cls?: TAny) => {}) {
+    $getUIDisplayObjectPath = params;
+}
+
+
 export function getTexture(src: TAny){
-    if(_getSourcePath){
-        src = _getSourcePath(src);
+    if($getSourcePath){
+        src = $getSourcePath(src);
     }
     if(src instanceof PIXI.Texture){
         return src;
@@ -27,13 +35,20 @@ export function getTexture(src: TAny){
 }
 
 export function getSound(src: TAny){
-    if(_getSourcePath){
-        src = _getSourcePath(src);
+    if($getSourcePath){
+        src = $getSourcePath(src);
     }
     if(src instanceof PIXI.sound.Sound){
         return src;
     }
     return PIXI.sound.Sound.from(src);
+}
+
+export function getDisplayObject(src: TAny){
+    if($getUIDisplayObjectPath){
+        src = $getUIDisplayObjectPath(src);
+    }
+    return src;
 }
 
 /**

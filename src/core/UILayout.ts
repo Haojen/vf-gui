@@ -2,8 +2,9 @@ import { Core } from "./Core";
 import * as UIKeys from "./UIKeys";
 import validatorShared from "./UIValidator";
 import { ComponentEvent } from "../interaction/Index";
-import { formatRelative, log } from "./Utils";
+import { formatRelative } from "./Utils";
 
+export const $tempLocalBounds = new PIXI.Rectangle();
 /**
  * UI 布局的基础属性类
  */
@@ -13,6 +14,9 @@ export class UILayout extends Core {
         super()
         this.initializeUIValues();
     }
+
+    public isContainer = false;
+
     /**
      * @private
      */
@@ -150,7 +154,8 @@ export class UILayout extends Core {
      * 测量组件尺寸
      */
     protected measure(): void {
-
+        this.container.getLocalBounds($tempLocalBounds);
+        this.setMeasuredSize($tempLocalBounds.width,$tempLocalBounds.height);
     }
 
     /**
@@ -254,11 +259,13 @@ export class UILayout extends Core {
      * 获取组件的首选尺寸,常用于父级的measure()方法中
      * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
      */
-    public getPreferredBounds(bounds: PIXI.Rectangle): void {
+    public getPreferredBounds(bounds: PIXI.Rectangle) {
+        this.measureSizes();
         bounds.width = this.getPreferredUWidth();
         bounds.height = this.getPreferredUHeight();
         bounds.x = this.$values[UIKeys.x];
         bounds.y = this.$values[UIKeys.y];
+        return bounds;
     }
 
     /**
@@ -603,8 +610,8 @@ export class UILayout extends Core {
      * 组件宽度设置为undefined将使用组件的measure()方法自动计算尺寸
      */
     public get width(): number {
-        //this.validateSizeNow();
-        return this.$values[UIKeys.width];
+        this.measureSizes();
+        return this.getPreferredUWidth();
     }
 
     /**
@@ -632,7 +639,8 @@ export class UILayout extends Core {
      */
     public get height(): number {
         //this.validateSizeNow();
-        return this.$values[UIKeys.height];
+        this.measureSizes();
+        return this.getPreferredUHeight();
     }
 
     /**
