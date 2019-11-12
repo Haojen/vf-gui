@@ -1,5 +1,5 @@
 /**
- * 特定属性改变时
+ * 特定属性改变时,通常为了去系统事件区分，UI组件的事件名为大写
  * 1. CheckBox 的 checked 改变时
  * 2. Label 的 text 改变时
  * 3. SpriteAnimated 的 animationName 改变时
@@ -53,10 +53,28 @@ export const REMOVEED = "removed";
  */
 export const RESIZE = "RESIZE";
 /**
- * 组件位置移动后
+ * 组件位置移动
  */
 export const MOVE = "MOVE";
 /**
  * 组件创建完成后
  */
 export const CREATION_COMPLETE = "CREATION_COMPLETE";
+
+/**
+ * 组件拖动开始时
+ */
+export const DRAG_START = "DRAG_START";
+/**
+ * 组件拖动结束时 （如果绑定接收容器并拖动到接收容器中，不会触发此事件）
+ */
+export const DRAG_END = "DRAG_END";
+/**
+ * 组件拖动中
+ */
+export const DRAG_MOVE = "DRAG_END";
+/**
+ * 组件拖动到接收目标中
+ */
+export const DRAG_TARGET = "DRAG_TARGET";
+

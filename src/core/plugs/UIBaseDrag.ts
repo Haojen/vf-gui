@@ -1,6 +1,5 @@
 import { UIBase } from "../UIBase";
-import { DragEvent,DragDropController,InteractionEvent } from "../../interaction/Index";
-import { DraggableEvent } from "../../interaction/InteractionEvent";
+import { DragEvent,DragDropController,InteractionEvent, ComponentEvent } from "../../interaction/Index";
 import { TouchMouseEventEnum } from "../../enum/TouchMouseEventEnum";
 import { Core } from "../Core";
 import { Stage } from "../Stage";
@@ -195,7 +194,7 @@ export class UIBaseDrag implements Lifecycle {
                     } else {
                         stageOffset.set(0);
                     }
-                    target.emit(DraggableEvent.onDragStart, e);
+                    target.emit(ComponentEvent.DRAG_START, target,e);
                 }
             };
 
@@ -222,7 +221,7 @@ export class UIBaseDrag implements Lifecycle {
                         this._dragPosition.y = Math.min(this._dragPosition.y,target.parent.height - target.height);
                     }
                     target.setPosition(this._dragPosition.x,this._dragPosition.y);
-                    target.emit(DraggableEvent.onDragMove, e);
+                    target.emit(ComponentEvent.DRAG_MOVE, target,e);
                 }
 
             };
@@ -254,7 +253,8 @@ export class UIBaseDrag implements Lifecycle {
                                 target.y = this._containerStart.y;
                             }
                         }
-                        target.emit(DraggableEvent.onDragEnd, e);
+                        target.emit(ComponentEvent.DRAG_END, target,e);
+
                     }, 0);
                 }
 
@@ -307,6 +307,7 @@ export class UIBaseDrag implements Lifecycle {
                     item.x = this._dragPosition.x;
                     item.y = this._dragPosition.y;
                     item.dragOption.$targetParent = parent;
+                    target.emit(ComponentEvent.DRAG_TARGET, target,e);
             }
         }
     }
