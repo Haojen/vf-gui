@@ -29,15 +29,15 @@ export default class TestDrag {
 
 
         let c3 = this.getNewContainer("限定Y轴移动");
-        c3.container.x = 400;
-        c3.container.y = 100;
+        c3.container.x = 100;
+        c3.container.y = 250;
         uiStage.addChild(c3.container);
         c3.rect.dragOption.draggable = true;
         c3.rect.dragOption.dragRestrictAxis = "y";
 
 
         let c4 = this.getNewContainer("限定边界");
-        c4.container.x = 100;
+        c4.container.x = 250;
         c4.container.y = 250;
         uiStage.addChild(c4.container);
         c4.rect.dragOption.draggable = true;
@@ -45,16 +45,16 @@ export default class TestDrag {
 
 
         let c5 = this.getNewContainer("拖动回弹");
-        c5.container.x = 250;
-        c5.container.y = 250;
+        c5.container.x = 100;
+        c5.container.y = 400;
         uiStage.addChild(c5.container);
         c5.rect.dragOption.draggable = true;
         c5.rect.dragOption.dragBounces = true;//回弹
 
 
         let c6 = this.getNewContainer("拖动到\n接收容器",undefined,false);
-        c6.container.x = 400;
-        c6.container.y = 250;
+        c6.container.x = 250;
+        c6.container.y = 400;
         c6.rect.visible = false;
         uiStage.addChild(c6.container);
         // ----------   绘制矩形设置可拖动 ---------- //
@@ -75,8 +75,8 @@ export default class TestDrag {
 
 
         let c7 = this.getNewContainer("接收容器",undefined,false);
-        c7.container.x = 400;
-        c7.container.y = 400;
+        c7.container.x = 100;
+        c7.container.y = 550;
         c7.container.style.display = "grid";
         c7.container.style.gridTemplateColumns =  ["repeat",3,30];
         c7.container.style.gridTemplateRows =  ["repeat",3,30];
