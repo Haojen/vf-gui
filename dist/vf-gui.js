@@ -1091,7 +1091,7 @@ class Label extends UIBase_1.UIBase {
     }
     set text(value) {
         this.sprite.text = value;
-        this.setActualSize(this.sprite.width, this.sprite.height);
+        this.invalidateSize();
         this.emit(Index_1.ComponentEvent.CHANGE, this);
     }
     set fontCssStyle(value) {
@@ -1100,6 +1100,8 @@ class Label extends UIBase_1.UIBase {
         }
         value.breakWords = true;
         this.sprite.style = value;
+        this.invalidateSize();
+        this.invalidateDisplayList();
     }
     release() {
         super.release();
@@ -1169,43 +1171,51 @@ class Rect extends UIBase_1.UIBase {
     }
     set lineColor(value) {
         this._lineColor = value;
+        this.invalidateDisplayList();
     }
     get lineWidth() {
         return this._lineWidth;
     }
     set lineWidth(value) {
         this._lineWidth = value;
+        this.invalidateDisplayList();
     }
     get color() {
         return this._color;
     }
     set color(value) {
         this._color = value;
+        this.invalidateDisplayList();
     }
     get anchorX() {
         return this._anchorX;
     }
     set anchorX(value) {
         this._anchorX = value;
+        this.invalidateDisplayList();
     }
     get anchorY() {
         return this._anchorY;
     }
     set anchorY(value) {
         this._anchorY = value;
+        this.invalidateDisplayList();
     }
-    release() {
-        super.release();
-        this.graphics.parent.removeChild(this.graphics).destroy();
-    }
-    updateDisplayList(unscaledWidth, unscaledHeight) {
-        super.updateDisplayList(unscaledWidth, unscaledHeight);
+    drawRoundedRect() {
         const graphics = this.graphics;
         graphics.clear();
         graphics.lineStyle(this._lineWidth, this._lineColor);
         graphics.beginFill(this._color);
         graphics.drawRoundedRect(this._anchorX ? -this._anchorX * this.width : 0, this._anchorY ? -this._anchorY * this.width : 0, this.width, this.height, this._radius);
         graphics.endFill();
+    }
+    release() {
+        super.release();
+        this.graphics.parent.removeChild(this.graphics).destroy();
+    }
+    updateDisplayList(unscaledWidth, unscaledHeight) {
+        this.drawRoundedRect();
+        super.updateDisplayList(unscaledWidth, unscaledHeight);
     }
 }
 exports.Rect = Rect;
@@ -4170,12 +4180,7 @@ class Core extends PIXI.utils.EventEmitter {
         if (item.parent) {
             item.parent.removeChild(item);
         }
-        if (this instanceof Stage_1.Stage) {
-            item.stage = this;
-        }
-        else {
-            item.stage = this.stage;
-        }
+        item.stage = Stage_1.Stage.Ins;
         item.parent = this;
         item.$nestLevel = this.$nestLevel + 1;
         this.uiChildren.splice(index, 0, item);
@@ -4183,6 +4188,7 @@ class Core extends PIXI.utils.EventEmitter {
             item.initialized = true;
             item.$onInit();
         }
+        index = Math.min(index, this.container.children.length);
         this.container.addChildAt(item.container, index);
         return item;
     }
@@ -4612,6 +4618,7 @@ const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interacti
 const UILayout_1 = __webpack_require__(/*! ./UILayout */ "./src/core/UILayout.ts");
 const CSSStyle_1 = __webpack_require__(/*! ../layout/CSSStyle */ "./src/layout/CSSStyle.ts");
 const CSSLayout_1 = __webpack_require__(/*! ../layout/CSSLayout */ "./src/layout/CSSLayout.ts");
+const UIBaseDrag_1 = __webpack_require__(/*! ./plugs/UIBaseDrag */ "./src/core/plugs/UIBaseDrag.ts");
 /**
  * UI的顶级类，基础的UI对象
  *
@@ -4625,17 +4632,13 @@ class UIBase extends UILayout_1.UILayout {
     constructor() {
         super();
         /**
-         * 是否不可用
+         * 插件列表
          */
-        this.isRelease = false;
+        this.plugs = new Map();
         /**
-         * 延迟渲染的列表
+         * 拖动限制门槛,小于设置的数不执行拖动,防止点击与滚动
          */
-        this.delayDrawList = new Map();
-        /**
-         * 是否布局渲染中
-         */
-        this.isDrawLayout = false;
+        this.dragThreshold = 0;
         /**
         *  在不同分辨率下保持像素稳定
         * @default
@@ -4645,32 +4648,16 @@ class UIBase extends UILayout_1.UILayout {
          * 动态属性，避免其他类注入
          */
         this.attach = {};
-        /**
-         * 可拖动初始化
-         *  @default
-         */
-        this.dragInitialized = false;
-        /**
-         * 可被掉落初始化
-         * @default
-        */
-        this.dropInitialized = false;
-        /**
-         * 是否拖动中
-         * @default
-         */
-        this.dragging = false;
-        this._draggable = false;
-        /**
-         * 是否开启限制拖动范围
-         */
-        this.dragRestricted = false;
-        /**
-         * 拖动限制门槛,小于设置的数不执行拖动
-         */
-        this.dragThreshold = 0;
-        this._droppable = false;
         this.container.name = this.constructor.name;
+    }
+    /**
+     * 设置拖动
+     */
+    get dragOption() {
+        if (this.plugs.has(UIBaseDrag_1.UIBaseDrag.key)) {
+            return this.plugs.get(UIBaseDrag_1.UIBaseDrag.key);
+        }
+        return new UIBaseDrag_1.UIBaseDrag(this);
     }
     get groupName() {
         return this._groupName;
@@ -4732,40 +4719,16 @@ class UIBase extends UILayout_1.UILayout {
         return this._style;
     }
     /**
-     * 是否开启拖动
-     * @default false
-     */
-    set draggable(value) {
-        this._draggable = value;
-        if (this.initialized) {
-            if (value)
-                this.initDraggable();
-            else
-                this.clearDraggable();
-        }
-    }
-    get draggable() {
-        return this._draggable;
-    }
-    /**
-     * 是否开拖动掉落
-     */
-    set droppable(value) {
-        this._droppable = true;
-        if (this.initialized) {
-            if (value)
-                this.initDroppable();
-            else
-                this.clearDroppable();
-        }
-    }
-    get droppable() {
-        return this._droppable;
-    }
-    /**
      * 更新显示列表,子类重写，实现布局
      */
     updateDisplayList(unscaledWidth, unscaledHeight) {
+        //Unrestricted dragging
+        // if (this.dragging && !this.dragRestricted && this._dragPosition) {
+        //     //this.container.position.x = this._dragPosition.x;
+        //     //this.container.position.y = this._dragPosition.y;
+        //     this.setPosition(this._dragPosition.x,this._dragPosition.y);
+        //     return;
+        // }
         if (this._style && this._style.display !== "none") {
             //console.log("displayStyle",unscaledWidth,unscaledHeight,this.left,this.right,this.x,this.y);
             CSSLayout_1.updateDisplayLayout(this, unscaledWidth, unscaledHeight);
@@ -4799,6 +4762,9 @@ class UIBase extends UILayout_1.UILayout {
             background.parent.removeChild(background).destroy();
             this.background = undefined;
         }
+        this.plugs.forEach(value => {
+            value.release();
+        });
         if (this.parent) {
             this.parent.removeChild(this);
         }
@@ -4810,8 +4776,6 @@ class UIBase extends UILayout_1.UILayout {
         this.release();
         for (let i = 0; i < this.uiChildren.length; i++) {
             const ui = this.uiChildren[i];
-            ui.offAll();
-            ui.release();
             ui.releaseAll();
         }
         this.uiChildren = [];
@@ -4822,115 +4786,6 @@ class UIBase extends UILayout_1.UILayout {
      * 将对象添加到UIStage时，进行的初始化方法
      */
     $onInit() {
-        if (this.draggable) {
-            this.initDraggable();
-        }
-        if (this.droppable) {
-            this.initDroppable();
-        }
-    }
-    clearDraggable() {
-        if (this.dragInitialized) {
-            this.dragInitialized = false;
-            this.drag && this.drag.stopEvent();
-        }
-    }
-    initDraggable() {
-        if (!this.dragInitialized) {
-            this.dragInitialized = true;
-            const containerStart = new PIXI.Point(), stageOffset = new PIXI.Point();
-            //self = this;
-            this._dragPosition = new PIXI.Point();
-            this.drag = new Index_1.DragEvent(this);
-            this.drag.onDragStart = (e) => {
-                const added = Index_1.DragDropController.add(this, e);
-                if (!this.dragging && added) {
-                    this.dragging = true;
-                    this.container.interactive = false;
-                    containerStart.copyFrom(this.container.position);
-                    if (this.dragContainer) {
-                        let c;
-                        if (this.dragContainer instanceof UIBase) {
-                            c = this.dragContainer.container;
-                        }
-                        else if (this.dragContainer instanceof PIXI.Container) {
-                            c = this.dragContainer;
-                        }
-                        if (c && this.parent) {
-                            //_this.container._recursivePostUpdateTransform();
-                            stageOffset.set(c.worldTransform.tx - this.parent.container.worldTransform.tx, c.worldTransform.ty - this.parent.container.worldTransform.ty);
-                            c.addChild(this.container);
-                        }
-                    }
-                    else {
-                        stageOffset.set(0);
-                    }
-                    this.emit("onDragStart" /* onDragStart */, e);
-                }
-            };
-            this.drag.onDragMove = (e, offset) => {
-                if (this.dragging && this._dragPosition) {
-                    this._dragPosition.set(containerStart.x + offset.x - stageOffset.x, containerStart.y + offset.y - stageOffset.y);
-                    this.x = this._dragPosition.x;
-                    this.y = this._dragPosition.y;
-                    this.emit("onDragMove" /* onDragMove */, e);
-                }
-            };
-            this.drag.onDragEnd = (e) => {
-                if (this.dragging) {
-                    this.dragging = false;
-                    //Return to container after 0ms if not picked up by a droppable
-                    setTimeout(() => {
-                        this.container.interactive = true;
-                        const item = Index_1.DragDropController.getItem(this);
-                        if (item && this.parent) {
-                            const container = this.parent.container;
-                            if (container)
-                                container.toLocal(this.container.position, this.container.parent);
-                            if (container != this.container) {
-                                if (this.parent instanceof UIBase) {
-                                    this.parent.addChild(this);
-                                }
-                                else {
-                                    this.parent.addChild(this);
-                                }
-                            }
-                        }
-                        this.emit("onDragEnd" /* onDragEnd */, e);
-                    }, 0);
-                }
-            };
-        }
-    }
-    clearDroppable() {
-        if (this.dropInitialized) {
-            this.dropInitialized = false;
-            this.container.off("mouseup" /* mouseup */, this.onDrop, this);
-            this.container.off("touchend" /* touchend */, this.onDrop, this);
-        }
-    }
-    initDroppable() {
-        if (!this.dropInitialized) {
-            this.dropInitialized = true;
-            const container = this.container;
-            //self = this;
-            this.container.interactive = true;
-            container.on("mouseup" /* mouseup */, this.onDrop, this);
-            container.on("touchend" /* touchend */, this.onDrop, this);
-        }
-    }
-    onDrop(e) {
-        const item = Index_1.DragDropController.getEventItem(e, this.dropGroup);
-        if (item && item.dragging) {
-            item.dragging = false;
-            item.container.interactive = true;
-            const parent = this.droppableReparent !== undefined ? this.droppableReparent : this;
-            if (parent) {
-                parent.container.toLocal(item.container.position, item.container.parent);
-                if (parent.container != item.container.parent)
-                    parent.addChild(item);
-            }
-        }
     }
 }
 exports.UIBase = UIBase;
@@ -5009,12 +4864,14 @@ const UIKeys = __webpack_require__(/*! ./UIKeys */ "./src/core/UIKeys.ts");
 const UIValidator_1 = __webpack_require__(/*! ./UIValidator */ "./src/core/UIValidator.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 const Utils_1 = __webpack_require__(/*! ./Utils */ "./src/core/Utils.ts");
+exports.$tempLocalBounds = new PIXI.Rectangle();
 /**
  * UI 布局的基础属性类
  */
 class UILayout extends Core_1.Core {
     constructor() {
         super();
+        this.isContainer = false;
         /**
          * @private
          */
@@ -5154,6 +5011,8 @@ class UILayout extends Core_1.Core {
      * 测量组件尺寸
      */
     measure() {
+        this.container.getLocalBounds(exports.$tempLocalBounds);
+        this.setMeasuredSize(exports.$tempLocalBounds.width, exports.$tempLocalBounds.height);
     }
     /**
      * @private
@@ -5251,10 +5110,12 @@ class UILayout extends Core_1.Core {
      * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
      */
     getPreferredBounds(bounds) {
+        this.measureSizes();
         bounds.width = this.getPreferredUWidth();
         bounds.height = this.getPreferredUHeight();
         bounds.x = this.$values[UIKeys.x];
         bounds.y = this.$values[UIKeys.y];
+        return bounds;
     }
     /**
     * @private
@@ -5564,8 +5425,8 @@ class UILayout extends Core_1.Core {
      * 组件宽度设置为undefined将使用组件的measure()方法自动计算尺寸
      */
     get width() {
-        //this.validateSizeNow();
-        return this.$values[UIKeys.width];
+        this.measureSizes();
+        return this.getPreferredUWidth();
     }
     /**
      * @private
@@ -5590,7 +5451,8 @@ class UILayout extends Core_1.Core {
      */
     get height() {
         //this.validateSizeNow();
-        return this.$values[UIKeys.height];
+        this.measureSizes();
+        return this.getPreferredUHeight();
     }
     /**
      * @private
@@ -6373,12 +6235,16 @@ function log(message, ...optionalParams) {
 }
 exports.log = log;
 function setSourcePath(params) {
-    exports._getSourcePath = params;
+    exports.$getSourcePath = params;
 }
 exports.setSourcePath = setSourcePath;
+function setDisplayObjectPath(params) {
+    exports.$getUIDisplayObjectPath = params;
+}
+exports.setDisplayObjectPath = setDisplayObjectPath;
 function getTexture(src) {
-    if (exports._getSourcePath) {
-        src = exports._getSourcePath(src);
+    if (exports.$getSourcePath) {
+        src = exports.$getSourcePath(src);
     }
     if (src instanceof PIXI.Texture) {
         return src;
@@ -6387,8 +6253,8 @@ function getTexture(src) {
 }
 exports.getTexture = getTexture;
 function getSound(src) {
-    if (exports._getSourcePath) {
-        src = exports._getSourcePath(src);
+    if (exports.$getSourcePath) {
+        src = exports.$getSourcePath(src);
     }
     if (src instanceof PIXI.sound.Sound) {
         return src;
@@ -6396,6 +6262,13 @@ function getSound(src) {
     return PIXI.sound.Sound.from(src);
 }
 exports.getSound = getSound;
+function getDisplayObject(src) {
+    if (exports.$getUIDisplayObjectPath) {
+        src = exports.$getUIDisplayObjectPath(src);
+    }
+    return src;
+}
+exports.getDisplayObject = getDisplayObject;
 /**
  * 快速设置矩形
  * @param sourcr
@@ -6612,6 +6485,291 @@ function formatRelative(value, total) {
     return percent * 0.01 * total;
 }
 exports.formatRelative = formatRelative;
+
+
+/***/ }),
+
+/***/ "./src/core/plugs/UIBaseDrag.ts":
+/*!**************************************!*\
+  !*** ./src/core/plugs/UIBaseDrag.ts ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Index_1 = __webpack_require__(/*! ../../interaction/Index */ "./src/interaction/Index.ts");
+const Core_1 = __webpack_require__(/*! ../Core */ "./src/core/Core.ts");
+const Utils_1 = __webpack_require__(/*! ../Utils */ "./src/core/Utils.ts");
+/**
+ *  组件的拖拽操作
+ *
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestDrop
+ */
+class UIBaseDrag {
+    /**
+     * 构造函数
+     */
+    constructor(target) {
+        /**
+         * 可拖动初始化
+         *  @default
+         */
+        this.dragInitialized = false;
+        /**
+         * 可被掉落初始化
+         * @default
+        */
+        this.dropInitialized = false;
+        /**
+         * 位置
+         *
+         */
+        this._dragPosition = new PIXI.Point();
+        /**
+         * 是否拖动中
+         * @default
+         */
+        this.dragging = false;
+        /**
+         * 是否设置边界
+         * @default false
+         */
+        this.dragBoundary = false;
+        /**
+         * 是否启用回弹，在移动到非接收方时，回弹到原始位置
+         */
+        this.dragBounces = false;
+        this.target = target;
+        this.target.plugs.set(UIBaseDrag.key, this);
+    }
+    /**
+     * 当前拖动组件的事件ID，用于处理DragDropController中多组件的选定
+     */
+    get dragDropEventId() {
+        if (this.target) {
+            return this.target.attach.dragDropEventId;
+        }
+    }
+    /**
+     * 是否开启拖动
+     * @default false
+     */
+    set draggable(value) {
+        if (value)
+            this.initDraggable();
+        else
+            this.clearDraggable();
+    }
+    get dragRestrictAxis() {
+        return this._dragRestrictAxis;
+    }
+    set dragRestrictAxis(value) {
+        this._dragRestrictAxis = value;
+        if (this.drag) {
+            this.drag.dragRestrictAxis = this._dragRestrictAxis;
+        }
+    }
+    /**
+     * 拖动分组
+     */
+    get dragGroup() {
+        if (this.target) {
+            return this.target.attach.dragGroup;
+        }
+        return "";
+    }
+    set dragGroup(value) {
+        if (this.target)
+            this.target.attach.dragGroup = value;
+    }
+    get dragContainer() {
+        return this._dragContainer;
+    }
+    set dragContainer(value) {
+        this._dragContainer = Utils_1.getDisplayObject(value);
+    }
+    /**
+     * 是否开启拖动掉落接收
+     */
+    set droppable(value) {
+        if (value)
+            this.initDroppable();
+        else
+            this.clearDroppable();
+    }
+    get droppableReparent() {
+        return this._droppableReparent;
+    }
+    set droppableReparent(value) {
+        this._droppableReparent = Utils_1.getDisplayObject(value);
+        ;
+    }
+    clearDraggable() {
+        if (this.dragInitialized) {
+            this.dragInitialized = false;
+            this.drag && this.drag.stopEvent();
+        }
+    }
+    initDraggable() {
+        if (this.target == undefined) {
+            return;
+        }
+        if (!this.dragInitialized) {
+            this.dragInitialized = true;
+            const containerStart = new PIXI.Point();
+            const stageOffset = new PIXI.Point();
+            this._containerStart = containerStart;
+            this._dragPosition.set(0, 0);
+            this.drag = new Index_1.DragEvent(this.target);
+            this.drag.dragRestrictAxis = this._dragRestrictAxis;
+            this.drag.onDragStart = (e) => {
+                if (this.target == undefined) {
+                    return;
+                }
+                let target = this.target;
+                this.$targetParent = target.parent;
+                const added = Index_1.DragDropController.add(target, e);
+                if (!this.dragging && added) {
+                    this.dragging = true;
+                    target.interactive = false;
+                    containerStart.copyFrom(target.container.position);
+                    if (this.dragContainer) {
+                        let c;
+                        if (this.dragContainer instanceof Core_1.Core) {
+                            c = this.dragContainer;
+                        }
+                        if (c && target.parent) {
+                            //_this.container._recursivePostUpdateTransform();
+                            stageOffset.set(c.container.worldTransform.tx - target.parent.container.worldTransform.tx, c.container.worldTransform.ty - target.parent.container.worldTransform.ty);
+                            c.addChild(target);
+                        }
+                    }
+                    else {
+                        stageOffset.set(0);
+                    }
+                    target.emit("onDragStart" /* onDragStart */, e);
+                }
+            };
+            this.drag.onDragMove = (e, offset) => {
+                if (this.target == undefined) {
+                    return;
+                }
+                let target = this.target;
+                if (this.dragging) {
+                    let x = containerStart.x + offset.x - stageOffset.x;
+                    let y = containerStart.y + offset.y - stageOffset.y;
+                    if (this.dragRestrictAxis == "x") {
+                        this._dragPosition.set(x, containerStart.y - stageOffset.y);
+                    }
+                    else if (this.dragRestrictAxis == "y") {
+                        this._dragPosition.set(containerStart.x - stageOffset.x, y);
+                    }
+                    else {
+                        this._dragPosition.set(x, y);
+                    }
+                    if (this.dragBoundary && target.parent) {
+                        this._dragPosition.x = Math.max(0, this._dragPosition.x);
+                        this._dragPosition.x = Math.min(this._dragPosition.x, target.parent.width - target.width);
+                        this._dragPosition.y = Math.max(0, this._dragPosition.y);
+                        this._dragPosition.y = Math.min(this._dragPosition.y, target.parent.height - target.height);
+                    }
+                    target.setPosition(this._dragPosition.x, this._dragPosition.y);
+                    target.emit("onDragMove" /* onDragMove */, e);
+                }
+            };
+            this.drag.onDragEnd = (e) => {
+                if (this.dragging) {
+                    this.dragging = false;
+                    //如果没有可被放置掉落的容器，0秒后返回原容器
+                    setTimeout(() => {
+                        if (this.target == undefined) {
+                            return;
+                        }
+                        //dragBounces
+                        let target = this.target;
+                        let parent = this.$targetParent;
+                        target.container.interactive = true;
+                        const item = Index_1.DragDropController.getItem(target);
+                        if (item && parent) {
+                            if (target.parent !== parent && target.parent) {
+                                parent.container.toLocal(target.container.position, target.container.parent, this._dragPosition);
+                                parent.addChild(target);
+                                target.x = this._dragPosition.x;
+                                target.y = this._dragPosition.y;
+                            }
+                            if (this.dragBounces && this._containerStart) {
+                                target.x = this._containerStart.x;
+                                target.y = this._containerStart.y;
+                            }
+                        }
+                        target.emit("onDragEnd" /* onDragEnd */, e);
+                    }, 0);
+                }
+            };
+        }
+    }
+    clearDroppable() {
+        if (this.target == undefined) {
+            return;
+        }
+        let target = this.target;
+        if (this.dropInitialized) {
+            this.dropInitialized = false;
+            target.container.off("mouseup" /* mouseup */, this.onDrop, this);
+            target.container.off("touchend" /* touchend */, this.onDrop, this);
+        }
+    }
+    initDroppable() {
+        if (this.target == undefined) {
+            return;
+        }
+        let target = this.target;
+        if (!this.dropInitialized) {
+            this.dropInitialized = true;
+            const container = target.container;
+            //self = this;
+            target.container.interactive = true;
+            container.on("mouseup" /* mouseup */, this.onDrop, this);
+            container.on("touchend" /* touchend */, this.onDrop, this);
+        }
+    }
+    onDrop(e) {
+        if (this.target == undefined) {
+            return;
+        }
+        let target = this.target;
+        const item = Index_1.DragDropController.getEventItem(e, this.dropGroup);
+        if (item && item.dragOption.dragging) {
+            item.dragOption.dragging = false;
+            item.interactive = true;
+            const parent = item.dragOption.droppableReparent !== undefined ? item.dragOption.droppableReparent : target;
+            if (parent) {
+                parent.container.toLocal(item.container.position, item.container.parent, this._dragPosition);
+                if (parent != item.parent)
+                    parent.addChild(item);
+                item.x = this._dragPosition.x;
+                item.y = this._dragPosition.y;
+                item.dragOption.$targetParent = parent;
+            }
+        }
+    }
+    load() {
+    }
+    release() {
+        this.clearDraggable();
+        this.clearDroppable();
+        if (this.target) {
+            this.target.plugs.delete(UIBaseDrag.key);
+            this.target = undefined;
+            this.$targetParent = undefined;
+            this.dragContainer = undefined;
+        }
+    }
+}
+UIBaseDrag.key = "UIBaseDrag";
+exports.UIBaseDrag = UIBaseDrag;
 
 
 /***/ }),
@@ -6943,7 +7101,7 @@ exports._items = [];
  * @since 1.0.0
  */
 function add(item, e) {
-    item.dragDropEventId = e.data.identifier;
+    item.attach.dragDropEventId = e.data.identifier;
     if (exports._items.indexOf(item) === -1) {
         exports._items.push(item);
         return true;
@@ -6982,8 +7140,8 @@ function getEventItem(e, group) {
     let item = null, index;
     const id = e.data.identifier;
     for (let i = 0; i < exports._items.length; i++) {
-        if (exports._items[i].dragDropEventId === id) {
-            if (group !== exports._items[i].dragGroup) {
+        if (exports._items[i].attach.dragDropEventId === id) {
+            if (group !== exports._items[i].attach.dragGroup && exports._items[i].attach.dragGroup !== "") {
                 return false;
             }
             item = exports._items[i];
@@ -7087,11 +7245,11 @@ class DragEvent {
             this.movementY = Math.abs(this.offset.y);
             if (this.movementX === 0 && this.movementY === 0 || Math.max(this.movementX, this.movementY) < this.obj.dragThreshold)
                 return; //thresshold
-            if (this.obj.dragRestrictAxis !== undefined) {
+            if (this.dragRestrictAxis !== undefined) {
                 this.cancel = false;
-                if (this.obj.dragRestrictAxis == "x" && this.movementY > this.movementX)
+                if (this.dragRestrictAxis == "x" && this.movementY > this.movementX)
                     this.cancel = true;
-                else if (this.obj.dragRestrictAxis == "y" && this.movementY <= this.movementX)
+                else if (this.dragRestrictAxis == "y" && this.movementY <= this.movementX)
                     this.cancel = true;
                 if (this.cancel) {
                     this._onDragEnd(e);
@@ -7647,29 +7805,7 @@ exports.MouseScrollEvent = MouseScrollEvent;
 Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
 const UIKeys = __webpack_require__(/*! ../core/UIKeys */ "./src/core/UIKeys.ts");
-/**
- * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
- * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。
- * 可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
- *
- */
-// export class CSSBasicLayout extends CSSLayoutBase {
-//     public constructor() {
-//         super();
-//     }
-//     public measure(): void {
-//         super.measure();
-//         measure(this.$target);
-//     }
-//     public updateDisplayList(unscaledWidth: number, unscaledHeight: number): void {
-//         super.updateDisplayList(unscaledWidth, unscaledHeight);
-//         const pos = updateDisplayList(this.$target, unscaledWidth, unscaledHeight);
-//         //if(pos)
-//         //    this.$target.setContentSize(Math.ceil(pos.x), Math.ceil(pos.y));
-//     }
-// }
-exports.$TempRectangle = new PIXI.Rectangle();
-exports.$TempPoint = new PIXI.Point();
+exports.$tempRectangle = new PIXI.Rectangle();
 /**
  * 布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸
  */
@@ -7740,7 +7876,7 @@ function measure(target) {
     }
     let width = 0;
     let height = 0;
-    const bounds = exports.$TempRectangle;
+    const bounds = exports.$tempRectangle;
     const count = target.uiChildren.length;
     for (let i = 0; i < count; i++) {
         const layoutElement = target.getChildAt(i);
@@ -7804,9 +7940,9 @@ function updateBasicDisplayList(target, unscaledWidth, unscaledHeight) {
     const parentHeight = target.parent ? target.parent.$values[UIKeys.height] : 1;
     const hCenter = formatRelative(values[UIKeys.horizontalCenter], parentWidth * 0.5);
     const vCenter = formatRelative(values[UIKeys.verticalCenter], parentHeight * 0.5);
-    const left = formatRelative(values[UIKeys.left], parentWidth);
+    const left = formatRelative(values[UIKeys.left], parentWidth || 1);
     const right = formatRelative(values[UIKeys.right], parentWidth);
-    const top = formatRelative(values[UIKeys.top], parentHeight);
+    const top = formatRelative(values[UIKeys.top], parentHeight || 1);
     const bottom = formatRelative(values[UIKeys.bottom], parentHeight);
     let childWidth = unscaledWidth;
     let childHeight = unscaledHeight;
@@ -7855,10 +7991,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Utils_1 = __webpack_require__(/*! ../core/Utils */ "./src/core/Utils.ts");
 function getColumnRowValue(gridTemplate, parentValue) {
     const list = [];
+    let isInfinity = false;
     if (gridTemplate) {
         if (gridTemplate[0] === "repeat") {
-            for (let i = 0; i < gridTemplate[1]; i++) {
-                list.push(Utils_1.formatRelative(gridTemplate[2], parentValue));
+            if (gridTemplate[1] === Infinity) {
+                isInfinity = true;
+                list.push(Utils_1.formatRelative(0, parentValue));
+            }
+            else {
+                for (let i = 0; i < gridTemplate[1]; i++) {
+                    list.push(Utils_1.formatRelative(gridTemplate[2], parentValue));
+                }
             }
         }
         else {
@@ -7867,7 +8010,7 @@ function getColumnRowValue(gridTemplate, parentValue) {
             }
         }
     }
-    return list;
+    return { list, isInfinity };
 }
 /**
  *  更新网格布局
@@ -7915,15 +8058,28 @@ function updateGridLayout(target) {
     let widthTotal = 0;
     for (let i = 0; i < target.uiChildren.length; i++) {
         child = target.uiChildren[i];
-        cloumnWidth = column[cloumnIndex] || 0;
-        rowHeight = row[rowIndex] || 0;
+        if (child.style.justifyContent || child.style.alignContent) {
+            continue;
+        }
+        if (column.isInfinity) {
+            cloumnWidth = column.list[0] || 0;
+        }
+        else {
+            cloumnWidth = column.list[cloumnIndex] || 0;
+        }
+        if (row.isInfinity) {
+            rowHeight = row.list[0] || 0;
+        }
+        else {
+            rowHeight = row.list[rowIndex] || 0;
+        }
         child.width = child.width || cloumnWidth;
         child.height = child.height || rowHeight;
         child.x = widthTotal;
         child.y = heightTotal;
         widthTotal += (cloumnWidth || child.width) + gridColumnGap;
         cloumnIndex++;
-        if (cloumnIndex >= column.length) {
+        if (cloumnIndex >= column.list.length) {
             cloumnIndex = 0;
             widthTotal = 0;
             if (rowHeight !== 0) {
@@ -7932,7 +8088,8 @@ function updateGridLayout(target) {
             else {
                 heightTotal += (child.height + gridRowGap);
             }
-            rowIndex++;
+            if (!column.isInfinity)
+                rowIndex++;
         }
     }
 }
@@ -7953,35 +8110,34 @@ exports.updateGridLayout = updateGridLayout;
 Object.defineProperty(exports, "__esModule", { value: true });
 const CSSGridLayout_1 = __webpack_require__(/*! ./CSSGridLayout */ "./src/layout/CSSGridLayout.ts");
 const CSSBasicLayout_1 = __webpack_require__(/*! ./CSSBasicLayout */ "./src/layout/CSSBasicLayout.ts");
-function updateDisplayAlign(target, targetWidth, targetHeight, marginTop = 0, marginLeft = 0) {
-    if (target.parent == undefined) {
-        return;
-    }
+exports.$TempRectangle = new PIXI.Rectangle();
+function updateDisplayAlign(target, parentWidth, parentHeight, marginTop = 0, marginLeft = 0) {
     if (target.style == undefined) {
         return;
     }
     let startX = 0;
     let startY = 0;
+    const bounds = target.getPreferredBounds(exports.$TempRectangle);
     switch (target.style.justifyContent) {
         case "center":
-            startX = target.parent.width - targetWidth >> 1;
+            startX = parentWidth - bounds.width >> 1;
             break;
         case "flex-start":
             startX = marginLeft;
             break;
         case "flex-end":
-            startX = target.parent.width - targetWidth - marginLeft;
+            startX = parentWidth - bounds.width - marginLeft;
             break;
     }
     switch (target.style.alignContent) {
         case "center":
-            startY = target.parent.height - targetHeight >> 1;
+            startY = parentHeight - bounds.height >> 1;
             break;
         case "flex-start":
             startY = marginTop;
             break;
         case "flex-end":
-            startY = target.parent.height - targetHeight - marginTop;
+            startY = parentHeight - bounds.height - marginTop;
             break;
     }
     if (startX !== 0)
@@ -8004,8 +8160,18 @@ function updateDisplayLayout(target, unscaledWidth, unscaledHeight) {
     else if (target.style.display === "grid") {
         CSSGridLayout_1.updateGridLayout(target);
     }
-    const bounds = target.container.getLocalBounds();
-    updateDisplayAlign(target, bounds.width, bounds.height, target.style.gridColumnGap, target.style.gridRowGap);
+    if (target.isContainer) {
+        if (target.style.justifyContent || target.style.alignContent) {
+            if (target.parent)
+                updateDisplayAlign(target, target.parent.width, target.parent.height, target.style.gridColumnGap, target.style.gridRowGap);
+        }
+        const bounds = target.getPreferredBounds(exports.$TempRectangle);
+        let child;
+        for (let i = 0; i < target.uiChildren.length; i++) {
+            child = target.uiChildren[i];
+            updateDisplayAlign(child, bounds.width, bounds.height, child.style.gridColumnGap, child.style.gridRowGap);
+        }
+    }
 }
 exports.updateDisplayLayout = updateDisplayLayout;
 

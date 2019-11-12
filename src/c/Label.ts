@@ -32,7 +32,7 @@ export class Label extends UIBase {
     }
     public set text(value) {
         this.sprite.text = value;
-        this.setActualSize(this.sprite.width,this.sprite.height);
+        this.invalidateSize();
         this.emit(ComponentEvent.CHANGE,this);
     }
 

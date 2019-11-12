@@ -1,36 +1,8 @@
 import { UIBase } from "../core/UIBase";
 import * as UIKeys from "../core/UIKeys";
 
-/**
- * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
- * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。
- * 可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
- *
- */
-// export class CSSBasicLayout extends CSSLayoutBase {
+export const $tempRectangle = new PIXI.Rectangle();
 
-//     public constructor() {
-//         super();
-//     }
-
-
-//     public measure(): void {
-//         super.measure();
-//         measure(this.$target);
-//     }
-
-
-//     public updateDisplayList(unscaledWidth: number, unscaledHeight: number): void {
-//         super.updateDisplayList(unscaledWidth, unscaledHeight);
-//         const pos = updateDisplayList(this.$target, unscaledWidth, unscaledHeight);
-//         //if(pos)
-//         //    this.$target.setContentSize(Math.ceil(pos.x), Math.ceil(pos.y));
-//     }
-// }
-
-
-export const $TempRectangle = new PIXI.Rectangle();
-export const $TempPoint = new PIXI.Point();
 /**
  * 布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸
  */
@@ -112,7 +84,7 @@ export function measure(target?: UIBase): void {
     }
     let width = 0;
     let height = 0;
-    const bounds = $TempRectangle;
+    const bounds = $tempRectangle;
     const count = target.uiChildren.length;
     for (let i = 0; i < count; i++) {
         const layoutElement =target.getChildAt(i) as UIBase;
@@ -183,9 +155,9 @@ export function updateBasicDisplayList(target: UIBase|undefined,unscaledWidth: n
     const parentHeight = target.parent?target.parent.$values[UIKeys.height]:1;
     const hCenter = formatRelative(values[UIKeys.horizontalCenter], parentWidth * 0.5);
     const vCenter = formatRelative(values[UIKeys.verticalCenter], parentHeight * 0.5);
-    const left = formatRelative(values[UIKeys.left], parentWidth);
+    const left = formatRelative(values[UIKeys.left], parentWidth || 1);
     const right = formatRelative(values[UIKeys.right], parentWidth);
-    const top = formatRelative(values[UIKeys.top], parentHeight);
+    const top = formatRelative(values[UIKeys.top], parentHeight || 1);
     const bottom = formatRelative(values[UIKeys.bottom], parentHeight);
 
     let childWidth = unscaledWidth;

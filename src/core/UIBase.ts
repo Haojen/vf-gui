@@ -197,12 +197,11 @@ export class UIBase extends UILayout implements Lifecycle {
     }
 
     public releaseAll(){
+        
         this.offAll();
         this.release();
         for(let i=0;i<this.uiChildren.length;i++){
             const ui = this.uiChildren[i] as UIBase;
-            ui.offAll();
-            ui.release();
             ui.releaseAll();
         }
         this.uiChildren = [];

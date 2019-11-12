@@ -4,15 +4,21 @@ declare module 'core/Utils' {
 	 */
 	/// <reference types="pixi.js" />
 	/// <reference types="pixi-sound" />
+	/** 日志输出 */
+	export function log(message?: string | number | object, ...optionalParams: string[] | number[] | object[]): void;
 	/**
 	 * 组件获取资源 - 源路径,外部可以重写本方法
 	 */
-	export let _getSourcePath: Function;
-	/** 日志输出 */
-	export function log(message?: string | number | object, ...optionalParams: string[] | number[] | object[]): void;
+	export let $getSourcePath: Function;
 	export function setSourcePath(params: (path: TAny, cls?: TAny) => {}): void;
+	/**
+	 * 根据显示路径，获取显示对象
+	 */
+	export let $getUIDisplayObjectPath: Function;
+	export function setDisplayObjectPath(params: (path: TAny, cls?: TAny) => {}): void;
 	export function getTexture(src: TAny): PIXI.Texture;
 	export function getSound(src: TAny): PIXI.sound.Sound;
+	export function getDisplayObject(src: TAny): any;
 	/**
 	 * 快速设置矩形
 	 * @param sourcr
@@ -804,30 +810,6 @@ declare module 'core/ObjectPool' {
 	export {};
 
 }
-declare module 'enum/TouchMouseEventEnum' {
-	/**
-	 * 鼠标点击与触摸事件枚举,内部UIBase使用
-	 * @since 1.0.0
-	 */
-	export const enum TouchMouseEventEnum {
-	    mousedown = "mousedown",
-	    mousemove = "mousemove",
-	    mouseup = "mouseup",
-	    mouseover = "mouseover",
-	    mouseout = "mouseout",
-	    mouseupoutside = "mouseupoutside",
-	    mouseRightDown = "rightdown",
-	    mouseRightup = "rightup",
-	    mouseRightupoutside = "rightupoutside",
-	    touchstart = "touchstart",
-	    touchcancel = "touchcancel",
-	    touchend = "touchend",
-	    touchendoutside = "touchendoutside",
-	    touchmove = "touchmove",
-	    tap = "tap"
-	}
-
-}
 declare module 'c/ContainerBase' {
 	/// <reference types="pixi.js" />
 	/** 容器扩展类，后续便于做延时渲染 */
@@ -1058,11 +1040,13 @@ declare module 'core/UIValidator' {
 declare module 'core/UILayout' {
 	/// <reference types="pixi.js" />
 	import { Core } from 'core/Core';
+	export const $tempLocalBounds: PIXI.Rectangle;
 	/**
 	 * UI 布局的基础属性类
 	 */
 	export class UILayout extends Core {
 	    constructor();
+	    isContainer: boolean;
 	    /**
 	     * @private
 	     */
@@ -1130,7 +1114,7 @@ declare module 'core/UILayout' {
 	     * 获取组件的首选尺寸,常用于父级的measure()方法中
 	     * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
 	     */
-	    getPreferredBounds(bounds: PIXI.Rectangle): void;
+	    getPreferredBounds(bounds: PIXI.Rectangle): PIXI.Rectangle;
 	    /**
 	    * @private
 	    * 标记提交过需要延迟应用的属性，以便在稍后屏幕更新期间调用该组件的 commitProperties() 方法。
@@ -1679,19 +1663,145 @@ declare module 'layout/CSSBasicLayout' {
 
 }
 declare module 'layout/CSSLayout' {
+	/// <reference types="pixi.js" />
 	import { UIBase } from 'core/UIBase';
-	export function updateDisplayAlign(target: UIBase, targetWidth: number, targetHeight: number, marginTop?: number, marginLeft?: number): void;
+	export const $TempRectangle: PIXI.Rectangle;
+	export function updateDisplayAlign(target: UIBase, parentWidth: number, parentHeight: number, marginTop?: number, marginLeft?: number): void;
 	/**
 	 * 调整目标的元素的大小并定位这些元素。
 	 */
 	export function updateDisplayLayout(target: UIBase, unscaledWidth: number, unscaledHeight: number): void;
 
 }
+declare module 'enum/TouchMouseEventEnum' {
+	/**
+	 * 鼠标点击与触摸事件枚举,内部UIBase使用
+	 * @since 1.0.0
+	 */
+	export const enum TouchMouseEventEnum {
+	    mousedown = "mousedown",
+	    mousemove = "mousemove",
+	    mouseup = "mouseup",
+	    mouseover = "mouseover",
+	    mouseout = "mouseout",
+	    mouseupoutside = "mouseupoutside",
+	    mouseRightDown = "rightdown",
+	    mouseRightup = "rightup",
+	    mouseRightupoutside = "rightupoutside",
+	    touchstart = "touchstart",
+	    touchcancel = "touchcancel",
+	    touchend = "touchend",
+	    touchendoutside = "touchendoutside",
+	    touchmove = "touchmove",
+	    tap = "tap"
+	}
+
+}
+declare module 'core/plugs/UIBaseDrag' {
+	import { UIBase } from 'core/UIBase';
+	import { Core } from 'core/Core';
+	import { Stage } from 'core/Stage';
+	/**
+	 *  组件的拖拽操作
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestDrop
+	 */
+	export class UIBaseDrag implements Lifecycle {
+	    /**
+	     * 构造函数
+	     */
+	    constructor(target: UIBase);
+	    static key: string;
+	    private target;
+	    $targetParent: UIBase | Stage | undefined;
+	    /**
+	     * 可拖动初始化
+	     *  @default
+	     */
+	    private dragInitialized;
+	    /**
+	     * 可被掉落初始化
+	     * @default
+	    */
+	    private dropInitialized;
+	    /**
+	     * 拖动控制类
+	     */
+	    private drag;
+	    /**
+	     * 位置
+	     *
+	     */
+	    private _dragPosition;
+	    /**
+	     * 开始位置
+	     */
+	    private _containerStart;
+	    /**
+	     * 是否拖动中
+	     * @default
+	     */
+	    dragging: boolean;
+	    /**
+	     * 当前拖动组件的事件ID，用于处理DragDropController中多组件的选定
+	     */
+	    readonly dragDropEventId: number | undefined;
+	    /**
+	     * 是否开启拖动
+	     * @default false
+	     */
+	    draggable: boolean;
+	    /**
+	     * 是否设置边界
+	     * @default false
+	     */
+	    dragBoundary: boolean;
+	    /**
+	     * 是否启用回弹，在移动到非接收方时，回弹到原始位置
+	     */
+	    dragBounces: boolean;
+	    /**
+	     * 限制拖动抽,XY,X抽或Y抽
+	     */
+	    private _dragRestrictAxis?;
+	    dragRestrictAxis: "x" | "y" | undefined;
+	    /**
+	     * 拖动分组
+	     */
+	    dragGroup: string;
+	    /**
+	     * 拖动的容器，需要显示设置容器宽高
+	     */
+	    private _dragContainer;
+	    dragContainer: Core | undefined;
+	    /**
+	     * 是否开启拖动掉落接收
+	     */
+	    droppable: boolean | undefined;
+	    /**
+	     * 接收掉落的新容器
+	     */
+	    private _droppableReparent;
+	    droppableReparent: UIBase | undefined;
+	    /**
+	     * 接收拖动掉落的分组名
+	     */
+	    dropGroup: string | undefined;
+	    protected clearDraggable(): void;
+	    protected initDraggable(): void;
+	    protected clearDroppable(): void;
+	    protected initDroppable(): void;
+	    private onDrop;
+	    load(): void;
+	    release(): void;
+	}
+
+}
 declare module 'core/UIBase' {
 	/// <reference types="pixi.js" />
-	import { DragEvent } from 'interaction/Index';
 	import { UILayout } from 'core/UILayout';
 	import { CSSStyle } from 'layout/CSSStyle';
+	import { UIBaseDrag } from 'core/plugs/UIBaseDrag';
 	/**
 	 * UI的顶级类，基础的UI对象
 	 *
@@ -1704,10 +1814,6 @@ declare module 'core/UIBase' {
 	     */
 	    constructor();
 	    /**
-	     * 是否不可用
-	     */
-	    isRelease: boolean;
-	    /**
 	     * 背景
 	     */
 	    background?: PIXI.Graphics;
@@ -1716,13 +1822,17 @@ declare module 'core/UIBase' {
 	     */
 	    mask?: PIXI.Graphics | PIXI.Sprite | UIBase;
 	    /**
-	     * 延迟渲染的列表
+	     * 插件列表
 	     */
-	    delayDrawList: Map<string, Function>;
+	    plugs: Map<string, Lifecycle>;
 	    /**
-	     * 是否布局渲染中
+	     * 拖动限制门槛,小于设置的数不执行拖动,防止点击与滚动
 	     */
-	    isDrawLayout: boolean;
+	    dragThreshold: number;
+	    /**
+	     * 设置拖动
+	     */
+	    readonly dragOption: UIBaseDrag;
 	    /**
 	     * 分组
 	     */
@@ -1757,73 +1867,6 @@ declare module 'core/UIBase' {
 	     */
 	    readonly style: CSSStyle;
 	    /**
-	     * 可拖动初始化
-	     *  @default
-	     */
-	    dragInitialized: boolean;
-	    /**
-	     * 可被掉落初始化
-	     * @default
-	    */
-	    dropInitialized: boolean;
-	    /**
-	     * 覆盖缓动播放时的位置
-	     *
-	     */
-	    _dragPosition: PIXI.Point | undefined;
-	    /**
-	     * 是否拖动中
-	     * @default
-	     */
-	    dragging: boolean;
-	    /**
-	     * 拖动控制类
-	     */
-	    drag: DragEvent | undefined;
-	    /**
-	     * 当前拖动组件的事件ID，用于处理DragDropController中多组件的选定
-	     */
-	    dragDropEventId: number | undefined;
-	    private _draggable;
-	    /**
-	     * 是否开启拖动
-	     * @default false
-	     */
-	    draggable: boolean;
-	    /**
-	     * 是否开启限制拖动范围
-	     */
-	    dragRestricted: boolean;
-	    /**
-	     * 限制拖动抽X抽或Y抽，需要开启dragRestricted
-	     */
-	    dragRestrictAxis: "x" | "y" | undefined;
-	    /**
-	     * 拖动限制门槛,小于设置的数不执行拖动
-	     */
-	    dragThreshold: number;
-	    /**
-	     * 拖动分组
-	     */
-	    dragGroup: string | undefined;
-	    /**
-	     * 拖动的容器
-	     */
-	    dragContainer: PIXI.Container | UIBase | undefined;
-	    private _droppable;
-	    /**
-	     * 是否开拖动掉落
-	     */
-	    droppable: boolean | undefined;
-	    /**
-	     * 接收掉落的新容器
-	     */
-	    droppableReparent: UIBase | undefined;
-	    /**
-	     * 接收拖动掉落的分组名
-	     */
-	    dropGroup: string | undefined;
-	    /**
 	     * 更新显示列表,子类重写，实现布局
 	     */
 	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
@@ -1834,11 +1877,6 @@ declare module 'core/UIBase' {
 	     * 将对象添加到UIStage时，进行的初始化方法
 	     */
 	    $onInit(): void;
-	    protected clearDraggable(): void;
-	    protected initDraggable(): void;
-	    protected clearDroppable(): void;
-	    protected initDroppable(): void;
-	    private onDrop;
 	}
 
 }
@@ -1983,6 +2021,10 @@ declare module 'interaction/DragEvent' {
 	    private cancel;
 	    private dragging;
 	    private isStop;
+	    /**
+	     * 限制拖动抽,XY,X抽或Y抽
+	     */
+	    dragRestrictAxis?: "x" | "y";
 	    startEvent(): void;
 	    private _onDragStart;
 	    private _onDragMove;
@@ -2565,7 +2607,6 @@ declare module 'c/Container' {
 	 */
 	export class Container extends UIBase {
 	    constructor();
-	    isContainer: boolean;
 	    /**
 	     * 确定指定显示对象是 DisplayObjectContainer 实例的子项或该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
 	     * 孙项、曾孙项等，每项都返回 true。
@@ -3039,6 +3080,7 @@ declare module 'c/Rect' {
 	     */
 	    private _anchorY?;
 	    anchorY: number | undefined;
+	    drawRoundedRect(): void;
 	    release(): void;
 	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
 	}
@@ -3257,6 +3299,9 @@ interface Color {
     a?: number;
 }
 interface Lifecycle {
+    /**
+     * 组件加载，暂时可能用不到
+     */
     load(): void;
     /**
      * 释放，回收
