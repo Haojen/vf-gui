@@ -169,8 +169,8 @@ export class UILayout extends Core {
             return changed;
 
         this.measure();
-        const parentWidth = this.parent?this.parent.$values[UIKeys.width]:1;
-        const parentHeight = this.parent?this.parent.$values[UIKeys.height]:1;
+        const parentWidth = this.parent?this.parent.width:1;
+        const parentHeight = this.parent?this.parent.height:1;
         const maxWidth = formatRelative(values[UIKeys.maxWidth],parentWidth);
         const maxHeight = formatRelative(values[UIKeys.maxHeight],parentHeight);
         const minWidth = formatRelative(values[UIKeys.minWidth],parentWidth);

@@ -71,6 +71,7 @@ export class Core extends PIXI.utils.EventEmitter implements LifecycleHook,Lifec
             item.$onInit();
         }
         index = Math.min(index,this.container.children.length);
+        this.emit(ComponentEvent.ADD, this);
         this.container.addChildAt(item.container, index);
         return item;
     }

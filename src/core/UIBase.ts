@@ -3,6 +3,7 @@ import { UILayout } from "./UILayout";
 import { CSSStyle} from "../layout/CSSStyle";
 import { updateDisplayLayout } from "../layout/CSSLayout";
 import { UIBaseDrag } from "./plugs/UIBaseDrag";
+import { deepCopy } from "./Utils";
 
 /**
  * UI的顶级类，基础的UI对象
@@ -131,6 +132,14 @@ export class UIBase extends UILayout implements Lifecycle {
             this._style = new CSSStyle(this);
         }
         return this._style;
+    }
+
+    public set style(value:CSSStyle){
+        if(this._style == undefined){
+            this._style = new CSSStyle(this);
+        }
+        deepCopy(value,this._style);
+        this.invalidateParentLayout();
     }
 
     /**

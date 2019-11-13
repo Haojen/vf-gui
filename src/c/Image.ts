@@ -115,7 +115,7 @@ export class Image extends UIBase {
             this._texture.removeAllListeners();
         }
 
-        if (src && src !== this._source) {
+        if (src !== this._source) {
             this._source = src;
             const texture = this._texture = getTexture(src);
             if (texture.frame.width > 1 && texture.frame.height > 1) {

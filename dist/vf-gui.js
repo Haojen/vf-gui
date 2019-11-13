@@ -754,7 +754,7 @@ class Image extends UIBase_1.UIBase {
         if (this._texture) {
             this._texture.removeAllListeners();
         }
-        if (src && src !== this._source) {
+        if (src !== this._source) {
             this._source = src;
             const texture = this._texture = Utils_1.getTexture(src);
             if (texture.frame.width > 1 && texture.frame.height > 1) {
@@ -4189,6 +4189,7 @@ class Core extends PIXI.utils.EventEmitter {
             item.$onInit();
         }
         index = Math.min(index, this.container.children.length);
+        this.emit(Index_1.ComponentEvent.ADD, this);
         this.container.addChildAt(item.container, index);
         return item;
     }
@@ -4619,6 +4620,7 @@ const UILayout_1 = __webpack_require__(/*! ./UILayout */ "./src/core/UILayout.ts
 const CSSStyle_1 = __webpack_require__(/*! ../layout/CSSStyle */ "./src/layout/CSSStyle.ts");
 const CSSLayout_1 = __webpack_require__(/*! ../layout/CSSLayout */ "./src/layout/CSSLayout.ts");
 const UIBaseDrag_1 = __webpack_require__(/*! ./plugs/UIBaseDrag */ "./src/core/plugs/UIBaseDrag.ts");
+const Utils_1 = __webpack_require__(/*! ./Utils */ "./src/core/Utils.ts");
 /**
  * UI的顶级类，基础的UI对象
  *
@@ -4717,6 +4719,13 @@ class UIBase extends UILayout_1.UILayout {
             this._style = new CSSStyle_1.CSSStyle(this);
         }
         return this._style;
+    }
+    set style(value) {
+        if (this._style == undefined) {
+            this._style = new CSSStyle_1.CSSStyle(this);
+        }
+        Utils_1.deepCopy(value, this._style);
+        this.invalidateParentLayout();
     }
     /**
      * 更新显示列表,子类重写，实现布局
@@ -5024,8 +5033,8 @@ class UILayout extends Core_1.Core {
         if (!values[UIKeys.invalidateSizeFlag])
             return changed;
         this.measure();
-        const parentWidth = this.parent ? this.parent.$values[UIKeys.width] : 1;
-        const parentHeight = this.parent ? this.parent.$values[UIKeys.height] : 1;
+        const parentWidth = this.parent ? this.parent.width : 1;
+        const parentHeight = this.parent ? this.parent.height : 1;
         const maxWidth = Utils_1.formatRelative(values[UIKeys.maxWidth], parentWidth);
         const maxHeight = Utils_1.formatRelative(values[UIKeys.maxHeight], parentHeight);
         const minWidth = Utils_1.formatRelative(values[UIKeys.minWidth], parentWidth);
@@ -6302,7 +6311,7 @@ exports.now = now;
  * 深度拷贝对象
  * @param source 对象元
  */
-function deepCopy(source) {
+function deepCopy(source, target) {
     if (source === undefined || typeof source !== 'object') {
         return source;
     }
@@ -6310,11 +6319,11 @@ function deepCopy(source) {
         return [].concat(source);
     }
     else if (typeof source === 'object') {
-        const target = {};
+        const tempTarget = target || {};
         for (const prop in source) {
-            target[prop] = deepCopy(source[prop]);
+            tempTarget[prop] = deepCopy(source[prop]);
         }
-        return target;
+        return tempTarget;
     }
     return source;
 }
@@ -6649,7 +6658,7 @@ class UIBaseDrag {
                     else {
                         stageOffset.set(0);
                     }
-                    target.emit("onDragStart" /* onDragStart */, e);
+                    target.emit(Index_1.ComponentEvent.DRAG_START, target, e);
                 }
             };
             this.drag.onDragMove = (e, offset) => {
@@ -6676,7 +6685,7 @@ class UIBaseDrag {
                         this._dragPosition.y = Math.min(this._dragPosition.y, target.parent.height - target.height);
                     }
                     target.setPosition(this._dragPosition.x, this._dragPosition.y);
-                    target.emit("onDragMove" /* onDragMove */, e);
+                    target.emit(Index_1.ComponentEvent.DRAG_MOVE, target, e);
                 }
             };
             this.drag.onDragEnd = (e) => {
@@ -6704,7 +6713,7 @@ class UIBaseDrag {
                                 target.y = this._containerStart.y;
                             }
                         }
-                        target.emit("onDragEnd" /* onDragEnd */, e);
+                        target.emit(Index_1.ComponentEvent.DRAG_END, target, e);
                     }, 0);
                 }
             };
@@ -6752,6 +6761,7 @@ class UIBaseDrag {
                 item.x = this._dragPosition.x;
                 item.y = this._dragPosition.y;
                 item.dragOption.$targetParent = parent;
+                target.emit(Index_1.ComponentEvent.DRAG_TARGET, target, e);
             }
         }
     }
@@ -7019,7 +7029,7 @@ exports.ClickEvent = ClickEvent;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
- * 特定属性改变时
+ * 特定属性改变时,通常为了去系统事件区分，UI组件的事件名为大写
  * 1. CheckBox 的 checked 改变时
  * 2. Label 的 text 改变时
  * 3. SpriteAnimated 的 animationName 改变时
@@ -7055,6 +7065,10 @@ exports.STATE_CHANGE = "STATE_CHANGE";
  */
 exports.LOOP = "LOOP";
 /**
+ * 组件被添加前
+ */
+exports.ADD = "add";
+/**
  * 组件被添加时
  */
 exports.ADDED = "added";
@@ -7067,13 +7081,29 @@ exports.REMOVEED = "removed";
  */
 exports.RESIZE = "RESIZE";
 /**
- * 组件位置移动后
+ * 组件位置移动
  */
 exports.MOVE = "MOVE";
 /**
  * 组件创建完成后
  */
 exports.CREATION_COMPLETE = "CREATION_COMPLETE";
+/**
+ * 组件拖动开始时
+ */
+exports.DRAG_START = "DRAG_START";
+/**
+ * 组件拖动结束时 （如果绑定接收容器并拖动到接收容器中，不会触发此事件）
+ */
+exports.DRAG_END = "DRAG_END";
+/**
+ * 组件拖动中
+ */
+exports.DRAG_MOVE = "DRAG_END";
+/**
+ * 组件拖动到接收目标中
+ */
+exports.DRAG_TARGET = "DRAG_TARGET";
 
 
 /***/ }),

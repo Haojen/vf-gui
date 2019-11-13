@@ -82,17 +82,17 @@ export function now() {
  * 深度拷贝对象
  * @param source 对象元
  */
-export function deepCopy(source: TAny) {
+export function deepCopy(source: TAny,target?:TAny) {
     if (source === undefined || typeof source !== 'object') {
         return source;
     } else if (Array.isArray(source)) {
         return [].concat(source as []);
     } else if (typeof source === 'object') {
-        const target: { [key: string]: TAny } = {};
+        const tempTarget: { [key: string]: TAny } = target || {};
         for (const prop in source) {
-            target[prop] = deepCopy(source[prop]);
+            tempTarget[prop] = deepCopy(source[prop]);
         }
-        return target;
+        return tempTarget;
     }
     return source;
 }

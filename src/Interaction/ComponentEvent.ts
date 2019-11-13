@@ -40,6 +40,10 @@ export const STATE_CHANGE= "STATE_CHANGE";
 export const LOOP = "LOOP";
 
 /**
+ * 组件被添加前
+ */
+export const ADD = "add";
+/**
  * 组件被添加时
  */
 export const ADDED = "added";
