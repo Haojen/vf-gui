@@ -56,7 +56,7 @@ export class ClickEvent {
             this.eventnameMouseupoutside = TouchMouseEventEnum.mouseRightupoutside;
         }
 
-        obj.container.interactive = true;
+        obj.interactive = true;
 
         this.startEvent();
     }
@@ -121,6 +121,7 @@ export class ClickEvent {
     }
 
     private _onMouseDown(e: InteractionEvent) {
+ 
         this.mouse.copyFrom(e.data.global);
         this.id = e.data.identifier;
         this.onPress && this.onPress.call(this.obj, e,this.obj, true),this.obj;
@@ -162,6 +163,7 @@ export class ClickEvent {
             return;
         this.offset.set(e.data.global.x - this.mouse.x, e.data.global.y - this.mouse.y);
         if (this.bound) {
+
             this.obj.container.off(this.eventnameMouseup, this._onMouseUp,this);
             this.obj.container.off(this.eventnameMouseupoutside, this._onMouseUpOutside,this);
             if (!this.right) {
@@ -174,6 +176,7 @@ export class ClickEvent {
         this.emitTouchEvent(TouchMouseEvent.onPress,e,false);
     }
     private _onMouseUp(e: InteractionEvent) {
+
         if (e.data.identifier !== this.id) 
             return;
         this._mouseUpAll(e);

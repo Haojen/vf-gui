@@ -112,7 +112,7 @@ export class UIBaseDrag implements Lifecycle {
     }
 
     /**
-     * 拖动的容器，需要显示设置容器宽高
+     * 拖动时，物体临时的存放容器，设置后，请注意事件流
      */
     private _dragContainer: Core | undefined;
     public get dragContainer() {
@@ -166,6 +166,8 @@ export class UIBaseDrag implements Lifecycle {
             const stageOffset = new PIXI.Point();
             this._containerStart = containerStart;
             this._dragPosition.set(0,0);
+            this._dragContainer = Stage.Ins;
+            
             this.drag = new DragEvent(this.target);
             this.drag.dragRestrictAxis = this._dragRestrictAxis;
 
@@ -180,10 +182,10 @@ export class UIBaseDrag implements Lifecycle {
                     this.dragging = true;
                     target.interactive = false;
                     containerStart.copyFrom(target.container.position);
-                    if (this.dragContainer) {
+                    if (this._dragContainer) {
                         let c: Core | undefined;
-                        if (this.dragContainer instanceof Core) {
-                            c = this.dragContainer;
+                        if (this._dragContainer instanceof Core) {
+                            c = this._dragContainer;
                         }
                         if (c && target.parent) {
                             //_this.container._recursivePostUpdateTransform();
@@ -239,7 +241,7 @@ export class UIBaseDrag implements Lifecycle {
                         //dragBounces
                         let target = this.target;
                         let parent = this.$targetParent;
-                        target.container.interactive = true;
+                        target.interactive = true;
                         const item = DragDropController.getItem(target);
                         if(item && parent){
                             if(target.parent !== parent && target.parent){
@@ -283,7 +285,7 @@ export class UIBaseDrag implements Lifecycle {
             this.dropInitialized = true;
             const container = target.container;
             //self = this;
-            target.container.interactive = true;
+            container.interactive = true;
             container.on(TouchMouseEventEnum.mouseup, this.onDrop, this);
             container.on(TouchMouseEventEnum.touchend, this.onDrop, this);
  

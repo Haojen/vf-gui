@@ -90,7 +90,7 @@ export function deepCopy(source: TAny,target?:TAny) {
     } else if (typeof source === 'object') {
         const tempTarget: { [key: string]: TAny } = target || {};
         for (const prop in source) {
-            tempTarget[prop] = deepCopy(source[prop]);
+            tempTarget[prop] = deepCopy(source[prop],tempTarget[prop]);
         }
         return tempTarget;
     }

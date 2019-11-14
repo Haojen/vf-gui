@@ -83,6 +83,7 @@ export class UILayout extends Core {
         if (values[UIKeys.invalidateDisplayListFlag]) {
             validatorShared.invalidateDisplayList(this);
         }
+        this.validateSize();
     }
 
     /**

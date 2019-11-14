@@ -46,6 +46,10 @@ export class UIBase extends UILayout implements Lifecycle {
         }
         return new UIBaseDrag(this);
     }
+    public set dragOption(value:UIBaseDrag){
+        let dragOption = this.dragOption;
+        deepCopy(value,dragOption);
+    }
     /**
      * 分组
      */
@@ -135,10 +139,8 @@ export class UIBase extends UILayout implements Lifecycle {
     }
 
     public set style(value:CSSStyle){
-        if(this._style == undefined){
-            this._style = new CSSStyle(this);
-        }
-        deepCopy(value,this._style);
+        let style = this.style;
+        deepCopy(value,style);
         this.invalidateParentLayout();
     }
 

@@ -1,5 +1,6 @@
 import { UIBase } from "../core/UIBase";
 import { ComponentEvent } from "../interaction/Index";
+import * as UIKeys from "../core/UIKeys";
 
 /**
  * 文本
@@ -33,6 +34,7 @@ export class Label extends UIBase {
     public set text(value) {
         this.sprite.text = value;
         this.invalidateSize();
+        this.invalidateDisplayList();
         this.emit(ComponentEvent.CHANGE,this);
     }
 
@@ -46,6 +48,16 @@ export class Label extends UIBase {
         this.invalidateDisplayList();
     }
 
+    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void {
+        super.updateDisplayList(unscaledWidth,unscaledHeight);
+        let values = this.$values;
+        if(!isNaN(values[UIKeys.explicitWidth])){
+            this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width >>1;
+        }
+        if(!isNaN(values[UIKeys.explicitHeight])){
+            this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >>1;
+        }
+    }
 
     public release(){
         super.release();

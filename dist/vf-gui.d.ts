@@ -34,7 +34,7 @@ declare module 'core/Utils' {
 	 * 深度拷贝对象
 	 * @param source 对象元
 	 */
-	export function deepCopy(source: TAny): any;
+	export function deepCopy(source: TAny, target?: TAny): any;
 	/**
 	 * helper function to convert string hex to int or default
 	 *
@@ -278,18 +278,6 @@ declare module 'interaction/InteractionEvent' {
 	     */
 	    onMove: string;
 	};
-	/**
-	 * DragEvent、UI组件拖动事件枚举，
-	 */
-	export const enum DraggableEvent {
-	    /**
-	     * UIBase中不包含次事件，DragEvent中包含
-	     */
-	    onDragPress = "onDragPress",
-	    onDragStart = "onDragStart",
-	    onDragMove = "onDragMove",
-	    onDragEnd = "onDragEnd"
-	}
 	/**
 	 * 键盘事件 驱动类KeysEvent
 	 *
@@ -1633,14 +1621,7 @@ declare module 'layout/CSSGridLayout' {
 declare module 'layout/CSSBasicLayout' {
 	/// <reference types="pixi.js" />
 	import { UIBase } from 'core/UIBase';
-	/**
-	 * BasicLayout 类根据其各个设置彼此独立地排列布局元素。
-	 * BasicLayout（也称为绝对布局）要求显式定位每个容器子代。
-	 * 可以使用子代的 x 和 y 属性，或使用约束来定位每个子代。
-	 *
-	 */
-	export const $TempRectangle: PIXI.Rectangle;
-	export const $TempPoint: PIXI.Point;
+	export const $tempRectangle: PIXI.Rectangle;
 	/**
 	 * 布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸
 	 */
@@ -1770,7 +1751,7 @@ declare module 'core/plugs/UIBaseDrag' {
 	     */
 	    dragGroup: string;
 	    /**
-	     * 拖动的容器，需要显示设置容器宽高
+	     * 拖动时，物体临时的存放容器，设置后，请注意事件流
 	     */
 	    private _dragContainer;
 	    dragContainer: Core | undefined;
@@ -1832,7 +1813,7 @@ declare module 'core/UIBase' {
 	    /**
 	     * 设置拖动
 	     */
-	    readonly dragOption: UIBaseDrag;
+	    dragOption: UIBaseDrag;
 	    /**
 	     * 分组
 	     */
@@ -1865,7 +1846,7 @@ declare module 'core/UIBase' {
 	    /**
 	     * 获取样式
 	     */
-	    readonly style: CSSStyle;
+	    style: CSSStyle;
 	    /**
 	     * 更新显示列表,子类重写，实现布局
 	     */
@@ -2063,6 +2044,7 @@ declare module 'c/Label' {
 	     */
 	    text: string;
 	    fontCssStyle: TAny;
+	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
 	    release(): void;
 	}
 
@@ -2379,7 +2361,7 @@ declare module 'interaction/MouseScrollEvent' {
 }
 declare module 'interaction/ComponentEvent' {
 	/**
-	 * 特定属性改变时
+	 * 特定属性改变时,通常为了去系统事件区分，UI组件的事件名为大写
 	 * 1. CheckBox 的 checked 改变时
 	 * 2. Label 的 text 改变时
 	 * 3. SpriteAnimated 的 animationName 改变时
@@ -2415,6 +2397,10 @@ declare module 'interaction/ComponentEvent' {
 	 */
 	export const LOOP = "LOOP";
 	/**
+	 * 组件被添加前
+	 */
+	export const ADD = "add";
+	/**
 	 * 组件被添加时
 	 */
 	export const ADDED = "added";
@@ -2427,13 +2413,29 @@ declare module 'interaction/ComponentEvent' {
 	 */
 	export const RESIZE = "RESIZE";
 	/**
-	 * 组件位置移动后
+	 * 组件位置移动
 	 */
 	export const MOVE = "MOVE";
 	/**
 	 * 组件创建完成后
 	 */
 	export const CREATION_COMPLETE = "CREATION_COMPLETE";
+	/**
+	 * 组件拖动开始时
+	 */
+	export const DRAG_START = "DRAG_START";
+	/**
+	 * 组件拖动结束时 （如果绑定接收容器并拖动到接收容器中，不会触发此事件）
+	 */
+	export const DRAG_END = "DRAG_END";
+	/**
+	 * 组件拖动中
+	 */
+	export const DRAG_MOVE = "DRAG_END";
+	/**
+	 * 组件拖动到接收目标中
+	 */
+	export const DRAG_TARGET = "DRAG_TARGET";
 
 }
 declare module 'interaction/GroupController' {

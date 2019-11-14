@@ -57,15 +57,17 @@ export function updateDisplayLayout(target: UIBase,unscaledWidth: number, unscal
         const pos = updateBasicDisplayList(target,unscaledWidth, unscaledHeight);
         //console.log(pos);
     }else if(target.style.display === "grid"){
+        updateBasicDisplayList(target,unscaledWidth, unscaledHeight);
         updateGridLayout(target);
     }
     
+    if (target.style.justifyContent || target.style.alignContent) {
+        if(target.parent)
+            updateDisplayAlign(target,target.parent.width,target.parent.height,target.style.gridColumnGap,target.style.gridRowGap);
+    }
+
     if(target.isContainer){
         
-        if (target.style.justifyContent || target.style.alignContent) {
-            if(target.parent)
-                updateDisplayAlign(target,target.parent.width,target.parent.height,target.style.gridColumnGap,target.style.gridRowGap);
-        }
         const bounds = target.getPreferredBounds($TempRectangle);
         let child:UIBase;
         for(let i = 0;i<target.uiChildren.length;i++){

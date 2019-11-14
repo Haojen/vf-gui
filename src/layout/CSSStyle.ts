@@ -523,6 +523,8 @@ export class CSSStyle {
     public set textAlign(value) {
         this._textAlign = value;
         CSSFunction.updateFontStyle(this.parent,"textAlign",value);
+        CSSFunction.updateFontStyle(this.parent,"align",value);
+        
     }
     /** 
      * 多行文本(wordWrap = true) - 行高 

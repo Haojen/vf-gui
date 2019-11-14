@@ -30,7 +30,7 @@ export class DragEvent {
 
     public constructor(obj: UIBase) {
         this.obj = obj;
-        obj.container.interactive = true;
+        obj.interactive = true;
         this.startEvent();
     }
 
@@ -110,18 +110,16 @@ export class DragEvent {
     }
 
     private _onDragEnd(e: InteractionEvent) {
-        if (e.data.identifier !== this.id) return;
-
-        
+        if (e.data.identifier !== this.id) return; 
         if (this.bound) {
             const stage =  Stage.Ins.container;
-            stage.removeListener(TouchMouseEventEnum.mousemove, this._onDragMove, this);
-            stage.removeListener(TouchMouseEventEnum.touchmove, this._onDragMove, this);
-            stage.removeListener(TouchMouseEventEnum.mouseup, this._onDragEnd, this);
-            stage.removeListener(TouchMouseEventEnum.mouseupoutside, this._onDragEnd, this);
-            stage.removeListener(TouchMouseEventEnum.touchend, this._onDragEnd, this);
-            stage.removeListener(TouchMouseEventEnum.touchendoutside, this._onDragEnd, this);
-            stage.removeListener(TouchMouseEventEnum.touchcancel, this._onDragEnd, this);
+            stage.off(TouchMouseEventEnum.mousemove, this._onDragMove, this);
+            stage.off(TouchMouseEventEnum.touchmove, this._onDragMove, this);
+            stage.off(TouchMouseEventEnum.mouseup, this._onDragEnd, this);
+            stage.off(TouchMouseEventEnum.mouseupoutside, this._onDragEnd, this);
+            stage.off(TouchMouseEventEnum.touchend, this._onDragEnd, this);
+            stage.off(TouchMouseEventEnum.touchendoutside, this._onDragEnd, this);
+            stage.off(TouchMouseEventEnum.touchcancel, this._onDragEnd, this);
             this.dragging = false;
             this.bound = false;
             this.onDragEnd && this.onDragEnd.call(this.obj, e,this);
@@ -154,7 +152,7 @@ export class DragEvent {
         this.onDragEnd = undefined;
         this.onDragMove = undefined;
         this.onDragStart = undefined;
-        this.obj.container.interactive = false;
+        this.obj.interactive = false;
     }
 
     public onDragPress: ((e: InteractionEvent, isPressed: boolean,dragObj?: DragEvent) => void) | undefined;

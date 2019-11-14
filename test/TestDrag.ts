@@ -52,27 +52,6 @@ export default class TestDrag {
         c5.rect.dragOption.dragBounces = true;//回弹
 
 
-        let c6 = this.getNewContainer("拖动到\n接收容器",undefined,false);
-        c6.container.x = 250;
-        c6.container.y = 400;
-        c6.rect.visible = false;
-        uiStage.addChild(c6.container);
-        // ----------   绘制矩形设置可拖动 ---------- //
-        let rect:gui.Rect;
-        for(let i=0;i<5;i++){        
-            rect = new gui.Rect();
-            rect.width = 30;
-            rect.height = 30;
-            rect.color = 0xffcc66;
-            rect.x = 0;
-            rect.y = 0;
-            rect.dragOption.dragContainer = uiStage; 
-            rect.dragOption.dragBounces = true;
-            rect.dragOption.draggable = true;//开启拖拽
-            rect.dragOption.dragGroup = "group1"; //设置分组，同时需要设置接收掉落方的dropGroup。
-            c6.container.addChild(rect);
-        }
-
 
         let c7 = this.getNewContainer("接收容器",undefined,false);
         c7.container.x = 100;
@@ -86,6 +65,29 @@ export default class TestDrag {
         c7.container.dragOption.droppable = true;//开启掉落接收
         c7.container.dragOption.dropGroup = "group1";
 
+
+        let c6 = this.getNewContainer("拖动到\n接收容器",undefined,false);
+        c6.container.name = "c6";
+        c6.container.x = 250;
+        c6.container.y = 400;
+        uiStage.addChild(c6.container);
+        // ----------   绘制矩形设置可拖动 ---------- //
+        let rect:gui.Rect;
+        for(let i=0;i<5;i++){        
+            rect = new gui.Rect();
+            rect.name = "rect" + i.toString();
+            new gui.Interaction.ClickEvent(rect,true);
+            rect.width = 30;
+            rect.height = 30;
+            rect.color = 0xffcc66;
+            rect.x = 0;
+            rect.y = 0;
+            rect.dragOption.dragBounces = true;
+            rect.dragOption.draggable = true;//开启拖拽
+            rect.dragOption.dragGroup = "group1"; //设置分组，同时需要设置接收掉落方的dropGroup。
+            c6.container.addChild(rect);
+        }
+
     }
 
 
@@ -95,6 +97,7 @@ export default class TestDrag {
         let childContainer:gui.Container;
         /** 单背景色 */
         childContainer = new gui.Container();
+        new gui.Interaction.ClickEvent(childContainer,true);
         childContainer.width = 100;
         childContainer.height = 100;
         childContainer.style.backgroundColor = color;

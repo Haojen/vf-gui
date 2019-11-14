@@ -1064,6 +1064,7 @@ exports.default = HtmlInput;
 Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ../core/UIBase */ "./src/core/UIBase.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+const UIKeys = __webpack_require__(/*! ../core/UIKeys */ "./src/core/UIKeys.ts");
 /**
  * 文本
  *
@@ -1092,6 +1093,7 @@ class Label extends UIBase_1.UIBase {
     set text(value) {
         this.sprite.text = value;
         this.invalidateSize();
+        this.invalidateDisplayList();
         this.emit(Index_1.ComponentEvent.CHANGE, this);
     }
     set fontCssStyle(value) {
@@ -1102,6 +1104,16 @@ class Label extends UIBase_1.UIBase {
         this.sprite.style = value;
         this.invalidateSize();
         this.invalidateDisplayList();
+    }
+    updateDisplayList(unscaledWidth, unscaledHeight) {
+        super.updateDisplayList(unscaledWidth, unscaledHeight);
+        let values = this.$values;
+        if (!isNaN(values[UIKeys.explicitWidth])) {
+            this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width >> 1;
+        }
+        if (!isNaN(values[UIKeys.explicitHeight])) {
+            this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >> 1;
+        }
     }
     release() {
         super.release();
@@ -4661,6 +4673,10 @@ class UIBase extends UILayout_1.UILayout {
         }
         return new UIBaseDrag_1.UIBaseDrag(this);
     }
+    set dragOption(value) {
+        let dragOption = this.dragOption;
+        Utils_1.deepCopy(value, dragOption);
+    }
     get groupName() {
         return this._groupName;
     }
@@ -4721,10 +4737,8 @@ class UIBase extends UILayout_1.UILayout {
         return this._style;
     }
     set style(value) {
-        if (this._style == undefined) {
-            this._style = new CSSStyle_1.CSSStyle(this);
-        }
-        Utils_1.deepCopy(value, this._style);
+        let style = this.style;
+        Utils_1.deepCopy(value, style);
         this.invalidateParentLayout();
     }
     /**
@@ -4954,6 +4968,7 @@ class UILayout extends Core_1.Core {
         if (values[UIKeys.invalidateDisplayListFlag]) {
             UIValidator_1.default.invalidateDisplayList(this);
         }
+        this.validateSize();
     }
     /**
      * @private
@@ -6321,7 +6336,7 @@ function deepCopy(source, target) {
     else if (typeof source === 'object') {
         const tempTarget = target || {};
         for (const prop in source) {
-            tempTarget[prop] = deepCopy(source[prop]);
+            tempTarget[prop] = deepCopy(source[prop], tempTarget[prop]);
         }
         return tempTarget;
     }
@@ -6510,6 +6525,7 @@ exports.formatRelative = formatRelative;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Index_1 = __webpack_require__(/*! ../../interaction/Index */ "./src/interaction/Index.ts");
 const Core_1 = __webpack_require__(/*! ../Core */ "./src/core/Core.ts");
+const Stage_1 = __webpack_require__(/*! ../Stage */ "./src/core/Stage.ts");
 const Utils_1 = __webpack_require__(/*! ../Utils */ "./src/core/Utils.ts");
 /**
  *  组件的拖拽操作
@@ -6631,6 +6647,7 @@ class UIBaseDrag {
             const stageOffset = new PIXI.Point();
             this._containerStart = containerStart;
             this._dragPosition.set(0, 0);
+            this._dragContainer = Stage_1.Stage.Ins;
             this.drag = new Index_1.DragEvent(this.target);
             this.drag.dragRestrictAxis = this._dragRestrictAxis;
             this.drag.onDragStart = (e) => {
@@ -6644,10 +6661,10 @@ class UIBaseDrag {
                     this.dragging = true;
                     target.interactive = false;
                     containerStart.copyFrom(target.container.position);
-                    if (this.dragContainer) {
+                    if (this._dragContainer) {
                         let c;
-                        if (this.dragContainer instanceof Core_1.Core) {
-                            c = this.dragContainer;
+                        if (this._dragContainer instanceof Core_1.Core) {
+                            c = this._dragContainer;
                         }
                         if (c && target.parent) {
                             //_this.container._recursivePostUpdateTransform();
@@ -6699,7 +6716,7 @@ class UIBaseDrag {
                         //dragBounces
                         let target = this.target;
                         let parent = this.$targetParent;
-                        target.container.interactive = true;
+                        target.interactive = true;
                         const item = Index_1.DragDropController.getItem(target);
                         if (item && parent) {
                             if (target.parent !== parent && target.parent) {
@@ -6739,7 +6756,7 @@ class UIBaseDrag {
             this.dropInitialized = true;
             const container = target.container;
             //self = this;
-            target.container.interactive = true;
+            container.interactive = true;
             container.on("mouseup" /* mouseup */, this.onDrop, this);
             container.on("touchend" /* touchend */, this.onDrop, this);
         }
@@ -6876,7 +6893,7 @@ class ClickEvent {
             this.eventnameMouseup = "rightup" /* mouseRightup */;
             this.eventnameMouseupoutside = "rightupoutside" /* mouseRightupoutside */;
         }
-        obj.container.interactive = true;
+        obj.interactive = true;
         this.startEvent();
     }
     startEvent() {
@@ -7238,7 +7255,7 @@ class DragEvent {
         this.dragging = false;
         this.isStop = true;
         this.obj = obj;
-        obj.container.interactive = true;
+        obj.interactive = true;
         this.startEvent();
     }
     startEvent() {
@@ -7296,13 +7313,13 @@ class DragEvent {
             return;
         if (this.bound) {
             const stage = Stage_1.Stage.Ins.container;
-            stage.removeListener("mousemove" /* mousemove */, this._onDragMove, this);
-            stage.removeListener("touchmove" /* touchmove */, this._onDragMove, this);
-            stage.removeListener("mouseup" /* mouseup */, this._onDragEnd, this);
-            stage.removeListener("mouseupoutside" /* mouseupoutside */, this._onDragEnd, this);
-            stage.removeListener("touchend" /* touchend */, this._onDragEnd, this);
-            stage.removeListener("touchendoutside" /* touchendoutside */, this._onDragEnd, this);
-            stage.removeListener("touchcancel" /* touchcancel */, this._onDragEnd, this);
+            stage.off("mousemove" /* mousemove */, this._onDragMove, this);
+            stage.off("touchmove" /* touchmove */, this._onDragMove, this);
+            stage.off("mouseup" /* mouseup */, this._onDragEnd, this);
+            stage.off("mouseupoutside" /* mouseupoutside */, this._onDragEnd, this);
+            stage.off("touchend" /* touchend */, this._onDragEnd, this);
+            stage.off("touchendoutside" /* touchendoutside */, this._onDragEnd, this);
+            stage.off("touchcancel" /* touchcancel */, this._onDragEnd, this);
             this.dragging = false;
             this.bound = false;
             this.onDragEnd && this.onDragEnd.call(this.obj, e, this);
@@ -7331,7 +7348,7 @@ class DragEvent {
         this.onDragEnd = undefined;
         this.onDragMove = undefined;
         this.onDragStart = undefined;
-        this.obj.container.interactive = false;
+        this.obj.interactive = false;
     }
 }
 exports.DragEvent = DragEvent;
@@ -8188,13 +8205,14 @@ function updateDisplayLayout(target, unscaledWidth, unscaledHeight) {
         //console.log(pos);
     }
     else if (target.style.display === "grid") {
+        CSSBasicLayout_1.updateBasicDisplayList(target, unscaledWidth, unscaledHeight);
         CSSGridLayout_1.updateGridLayout(target);
     }
+    if (target.style.justifyContent || target.style.alignContent) {
+        if (target.parent)
+            updateDisplayAlign(target, target.parent.width, target.parent.height, target.style.gridColumnGap, target.style.gridRowGap);
+    }
     if (target.isContainer) {
-        if (target.style.justifyContent || target.style.alignContent) {
-            if (target.parent)
-                updateDisplayAlign(target, target.parent.width, target.parent.height, target.style.gridColumnGap, target.style.gridRowGap);
-        }
         const bounds = target.getPreferredBounds(exports.$TempRectangle);
         let child;
         for (let i = 0; i < target.uiChildren.length; i++) {
@@ -8837,6 +8855,7 @@ class CSSStyle {
     set textAlign(value) {
         this._textAlign = value;
         CSSFunction.updateFontStyle(this.parent, "textAlign", value);
+        CSSFunction.updateFontStyle(this.parent, "align", value);
     }
     get lineHeight() {
         return this._lineHeight;
