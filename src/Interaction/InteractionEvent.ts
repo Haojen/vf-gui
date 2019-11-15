@@ -30,6 +30,14 @@ export const TouchMouseEvent = {
      */
     onPress : "press",
     /**
+     * 按下
+     */
+    onDown : "down",
+    /**
+     * 弹起
+     */
+    onUp : "up",
+    /**
      * 点击
      * 
      * (e: InteractionEvent,thisObj:UIBase)=>void

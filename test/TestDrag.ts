@@ -1,4 +1,5 @@
 import gui from "../src/vf-gui";
+import { ComponentEvent } from "../src/interaction/Index";
 
 export default class TestDrag {
 
@@ -56,6 +57,7 @@ export default class TestDrag {
         let c7 = this.getNewContainer("接收容器",undefined,false);
         c7.container.x = 100;
         c7.container.y = 550;
+        c7.container.name = "c7";
         c7.container.style.display = "grid";
         c7.container.style.gridTemplateColumns =  ["repeat",3,30];
         c7.container.style.gridTemplateRows =  ["repeat",3,30];
@@ -64,6 +66,9 @@ export default class TestDrag {
         uiStage.addChild(c7.container);
         c7.container.dragOption.droppable = true;//开启掉落接收
         c7.container.dragOption.dropGroup = "group1";
+        c7.container.on(ComponentEvent.DROP_TARGET,(container:gui.Container,source:gui.Rect)=>{
+            console.log(container.name,source.name);
+        });
 
 
         let c6 = this.getNewContainer("拖动到\n接收容器",undefined,false);

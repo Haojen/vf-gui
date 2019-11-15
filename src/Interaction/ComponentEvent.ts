@@ -65,10 +65,20 @@ export const MOVE = "MOVE";
  */
 export const CREATION_COMPLETE = "CREATION_COMPLETE";
 
+
+/**
+ * 组件拖动开始之前
+ */
+export const DRAG_START_BEFORE = "DRAG_START_BEFORE";
 /**
  * 组件拖动开始时
  */
 export const DRAG_START = "DRAG_START";
+
+/**
+ * 组件拖动结束之前
+ */
+export const DRAG_END_BEFORE = "DRAG_END_BEFORE";
 /**
  * 组件拖动结束时 （如果绑定接收容器并拖动到接收容器中，不会触发此事件）
  */
@@ -77,8 +87,18 @@ export const DRAG_END = "DRAG_END";
  * 组件拖动中
  */
 export const DRAG_MOVE = "DRAG_MOVE";
+
+/**
+ * 组件拖动到接收目标中之前
+ */
+export const DRAG_TARGET_BEFORE = "DRAG_TARGET_BEFORE";
 /**
  * 组件拖动到接收目标中
  */
 export const DRAG_TARGET = "DRAG_TARGET";
+
+/**
+ * 有拖拽物掉落到此容器时触发
+ */
+export const DROP_TARGET = "DROP_TARGET";
 

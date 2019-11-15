@@ -6660,6 +6660,7 @@ class UIBaseDrag {
                 this.$targetParent = target.parent;
                 const added = Index_1.DragDropController.add(target, e);
                 if (!this.dragging && added) {
+                    target.emit(Index_1.ComponentEvent.DRAG_START_BEFORE, target, e);
                     this.dragging = true;
                     target.interactive = false;
                     containerStart.copyFrom(target.container.position);
@@ -6720,6 +6721,7 @@ class UIBaseDrag {
                         let parent = this.$targetParent;
                         target.interactive = true;
                         const item = Index_1.DragDropController.getItem(target);
+                        target.emit(Index_1.ComponentEvent.DRAG_END_BEFORE, target, e);
                         if (item && parent) {
                             if (target.parent !== parent && target.parent) {
                                 parent.container.toLocal(target.container.position, target.container.parent, this._dragPosition);
@@ -6775,11 +6777,12 @@ class UIBaseDrag {
             const parent = item.dragOption.droppableReparent !== undefined ? item.dragOption.droppableReparent : target;
             if (parent) {
                 parent.container.toLocal(item.container.position, item.container.parent, this._dragPosition);
-                if (parent != item.parent) {
-                    parent.addChild(item);
-                }
                 item.x = this._dragPosition.x;
                 item.y = this._dragPosition.y;
+                if (parent != item.parent) {
+                    parent.addChild(item);
+                    parent.emit(Index_1.ComponentEvent.DROP_TARGET, parent, item, e);
+                }
                 item.dragOption.$targetParent = parent;
             }
             item.emit(Index_1.ComponentEvent.DRAG_TARGET, item, e);
@@ -7109,9 +7112,17 @@ exports.MOVE = "MOVE";
  */
 exports.CREATION_COMPLETE = "CREATION_COMPLETE";
 /**
+ * 组件拖动开始之前
+ */
+exports.DRAG_START_BEFORE = "DRAG_START_BEFORE";
+/**
  * 组件拖动开始时
  */
 exports.DRAG_START = "DRAG_START";
+/**
+ * 组件拖动结束之前
+ */
+exports.DRAG_END_BEFORE = "DRAG_END_BEFORE";
 /**
  * 组件拖动结束时 （如果绑定接收容器并拖动到接收容器中，不会触发此事件）
  */
@@ -7121,9 +7132,17 @@ exports.DRAG_END = "DRAG_END";
  */
 exports.DRAG_MOVE = "DRAG_MOVE";
 /**
+ * 组件拖动到接收目标中之前
+ */
+exports.DRAG_TARGET_BEFORE = "DRAG_TARGET_BEFORE";
+/**
  * 组件拖动到接收目标中
  */
 exports.DRAG_TARGET = "DRAG_TARGET";
+/**
+ * 有拖拽物掉落到此容器时触发
+ */
+exports.DROP_TARGET = "DROP_TARGET";
 
 
 /***/ }),
