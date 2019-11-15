@@ -256,6 +256,7 @@ export class UIBaseDrag implements Lifecycle {
                             }
                         }
                         target.emit(ComponentEvent.DRAG_END, target,e);
+                        
 
                     }, 0);
                 }
@@ -305,12 +306,14 @@ export class UIBaseDrag implements Lifecycle {
             if (parent) {
                 parent.container.toLocal(item.container.position, item.container.parent,this._dragPosition);
                 if (parent != item.parent)
+                {
                     parent.addChild(item);
-                    item.x = this._dragPosition.x;
-                    item.y = this._dragPosition.y;
-                    item.dragOption.$targetParent = parent;
-                    target.emit(ComponentEvent.DRAG_TARGET, target,e);
+                }           
+                item.x = this._dragPosition.x;
+                item.y = this._dragPosition.y;
+                item.dragOption.$targetParent = parent;
             }
+            item.emit(ComponentEvent.DRAG_TARGET, item,e);
         }
     }
 

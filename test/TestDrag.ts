@@ -85,6 +85,18 @@ export default class TestDrag {
             rect.dragOption.dragBounces = true;
             rect.dragOption.draggable = true;//开启拖拽
             rect.dragOption.dragGroup = "group1"; //设置分组，同时需要设置接收掉落方的dropGroup。
+            rect.on(gui.Interaction.ComponentEvent.DRAG_START,(rect1:gui.Rect)=>{
+                console.log("DRAG_START");
+                rect1.scaleX = rect1.scaleY = 1.5;
+            },this);
+            rect.on(gui.Interaction.ComponentEvent.DRAG_END,(rect1:gui.Rect)=>{
+                console.log("DRAG_END");
+                rect1.scaleX = rect1.scaleY = 1;
+            },this);
+            rect.on(gui.Interaction.ComponentEvent.DRAG_TARGET,(rect1:gui.Rect)=>{
+                console.log("DRAG_TARGET");
+                rect1.scaleX = rect1.scaleY = 1;
+            },this);
             c6.container.addChild(rect);
         }
 

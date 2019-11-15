@@ -76,7 +76,7 @@ export const DRAG_END = "DRAG_END";
 /**
  * 组件拖动中
  */
-export const DRAG_MOVE = "DRAG_END";
+export const DRAG_MOVE = "DRAG_MOVE";
 /**
  * 组件拖动到接收目标中
  */

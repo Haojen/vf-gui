@@ -753,6 +753,7 @@ export class UILayout extends Core {
             values[UIKeys.scaleX] = value;
             this.invalidateProperties();
             this.invalidateSize();
+            this.invalidateDisplayList();
             this.invalidateParentLayout();
         }
     }
@@ -771,6 +772,7 @@ export class UILayout extends Core {
             values[UIKeys.scaleY] = value;
             this.invalidateProperties();
             this.invalidateSize();
+            this.invalidateDisplayList();
             this.invalidateParentLayout();
         }
     }

@@ -5576,6 +5576,7 @@ class UILayout extends Core_1.Core {
             values[UIKeys.scaleX] = value;
             this.invalidateProperties();
             this.invalidateSize();
+            this.invalidateDisplayList();
             this.invalidateParentLayout();
         }
     }
@@ -5592,6 +5593,7 @@ class UILayout extends Core_1.Core {
             values[UIKeys.scaleY] = value;
             this.invalidateProperties();
             this.invalidateSize();
+            this.invalidateDisplayList();
             this.invalidateParentLayout();
         }
     }
@@ -6773,13 +6775,14 @@ class UIBaseDrag {
             const parent = item.dragOption.droppableReparent !== undefined ? item.dragOption.droppableReparent : target;
             if (parent) {
                 parent.container.toLocal(item.container.position, item.container.parent, this._dragPosition);
-                if (parent != item.parent)
+                if (parent != item.parent) {
                     parent.addChild(item);
+                }
                 item.x = this._dragPosition.x;
                 item.y = this._dragPosition.y;
                 item.dragOption.$targetParent = parent;
-                target.emit(Index_1.ComponentEvent.DRAG_TARGET, target, e);
             }
+            item.emit(Index_1.ComponentEvent.DRAG_TARGET, item, e);
         }
     }
     load() {
@@ -7116,7 +7119,7 @@ exports.DRAG_END = "DRAG_END";
 /**
  * 组件拖动中
  */
-exports.DRAG_MOVE = "DRAG_END";
+exports.DRAG_MOVE = "DRAG_MOVE";
 /**
  * 组件拖动到接收目标中
  */
