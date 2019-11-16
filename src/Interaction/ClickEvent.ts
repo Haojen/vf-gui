@@ -126,6 +126,9 @@ export class ClickEvent {
         this.id = e.data.identifier;
         this.onPress && this.onPress.call(this.obj, e,this.obj, true),this.obj;
         this.emitTouchEvent(TouchMouseEvent.onPress,e,true);
+        if(this.obj.listenerCount(TouchMouseEvent.onDown)>0){
+            this.emitTouchEvent(TouchMouseEvent.onDown,e);
+        }
         if (!this.bound) {
             this.obj.container.on(this.eventnameMouseup, this._onMouseUp,this);
             this.obj.container.on(this.eventnameMouseupoutside, this._onMouseUpOutside,this);
@@ -173,6 +176,9 @@ export class ClickEvent {
             this.bound = false;
         }
         this.onPress && this.onPress.call(this.obj, e,this.obj, false);
+        if(this.obj.listenerCount(TouchMouseEvent.onUp)>0){
+            this.emitTouchEvent(TouchMouseEvent.onUp,e);
+        }
         this.emitTouchEvent(TouchMouseEvent.onPress,e,false);
     }
     private _onMouseUp(e: InteractionEvent) {

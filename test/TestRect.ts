@@ -22,6 +22,18 @@ export default class TestRect {
         rect.radius = 10; //圆角
 
         uiStage.addChild(rect);
+
+        let click = new gui.Interaction.ClickEvent(rect,true);
+        rect.on(gui.Interaction.TouchMouseEvent.onUp,this.onClick,this);
+        rect.on(gui.Interaction.TouchMouseEvent.onDown,this.onClick,this);
+        rect.on(gui.Interaction.TouchMouseEvent.onPress,this.onClick,this);
+        rect.on(gui.Interaction.TouchMouseEvent.onMove,this.onClick,this);
+        rect.on(gui.Interaction.TouchMouseEvent.onHover,this.onClick,this);
+        rect.on(gui.Interaction.TouchMouseEvent.onClick,this.onClick,this);
+    }
+
+    private onClick(e:gui.Interaction.InteractionEvent){
+        console.log(e.type);
     }
 
 }
