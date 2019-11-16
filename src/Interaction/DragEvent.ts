@@ -65,8 +65,8 @@ export class DragEvent {
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true,this);
 
-        if (!this.bound && this.obj.parent) {
-            const stage =  Stage.Ins.container;
+        if (!this.bound && this.obj.parent && this.obj.stage) {
+            const stage =  this.obj.stage.container;
             this.start.copyFrom(e.data.global);
             stage.on(TouchMouseEventEnum.mousemove, this._onDragMove, this);
             stage.on(TouchMouseEventEnum.touchmove, this._onDragMove, this);
@@ -111,8 +111,8 @@ export class DragEvent {
 
     private _onDragEnd(e: InteractionEvent) {
         if (e.data.identifier !== this.id) return; 
-        if (this.bound) {
-            const stage =  Stage.Ins.container;
+        if (this.bound && this.obj.stage) {
+            const stage = this.obj.stage.container;
             stage.off(TouchMouseEventEnum.mousemove, this._onDragMove, this);
             stage.off(TouchMouseEventEnum.touchmove, this._onDragMove, this);
             stage.off(TouchMouseEventEnum.mouseup, this._onDragEnd, this);
@@ -130,8 +130,8 @@ export class DragEvent {
 
     /** 清除拖动 */
     public stopEvent() {
-        if (this.bound) {
-            const stage =  Stage.Ins.container;
+        if (this.bound && this.obj.stage) {      
+            const stage =  this.obj.stage.container;
             stage.off(TouchMouseEventEnum.mousemove, this._onDragMove, this);
             stage.off(TouchMouseEventEnum.touchmove, this._onDragMove, this);
             stage.off(TouchMouseEventEnum.mouseup, this._onDragEnd, this);

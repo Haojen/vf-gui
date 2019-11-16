@@ -69,7 +69,7 @@ export function updateDisplayLayout(target: UIBase,unscaledWidth: number, unscal
     if(target.isContainer){
         
         const bounds = target.getPreferredBounds($TempRectangle);
-        let child:UIBase;
+        let child: UIBase;
         for(let i = 0;i<target.uiChildren.length;i++){
             child = target.uiChildren[i] as UIBase;
             updateDisplayAlign(child,bounds.width,bounds.height,child.style.gridColumnGap,child.style.gridRowGap);  

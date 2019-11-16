@@ -45,14 +45,3 @@ interface InputStyle{
     transformOrigin: '0 0';
     lineHeight: '1';
 }
-
-interface ScrollBar{
-    alignToContainer: () => void;
-}
-
-interface Color{
-    r: number;
-    g: number;
-    b: number;
-    a?: number;
-}

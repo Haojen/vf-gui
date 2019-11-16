@@ -128,16 +128,16 @@ export class InputBase extends UIBase{
 
     private keyDownEventBind: TAny;
     protected _bindEvents() {
-        if (Stage.Ins) {
-            Stage.Ins.on("pointerdown", this.documentMouseDown,this);
+        if (this.stage) {
+            this.stage.on("pointerdown", this.documentMouseDown,this);
             this.keyDownEventBind = this.keyDownEvent.bind(this);
             document.addEventListener("keydown", this.keyDownEventBind);
         }
     }
 
     protected _clearEvents(){
-        if (Stage.Ins) {
-            Stage.Ins.off("pointerdown", this.documentMouseDown,this);
+        if (this.stage) {
+            this.stage.off("pointerdown", this.documentMouseDown,this);
             document.removeEventListener("keydown", this.keyDownEventBind);
         }
     }
@@ -171,8 +171,8 @@ export class InputBase extends UIBase{
         this.off(TouchMouseEvent.onClick,this.onClick,this);
         if(this.keyDownEventBind)
             document.removeEventListener("keydown", this.keyDownEventBind);
-        if(this.documentMouseDown && Stage.Ins)
-            Stage.Ins.off("pointerdown", this.documentMouseDown,this);
+        if(this.documentMouseDown && this.stage)
+            this.stage.off("pointerdown", this.documentMouseDown,this);
     }
 
     public setTabIndex(index: number|undefined,group: string|undefined){

@@ -1,7 +1,7 @@
 import { ContainerBase } from "../c/ContainerBase";
 import { Stage } from "./Stage";
 import { ComponentEvent } from "../interaction/Index";
-import { uid } from "./Utils";
+import { uid, getStage } from "./Utils";
 import { UIBase } from "../UI";
 
 export class Core extends PIXI.utils.EventEmitter implements LifecycleHook,Lifecycle {
@@ -34,7 +34,7 @@ export class Core extends PIXI.utils.EventEmitter implements LifecycleHook,Lifec
     /** 
      * 舞台引用
      */
-    public stage: Stage | undefined;
+    public $stage?: Stage;
     /** 
      * 父容器 
      */
@@ -62,7 +62,7 @@ export class Core extends PIXI.utils.EventEmitter implements LifecycleHook,Lifec
         if (item.parent) {
             item.parent.removeChild(item);
         }
-        item.stage = Stage.Ins;
+
         item.parent = this as TAny;       
         item.$nestLevel = this.$nestLevel + 1;
         this.uiChildren.splice(index, 0, item);
@@ -85,13 +85,18 @@ export class Core extends PIXI.utils.EventEmitter implements LifecycleHook,Lifec
      * @param UIObject 要移除的UI组件
      */
     public removeChild(item: Core) {
-
         const index = this.uiChildren.indexOf(item);
-        if (index !== -1) {
+        return this.removeChildAt(index);
+    }
+
+    public removeChildAt(index: number){   
+        index = Math.max(0,index);
+        index = Math.min(this.uiChildren.length,index);
+        const item = this.uiChildren[index];
+        if(item){
             item.container.parent.removeChild(item.container);
             this.uiChildren.splice(index, 1);
             item.parent = undefined;
-            item.stage = undefined;
         }
         return item;
     }
@@ -135,6 +140,10 @@ export class Core extends PIXI.utils.EventEmitter implements LifecycleHook,Lifec
         this.$onLoad();
     }
     release(): void {
+        if(this.parent){
+            this.parent.removeChild(this);
+        }
+        this.$stage = undefined;
         this.$onRelease();
     }
 
@@ -158,6 +167,13 @@ export class Core extends PIXI.utils.EventEmitter implements LifecycleHook,Lifec
         this.checkInvalidateFlag();
         this.parent = undefined;
         this.emit(ComponentEvent.REMOVEED, this);
+    }
+
+    public get stage(): Stage|undefined{
+        if(this.$stage == undefined){
+            this.$stage = getStage(this);
+        }
+        return this.$stage;
     }
 
     protected checkInvalidateFlag(){

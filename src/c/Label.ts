@@ -50,7 +50,7 @@ export class Label extends UIBase {
 
     protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void {
         super.updateDisplayList(unscaledWidth,unscaledHeight);
-        let values = this.$values;
+        const values = this.$values;
         if(!isNaN(values[UIKeys.explicitWidth])){
             this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width >>1;
         }

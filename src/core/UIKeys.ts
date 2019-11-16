@@ -26,6 +26,7 @@ export const skewY = Symbol("skewY");
 export const pivotX = Symbol("pivotX");
 export const pivotY = Symbol("pivotY");
 export const rotation = Symbol("rotation");
+export const zIndex = Symbol("zIndex");
 export const measuredWidth = Symbol("measuredWidth");
 export const measuredHeight = Symbol("measuredHeight");
 export const oldPreferWidth = Symbol("oldPreferWidth");

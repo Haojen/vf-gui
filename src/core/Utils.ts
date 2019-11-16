@@ -1,3 +1,7 @@
+import { Core } from "./Core";
+import { UIBase } from "./UIBase";
+import { Stage } from "./Stage";
+
 /**
  * 工具类
  */
@@ -52,6 +56,24 @@ export function getDisplayObject(src: TAny){
 }
 
 /**
+ * 递归获取舞台，组件必须已经添加到舞台
+ * @param uibase 
+ */
+export function  getStage(uibase: UIBase|Core|Stage): Stage|undefined{
+    if(uibase.$stage){
+        return uibase.$stage;
+    }
+    if(uibase.parent instanceof Stage){
+        return uibase.parent;
+    }
+    if(uibase.parent){
+        return getStage(uibase.parent);
+    }
+    return undefined;
+}
+
+
+/**
  * 快速设置矩形
  * @param sourcr 
  * @param x 
@@ -82,7 +104,7 @@ export function now() {
  * 深度拷贝对象
  * @param source 对象元
  */
-export function deepCopy(source: TAny,target?:TAny) {
+export function deepCopy(source: TAny,target?: TAny) {
     if (source === undefined || typeof source !== 'object') {
         return source;
     } else if (Array.isArray(source)) {

@@ -12,6 +12,7 @@
 
 const {execSync } = require('child_process');
 const fs = require("fs");
+const packageData = require('./package.json');
 
 let buildOut =  execSync("npm run build",{encoding:"utf8"});
 console.log(buildOut);
@@ -26,5 +27,9 @@ declare namespace gui{
     export * from "UI";
 }
 `;
-
 fs.writeFileSync("./dist/vf-gui.d.ts",dtsFile);
+
+let content = fs.readFileSync("./src/vf-gui.ts","utf8");
+const versionRegExp = /\d+(\.\d+){0,3}/g;
+content = content.replace(versionRegExp,packageData.version);
+fs.writeFileSync("./src/vf-gui.ts",content);

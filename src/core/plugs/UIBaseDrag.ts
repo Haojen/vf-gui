@@ -166,7 +166,6 @@ export class UIBaseDrag implements Lifecycle {
             const stageOffset = new PIXI.Point();
             this._containerStart = containerStart;
             this._dragPosition.set(0, 0);
-            this._dragContainer = Stage.Ins;
 
             this.drag = new DragEvent(this.target);
             this.drag.dragRestrictAxis = this._dragRestrictAxis;
@@ -177,6 +176,11 @@ export class UIBaseDrag implements Lifecycle {
                 }
                 let target = this.target;
                 this.$targetParent = target.parent;
+                
+                if(this._dragContainer == undefined){
+                    this._dragContainer = this.target.stage;
+                }    
+                
                 const added = DragDropController.add(target, e);
                 if (!this.dragging && added) {
                     target.emit(ComponentEvent.DRAG_START_BEFORE, target, e);

@@ -91,7 +91,7 @@ export class Rect extends UIBase{
         graphics.lineStyle(this._lineWidth,this._lineColor);
         graphics.beginFill(this._color);   
         
-        graphics.drawRoundedRect(this._anchorX?-this._anchorX*this.width:0,this._anchorY?-this._anchorY*this.width:0,this.width, this.height,this._radius);
+        graphics.drawRoundedRect(this._anchorX?-this._anchorX*this.width:0,this._anchorY?-this._anchorY*this.height:0,this.width, this.height,this._radius);
         graphics.endFill();
     }
     

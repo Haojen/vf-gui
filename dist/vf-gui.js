@@ -1107,7 +1107,7 @@ class Label extends UIBase_1.UIBase {
     }
     updateDisplayList(unscaledWidth, unscaledHeight) {
         super.updateDisplayList(unscaledWidth, unscaledHeight);
-        let values = this.$values;
+        const values = this.$values;
         if (!isNaN(values[UIKeys.explicitWidth])) {
             this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width >> 1;
         }
@@ -1218,7 +1218,7 @@ class Rect extends UIBase_1.UIBase {
         graphics.clear();
         graphics.lineStyle(this._lineWidth, this._lineColor);
         graphics.beginFill(this._color);
-        graphics.drawRoundedRect(this._anchorX ? -this._anchorX * this.width : 0, this._anchorY ? -this._anchorY * this.width : 0, this.width, this.height, this._radius);
+        graphics.drawRoundedRect(this._anchorX ? -this._anchorX * this.width : 0, this._anchorY ? -this._anchorY * this.height : 0, this.width, this.height, this._radius);
         graphics.endFill();
     }
     release() {
@@ -4150,7 +4150,6 @@ exports.Timeline = Timeline_1.Timeline;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const ContainerBase_1 = __webpack_require__(/*! ../c/ContainerBase */ "./src/c/ContainerBase.ts");
-const Stage_1 = __webpack_require__(/*! ./Stage */ "./src/core/Stage.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 const Utils_1 = __webpack_require__(/*! ./Utils */ "./src/core/Utils.ts");
 class Core extends PIXI.utils.EventEmitter {
@@ -4192,7 +4191,6 @@ class Core extends PIXI.utils.EventEmitter {
         if (item.parent) {
             item.parent.removeChild(item);
         }
-        item.stage = Stage_1.Stage.Ins;
         item.parent = this;
         item.$nestLevel = this.$nestLevel + 1;
         this.uiChildren.splice(index, 0, item);
@@ -4214,11 +4212,16 @@ class Core extends PIXI.utils.EventEmitter {
      */
     removeChild(item) {
         const index = this.uiChildren.indexOf(item);
-        if (index !== -1) {
+        return this.removeChildAt(index);
+    }
+    removeChildAt(index) {
+        index = Math.max(0, index);
+        index = Math.min(this.uiChildren.length, index);
+        const item = this.uiChildren[index];
+        if (item) {
             item.container.parent.removeChild(item.container);
             this.uiChildren.splice(index, 1);
             item.parent = undefined;
-            item.stage = undefined;
         }
         return item;
     }
@@ -4257,6 +4260,10 @@ class Core extends PIXI.utils.EventEmitter {
         this.$onLoad();
     }
     release() {
+        if (this.parent) {
+            this.parent.removeChild(this);
+        }
+        this.$stage = undefined;
         this.$onRelease();
     }
     $onInit() {
@@ -4274,6 +4281,12 @@ class Core extends PIXI.utils.EventEmitter {
         this.checkInvalidateFlag();
         this.parent = undefined;
         this.emit(Index_1.ComponentEvent.REMOVEED, this);
+    }
+    get stage() {
+        if (this.$stage == undefined) {
+            this.$stage = Utils_1.getStage(this);
+        }
+        return this.$stage;
     }
     checkInvalidateFlag() {
     }
@@ -4295,7 +4308,6 @@ exports.Core = Core;
 Object.defineProperty(exports, "__esModule", { value: true });
 const UIBase_1 = __webpack_require__(/*! ./UIBase */ "./src/core/UIBase.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const Stage_1 = __webpack_require__(/*! ./Stage */ "./src/core/Stage.ts");
 /**
  * 输入对象的基础类
  */
@@ -4377,15 +4389,15 @@ class InputBase extends UIBase_1.UIBase {
         }
     }
     _bindEvents() {
-        if (Stage_1.Stage.Ins) {
-            Stage_1.Stage.Ins.on("pointerdown", this.documentMouseDown, this);
+        if (this.stage) {
+            this.stage.on("pointerdown", this.documentMouseDown, this);
             this.keyDownEventBind = this.keyDownEvent.bind(this);
             document.addEventListener("keydown", this.keyDownEventBind);
         }
     }
     _clearEvents() {
-        if (Stage_1.Stage.Ins) {
-            Stage_1.Stage.Ins.off("pointerdown", this.documentMouseDown, this);
+        if (this.stage) {
+            this.stage.off("pointerdown", this.documentMouseDown, this);
             document.removeEventListener("keydown", this.keyDownEventBind);
         }
     }
@@ -4415,8 +4427,8 @@ class InputBase extends UIBase_1.UIBase {
         this.off(Index_1.TouchMouseEvent.onClick, this.onClick, this);
         if (this.keyDownEventBind)
             document.removeEventListener("keydown", this.keyDownEventBind);
-        if (this.documentMouseDown && Stage_1.Stage.Ins)
-            Stage_1.Stage.Ins.off("pointerdown", this.documentMouseDown, this);
+        if (this.documentMouseDown && this.stage)
+            this.stage.off("pointerdown", this.documentMouseDown, this);
     }
     setTabIndex(index, group) {
         this._tabIndex = index;
@@ -4503,29 +4515,25 @@ const UILayout_1 = __webpack_require__(/*! ./UILayout */ "./src/core/UILayout.ts
  * UI的舞台对象，展示所有UI组件
  *
  * @class
- * @extends PIXI.UI.Container
- * @memberof PIXI.UI
  * @param width {Number} 舞台宽度
  * @param height {Number} 舞台高度
- * @since 1.0.0
  */
 class Stage extends UILayout_1.UILayout {
-    constructor(width, height) {
+    constructor(width, height, app) {
         super();
         this.width = width;
         this.height = height;
         this.setActualSize(width, height);
-        this.stage = this;
         this.container.name = "Stage";
         this.container.hitArea = new PIXI.Rectangle(0, 0, width, height);
         this.container.interactive = true;
         this.container.interactiveChildren = true;
-        Stage._stage = this;
         this.initialized = true;
         this.$nestLevel = 1;
+        this.app = app;
     }
-    static get Ins() {
-        return Stage._stage;
+    release() {
+        super.release();
     }
     releaseAll() {
         for (let i = 0; i < this.uiChildren.length; i++) {
@@ -4674,7 +4682,7 @@ class UIBase extends UILayout_1.UILayout {
         return new UIBaseDrag_1.UIBaseDrag(this);
     }
     set dragOption(value) {
-        let dragOption = this.dragOption;
+        const dragOption = this.dragOption;
         Utils_1.deepCopy(value, dragOption);
     }
     get groupName() {
@@ -4737,7 +4745,7 @@ class UIBase extends UILayout_1.UILayout {
         return this._style;
     }
     set style(value) {
-        let style = this.style;
+        const style = this.style;
         Utils_1.deepCopy(value, style);
         this.invalidateParentLayout();
     }
@@ -4788,9 +4796,6 @@ class UIBase extends UILayout_1.UILayout {
         this.plugs.forEach(value => {
             value.release();
         });
-        if (this.parent) {
-            this.parent.removeChild(this);
-        }
         Index_1.GroupController.unRegistrerGroup(this);
         super.release();
     }
@@ -4853,6 +4858,7 @@ exports.skewY = Symbol("skewY");
 exports.pivotX = Symbol("pivotX");
 exports.pivotY = Symbol("pivotY");
 exports.rotation = Symbol("rotation");
+exports.zIndex = Symbol("zIndex");
 exports.measuredWidth = Symbol("measuredWidth");
 exports.measuredHeight = Symbol("measuredHeight");
 exports.oldPreferWidth = Symbol("oldPreferWidth");
@@ -4951,6 +4957,7 @@ class UILayout extends Core_1.Core {
             [UIKeys.rotation]: 0,
             [UIKeys.skewX]: 0,
             [UIKeys.skewY]: 0,
+            [UIKeys.zIndex]: NaN,
         };
     }
     /**
@@ -5688,6 +5695,21 @@ class UILayout extends Core_1.Core {
         this.invalidateDisplayList();
     }
     /**
+     *  =不可用= 设置索引层级，每次父级变化时，会排序 （未实现）
+     */
+    get zIndex() {
+        return this.$values[UIKeys.zIndex];
+    }
+    set zIndex(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (values[UIKeys.zIndex] === value) {
+            return;
+        }
+        values[UIKeys.zIndex] = value;
+        this.invalidateParentLayout();
+    }
+    /**
      * 对象是否可以接收事件
      */
     set interactive(value) {
@@ -6251,10 +6273,11 @@ exports.default = validatorShared;
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
+const Stage_1 = __webpack_require__(/*! ./Stage */ "./src/core/Stage.ts");
 /**
  * 工具类
  */
-Object.defineProperty(exports, "__esModule", { value: true });
 /** 日志输出 */
 function log(message, ...optionalParams) {
     console.log(message, ...optionalParams);
@@ -6295,6 +6318,23 @@ function getDisplayObject(src) {
     return src;
 }
 exports.getDisplayObject = getDisplayObject;
+/**
+ * 递归获取舞台，组件必须已经添加到舞台
+ * @param uibase
+ */
+function getStage(uibase) {
+    if (uibase.$stage) {
+        return uibase.$stage;
+    }
+    if (uibase.parent instanceof Stage_1.Stage) {
+        return uibase.parent;
+    }
+    if (uibase.parent) {
+        return getStage(uibase.parent);
+    }
+    return undefined;
+}
+exports.getStage = getStage;
 /**
  * 快速设置矩形
  * @param sourcr
@@ -6527,7 +6567,6 @@ exports.formatRelative = formatRelative;
 Object.defineProperty(exports, "__esModule", { value: true });
 const Index_1 = __webpack_require__(/*! ../../interaction/Index */ "./src/interaction/Index.ts");
 const Core_1 = __webpack_require__(/*! ../Core */ "./src/core/Core.ts");
-const Stage_1 = __webpack_require__(/*! ../Stage */ "./src/core/Stage.ts");
 const Utils_1 = __webpack_require__(/*! ../Utils */ "./src/core/Utils.ts");
 /**
  *  组件的拖拽操作
@@ -6649,7 +6688,6 @@ class UIBaseDrag {
             const stageOffset = new PIXI.Point();
             this._containerStart = containerStart;
             this._dragPosition.set(0, 0);
-            this._dragContainer = Stage_1.Stage.Ins;
             this.drag = new Index_1.DragEvent(this.target);
             this.drag.dragRestrictAxis = this._dragRestrictAxis;
             this.drag.onDragStart = (e) => {
@@ -6658,6 +6696,9 @@ class UIBaseDrag {
                 }
                 let target = this.target;
                 this.$targetParent = target.parent;
+                if (this._dragContainer == undefined) {
+                    this._dragContainer = this.target.stage;
+                }
                 const added = Index_1.DragDropController.add(target, e);
                 if (!this.dragging && added) {
                     target.emit(Index_1.ComponentEvent.DRAG_START_BEFORE, target, e);
@@ -6941,6 +6982,9 @@ class ClickEvent {
         this.id = e.data.identifier;
         this.onPress && this.onPress.call(this.obj, e, this.obj, true), this.obj;
         this.emitTouchEvent(InteractionEvent_1.TouchMouseEvent.onPress, e, true);
+        if (this.obj.listenerCount(InteractionEvent_1.TouchMouseEvent.onDown) > 0) {
+            this.emitTouchEvent(InteractionEvent_1.TouchMouseEvent.onDown, e);
+        }
         if (!this.bound) {
             this.obj.container.on(this.eventnameMouseup, this._onMouseUp, this);
             this.obj.container.on(this.eventnameMouseupoutside, this._onMouseUpOutside, this);
@@ -6982,6 +7026,9 @@ class ClickEvent {
             this.bound = false;
         }
         this.onPress && this.onPress.call(this.obj, e, this.obj, false);
+        if (this.obj.listenerCount(InteractionEvent_1.TouchMouseEvent.onUp) > 0) {
+            this.emitTouchEvent(InteractionEvent_1.TouchMouseEvent.onUp, e);
+        }
         this.emitTouchEvent(InteractionEvent_1.TouchMouseEvent.onPress, e, false);
     }
     _onMouseUp(e) {
@@ -7241,7 +7288,6 @@ exports.getEventItem = getEventItem;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Stage_1 = __webpack_require__(/*! ../core/Stage */ "./src/core/Stage.ts");
 /**
  * 多拽相关的事件处理类
  *
@@ -7290,8 +7336,8 @@ class DragEvent {
     _onDragStart(e) {
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true, this);
-        if (!this.bound && this.obj.parent) {
-            const stage = Stage_1.Stage.Ins.container;
+        if (!this.bound && this.obj.parent && this.obj.stage) {
+            const stage = this.obj.stage.container;
             this.start.copyFrom(e.data.global);
             stage.on("mousemove" /* mousemove */, this._onDragMove, this);
             stage.on("touchmove" /* touchmove */, this._onDragMove, this);
@@ -7333,8 +7379,8 @@ class DragEvent {
     _onDragEnd(e) {
         if (e.data.identifier !== this.id)
             return;
-        if (this.bound) {
-            const stage = Stage_1.Stage.Ins.container;
+        if (this.bound && this.obj.stage) {
+            const stage = this.obj.stage.container;
             stage.off("mousemove" /* mousemove */, this._onDragMove, this);
             stage.off("touchmove" /* touchmove */, this._onDragMove, this);
             stage.off("mouseup" /* mouseup */, this._onDragEnd, this);
@@ -7350,8 +7396,8 @@ class DragEvent {
     }
     /** 清除拖动 */
     stopEvent() {
-        if (this.bound) {
-            const stage = Stage_1.Stage.Ins.container;
+        if (this.bound && this.obj.stage) {
+            const stage = this.obj.stage.container;
             stage.off("mousemove" /* mousemove */, this._onDragMove, this);
             stage.off("touchmove" /* touchmove */, this._onDragMove, this);
             stage.off("mouseup" /* mouseup */, this._onDragEnd, this);
@@ -7704,6 +7750,14 @@ exports.TouchMouseEvent = {
      * (e: InteractionEvent,thisObj:UIBase, isPressed: boolean)=>void
      */
     onPress: "press",
+    /**
+     * 按下
+     */
+    onDown: "down",
+    /**
+     * 弹起
+     */
+    onUp: "up",
     /**
      * 点击
      *
@@ -9338,9 +9392,10 @@ const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos || 0) === 0;
+//     return this.lastIndexOf(word, pos0.6.5.0.6.5.0.6.5.0.6.5.0.6.5.0.6.5.0.6.5.0.6.5.0.6.5) ==0.6.5.0.6.5.0.6.5;
 // });
 window.gui = vfgui;
+window.gui.version = "0.6.5";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

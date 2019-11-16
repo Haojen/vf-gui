@@ -46,8 +46,8 @@ export class UIBase extends UILayout implements Lifecycle {
         }
         return new UIBaseDrag(this);
     }
-    public set dragOption(value:UIBaseDrag){
-        let dragOption = this.dragOption;
+    public set dragOption(value: UIBaseDrag){
+        const dragOption = this.dragOption;
         deepCopy(value,dragOption);
     }
     /**
@@ -138,8 +138,8 @@ export class UIBase extends UILayout implements Lifecycle {
         return this._style;
     }
 
-    public set style(value:CSSStyle){
-        let style = this.style;
+    public set style(value: CSSStyle){
+        const style = this.style;
         deepCopy(value,style);
         this.invalidateParentLayout();
     }
@@ -195,12 +195,8 @@ export class UIBase extends UILayout implements Lifecycle {
         }
 
         this.plugs.forEach(value=>{
-              value.release();  
+            value.release();  
         });
-
-        if(this.parent){
-            this.parent.removeChild(this);
-        }
 
         GroupController.unRegistrerGroup(this);
 

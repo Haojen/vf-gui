@@ -65,6 +65,7 @@ export class UILayout extends Core {
             [UIKeys.rotation]: 0,
             [UIKeys.skewX]: 0,
             [UIKeys.skewY]: 0,
+            [UIKeys.zIndex]: NaN, 
         };
     }
 
@@ -877,6 +878,21 @@ export class UILayout extends Core {
         this.invalidateDisplayList();
     }
 
+    /**
+     *  =不可用= 设置索引层级，每次父级变化时，会排序 （未实现）
+     */
+    public get zIndex(){
+        return this.$values[UIKeys.zIndex];
+    }
+    public set zIndex(value) {
+        value = +value || 0;
+        const values = this.$values;
+        if (values[UIKeys.zIndex] === value) {
+            return;
+        }
+        values[UIKeys.zIndex] = value;
+        this.invalidateParentLayout();
+    }
 
     private _interactive = true;
     private _interactiveChildren = true;

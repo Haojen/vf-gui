@@ -1,803 +1,3 @@
-declare module 'core/Utils' {
-	/**
-	 * 工具类
-	 */
-	/// <reference types="pixi.js" />
-	/// <reference types="pixi-sound" />
-	/** 日志输出 */
-	export function log(message?: string | number | object, ...optionalParams: string[] | number[] | object[]): void;
-	/**
-	 * 组件获取资源 - 源路径,外部可以重写本方法
-	 */
-	export let $getSourcePath: Function;
-	export function setSourcePath(params: (path: TAny, cls?: TAny) => {}): void;
-	/**
-	 * 根据显示路径，获取显示对象
-	 */
-	export let $getUIDisplayObjectPath: Function;
-	export function setDisplayObjectPath(params: (path: TAny, cls?: TAny) => {}): void;
-	export function getTexture(src: TAny): PIXI.Texture;
-	export function getSound(src: TAny): PIXI.sound.Sound;
-	export function getDisplayObject(src: TAny): any;
-	/**
-	 * 快速设置矩形
-	 * @param sourcr
-	 * @param x
-	 * @param y
-	 * @param w
-	 * @param h
-	 */
-	export function setRectangle(source: PIXI.Rectangle, x: number, y: number, w: number, h: number): void;
-	/** 获取当前运行时时间 */
-	export function now(): number;
-	/**
-	 * 深度拷贝对象
-	 * @param source 对象元
-	 */
-	export function deepCopy(source: TAny, target?: TAny): any;
-	/**
-	 * helper function to convert string hex to int or default
-	 *
-	 * 16进制转int，颜色转换
-	 * @param str 要转换的值，如#FFFFFF,0xFFFFFF
-	 * @param def 转换失败的返回值
-	 */
-	export function hexToInt(str: string, def: number): number;
-	/**
-	 *
-	 * @param hex 16进制字符窜 如 #FFFFFF ，不能省略三位写法
-	 * @param alpha 透明度
-	 * @returns "rgba(255,255,255,1)" || false
-	 */
-	export function hexToRgba(hex: string, alpha: number): string | false;
-	/**
-	 * 转换为16位字符串，不够2位的补0，如 “01”
-	 * @param c 要转换的数字
-	 */
-	export function componentToHex(c: number): string;
-	/**
-	 * RGB转16进制
-	 * @param r 红 0-255
-	 * @param g 绿 0-255
-	 * @param b 蓝 0-255
-	 */
-	export function rgbToHex(r: number, g: number, b: number): string;
-	/**
-	 * RGB转number
-	 * @param r 红 0-255
-	 * @param g 绿 0-255
-	 * @param b 蓝 0-255
-	 */
-	export function rgbToNumber(r: number, g: number, b: number): number;
-	/**
-	 * rgb字符串形式转换
-	 * @param color rgb(255,255,255)
-	 */
-	export function rgbStrToNumber(color: string): number;
-	/**
-	 * 10进制转RGB
-	 * @param c 数
-	 */
-	export function numberToRgb(c: number): {
-	    r: number;
-	    g: number;
-	    b: number;
-	};
-	/**
-	 * hex 转 RGB，
-	 *
-	 * 如hex字符串: "#ffffff"->255,255,255
-	 *
-	 * 如16进制数字: 0xffffff->255,255,255
-	 * @param hex
-	 */
-	export function hexToRgb(hex?: string | number): {
-	    r: number;
-	    g: number;
-	    b: number;
-	};
-	/**
-	 * 根据amt计算当前的位置start-stop，两数差值
-	 * @param start 开始数值
-	 * @param stop  结束的数值
-	 * @param amt 0-1 用时 >1为1，小于0为0
-	 */
-	export function Lerp(start: number, stop: number, amt: number): number;
-	/**
-	 * 四舍五入保留指定位数的小数
-	 * @param num 取舍的数
-	 * @param decimals 保留小数位
-	 */
-	export function Round(num: number, decimals: number): number;
-	/** 获取全局唯一数 */
-	export function uid(): number;
-	/** 获取URL参数 */
-	export function getQueryVariable(variable: string): string | null | undefined;
-	export function isDeltaIdentity(m: PIXI.Matrix): boolean;
-	export function formatRelative(value: number | string | undefined, total: number): number;
-
-}
-declare module 'c/Easing' {
-	/**
-	 * 完整的缓动曲线列表
-	 *
-	 * @example gui.Easing.Linear.None;
-	 *
-	 * @namespace gui
-	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTween
-	 */
-	export const Easing: {
-	    Linear: {
-	        None(k: number): number;
-	    };
-	    Quadratic: {
-	        In(k: number): number;
-	        Out(k: number): number;
-	        InOut(k: number): number;
-	    };
-	    Cubic: {
-	        In(k: number): number;
-	        Out(k: number): number;
-	        InOut(k: number): number;
-	    };
-	    Quartic: {
-	        In(k: number): number;
-	        Out(k: number): number;
-	        InOut(k: number): number;
-	    };
-	    Quintic: {
-	        In(k: number): number;
-	        Out(k: number): number;
-	        InOut(k: number): number;
-	    };
-	    Sinusoidal: {
-	        In(k: number): number;
-	        Out(k: number): number;
-	        InOut(k: number): number;
-	    };
-	    Exponential: {
-	        In(k: number): number;
-	        Out(k: number): number;
-	        InOut(k: number): number;
-	    };
-	    Circular: {
-	        In(k: number): number;
-	        Out(k: number): number;
-	        InOut(k: number): number;
-	    };
-	    Elastic: {
-	        In(k: number): number;
-	        Out(k: number): number;
-	        InOut(k: number): number;
-	    };
-	    Back: {
-	        In(k: number): number;
-	        Out(k: number): number;
-	        InOut(k: number): number;
-	    };
-	    Bounce: {
-	        In(k: number): number;
-	        Out(k: number): number;
-	        InOut(k: number): number;
-	    };
-	    Stepped: {
-	        steps: (steps: number) => (k: number) => number;
-	    };
-	};
-
-}
-declare module 'c/tween/constants' {
-	/**
-	 * 卡帧后的平滑处理帧率
-	 */
-	export const FRAME_MS: number;
-	/**
-	 * 平滑处理允许的触发时间
-	 */
-	export const TOO_LONG_FRAME_MS = 250;
-	/**
-	 * 链式补间动画的key前缀
-	 */
-	export const CHAINED_TWEENS = "_chainedTweens";
-	export const STRING_PROP = "STRING_PROP";
-	export const NUM_REGEX: RegExp;
-	export function decomposeString(fromValue: string | any): any;
-	export function decompose(prop: any, obj: any, from: any, to: any): any;
-	export const RGB = "rgb(";
-	export const RGBA = "rgba(";
-	export function isRGBColor(v: any, i: number, r?: string): boolean;
-	export function recompose(prop: any, obj: any, from: any, to: any, t: any, originalT: any, stringBuffer?: any): any;
-	export const SET_NESTED: (nested: any) => any;
-
-}
-declare module 'c/tween/Interpolation' {
-	/**
-	 * 差值计算列表
-	 * @namespace TWEEN.Interpolation
-	 * @example
-	 *
-	 * let bezier = gui.tween.Interpolation.Bezier
-	 * new gui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
-	 * @memberof gui.tween
-	 */
-	export const Interpolation: {
-	    Linear(v: any, k: number, value: any): any;
-	    Bezier(v: any, k: number, value: any): any;
-	    CatmullRom(v: any, k: number, value: any): any;
-	    Utils: {
-	        Linear(p0: any, p1: any, t: any, v: any): any;
-	        Reset(value: any): any;
-	        Bernstein(n: any, i: any): number;
-	        Factorial: (n: any) => number;
-	        CatmullRom(p0: any, p1: any, p2: any, p3: any, t: any, v?: any): any;
-	    };
-	};
-
-}
-declare module 'interaction/InteractionEvent' {
-	/// <reference types="pixi.js" />
-	/**
-	 * 事件的基础类
-	 *
-	 * 触摸或鼠标操作事件 可查看 -> TouchEventEnum.TouchEnum
-	 *
-	 * import InteractionEvent from "../interaction/InteractionEvent",
-	 */
-	export class InteractionEvent extends PIXI.interaction.InteractionEvent {
-	    constructor();
-	}
-	/**
-	 * 对外，封装的点击触摸事件
-	 *
-	 * import InteractionEvent,{Mouse} from "../interaction/InteractionEvent",
-	 */
-	export const TouchMouseEvent: {
-	    /**
-	     * 移出
-	     *
-	     * (e: InteractionEvent,thisObj:UIBase,over: boolean)=>{}
-	     */
-	    onHover: string;
-	    /**
-	     * 按下
-	     *
-	     * (e: InteractionEvent,thisObj:UIBase, isPressed: boolean)=>void
-	     */
-	    onPress: string;
-	    /**
-	     * 点击
-	     *
-	     * (e: InteractionEvent,thisObj:UIBase)=>void
-	     */
-	    onClick: string;
-	    /**
-	     * 移动
-	     *
-	     * (e: InteractionEvent,thisObj:UIBase)=>void
-	     */
-	    onMove: string;
-	};
-	/**
-	 * 键盘事件 驱动类KeysEvent
-	 *
-	 * import InteractionEvent,{KeyEvent} from "../interaction/InteractionEvent",
-	 */
-	export const enum KeyEvent {
-	    input = "input",
-	    /**
-	     * 键盘按下
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    keydown = "keydown",
-	    /**
-	     * 键盘弹起
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    keyup = "keyup",
-	    /**
-	     * 粘贴
-	     *
-	     * (e:InteractionEvent,obj:UIBase,clipboardData: DataTransfer | null)
-	     */
-	    paste = "paste",
-	    /**
-	     * 复制
-	     *
-	     * (e:InteractionEvent,obj:UIBase,clipboardData: DataTransfer | null)
-	     */
-	    copy = "copy",
-	    /**
-	     * 剪切
-	     *
-	     * (e:InteractionEvent,obj:UIBase,clipboardData: DataTransfer | null)
-	     */
-	    cut = "cut",
-	    /**
-	     * 回退删除
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    backspace = 8,
-	    /**
-	     * 回车
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    enter = 13,
-	    /**
-	     * 删除
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    delete = 46,
-	    /**
-	     * 全选 ctrl+a
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    ctrlA = 65,
-	    /**
-	     * 撤销 ctrl+z
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    ctrlZ = 90,
-	    /**
-	     * 箭头左
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    left = 37,
-	    /**
-	     * 箭头上
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    top = 38,
-	    /**
-	     * 箭头右
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    right = 39,
-	    /**
-	     * 箭头下
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    down = 40,
-	    /**
-	     * shift + 箭头左
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    shiftLeft = "shift37",
-	    /**
-	     * shift + 箭头右
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    shiftRight = "shift39",
-	    /**
-	     * shift + 箭头上
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    shiftTop = "shift38",
-	    /**
-	     * shift + 箭头下
-	     *
-	     * (e:InteractionEvent,obj:UIBase)
-	     */
-	    shiftDown = "shift40"
-	}
-	/**
-	 * 缓动事件
-	 */
-	export const TweenEvent: {
-	    /**
-	     *
-	     */
-	    Callback: string;
-	    /**
-	     * 每次改变
-	     */
-	    update: string;
-	    /**
-	     * 完成
-	     */
-	    complete: string;
-	    /**
-	     * 开始时
-	     */
-	    start: string;
-	    /**
-	     * 每次重复时
-	     */
-	    repeat: string;
-	    /**
-	     * 反向时
-	     */
-	    reverse: string;
-	    /**
-	     * 暂停时
-	     */
-	    pause: string;
-	    /**
-	     * 播放时
-	     */
-	    play: string;
-	    /**
-	     * 重新开始时
-	     */
-	    restart: string;
-	    /**
-	     * 停止时
-	     */
-	    stop: string;
-	};
-
-}
-declare module 'c/Tween' {
-	/// <reference types="pixi.js" />
-	import { add, get, getAll, remove, removeAll, removeDisplay, update } from 'c/tween/core';
-	/**
-	 * 缓动动画
-	 *
-	 * @example let tween = new gui.Tween(myObject).to({width:'300px'}, 2000).start()
-	 *
-	 * @namespace gui
-	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTween
-	 */
-	export class Tween extends PIXI.utils.EventEmitter {
-	    static core: {
-	        add: typeof add;
-	        get: typeof get;
-	        getAll: typeof getAll;
-	        remove: typeof remove;
-	        removeAll: typeof removeAll;
-	        removeDisplay: typeof removeDisplay;
-	        update: typeof update;
-	    };
-	    static Event: {
-	        Callback: string;
-	        update: string;
-	        complete: string;
-	        start: string;
-	        repeat: string;
-	        reverse: string;
-	        pause: string;
-	        play: string;
-	        restart: string;
-	        stop: string;
-	    };
-	    /**
-	     * Easier way to call the Tween
-	     * @param {object} object - Initial value
-	     * @param {object} to - Target value
-	     * @param {object} params - Options of tweens
-	     * @example Tween.fromTo(myObject, {x:0}, {x:200},1000)
-	     * @memberof gui.Tween
-	     * @static
-	     */
-	    static fromTo(object: TAny, to: TAny, duration?: number): Tween;
-	    /**
-	     * Easier way calling constructor only applies the `to` value, useful for CSS Animation
-	     * @param {TAny} object object
-	     * @param {object} to - Target value
-	     * @param {object} params - Options of tweens
-	     * @example Tween.to(myObject, {x:200}, 1000)
-	     * @memberof gui.Tween
-	     * @static
-	     */
-	    static to(object: TAny | TAny[], to: TAny, duration?: number): Tween;
-	    /**
-	     * Easier way calling constructor only applies the `from` value, useful for CSS Animation
-	     * @param {TAny} object object
-	     * @param {object} from - Initial value
-	     * @param {object} params - Options of tweens
-	     * @example Tween.from(myObject, {x:200}, 1000)
-	     * @memberof gui.Tween
-	     * @static
-	     */
-	    static from(object: TAny, from: TAny, duration?: number): Tween;
-	    constructor(object?: TAny);
-	    id: number;
-	    object: TAny;
-	    private _valuesEnd;
-	    private _valuesStart;
-	    protected _duration: number;
-	    private _easingFunction;
-	    private _easingReverse;
-	    private _interpolationFunction;
-	    protected _startTime: number;
-	    protected _delayTime: number;
-	    private _repeat;
-	    private _initRepeat;
-	    _isPlaying: boolean;
-	    private _yoyo;
-	    private _reversed;
-	    private _onStartCallbackFired;
-	    private _isFinite;
-	    private _prevTime;
-	    private _rendered;
-	    private _reverseDelayTime;
-	    /** 附加数据 */
-	    data: {
-	        [key: string]: TAny;
-	    };
-	    /**
-	     * 是否在播放中
-	     * @return {boolean}
-	     * @example tween.isPlaying()
-	     * @memberof gui.Tween
-	     */
-	    readonly isPlaying: boolean;
-	    /**
-	     * 是否开始播放
-	     * @return {boolean}
-	     * @example tween.isStarted()
-	     * @memberof gui.Tween
-	     */
-	    readonly isStarted: boolean;
-	    /**
-	     * 获取动画的开始时间
-	     */
-	    /**
-	    * 获取动画的开始时间
-	    */
-	    startTime: number;
-	    /**
-	     * 设置缓动时长
-	     * @param {number} amount 持续的毫秒值
-	     * @example tween.duration(2000)
-	     * @memberof gui.Tween
-	     * @deprecated 不推荐使用这个方法，内部使用
-	     * @private
-	     */
-	    duration: number | Function;
-	    /**
-	     * 逆向缓动
-	     * @example tween.reverse()
-	     * @param {boolean=} state 是否逆向
-	     * @memberof gui.Tween
-	     */
-	    reverse(state?: boolean): this;
-	    /**
-	     * 当前动画是否逆转
-	     * @return {boolean}
-	     * @example tween.reversed() true逆向中
-	     * @memberof gui.Tween
-	     */
-	    reversed(): boolean;
-	    /**
-	     * 暂停缓动
-	     * @example tween.pause()
-	     * @memberof gui.Tween
-	     */
-	    pause(): boolean | this;
-	    /**
-	     * 播放或恢复播放
-	     * @example tween.play()
-	     * @memberof gui.Tween
-	     */
-	    play(): boolean | this;
-	    /**
-	     * 设置要缓动的目标属性与持续时间
-	     * @param {object} properties 目标属性值
-	     * @param {number|Object=} [duration=1000] 持续时间
-	     * @example let tween = new gui.Tween({x:0}).to({x:100}, 2000)
-	     * @memberof gui.Tween
-	     */
-	    to(properties: TAny, duration?: number): this;
-	    private render;
-	    /**
-	     * 开始执行缓动
-	     * @param {number|string} time 要开始的时间，延迟值
-	     * @example tween.start()
-	     * @memberof gui.Tween
-	     */
-	    start(time?: number): this;
-	    /**
-	     * 停止缓动
-	     * @example tween.stop()
-	     * @memberof gui.Tween
-	     */
-	    stop(): boolean | this;
-	    /**
-	     * 设置延迟执行时间
-	     * @param {number} amount 延迟等待的时间，毫秒
-	     * @example tween.delay(500)
-	     * @memberof gui.Tween
-	     */
-	    delay(amount: number): this;
-	    /**
-	     * 设置重复执行的次数
-	     * @param {number} amount 重复次数
-	     * @example tween.repeat(5)
-	     * @memberof gui.Tween
-	     */
-	    repeat(amount: number): this;
-	    /**
-	     * 设置每个重复执行过程的延迟时间，毫秒
-	     * @param {number} amount 延迟值
-	     * @example tween.reverseDelay(500)
-	     * @memberof gui.Tween
-	     */
-	    reverseDelay(amount: number): this;
-	    /**
-	     * 是否在重复执行中启用反向动画
-	     * @param {boolean} state true启动
-	     * @param {Function=} _easingReverse 反向时的Easing function
-	     * @example tween.yoyo(true)
-	     * @memberof gui.Tween
-	     */
-	    yoyo(state?: boolean | Function, _easingReverse?: (k: number) => number): this;
-	    /**
-	     * 设置缓动函数
-	     * @param {Function} _easingFunction 缓动函数的公式，如果设置yoyo的第二个值会应用于逆向缓动
-	     * @example tween.easing(Easing.Elastic.InOut)
-	     * @memberof gui.Tween
-	     */
-	    easing(_easingFunction: ((k: number) => number) | TAny): this;
-	    /**
-	     * 设置差值
-	     * @param {Function} _interpolationFunction 差值的函数
-	     * @example tween.interpolation(Interpolation.Bezier)
-	     * @memberof gui.Tween
-	     */
-	    interpolation(_interpolationFunction: (v: TAny, k: number, value: TAny) => TAny): this;
-	    /**
-	     * 更新动画到指定时间点，进行播放
-	     * @param time
-	     */
-	    gotoAndPlay(time: number): void;
-	    /**
-	     * 更新动画到指定时间点，停止播放
-	     * @param time
-	     */
-	    gotoAndStop(time: number): void;
-	    /**
-	     * 更新动画到指定时间点，停止播放
-	     * @param time
-	     */
-	    gotoAndEnd(): void;
-	    /**
-	     * 更新函数，通过给定的 `time` 设置目标属性变化
-	    * @param {number=} elapsedMS 帧间隔
-	    * @param {Boolean=} preserve 完成后，防止删除动画对象
-	     * @param {boolean=} forceTime 强制进行更新渲染，不关心时间是否匹配
-	     * @example tween.update(100)
-	     * @memberof gui.Tween
-	     */
-	    update(elapsedMS: number, preserve?: boolean, forceTime?: boolean): boolean;
-	}
-
-}
-declare module 'c/tween/core' {
-	import { Tween } from 'c/Tween';
-	/**
-	 * 插件存储器
-	 * @namespace tween.Plugins
-	 * @memberof gui.tween
-	 * @example
-	 * let num = Plugins.num = function (node, start, end) {
-	  * return t => start + (end - start) * t
-	  * }
-	  *
-	  * @static
-	  */
-	export const Plugins: TAny;
-	/**
-	 * 添加对象到缓动列表
-	 * @param {Tween} tween Tween 实例
-	 * @memberof gui.tween
-	 * @example
-	 * let tween = new gui.tween.Tween({x:0})
-	 * tween.to({x:200}, 1000)
-	 * gui.tween.add(tween)
-	 */
-	export function add(tween: Tween): void;
-	/**
-	 * 没有缓动后，设置运行多少帧后，停止
-	 * @param {number} frameCount=120 删除所有动画后，要运行的剩余帧
-	 * @memberof gui.tween
-	 * @example
-	 * gui.tween.FrameThrottle(60)
-	 */
-	export function FrameThrottle(frameCount?: number): void;
-	/**
-	 * 延时处理，针对插件、canvas、dom
-	 * @param {number} state=true 是否平滑处理
-	 * @memberof gui.tween
-	 * @example
-	 * gui.tween.ToggleLagSmoothing(false)
-	 */
-	export function ToggleLagSmoothing(_state?: boolean): void;
-	/**
-	 * 获得所有缓动对象
-	 * @memberof gui.tween
-	 * gui.tween.getAll()
-	 */
-	export function getAll(): Tween[];
-	/**
-	 * 移除所有动画对象
-	 * @example  gui.tween.removeAll()
-	 * @memberof gui.tween
-	 */
-	export function removeAll(): void;
-	/**
-	 * 获取对象
-	 * @param {Tween} tween 缓动对象实例
-	 * @return {Tween} 返回对象或null
-	 * @memberof gui.tween
-	 * @example
-	 * gui.tween.get(tween)
-	 */
-	export function get(tween: Tween): Tween | null;
-	export function removeDisplay(uuid: string): void;
-	/**
-	 * 从缓动列表移除对象
-	 * @param {Tween} tween Tween instance
-	 * @memberof gui.tween
-	 * @example
-	 * gui.tween.remove(tween)
-	 */
-	export function remove(tween: Tween): void;
-	/**
-	 * 按给定时间更新缓动
-	 * @param {number=} time 时间戳
-	 * @param {Boolean=} preserve 完成后，防止删除动画对象
-	 * @memberof gui.tween
-	 * @example
-	 * gui.tween.update(500)
-	 */
-	export function update(time: number, preserve?: boolean): boolean;
-	/**
-	 * 是否正在运行中
-	 * @return {Boolean} 只要还有缓动在运行，返回true
-	 * @memberof gui.tween
-	 * @example gui.tween.isRunning()
-	 */
-	export function isRunning(): boolean;
-	/**
-	 * 返回是否开启延迟平滑状态
-	 * @return {Boolean}
-	 * @memberof gui.tween
-	 * @example gui.tween.isRunning()
-	 */
-	export function isLagSmoothing(): boolean;
-
-}
-declare module 'core/ObjectPool' {
-	 class ObjectPool {
-	    constructor();
-	    /**
-	     * 作为对象池的词典dict
-	     */
-	    private objPoolDict;
-	    /**
-	     * 向对象池中放入对象，以便重复利用
-	     */
-	    push<T extends Lifecycle, S>(keyClass: S, oldObj: T): void;
-	    /**
-	     * 从对象池中取出需要的对象
-	     * @return 取出的相应对象
-	     *
-	     */
-	    pop<T>(keyClass: T): TAny;
-	}
-	/**
-	 * 对象池实例
-	 */
-	export const objectPoolShared: ObjectPool;
-	export {};
-
-}
 declare module 'c/ContainerBase' {
 	/// <reference types="pixi.js" />
 	/** 容器扩展类，后续便于做延时渲染 */
@@ -805,78 +5,6 @@ declare module 'c/ContainerBase' {
 	    constructor();
 	    isEmitRender: boolean;
 	    render(renderer: PIXI.Renderer): void;
-	}
-
-}
-declare module 'core/Core' {
-	/// <reference types="pixi.js" />
-	import { ContainerBase } from 'c/ContainerBase';
-	import { Stage } from 'core/Stage';
-	import { UIBase } from 'UI';
-	export class Core extends PIXI.utils.EventEmitter implements LifecycleHook, Lifecycle {
-	    constructor();
-	    /**
-	     * 全局唯一ID
-	     */
-	    readonly uuid: number;
-	    /**
-	     * 自定义组价名
-	     */
-	    name: string;
-	    /**
-	     * @private
-	     * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
-	     */
-	    $nestLevel: number;
-	    /**
-	     * 是否初始化
-	     * @default
-	     */
-	    initialized: boolean;
-	    /**
-	     * 舞台引用
-	     */
-	    stage: Stage | undefined;
-	    /**
-	     * 父容器
-	     */
-	    parent: UIBase | Stage | undefined;
-	    /**
-	     * 节点列表
-	     */
-	    uiChildren: Core[];
-	    /** 没有功能实现，内部编辑器 */
-	    container: ContainerBase;
-	    /** 添加显示对象，需集成Core */
-	    addChild(item: Core): Core;
-	    addChildAt(item: Core, index: number): Core;
-	    getChildAt(index: number): Core;
-	    /**
-	     * 移除已添加的UI组件
-	     * @param UIObject 要移除的UI组件
-	     */
-	    removeChild(item: Core): Core;
-	    removeChildren(beginIndex?: number | undefined, endIndex?: number | undefined): void;
-	    /**
-	     * 是否绘制显示对象，如果false不进行绘制，不过仍然会进行相关的更新计算。
-	     * 只影响父级的递归调用。
-	     */
-	    renderable: boolean;
-	    /**
-	     * 缓存当前的显示对象，如果移除缓存，设置false即可
-	     * 在设置这个值时，请确保你的纹理位图已经加载
-	     */
-	    cacheAsBitmap: boolean;
-	    /** 清除全部事件 */
-	    offAll(event?: string | symbol): this;
-	    load(): void;
-	    release(): void;
-	    $onInit(): void;
-	    $onLoad(): void;
-	    $onRelease(): void;
-	    $onAddStage(): void;
-	    $onRemoveStage(): void;
-	    protected checkInvalidateFlag(): void;
 	}
 
 }
@@ -906,6 +34,7 @@ declare module 'core/UIKeys' {
 	export const pivotX: unique symbol;
 	export const pivotY: unique symbol;
 	export const rotation: unique symbol;
+	export const zIndex: unique symbol;
 	export const measuredWidth: unique symbol;
 	export const measuredHeight: unique symbol;
 	export const oldPreferWidth: unique symbol;
@@ -1264,6 +393,10 @@ declare module 'core/UILayout' {
 	    pivotX: any;
 	    pivotY: any;
 	    rotation: any;
+	    /**
+	     *  =不可用= 设置索引层级，每次父级变化时，会排序 （未实现）
+	     */
+	    zIndex: any;
 	    private _interactive;
 	    private _interactiveChildren;
 	    /**
@@ -1359,7 +492,7 @@ declare module 'layout/CSSStyle' {
 	     * 方式二 ["repeat",3,100] 三列，宽度都为100像素
 	     */
 	    private _gridTemplateColumns?;
-	    gridTemplateColumns: string[] | number[] | [string, number, number] | undefined;
+	    gridTemplateColumns: number[] | string[] | [string, number, number] | undefined;
 	    /**
 	     * 设置列间距
 	     */
@@ -1373,7 +506,7 @@ declare module 'layout/CSSStyle' {
 	     * 方式二 ["repeat",3,100] 三行，宽度都为100像素
 	     */
 	    private _gridTemplateRows?;
-	    gridTemplateRows: string[] | number[] | [string, number, number] | undefined;
+	    gridTemplateRows: number[] | string[] | [string, number, number] | undefined;
 	    /**
 	     * 设置行间距
 	     */
@@ -1495,12 +628,12 @@ declare module 'layout/CSSStyle' {
 	     * no-repeat不重复，
 	     */
 	    private _backgroundRepeat;
-	    backgroundRepeat: "repeat" | "no-repeat";
+	    backgroundRepeat: "no-repeat" | "repeat";
 	    /**
 	     * 遮罩图
 	     */
 	    private _maskImage?;
-	    maskImage: string | PIXI.Texture | UIBase | PIXI.Graphics | undefined;
+	    maskImage: string | UIBase | PIXI.Graphics | PIXI.Texture | undefined;
 	    /**
 	     * 设置位数 [x,y]
 	     */
@@ -1861,6 +994,220 @@ declare module 'core/UIBase' {
 	}
 
 }
+declare module 'interaction/InteractionEvent' {
+	/// <reference types="pixi.js" />
+	/**
+	 * 事件的基础类
+	 *
+	 * 触摸或鼠标操作事件 可查看 -> TouchEventEnum.TouchEnum
+	 *
+	 * import InteractionEvent from "../interaction/InteractionEvent",
+	 */
+	export class InteractionEvent extends PIXI.interaction.InteractionEvent {
+	    constructor();
+	}
+	/**
+	 * 对外，封装的点击触摸事件
+	 *
+	 * import InteractionEvent,{Mouse} from "../interaction/InteractionEvent",
+	 */
+	export const TouchMouseEvent: {
+	    /**
+	     * 移出
+	     *
+	     * (e: InteractionEvent,thisObj:UIBase,over: boolean)=>{}
+	     */
+	    onHover: string;
+	    /**
+	     * 按下
+	     *
+	     * (e: InteractionEvent,thisObj:UIBase, isPressed: boolean)=>void
+	     */
+	    onPress: string;
+	    /**
+	     * 按下
+	     */
+	    onDown: string;
+	    /**
+	     * 弹起
+	     */
+	    onUp: string;
+	    /**
+	     * 点击
+	     *
+	     * (e: InteractionEvent,thisObj:UIBase)=>void
+	     */
+	    onClick: string;
+	    /**
+	     * 移动
+	     *
+	     * (e: InteractionEvent,thisObj:UIBase)=>void
+	     */
+	    onMove: string;
+	};
+	/**
+	 * 键盘事件 驱动类KeysEvent
+	 *
+	 * import InteractionEvent,{KeyEvent} from "../interaction/InteractionEvent",
+	 */
+	export const enum KeyEvent {
+	    input = "input",
+	    /**
+	     * 键盘按下
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    keydown = "keydown",
+	    /**
+	     * 键盘弹起
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    keyup = "keyup",
+	    /**
+	     * 粘贴
+	     *
+	     * (e:InteractionEvent,obj:UIBase,clipboardData: DataTransfer | null)
+	     */
+	    paste = "paste",
+	    /**
+	     * 复制
+	     *
+	     * (e:InteractionEvent,obj:UIBase,clipboardData: DataTransfer | null)
+	     */
+	    copy = "copy",
+	    /**
+	     * 剪切
+	     *
+	     * (e:InteractionEvent,obj:UIBase,clipboardData: DataTransfer | null)
+	     */
+	    cut = "cut",
+	    /**
+	     * 回退删除
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    backspace = 8,
+	    /**
+	     * 回车
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    enter = 13,
+	    /**
+	     * 删除
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    delete = 46,
+	    /**
+	     * 全选 ctrl+a
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    ctrlA = 65,
+	    /**
+	     * 撤销 ctrl+z
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    ctrlZ = 90,
+	    /**
+	     * 箭头左
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    left = 37,
+	    /**
+	     * 箭头上
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    top = 38,
+	    /**
+	     * 箭头右
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    right = 39,
+	    /**
+	     * 箭头下
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    down = 40,
+	    /**
+	     * shift + 箭头左
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    shiftLeft = "shift37",
+	    /**
+	     * shift + 箭头右
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    shiftRight = "shift39",
+	    /**
+	     * shift + 箭头上
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    shiftTop = "shift38",
+	    /**
+	     * shift + 箭头下
+	     *
+	     * (e:InteractionEvent,obj:UIBase)
+	     */
+	    shiftDown = "shift40"
+	}
+	/**
+	 * 缓动事件
+	 */
+	export const TweenEvent: {
+	    /**
+	     *
+	     */
+	    Callback: string;
+	    /**
+	     * 每次改变
+	     */
+	    update: string;
+	    /**
+	     * 完成
+	     */
+	    complete: string;
+	    /**
+	     * 开始时
+	     */
+	    start: string;
+	    /**
+	     * 每次重复时
+	     */
+	    repeat: string;
+	    /**
+	     * 反向时
+	     */
+	    reverse: string;
+	    /**
+	     * 暂停时
+	     */
+	    pause: string;
+	    /**
+	     * 播放时
+	     */
+	    play: string;
+	    /**
+	     * 重新开始时
+	     */
+	    restart: string;
+	    /**
+	     * 停止时
+	     */
+	    stop: string;
+	};
+
+}
 declare module 'interaction/ClickEvent' {
 	import { UIBase } from 'core/UIBase';
 	import { InteractionEvent } from 'interaction/InteractionEvent';
@@ -2085,7 +1432,7 @@ declare module 'c/Image' {
 	     * 设置scale后，可设置scale9Grid进行调整缩放区域
 	     */
 	    private _fillMode?;
-	    fillMode: "repeat" | "no-repeat" | "scale" | undefined;
+	    fillMode: "no-repeat" | "repeat" | "scale" | undefined;
 	    /**
 	     * 锚点，调整位图的坐标中点 0-1
 	     */
@@ -2489,6 +1836,687 @@ declare module 'interaction/Index' {
 	export { ClickEvent, DragDropController, DragEvent, InputController, MouseScrollEvent, InteractionEvent, TouchMouseEvent, ComponentEvent, GroupController };
 
 }
+declare module 'core/Core' {
+	/// <reference types="pixi.js" />
+	import { ContainerBase } from 'c/ContainerBase';
+	import { Stage } from 'core/Stage';
+	import { UIBase } from 'UI';
+	export class Core extends PIXI.utils.EventEmitter implements LifecycleHook, Lifecycle {
+	    constructor();
+	    /**
+	     * 全局唯一ID
+	     */
+	    readonly uuid: number;
+	    /**
+	     * 自定义组价名
+	     */
+	    name: string;
+	    /**
+	     * @private
+	     * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
+	     */
+	    $nestLevel: number;
+	    /**
+	     * 是否初始化
+	     * @default
+	     */
+	    initialized: boolean;
+	    /**
+	     * 舞台引用
+	     */
+	    $stage?: Stage;
+	    /**
+	     * 父容器
+	     */
+	    parent: UIBase | Stage | undefined;
+	    /**
+	     * 节点列表
+	     */
+	    uiChildren: Core[];
+	    /** 没有功能实现，内部编辑器 */
+	    container: ContainerBase;
+	    /** 添加显示对象，需集成Core */
+	    addChild(item: Core): Core;
+	    addChildAt(item: Core, index: number): Core;
+	    getChildAt(index: number): Core;
+	    /**
+	     * 移除已添加的UI组件
+	     * @param UIObject 要移除的UI组件
+	     */
+	    removeChild(item: Core): Core;
+	    removeChildAt(index: number): Core;
+	    removeChildren(beginIndex?: number | undefined, endIndex?: number | undefined): void;
+	    /**
+	     * 是否绘制显示对象，如果false不进行绘制，不过仍然会进行相关的更新计算。
+	     * 只影响父级的递归调用。
+	     */
+	    renderable: boolean;
+	    /**
+	     * 缓存当前的显示对象，如果移除缓存，设置false即可
+	     * 在设置这个值时，请确保你的纹理位图已经加载
+	     */
+	    cacheAsBitmap: boolean;
+	    /** 清除全部事件 */
+	    offAll(event?: string | symbol): this;
+	    load(): void;
+	    release(): void;
+	    $onInit(): void;
+	    $onLoad(): void;
+	    $onRelease(): void;
+	    $onAddStage(): void;
+	    $onRemoveStage(): void;
+	    readonly stage: Stage | undefined;
+	    protected checkInvalidateFlag(): void;
+	}
+
+}
+declare module 'core/Utils' {
+	/// <reference types="pixi.js" />
+	/// <reference types="pixi-sound" />
+	import { Core } from 'core/Core';
+	import { UIBase } from 'core/UIBase';
+	import { Stage } from 'core/Stage';
+	/**
+	 * 工具类
+	 */
+	/** 日志输出 */
+	export function log(message?: string | number | object, ...optionalParams: string[] | number[] | object[]): void;
+	/**
+	 * 组件获取资源 - 源路径,外部可以重写本方法
+	 */
+	export let $getSourcePath: Function;
+	export function setSourcePath(params: (path: TAny, cls?: TAny) => {}): void;
+	/**
+	 * 根据显示路径，获取显示对象
+	 */
+	export let $getUIDisplayObjectPath: Function;
+	export function setDisplayObjectPath(params: (path: TAny, cls?: TAny) => {}): void;
+	export function getTexture(src: TAny): PIXI.Texture;
+	export function getSound(src: TAny): PIXI.sound.Sound;
+	export function getDisplayObject(src: TAny): any;
+	/**
+	 * 递归获取舞台，组件必须已经添加到舞台
+	 * @param uibase
+	 */
+	export function getStage(uibase: UIBase | Core | Stage): Stage | undefined;
+	/**
+	 * 快速设置矩形
+	 * @param sourcr
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 */
+	export function setRectangle(source: PIXI.Rectangle, x: number, y: number, w: number, h: number): void;
+	/** 获取当前运行时时间 */
+	export function now(): number;
+	/**
+	 * 深度拷贝对象
+	 * @param source 对象元
+	 */
+	export function deepCopy(source: TAny, target?: TAny): any;
+	/**
+	 * helper function to convert string hex to int or default
+	 *
+	 * 16进制转int，颜色转换
+	 * @param str 要转换的值，如#FFFFFF,0xFFFFFF
+	 * @param def 转换失败的返回值
+	 */
+	export function hexToInt(str: string, def: number): number;
+	/**
+	 *
+	 * @param hex 16进制字符窜 如 #FFFFFF ，不能省略三位写法
+	 * @param alpha 透明度
+	 * @returns "rgba(255,255,255,1)" || false
+	 */
+	export function hexToRgba(hex: string, alpha: number): string | false;
+	/**
+	 * 转换为16位字符串，不够2位的补0，如 “01”
+	 * @param c 要转换的数字
+	 */
+	export function componentToHex(c: number): string;
+	/**
+	 * RGB转16进制
+	 * @param r 红 0-255
+	 * @param g 绿 0-255
+	 * @param b 蓝 0-255
+	 */
+	export function rgbToHex(r: number, g: number, b: number): string;
+	/**
+	 * RGB转number
+	 * @param r 红 0-255
+	 * @param g 绿 0-255
+	 * @param b 蓝 0-255
+	 */
+	export function rgbToNumber(r: number, g: number, b: number): number;
+	/**
+	 * rgb字符串形式转换
+	 * @param color rgb(255,255,255)
+	 */
+	export function rgbStrToNumber(color: string): number;
+	/**
+	 * 10进制转RGB
+	 * @param c 数
+	 */
+	export function numberToRgb(c: number): {
+	    r: number;
+	    g: number;
+	    b: number;
+	};
+	/**
+	 * hex 转 RGB，
+	 *
+	 * 如hex字符串: "#ffffff"->255,255,255
+	 *
+	 * 如16进制数字: 0xffffff->255,255,255
+	 * @param hex
+	 */
+	export function hexToRgb(hex?: string | number): {
+	    r: number;
+	    g: number;
+	    b: number;
+	};
+	/**
+	 * 根据amt计算当前的位置start-stop，两数差值
+	 * @param start 开始数值
+	 * @param stop  结束的数值
+	 * @param amt 0-1 用时 >1为1，小于0为0
+	 */
+	export function Lerp(start: number, stop: number, amt: number): number;
+	/**
+	 * 四舍五入保留指定位数的小数
+	 * @param num 取舍的数
+	 * @param decimals 保留小数位
+	 */
+	export function Round(num: number, decimals: number): number;
+	/** 获取全局唯一数 */
+	export function uid(): number;
+	/** 获取URL参数 */
+	export function getQueryVariable(variable: string): string | null | undefined;
+	export function isDeltaIdentity(m: PIXI.Matrix): boolean;
+	export function formatRelative(value: number | string | undefined, total: number): number;
+
+}
+declare module 'c/Easing' {
+	/**
+	 * 完整的缓动曲线列表
+	 *
+	 * @example gui.Easing.Linear.None;
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTween
+	 */
+	export const Easing: {
+	    Linear: {
+	        None(k: number): number;
+	    };
+	    Quadratic: {
+	        In(k: number): number;
+	        Out(k: number): number;
+	        InOut(k: number): number;
+	    };
+	    Cubic: {
+	        In(k: number): number;
+	        Out(k: number): number;
+	        InOut(k: number): number;
+	    };
+	    Quartic: {
+	        In(k: number): number;
+	        Out(k: number): number;
+	        InOut(k: number): number;
+	    };
+	    Quintic: {
+	        In(k: number): number;
+	        Out(k: number): number;
+	        InOut(k: number): number;
+	    };
+	    Sinusoidal: {
+	        In(k: number): number;
+	        Out(k: number): number;
+	        InOut(k: number): number;
+	    };
+	    Exponential: {
+	        In(k: number): number;
+	        Out(k: number): number;
+	        InOut(k: number): number;
+	    };
+	    Circular: {
+	        In(k: number): number;
+	        Out(k: number): number;
+	        InOut(k: number): number;
+	    };
+	    Elastic: {
+	        In(k: number): number;
+	        Out(k: number): number;
+	        InOut(k: number): number;
+	    };
+	    Back: {
+	        In(k: number): number;
+	        Out(k: number): number;
+	        InOut(k: number): number;
+	    };
+	    Bounce: {
+	        In(k: number): number;
+	        Out(k: number): number;
+	        InOut(k: number): number;
+	    };
+	    Stepped: {
+	        steps: (steps: number) => (k: number) => number;
+	    };
+	};
+
+}
+declare module 'c/tween/constants' {
+	/**
+	 * 卡帧后的平滑处理帧率
+	 */
+	export const FRAME_MS: number;
+	/**
+	 * 平滑处理允许的触发时间
+	 */
+	export const TOO_LONG_FRAME_MS = 250;
+	/**
+	 * 链式补间动画的key前缀
+	 */
+	export const CHAINED_TWEENS = "_chainedTweens";
+	export const STRING_PROP = "STRING_PROP";
+	export const NUM_REGEX: RegExp;
+	export function decomposeString(fromValue: string | any): any;
+	export function decompose(prop: any, obj: any, from: any, to: any): any;
+	export const RGB = "rgb(";
+	export const RGBA = "rgba(";
+	export function isRGBColor(v: any, i: number, r?: string): boolean;
+	export function recompose(prop: any, obj: any, from: any, to: any, t: any, originalT: any, stringBuffer?: any): any;
+	export const SET_NESTED: (nested: any) => any;
+
+}
+declare module 'c/tween/Interpolation' {
+	/**
+	 * 差值计算列表
+	 * @namespace TWEEN.Interpolation
+	 * @example
+	 *
+	 * let bezier = gui.tween.Interpolation.Bezier
+	 * new gui.tween.Tween({x:0}).to({x:[0, 4, 8, 12, 15, 20, 30, 40, 20, 40, 10, 50]}, 1000).interpolation(bezier).start()
+	 * @memberof gui.tween
+	 */
+	export const Interpolation: {
+	    Linear(v: any, k: number, value: any): any;
+	    Bezier(v: any, k: number, value: any): any;
+	    CatmullRom(v: any, k: number, value: any): any;
+	    Utils: {
+	        Linear(p0: any, p1: any, t: any, v: any): any;
+	        Reset(value: any): any;
+	        Bernstein(n: any, i: any): number;
+	        Factorial: (n: any) => number;
+	        CatmullRom(p0: any, p1: any, p2: any, p3: any, t: any, v?: any): any;
+	    };
+	};
+
+}
+declare module 'c/Tween' {
+	/// <reference types="pixi.js" />
+	import { add, get, getAll, remove, removeAll, removeDisplay, update } from 'c/tween/core';
+	/**
+	 * 缓动动画
+	 *
+	 * @example let tween = new gui.Tween(myObject).to({width:'300px'}, 2000).start()
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestTween
+	 */
+	export class Tween extends PIXI.utils.EventEmitter {
+	    static core: {
+	        add: typeof add;
+	        get: typeof get;
+	        getAll: typeof getAll;
+	        remove: typeof remove;
+	        removeAll: typeof removeAll;
+	        removeDisplay: typeof removeDisplay;
+	        update: typeof update;
+	    };
+	    static Event: {
+	        Callback: string;
+	        update: string;
+	        complete: string; /**
+	         * 是否在播放中
+	         * @return {boolean}
+	         * @example tween.isPlaying()
+	         * @memberof gui.Tween
+	         */
+	        start: string;
+	        repeat: string;
+	        reverse: string;
+	        pause: string;
+	        play: string;
+	        restart: string;
+	        stop: string;
+	    };
+	    /**
+	     * Easier way to call the Tween
+	     * @param {object} object - Initial value
+	     * @param {object} to - Target value
+	     * @param {object} params - Options of tweens
+	     * @example Tween.fromTo(myObject, {x:0}, {x:200},1000)
+	     * @memberof gui.Tween
+	     * @static
+	     */
+	    static fromTo(object: TAny, to: TAny, duration?: number): Tween;
+	    /**
+	     * Easier way calling constructor only applies the `to` value, useful for CSS Animation
+	     * @param {TAny} object object
+	     * @param {object} to - Target value
+	     * @param {object} params - Options of tweens
+	     * @example Tween.to(myObject, {x:200}, 1000)
+	     * @memberof gui.Tween
+	     * @static
+	     */
+	    static to(object: TAny | TAny[], to: TAny, duration?: number): Tween;
+	    /**
+	     * Easier way calling constructor only applies the `from` value, useful for CSS Animation
+	     * @param {TAny} object object
+	     * @param {object} from - Initial value
+	     * @param {object} params - Options of tweens
+	     * @example Tween.from(myObject, {x:200}, 1000)
+	     * @memberof gui.Tween
+	     * @static
+	     */
+	    static from(object: TAny, from: TAny, duration?: number): Tween;
+	    constructor(object?: TAny);
+	    id: number;
+	    object: TAny;
+	    private _valuesEnd;
+	    private _valuesStart;
+	    protected _duration: number;
+	    private _easingFunction;
+	    private _easingReverse;
+	    private _interpolationFunction;
+	    protected _startTime: number;
+	    protected _delayTime: number;
+	    private _repeat;
+	    private _initRepeat;
+	    _isPlaying: boolean;
+	    private _yoyo;
+	    private _reversed;
+	    private _onStartCallbackFired;
+	    private _isFinite;
+	    private _prevTime;
+	    private _rendered;
+	    private _reverseDelayTime;
+	    /** 附加数据 */
+	    data: {
+	        [key: string]: TAny;
+	    };
+	    /**
+	     * 是否在播放中
+	     * @return {boolean}
+	     * @example tween.isPlaying()
+	     * @memberof gui.Tween
+	     */
+	    readonly isPlaying: boolean;
+	    /**
+	     * 是否开始播放
+	     * @return {boolean}
+	     * @example tween.isStarted()
+	     * @memberof gui.Tween
+	     */
+	    readonly isStarted: boolean;
+	    /**
+	     * 获取动画的开始时间
+	     */
+	    /**
+	    * 获取动画的开始时间
+	    */
+	    startTime: number;
+	    /**
+	     * 设置缓动时长
+	     * @param {number} amount 持续的毫秒值
+	     * @example tween.duration(2000)
+	     * @memberof gui.Tween
+	     * @deprecated 不推荐使用这个方法，内部使用
+	     * @private
+	     */
+	    duration: number | Function;
+	    /**
+	     * 逆向缓动
+	     * @example tween.reverse()
+	     * @param {boolean=} state 是否逆向
+	     * @memberof gui.Tween
+	     */
+	    reverse(state?: boolean): this;
+	    /**
+	     * 当前动画是否逆转
+	     * @return {boolean}
+	     * @example tween.reversed() true逆向中
+	     * @memberof gui.Tween
+	     */
+	    reversed(): boolean;
+	    /**
+	     * 暂停缓动
+	     * @example tween.pause()
+	     * @memberof gui.Tween
+	     */
+	    pause(): boolean | this;
+	    /**
+	     * 播放或恢复播放
+	     * @example tween.play()
+	     * @memberof gui.Tween
+	     */
+	    play(): boolean | this;
+	    /**
+	     * 设置要缓动的目标属性与持续时间
+	     * @param {object} properties 目标属性值
+	     * @param {number|Object=} [duration=1000] 持续时间
+	     * @example let tween = new gui.Tween({x:0}).to({x:100}, 2000)
+	     * @memberof gui.Tween
+	     */
+	    to(properties: TAny, duration?: number): this;
+	    private render;
+	    /**
+	     * 开始执行缓动
+	     * @param {number|string} time 要开始的时间，延迟值
+	     * @example tween.start()
+	     * @memberof gui.Tween
+	     */
+	    start(time?: number): this;
+	    /**
+	     * 停止缓动
+	     * @example tween.stop()
+	     * @memberof gui.Tween
+	     */
+	    stop(): boolean | this;
+	    /**
+	     * 设置延迟执行时间
+	     * @param {number} amount 延迟等待的时间，毫秒
+	     * @example tween.delay(500)
+	     * @memberof gui.Tween
+	     */
+	    delay(amount: number): this;
+	    /**
+	     * 设置重复执行的次数
+	     * @param {number} amount 重复次数
+	     * @example tween.repeat(5)
+	     * @memberof gui.Tween
+	     */
+	    repeat(amount: number): this;
+	    /**
+	     * 设置每个重复执行过程的延迟时间，毫秒
+	     * @param {number} amount 延迟值
+	     * @example tween.reverseDelay(500)
+	     * @memberof gui.Tween
+	     */
+	    reverseDelay(amount: number): this;
+	    /**
+	     * 是否在重复执行中启用反向动画
+	     * @param {boolean} state true启动
+	     * @param {Function=} _easingReverse 反向时的Easing function
+	     * @example tween.yoyo(true)
+	     * @memberof gui.Tween
+	     */
+	    yoyo(state?: boolean | Function, _easingReverse?: (k: number) => number): this;
+	    /**
+	     * 设置缓动函数
+	     * @param {Function} _easingFunction 缓动函数的公式，如果设置yoyo的第二个值会应用于逆向缓动
+	     * @example tween.easing(Easing.Elastic.InOut)
+	     * @memberof gui.Tween
+	     */
+	    easing(_easingFunction: ((k: number) => number) | TAny): this;
+	    /**
+	     * 设置差值
+	     * @param {Function} _interpolationFunction 差值的函数
+	     * @example tween.interpolation(Interpolation.Bezier)
+	     * @memberof gui.Tween
+	     */
+	    interpolation(_interpolationFunction: (v: TAny, k: number, value: TAny) => TAny): this;
+	    /**
+	     * 更新动画到指定时间点，进行播放
+	     * @param time
+	     */
+	    gotoAndPlay(time: number): void;
+	    /**
+	     * 更新动画到指定时间点，停止播放
+	     * @param time
+	     */
+	    gotoAndStop(time: number): void;
+	    /**
+	     * 更新动画到指定时间点，停止播放
+	     * @param time
+	     */
+	    gotoAndEnd(): void;
+	    /**
+	     * 更新函数，通过给定的 `time` 设置目标属性变化
+	    * @param {number=} elapsedMS 帧间隔
+	    * @param {Boolean=} preserve 完成后，防止删除动画对象
+	     * @param {boolean=} forceTime 强制进行更新渲染，不关心时间是否匹配
+	     * @example tween.update(100)
+	     * @memberof gui.Tween
+	     */
+	    update(elapsedMS: number, preserve?: boolean, forceTime?: boolean): boolean;
+	}
+
+}
+declare module 'c/tween/core' {
+	import { Tween } from 'c/Tween';
+	/**
+	 * 插件存储器
+	 * @namespace tween.Plugins
+	 * @memberof gui.tween
+	 * @example
+	 * let num = Plugins.num = function (node, start, end) {
+	  * return t => start + (end - start) * t
+	  * }
+	  *
+	  * @static
+	  */
+	export const Plugins: TAny;
+	/**
+	 * 添加对象到缓动列表
+	 * @param {Tween} tween Tween 实例
+	 * @memberof gui.tween
+	 * @example
+	 * let tween = new gui.tween.Tween({x:0})
+	 * tween.to({x:200}, 1000)
+	 * gui.tween.add(tween)
+	 */
+	export function add(tween: Tween): void;
+	/**
+	 * 没有缓动后，设置运行多少帧后，停止
+	 * @param {number} frameCount=120 删除所有动画后，要运行的剩余帧
+	 * @memberof gui.tween
+	 * @example
+	 * gui.tween.FrameThrottle(60)
+	 */
+	export function FrameThrottle(frameCount?: number): void;
+	/**
+	 * 延时处理，针对插件、canvas、dom
+	 * @param {number} state=true 是否平滑处理
+	 * @memberof gui.tween
+	 * @example
+	 * gui.tween.ToggleLagSmoothing(false)
+	 */
+	export function ToggleLagSmoothing(_state?: boolean): void;
+	/**
+	 * 获得所有缓动对象
+	 * @memberof gui.tween
+	 * gui.tween.getAll()
+	 */
+	export function getAll(): Tween[];
+	/**
+	 * 移除所有动画对象
+	 * @example  gui.tween.removeAll()
+	 * @memberof gui.tween
+	 */
+	export function removeAll(): void;
+	/**
+	 * 获取对象
+	 * @param {Tween} tween 缓动对象实例
+	 * @return {Tween} 返回对象或null
+	 * @memberof gui.tween
+	 * @example
+	 * gui.tween.get(tween)
+	 */
+	export function get(tween: Tween): Tween | null;
+	export function removeDisplay(uuid: string): void;
+	/**
+	 * 从缓动列表移除对象
+	 * @param {Tween} tween Tween instance
+	 * @memberof gui.tween
+	 * @example
+	 * gui.tween.remove(tween)
+	 */
+	export function remove(tween: Tween): void;
+	/**
+	 * 按给定时间更新缓动
+	 * @param {number=} time 时间戳
+	 * @param {Boolean=} preserve 完成后，防止删除动画对象
+	 * @memberof gui.tween
+	 * @example
+	 * gui.tween.update(500)
+	 */
+	export function update(time: number, preserve?: boolean): boolean;
+	/**
+	 * 是否正在运行中
+	 * @return {Boolean} 只要还有缓动在运行，返回true
+	 * @memberof gui.tween
+	 * @example gui.tween.isRunning()
+	 */
+	export function isRunning(): boolean;
+	/**
+	 * 返回是否开启延迟平滑状态
+	 * @return {Boolean}
+	 * @memberof gui.tween
+	 * @example gui.tween.isRunning()
+	 */
+	export function isLagSmoothing(): boolean;
+
+}
+declare module 'core/ObjectPool' {
+	 class ObjectPool {
+	    constructor();
+	    /**
+	     * 作为对象池的词典dict
+	     */
+	    private objPoolDict;
+	    /**
+	     * 向对象池中放入对象，以便重复利用
+	     */
+	    push<T extends Lifecycle, S>(keyClass: S, oldObj: T): void;
+	    /**
+	     * 从对象池中取出需要的对象
+	     * @return 取出的相应对象
+	     *
+	     */
+	    pop<T>(keyClass: T): TAny;
+	}
+	/**
+	 * 对象池实例
+	 */
+	export const objectPoolShared: ObjectPool;
+	export {};
+
+}
 declare module 'c/Timeline' {
 	 class Node {
 	    constructor(node?: Node);
@@ -2586,26 +2614,20 @@ declare module 'core/Ticker' {
 
 }
 declare module 'core/Stage' {
+	/// <reference types="pixi.js" />
 	import { UILayout } from 'core/UILayout';
 	/**
 	 * UI的舞台对象，展示所有UI组件
 	 *
 	 * @class
-	 * @extends PIXI.UI.Container
-	 * @memberof PIXI.UI
 	 * @param width {Number} 舞台宽度
 	 * @param height {Number} 舞台高度
-	 * @since 1.0.0
 	 */
 	export class Stage extends UILayout {
-	    constructor(width: number, height: number);
-	    private static _stage;
-	    static readonly Ins: Stage;
+	    constructor(width: number, height: number, app: PIXI.Application);
+	    app: PIXI.Application;
+	    release(): void;
 	    releaseAll(): void;
-	    /**
-	     * 舞台引用
-	     */
-	    stage: Stage | undefined;
 	    resize(): void;
 	}
 
@@ -3306,15 +3328,6 @@ interface InputStyle {
     outline: 'none';
     transformOrigin: '0 0';
     lineHeight: '1';
-}
-interface ScrollBar {
-    alignToContainer: () => void;
-}
-interface Color {
-    r: number;
-    g: number;
-    b: number;
-    a?: number;
 }
 interface Lifecycle {
     /**
