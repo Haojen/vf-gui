@@ -1,16 +1,18 @@
-import { UIBase } from "../core/UIBase";
+import { DisplayObject } from "../core/DisplayObject";
 import { updateGridLayout } from "./CSSGridLayout";
 import { updateBasicDisplayList } from "./CSSBasicLayout";
 
 export const $TempRectangle = new PIXI.Rectangle();
 
-export function updateDisplayAlign(target: UIBase,parentWidth: number,parentHeight: number,marginTop=0,marginLeft=0){
+function updateDisplayAlign(target: DisplayObject,parentWidth: number,parentHeight: number,marginTop=0,marginLeft=0){
 
 
     if(target.style == undefined){
         return;
     }
-    
+    if (target.style.justifyContent == undefined && target.style.alignContent == undefined) {
+        return
+    }
     let startX = 0;
     let startY = 0;
     const bounds = target.getPreferredBounds($TempRectangle);
@@ -23,7 +25,7 @@ export function updateDisplayAlign(target: UIBase,parentWidth: number,parentHeig
             startX = marginLeft;
             break;
         case "flex-end":
-            startX = parentWidth - bounds.width - marginLeft;
+            startX = parentWidth - bounds.width - (marginLeft);
             break;
 
     }
@@ -36,7 +38,7 @@ export function updateDisplayAlign(target: UIBase,parentWidth: number,parentHeig
             startY = marginTop;
             break;
         case "flex-end":
-            startY = parentHeight - bounds.height - marginTop;
+            startY = parentHeight - bounds.height - (marginTop);
             break;
 
     }
@@ -48,7 +50,7 @@ export function updateDisplayAlign(target: UIBase,parentWidth: number,parentHeig
 /**
  * 调整目标的元素的大小并定位这些元素。
  */
-export function updateDisplayLayout(target: UIBase,unscaledWidth: number, unscaledHeight: number) {
+export function updateDisplayLayout(target: DisplayObject,unscaledWidth: number, unscaledHeight: number) {
 
     if(target.style == undefined){
         return;
@@ -57,22 +59,21 @@ export function updateDisplayLayout(target: UIBase,unscaledWidth: number, unscal
         const pos = updateBasicDisplayList(target,unscaledWidth, unscaledHeight);
         //console.log(pos);
     }else if(target.style.display === "grid"){
-        updateBasicDisplayList(target,unscaledWidth, unscaledHeight);
-        updateGridLayout(target);
+        const size = updateGridLayout(target);
+        updateBasicDisplayList(target,size.width, size.height);
     }
     
-    if (target.style.justifyContent || target.style.alignContent) {
-        if(target.parent)
-            updateDisplayAlign(target,target.parent.width,target.parent.height,target.style.gridColumnGap,target.style.gridRowGap);
+    if(target.parent){
+        updateDisplayAlign(target,target.parent.width,target.parent.height,target.style.gridRowGap,target.style.gridColumnGap);
     }
 
     if(target.isContainer){
         
         const bounds = target.getPreferredBounds($TempRectangle);
-        let child: UIBase;
+        let child: DisplayObject;
         for(let i = 0;i<target.uiChildren.length;i++){
-            child = target.uiChildren[i] as UIBase;
-            updateDisplayAlign(child,bounds.width,bounds.height,child.style.gridColumnGap,child.style.gridRowGap);  
+            child = target.uiChildren[i] as DisplayObject;
+            updateDisplayAlign(child,bounds.width,bounds.height,child.style.gridRowGap,child.style.gridColumnGap);  
         }
         
     }

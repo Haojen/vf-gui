@@ -1,4 +1,4 @@
-import { UIBase } from "../core/UIBase";
+import { DisplayObject } from "../core/DisplayObject";
 import * as CSSFunction from "./CSSSSystem";
 import { ComponentEvent } from "../interaction/Index";
 
@@ -45,11 +45,11 @@ function formatRelative(value: number | string | undefined): {percent: number;va
  */
 export class CSSStyle {
 
-    public constructor(target: UIBase){
+    public constructor(target: DisplayObject){
         this.parent = target;
         target.on(ComponentEvent.RESIZE,this.onResize,this);
     }
-    public parent: UIBase;
+    public parent: DisplayObject;
 
     public release(){
         this.parent.off(ComponentEvent.RESIZE,this.onResize,this);
@@ -368,6 +368,9 @@ export class CSSStyle {
         return this._backgroundColor;
     }
     public set backgroundColor(value) {
+        if(value === this.backgroundColor){
+            return;
+        }
         this._backgroundColor = value;
         CSSFunction.backgroundColor(this.parent);
 
@@ -436,7 +439,7 @@ export class CSSStyle {
     /** 
      * 遮罩图 
      */
-    private _maskImage?: string | PIXI.Graphics | PIXI.Texture | UIBase;
+    private _maskImage?: string | PIXI.Graphics | PIXI.Texture | DisplayObject;
     public get maskImage(){
         return this._maskImage;
     }
@@ -674,15 +677,24 @@ export class CSSStyle {
     }
 
     private onResize(){
+        
+        
         const target = this.parent;
+        if(target.width == 0  || target.height == 0){
+            return;
+        }
         if(this.backgroundColor && target.background){
+            
             const background = target.background;
+            //console.log("onResize backgroundColor",background.width , target.width ,background.height ,target.height)
             background.clear();
             background.beginFill(this.backgroundColor);
             background.drawRoundedRect(0, 0, target.width, target.height, 0);
-            background.endFill();
+            background.endFill();      
+
         }
         if(target.background && target.background.mask){
+            //console.log("onResize backgroundColor mask",this.backgroundColor)
             const mask = target.background.mask as PIXI.Graphics;
             mask.clear();
             mask.beginFill(this.backgroundColor);

@@ -1,6 +1,6 @@
 import {shared as TickerShared} from "./Ticker";
-import { UILayout } from "./UILayout";
-import { UIBase } from "./UIBase";
+import { DisplayLayoutAbstract } from "./DisplayLayoutAbstract";
+import { DisplayObject } from "./DisplayObject";
 
 /**
  * UI的舞台对象，展示所有UI组件
@@ -9,7 +9,7 @@ import { UIBase } from "./UIBase";
  * @param width {Number} 舞台宽度
  * @param height {Number} 舞台高度
  */
-export class Stage extends UILayout{
+export class Stage extends DisplayLayoutAbstract{
 
 
     public constructor(width: number, height: number,app: PIXI.Application) {
@@ -34,7 +34,7 @@ export class Stage extends UILayout{
 
     public releaseAll(){
         for(let i=0;i<this.uiChildren.length;i++){
-            const ui = this.uiChildren[i] as UIBase;
+            const ui = this.uiChildren[i] as DisplayObject;
             ui.releaseAll();
         }
         this.uiChildren = [];

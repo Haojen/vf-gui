@@ -1,5 +1,5 @@
-import { UIBase } from "../core/UIBase";
-import * as UIKeys from "../core/UIKeys";
+import { DisplayObject } from "../core/DisplayObject";
+import * as UIKeys from "../core/DisplayLayoutKeys";
 
 export const $tempRectangle = new PIXI.Rectangle();
 
@@ -24,129 +24,12 @@ export function formatRelative(value: number | string | undefined, total: number
     return percent * 0.01 * total;
 }
 
-/**
- * @private
- * 设置组件的布局宽高
- */
-export function getLayoutBoundsSize(target: UIBase,rectangle: PIXI.Rectangle, layoutWidth: number, layoutHeight: number) {
-
-    if(target.parent == undefined){
-        rectangle.width = NaN;
-        rectangle.height = NaN;
-        return rectangle;
-    }
-    const parentHeight =target.parent.width;
-    const parentWidth = target.parent.height;
-
-    rectangle.width = layoutWidth;
-    rectangle.height = layoutHeight;
-
-    const values = target.$values;
-
-    const maxWidth = formatRelative(values[UIKeys.maxWidth],parentWidth);
-    const maxHeight = formatRelative(values[UIKeys.maxHeight],parentHeight);
-    const minWidth = formatRelative(values[UIKeys.minWidth],parentWidth);
-    const minHeight = formatRelative(values[UIKeys.minHeight],parentHeight);
-
-    //min/max sizes
-    if (!isNaN(maxWidth) && rectangle.width > maxWidth) {
-        rectangle.width = maxWidth;
-    }
-    if (!isNaN(minWidth) && rectangle.width < minWidth) {
-        rectangle.width = minWidth;
-    }
-
-    if (!isNaN(maxHeight) && rectangle.height > maxHeight) {
-        rectangle.height = maxHeight;
-    }
-    if (!isNaN(minHeight) && rectangle.height < minHeight) {
-        rectangle.height = minHeight;
-    }
-
-    if(isNaN(rectangle.width)){
-        rectangle.width = 0;
-    }
-    if(isNaN(rectangle.height)){
-        rectangle.height = 0;
-    }
-
-    return rectangle;
-}
-
-
-/**
- * @private
- * 一个工具方法，使用BasicLayout规则测量目标对象。
- */
-export function measure(target?: UIBase): void {
-    if (!target) {
-        return;
-    }
-    let width = 0;
-    let height = 0;
-    const bounds = $tempRectangle;
-    const count = target.uiChildren.length;
-    for (let i = 0; i < count; i++) {
-        const layoutElement =target.getChildAt(i) as UIBase;
-        if (!(layoutElement instanceof UIBase) || !layoutElement.includeInLayout) {
-            continue;
-        }
-
-        const values = layoutElement.$values;
-        const hCenter = +values[UIKeys.horizontalCenter];
-        const vCenter = +values[UIKeys.verticalCenter];
-        const left = +values[UIKeys.left];
-        const right = +values[UIKeys.right];
-        const top = +values[UIKeys.top];
-        const bottom = +values[UIKeys.bottom];
-
-        layoutElement.getPreferredBounds(bounds);
-
-        let extX: number;
-        let extY: number;   
-
-        if (!isNaN(left) && !isNaN(right)) {
-            extX = left + right;
-        }
-        else if (!isNaN(hCenter)) {
-            extX = Math.abs(hCenter) * 2;
-        }
-        else if (!isNaN(left) || !isNaN(right)) {
-            extX = isNaN(left) ? 0 : left;
-            extX += isNaN(right) ? 0 : right;
-        }
-        else {
-            extX = bounds.x;
-        }
-
-        if (!isNaN(top) && !isNaN(bottom)) {
-            extY = top + bottom;
-        }
-        else if (!isNaN(vCenter)) {
-            extY = Math.abs(vCenter) * 2;
-        }
-        else if (!isNaN(top) || !isNaN(bottom)) {
-            extY = isNaN(top) ? 0 : top;
-            extY += isNaN(bottom) ? 0 : bottom;
-        }
-        else {
-            extY = bounds.y;
-        }
-
-        const preferredWidth = bounds.width;
-        const preferredHeight = bounds.height;
-        width = Math.ceil(Math.max(width, extX + preferredWidth));
-        height = Math.ceil(Math.max(height, extY + preferredHeight));
-    }
-
-    target.setMeasuredSize(width, height);
-}
 
 /**
  * @private
  * 一个工具方法，使用BasicLayout规则布局目标对象。
  */
-export function updateBasicDisplayList(target: UIBase|undefined,unscaledWidth: number, unscaledHeight: number){
+export function updateBasicDisplayList(target: DisplayObject|undefined,unscaledWidth: number, unscaledHeight: number){
     if (!target)
         return;
     //console.log(target.container.name);
@@ -171,7 +54,8 @@ export function updateBasicDisplayList(target: UIBase|undefined,unscaledWidth: n
         childHeight = parentHeight - bottom - top;
     }
 
-    target.setActualSize(childWidth,childHeight)
+    target.setMeasuredSize(childWidth,childHeight);
+    target.setActualSize(childWidth,childHeight);
     
     let childX = NaN;
     let childY = NaN;

@@ -11,6 +11,7 @@ class Index{
         }
         new TestApplication(this,(app: PIXI.Application, uiStage: gui.Stage) => {
             import(`./${type}`).then(value=>{
+                console.log("create->",type);
                 new value.default(app,uiStage);
             }); 
         });

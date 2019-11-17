@@ -1,30 +1,30 @@
-import { getTexture } from "../core/Utils";
-import { UIBase } from "../core/UIBase";
+import { getTexture } from "../utils/Utils";
+import { DisplayObject } from "../core/DisplayObject";
 
 /** ===================== background  ===================== */
 
-export function backgroundColor(uibase: UIBase){
+export function backgroundColor(target: DisplayObject){
 
-    if(uibase.style == undefined){
+    if(target.style == undefined){
         return;
     }
-    if(uibase.style.backgroundColor==undefined  && uibase.background == undefined){
+    if(target.style.backgroundColor==undefined  && target.background == undefined){
         return;
     }
-    if (uibase.background === undefined) {
-        uibase.background = new PIXI.Graphics();
-        uibase.background.name = "background";
-        uibase.container.addChildAt(uibase.background, 0);
+    if (target.background === undefined) {
+        target.background = new PIXI.Graphics();
+        target.background.name = "background";
+        target.container.addChildAt(target.background, 0);
     }
 }
 
-export function backgroundPositionSize(uibase: UIBase){
-    if(uibase.style == undefined){
+export function backgroundPositionSize(target: DisplayObject){
+    if(target.style == undefined){
         return;
     }
-    if (uibase.background && uibase.background.children.length > 0) {
-        const sprite = uibase.background.getChildAt(0) as PIXI.Sprite;
-        const style = uibase.style;
+    if (target.background && target.background.children.length > 0) {
+        const sprite = target.background.getChildAt(0) as PIXI.Sprite;
+        const style = target.style;
         if (sprite instanceof PIXI.TilingSprite) {
             sprite.tilePosition.set(style.backgroundPositionX || 0, style.backgroundPositionY || 0);
         } else {
@@ -37,13 +37,13 @@ export function backgroundPositionSize(uibase: UIBase){
     }
 }
 
-export function backgroundRepeat(uibase: UIBase){
-    if(uibase.style == undefined){
+export function backgroundRepeat(target: DisplayObject){
+    if(target.style == undefined){
         return;
     }
-    const style = uibase.style;
-    if (style.backgroundImage && uibase.background) {
-        uibase.background.removeChildren();
+    const style = target.style;
+    if (style.backgroundImage && target.background) {
+        target.background.removeChildren();
 
         let backgroundImage: PIXI.Texture | undefined;
         if (style.backgroundImage instanceof PIXI.Texture) {
@@ -62,107 +62,107 @@ export function backgroundRepeat(uibase: UIBase){
                 sprite = new PIXI.Sprite(backgroundImage);
             }
 
-            uibase.background.addChild(sprite);
+            target.background.addChild(sprite);
             const maskGraphics = new PIXI.Graphics();
-            uibase.background.addChild(maskGraphics);
-            uibase.background.mask = maskGraphics;
+            target.background.addChild(maskGraphics);
+            target.background.mask = maskGraphics;
         }
     }
 }
 
-export function backgroundImage(uibase: UIBase){
-    if (uibase.background === undefined) {
-        uibase.background = new PIXI.Graphics();
-        uibase.background.name = "background";
-        uibase.container.addChildAt(uibase.background, 0);
+export function backgroundImage(target: DisplayObject){
+    if (target.background === undefined) {
+        target.background = new PIXI.Graphics();
+        target.background.name = "background";
+        target.container.addChildAt(target.background, 0);
     }
-    backgroundRepeat(uibase);
-    backgroundPositionSize(uibase);
+    backgroundRepeat(target);
+    backgroundPositionSize(target);
 
 }
 
 /** ===================== mask  ===================== */
 
 
-export function maskPosition(uibase: UIBase){
-    if(uibase.style == undefined){
+export function maskPosition(target: DisplayObject){
+    if(target.style == undefined){
         return;
     }
-    if(uibase.mask){
-        const style = uibase.style;
+    if(target.mask){
+        const style = target.style;
         if(style.maskPosition === undefined){
             return;
         }
         
-        if(uibase.mask instanceof UIBase){
-            uibase.mask.x = style.maskPosition[0];
-            uibase.mask.y =  style.maskPosition[1];
+        if(target.mask instanceof DisplayObject){
+            target.mask.x = style.maskPosition[0];
+            target.mask.y =  style.maskPosition[1];
         }else{
-            uibase.mask.position.set(style.maskPosition[0],style.maskPosition[1])
+            target.mask.position.set(style.maskPosition[0],style.maskPosition[1])
         }
     }
 }
 
-export function maskSize(uibase: UIBase){
-    if(uibase.style == undefined){
+export function maskSize(target: DisplayObject){
+    if(target.style == undefined){
         return;
     }
-    if(uibase.mask){
-        const style = uibase.style;
+    if(target.mask){
+        const style = target.style;
         if(style.maskSize === undefined){
             return;
         }
 
-        uibase.mask.width = style.maskSize[0];
-        uibase.mask.height = style.maskSize[1];
-        if(!(uibase.mask instanceof UIBase))
-            uibase.mask.updateTransform();
+        target.mask.width = style.maskSize[0];
+        target.mask.height = style.maskSize[1];
+        if(!(target.mask instanceof DisplayObject))
+        target.mask.updateTransform();
     }
 }
 
-export function maskImage(uibase: UIBase){
-    if(uibase.style == undefined){
+export function maskImage(target: DisplayObject){
+    if(target.style == undefined){
         return;
     }
-    uibase.container.mask = null;
-    if (uibase.mask && uibase.mask.parent) {
-        if (uibase.mask instanceof UIBase) {
-            uibase.removeChild(uibase.mask);
+    target.container.mask = null;
+    if (target.mask && target.mask.parent) {
+        if (target.mask instanceof DisplayObject) {
+            target.removeChild(target.mask);
         } else {
-            uibase.mask.parent.removeChild(uibase.mask);
+            target.mask.parent.removeChild(target.mask);
         }
     }
 
-    for (let i = 0; i < uibase.uiChildren.length; i++) {
-        if (uibase.uiChildren[i].name == "maskImage") {
-            uibase.removeChild(uibase.uiChildren[i]);
+    for (let i = 0; i < target.uiChildren.length; i++) {
+        if (target.uiChildren[i].name == "maskImage") {
+            target.removeChild(target.uiChildren[i]);
             break;
         }
     }
 
-    uibase.mask = undefined;
-    const style = uibase.style;
-    const container = uibase.container;
+    target.mask = undefined;
+    const style = target.style;
+    const container = target.container;
 
     if (style.maskImage instanceof PIXI.Graphics) {
-        uibase.mask = style.maskImage;
-        container.mask = uibase.mask;
-        container.addChild(uibase.mask);
-    } else if (style.maskImage instanceof UIBase) {
+        target.mask = style.maskImage;
+        container.mask = target.mask;
+        container.addChild(target.mask);
+    } else if (style.maskImage instanceof DisplayObject) {
         //后期组件完成后补充，矢量与位图组件
-        uibase.mask = style.maskImage;
-        uibase.mask.name = "maskImage";
-        uibase.mask.container.name = "maskImage";
-        container.mask = (uibase.mask.container as TAny) || null;
-        uibase.addChild(uibase.mask);
+        target.mask = style.maskImage;
+        target.mask.name = "maskImage";
+        target.mask.container.name = "maskImage";
+        container.mask = (target.mask.container as TAny) || null;
+        target.addChild(target.mask);
     } else {
-        uibase.mask = PIXI.Sprite.from(getTexture(style.maskImage));
-        container.mask = uibase.mask;
-        container.addChild(uibase.mask);
+        target.mask = PIXI.Sprite.from(getTexture(style.maskImage));
+        container.mask = target.mask;
+        container.addChild(target.mask);
     }
     
-    maskSize(uibase);
-    maskPosition(uibase)
+    maskSize(target);
+    maskPosition(target)
 
 }
 

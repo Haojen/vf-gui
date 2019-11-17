@@ -1,11 +1,11 @@
-import {UIBase} from "../core/UIBase";
-import {InteractionEvent} from "./InteractionEvent";
+import {DisplayObject} from "../core/DisplayObject";
+import {InteractionEvent} from "../event/InteractionEvent";
 
 /**
  * 记录当前正在拖动的UI组件列表
  * @private
  */
-export const _items: UIBase[] = [];
+export const _items: DisplayObject[] = [];
 /**
  * 添加拖动组件到控制器
  * @param item 要添加的UI组件
@@ -13,7 +13,7 @@ export const _items: UIBase[] = [];
  * @returns true|false
  * @since 1.0.0
  */
-export function add(item: UIBase, e: InteractionEvent) {
+export function add(item: DisplayObject, e: InteractionEvent) {
     item.attach.dragDropEventId = e.data.identifier;
     if (_items.indexOf(item) === -1) {
         _items.push(item);
@@ -27,7 +27,7 @@ export function add(item: UIBase, e: InteractionEvent) {
  * @param item 要获取的UI组件
  * @returns flase | item
  */
-export function getItem(item: UIBase) {
+export function getItem(item: DisplayObject) {
     let index: number | undefined;
     for (let i = 0; i < _items.length; i++) {
         if (_items[i] === item) {

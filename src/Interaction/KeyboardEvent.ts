@@ -1,5 +1,5 @@
-import { KeyEvent } from "./InteractionEvent";
-import {UIBase} from "../core/UIBase";
+import { KeyEvent } from "../event/KeyEvent";
+import {DisplayObject} from "../core/DisplayObject";
 
 
 class KeyboardSelectEvent {
@@ -11,7 +11,7 @@ class KeyboardSelectEvent {
 
     }
 
-    private obj: UIBase|undefined;
+    private obj: DisplayObject|undefined;
     private ctrlDown = false;
     private shiftDown = false;
     private shiftKey = 16;
@@ -195,7 +195,7 @@ class KeyboardSelectEvent {
         e.preventDefault();
     }
 
-    public focus(obj: UIBase){
+    public focus(obj: DisplayObject){
         this.addEvent();
         this.obj = obj;
     }

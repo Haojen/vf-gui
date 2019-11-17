@@ -67,14 +67,14 @@ export default class TestGridLayout {
         this.addContent(purple,0x9c27b0);
     }
 
-    private addContent(parent:gui.UIBase,color:number,len=9){
+    private addContent(parent:gui.DisplayObject,color:number,len=9){
         let childContainer:gui.Container;
         for(let i=1;i<=len;i++){
             /** 单背景色 */
             childContainer = new gui.Container();
             childContainer.name = i.toString() + "_" + color;
-            childContainer.width = 50;
-            childContainer.height = 50;
+            //childContainer.width = 50;
+            //childContainer.height = 50;
             childContainer.style.backgroundColor = color;
             parent.addChild(childContainer);
 

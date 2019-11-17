@@ -1,29 +1,29 @@
-import { UIBase } from "../UIBase";
+import { DisplayObject } from "../DisplayObject";
 import { DragEvent, DragDropController, InteractionEvent, ComponentEvent } from "../../interaction/Index";
-import { TouchMouseEventEnum } from "../../enum/TouchMouseEventEnum";
-import { Core } from "../Core";
+import { TouchMouseEventEnum } from "../../interaction/TouchMouseEventEnum";
+import { DisplayObjectAbstract } from "../DisplayObjectAbstract";
 import { Stage } from "../Stage";
-import { getDisplayObject } from "../Utils";
+import { getDisplayObject } from "../../utils/Utils";
 
 
 /**
  *  组件的拖拽操作
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.5.0/TestDrop
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestDrop
  */
 export class UIBaseDrag implements Lifecycle {
     /**
      * 构造函数
      */
-    public constructor(target: UIBase) {
+    public constructor(target: DisplayObject) {
         this.target = target;
         this.target.plugs.set(UIBaseDrag.key, this);
     }
 
     public static key = "UIBaseDrag";
 
-    private target: UIBase | undefined;
-    public $targetParent: UIBase | Stage | undefined;
+    private target: DisplayObject | undefined;
+    public $targetParent: DisplayObject | Stage | undefined;
     /** 
      * 可拖动初始化
      *  @default
@@ -114,7 +114,7 @@ export class UIBaseDrag implements Lifecycle {
     /**
      * 拖动时，物体临时的存放容器，设置后，请注意事件流
      */
-    private _dragContainer: Core | undefined;
+    private _dragContainer: DisplayObjectAbstract | undefined;
     public get dragContainer() {
         return this._dragContainer;
     }
@@ -135,7 +135,7 @@ export class UIBaseDrag implements Lifecycle {
     /**
      * 接收掉落的新容器
      */
-    private _droppableReparent: UIBase | undefined;
+    private _droppableReparent: DisplayObject | undefined;
     public get droppableReparent() {
         return this._droppableReparent;
     }
@@ -177,7 +177,7 @@ export class UIBaseDrag implements Lifecycle {
                 let target = this.target;
                 this.$targetParent = target.parent;
                 
-                if(this._dragContainer == undefined){
+                if(this._dragContainer == undefined && !this.dragBoundary){
                     this._dragContainer = this.target.stage;
                 }    
                 
@@ -188,8 +188,8 @@ export class UIBaseDrag implements Lifecycle {
                     target.interactive = false;
                     containerStart.copyFrom(target.container.position);
                     if (this._dragContainer) {
-                        let c: Core | undefined;
-                        if (this._dragContainer instanceof Core) {
+                        let c: DisplayObjectAbstract | undefined;
+                        if (this._dragContainer instanceof DisplayObjectAbstract) {
                             c = this._dragContainer;
                         }
                         if (c && target.parent) {

@@ -1,8 +1,6 @@
-import {UIBase} from "../core/UIBase";
-import { TouchMouseEventEnum } from "../enum/TouchMouseEventEnum";
-import {InteractionEvent} from "./InteractionEvent";
-import { Stage } from "../core/Stage";
-
+import {DisplayObject} from "../core/DisplayObject";
+import { TouchMouseEventEnum } from "./TouchMouseEventEnum";
+import {InteractionEvent} from "../event/InteractionEvent";
 
 /**
  * 多拽相关的事件处理类
@@ -28,13 +26,13 @@ import { Stage } from "../core/Stage";
  */
 export class DragEvent {
 
-    public constructor(obj: UIBase) {
+    public constructor(obj: DisplayObject) {
         this.obj = obj;
         obj.interactive = true;
         this.startEvent();
     }
 
-    private obj: UIBase;
+    private obj: DisplayObject;
     public  id = 0;
     private offset = new PIXI.Point();
     private movementX = 0;

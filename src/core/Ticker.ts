@@ -1,4 +1,4 @@
-import * as tween from "../c/tween/index";
+import * as tween from "../tween/private/index";
 
 /**
  * 心跳，需要UI库初始化后，进行实例调用注册

@@ -1,6 +1,6 @@
-import {UIBase} from "../core/UIBase";
-import { TouchMouseEventEnum } from "../enum/TouchMouseEventEnum";
-import { uid } from "../core/Utils";
+import {DisplayObject} from "../core/DisplayObject";
+import { TouchMouseEventEnum } from "./TouchMouseEventEnum";
+import { uid } from "../utils/Utils";
 
 interface TWheelEvent extends WheelEvent{
     /** 火狐 */
@@ -31,14 +31,14 @@ export class MouseScrollEvent{
      * @param obj 需要绑定的对象
      * @param preventDefault 是否组织系统默认的事件触发
      */
-    public constructor(obj: UIBase, preventDefault: boolean){
+    public constructor(obj: DisplayObject, preventDefault: boolean){
         this.obj = obj;
         this.preventDefault = preventDefault;
         obj.container.interactive = true;
         this.startEvent();
     }
     public  id= 0;
-    private obj: UIBase
+    private obj: DisplayObject
     private preventDefault: boolean;
     private delta = new PIXI.Point();
     private mouseScrllBind: ((_e: TWheelEvent | Event) => void | undefined) | undefined;

@@ -1,6 +1,7 @@
-import {UIBase} from "../core/UIBase";
-import { TouchMouseEventEnum } from "../enum/TouchMouseEventEnum";
-import {InteractionEvent, TouchMouseEvent } from "./InteractionEvent";
+import {DisplayObject} from "../core/DisplayObject";
+import { TouchMouseEventEnum } from "./TouchMouseEventEnum";
+import {InteractionEvent} from "../event/InteractionEvent";
+import {TouchMouseEvent } from "../event/TouchMouseEvent";
 
 /**
  * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
@@ -14,10 +15,10 @@ import {InteractionEvent, TouchMouseEvent } from "./InteractionEvent";
  * ```
  *  可赋值方法:
  * ```
- *  onHover: ((e: InteractionEvent,thisOBj:UIBase,over: boolean) => void) | undefined
- *  onPress: ((e: InteractionEvent,thisOBj:UIBase, isPressed: boolean) => void) | undefined;
- *  onClick: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined 
- *  onMove: ((e: InteractionEvent,thisOBj:UIBase) => void) | undefined
+ *  onHover: ((e: InteractionEvent,thisOBj:DisplayObject,over: boolean) => void) | undefined
+ *  onPress: ((e: InteractionEvent,thisOBj:DisplayObject, isPressed: boolean) => void) | undefined;
+ *  onClick: ((e: InteractionEvent,thisOBj:DisplayObject) => void) | undefined 
+ *  onMove: ((e: InteractionEvent,thisOBj:DisplayObject) => void) | undefined
  * ```
  * 
  * @example 可查看 `TestSliceSprite` 示例
@@ -34,7 +35,7 @@ export class ClickEvent {
      * @param rightMouseButton 是否开启鼠标右键点击，默认false
      * @param doubleClick 是否开启鼠标双击,默认false
      */
-    public constructor(obj: UIBase,isOpenEmitEvent?: boolean,includeHover?: boolean, rightMouseButton?: boolean, doubleClick?: boolean) {
+    public constructor(obj: DisplayObject,isOpenEmitEvent?: boolean,includeHover?: boolean, rightMouseButton?: boolean, doubleClick?: boolean) {
         this.obj = obj;
         
         if(isOpenEmitEvent!==undefined){
@@ -61,7 +62,7 @@ export class ClickEvent {
         this.startEvent();
     }
 
-    private obj: UIBase;
+    private obj: DisplayObject;
     public  id = 0;
     /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | gui.Interaction.TouchEvent */
     public isOpenEmitEvent = false;
@@ -240,8 +241,8 @@ export class ClickEvent {
         this.onMove = undefined;
         this.obj.container.interactive = false;
     }
-    public onHover: ((e: InteractionEvent,thisOBj: UIBase,over: boolean) => void) | undefined
-    public onPress: ((e: InteractionEvent,thisOBj: UIBase, isPressed: boolean) => void) | undefined;
-    public onClick: ((e: InteractionEvent,thisOBj: UIBase) => void) | undefined 
-    public onMove: ((e: InteractionEvent,thisOBj: UIBase) => void) | undefined
+    public onHover: ((e: InteractionEvent,thisOBj: DisplayObject,over: boolean) => void) | undefined
+    public onPress: ((e: InteractionEvent,thisOBj: DisplayObject, isPressed: boolean) => void) | undefined;
+    public onClick: ((e: InteractionEvent,thisOBj: DisplayObject) => void) | undefined 
+    public onMove: ((e: InteractionEvent,thisOBj: DisplayObject) => void) | undefined
 }

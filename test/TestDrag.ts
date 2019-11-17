@@ -63,6 +63,8 @@ export default class TestDrag {
         c7.container.style.gridTemplateRows =  ["repeat",3,30];
         c7.container.style.gridColumnGap = 10;
         c7.container.style.gridRowGap = 10;
+        c7.container.width = 100;
+        c7.container.height = 100;
         uiStage.addChild(c7.container);
         c7.container.dragOption.droppable = true;//开启掉落接收
         c7.container.dragOption.dropGroup = "group1";
