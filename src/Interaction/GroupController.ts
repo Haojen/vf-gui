@@ -1,15 +1,15 @@
-import { UIBase } from "../core/UIBase";
+import { DisplayObject } from "../core/DisplayObject";
 
 /**
  * 
  * @private
  */
-export const _GroupObject = new Map<string, { [key: string]: UIBase }>();
+export const _GroupObject = new Map<string, { [key: string]: DisplayObject }>();
 
 /** 
  * 注册分组，
  */
-export function registrerGroup(ui: UIBase) {
+export function registrerGroup(ui: DisplayObject) {
     if ( ui.groupName) {
 
         let group = _GroupObject.get( ui.groupName);
@@ -24,7 +24,7 @@ export function registrerGroup(ui: UIBase) {
 /**
  * 注销指定分组或指定分组的子项
  */
-export function unRegistrerGroup(ui: UIBase) {
+export function unRegistrerGroup(ui: DisplayObject) {
     if (ui.groupName) {
         const group = _GroupObject.get(ui.groupName);
         if (group) {
@@ -42,7 +42,7 @@ export function unRegistrerGroup(ui: UIBase) {
 }
 
 /** 设置选中 */
-export function getGroup(name?: string): { [key: string]: UIBase } | undefined {
+export function getGroup(name?: string): { [key: string]: DisplayObject } | undefined {
     if (name == undefined) {
         return undefined;
     }

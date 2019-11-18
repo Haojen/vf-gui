@@ -1,5 +1,5 @@
-import {UIBase} from "../core/UIBase";
-import { CheckBox } from "../c/CheckBox";
+import {DisplayObject} from "../core/DisplayObject";
+import { CheckBox } from "../display/CheckBox";
 
 interface CheckGroupObject{
     groups: {[key: string]: {[value: string]: CheckBox}} ;
@@ -9,12 +9,12 @@ interface CheckGroupObject{
  * 记录当前正在拖动的UI组件列表
  * @private
  */
-let _currentItem: UIBase|undefined;
+let _currentItem: DisplayObject|undefined;
 /**
  * 
  * @private
  */
-export const tabGroups: {[key: string]: UIBase[]} = {};
+export const tabGroups: {[key: string]: DisplayObject[]} = {};
 /**
  * 
  * @private
@@ -31,7 +31,7 @@ export const _checkGroupObject: CheckGroupObject = {
  * @param tabGroup 分组名
  * @returns 依据tabIndex返回是否需要排序 0，-1，1
  */
-export function registrer(item: UIBase, tabIndex: number, tabGroup?: string) {
+export function registrer(item: DisplayObject, tabIndex: number, tabGroup?: string) {
     const groupName = tabGroup || "default";
 
     let items = tabGroups[groupName];
@@ -54,7 +54,7 @@ export function registrer(item: UIBase, tabIndex: number, tabGroup?: string) {
 }
 /** 失去焦点时 */
 export function blur(){
-    const obj = _currentItem as TUIBase;
+    const obj = _currentItem as TInputBase;
     if(obj){
         if(obj.blur && typeof obj.blur == "function"){
             obj.blur();
@@ -62,7 +62,7 @@ export function blur(){
     }     
 }
 /** 设置当前输入组件 */
-export function set(item: UIBase){
+export function set(item: DisplayObject){
     blur();
     _currentItem = item;
 }
@@ -74,11 +74,11 @@ export function clear(){
 /** 一般再按下键盘tab健执行 焦点获取与设置 */
 export function fireTab(){
     if (_currentItem) {
-        const _tabGroup = _currentItem.attach._tabGroup as UIBase[];
+        const _tabGroup = _currentItem.attach._tabGroup as DisplayObject[];
         let i = _tabGroup.indexOf(_currentItem) + 1;
         if (i >= _tabGroup.length) 
             i = 0;
-        const obj = _tabGroup[i] as TUIBase;
+        const obj = _tabGroup[i] as TInputBase;
         if(obj.focus)
             obj.focus();
     }
@@ -87,11 +87,11 @@ export function fireTab(){
 /** 一般再按下键盘向下箭头执行 焦点获取与设置 */
 export function fireNext(){
     if (_currentItem) {
-        const _tabGroup = _currentItem.attach._tabGroup as UIBase[];
+        const _tabGroup = _currentItem.attach._tabGroup as DisplayObject[];
         let i = _tabGroup.indexOf(_currentItem) + 1;
         if (i >= _tabGroup.length) 
             i = _tabGroup.length - 1;
-        const obj = _tabGroup[i] as TUIBase;
+        const obj = _tabGroup[i] as TInputBase;
         if(obj.focus)
             obj.focus();
     }
@@ -100,11 +100,11 @@ export function fireNext(){
 /** 一般再按下键盘向上箭头执行 焦点获取与设置 */
 export function firePrev(){
     if (_currentItem) {
-        const _tabGroup = _currentItem.attach._tabGroup as UIBase[];
+        const _tabGroup = _currentItem.attach._tabGroup as DisplayObject[];
         let i = _tabGroup.indexOf(_currentItem) - 1;
         if (i < 0) 
             i = 0;
-        const obj = _tabGroup[i] as TUIBase;
+        const obj = _tabGroup[i] as TInputBase;
         if(obj.focus)
             obj.focus();
     }

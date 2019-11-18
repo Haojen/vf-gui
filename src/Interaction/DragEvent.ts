@@ -1,8 +1,6 @@
-import {UIBase} from "../core/UIBase";
-import { TouchMouseEventEnum } from "../enum/TouchMouseEventEnum";
-import {InteractionEvent} from "./InteractionEvent";
-import { Stage } from "../core/Stage";
-
+import {DisplayObject} from "../core/DisplayObject";
+import { TouchMouseEventEnum } from "./TouchMouseEventEnum";
+import {InteractionEvent} from "../event/InteractionEvent";
 
 /**
  * 多拽相关的事件处理类
@@ -28,13 +26,13 @@ import { Stage } from "../core/Stage";
  */
 export class DragEvent {
 
-    public constructor(obj: UIBase) {
+    public constructor(obj: DisplayObject) {
         this.obj = obj;
-        obj.container.interactive = true;
+        obj.interactive = true;
         this.startEvent();
     }
 
-    private obj: UIBase;
+    private obj: DisplayObject;
     public  id = 0;
     private offset = new PIXI.Point();
     private movementX = 0;
@@ -45,6 +43,10 @@ export class DragEvent {
     private cancel = false;
     private dragging = false;
     private isStop = true;
+    /**
+     * 限制拖动抽,XY,X抽或Y抽
+     */
+    public dragRestrictAxis?: "x" | "y" ;
 
     public startEvent() {
 
@@ -57,11 +59,12 @@ export class DragEvent {
 
 
     private _onDragStart(e: InteractionEvent) {
+
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true,this);
 
-        if (!this.bound && this.obj.parent) {
-            const stage =  Stage.Ins.container;
+        if (!this.bound && this.obj.parent && this.obj.stage) {
+            const stage =  this.obj.stage.container;
             this.start.copyFrom(e.data.global);
             stage.on(TouchMouseEventEnum.mousemove, this._onDragMove, this);
             stage.on(TouchMouseEventEnum.touchmove, this._onDragMove, this);
@@ -84,11 +87,14 @@ export class DragEvent {
         if (!this.dragging) {
             this.movementX = Math.abs(this.offset.x);
             this.movementY = Math.abs(this.offset.y);
-            if (this.movementX === 0 && this.movementY === 0 || Math.max(this.movementX, this.movementY) < this.obj.dragThreshold) return; //thresshold
-            if (this.obj.dragRestrictAxis !== undefined) {
+            if (this.movementX === 0 && this.movementY === 0 || Math.max(this.movementX, this.movementY) < this.obj.dragThreshold) 
+                return; //thresshold
+            if (this.dragRestrictAxis !== undefined) {
                 this.cancel = false;
-                if (this.obj.dragRestrictAxis == "x" && this.movementY > this.movementX) this.cancel = true;
-                else if (this.obj.dragRestrictAxis == "y" && this.movementY <= this.movementX) this.cancel = true;
+                if (this.dragRestrictAxis == "x" && this.movementY > this.movementX) 
+                    this.cancel = true;
+                else if (this.dragRestrictAxis == "y" && this.movementY <= this.movementX) 
+                    this.cancel = true;
                 if (this.cancel) {
                     this._onDragEnd(e);
                     return;
@@ -102,18 +108,16 @@ export class DragEvent {
     }
 
     private _onDragEnd(e: InteractionEvent) {
-        if (e.data.identifier !== this.id) return;
-
-        
-        if (this.bound) {
-            const stage =  Stage.Ins.container;
-            stage.removeListener(TouchMouseEventEnum.mousemove, this._onDragMove, this);
-            stage.removeListener(TouchMouseEventEnum.touchmove, this._onDragMove, this);
-            stage.removeListener(TouchMouseEventEnum.mouseup, this._onDragEnd, this);
-            stage.removeListener(TouchMouseEventEnum.mouseupoutside, this._onDragEnd, this);
-            stage.removeListener(TouchMouseEventEnum.touchend, this._onDragEnd, this);
-            stage.removeListener(TouchMouseEventEnum.touchendoutside, this._onDragEnd, this);
-            stage.removeListener(TouchMouseEventEnum.touchcancel, this._onDragEnd, this);
+        if (e.data.identifier !== this.id) return; 
+        if (this.bound && this.obj.stage) {
+            const stage = this.obj.stage.container;
+            stage.off(TouchMouseEventEnum.mousemove, this._onDragMove, this);
+            stage.off(TouchMouseEventEnum.touchmove, this._onDragMove, this);
+            stage.off(TouchMouseEventEnum.mouseup, this._onDragEnd, this);
+            stage.off(TouchMouseEventEnum.mouseupoutside, this._onDragEnd, this);
+            stage.off(TouchMouseEventEnum.touchend, this._onDragEnd, this);
+            stage.off(TouchMouseEventEnum.touchendoutside, this._onDragEnd, this);
+            stage.off(TouchMouseEventEnum.touchcancel, this._onDragEnd, this);
             this.dragging = false;
             this.bound = false;
             this.onDragEnd && this.onDragEnd.call(this.obj, e,this);
@@ -124,8 +128,8 @@ export class DragEvent {
 
     /** 清除拖动 */
     public stopEvent() {
-        if (this.bound) {
-            const stage =  Stage.Ins.container;
+        if (this.bound && this.obj.stage) {      
+            const stage =  this.obj.stage.container;
             stage.off(TouchMouseEventEnum.mousemove, this._onDragMove, this);
             stage.off(TouchMouseEventEnum.touchmove, this._onDragMove, this);
             stage.off(TouchMouseEventEnum.mouseup, this._onDragEnd, this);
@@ -146,7 +150,7 @@ export class DragEvent {
         this.onDragEnd = undefined;
         this.onDragMove = undefined;
         this.onDragStart = undefined;
-        this.obj.container.interactive = false;
+        this.obj.interactive = false;
     }
 
     public onDragPress: ((e: InteractionEvent, isPressed: boolean,dragObj?: DragEvent) => void) | undefined;

@@ -1,5 +1,3 @@
-webpack.config.js
-test-webpack.config.js
-publish-webpack.config.js
+webpack_config/
 src/c/Tween
 src/core/IUIBase.ts
