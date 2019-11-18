@@ -1,5 +1,4 @@
 import gui from "../src/vf-gui";
-import { ComponentEvent } from "../src/interaction/Index";
 
 export default class TestDrag {
 
@@ -68,7 +67,7 @@ export default class TestDrag {
         uiStage.addChild(c7.container);
         c7.container.dragOption.droppable = true;//开启掉落接收
         c7.container.dragOption.dropGroup = "group1";
-        c7.container.on(ComponentEvent.DROP_TARGET,(container:gui.Container,source:gui.Rect)=>{
+        c7.container.on(gui.Interaction.ComponentEvent.DROP_TARGET,(container:gui.Container,source:gui.Rect)=>{
             console.log(container.name,source.name);
         });
 

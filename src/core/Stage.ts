@@ -12,7 +12,7 @@ import { DisplayObject } from "./DisplayObject";
 export class Stage extends DisplayLayoutAbstract{
 
 
-    public constructor(width: number, height: number,app: PIXI.Application) {
+    public constructor(width: number, height: number,app?: PIXI.Application) {
         super(); 
         this.width = width;
         this.height = height;
@@ -26,7 +26,7 @@ export class Stage extends DisplayLayoutAbstract{
         this.app = app;
     }
 
-    public app: PIXI.Application;
+    public app?: PIXI.Application;
 
     public release(){
         super.release();

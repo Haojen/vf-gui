@@ -1490,8 +1490,8 @@ declare module 'core/Stage' {
 	 * @param height {Number} 舞台高度
 	 */
 	export class Stage extends DisplayLayoutAbstract {
-	    constructor(width: number, height: number, app: PIXI.Application);
-	    app: PIXI.Application;
+	    constructor(width: number, height: number, app?: PIXI.Application);
+	    app?: PIXI.Application;
 	    release(): void;
 	    releaseAll(): void;
 	    resize(): void;

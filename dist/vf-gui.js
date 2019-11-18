@@ -9492,7 +9492,7 @@ const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.0.0.7.0.0.7.0.0.7.0) ==0.7.0.0.7.0.0.7.0;
+//     return this.lastIndexOf(word, pos0.7.0.0.7.0.0.7.0) ==0.7.0.0.7.0.0.7.0;
 // });
 window.gui = vfgui;
 window.gui.version = "0.7.0";
