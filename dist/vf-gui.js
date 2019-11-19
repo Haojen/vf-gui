@@ -2137,8 +2137,12 @@ const DisplayLayoutAbstract_1 = __webpack_require__(/*! ./DisplayLayoutAbstract 
 class Stage extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
     constructor(width, height, app) {
         super();
+        this._stageWidth = 0; //调整缩放后的值
+        this._stageHeight = 0; //调整缩放后的值
         this.width = width;
         this.height = height;
+        this._stageWidth = width;
+        this._stageWidth = height;
         this.setActualSize(width, height);
         this.container.name = "Stage";
         this.container.hitArea = new PIXI.Rectangle(0, 0, width, height);
@@ -2147,6 +2151,31 @@ class Stage extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
         this.initialized = true;
         this.$nestLevel = 1;
         this.app = app;
+    }
+    get stageWidth() {
+        return this._stageWidth;
+    }
+    get stageHeight() {
+        return this._stageHeight;
+    }
+    get scaleX() {
+        return this.container.scale.x;
+    }
+    set scaleX(value) {
+        this.container.scale.x = value;
+        this._stageWidth = value * this.width;
+    }
+    get scaleY() {
+        return this.container.scale.y;
+    }
+    set scaleY(value) {
+        this.container.scale.y = value;
+        this._stageHeight = value * this.height;
+    }
+    set Scale(value) {
+        this.container.scale.copyFrom(value);
+        this._stageWidth = value.x * this.width;
+        this._stageHeight = value.y * this.height;
     }
     release() {
         super.release();
@@ -2400,6 +2429,7 @@ class UIBaseDrag {
                             //_this.container._recursivePostUpdateTransform();
                             stageOffset.set(c.container.worldTransform.tx - target.parent.container.worldTransform.tx, c.container.worldTransform.ty - target.parent.container.worldTransform.ty);
                             c.addChild(target);
+                            stageOffset.set(stageOffset.x / target.parent.scaleX, stageOffset.y / target.parent.scaleY);
                         }
                     }
                     else {
@@ -2413,9 +2443,9 @@ class UIBaseDrag {
                     return;
                 }
                 let target = this.target;
-                if (this.dragging) {
-                    let x = containerStart.x + offset.x - stageOffset.x;
-                    let y = containerStart.y + offset.y - stageOffset.y;
+                if (this.dragging && target.stage) {
+                    let x = containerStart.x + (offset.x / target.stage.scaleX) - stageOffset.x;
+                    let y = containerStart.y + (offset.y / target.stage.scaleY) - stageOffset.y;
                     if (this.dragRestrictAxis == "x") {
                         this._dragPosition.set(x, containerStart.y - stageOffset.y);
                     }

@@ -1492,6 +1492,13 @@ declare module 'core/Stage' {
 	export class Stage extends DisplayLayoutAbstract {
 	    constructor(width: number, height: number, app?: PIXI.Application);
 	    app?: PIXI.Application;
+	    _stageWidth: number;
+	    _stageHeight: number;
+	    readonly stageWidth: number;
+	    readonly stageHeight: number;
+	    scaleX: number;
+	    scaleY: number;
+	    Scale: PIXI.Point;
 	    release(): void;
 	    releaseAll(): void;
 	    resize(): void;

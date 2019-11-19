@@ -1,3 +1,2 @@
 webpack_config/
-src/c/Tween
-src/core/IUIBase.ts
+src/core/InterfaceCore.ts

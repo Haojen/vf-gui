@@ -16,6 +16,8 @@ export class Stage extends DisplayLayoutAbstract{
         super(); 
         this.width = width;
         this.height = height;
+        this._stageWidth = width;
+        this._stageWidth = height;
         this.setActualSize(width,height);
         this.container.name = "Stage";
         this.container.hitArea = new PIXI.Rectangle(0, 0, width, height);
@@ -27,6 +29,40 @@ export class Stage extends DisplayLayoutAbstract{
     }
 
     public app?: PIXI.Application;
+    public _stageWidth = 0;//调整缩放后的值
+    public _stageHeight = 0;//调整缩放后的值
+
+    public get stageWidth(){
+        return this._stageWidth;
+    }
+
+    public get stageHeight(){
+        return this._stageHeight;
+    }
+
+    public get scaleX() {
+        return  this.container.scale.x;
+    }
+
+    public set scaleX(value: number) {
+        this.container.scale.x = value;
+        this._stageWidth = value * this.width;
+    }
+
+    public get scaleY() {
+        return this.container.scale.y;
+    }
+
+    public set scaleY(value: number) {
+        this.container.scale.y = value;
+        this._stageHeight = value * this.height;
+    }
+
+    public set Scale(value: PIXI.Point){
+        this.container.scale.copyFrom(value);
+        this._stageWidth = value.x * this.width;
+        this._stageHeight = value.y * this.height;
+    }
 
     public release(){
         super.release();

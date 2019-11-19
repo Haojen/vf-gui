@@ -1,9 +1,10 @@
 
+type ScaleMode = "noScale" | "showAll" | "noBorder" | "exactFit" | "fixedWidth" | "fixedHeight" | "fixedNarrow" | "fixedWide"
 /**
  * @private
  * 更新播放器视口尺寸
  */
-export default function  updateViewSize(app: PIXI.Application,canvasScaleFactor = 1,isWebGl =true,scaleMode: "noScale" | "showAll" | "noBorder" | "exactFit" | "fixedWidth" | "fixedHeight" | "fixedNarrow" | "fixedWide" = "showAll"): void {  
+export default function  updateViewSize(app: PIXI.Application,canvasScaleFactor = 1,isWebGl =true,scaleMode: ScaleMode): void {  
     let top = 0;
     let canvas = app.view;
     let boundingClientWidth = window.innerWidth;
@@ -72,7 +73,7 @@ export default function  updateViewSize(app: PIXI.Application,canvasScaleFactor 
  * @param contentHeight 初始化内容高度
  */
 function calculateStageSize(
-    scaleMode: "noScale" | "showAll" | "noBorder" | "exactFit" | "fixedWidth" | "fixedHeight" | "fixedNarrow" | "fixedWide",
+    scaleMode: ScaleMode,
     screenWidth: number,
     screenHeight: number,
     contentWidth: number,

@@ -116,7 +116,7 @@ export function maskSize(target: DisplayObject){
         target.mask.width = style.maskSize[0];
         target.mask.height = style.maskSize[1];
         if(!(target.mask instanceof DisplayObject))
-        target.mask.updateTransform();
+            target.mask.updateTransform();
     }
 }
 
