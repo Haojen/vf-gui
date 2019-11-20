@@ -38,6 +38,13 @@ export function getTexture(src: TAny){
     return PIXI.Texture.from(src);
 }
 
+export function getSheet(src: TAny){
+    if($getSourcePath){
+        src = $getSourcePath(src);
+    }
+    return src;
+}
+
 export function getSound(src: TAny){
     if($getSourcePath){
         src = $getSourcePath(src);

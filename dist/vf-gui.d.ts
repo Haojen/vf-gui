@@ -2407,6 +2407,7 @@ declare module 'utils/Utils' {
 	export let $getUIDisplayObjectPath: Function;
 	export function setDisplayObjectPath(params: (path: TAny, cls?: TAny) => {}): void;
 	export function getTexture(src: TAny): PIXI.Texture;
+	export function getSheet(src: TAny): any;
 	export function getSound(src: TAny): PIXI.sound.Sound;
 	export function getDisplayObject(src: TAny): any;
 	/**
@@ -2702,6 +2703,8 @@ declare module 'display/SpriteAnimated' {
 	    stop(): void;
 	    /** 播放 */
 	    play(): void;
+	    autoPlay: boolean;
+	    isPlay: boolean;
 	    /**
 	     * 添加动画
 	     */

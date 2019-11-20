@@ -4207,6 +4207,20 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
         this._playing = true;
         this.playSystem();
     }
+    get autoPlay() {
+        return this._playing;
+    }
+    set autoPlay(value) {
+        this._playing = value;
+    }
+    set isPlay(value) {
+        if (value) {
+            this.play();
+        }
+        else {
+            this.stop();
+        }
+    }
     /**
      * 添加动画
      */
@@ -4235,7 +4249,7 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
     }
     srcSystem() {
         this.releaseAnimate();
-        const src = this.src;
+        const src = Utils_1.getSheet(this.src);
         if (src) {
             if (Array.isArray(src)) {
                 const textures = [];
@@ -9292,6 +9306,13 @@ function getTexture(src) {
     return PIXI.Texture.from(src);
 }
 exports.getTexture = getTexture;
+function getSheet(src) {
+    if (exports.$getSourcePath) {
+        src = exports.$getSourcePath(src);
+    }
+    return src;
+}
+exports.getSheet = getSheet;
 function getSound(src) {
     if (exports.$getSourcePath) {
         src = exports.$getSourcePath(src);
@@ -9564,10 +9585,10 @@ const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.1.0.7.1.0.7.1) ==0.7.1.0.7.1.0.7.1;
+//     return this.lastIndexOf(word, pos0.7.2.0.7.2.0.7.2) ==0.7.2.0.7.2.0.7.2;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.1";
+window.gui.version = "0.7.2";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
