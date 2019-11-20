@@ -3170,6 +3170,7 @@ declare module 'display/Sound' {
 	     * 是否自动播放
 	     * @default false
 	     */
+	    private _autoPlay;
 	    autoPlay: boolean;
 	    /**
 	     * 播放的动画
@@ -3202,6 +3203,12 @@ declare module 'display/Sound' {
 	    protected _curProgress: number;
 	    protected _playing: boolean;
 	    readonly isPlaying: boolean;
+	    private _startTime?;
+	    startTime: number | undefined;
+	    private _endTime?;
+	    endTime: number | undefined;
+	    isPlay: boolean;
+	    protected commitProperties(): void;
 	    play(start?: number, end?: number): Promise<void>;
 	    stop(): void;
 	    /**

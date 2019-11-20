@@ -38,7 +38,14 @@ export class Sound extends InputBase {
      * 是否自动播放
      * @default false
      */
-    public autoPlay = false;
+    private _autoPlay = false;
+    public get autoPlay() {
+        return this._autoPlay;
+    }
+    public set autoPlay(value) {
+        this._autoPlay = value;
+    }
+
     /**
      * 播放的动画
      */
@@ -69,20 +76,8 @@ export class Sound extends InputBase {
         if(src === this.src){
             return;
         }
-        this.releaseSound();
         this._src = src;
-        if(src){
-            const sound = this._sound = getSound(src);
-            sound.loop = this.loop;
-            sound.volume = this.volume;
-            sound.speed = this.speed;
-            if(this.autoPlay){
-                this.play();
-            }else{
-                this.stop();
-            }
-
-        }
+        this.invalidateProperties();
     }
 
     private _speed = 1;
@@ -138,9 +133,59 @@ export class Sound extends InputBase {
         return false;
     }
 
+    private _startTime?: number;
+    public get startTime() {
+        return this._startTime;
+    }
+    public set startTime(value) {
+        this._startTime = value;
+    }
 
+    private _endTime?: number;
+    public get endTime() {
+        return this._endTime;
+    }
+    public set endTime(value) {
+        this._endTime = value;
+    }
+
+    public get isPlay() {
+        return this.isPlaying;
+    }
+    public set isPlay(value) {
+        if(this._sound == undefined){
+            console.warn("curent sound initialization not complete;");
+            return;
+        }
+        if(value){
+            this.play();
+        }else{
+            this.stop();
+        }
+    }
+
+    protected commitProperties() {
+        this.releaseSound();
+        if(this.src){
+            const sound = this._sound = getSound(this.src);
+            sound.loop = this.loop;
+            sound.volume = this.volume;
+            sound.speed = this.speed;
+            if(this.autoPlay){
+                this.play();
+            }else{
+                this.stop();
+            }
+        }
+    }
 
     public async play(start = 0,end?: number){
+        if(this.startTime){
+            start = this.startTime;
+        }
+        if(this.endTime){
+            end = this.endTime;
+        }
         if(this._sound && this._sound.isPlaying){
             return;
         }

@@ -13,6 +13,8 @@ export default class TestSound {
         sound.sheetSkin = PIXI.Loader.shared.resources["soundskin"].spritesheet;//spritesheet格式中animations需要包含play与stop动作
         sound.loop = true;
         sound.volume = 100;
+        sound.startTime = 0;
+        sound.endTime = 2;//音频播放区间未0-2秒
         sound.autoPlay = false;
         sound.groupName = "a1";//属于a1组的音频互斥
         sound.src = "./assets/test.mp3";

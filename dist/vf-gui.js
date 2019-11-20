@@ -3840,7 +3840,7 @@ class Sound extends InputBase_1.InputBase {
          * 是否自动播放
          * @default false
          */
-        this.autoPlay = false;
+        this._autoPlay = false;
         this._speed = 1;
         this._volume = 100;
         this._loop = false;
@@ -3849,6 +3849,12 @@ class Sound extends InputBase_1.InputBase {
         const sp = this.spriteAnimated;
         sp.loop = true;
         this.addChild(sp);
+    }
+    get autoPlay() {
+        return this._autoPlay;
+    }
+    set autoPlay(value) {
+        this._autoPlay = value;
     }
     get sheetSkin() {
         return this._sheetSkin;
@@ -3873,20 +3879,8 @@ class Sound extends InputBase_1.InputBase {
         if (src === this.src) {
             return;
         }
-        this.releaseSound();
         this._src = src;
-        if (src) {
-            const sound = this._sound = Utils_1.getSound(src);
-            sound.loop = this.loop;
-            sound.volume = this.volume;
-            sound.speed = this.speed;
-            if (this.autoPlay) {
-                this.play();
-            }
-            else {
-                this.stop();
-            }
-        }
+        this.invalidateProperties();
     }
     /**
      * 设置播放速度
@@ -3932,8 +3926,56 @@ class Sound extends InputBase_1.InputBase {
         }
         return false;
     }
+    get startTime() {
+        return this._startTime;
+    }
+    set startTime(value) {
+        this._startTime = value;
+    }
+    get endTime() {
+        return this._endTime;
+    }
+    set endTime(value) {
+        this._endTime = value;
+    }
+    get isPlay() {
+        return this.isPlaying;
+    }
+    set isPlay(value) {
+        if (this._sound == undefined) {
+            console.warn("curent sound initialization not complete;");
+            return;
+        }
+        if (value) {
+            this.play();
+        }
+        else {
+            this.stop();
+        }
+    }
+    commitProperties() {
+        this.releaseSound();
+        if (this.src) {
+            const sound = this._sound = Utils_1.getSound(this.src);
+            sound.loop = this.loop;
+            sound.volume = this.volume;
+            sound.speed = this.speed;
+            if (this.autoPlay) {
+                this.play();
+            }
+            else {
+                this.stop();
+            }
+        }
+    }
     play(start = 0, end) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (this.startTime) {
+                start = this.startTime;
+            }
+            if (this.endTime) {
+                end = this.endTime;
+            }
             if (this._sound && this._sound.isPlaying) {
                 return;
             }
@@ -9522,10 +9564,10 @@ const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.0.0.7.0.0.7.0) ==0.7.0.0.7.0.0.7.0;
+//     return this.lastIndexOf(word, pos0.7.1.0.7.1.0.7.1) ==0.7.1.0.7.1.0.7.1;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.0";
+window.gui.version = "0.7.1";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
