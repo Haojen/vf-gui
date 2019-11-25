@@ -1830,6 +1830,23 @@ class DisplayObject extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
         });
     }
     /**
+     * 设置Blur XY的模糊强度
+     *
+     * 参数类型为number时，设置 blurX = blurY = value
+     *
+     */
+    set filterBlur(value) {
+        const container = this.container;
+        if (this.blurFilter === undefined) {
+            this.blurFilter = new PIXI.filters.BlurFilter(8, 1, 1);
+            container.filters = [this.blurFilter];
+        }
+        this.blurFilter.blur = value;
+    }
+    get filterBlur() {
+        return this.blurFilter ? this.blurFilter.blur : 0;
+    }
+    /**
      * 获取样式
      */
     get style() {
@@ -2938,6 +2955,9 @@ class Image extends DisplayObject_1.DisplayObject {
         if (src !== this._source) {
             this._source = src;
             const texture = this._texture = Utils_1.getTexture(src);
+            if (texture === undefined) {
+                return;
+            }
             if (texture.frame.width > 1 && texture.frame.height > 1) {
                 this.setMeasuredSize(texture.frame.width, texture.frame.height);
             }
@@ -3849,6 +3869,7 @@ class Sound extends InputBase_1.InputBase {
         const sp = this.spriteAnimated;
         sp.loop = true;
         this.addChild(sp);
+        this.container.buttonMode = true;
     }
     get autoPlay() {
         return this._autoPlay;
@@ -3881,6 +3902,15 @@ class Sound extends InputBase_1.InputBase {
         }
         this._src = src;
         this.invalidateProperties();
+    }
+    /**
+     * 动画速度
+     */
+    get animationSpeed() {
+        return this.spriteAnimated.animationSpeed;
+    }
+    set animationSpeed(value) {
+        this.spriteAnimated.animationSpeed = value;
     }
     /**
      * 设置播放速度
@@ -3916,9 +3946,6 @@ class Sound extends InputBase_1.InputBase {
     }
     set loop(value) {
         this._loop = value;
-        if (this._sound) {
-            this._sound.loop = value;
-        }
     }
     get isPlaying() {
         if (this._sound) {
@@ -3957,7 +3984,6 @@ class Sound extends InputBase_1.InputBase {
         this.releaseSound();
         if (this.src) {
             const sound = this._sound = Utils_1.getSound(this.src);
-            sound.loop = this.loop;
             sound.volume = this.volume;
             sound.speed = this.speed;
             if (this.autoPlay) {
@@ -3966,6 +3992,7 @@ class Sound extends InputBase_1.InputBase {
             else {
                 this.stop();
             }
+            this.container.hitArea = new PIXI.Rectangle(0, 0, this.width / this.scaleX, this.height / this.scaleY);
         }
     }
     play(start = 0, end) {
@@ -4031,9 +4058,6 @@ class Sound extends InputBase_1.InputBase {
         }
         this.stop();
     }
-    update(_style) {
-        this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
-    }
     release() {
         super.release();
         this.releaseSound();
@@ -4060,9 +4084,11 @@ class Sound extends InputBase_1.InputBase {
     }
     onEnd() {
         if (this.loop) {
+            this.play();
             this.emit(Index_1.ComponentEvent.LOOP, this);
         }
         else {
+            this.stop();
             this.emit(Index_1.ComponentEvent.COMPLETE, this);
         }
     }
@@ -6622,18 +6648,20 @@ function maskImage(target) {
     target.mask = undefined;
     const style = target.style;
     const container = target.container;
-    if (style.maskImage instanceof PIXI.Graphics) {
-        target.mask = style.maskImage;
+    const maskdisplay = Utils_1.getDisplayObject(style.maskImage, target);
+    if (maskdisplay instanceof PIXI.Graphics) {
+        target.mask = maskdisplay;
         container.mask = target.mask;
         container.addChild(target.mask);
     }
-    else if (style.maskImage instanceof DisplayObject_1.DisplayObject) {
+    else if (maskdisplay instanceof DisplayObject_1.DisplayObject) {
         //后期组件完成后补充，矢量与位图组件
-        target.mask = style.maskImage;
+        target.mask = maskdisplay;
         target.mask.name = "maskImage";
         target.mask.container.name = "maskImage";
         container.mask = target.mask.container || null;
-        target.addChild(target.mask);
+        if (target.mask.parent == undefined)
+            target.addChild(target.mask);
     }
     else {
         target.mask = PIXI.Sprite.from(Utils_1.getTexture(style.maskImage));
@@ -9303,6 +9331,10 @@ function getTexture(src) {
     if (src instanceof PIXI.Texture) {
         return src;
     }
+    if (src === '') {
+        src = undefined;
+        return src;
+    }
     return PIXI.Texture.from(src);
 }
 exports.getTexture = getTexture;
@@ -9323,9 +9355,9 @@ function getSound(src) {
     return PIXI.sound.Sound.from(src);
 }
 exports.getSound = getSound;
-function getDisplayObject(src) {
+function getDisplayObject(src, target) {
     if (exports.$getUIDisplayObjectPath) {
-        src = exports.$getUIDisplayObjectPath(src);
+        src = exports.$getUIDisplayObjectPath(src, target);
     }
     return src;
 }
@@ -9585,10 +9617,10 @@ const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.2.0.7.2.0.7.2) ==0.7.2.0.7.2.0.7.2;
+//     return this.lastIndexOf(word, pos0.7.3.0.7.3.0.7.3) ==0.7.3.0.7.3.0.7.3;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.2";
+window.gui.version = "0.7.3";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

@@ -2338,6 +2338,8 @@ declare module 'core/DisplayObject' {
 	     * 拖动限制门槛,小于设置的数不执行拖动,防止点击与滚动
 	     */
 	    dragThreshold: number;
+	    /** 模糊 */
+	    private blurFilter?;
 	    /**
 	     * 设置拖动
 	     */
@@ -2356,6 +2358,13 @@ declare module 'core/DisplayObject' {
 	    tint: number | undefined;
 	    private _blendMode;
 	    blendMode: PIXI.BLEND_MODES | undefined;
+	    /**
+	     * 设置Blur XY的模糊强度
+	     *
+	     * 参数类型为number时，设置 blurX = blurY = value
+	     *
+	     */
+	    filterBlur: number;
 	    /**
 	     * 私有样式代理
 	     * */
@@ -2386,8 +2395,8 @@ declare module 'core/DisplayObject' {
 
 }
 declare module 'utils/Utils' {
-	/// <reference types="pixi.js" />
 	/// <reference types="pixi-sound" />
+	/// <reference types="pixi.js" />
 	import { DisplayObject } from 'core/DisplayObject';
 	import { Stage } from 'core/Stage';
 	import { DisplayObjectAbstract } from 'core/DisplayObjectAbstract';
@@ -2405,11 +2414,11 @@ declare module 'utils/Utils' {
 	 * 根据显示路径，获取显示对象
 	 */
 	export let $getUIDisplayObjectPath: Function;
-	export function setDisplayObjectPath(params: (path: TAny, cls?: TAny) => {}): void;
-	export function getTexture(src: TAny): PIXI.Texture;
+	export function setDisplayObjectPath(params: (cls?: TAny, target?: DisplayObject) => {}): void;
+	export function getTexture(src: TAny): any;
 	export function getSheet(src: TAny): any;
 	export function getSound(src: TAny): PIXI.sound.Sound;
-	export function getDisplayObject(src: TAny): any;
+	export function getDisplayObject(src: TAny, target?: DisplayObject): any;
 	/**
 	 * 递归获取舞台，组件必须已经添加到舞台
 	 * @param DisplayObject
@@ -3148,7 +3157,6 @@ declare module 'display/Graphics' {
 declare module 'display/Sound' {
 	/// <reference types="pixi-sound" />
 	/// <reference types="pixi.js" />
-	import { CSSStyle } from 'layout/CSSStyle';
 	import { SpriteAnimated } from 'display/SpriteAnimated';
 	import { InputBase } from 'display/private/InputBase';
 	export const $sounds: Map<string, PIXI.sound.Sound>;
@@ -3186,6 +3194,10 @@ declare module 'display/Sound' {
 	     * 音频源
 	     */
 	    src: string | number | PIXI.sound.Options | ArrayBuffer | HTMLAudioElement | undefined;
+	    /**
+	     * 动画速度
+	     */
+	    animationSpeed: number;
 	    private _speed;
 	    /**
 	     * 设置播放速度
@@ -3222,7 +3234,6 @@ declare module 'display/Sound' {
 	     * 暂停播放
 	     */
 	    pause(): void;
-	    update(_style: CSSStyle): void;
 	    release(): void;
 	    private releaseSound;
 	    private onProgress;

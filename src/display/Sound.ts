@@ -23,6 +23,7 @@ export class Sound extends InputBase {
         const sp = this.spriteAnimated;
         sp.loop = true;
         this.addChild(sp);
+        this.container.buttonMode = true;
     }
 
 
@@ -80,6 +81,16 @@ export class Sound extends InputBase {
         this.invalidateProperties();
     }
 
+    /**
+     * 动画速度
+     */
+    public get animationSpeed() {
+        return this.spriteAnimated.animationSpeed;
+    }
+    public set animationSpeed(value) {
+        this.spriteAnimated.animationSpeed = value;
+    }
+
     private _speed = 1;
     /**
      * 设置播放速度
@@ -119,9 +130,6 @@ export class Sound extends InputBase {
     }
     public set loop(value) {
         this._loop = value;
-        if( this._sound ){
-            this._sound.loop = value;
-        }
     }
 
     protected _curProgress = 0;
@@ -168,7 +176,6 @@ export class Sound extends InputBase {
         this.releaseSound();
         if(this.src){
             const sound = this._sound = getSound(this.src);
-            sound.loop = this.loop;
             sound.volume = this.volume;
             sound.speed = this.speed;
             if(this.autoPlay){
@@ -176,6 +183,7 @@ export class Sound extends InputBase {
             }else{
                 this.stop();
             }
+            this.container.hitArea = new PIXI.Rectangle(0, 0, this.width/this.scaleX, this.height/this.scaleY);
         }
     }
 
@@ -248,10 +256,6 @@ export class Sound extends InputBase {
         this.stop();
     }
 
-    public update(_style: CSSStyle) {
-        this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
-    }
-
     public release() {
         super.release();
         this.releaseSound();
@@ -280,8 +284,10 @@ export class Sound extends InputBase {
     }
     private onEnd() {
         if(this.loop){
+            this.play();
             this.emit(ComponentEvent.LOOP,this);
         }else{
+            this.stop();
             this.emit(ComponentEvent.COMPLETE,this);
         }
     }

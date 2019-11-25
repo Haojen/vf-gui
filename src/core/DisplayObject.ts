@@ -36,6 +36,8 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
      * 拖动限制门槛,小于设置的数不执行拖动,防止点击与滚动
      */
     public dragThreshold = 0;
+    /** 模糊 */
+    private blurFilter ?: PIXI.filters.BlurFilter;
     
     /** 
      * 设置拖动
@@ -50,6 +52,7 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
         const dragOption = this.dragOption;
         deepCopy(value,dragOption);
     }
+
     /**
      * 分组
      */
@@ -115,6 +118,25 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
         });
     }
   
+    /**
+     * 设置Blur XY的模糊强度
+     * 
+     * 参数类型为number时，设置 blurX = blurY = value
+     * 
+     */
+    public set filterBlur(value: number){
+        const container = this.container;
+        if(this.blurFilter === undefined){
+            this.blurFilter  =  new PIXI.filters.BlurFilter(8,1,1);
+            container.filters = [ this.blurFilter ];
+        }
+        this.blurFilter.blur = value;
+        
+    }
+    public get filterBlur() {
+        return this.blurFilter ? this.blurFilter.blur : 0;
+    }
+
     /** 
      * 私有样式代理 
      * */

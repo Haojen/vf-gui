@@ -1,5 +1,5 @@
 import { DisplayObject } from "../core/DisplayObject";
-import { getTexture } from "../utils/Utils";
+import { getTexture, $getSourcePath } from "../utils/Utils";
 import { ComponentEvent } from "../interaction/Index";
 
 /**
@@ -118,6 +118,9 @@ export class Image extends DisplayObject {
         if (src !== this._source) {
             this._source = src;
             const texture = this._texture = getTexture(src);
+            if(texture === undefined){
+                return;
+            }
             if (texture.frame.width > 1 && texture.frame.height > 1) {
                 this.setMeasuredSize(texture.frame.width, texture.frame.height);
                 

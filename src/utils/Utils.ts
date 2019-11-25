@@ -23,7 +23,7 @@ export function setSourcePath(params: (path: TAny,cls?: TAny) => {}) {
  * 根据显示路径，获取显示对象
  */
 export let $getUIDisplayObjectPath: Function;
-export function setDisplayObjectPath(params: (path: TAny,cls?: TAny) => {}) {
+export function setDisplayObjectPath(params: (cls?: TAny,target?:DisplayObject) => {}) {
     $getUIDisplayObjectPath = params;
 }
 
@@ -33,6 +33,10 @@ export function getTexture(src: TAny){
         src = $getSourcePath(src);
     }
     if(src instanceof PIXI.Texture){
+        return src;
+    }
+    if(src === ''){
+        src = undefined;
         return src;
     }
     return PIXI.Texture.from(src);
@@ -55,9 +59,9 @@ export function getSound(src: TAny){
     return PIXI.sound.Sound.from(src);
 }
 
-export function getDisplayObject(src: TAny){
+export function getDisplayObject(src: TAny,target?:DisplayObject){
     if($getUIDisplayObjectPath){
-        src = $getUIDisplayObjectPath(src);
+        src = $getUIDisplayObjectPath(src,target);
     }
     return src;
 }
