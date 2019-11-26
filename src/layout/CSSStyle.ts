@@ -1,6 +1,7 @@
 import { DisplayObject } from "../core/DisplayObject";
 import * as CSSFunction from "./CSSSSystem";
 import { ComponentEvent } from "../interaction/Index";
+import { getStringFunctionParam } from "../utils/Utils";
 
 
 /**
@@ -21,23 +22,23 @@ export type Position = "absolute" | "fixed" | "static";
 export type Align = "flex-start" | "flex-end" | "center";
 
 /** 布局模式 */
-export type Display = "none"|"block" | "grid";
+export type Display = "none" | "block" | "grid";
 
-function formatRelative(value: number | string | undefined): {percent: number;value: number} {
+function formatRelative(value: number | string | undefined): { percent: number; value: number } {
 
     if (value == undefined) {
-        return {percent:NaN,value:NaN};
+        return { percent: NaN, value: NaN };
     }
     if (typeof value === "number") {
-        return {percent:NaN,value:value};
+        return { percent: NaN, value: value };
     }
     const str = value;
     const index = str.indexOf("%");
     if (index == -1) {
-        return {percent:NaN,value:+str};
+        return { percent: NaN, value: +str };
     }
     const percent = +str.substring(0, index);
-    return {percent:Math.min(percent * 0.01, 1),value:NaN};
+    return { percent: Math.min(percent * 0.01, 1), value: NaN };
 }
 
 /**
@@ -45,15 +46,15 @@ function formatRelative(value: number | string | undefined): {percent: number;va
  */
 export class CSSStyle {
 
-    public constructor(target: DisplayObject){
+    public constructor(target: DisplayObject) {
         this.parent = target;
-        target.on(ComponentEvent.RESIZE,this.onResize,this);
+        target.on(ComponentEvent.RESIZE, this.onResize, this);
     }
     public parent: DisplayObject;
 
-    public release(){
-        this.parent.off(ComponentEvent.RESIZE,this.onResize,this);
-    }  
+    public release() {
+        this.parent.off(ComponentEvent.RESIZE, this.onResize, this);
+    }
     /** 
      * 规定元素的显示类型。布局模式 
      * 
@@ -83,7 +84,7 @@ export class CSSStyle {
      * 在容器里面的水平位置（左中右）
      */
     private _justifyContent?: Align;
-    public get justifyContent(){
+    public get justifyContent() {
         return this._justifyContent;
     }
     public set justifyContent(value) {
@@ -114,7 +115,7 @@ export class CSSStyle {
     public set gridTemplateColumns(value) {
         this._gridTemplateColumns = value;
     }
- 
+
     /**
      * 设置列间距
      */
@@ -133,7 +134,7 @@ export class CSSStyle {
      * 方式二 ["repeat",3,100] 三行，宽度都为100像素
      */
     private _gridTemplateRows?: number[] | string[] | [string, number, number];
-    public get gridTemplateRows(){
+    public get gridTemplateRows() {
         return this._gridTemplateRows;
     }
     public set gridTemplateRows(value) {
@@ -156,7 +157,7 @@ export class CSSStyle {
     public get width() {
         return this.parent.width;
     }
-    public set width(value: number|string) {
+    public set width(value: number | string) {
         const relative = formatRelative(value);
         this.parent.width = relative.value;
         this.parent.percentWidth = relative.percent;
@@ -164,10 +165,10 @@ export class CSSStyle {
     /** 
      * 表示显示对象的高度，以像素为单位。
      * */
-    public get height(){
+    public get height() {
         return this.parent.height;
     }
-    public set height(value: number|string) {
+    public set height(value: number | string) {
         const relative = formatRelative(value);
         this.parent.height = relative.value;
         this.parent.percentHeight = relative.percent;
@@ -196,7 +197,7 @@ export class CSSStyle {
      * 设置元素的最小高度。
      */
     public get maxHeight() {
-        return  this.parent.maxHeight;
+        return this.parent.maxHeight;
     }
     public set maxHeight(value) {
         this.parent.maxHeight = value;
@@ -223,7 +224,7 @@ export class CSSStyle {
     /** 
      * 设置定位元素的上外边距边界与其容器上边界之间的偏移。
      * */
-    public get top(){
+    public get top() {
         return this.parent.top;
     }
     public set top(value) {
@@ -232,7 +233,7 @@ export class CSSStyle {
     /** 
      * 设置定位元素右外边距边界与其容器右边界之间的偏移。
      * */
-    public get right(){
+    public get right() {
         return this.parent.right;
     }
     public set right(value) {
@@ -241,7 +242,7 @@ export class CSSStyle {
     /** 
      * 设置定位元素下外边距边界与其容器下边界之间的偏移。
      * */
-    public get bottom(){
+    public get bottom() {
         return this.parent.bottom;
     }
     public set bottom(value) {
@@ -327,7 +328,7 @@ export class CSSStyle {
       * 调整元素的色调，取消设置0xFFFFFF
       */
     public get tint() {
-        return  this.parent.tint;
+        return this.parent.tint;
     }
     public set tint(value) {
         this.parent.tint = value;
@@ -368,14 +369,14 @@ export class CSSStyle {
         return this._backgroundColor;
     }
     public set backgroundColor(value) {
-        if(value === this.backgroundColor){
+        if (value === this.backgroundColor) {
             return;
         }
         this._backgroundColor = value;
         CSSFunction.backgroundColor(this.parent);
 
     }
-    
+
     /** 
      * 设置元素的背景图像。backgroundImage = "./xxx.png" 
      * */
@@ -440,7 +441,7 @@ export class CSSStyle {
      * 遮罩图 
      */
     private _maskImage?: string | PIXI.Graphics | PIXI.Texture | DisplayObject;
-    public get maskImage(){
+    public get maskImage() {
         return this._maskImage;
     }
     public set maskImage(value) {
@@ -457,19 +458,46 @@ export class CSSStyle {
     public set maskPosition(value) {
         this._maskPosition = value;
         CSSFunction.maskPosition(this.parent);
-        
+
     }
     /** 
      * 设置遮罩位图的大小 
      */
     private _maskSize?: number[];
-    public get maskSize(){
+    public get maskSize() {
         return this._maskSize;
     }
     public set maskSize(value) {
         this._maskSize = value;
         CSSFunction.maskSize(this.parent);
     }
+
+    /** 
+     * 设置滤镜
+     * 
+     * 支持 blur(number)
+     */
+    private _filter?: string;
+    public get filter() {
+        return this._filter;
+    }
+    public set filter(value: string | undefined) {
+        if (value === this._filter) {
+            return;
+        }
+        this._filter = value;
+        if (value === undefined || value === 'none') {
+            this.parent.container.filters = [];
+            return;
+        }
+        let target = getStringFunctionParam(value);
+        switch (target.key) {
+            case "blur":
+                this.parent.filterBlur = target.value;
+                break;
+        }
+    }
+
 
 
 
@@ -483,7 +511,7 @@ export class CSSStyle {
     }
     public set color(value) {
         this._color = value;
-        CSSFunction.color(this.parent,"color",value);
+        CSSFunction.color(this.parent, "color", value);
     }
     /** 字符间距 */
     private _letterSpacing?: number;
@@ -492,7 +520,7 @@ export class CSSStyle {
     }
     public set letterSpacing(value) {
         this._letterSpacing = value;
-        CSSFunction.updateFontStyle(this.parent,"letterSpacing",value);
+        CSSFunction.updateFontStyle(this.parent, "letterSpacing", value);
     }
     /** 
      * 是否自动换行 
@@ -503,7 +531,7 @@ export class CSSStyle {
     }
     public set wordWrap(value) {
         this._wordWrap = value;
-        CSSFunction.updateFontStyle(this.parent,"wordWrap",value);
+        CSSFunction.updateFontStyle(this.parent, "wordWrap", value);
     }
     /** 
      * 自动换行的宽度 
@@ -514,20 +542,20 @@ export class CSSStyle {
     }
     public set wordWrapWidth(value) {
         this._wordWrapWidth = value;
-        CSSFunction.updateFontStyle(this.parent,"wordWrapWidth",value);
+        CSSFunction.updateFontStyle(this.parent, "wordWrapWidth", value);
     }
     /** 
      * 多行文本(wordWrap = true) - 对齐方式
      * */
     private _textAlign: "left" | "right" | "center" = "left";
-    public get textAlign(){
+    public get textAlign() {
         return this._textAlign;
     }
     public set textAlign(value) {
         this._textAlign = value;
-        CSSFunction.updateFontStyle(this.parent,"textAlign",value);
-        CSSFunction.updateFontStyle(this.parent,"align",value);
-        
+        CSSFunction.updateFontStyle(this.parent, "textAlign", value);
+        CSSFunction.updateFontStyle(this.parent, "align", value);
+
     }
     /** 
      * 多行文本(wordWrap = true) - 行高 
@@ -538,16 +566,16 @@ export class CSSStyle {
     }
     public set lineHeight(value) {
         this._lineHeight = value;
-        CSSFunction.updateFontStyle(this.parent,"lineHeight",value);
+        CSSFunction.updateFontStyle(this.parent, "lineHeight", value);
     }
     /** 字体 示例：fontFamily = "\"Comic Sans MS\", cursive, sans-serif" */
     private _fontFamily?: string | string[];
-    public get fontFamily(){
+    public get fontFamily() {
         return this._fontFamily;
     }
     public set fontFamily(value) {
         this._fontFamily = value;
-        CSSFunction.updateFontStyle(this.parent,"fontFamily",value);
+        CSSFunction.updateFontStyle(this.parent, "fontFamily", value);
     }
     /** 字体大小 */
     private _fontSize = 22;
@@ -556,7 +584,7 @@ export class CSSStyle {
     }
     public set fontSize(value) {
         this._fontSize = value;
-        CSSFunction.updateFontStyle(this.parent,"fontSize",value);
+        CSSFunction.updateFontStyle(this.parent, "fontSize", value);
     }
     /** 字体样式 */
     private _fontStyle: "normal" | "italic" | "oblique" = "normal";
@@ -565,25 +593,25 @@ export class CSSStyle {
     }
     public set fontStyle(value) {
         this._fontStyle = value;
-        CSSFunction.updateFontStyle(this.parent,"fontStyle",value);
+        CSSFunction.updateFontStyle(this.parent, "fontStyle", value);
     }
     /**  字体变形，普通或小写  */
     private _fontVariant: "normal" | "small-caps" = "normal";
-    public get fontVariant(){
+    public get fontVariant() {
         return this._fontVariant;
     }
     public set fontVariant(value) {
         this._fontVariant = value;
-        CSSFunction.updateFontStyle(this.parent,"fontVariant",value);
+        CSSFunction.updateFontStyle(this.parent, "fontVariant", value);
     }
     /** 字体粗细 */
     private _fontWeight: "normal" | 'bold' | 'bolder' | 'lighter' | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 = "normal";
-    public get fontWeight(){
+    public get fontWeight() {
         return this._fontWeight;
     }
     public set fontWeight(value) {
         this._fontWeight = value;
-        CSSFunction.updateFontStyle(this.parent,"fontWeight",value);
+        CSSFunction.updateFontStyle(this.parent, "fontWeight", value);
     }
     /** 内部填充,只支持文字 */
     private _padding?: number;
@@ -592,16 +620,16 @@ export class CSSStyle {
     }
     public set padding(value) {
         this._padding = value;
-        CSSFunction.updateFontStyle(this.parent,"padding",value);
+        CSSFunction.updateFontStyle(this.parent, "padding", value);
     }
     /** 描边颜色 */
     private _stroke?: string | number;
-    public get stroke(){
+    public get stroke() {
         return this._stroke;
     }
     public set stroke(value) {
         this._stroke = value;
-        CSSFunction.updateFontStyle(this.parent,"stroke",value);
+        CSSFunction.updateFontStyle(this.parent, "stroke", value);
     }
     /** 描边的笔触粗细值 */
     private _strokeThickness = 0;
@@ -610,7 +638,7 @@ export class CSSStyle {
     }
     public set strokeThickness(value) {
         this._strokeThickness = value;
-        CSSFunction.updateFontStyle(this.parent,"strokeThickness",value);
+        CSSFunction.updateFontStyle(this.parent, "strokeThickness", value);
     }
     /** 是否设置投影 */
     private _dropShadow = false;
@@ -619,7 +647,7 @@ export class CSSStyle {
     }
     public set dropShadow(value) {
         this._dropShadow = value;
-        CSSFunction.updateFontStyle(this.parent,"dropShadow",value);
+        CSSFunction.updateFontStyle(this.parent, "dropShadow", value);
     }
     /** 投影的alpha值 */
     private _dropShadowAlpha = false;
@@ -628,7 +656,7 @@ export class CSSStyle {
     }
     public set dropShadowAlpha(value) {
         this._dropShadowAlpha = value;
-        CSSFunction.updateFontStyle(this.parent,"dropShadowAlpha",value);
+        CSSFunction.updateFontStyle(this.parent, "dropShadowAlpha", value);
     }
     /** 是否设置投影 */
     private _dropShadowAngle = 0;//Math.PI / 6;
@@ -637,7 +665,7 @@ export class CSSStyle {
     }
     public set dropShadowAngle(value) {
         this._dropShadowAngle = value;
-        CSSFunction.updateFontStyle(this.parent,"dropShadowAngle",value);
+        CSSFunction.updateFontStyle(this.parent, "dropShadowAngle", value);
     }
     /** 投影的模糊半径 */
     private _dropShadowBlur = 0;
@@ -646,7 +674,7 @@ export class CSSStyle {
     }
     public set dropShadowBlur(value) {
         this._dropShadowBlur = value;
-        CSSFunction.updateFontStyle(this.parent,"dropShadowBlur",value);
+        CSSFunction.updateFontStyle(this.parent, "dropShadowBlur", value);
     }
     /** 投影填充颜色值 */
     private _dropShadowColor = 0x000000;
@@ -655,7 +683,7 @@ export class CSSStyle {
     }
     public set dropShadowColor(value) {
         this._dropShadowColor = value;
-        CSSFunction.updateFontStyle(this.parent,"dropShadowColor",value);
+        CSSFunction.updateFontStyle(this.parent, "dropShadowColor", value);
     }
     /** 投影深度 */
     private _dropShadowDistance = 5;
@@ -664,7 +692,7 @@ export class CSSStyle {
     }
     public set dropShadowDistance(value) {
         this._dropShadowDistance = value;
-        CSSFunction.updateFontStyle(this.parent,"dropShadowDistance",value);
+        CSSFunction.updateFontStyle(this.parent, "dropShadowDistance", value);
     }
     /** 中文换行 */
     private _breakWords = true;
@@ -673,27 +701,27 @@ export class CSSStyle {
     }
     public set breakWords(value) {
         this._breakWords = value;
-        CSSFunction.updateFontStyle(this.parent,"breakWords",value);
+        CSSFunction.updateFontStyle(this.parent, "breakWords", value);
     }
 
-    private onResize(){
-        
-        
+    private onResize() {
+
+
         const target = this.parent;
-        if(target.width == 0  || target.height == 0){
+        if (target.width == 0 || target.height == 0) {
             return;
         }
-        if(this.backgroundColor && target.background){
-            
+        if (this.backgroundColor && target.background) {
+
             const background = target.background;
             //console.log("onResize backgroundColor",background.width , target.width ,background.height ,target.height)
             background.clear();
             background.beginFill(this.backgroundColor);
             background.drawRoundedRect(0, 0, target.width, target.height, 0);
-            background.endFill();      
+            background.endFill();
 
         }
-        if(target.background && target.background.mask){
+        if (target.background && target.background.mask) {
             //console.log("onResize backgroundColor mask",this.backgroundColor)
             const mask = target.background.mask as PIXI.Graphics;
             mask.clear();

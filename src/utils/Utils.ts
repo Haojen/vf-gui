@@ -276,6 +276,18 @@ export function getQueryVariable(variable: string) {
     return undefined;
 }
 
+/**
+ * 解析一个字符串函数的参数，如xxx(1) = 1
+ * @param
+ */
+export function getStringFunctionParam(str:string){
+    const target:{key:string,value:number} = {} as any;
+    target.key = str.substr(0,str.indexOf("("));
+    let value = str.substr(str.indexOf("(")+1);
+    target.value = parseFloat(value.substr(0,value.lastIndexOf(")")));
+    return target
+}
+
 export function  isDeltaIdentity(m: PIXI.Matrix): boolean {
     return (m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1);
 }
