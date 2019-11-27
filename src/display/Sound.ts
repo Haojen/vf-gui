@@ -23,6 +23,7 @@ export class Sound extends InputBase {
         const sp = this.spriteAnimated;
         sp.loop = true;
         this.addChild(sp);
+        this.container.buttonMode = true;
     }
 
 
@@ -38,7 +39,14 @@ export class Sound extends InputBase {
      * 是否自动播放
      * @default false
      */
-    public autoPlay = false;
+    private _autoPlay = false;
+    public get autoPlay() {
+        return this._autoPlay;
+    }
+    public set autoPlay(value) {
+        this._autoPlay = value;
+    }
+
     /**
      * 播放的动画
      */
@@ -69,20 +77,18 @@ export class Sound extends InputBase {
         if(src === this.src){
             return;
         }
-        this.releaseSound();
         this._src = src;
-        if(src){
-            const sound = this._sound = getSound(src);
-            sound.loop = this.loop;
-            sound.volume = this.volume;
-            sound.speed = this.speed;
-            if(this.autoPlay){
-                this.play();
-            }else{
-                this.stop();
-            }
+        this.invalidateProperties();
+    }
 
-        }
+    /**
+     * 动画速度
+     */
+    public get animationSpeed() {
+        return this.spriteAnimated.animationSpeed;
+    }
+    public set animationSpeed(value) {
+        this.spriteAnimated.animationSpeed = value;
     }
 
     private _speed = 1;
@@ -124,9 +130,6 @@ export class Sound extends InputBase {
     }
     public set loop(value) {
         this._loop = value;
-        if( this._sound ){
-            this._sound.loop = value;
-        }
     }
 
     protected _curProgress = 0;
@@ -138,9 +141,59 @@ export class Sound extends InputBase {
         return false;
     }
 
+    private _startTime?: number;
+    public get startTime() {
+        return this._startTime;
+    }
+    public set startTime(value) {
+        this._startTime = value;
+    }
 
+    private _endTime?: number;
+    public get endTime() {
+        return this._endTime;
+    }
+    public set endTime(value) {
+        this._endTime = value;
+    }
+
+    public get isPlay() {
+        return this.isPlaying;
+    }
+    public set isPlay(value) {
+        if(this._sound == undefined){
+            console.warn("curent sound initialization not complete;");
+            return;
+        }
+        if(value){
+            this.play();
+        }else{
+            this.stop();
+        }
+    }
+
+    protected commitProperties() {
+        this.releaseSound();
+        if(this.src){
+            const sound = this._sound = getSound(this.src);
+            sound.volume = this.volume;
+            sound.speed = this.speed;
+            if(this.autoPlay){
+                this.play();
+            }else{
+                this.stop();
+            }
+            this.container.hitArea = new PIXI.Rectangle(0, 0, this.width/this.scaleX, this.height/this.scaleY);
+        }
+    }
 
     public async play(start = 0,end?: number){
+        if(this.startTime){
+            start = this.startTime;
+        }
+        if(this.endTime){
+            end = this.endTime;
+        }
         if(this._sound && this._sound.isPlaying){
             return;
         }
@@ -203,10 +256,6 @@ export class Sound extends InputBase {
         this.stop();
     }
 
-    public update(_style: CSSStyle) {
-        this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
-    }
-
     public release() {
         super.release();
         this.releaseSound();
@@ -235,8 +284,10 @@ export class Sound extends InputBase {
     }
     private onEnd() {
         if(this.loop){
+            this.play();
             this.emit(ComponentEvent.LOOP,this);
         }else{
+            this.stop();
             this.emit(ComponentEvent.COMPLETE,this);
         }
     }

@@ -51,7 +51,7 @@ export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements Li
     public container: ContainerBase;
     
     /** 添加显示对象，需集成Core */
-    public addChild<T extends DisplayObjectAbstract>(item: T):T {
+    public addChild<T extends DisplayObjectAbstract>(item: T): T {
         if (this.container.children.length !== this.uiChildren.length) {
             return this.addChildAt(item, this.container.children.length);
         } else {
@@ -60,7 +60,7 @@ export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements Li
 
     }
 
-    public addChildAt<T extends DisplayObjectAbstract>(item: T, index: number):T {
+    public addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T {
 
         if (item.parent) {
             item.parent.removeChild(item);
@@ -87,12 +87,12 @@ export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements Li
      * 移除已添加的UI组件
      * @param UIObject 要移除的UI组件
      */
-    public removeChild<T extends DisplayObjectAbstract>(item: T):T {
+    public removeChild<T extends DisplayObjectAbstract>(item: T): T {
         const index = this.uiChildren.indexOf(item);
         return this.removeChildAt(index);
     }
 
-    public removeChildAt<T>(index: number):T{   
+    public removeChildAt<T>(index: number): T{   
         index = Math.max(0,index);
         index = Math.min(this.uiChildren.length,index);
         const item = this.uiChildren[index];
@@ -174,7 +174,7 @@ export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements Li
         }
         this._enabled = value;
         this.container.interactive = value;
-        this.container.interactiveChildren = value;
+        this.container.interactiveChildren = value;      
     }
 
     /**

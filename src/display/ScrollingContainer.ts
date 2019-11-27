@@ -178,7 +178,7 @@ export class ScrollingContainer extends Container {
     }
 
 
-    public addChildAt<T extends DisplayObjectAbstract>(item: T, index: number):T {
+    public addChildAt<T extends DisplayObjectAbstract>(item: T, index: number): T {
 
         if (item.parent) {
             item.parent.removeChild(item);

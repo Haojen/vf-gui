@@ -194,9 +194,9 @@ export class UIBaseDrag implements Lifecycle {
                         }
                         if (c && target.parent) {
                             //_this.container._recursivePostUpdateTransform();
-
                             stageOffset.set(c.container.worldTransform.tx - target.parent.container.worldTransform.tx, c.container.worldTransform.ty - target.parent.container.worldTransform.ty);
                             c.addChild(target);
+                            stageOffset.set(stageOffset.x/target.parent.scaleX,stageOffset.y/target.parent.scaleY);
                         }
                     } else {
                         stageOffset.set(0);
@@ -211,9 +211,9 @@ export class UIBaseDrag implements Lifecycle {
                     return;
                 }
                 let target = this.target;
-                if (this.dragging) {
-                    let x = containerStart.x + offset.x - stageOffset.x;
-                    let y = containerStart.y + offset.y - stageOffset.y;
+                if (this.dragging && target.stage) {
+                    let x = containerStart.x + (offset.x/target.stage.scaleX) - stageOffset.x;
+                    let y = containerStart.y + (offset.y/target.stage.scaleY) - stageOffset.y;
                     if (this.dragRestrictAxis == "x") {
                         this._dragPosition.set(x, containerStart.y - stageOffset.y);
                     } else if (this.dragRestrictAxis == "y") {

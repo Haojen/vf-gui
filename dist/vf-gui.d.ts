@@ -1492,6 +1492,13 @@ declare module 'core/Stage' {
 	export class Stage extends DisplayLayoutAbstract {
 	    constructor(width: number, height: number, app?: PIXI.Application);
 	    app?: PIXI.Application;
+	    _stageWidth: number;
+	    _stageHeight: number;
+	    readonly stageWidth: number;
+	    readonly stageHeight: number;
+	    scaleX: number;
+	    scaleY: number;
+	    Scale: PIXI.Point;
 	    release(): void;
 	    releaseAll(): void;
 	    resize(): void;
@@ -2067,6 +2074,17 @@ declare module 'layout/CSSStyle' {
 	    private _maskSize?;
 	    maskSize: number[] | undefined;
 	    /**
+	     * 设置滤镜
+	     *
+	     * 支持 blur(number)
+	     */
+	    private _filter?;
+	    filter: string | undefined;
+	    /**
+	     * 设置鼠标样式
+	     */
+	    cursor: string;
+	    /**
 	     * 文本颜色，16进制
 	     * */
 	    private _color?;
@@ -2331,6 +2349,8 @@ declare module 'core/DisplayObject' {
 	     * 拖动限制门槛,小于设置的数不执行拖动,防止点击与滚动
 	     */
 	    dragThreshold: number;
+	    /** 模糊 */
+	    private blurFilter?;
 	    /**
 	     * 设置拖动
 	     */
@@ -2349,6 +2369,13 @@ declare module 'core/DisplayObject' {
 	    tint: number | undefined;
 	    private _blendMode;
 	    blendMode: PIXI.BLEND_MODES | undefined;
+	    /**
+	     * 设置Blur XY的模糊强度
+	     *
+	     * 参数类型为number时，设置 blurX = blurY = value
+	     *
+	     */
+	    filterBlur: number;
 	    /**
 	     * 私有样式代理
 	     * */
@@ -2379,8 +2406,8 @@ declare module 'core/DisplayObject' {
 
 }
 declare module 'utils/Utils' {
-	/// <reference types="pixi.js" />
 	/// <reference types="pixi-sound" />
+	/// <reference types="pixi.js" />
 	import { DisplayObject } from 'core/DisplayObject';
 	import { Stage } from 'core/Stage';
 	import { DisplayObjectAbstract } from 'core/DisplayObjectAbstract';
@@ -2398,10 +2425,11 @@ declare module 'utils/Utils' {
 	 * 根据显示路径，获取显示对象
 	 */
 	export let $getUIDisplayObjectPath: Function;
-	export function setDisplayObjectPath(params: (path: TAny, cls?: TAny) => {}): void;
-	export function getTexture(src: TAny): PIXI.Texture;
+	export function setDisplayObjectPath(params: (cls?: TAny, target?: DisplayObject) => {}): void;
+	export function getTexture(src: TAny): any;
+	export function getSheet(src: TAny): any;
 	export function getSound(src: TAny): PIXI.sound.Sound;
-	export function getDisplayObject(src: TAny): any;
+	export function getDisplayObject(src: TAny, target?: DisplayObject): any;
 	/**
 	 * 递归获取舞台，组件必须已经添加到舞台
 	 * @param DisplayObject
@@ -2501,7 +2529,20 @@ declare module 'utils/Utils' {
 	export function uid(): number;
 	/** 获取URL参数 */
 	export function getQueryVariable(variable: string): string | null | undefined;
+	/**
+	 * 解析一个字符串函数的参数，如xxx(1) = 1
+	 * @param
+	 */
+	export function getStringFunctionParam(str: string): {
+	    key: string;
+	    value: number;
+	};
 	export function isDeltaIdentity(m: PIXI.Matrix): boolean;
+	/**
+	 * 格式化一个百分比为小数
+	 * @param value
+	 * @param total
+	 */
 	export function formatRelative(value: number | string | undefined, total: number): number;
 
 }
@@ -2695,6 +2736,8 @@ declare module 'display/SpriteAnimated' {
 	    stop(): void;
 	    /** 播放 */
 	    play(): void;
+	    autoPlay: boolean;
+	    isPlay: boolean;
 	    /**
 	     * 添加动画
 	     */
@@ -3138,7 +3181,6 @@ declare module 'display/Graphics' {
 declare module 'display/Sound' {
 	/// <reference types="pixi-sound" />
 	/// <reference types="pixi.js" />
-	import { CSSStyle } from 'layout/CSSStyle';
 	import { SpriteAnimated } from 'display/SpriteAnimated';
 	import { InputBase } from 'display/private/InputBase';
 	export const $sounds: Map<string, PIXI.sound.Sound>;
@@ -3163,6 +3205,7 @@ declare module 'display/Sound' {
 	     * 是否自动播放
 	     * @default false
 	     */
+	    private _autoPlay;
 	    autoPlay: boolean;
 	    /**
 	     * 播放的动画
@@ -3175,6 +3218,10 @@ declare module 'display/Sound' {
 	     * 音频源
 	     */
 	    src: string | number | PIXI.sound.Options | ArrayBuffer | HTMLAudioElement | undefined;
+	    /**
+	     * 动画速度
+	     */
+	    animationSpeed: number;
 	    private _speed;
 	    /**
 	     * 设置播放速度
@@ -3195,6 +3242,12 @@ declare module 'display/Sound' {
 	    protected _curProgress: number;
 	    protected _playing: boolean;
 	    readonly isPlaying: boolean;
+	    private _startTime?;
+	    startTime: number | undefined;
+	    private _endTime?;
+	    endTime: number | undefined;
+	    isPlay: boolean;
+	    protected commitProperties(): void;
 	    play(start?: number, end?: number): Promise<void>;
 	    stop(): void;
 	    /**
@@ -3205,7 +3258,6 @@ declare module 'display/Sound' {
 	     * 暂停播放
 	     */
 	    pause(): void;
-	    update(_style: CSSStyle): void;
 	    release(): void;
 	    private releaseSound;
 	    private onProgress;

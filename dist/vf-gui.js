@@ -1830,6 +1830,23 @@ class DisplayObject extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
         });
     }
     /**
+     * 设置Blur XY的模糊强度
+     *
+     * 参数类型为number时，设置 blurX = blurY = value
+     *
+     */
+    set filterBlur(value) {
+        const container = this.container;
+        if (this.blurFilter === undefined) {
+            this.blurFilter = new PIXI.filters.BlurFilter(8, 1, 1);
+            container.filters = [this.blurFilter];
+        }
+        this.blurFilter.blur = value;
+    }
+    get filterBlur() {
+        return this.blurFilter ? this.blurFilter.blur : 0;
+    }
+    /**
      * 获取样式
      */
     get style() {
@@ -2137,8 +2154,12 @@ const DisplayLayoutAbstract_1 = __webpack_require__(/*! ./DisplayLayoutAbstract 
 class Stage extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
     constructor(width, height, app) {
         super();
+        this._stageWidth = 0; //调整缩放后的值
+        this._stageHeight = 0; //调整缩放后的值
         this.width = width;
         this.height = height;
+        this._stageWidth = width;
+        this._stageWidth = height;
         this.setActualSize(width, height);
         this.container.name = "Stage";
         this.container.hitArea = new PIXI.Rectangle(0, 0, width, height);
@@ -2147,6 +2168,31 @@ class Stage extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
         this.initialized = true;
         this.$nestLevel = 1;
         this.app = app;
+    }
+    get stageWidth() {
+        return this._stageWidth;
+    }
+    get stageHeight() {
+        return this._stageHeight;
+    }
+    get scaleX() {
+        return this.container.scale.x;
+    }
+    set scaleX(value) {
+        this.container.scale.x = value;
+        this._stageWidth = value * this.width;
+    }
+    get scaleY() {
+        return this.container.scale.y;
+    }
+    set scaleY(value) {
+        this.container.scale.y = value;
+        this._stageHeight = value * this.height;
+    }
+    set Scale(value) {
+        this.container.scale.copyFrom(value);
+        this._stageWidth = value.x * this.width;
+        this._stageHeight = value.y * this.height;
     }
     release() {
         super.release();
@@ -2400,6 +2446,7 @@ class UIBaseDrag {
                             //_this.container._recursivePostUpdateTransform();
                             stageOffset.set(c.container.worldTransform.tx - target.parent.container.worldTransform.tx, c.container.worldTransform.ty - target.parent.container.worldTransform.ty);
                             c.addChild(target);
+                            stageOffset.set(stageOffset.x / target.parent.scaleX, stageOffset.y / target.parent.scaleY);
                         }
                     }
                     else {
@@ -2413,9 +2460,9 @@ class UIBaseDrag {
                     return;
                 }
                 let target = this.target;
-                if (this.dragging) {
-                    let x = containerStart.x + offset.x - stageOffset.x;
-                    let y = containerStart.y + offset.y - stageOffset.y;
+                if (this.dragging && target.stage) {
+                    let x = containerStart.x + (offset.x / target.stage.scaleX) - stageOffset.x;
+                    let y = containerStart.y + (offset.y / target.stage.scaleY) - stageOffset.y;
                     if (this.dragRestrictAxis == "x") {
                         this._dragPosition.set(x, containerStart.y - stageOffset.y);
                     }
@@ -2908,6 +2955,9 @@ class Image extends DisplayObject_1.DisplayObject {
         if (src !== this._source) {
             this._source = src;
             const texture = this._texture = Utils_1.getTexture(src);
+            if (texture === undefined) {
+                return;
+            }
             if (texture.frame.width > 1 && texture.frame.height > 1) {
                 this.setMeasuredSize(texture.frame.width, texture.frame.height);
             }
@@ -3810,7 +3860,7 @@ class Sound extends InputBase_1.InputBase {
          * 是否自动播放
          * @default false
          */
-        this.autoPlay = false;
+        this._autoPlay = false;
         this._speed = 1;
         this._volume = 100;
         this._loop = false;
@@ -3819,6 +3869,13 @@ class Sound extends InputBase_1.InputBase {
         const sp = this.spriteAnimated;
         sp.loop = true;
         this.addChild(sp);
+        this.container.buttonMode = true;
+    }
+    get autoPlay() {
+        return this._autoPlay;
+    }
+    set autoPlay(value) {
+        this._autoPlay = value;
     }
     get sheetSkin() {
         return this._sheetSkin;
@@ -3843,20 +3900,17 @@ class Sound extends InputBase_1.InputBase {
         if (src === this.src) {
             return;
         }
-        this.releaseSound();
         this._src = src;
-        if (src) {
-            const sound = this._sound = Utils_1.getSound(src);
-            sound.loop = this.loop;
-            sound.volume = this.volume;
-            sound.speed = this.speed;
-            if (this.autoPlay) {
-                this.play();
-            }
-            else {
-                this.stop();
-            }
-        }
+        this.invalidateProperties();
+    }
+    /**
+     * 动画速度
+     */
+    get animationSpeed() {
+        return this.spriteAnimated.animationSpeed;
+    }
+    set animationSpeed(value) {
+        this.spriteAnimated.animationSpeed = value;
     }
     /**
      * 设置播放速度
@@ -3892,9 +3946,6 @@ class Sound extends InputBase_1.InputBase {
     }
     set loop(value) {
         this._loop = value;
-        if (this._sound) {
-            this._sound.loop = value;
-        }
     }
     get isPlaying() {
         if (this._sound) {
@@ -3902,8 +3953,56 @@ class Sound extends InputBase_1.InputBase {
         }
         return false;
     }
+    get startTime() {
+        return this._startTime;
+    }
+    set startTime(value) {
+        this._startTime = value;
+    }
+    get endTime() {
+        return this._endTime;
+    }
+    set endTime(value) {
+        this._endTime = value;
+    }
+    get isPlay() {
+        return this.isPlaying;
+    }
+    set isPlay(value) {
+        if (this._sound == undefined) {
+            console.warn("curent sound initialization not complete;");
+            return;
+        }
+        if (value) {
+            this.play();
+        }
+        else {
+            this.stop();
+        }
+    }
+    commitProperties() {
+        this.releaseSound();
+        if (this.src) {
+            const sound = this._sound = Utils_1.getSound(this.src);
+            sound.volume = this.volume;
+            sound.speed = this.speed;
+            if (this.autoPlay) {
+                this.play();
+            }
+            else {
+                this.stop();
+            }
+            this.container.hitArea = new PIXI.Rectangle(0, 0, this.width / this.scaleX, this.height / this.scaleY);
+        }
+    }
     play(start = 0, end) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (this.startTime) {
+                start = this.startTime;
+            }
+            if (this.endTime) {
+                end = this.endTime;
+            }
             if (this._sound && this._sound.isPlaying) {
                 return;
             }
@@ -3959,9 +4058,6 @@ class Sound extends InputBase_1.InputBase {
         }
         this.stop();
     }
-    update(_style) {
-        this.container.hitArea = new PIXI.Rectangle(0, 0, this._width, this._height);
-    }
     release() {
         super.release();
         this.releaseSound();
@@ -3988,9 +4084,11 @@ class Sound extends InputBase_1.InputBase {
     }
     onEnd() {
         if (this.loop) {
+            this.play();
             this.emit(Index_1.ComponentEvent.LOOP, this);
         }
         else {
+            this.stop();
             this.emit(Index_1.ComponentEvent.COMPLETE, this);
         }
     }
@@ -4135,6 +4233,20 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
         this._playing = true;
         this.playSystem();
     }
+    get autoPlay() {
+        return this._playing;
+    }
+    set autoPlay(value) {
+        this._playing = value;
+    }
+    set isPlay(value) {
+        if (value) {
+            this.play();
+        }
+        else {
+            this.stop();
+        }
+    }
     /**
      * 添加动画
      */
@@ -4163,7 +4275,7 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
     }
     srcSystem() {
         this.releaseAnimate();
-        const src = this.src;
+        const src = Utils_1.getSheet(this.src);
         if (src) {
             if (Array.isArray(src)) {
                 const textures = [];
@@ -6536,18 +6648,20 @@ function maskImage(target) {
     target.mask = undefined;
     const style = target.style;
     const container = target.container;
-    if (style.maskImage instanceof PIXI.Graphics) {
-        target.mask = style.maskImage;
+    const maskdisplay = Utils_1.getDisplayObject(style.maskImage, target);
+    if (maskdisplay instanceof PIXI.Graphics) {
+        target.mask = maskdisplay;
         container.mask = target.mask;
         container.addChild(target.mask);
     }
-    else if (style.maskImage instanceof DisplayObject_1.DisplayObject) {
+    else if (maskdisplay instanceof DisplayObject_1.DisplayObject) {
         //后期组件完成后补充，矢量与位图组件
-        target.mask = style.maskImage;
+        target.mask = maskdisplay;
         target.mask.name = "maskImage";
         target.mask.container.name = "maskImage";
         container.mask = target.mask.container || null;
-        target.addChild(target.mask);
+        if (target.mask.parent == undefined)
+            target.addChild(target.mask);
     }
     else {
         target.mask = PIXI.Sprite.from(Utils_1.getTexture(style.maskImage));
@@ -6593,6 +6707,7 @@ exports.color = color;
 Object.defineProperty(exports, "__esModule", { value: true });
 const CSSFunction = __webpack_require__(/*! ./CSSSSystem */ "./src/layout/CSSSSystem.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 function formatRelative(value) {
     if (value == undefined) {
         return { percent: NaN, value: NaN };
@@ -6985,6 +7100,34 @@ class CSSStyle {
     set maskSize(value) {
         this._maskSize = value;
         CSSFunction.maskSize(this.parent);
+    }
+    get filter() {
+        return this._filter;
+    }
+    set filter(value) {
+        if (value === this._filter) {
+            return;
+        }
+        this._filter = value;
+        if (value === undefined || value === 'none') {
+            this.parent.container.filters = [];
+            return;
+        }
+        let target = Utils_1.getStringFunctionParam(value);
+        switch (target.key) {
+            case "blur":
+                this.parent.filterBlur = target.value;
+                break;
+        }
+    }
+    /**
+     * 设置鼠标样式
+     */
+    get cursor() {
+        return this.parent.container.cursor;
+    }
+    set cursor(value) {
+        this.parent.container.cursor = value;
     }
     get color() {
         return this._color;
@@ -9217,9 +9360,20 @@ function getTexture(src) {
     if (src instanceof PIXI.Texture) {
         return src;
     }
+    if (src === '') {
+        src = undefined;
+        return src;
+    }
     return PIXI.Texture.from(src);
 }
 exports.getTexture = getTexture;
+function getSheet(src) {
+    if (exports.$getSourcePath) {
+        src = exports.$getSourcePath(src);
+    }
+    return src;
+}
+exports.getSheet = getSheet;
 function getSound(src) {
     if (exports.$getSourcePath) {
         src = exports.$getSourcePath(src);
@@ -9230,9 +9384,9 @@ function getSound(src) {
     return PIXI.sound.Sound.from(src);
 }
 exports.getSound = getSound;
-function getDisplayObject(src) {
+function getDisplayObject(src, target) {
     if (exports.$getUIDisplayObjectPath) {
-        src = exports.$getUIDisplayObjectPath(src);
+        src = exports.$getUIDisplayObjectPath(src, target);
     }
     return src;
 }
@@ -9450,10 +9604,27 @@ function getQueryVariable(variable) {
     return undefined;
 }
 exports.getQueryVariable = getQueryVariable;
+/**
+ * 解析一个字符串函数的参数，如xxx(1) = 1
+ * @param
+ */
+function getStringFunctionParam(str) {
+    const target = {};
+    target.key = str.substr(0, str.indexOf("("));
+    let value = str.substr(str.indexOf("(") + 1);
+    target.value = parseFloat(value.substr(0, value.lastIndexOf(")")));
+    return target;
+}
+exports.getStringFunctionParam = getStringFunctionParam;
 function isDeltaIdentity(m) {
     return (m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1);
 }
 exports.isDeltaIdentity = isDeltaIdentity;
+/**
+ * 格式化一个百分比为小数
+ * @param value
+ * @param total
+ */
 function formatRelative(value, total) {
     if (value == undefined) {
         return NaN;
@@ -9492,10 +9663,10 @@ const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.0.0.7.0.0.7.0) ==0.7.0.0.7.0.0.7.0;
+//     return this.lastIndexOf(word, pos0.7.3.0.7.3.0.7.3) ==0.7.3.0.7.3.0.7.3;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.0";
+window.gui.version = "0.7.3";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

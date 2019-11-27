@@ -1,5 +1,5 @@
 import {DisplayObject} from "../core/DisplayObject";
-import { log, getTexture } from "../utils/Utils";
+import { log, getTexture, getSheet } from "../utils/Utils";
 import { ComponentEvent } from "../interaction/Index";
 
 /**
@@ -131,6 +131,21 @@ export class SpriteAnimated extends DisplayObject{
         this.playSystem();
     }
 
+    public get autoPlay() {
+        return this._playing;
+    }
+    public set autoPlay(value) {
+        this._playing = value;
+    }
+    
+    public set isPlay(value: boolean){
+        if(value){
+            this.play();
+        }else{
+            this.stop();
+        }
+    }
+
     /** 
      * 添加动画 
      */
@@ -163,7 +178,7 @@ export class SpriteAnimated extends DisplayObject{
     protected srcSystem(){
 
         this.releaseAnimate();
-        const src = this.src;
+        const src = getSheet(this.src);
         if(src){
             if(Array.isArray(src)){
                 const textures: PIXI.Texture[] = [];

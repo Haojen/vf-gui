@@ -23,7 +23,7 @@ export function setSourcePath(params: (path: TAny,cls?: TAny) => {}) {
  * 根据显示路径，获取显示对象
  */
 export let $getUIDisplayObjectPath: Function;
-export function setDisplayObjectPath(params: (path: TAny,cls?: TAny) => {}) {
+export function setDisplayObjectPath(params: (cls?: TAny,target?:DisplayObject) => {}) {
     $getUIDisplayObjectPath = params;
 }
 
@@ -35,7 +35,18 @@ export function getTexture(src: TAny){
     if(src instanceof PIXI.Texture){
         return src;
     }
+    if(src === ''){
+        src = undefined;
+        return src;
+    }
     return PIXI.Texture.from(src);
+}
+
+export function getSheet(src: TAny){
+    if($getSourcePath){
+        src = $getSourcePath(src);
+    }
+    return src;
 }
 
 export function getSound(src: TAny){
@@ -48,9 +59,9 @@ export function getSound(src: TAny){
     return PIXI.sound.Sound.from(src);
 }
 
-export function getDisplayObject(src: TAny){
+export function getDisplayObject(src: TAny,target?:DisplayObject){
     if($getUIDisplayObjectPath){
-        src = $getUIDisplayObjectPath(src);
+        src = $getUIDisplayObjectPath(src,target);
     }
     return src;
 }
@@ -265,12 +276,27 @@ export function getQueryVariable(variable: string) {
     return undefined;
 }
 
+/**
+ * 解析一个字符串函数的参数，如xxx(1) = 1
+ * @param
+ */
+export function getStringFunctionParam(str:string){
+    const target:{key:string,value:number} = {} as any;
+    target.key = str.substr(0,str.indexOf("("));
+    let value = str.substr(str.indexOf("(")+1);
+    target.value = parseFloat(value.substr(0,value.lastIndexOf(")")));
+    return target
+}
+
 export function  isDeltaIdentity(m: PIXI.Matrix): boolean {
     return (m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1);
 }
 
-
-
+/**
+ * 格式化一个百分比为小数
+ * @param value 
+ * @param total 
+ */
 export function formatRelative(value: number | string | undefined, total: number): number {
     if (value == undefined) {
         return NaN;
