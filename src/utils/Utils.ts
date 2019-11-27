@@ -292,8 +292,11 @@ export function  isDeltaIdentity(m: PIXI.Matrix): boolean {
     return (m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1);
 }
 
-
-
+/**
+ * 格式化一个百分比为小数
+ * @param value 
+ * @param total 
+ */
 export function formatRelative(value: number | string | undefined, total: number): number {
     if (value == undefined) {
         return NaN;

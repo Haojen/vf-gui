@@ -499,6 +499,16 @@ export class CSSStyle {
     }
 
 
+    /**
+     * 设置鼠标样式
+     */
+    public get cursor(){
+        return this.parent.container.cursor;
+    }
+    public set cursor(value:string){
+        this.parent.container.cursor = value;
+    }
+
 
 
 

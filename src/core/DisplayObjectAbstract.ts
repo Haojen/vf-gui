@@ -174,7 +174,7 @@ export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements Li
         }
         this._enabled = value;
         this.container.interactive = value;
-        this.container.interactiveChildren = value;
+        this.container.interactiveChildren = value;      
     }
 
     /**
