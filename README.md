@@ -34,9 +34,9 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
     
 Version:
 
-    <script src="http://unpkg.com/vf-gui@0.7.1/dist/vf-gui.js"></script>
+    <script src="http://unpkg.com/vf-gui@0.7.3/dist/vf-gui.js"></script>
     
-    <script src="http://unpkg.com/vf-gui@0.7.1/dist/vf-gui.min.js"></script>
+    <script src="http://unpkg.com/vf-gui@0.7.3/dist/vf-gui.min.js"></script>
 
 Master:
 

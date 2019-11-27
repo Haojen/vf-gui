@@ -6707,6 +6707,7 @@ exports.color = color;
 Object.defineProperty(exports, "__esModule", { value: true });
 const CSSFunction = __webpack_require__(/*! ./CSSSSystem */ "./src/layout/CSSSSystem.ts");
 const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 function formatRelative(value) {
     if (value == undefined) {
         return { percent: NaN, value: NaN };
@@ -7099,6 +7100,34 @@ class CSSStyle {
     set maskSize(value) {
         this._maskSize = value;
         CSSFunction.maskSize(this.parent);
+    }
+    get filter() {
+        return this._filter;
+    }
+    set filter(value) {
+        if (value === this._filter) {
+            return;
+        }
+        this._filter = value;
+        if (value === undefined || value === 'none') {
+            this.parent.container.filters = [];
+            return;
+        }
+        let target = Utils_1.getStringFunctionParam(value);
+        switch (target.key) {
+            case "blur":
+                this.parent.filterBlur = target.value;
+                break;
+        }
+    }
+    /**
+     * 设置鼠标样式
+     */
+    get cursor() {
+        return this.parent.container.cursor;
+    }
+    set cursor(value) {
+        this.parent.container.cursor = value;
     }
     get color() {
         return this._color;
@@ -9575,10 +9604,27 @@ function getQueryVariable(variable) {
     return undefined;
 }
 exports.getQueryVariable = getQueryVariable;
+/**
+ * 解析一个字符串函数的参数，如xxx(1) = 1
+ * @param
+ */
+function getStringFunctionParam(str) {
+    const target = {};
+    target.key = str.substr(0, str.indexOf("("));
+    let value = str.substr(str.indexOf("(") + 1);
+    target.value = parseFloat(value.substr(0, value.lastIndexOf(")")));
+    return target;
+}
+exports.getStringFunctionParam = getStringFunctionParam;
 function isDeltaIdentity(m) {
     return (m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1);
 }
 exports.isDeltaIdentity = isDeltaIdentity;
+/**
+ * 格式化一个百分比为小数
+ * @param value
+ * @param total
+ */
 function formatRelative(value, total) {
     if (value == undefined) {
         return NaN;

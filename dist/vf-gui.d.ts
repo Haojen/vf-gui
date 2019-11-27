@@ -2074,6 +2074,17 @@ declare module 'layout/CSSStyle' {
 	    private _maskSize?;
 	    maskSize: number[] | undefined;
 	    /**
+	     * 设置滤镜
+	     *
+	     * 支持 blur(number)
+	     */
+	    private _filter?;
+	    filter: string | undefined;
+	    /**
+	     * 设置鼠标样式
+	     */
+	    cursor: string;
+	    /**
 	     * 文本颜色，16进制
 	     * */
 	    private _color?;
@@ -2518,7 +2529,20 @@ declare module 'utils/Utils' {
 	export function uid(): number;
 	/** 获取URL参数 */
 	export function getQueryVariable(variable: string): string | null | undefined;
+	/**
+	 * 解析一个字符串函数的参数，如xxx(1) = 1
+	 * @param
+	 */
+	export function getStringFunctionParam(str: string): {
+	    key: string;
+	    value: number;
+	};
 	export function isDeltaIdentity(m: PIXI.Matrix): boolean;
+	/**
+	 * 格式化一个百分比为小数
+	 * @param value
+	 * @param total
+	 */
 	export function formatRelative(value: number | string | undefined, total: number): number;
 
 }
