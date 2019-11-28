@@ -44,6 +44,8 @@ const version = `
 const pixiLegacy = fs.readFileSync('./node_modules/pixi.js-legacy/dist/pixi-legacy.min.js',"utf8");
 const pixiSound = fs.readFileSync('./node_modules/pixi-sound/dist/pixi-sound.js',"utf8");
 const vfgui = fs.readFileSync('./dist/vf-gui.min.js',"utf8");
+const es6 = `
+    export {PIXI,vfgui}
+`;
 
-
-fs.writeFileSync(`./dist/vf-gui-all.min.js`,version+ '\n'+ pixiLegacy+ '\n'+ pixiSound+ '\n'+ vfgui);
+fs.writeFileSync(`./dist/vf-gui-all.min.js`,version+ '\n'+ pixiLegacy+ '\n'+ pixiSound+ '\n'+ vfgui + '\n'+ es6);
