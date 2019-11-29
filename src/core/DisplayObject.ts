@@ -37,7 +37,7 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
      */
     public dragThreshold = 0;
     /** 模糊 */
-    private blurFilter ?: PIXI.filters.BlurFilter;
+    private blurFilter?: PIXI.filters.BlurFilter;
     
     /** 
      * 设置拖动

@@ -3102,7 +3102,17 @@ class Label extends DisplayObject_1.DisplayObject {
         super.updateDisplayList(unscaledWidth, unscaledHeight);
         const values = this.$values;
         if (!isNaN(values[UIKeys.explicitWidth])) {
-            this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width >> 1;
+            switch (this.style.textAlign) {
+                case "left":
+                    this.sprite.x = 0;
+                    break;
+                case "right":
+                    this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width;
+                    break;
+                case "center":
+                    this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width >> 1;
+                    break;
+            }
         }
         if (!isNaN(values[UIKeys.explicitHeight])) {
             this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >> 1;
@@ -4070,7 +4080,6 @@ class Sound extends InputBase_1.InputBase {
             this._mediaInstance.off('end', this.onEnd, this);
         }
         if (this._sound) {
-            this.removeAllListeners();
             this._sound.stop();
             this._sound.destroy();
             this._sound = undefined;
@@ -6757,7 +6766,7 @@ class CSSStyle {
         /**
          * 多行文本(wordWrap = true) - 对齐方式
          * */
-        this._textAlign = "left";
+        this._textAlign = "center";
         /** 字体大小 */
         this._fontSize = 22;
         /** 字体样式 */
@@ -7113,7 +7122,7 @@ class CSSStyle {
             this.parent.container.filters = [];
             return;
         }
-        let target = Utils_1.getStringFunctionParam(value);
+        const target = Utils_1.getStringFunctionParam(value);
         switch (target.key) {
             case "blur":
                 this.parent.filterBlur = target.value;
@@ -9611,7 +9620,7 @@ exports.getQueryVariable = getQueryVariable;
 function getStringFunctionParam(str) {
     const target = {};
     target.key = str.substr(0, str.indexOf("("));
-    let value = str.substr(str.indexOf("(") + 1);
+    const value = str.substr(str.indexOf("(") + 1);
     target.value = parseFloat(value.substr(0, value.lastIndexOf(")")));
     return target;
 }
@@ -9663,10 +9672,10 @@ const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.4.0.7.4.0.7.4) ==0.7.4.0.7.4.0.7.4;
+//     return this.lastIndexOf(word, pos0.7.7.0.7.7.0.7.7) ==0.7.7.0.7.7.0.7.7;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.4";
+window.gui.version = "0.7.7";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

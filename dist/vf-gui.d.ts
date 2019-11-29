@@ -1907,12 +1907,12 @@ declare module 'layout/CSSStyle' {
 	     * 在容器里面的水平位置（左中右）
 	     */
 	    private _justifyContent?;
-	    justifyContent: "flex-start" | "flex-end" | "center" | undefined;
+	    justifyContent: "center" | "flex-start" | "flex-end" | undefined;
 	    /**
 	     * 在容器里面的垂直位置（上中下）
 	     */
 	    private _alignContent?;
-	    alignContent: "flex-start" | "flex-end" | "center" | undefined;
+	    alignContent: "center" | "flex-start" | "flex-end" | undefined;
 	    /**
 	     * 基于 网格列的维度，去定义网格线的名称和网格轨道的尺寸大小。
 	     *

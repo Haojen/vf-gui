@@ -23,7 +23,7 @@ export function setSourcePath(params: (path: TAny,cls?: TAny) => {}) {
  * 根据显示路径，获取显示对象
  */
 export let $getUIDisplayObjectPath: Function;
-export function setDisplayObjectPath(params: (cls?: TAny,target?:DisplayObject) => {}) {
+export function setDisplayObjectPath(params: (cls?: TAny,target?: DisplayObject) => {}) {
     $getUIDisplayObjectPath = params;
 }
 
@@ -59,7 +59,7 @@ export function getSound(src: TAny){
     return PIXI.sound.Sound.from(src);
 }
 
-export function getDisplayObject(src: TAny,target?:DisplayObject){
+export function getDisplayObject(src: TAny,target?: DisplayObject){
     if($getUIDisplayObjectPath){
         src = $getUIDisplayObjectPath(src,target);
     }
@@ -280,10 +280,10 @@ export function getQueryVariable(variable: string) {
  * 解析一个字符串函数的参数，如xxx(1) = 1
  * @param
  */
-export function getStringFunctionParam(str:string){
-    const target:{key:string,value:number} = {} as any;
+export function getStringFunctionParam(str: string){
+    const target: {key: string;value: number} = {} as TAny;
     target.key = str.substr(0,str.indexOf("("));
-    let value = str.substr(str.indexOf("(")+1);
+    const value = str.substr(str.indexOf("(")+1);
     target.value = parseFloat(value.substr(0,value.lastIndexOf(")")));
     return target
 }
