@@ -32,13 +32,36 @@ export default class TestImage {
         /** 样式宽高为0时，适配原始图片宽高 */
         let img3 = new gui.Image();
         img3.x = 100;
-        img3.y = 350;
+        img3.y = 300;
         //img3.width = 0;
         //img3.height = 0;
         img3.src = "assets/mask/bg.jpg";
         img3.tint = 0xffcc00;//填充颜色
         //img3.visible = false;
         uiStage.addChild(img3);
+
+
+        //canvas兼容测试
+        let rect = new gui.Rect();
+        rect.x = 100;
+        rect.y = 700;
+        rect.width = 100;
+        rect.height = 100;
+        rect.color = 0xffffff;
+        rect.lineColor = 0xff00cc;
+        rect.lineWidth = 1;
+        rect.radius = 10; //圆角
+        uiStage.addChild(rect);
+        //彩色
+        let img4 = new gui.Image();
+        img4.x =  100;
+        img4.y = 700;
+        img4.width = 380;
+        img4.height = 160;
+        img4.style.maskImage = rect;
+        img4.src = "assets/mask/bg.jpg";
+        uiStage.addChild(img4);
+
 
         let count = 0;
         gui.TickerShared.addUpdateEvent(() => {

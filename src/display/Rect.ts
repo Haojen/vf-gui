@@ -1,4 +1,5 @@
 import {DisplayObject} from "../core/DisplayObject";
+import {MaskSprite} from "../core/MaskSprite";
 
 /**
  * 绘制矩形或圆角矩形
@@ -9,7 +10,7 @@ import {DisplayObject} from "../core/DisplayObject";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
  */
-export class Rect extends DisplayObject{
+export class Rect extends DisplayObject implements MaskSprite{
     public constructor(){
         super();
         this.graphics = new PIXI.Graphics();
@@ -17,6 +18,11 @@ export class Rect extends DisplayObject{
     }
 
     public readonly graphics: PIXI.Graphics;
+
+    /** 可以支持遮罩的组件 */
+    public maskSprite(){
+        return this.graphics;
+    }
 
     /**
      * 圆角

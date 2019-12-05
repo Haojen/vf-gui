@@ -1,5 +1,6 @@
 import { DisplayObject } from "../core/DisplayObject";
-import { getTexture, $getSourcePath } from "../utils/Utils";
+import {MaskSprite} from "../core/MaskSprite";
+import { getTexture } from "../utils/Utils";
 import { ComponentEvent } from "../interaction/Index";
 
 /**
@@ -11,11 +12,16 @@ import { ComponentEvent } from "../interaction/Index";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestImage
  */
-export class Image extends DisplayObject {
+export class Image extends DisplayObject implements MaskSprite{
 
 
     public constructor() {
         super();
+    }
+
+    /** 可以支持遮罩的组件 */
+    public maskSprite(){
+        return this._sprite as PIXI.Sprite;
     }
 
     protected _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
