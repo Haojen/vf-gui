@@ -309,9 +309,18 @@ declare module 'display/Label' {
 	}
 
 }
+declare module 'core/MaskSprite' {
+	/// <reference types="pixi.js" />
+	import { DisplayObject } from 'core/DisplayObject';
+	export interface MaskSprite extends DisplayObject {
+	    maskSprite(): PIXI.Sprite | PIXI.Graphics;
+	}
+
+}
 declare module 'display/Image' {
 	/// <reference types="pixi.js" />
 	import { DisplayObject } from 'core/DisplayObject';
+	import { MaskSprite } from 'core/MaskSprite';
 	/**
 	 * 图片
 	 *
@@ -321,8 +330,10 @@ declare module 'display/Image' {
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestImage
 	 */
-	export class Image extends DisplayObject {
+	export class Image extends DisplayObject implements MaskSprite {
 	    constructor();
+	    /** 可以支持遮罩的组件 */
+	    maskSprite(): PIXI.Sprite;
 	    protected _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
 	    protected _texture: PIXI.Texture | undefined;
 	    protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
@@ -3117,6 +3128,7 @@ declare module 'display/Slider' {
 declare module 'display/Rect' {
 	/// <reference types="pixi.js" />
 	import { DisplayObject } from 'core/DisplayObject';
+	import { MaskSprite } from 'core/MaskSprite';
 	/**
 	 * 绘制矩形或圆角矩形
 	 *
@@ -3126,9 +3138,11 @@ declare module 'display/Rect' {
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
 	 */
-	export class Rect extends DisplayObject {
+	export class Rect extends DisplayObject implements MaskSprite {
 	    constructor();
 	    readonly graphics: PIXI.Graphics;
+	    /** 可以支持遮罩的组件 */
+	    maskSprite(): PIXI.Graphics;
 	    /**
 	     * 圆角
 	     */

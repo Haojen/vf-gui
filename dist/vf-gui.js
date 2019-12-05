@@ -2891,6 +2891,10 @@ class Image extends DisplayObject_1.DisplayObject {
          */
         this._fillMode = "no-repeat";
     }
+    /** 可以支持遮罩的组件 */
+    maskSprite() {
+        return this._sprite;
+    }
     get src() {
         return this._src;
     }
@@ -3188,6 +3192,10 @@ class Rect extends DisplayObject_1.DisplayObject {
         this._color = 0;
         this.graphics = new PIXI.Graphics();
         this.container.addChild(this.graphics);
+    }
+    /** 可以支持遮罩的组件 */
+    maskSprite() {
+        return this.graphics;
     }
     get radius() {
         return this._radius;
@@ -6679,13 +6687,14 @@ function maskImage(target) {
         container.addChild(target.mask);
     }
     else if (maskdisplay instanceof DisplayObject_1.DisplayObject) {
-        //后期组件完成后补充，矢量与位图组件
-        target.mask = maskdisplay;
-        target.mask.name = "maskImage";
-        target.mask.container.name = "maskImage";
-        container.mask = target.mask.container || null;
-        if (target.mask.parent == undefined)
-            target.addChild(target.mask);
+        if (maskdisplay.maskSprite) {
+            target.mask = maskdisplay.maskSprite();
+            target.mask.name = "maskImage";
+            container.mask = target.mask || null;
+            if (maskdisplay.parent == undefined) {
+                target.addChild(maskdisplay);
+            }
+        }
     }
     else {
         target.mask = PIXI.Sprite.from(Utils_1.getTexture(style.maskImage));
@@ -9687,10 +9696,10 @@ const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.8.0.7.8.0.7.8) ==0.7.8.0.7.8.0.7.8;
+//     return this.lastIndexOf(word, pos0.7.9.0.7.9.0.7.9) ==0.7.9.0.7.9.0.7.9;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.8";
+window.gui.version = "0.7.9";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
