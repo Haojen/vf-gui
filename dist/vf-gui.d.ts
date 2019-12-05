@@ -357,6 +357,11 @@ declare module 'display/Image' {
 	    private _anchorY?;
 	    anchorY: number | undefined;
 	    release(): void;
+	    /**
+	     * @private
+	     * 测量组件尺寸
+	     */
+	    protected measure(): void;
 	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
 	    protected srcSystem(): void;
 	    protected scale9GridSystem(): void;

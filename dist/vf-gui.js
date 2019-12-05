@@ -2934,8 +2934,18 @@ class Image extends DisplayObject_1.DisplayObject {
             this._sprite.parent.removeChild(this._sprite).destroy();
         }
     }
+    /**
+     * @private
+     * 测量组件尺寸
+     */
+    measure() {
+    }
     updateDisplayList(unscaledWidth, unscaledHeight) {
+        if (unscaledWidth === 0 && unscaledHeight === 0) {
+            return;
+        }
         if (this._sprite) {
+            console.log("updateDisplayList", unscaledWidth, unscaledHeight);
             super.updateDisplayList(unscaledWidth, unscaledHeight);
             this.scale9GridSystem();
             this._sprite.width = unscaledWidth;
@@ -2961,9 +2971,11 @@ class Image extends DisplayObject_1.DisplayObject {
             if (texture.frame.width > 1 && texture.frame.height > 1) {
                 this.setMeasuredSize(texture.frame.width, texture.frame.height);
             }
+            let invalidateDisplayList = false;
             texture.once("update", () => {
+                invalidateDisplayList = true;
                 this.setMeasuredSize(texture.frame.width, texture.frame.height);
-                this.invalidateDisplayList();
+                this.invalidateSize();
                 this.emit(Index_1.ComponentEvent.COMPLETE, this);
             }, this);
             let sprite = this._sprite;
@@ -2999,7 +3011,10 @@ class Image extends DisplayObject_1.DisplayObject {
             if (sprite && sprite.parent == undefined) {
                 this._sprite = container.addChild(sprite);
             }
-            this.invalidateDisplayList();
+            if (!invalidateDisplayList) {
+                this.invalidateDisplayList();
+                this.invalidateParentLayout();
+            }
         }
     }
     scale9GridSystem() {
@@ -9672,10 +9687,10 @@ const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.7.0.7.7.0.7.7) ==0.7.7.0.7.7.0.7.7;
+//     return this.lastIndexOf(word, pos0.7.8.0.7.8.0.7.8) ==0.7.8.0.7.8.0.7.8;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.7";
+window.gui.version = "0.7.8";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
