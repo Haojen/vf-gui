@@ -12,7 +12,8 @@ export default
 
         sheetAnimated.animationSpeed = 0.1;
         sheetAnimated.animationName = "1";
-        sheetAnimated.loop = true;
+		sheetAnimated.loop = true;
+		sheetAnimated.loopCount = 30;//设置循环次数，0为不限制
         sheetAnimated.src = PIXI.Loader.shared.resources["role"].spritesheet; //方式1，有可使用位图数组填充
         sheetAnimated.anchorX = 0.5;
 		sheetAnimated.anchorY = 1;
@@ -25,15 +26,14 @@ export default
 
         uiStage.addChild(sheetAnimated);
 
-        let clickAnimated = new gui.Interaction.ClickEvent(sheetAnimated);
-        clickAnimated.onClick = () => {
+		sheetAnimated.isClick = true;
+		sheetAnimated.on(gui.Interaction.TouchMouseEvent.onClick,()=>{
             if (sheetAnimated.animationName == "0") {
                 sheetAnimated.animationName = "1";
             } else {
                 sheetAnimated.animationName = "0";
             }
-
-        }
+		});
 
         sheetAnimated.on(gui.Interaction.ComponentEvent.CHANGE,(sa:gui.SpriteAnimated)=>{
             console.log("CHANGE");

@@ -2333,6 +2333,25 @@ declare module 'core/plugs/UIBaseDrag' {
 	}
 
 }
+declare module 'core/plugs/UIClick' {
+	import { DisplayObject } from 'core/DisplayObject';
+	/**
+	 *  组件的单击操作
+	 *
+	 */
+	export class UIClick implements Lifecycle {
+	    /**
+	     * 构造函数
+	     */
+	    constructor(target: DisplayObject);
+	    static key: string;
+	    private _target;
+	    private _clickEvent;
+	    load(): void;
+	    release(): void;
+	}
+
+}
 declare module 'core/DisplayObject' {
 	/// <reference types="pixi.js" />
 	import { DisplayLayoutAbstract } from 'core/DisplayLayoutAbstract';
@@ -2371,6 +2390,8 @@ declare module 'core/DisplayObject' {
 	     * 设置拖动
 	     */
 	    dragOption: UIBaseDrag;
+	    /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
+	    isClick: boolean;
 	    /**
 	     * 分组
 	     */
@@ -2729,6 +2750,12 @@ declare module 'display/SpriteAnimated' {
 	     */
 	    private _loop;
 	    loop: boolean;
+	    private _playCount;
+	    /**
+	     * 循环次数
+	     */
+	    private _loopCount;
+	    loopCount: number;
 	    /**
 	     * 是否播放中
 	     */

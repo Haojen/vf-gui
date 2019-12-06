@@ -1735,6 +1735,7 @@ const CSSStyle_1 = __webpack_require__(/*! ../layout/CSSStyle */ "./src/layout/C
 const CSSLayout_1 = __webpack_require__(/*! ../layout/CSSLayout */ "./src/layout/CSSLayout.ts");
 const UIBaseDrag_1 = __webpack_require__(/*! ./plugs/UIBaseDrag */ "./src/core/plugs/UIBaseDrag.ts");
 const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+const UIClick_1 = __webpack_require__(/*! ./plugs/UIClick */ "./src/core/plugs/UIClick.ts");
 /**
  * UI的顶级类，基础的UI对象
  *
@@ -1778,6 +1779,27 @@ class DisplayObject extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
     set dragOption(value) {
         const dragOption = this.dragOption;
         Utils_1.deepCopy(value, dragOption);
+    }
+    /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
+    get isClick() {
+        let click = this.plugs.get(UIClick_1.UIClick.key);
+        if (click) {
+            return true;
+        }
+        return false;
+    }
+    set isClick(value) {
+        let click = this.plugs.get(UIClick_1.UIClick.key);
+        if (value) {
+            if (!click) {
+                new UIClick_1.UIClick(this);
+            }
+        }
+        else {
+            if (click) {
+                click.release();
+            }
+        }
     }
     get groupName() {
         return this._groupName;
@@ -2577,6 +2599,47 @@ class UIBaseDrag {
 }
 UIBaseDrag.key = "UIBaseDrag";
 exports.UIBaseDrag = UIBaseDrag;
+
+
+/***/ }),
+
+/***/ "./src/core/plugs/UIClick.ts":
+/*!***********************************!*\
+  !*** ./src/core/plugs/UIClick.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Index_1 = __webpack_require__(/*! ../../interaction/Index */ "./src/interaction/Index.ts");
+/**
+ *  组件的单击操作
+ *
+ */
+class UIClick {
+    /**
+     * 构造函数
+     */
+    constructor(target) {
+        this._target = target;
+        this._target.plugs.set(UIClick.key, this);
+        this._clickEvent = new Index_1.ClickEvent(target, true);
+        ;
+    }
+    load() {
+    }
+    release() {
+        this._clickEvent.remove();
+        if (this._target) {
+            this._target.plugs.delete(UIClick.key);
+            this._target = undefined;
+        }
+    }
+}
+UIClick.key = "UIClick";
+exports.UIClick = UIClick;
 
 
 /***/ }),
@@ -4178,6 +4241,11 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
          * 是的循环
          */
         this._loop = false;
+        this._playCount = 0;
+        /**
+         * 循环次数
+         */
+        this._loopCount = 0;
         /**
          * 是否播放中
          */
@@ -4223,6 +4291,12 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
         this._loop = value;
         this.attribSystem();
     }
+    get loopCount() {
+        return this._loopCount;
+    }
+    set loopCount(value) {
+        this._loopCount = value;
+    }
     get playing() {
         return this._playing;
     }
@@ -4254,12 +4328,14 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
     }
     /** 停止 */
     stop() {
+        this._playCount = 0;
         this._curFrameNumber = 0;
         this._playing = false;
         this.playSystem();
     }
     /** 播放 */
     play() {
+        this._playCount = 0;
         this._curFrameNumber = 0;
         this._playing = true;
         this.playSystem();
@@ -4338,6 +4414,10 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
         const lastAnimated = this._animatedSprites.get(this._lastAnimatedName);
         animatedSp.onLoop = () => {
             this.emit(Index_1.ComponentEvent.LOOP, this);
+            this._playCount++;
+            if (this._loopCount !== 0 && this._playCount >= this._loopCount) {
+                this.stop();
+            }
         };
         animatedSp.onComplete = () => {
             this.emit(Index_1.ComponentEvent.COMPLETE, this);
@@ -9698,10 +9778,10 @@ const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.11.0.7.11.0.7.11) ==0.7.11.0.7.11.0.7.11;
+//     return this.lastIndexOf(word, pos0.7.12.0.7.12.0.7.12) ==0.7.12.0.7.12.0.7.12;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.11";
+window.gui.version = "0.7.12";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

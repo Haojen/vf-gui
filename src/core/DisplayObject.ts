@@ -4,6 +4,7 @@ import { CSSStyle} from "../layout/CSSStyle";
 import { updateDisplayLayout } from "../layout/CSSLayout";
 import { UIBaseDrag } from "./plugs/UIBaseDrag";
 import { deepCopy } from "../utils/Utils";
+import { UIClick } from "./plugs/UIClick";
 
 /**
  * UI的顶级类，基础的UI对象
@@ -51,6 +52,28 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
     public set dragOption(value: UIBaseDrag){
         const dragOption = this.dragOption;
         deepCopy(value,dragOption);
+    }
+
+    /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
+    public get isClick(){
+        let click = this.plugs.get(UIClick.key) as UIClick;
+        if(click){
+            return true;
+        }
+        return false;
+    }
+
+    public set isClick(value: boolean){
+        let click = this.plugs.get(UIClick.key) as UIClick;
+        if(value){
+            if(!click){
+                new UIClick(this);
+            }
+        }else{
+            if(click){
+                click.release();
+            }
+        }
     }
 
     /**
