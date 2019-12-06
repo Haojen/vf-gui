@@ -111,7 +111,6 @@ export class Image extends DisplayObject implements MaskSprite{
             return;
         }
         if (this._sprite) {
-            console.log("updateDisplayList",unscaledWidth, unscaledHeight);
             super.updateDisplayList(unscaledWidth, unscaledHeight);
             this.scale9GridSystem();
             this._sprite.width = unscaledWidth;
