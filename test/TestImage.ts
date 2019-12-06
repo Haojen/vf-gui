@@ -43,15 +43,11 @@ export default class TestImage {
 
         //canvas兼容测试
         let rect = new gui.Rect();
-        rect.x = 100;
-        rect.y = 700;
-        rect.width = 100;
-        rect.height = 100;
         rect.color = 0xffffff;
         rect.lineColor = 0xff00cc;
         rect.lineWidth = 1;
         rect.radius = 10; //圆角
-        uiStage.addChild(rect);
+        //uiStage.addChild(rect);
         //彩色
         let img4 = new gui.Image();
         img4.x =  100;
@@ -59,6 +55,8 @@ export default class TestImage {
         img4.width = 380;
         img4.height = 160;
         img4.style.maskImage = rect;
+        img4.style.maskSize = [100,100],
+        img4.style.maskPosition = [0,0] //如果没有添加到舞台，坐标按当前父级算
         img4.src = "assets/mask/bg.jpg";
         uiStage.addChild(img4);
 

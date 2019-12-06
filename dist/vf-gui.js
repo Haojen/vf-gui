@@ -6653,6 +6653,9 @@ function maskSize(target) {
         }
         target.mask.width = style.maskSize[0];
         target.mask.height = style.maskSize[1];
+        if (target.mask instanceof PIXI.Graphics) {
+            target.mask.clone;
+        }
         if (!(target.mask instanceof DisplayObject_1.DisplayObject))
             target.mask.updateTransform();
     }
@@ -6688,9 +6691,9 @@ function maskImage(target) {
     }
     else if (maskdisplay instanceof DisplayObject_1.DisplayObject) {
         if (maskdisplay.maskSprite) {
-            target.mask = maskdisplay.maskSprite();
+            target.mask = maskdisplay; //gui组件
             target.mask.name = "maskImage";
-            container.mask = target.mask || null;
+            container.mask = maskdisplay.maskSprite() || null; //pixi组件
             if (maskdisplay.parent == undefined) {
                 target.addChild(maskdisplay);
             }

@@ -116,6 +116,9 @@ export function maskSize(target: DisplayObject){
 
         target.mask.width = style.maskSize[0];
         target.mask.height = style.maskSize[1];
+        if(target.mask instanceof PIXI.Graphics){
+            target.mask.clone
+        }
         if(!(target.mask instanceof DisplayObject))
             target.mask.updateTransform();
     }
@@ -153,9 +156,9 @@ export function maskImage(target: DisplayObject){
     } else if (maskdisplay instanceof DisplayObject) {
 
         if((maskdisplay as MaskSprite).maskSprite){
-            target.mask = maskdisplay.maskSprite();
+            target.mask = maskdisplay;//gui组件
             target.mask.name = "maskImage";
-            container.mask = target.mask || null;
+            container.mask = maskdisplay.maskSprite() || null;//pixi组件
             if(maskdisplay.parent == undefined){
                 target.addChild(maskdisplay);
             }
