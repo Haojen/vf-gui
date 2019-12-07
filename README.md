@@ -106,7 +106,7 @@ Master:
     npm run lint
 
 
-## Ohter
+## Other
 
 Chrome debug - windows
 
