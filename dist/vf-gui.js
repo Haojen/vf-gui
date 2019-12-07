@@ -1735,6 +1735,7 @@ const CSSStyle_1 = __webpack_require__(/*! ../layout/CSSStyle */ "./src/layout/C
 const CSSLayout_1 = __webpack_require__(/*! ../layout/CSSLayout */ "./src/layout/CSSLayout.ts");
 const UIBaseDrag_1 = __webpack_require__(/*! ./plugs/UIBaseDrag */ "./src/core/plugs/UIBaseDrag.ts");
 const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+const UIClick_1 = __webpack_require__(/*! ./plugs/UIClick */ "./src/core/plugs/UIClick.ts");
 /**
  * UI的顶级类，基础的UI对象
  *
@@ -1778,6 +1779,27 @@ class DisplayObject extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
     set dragOption(value) {
         const dragOption = this.dragOption;
         Utils_1.deepCopy(value, dragOption);
+    }
+    /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
+    get isClick() {
+        let click = this.plugs.get(UIClick_1.UIClick.key);
+        if (click) {
+            return true;
+        }
+        return false;
+    }
+    set isClick(value) {
+        let click = this.plugs.get(UIClick_1.UIClick.key);
+        if (value) {
+            if (!click) {
+                new UIClick_1.UIClick(this);
+            }
+        }
+        else {
+            if (click) {
+                click.release();
+            }
+        }
     }
     get groupName() {
         return this._groupName;
@@ -2581,6 +2603,47 @@ exports.UIBaseDrag = UIBaseDrag;
 
 /***/ }),
 
+/***/ "./src/core/plugs/UIClick.ts":
+/*!***********************************!*\
+  !*** ./src/core/plugs/UIClick.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const Index_1 = __webpack_require__(/*! ../../interaction/Index */ "./src/interaction/Index.ts");
+/**
+ *  组件的单击操作
+ *
+ */
+class UIClick {
+    /**
+     * 构造函数
+     */
+    constructor(target) {
+        this._target = target;
+        this._target.plugs.set(UIClick.key, this);
+        this._clickEvent = new Index_1.ClickEvent(target, true);
+        ;
+    }
+    load() {
+    }
+    release() {
+        this._clickEvent.remove();
+        if (this._target) {
+            this._target.plugs.delete(UIClick.key);
+            this._target = undefined;
+        }
+    }
+}
+UIClick.key = "UIClick";
+exports.UIClick = UIClick;
+
+
+/***/ }),
+
 /***/ "./src/display/Button.ts":
 /*!*******************************!*\
   !*** ./src/display/Button.ts ***!
@@ -2891,6 +2954,10 @@ class Image extends DisplayObject_1.DisplayObject {
          */
         this._fillMode = "no-repeat";
     }
+    /** 可以支持遮罩的组件 */
+    maskSprite() {
+        return this._sprite;
+    }
     get src() {
         return this._src;
     }
@@ -2934,7 +3001,16 @@ class Image extends DisplayObject_1.DisplayObject {
             this._sprite.parent.removeChild(this._sprite).destroy();
         }
     }
+    /**
+     * @private
+     * 测量组件尺寸
+     */
+    measure() {
+    }
     updateDisplayList(unscaledWidth, unscaledHeight) {
+        if (unscaledWidth === 0 && unscaledHeight === 0) {
+            return;
+        }
         if (this._sprite) {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
             this.scale9GridSystem();
@@ -2961,9 +3037,11 @@ class Image extends DisplayObject_1.DisplayObject {
             if (texture.frame.width > 1 && texture.frame.height > 1) {
                 this.setMeasuredSize(texture.frame.width, texture.frame.height);
             }
+            let invalidateDisplayList = false;
             texture.once("update", () => {
+                invalidateDisplayList = true;
                 this.setMeasuredSize(texture.frame.width, texture.frame.height);
-                this.invalidateDisplayList();
+                this.invalidateSize();
                 this.emit(Index_1.ComponentEvent.COMPLETE, this);
             }, this);
             let sprite = this._sprite;
@@ -2999,7 +3077,10 @@ class Image extends DisplayObject_1.DisplayObject {
             if (sprite && sprite.parent == undefined) {
                 this._sprite = container.addChild(sprite);
             }
-            this.invalidateDisplayList();
+            if (!invalidateDisplayList) {
+                this.invalidateDisplayList();
+                this.invalidateParentLayout();
+            }
         }
     }
     scale9GridSystem() {
@@ -3102,7 +3183,17 @@ class Label extends DisplayObject_1.DisplayObject {
         super.updateDisplayList(unscaledWidth, unscaledHeight);
         const values = this.$values;
         if (!isNaN(values[UIKeys.explicitWidth])) {
-            this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width >> 1;
+            switch (this.style.textAlign) {
+                case "left":
+                    this.sprite.x = 0;
+                    break;
+                case "right":
+                    this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width;
+                    break;
+                case "center":
+                    this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width >> 1;
+                    break;
+            }
         }
         if (!isNaN(values[UIKeys.explicitHeight])) {
             this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >> 1;
@@ -3163,6 +3254,10 @@ class Rect extends DisplayObject_1.DisplayObject {
         this._color = 0;
         this.graphics = new PIXI.Graphics();
         this.container.addChild(this.graphics);
+    }
+    /** 可以支持遮罩的组件 */
+    maskSprite() {
+        return this.graphics;
     }
     get radius() {
         return this._radius;
@@ -4070,7 +4165,6 @@ class Sound extends InputBase_1.InputBase {
             this._mediaInstance.off('end', this.onEnd, this);
         }
         if (this._sound) {
-            this.removeAllListeners();
             this._sound.stop();
             this._sound.destroy();
             this._sound = undefined;
@@ -4147,6 +4241,11 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
          * 是的循环
          */
         this._loop = false;
+        this._playCount = 0;
+        /**
+         * 循环次数
+         */
+        this._loopCount = 0;
         /**
          * 是否播放中
          */
@@ -4192,6 +4291,12 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
         this._loop = value;
         this.attribSystem();
     }
+    get loopCount() {
+        return this._loopCount;
+    }
+    set loopCount(value) {
+        this._loopCount = value;
+    }
     get playing() {
         return this._playing;
     }
@@ -4223,12 +4328,14 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
     }
     /** 停止 */
     stop() {
+        this._playCount = 0;
         this._curFrameNumber = 0;
         this._playing = false;
         this.playSystem();
     }
     /** 播放 */
     play() {
+        this._playCount = 0;
         this._curFrameNumber = 0;
         this._playing = true;
         this.playSystem();
@@ -4307,6 +4414,10 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
         const lastAnimated = this._animatedSprites.get(this._lastAnimatedName);
         animatedSp.onLoop = () => {
             this.emit(Index_1.ComponentEvent.LOOP, this);
+            this._playCount++;
+            if (this._loopCount !== 0 && this._playCount >= this._loopCount) {
+                this.stop();
+            }
         };
         animatedSp.onComplete = () => {
             this.emit(Index_1.ComponentEvent.COMPLETE, this);
@@ -6621,6 +6732,9 @@ function maskSize(target) {
         }
         target.mask.width = style.maskSize[0];
         target.mask.height = style.maskSize[1];
+        if (target.mask instanceof PIXI.Graphics) {
+            target.mask.clone;
+        }
         if (!(target.mask instanceof DisplayObject_1.DisplayObject))
             target.mask.updateTransform();
     }
@@ -6655,13 +6769,14 @@ function maskImage(target) {
         container.addChild(target.mask);
     }
     else if (maskdisplay instanceof DisplayObject_1.DisplayObject) {
-        //后期组件完成后补充，矢量与位图组件
-        target.mask = maskdisplay;
-        target.mask.name = "maskImage";
-        target.mask.container.name = "maskImage";
-        container.mask = target.mask.container || null;
-        if (target.mask.parent == undefined)
-            target.addChild(target.mask);
+        if (maskdisplay.maskSprite) {
+            target.mask = maskdisplay; //gui组件
+            target.mask.name = "maskImage";
+            container.mask = maskdisplay.maskSprite() || null; //pixi组件
+            if (maskdisplay.parent == undefined) {
+                target.addChild(maskdisplay);
+            }
+        }
     }
     else {
         target.mask = PIXI.Sprite.from(Utils_1.getTexture(style.maskImage));
@@ -6757,7 +6872,7 @@ class CSSStyle {
         /**
          * 多行文本(wordWrap = true) - 对齐方式
          * */
-        this._textAlign = "left";
+        this._textAlign = "center";
         /** 字体大小 */
         this._fontSize = 22;
         /** 字体样式 */
@@ -7113,7 +7228,7 @@ class CSSStyle {
             this.parent.container.filters = [];
             return;
         }
-        let target = Utils_1.getStringFunctionParam(value);
+        const target = Utils_1.getStringFunctionParam(value);
         switch (target.key) {
             case "blur":
                 this.parent.filterBlur = target.value;
@@ -9611,7 +9726,7 @@ exports.getQueryVariable = getQueryVariable;
 function getStringFunctionParam(str) {
     const target = {};
     target.key = str.substr(0, str.indexOf("("));
-    let value = str.substr(str.indexOf("(") + 1);
+    const value = str.substr(str.indexOf("(") + 1);
     target.value = parseFloat(value.substr(0, value.lastIndexOf(")")));
     return target;
 }
@@ -9663,10 +9778,10 @@ const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.3.0.7.3.0.7.3) ==0.7.3.0.7.3.0.7.3;
+//     return this.lastIndexOf(word, pos0.7.12.0.7.12.0.7.12) ==0.7.12.0.7.12.0.7.12;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.3";
+window.gui.version = "0.7.12";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

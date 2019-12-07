@@ -32,6 +32,15 @@ export default class TestLabel {
         richText.text = '包含了换行与多种自定义样式的组件,包含了换行与多种自定义样式的组件,包含了换行与多种自定义样式的组件';
         uiStage.addChild(richText);
 
+        /** 限定宽度 */
+        let wText = new gui.Label();
+        wText.style.left = 100;
+        wText.style.top = 500;
+        wText.style.color =[0xffffff,0xffcc00];
+        wText.style.width = 500;
+        wText.style.textAlign = "right";
+        wText.text = "我限定了宽度与位置"
+        uiStage.addChild(wText);
     }
 
     private getFontCssStyle(){

@@ -1,5 +1,6 @@
 import { DisplayObject } from "../core/DisplayObject";
-import { getTexture, $getSourcePath } from "../utils/Utils";
+import {MaskSprite} from "../core/MaskSprite";
+import { getTexture } from "../utils/Utils";
 import { ComponentEvent } from "../interaction/Index";
 
 /**
@@ -11,11 +12,16 @@ import { ComponentEvent } from "../interaction/Index";
  * 
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestImage
  */
-export class Image extends DisplayObject {
+export class Image extends DisplayObject implements MaskSprite{
 
 
     public constructor() {
         super();
+    }
+
+    /** 可以支持遮罩的组件 */
+    public maskSprite(){
+        return this._sprite as PIXI.Sprite;
     }
 
     protected _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
@@ -92,8 +98,18 @@ export class Image extends DisplayObject {
         }
     }
 
+    /**
+     * @private
+     * 测量组件尺寸
+     */
+    protected measure(): void {
+
+    }
 
     protected updateDisplayList(unscaledWidth: number, unscaledHeight: number) {
+        if(unscaledWidth === 0 && unscaledHeight ===0){
+            return;
+        }
         if (this._sprite) {
             super.updateDisplayList(unscaledWidth, unscaledHeight);
             this.scale9GridSystem();
@@ -123,12 +139,14 @@ export class Image extends DisplayObject {
             }
             if (texture.frame.width > 1 && texture.frame.height > 1) {
                 this.setMeasuredSize(texture.frame.width, texture.frame.height);
-                
             }
+            let invalidateDisplayList = false;
             texture.once("update", () => {
+                invalidateDisplayList = true;
                 this.setMeasuredSize(texture.frame.width, texture.frame.height);
-                this.invalidateDisplayList();
+                this.invalidateSize();
                 this.emit(ComponentEvent.COMPLETE, this);
+
             }, this);
 
             let sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined = this._sprite;
@@ -159,7 +177,10 @@ export class Image extends DisplayObject {
             if (sprite && sprite.parent == undefined) {
                 this._sprite = container.addChild(sprite);
             }
-            this.invalidateDisplayList();
+            if(!invalidateDisplayList){
+                this.invalidateDisplayList();
+                this.invalidateParentLayout();
+            }
         }
 
     }

@@ -490,7 +490,7 @@ export class CSSStyle {
             this.parent.container.filters = [];
             return;
         }
-        let target = getStringFunctionParam(value);
+        const target = getStringFunctionParam(value);
         switch (target.key) {
             case "blur":
                 this.parent.filterBlur = target.value;
@@ -505,7 +505,7 @@ export class CSSStyle {
     public get cursor(){
         return this.parent.container.cursor;
     }
-    public set cursor(value:string){
+    public set cursor(value: string){
         this.parent.container.cursor = value;
     }
 
@@ -557,7 +557,7 @@ export class CSSStyle {
     /** 
      * 多行文本(wordWrap = true) - 对齐方式
      * */
-    private _textAlign: "left" | "right" | "center" = "left";
+    private _textAlign: "left" | "right" | "center" = "center";
     public get textAlign() {
         return this._textAlign;
     }

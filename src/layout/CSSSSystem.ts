@@ -1,5 +1,6 @@
 import { getTexture, getDisplayObject } from "../utils/Utils";
 import { DisplayObject } from "../core/DisplayObject";
+import {MaskSprite} from "../core/MaskSprite";
 
 /** ===================== background  ===================== */
 
@@ -115,6 +116,9 @@ export function maskSize(target: DisplayObject){
 
         target.mask.width = style.maskSize[0];
         target.mask.height = style.maskSize[1];
+        if(target.mask instanceof PIXI.Graphics){
+            target.mask.clone
+        }
         if(!(target.mask instanceof DisplayObject))
             target.mask.updateTransform();
     }
@@ -143,21 +147,23 @@ export function maskImage(target: DisplayObject){
     target.mask = undefined;
     const style = target.style;
     const container = target.container;
-    const maskdisplay = getDisplayObject( style.maskImage,target) as DisplayObject | PIXI.Graphics;
-
+    const maskdisplay = getDisplayObject( style.maskImage,target) as MaskSprite | PIXI.Graphics;
+    
     if (maskdisplay instanceof PIXI.Graphics) {
         target.mask = maskdisplay;
         container.mask = target.mask;
         container.addChild(target.mask);
     } else if (maskdisplay instanceof DisplayObject) {
-        
-        //后期组件完成后补充，矢量与位图组件
-        target.mask = maskdisplay;
-        target.mask.name = "maskImage";
-        target.mask.container.name = "maskImage";
-        container.mask = (target.mask.container as TAny) || null;
-        if(target.mask.parent == undefined)
-            target.addChild(target.mask);
+
+        if((maskdisplay as MaskSprite).maskSprite){
+            target.mask = maskdisplay;//gui组件
+            target.mask.name = "maskImage";
+            container.mask = maskdisplay.maskSprite() || null;//pixi组件
+            if(maskdisplay.parent == undefined){
+                target.addChild(maskdisplay);
+            }
+                
+        }
     } else {
         target.mask = PIXI.Sprite.from(getTexture(style.maskImage));
         container.mask = target.mask;

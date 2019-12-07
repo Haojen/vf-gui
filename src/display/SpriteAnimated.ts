@@ -71,6 +71,18 @@ export class SpriteAnimated extends DisplayObject{
         this._loop = value;
         this.attribSystem()
     }
+
+    private _playCount = 0;
+    /** 
+     * 循环次数
+     */
+    private _loopCount = 0;
+    public get loopCount() {
+        return this._loopCount;
+    }
+    public set loopCount(value) {
+        this._loopCount = value;
+    }
     /** 
      * 是否播放中
      */
@@ -119,6 +131,7 @@ export class SpriteAnimated extends DisplayObject{
 
     /** 停止 */
     public stop(){
+        this._playCount = 0;
         this._curFrameNumber = 0;
         this._playing = false;
         this.playSystem();
@@ -126,6 +139,7 @@ export class SpriteAnimated extends DisplayObject{
 
     /** 播放 */
     public play(){
+        this._playCount = 0;
         this._curFrameNumber = 0;
         this._playing = true;
         this.playSystem();
@@ -211,6 +225,10 @@ export class SpriteAnimated extends DisplayObject{
         const lastAnimated = this._animatedSprites.get(this._lastAnimatedName);
         animatedSp.onLoop = ()=>{
             this.emit(ComponentEvent.LOOP,this);
+            this._playCount++;
+            if(this._loopCount!==0 && this._playCount>=this._loopCount){
+                this.stop();
+            }
         }
         animatedSp.onComplete = ()=>{
             this.emit(ComponentEvent.COMPLETE,this);

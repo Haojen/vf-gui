@@ -9,7 +9,7 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
 ## 学习(Learn) 
 
 
-* [文档(documentation)](https://vipkid-edu.github.io/vf-gui-docs/0.7.0/)
+* [文档(Documentation)](https://vipkid-edu.github.io/vf-gui-docs/0.7.0/)
 
 * [示例(Examples)](https://vipkid-edu.github.io/vf-gui-docs/play)
 
@@ -34,9 +34,9 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
     
 Version:
 
-    <script src="http://unpkg.com/vf-gui@0.7.3/dist/vf-gui.js"></script>
+    <script src="http://unpkg.com/vf-gui@0.7.12/dist/vf-gui.js"></script>
     
-    <script src="http://unpkg.com/vf-gui@0.7.3/dist/vf-gui.min.js"></script>
+    <script src="http://unpkg.com/vf-gui@0.7.12/dist/vf-gui.min.js"></script>
 
 Master:
 
@@ -85,7 +85,7 @@ Master:
 | gui.Ticker | 心跳 |
 | gui.Tween | 缓动 |
 | gui.Timeline | 缓动 |
-| gui.Sound | 音频 |
+| gui.Sound | 音频(deprecated) |
 | gui.Utils | 工具类 |
 
 

@@ -268,8 +268,7 @@ export class Sound extends InputBase {
             this._mediaInstance.off('progress',this.onProgress,this);
             this._mediaInstance.off('end',this.onEnd,this);
         }
-        if (this._sound) {
-            this.removeAllListeners();
+        if (this._sound) {  
             this._sound.stop();
             this._sound.destroy();
             this._sound = undefined;

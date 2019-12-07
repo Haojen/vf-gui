@@ -309,9 +309,18 @@ declare module 'display/Label' {
 	}
 
 }
+declare module 'core/MaskSprite' {
+	/// <reference types="pixi.js" />
+	import { DisplayObject } from 'core/DisplayObject';
+	export interface MaskSprite extends DisplayObject {
+	    maskSprite(): PIXI.Sprite | PIXI.Graphics;
+	}
+
+}
 declare module 'display/Image' {
 	/// <reference types="pixi.js" />
 	import { DisplayObject } from 'core/DisplayObject';
+	import { MaskSprite } from 'core/MaskSprite';
 	/**
 	 * 图片
 	 *
@@ -321,8 +330,10 @@ declare module 'display/Image' {
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestImage
 	 */
-	export class Image extends DisplayObject {
+	export class Image extends DisplayObject implements MaskSprite {
 	    constructor();
+	    /** 可以支持遮罩的组件 */
+	    maskSprite(): PIXI.Sprite;
 	    protected _sprite: PIXI.Sprite | PIXI.TilingSprite | PIXI.NineSlicePlane | undefined;
 	    protected _texture: PIXI.Texture | undefined;
 	    protected _source: number | string | PIXI.Texture | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | undefined;
@@ -357,6 +368,11 @@ declare module 'display/Image' {
 	    private _anchorY?;
 	    anchorY: number | undefined;
 	    release(): void;
+	    /**
+	     * @private
+	     * 测量组件尺寸
+	     */
+	    protected measure(): void;
 	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
 	    protected srcSystem(): void;
 	    protected scale9GridSystem(): void;
@@ -1907,12 +1923,12 @@ declare module 'layout/CSSStyle' {
 	     * 在容器里面的水平位置（左中右）
 	     */
 	    private _justifyContent?;
-	    justifyContent: "flex-start" | "flex-end" | "center" | undefined;
+	    justifyContent: "center" | "flex-start" | "flex-end" | undefined;
 	    /**
 	     * 在容器里面的垂直位置（上中下）
 	     */
 	    private _alignContent?;
-	    alignContent: "flex-start" | "flex-end" | "center" | undefined;
+	    alignContent: "center" | "flex-start" | "flex-end" | undefined;
 	    /**
 	     * 基于 网格列的维度，去定义网格线的名称和网格轨道的尺寸大小。
 	     *
@@ -2317,6 +2333,25 @@ declare module 'core/plugs/UIBaseDrag' {
 	}
 
 }
+declare module 'core/plugs/UIClick' {
+	import { DisplayObject } from 'core/DisplayObject';
+	/**
+	 *  组件的单击操作
+	 *
+	 */
+	export class UIClick implements Lifecycle {
+	    /**
+	     * 构造函数
+	     */
+	    constructor(target: DisplayObject);
+	    static key: string;
+	    private _target;
+	    private _clickEvent;
+	    load(): void;
+	    release(): void;
+	}
+
+}
 declare module 'core/DisplayObject' {
 	/// <reference types="pixi.js" />
 	import { DisplayLayoutAbstract } from 'core/DisplayLayoutAbstract';
@@ -2355,6 +2390,8 @@ declare module 'core/DisplayObject' {
 	     * 设置拖动
 	     */
 	    dragOption: UIBaseDrag;
+	    /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
+	    isClick: boolean;
 	    /**
 	     * 分组
 	     */
@@ -2713,6 +2750,12 @@ declare module 'display/SpriteAnimated' {
 	     */
 	    private _loop;
 	    loop: boolean;
+	    private _playCount;
+	    /**
+	     * 循环次数
+	     */
+	    private _loopCount;
+	    loopCount: number;
 	    /**
 	     * 是否播放中
 	     */
@@ -3112,6 +3155,7 @@ declare module 'display/Slider' {
 declare module 'display/Rect' {
 	/// <reference types="pixi.js" />
 	import { DisplayObject } from 'core/DisplayObject';
+	import { MaskSprite } from 'core/MaskSprite';
 	/**
 	 * 绘制矩形或圆角矩形
 	 *
@@ -3121,9 +3165,11 @@ declare module 'display/Rect' {
 	 *
 	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
 	 */
-	export class Rect extends DisplayObject {
+	export class Rect extends DisplayObject implements MaskSprite {
 	    constructor();
 	    readonly graphics: PIXI.Graphics;
+	    /** 可以支持遮罩的组件 */
+	    maskSprite(): PIXI.Graphics;
 	    /**
 	     * 圆角
 	     */

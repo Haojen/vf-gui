@@ -52,10 +52,21 @@ export class Label extends DisplayObject {
         super.updateDisplayList(unscaledWidth,unscaledHeight);
         const values = this.$values;
         if(!isNaN(values[UIKeys.explicitWidth])){
-            this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width >>1;
+            switch(this.style.textAlign){
+                case "left":
+                    this.sprite.x = 0;
+                    break;
+                case "right":
+                    this.sprite.x =  values[UIKeys.explicitWidth] - this.sprite.width;
+                    break;
+                case "center":
+                    this.sprite.x = values[UIKeys.explicitWidth] - this.sprite.width >>1;
+                    break;
+            }
+            
         }
         if(!isNaN(values[UIKeys.explicitHeight])){
-            this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >>1;
+            this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >>1; 
         }
     }
 
