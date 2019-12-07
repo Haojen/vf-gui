@@ -44,7 +44,7 @@ Master:
 
     <script src="http://unpkg.com/vf-gui/dist/vf-gui.min.js"></script>
 
-### 创建方式(Use)：
+### 创建方式(Usage)：
 
     let button = new  gui.Button();
 
