@@ -98,16 +98,16 @@ var vfgui =
 
 Object.defineProperty(exports, "__esModule", { value: true });
 /** 工具类 */
-const Utils = __webpack_require__(/*! ./utils/Utils */ "./src/utils/Utils.ts");
+var Utils = __webpack_require__(/*! ./utils/Utils */ "./src/utils/Utils.ts");
 exports.Utils = Utils;
 /** UI舞台，最顶级的层 展示所有UI组件 */
-const Stage_1 = __webpack_require__(/*! ./core/Stage */ "./src/core/Stage.ts");
+var Stage_1 = __webpack_require__(/*! ./core/Stage */ "./src/core/Stage.ts");
 exports.Stage = Stage_1.Stage;
 /** UI基础显示对象，一般不会直接使用，只作为类型推断 */
-const DisplayObject_1 = __webpack_require__(/*! ./core/DisplayObject */ "./src/core/DisplayObject.ts");
+var DisplayObject_1 = __webpack_require__(/*! ./core/DisplayObject */ "./src/core/DisplayObject.ts");
 exports.DisplayObject = DisplayObject_1.DisplayObject;
 /** 心跳，需要在初始化完成后，启动心跳更新 */
-const Ticker_1 = __webpack_require__(/*! ./core/Ticker */ "./src/core/Ticker.ts");
+var Ticker_1 = __webpack_require__(/*! ./core/Ticker */ "./src/core/Ticker.ts");
 exports.TickerShared = Ticker_1.shared;
 /**
  * 基础容器
@@ -120,7 +120,7 @@ exports.TickerShared = Ticker_1.shared;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestContainer
  */
-const Container_1 = __webpack_require__(/*! ./display/Container */ "./src/display/Container.ts");
+var Container_1 = __webpack_require__(/*! ./display/Container */ "./src/display/Container.ts");
 exports.Container = Container_1.Container;
 /**
  * 滚动容器
@@ -131,7 +131,7 @@ exports.Container = Container_1.Container;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
  */
-const ScrollingContainer_1 = __webpack_require__(/*! ./display/ScrollingContainer */ "./src/display/ScrollingContainer.ts");
+var ScrollingContainer_1 = __webpack_require__(/*! ./display/ScrollingContainer */ "./src/display/ScrollingContainer.ts");
 exports.ScrollingContainer = ScrollingContainer_1.ScrollingContainer;
 /**
  * 图片
@@ -142,7 +142,7 @@ exports.ScrollingContainer = ScrollingContainer_1.ScrollingContainer;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestImage
  */
-const Image_1 = __webpack_require__(/*! ./display/Image */ "./src/display/Image.ts");
+var Image_1 = __webpack_require__(/*! ./display/Image */ "./src/display/Image.ts");
 exports.Image = Image_1.Image;
 /**
  * 序列图动画
@@ -155,7 +155,7 @@ exports.Image = Image_1.Image;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSpriteAnimated
  */
-const SpriteAnimated_1 = __webpack_require__(/*! ./display/SpriteAnimated */ "./src/display/SpriteAnimated.ts");
+var SpriteAnimated_1 = __webpack_require__(/*! ./display/SpriteAnimated */ "./src/display/SpriteAnimated.ts");
 exports.SpriteAnimated = SpriteAnimated_1.SpriteAnimated;
 /**
  * 文本
@@ -170,7 +170,7 @@ exports.SpriteAnimated = SpriteAnimated_1.SpriteAnimated;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestLabel
  */
-const Label_1 = __webpack_require__(/*! ./display/Label */ "./src/display/Label.ts");
+var Label_1 = __webpack_require__(/*! ./display/Label */ "./src/display/Label.ts");
 exports.Label = Label_1.Label;
 /**
  * 文本输入
@@ -181,7 +181,7 @@ exports.Label = Label_1.Label;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTextInput
  */
-const TextInput_1 = __webpack_require__(/*! ./display/TextInput */ "./src/display/TextInput.ts");
+var TextInput_1 = __webpack_require__(/*! ./display/TextInput */ "./src/display/TextInput.ts");
 exports.TextInput = TextInput_1.TextInput;
 /**
  * 滑动条/进度条
@@ -192,7 +192,7 @@ exports.TextInput = TextInput_1.TextInput;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSlider
  */
-const Slider_1 = __webpack_require__(/*! ./display/Slider */ "./src/display/Slider.ts");
+var Slider_1 = __webpack_require__(/*! ./display/Slider */ "./src/display/Slider.ts");
 exports.Slider = Slider_1.Slider;
 /**
  * 按钮
@@ -203,7 +203,7 @@ exports.Slider = Slider_1.Slider;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestButton
  */
-const Button_1 = __webpack_require__(/*! ./display/Button */ "./src/display/Button.ts");
+var Button_1 = __webpack_require__(/*! ./display/Button */ "./src/display/Button.ts");
 exports.Button = Button_1.Button;
 /**
  * 单选\复选框
@@ -216,7 +216,7 @@ exports.Button = Button_1.Button;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestCheckBox
  */
-const CheckBox_1 = __webpack_require__(/*! ./display/CheckBox */ "./src/display/CheckBox.ts");
+var CheckBox_1 = __webpack_require__(/*! ./display/CheckBox */ "./src/display/CheckBox.ts");
 exports.CheckBox = CheckBox_1.CheckBox;
 /**
  * 绘制矩形或圆角矩形
@@ -227,7 +227,7 @@ exports.CheckBox = CheckBox_1.CheckBox;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
  */
-const Rect_1 = __webpack_require__(/*! ./display/Rect */ "./src/display/Rect.ts");
+var Rect_1 = __webpack_require__(/*! ./display/Rect */ "./src/display/Rect.ts");
 exports.Rect = Rect_1.Rect;
 /**
  * 矢量绘制
@@ -238,7 +238,7 @@ exports.Rect = Rect_1.Rect;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
  */
-const Graphics_1 = __webpack_require__(/*! ./display/Graphics */ "./src/display/Graphics.ts");
+var Graphics_1 = __webpack_require__(/*! ./display/Graphics */ "./src/display/Graphics.ts");
 exports.Graphics = Graphics_1.Graphics;
 /**
  * 音频播放组件
@@ -249,7 +249,7 @@ exports.Graphics = Graphics_1.Graphics;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSound
  */
-const Sound_1 = __webpack_require__(/*! ./display/Sound */ "./src/display/Sound.ts");
+var Sound_1 = __webpack_require__(/*! ./display/Sound */ "./src/display/Sound.ts");
 exports.Sound = Sound_1.Sound;
 /**
  * 完整的缓动曲线列表
@@ -260,7 +260,7 @@ exports.Sound = Sound_1.Sound;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
  */
-const Easing_1 = __webpack_require__(/*! ./tween/Easing */ "./src/tween/Easing.ts");
+var Easing_1 = __webpack_require__(/*! ./tween/Easing */ "./src/tween/Easing.ts");
 exports.Easing = Easing_1.Easing;
 /**
  * 缓动动画
@@ -271,7 +271,7 @@ exports.Easing = Easing_1.Easing;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
  */
-const Tween_1 = __webpack_require__(/*! ./tween/Tween */ "./src/tween/Tween.ts");
+var Tween_1 = __webpack_require__(/*! ./tween/Tween */ "./src/tween/Tween.ts");
 exports.Tween = Tween_1.Tween;
 /**
  * 基于帧的时间轴控制类
@@ -282,17 +282,17 @@ exports.Tween = Tween_1.Tween;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
  */
-const Timeline_1 = __webpack_require__(/*! ./tween/Timeline */ "./src/tween/Timeline.ts");
+var Timeline_1 = __webpack_require__(/*! ./tween/Timeline */ "./src/tween/Timeline.ts");
 exports.Timeline = Timeline_1.Timeline;
 /**
  * 事件绑定类，非继承于inputbase的组件是没有任何交互事件，需单独绑定
  */
-const Interaction = __webpack_require__(/*! ./interaction/Index */ "./src/interaction/Index.ts");
+var Interaction = __webpack_require__(/*! ./interaction/Index */ "./src/interaction/Index.ts");
 exports.Interaction = Interaction;
 /**
  * 事件名
  */
-const Event = __webpack_require__(/*! ./event/Index */ "./src/event/Index.ts");
+var Event = __webpack_require__(/*! ./event/Index */ "./src/event/Index.ts");
 exports.Event = Event;
 
 
@@ -307,20 +307,36 @@ exports.Event = Event;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 /** 容器扩展类，后续便于做延时渲染 */
-class ContainerBase extends PIXI.Container {
-    constructor() {
-        super();
-        this.isEmitRender = false;
+var ContainerBase = /** @class */ (function (_super) {
+    __extends(ContainerBase, _super);
+    function ContainerBase() {
+        var _this = _super.call(this) || this;
+        _this.isEmitRender = false;
+        return _this;
     }
-    render(renderer) {
+    ContainerBase.prototype.render = function (renderer) {
         if (this.isEmitRender) {
             this.emit("renderChange", renderer);
         }
-        super.render(renderer);
-    }
-}
+        _super.prototype.render.call(this, renderer);
+    };
+    return ContainerBase;
+}(PIXI.Container));
 exports.ContainerBase = ContainerBase;
 
 
@@ -335,78 +351,94 @@ exports.ContainerBase = ContainerBase;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const UIKeys = __webpack_require__(/*! ./DisplayLayoutKeys */ "./src/core/DisplayLayoutKeys.ts");
-const DisplayLayoutValidator_1 = __webpack_require__(/*! ./DisplayLayoutValidator */ "./src/core/DisplayLayoutValidator.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const DisplayObjectAbstract_1 = __webpack_require__(/*! ./DisplayObjectAbstract */ "./src/core/DisplayObjectAbstract.ts");
+var UIKeys = __webpack_require__(/*! ./DisplayLayoutKeys */ "./src/core/DisplayLayoutKeys.ts");
+var DisplayLayoutValidator_1 = __webpack_require__(/*! ./DisplayLayoutValidator */ "./src/core/DisplayLayoutValidator.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var DisplayObjectAbstract_1 = __webpack_require__(/*! ./DisplayObjectAbstract */ "./src/core/DisplayObjectAbstract.ts");
 exports.$tempLocalBounds = new PIXI.Rectangle();
 /**
  * UI 布局的基础属性类
  */
-class DisplayLayoutAbstract extends DisplayObjectAbstract_1.DisplayObjectAbstract {
-    constructor() {
-        super();
-        this.isContainer = false;
+var DisplayLayoutAbstract = /** @class */ (function (_super) {
+    __extends(DisplayLayoutAbstract, _super);
+    function DisplayLayoutAbstract() {
+        var _this = _super.call(this) || this;
+        _this.isContainer = false;
         /**
          * @private
          */
-        this.$values = {};
-        this.includeInLayout = true;
-        this.initializeUIValues();
+        _this.$values = {};
+        _this.includeInLayout = true;
+        _this.initializeUIValues();
+        return _this;
     }
     /**
      * @private
      * 定义的所有变量请不要添加任何初始值，必须统一在此处初始化。
      */
-    initializeUIValues() {
-        this.$values = {
-            [UIKeys.invalidatePropertiesFlag]: true,
-            [UIKeys.invalidateSizeFlag]: true,
-            [UIKeys.invalidateDisplayListFlag]: true,
-            [UIKeys.left]: NaN,
-            [UIKeys.right]: NaN,
-            [UIKeys.top]: NaN,
-            [UIKeys.bottom]: NaN,
-            [UIKeys.horizontalCenter]: NaN,
-            [UIKeys.verticalCenter]: NaN,
-            [UIKeys.percentWidth]: NaN,
-            [UIKeys.percentHeight]: NaN,
-            [UIKeys.explicitWidth]: NaN,
-            [UIKeys.explicitHeight]: NaN,
-            [UIKeys.width]: 0,
-            [UIKeys.height]: 0,
-            [UIKeys.minWidth]: 0,
-            [UIKeys.maxWidth]: 100000,
-            [UIKeys.minHeight]: 0,
-            [UIKeys.maxHeight]: 100000,
-            [UIKeys.measuredWidth]: 0,
-            [UIKeys.measuredHeight]: 0,
-            [UIKeys.oldPreferWidth]: NaN,
-            [UIKeys.oldPreferHeight]: NaN,
-            [UIKeys.x]: 0,
-            [UIKeys.y]: 0,
-            [UIKeys.oldX]: 0,
-            [UIKeys.oldY]: 0,
-            [UIKeys.oldWidth]: 0,
-            [UIKeys.oldHeight]: 0,
-            [UIKeys.scaleX]: 1,
-            [UIKeys.scaleY]: 1,
-            [UIKeys.pivotX]: 0,
-            [UIKeys.pivotY]: 0,
-            [UIKeys.rotation]: 0,
-            [UIKeys.skewX]: 0,
-            [UIKeys.skewY]: 0,
-            [UIKeys.zIndex]: NaN,
-        };
-    }
+    DisplayLayoutAbstract.prototype.initializeUIValues = function () {
+        var _a;
+        this.$values = (_a = {},
+            _a[UIKeys.invalidatePropertiesFlag] = true,
+            _a[UIKeys.invalidateSizeFlag] = true,
+            _a[UIKeys.invalidateDisplayListFlag] = true,
+            _a[UIKeys.left] = NaN,
+            _a[UIKeys.right] = NaN,
+            _a[UIKeys.top] = NaN,
+            _a[UIKeys.bottom] = NaN,
+            _a[UIKeys.horizontalCenter] = NaN,
+            _a[UIKeys.verticalCenter] = NaN,
+            _a[UIKeys.percentWidth] = NaN,
+            _a[UIKeys.percentHeight] = NaN,
+            _a[UIKeys.explicitWidth] = NaN,
+            _a[UIKeys.explicitHeight] = NaN,
+            _a[UIKeys.width] = 0,
+            _a[UIKeys.height] = 0,
+            _a[UIKeys.minWidth] = 0,
+            _a[UIKeys.maxWidth] = 100000,
+            _a[UIKeys.minHeight] = 0,
+            _a[UIKeys.maxHeight] = 100000,
+            _a[UIKeys.measuredWidth] = 0,
+            _a[UIKeys.measuredHeight] = 0,
+            _a[UIKeys.oldPreferWidth] = NaN,
+            _a[UIKeys.oldPreferHeight] = NaN,
+            _a[UIKeys.x] = 0,
+            _a[UIKeys.y] = 0,
+            _a[UIKeys.oldX] = 0,
+            _a[UIKeys.oldY] = 0,
+            _a[UIKeys.oldWidth] = 0,
+            _a[UIKeys.oldHeight] = 0,
+            _a[UIKeys.scaleX] = 1,
+            _a[UIKeys.scaleY] = 1,
+            _a[UIKeys.pivotX] = 0,
+            _a[UIKeys.pivotY] = 0,
+            _a[UIKeys.rotation] = 0,
+            _a[UIKeys.skewX] = 0,
+            _a[UIKeys.skewY] = 0,
+            _a[UIKeys.zIndex] = NaN,
+            _a);
+    };
     /**
      * @private
      * 检查属性失效标记并应用
      */
-    checkInvalidateFlag() {
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.checkInvalidateFlag = function () {
+        var values = this.$values;
         if (values[UIKeys.invalidatePropertiesFlag]) {
             DisplayLayoutValidator_1.default.invalidateProperties(this);
         }
@@ -417,36 +449,36 @@ class DisplayLayoutAbstract extends DisplayObjectAbstract_1.DisplayObjectAbstrac
             DisplayLayoutValidator_1.default.invalidateDisplayList(this);
         }
         this.validateSize();
-    }
+    };
     /**
      * @private
      * 验证组件的属性
      */
-    validateProperties() {
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.validateProperties = function () {
+        var values = this.$values;
         if (values[UIKeys.invalidatePropertiesFlag]) {
             this.commitProperties();
             values[UIKeys.invalidatePropertiesFlag] = false;
         }
-    }
+    };
     /**
      * @private
      * 验证组件的尺寸
      */
-    validateSize(recursive) {
+    DisplayLayoutAbstract.prototype.validateSize = function (recursive) {
         if (recursive) {
-            const children = this.uiChildren;
+            var children = this.uiChildren;
             if (children) {
-                const length = children.length;
-                for (let i = 0; i < length; i++) {
-                    const child = children[i];
+                var length_1 = children.length;
+                for (var i = 0; i < length_1; i++) {
+                    var child = children[i];
                     child.validateSize(true);
                 }
             }
         }
-        const values = this.$values;
+        var values = this.$values;
         if (values[UIKeys.invalidateSizeFlag]) {
-            const changed = this.measureSizes();
+            var changed = this.measureSizes();
             if (changed) {
                 this.invalidateDisplayList();
                 this.invalidateParentLayout();
@@ -456,52 +488,52 @@ class DisplayLayoutAbstract extends DisplayObjectAbstract_1.DisplayObjectAbstrac
             }
             values[UIKeys.invalidateSizeFlag] = false;
         }
-    }
+    };
     /**
      * @private
      * 验证子项的位置和大小，并绘制其他可视内容
      */
-    validateDisplayList() {
+    DisplayLayoutAbstract.prototype.validateDisplayList = function () {
         if (this.parent == undefined) {
             return;
         }
-        const values = this.$values;
+        var values = this.$values;
         if (values[UIKeys.invalidateDisplayListFlag]) {
             this.updateSize();
             this.updateDisplayList(values[UIKeys.width], values[UIKeys.height]);
             values[UIKeys.invalidateDisplayListFlag] = false;
         }
-    }
+    };
     /**
      * @private
      * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
      */
-    commitProperties() {
-    }
+    DisplayLayoutAbstract.prototype.commitProperties = function () {
+    };
     /**
      * @private
      * 测量组件尺寸
      */
-    measure() {
+    DisplayLayoutAbstract.prototype.measure = function () {
         this.container.getLocalBounds(exports.$tempLocalBounds);
         this.setMeasuredSize(exports.$tempLocalBounds.width, exports.$tempLocalBounds.height);
-    }
+    };
     /**
      * @private
      * 测量组件尺寸，返回尺寸是否发生变化
      */
-    measureSizes() {
-        let changed = false;
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.measureSizes = function () {
+        var changed = false;
+        var values = this.$values;
         if (!values[UIKeys.invalidateSizeFlag])
             return changed;
         this.measure();
-        const parentWidth = this.parent ? this.parent.width : 1;
-        const parentHeight = this.parent ? this.parent.height : 1;
-        const maxWidth = Utils_1.formatRelative(values[UIKeys.maxWidth], parentWidth);
-        const maxHeight = Utils_1.formatRelative(values[UIKeys.maxHeight], parentHeight);
-        const minWidth = Utils_1.formatRelative(values[UIKeys.minWidth], parentWidth);
-        const minHeight = Utils_1.formatRelative(values[UIKeys.minHeight], parentHeight);
+        var parentWidth = this.parent ? this.parent.width : 1;
+        var parentHeight = this.parent ? this.parent.height : 1;
+        var maxWidth = Utils_1.formatRelative(values[UIKeys.maxWidth], parentWidth);
+        var maxHeight = Utils_1.formatRelative(values[UIKeys.maxHeight], parentHeight);
+        var minWidth = Utils_1.formatRelative(values[UIKeys.minWidth], parentWidth);
+        var minHeight = Utils_1.formatRelative(values[UIKeys.minHeight], parentHeight);
         //显示设置宽高，会忽略最大与最小值
         if (isNaN(values[UIKeys.explicitWidth]) || isNaN(values[UIKeys.explicitHeight])) {
             if (!isNaN(values[UIKeys.percentWidth])) {
@@ -537,8 +569,8 @@ class DisplayLayoutAbstract extends DisplayObjectAbstract_1.DisplayObjectAbstrac
                 values[UIKeys.explicitHeight] = maxHeight;
             }
         }
-        const preferredW = this.getPreferredUWidth();
-        const preferredH = this.getPreferredUHeight();
+        var preferredW = this.getPreferredUWidth();
+        var preferredH = this.getPreferredUHeight();
         if (preferredW !== values[UIKeys.oldPreferWidth] ||
             preferredH !== values[UIKeys.oldPreferHeight]) {
             values[UIKeys.oldPreferWidth] = preferredW;
@@ -546,49 +578,49 @@ class DisplayLayoutAbstract extends DisplayObjectAbstract_1.DisplayObjectAbstrac
             changed = true;
         }
         return changed;
-    }
+    };
     /**
      * @private
      * 设置测量结果。
      * @param width 测量宽度
      * @param height 测量高度
      */
-    setMeasuredSize(width, height) {
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.setMeasuredSize = function (width, height) {
+        var values = this.$values;
         values[UIKeys.measuredWidth] = Math.ceil(+width || 0);
         values[UIKeys.measuredHeight] = Math.ceil(+height || 0);
-    }
+    };
     /**
      * @private
      *
      * @returns
      */
-    getPreferredUWidth() {
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.getPreferredUWidth = function () {
+        var values = this.$values;
         return isNaN(values[UIKeys.explicitWidth]) ?
             values[UIKeys.measuredWidth] : values[UIKeys.explicitWidth];
-    }
+    };
     /**
      * @private
      */
-    getPreferredUHeight() {
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.getPreferredUHeight = function () {
+        var values = this.$values;
         return isNaN(values[UIKeys.explicitHeight]) ?
             values[UIKeys.measuredHeight] : values[UIKeys.explicitHeight];
-    }
+    };
     /**
      * @private
      * 获取组件的首选尺寸,常用于父级的measure()方法中
      * 按照：外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸，
      */
-    getPreferredBounds(bounds) {
+    DisplayLayoutAbstract.prototype.getPreferredBounds = function (bounds) {
         this.measureSizes();
         bounds.width = this.getPreferredUWidth();
         bounds.height = this.getPreferredUHeight();
         bounds.x = this.$values[UIKeys.x];
         bounds.y = this.$values[UIKeys.y];
         return bounds;
-    }
+    };
     /**
     * @private
     * 标记提交过需要延迟应用的属性，以便在稍后屏幕更新期间调用该组件的 commitProperties() 方法。
@@ -598,41 +630,41 @@ class DisplayLayoutAbstract extends DisplayObjectAbstract_1.DisplayObjectAbstrac
     *
     * 通常，子类应覆盖 commitProperties() 方法，而不是覆盖此方法。
      */
-    invalidateProperties() {
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.invalidateProperties = function () {
+        var values = this.$values;
         if (!values[UIKeys.invalidatePropertiesFlag]) {
             values[UIKeys.invalidatePropertiesFlag] = true;
             DisplayLayoutValidator_1.default.invalidateProperties(this);
         }
-    }
+    };
     /**
     * @private
     * 标记提交过需要验证组件尺寸，以便在稍后屏幕更新期间调用该组件的 measure(),updatesize() 方法。
     */
-    invalidateSize() {
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.invalidateSize = function () {
+        var values = this.$values;
         if (!values[UIKeys.invalidateSizeFlag]) {
             values[UIKeys.invalidateSizeFlag] = true;
             DisplayLayoutValidator_1.default.invalidateSize(this);
         }
-    }
+    };
     /**
     * @private
     * 标记需要验证显示列表，以便在稍后屏幕更新期间调用该组件的 updateDisplayList() 方法。
     */
-    invalidateDisplayList() {
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.invalidateDisplayList = function () {
+        var values = this.$values;
         if (!values[UIKeys.invalidateDisplayListFlag]) {
             values[UIKeys.invalidateDisplayListFlag] = true;
             DisplayLayoutValidator_1.default.invalidateDisplayList(this);
         }
-    }
+    };
     /**
      * @private
      * 标记父级容器的尺寸和显示列表为失效
      */
-    invalidateParentLayout() {
-        const parent = this.parent;
+    DisplayLayoutAbstract.prototype.invalidateParentLayout = function () {
+        var parent = this.parent;
         if (!parent) {
             return;
         }
@@ -640,26 +672,26 @@ class DisplayLayoutAbstract extends DisplayObjectAbstract_1.DisplayObjectAbstrac
             parent.invalidateSize();
             parent.invalidateDisplayList();
         }
-    }
+    };
     /**
      * @private
      * 设置组件的布局位置
      */
-    setPosition(x, y) {
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.setPosition = function (x, y) {
+        var values = this.$values;
         values[UIKeys.x] = x;
         values[UIKeys.y] = y;
         this.updateTransform();
         this.emit(Index_1.ComponentEvent.MOVE, this);
-    }
+    };
     /**
      * @private
      * 设置组件的宽高。此方法不同于直接设置width,height属性，
      * 不会影响显式标记尺寸属性
      */
-    setActualSize(w, h) {
-        let change = false;
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.setActualSize = function (w, h) {
+        var change = false;
+        var values = this.$values;
         if (values[UIKeys.width] !== w) {
             values[UIKeys.oldWidth] = values[UIKeys.width];
             values[UIKeys.width] = w;
@@ -674,15 +706,15 @@ class DisplayLayoutAbstract extends DisplayObjectAbstract_1.DisplayObjectAbstrac
             this.invalidateDisplayList();
             this.emit(Index_1.ComponentEvent.RESIZE, this);
         }
-    }
+    };
     /**
      * @private
      * 更新最终的组件宽高
      */
-    updateSize() {
-        let unscaledWidth = 0;
-        let unscaledHeight = 0;
-        const values = this.$values;
+    DisplayLayoutAbstract.prototype.updateSize = function () {
+        var unscaledWidth = 0;
+        var unscaledHeight = 0;
+        var values = this.$values;
         if (!isNaN(values[UIKeys.explicitWidth])) {
             unscaledWidth = values[UIKeys.explicitWidth];
         }
@@ -696,23 +728,23 @@ class DisplayLayoutAbstract extends DisplayObjectAbstract_1.DisplayObjectAbstrac
             unscaledHeight = values[UIKeys.measuredHeight];
         }
         this.setActualSize(unscaledWidth, unscaledHeight);
-    }
-    updateTransform() {
+    };
+    DisplayLayoutAbstract.prototype.updateTransform = function () {
         this.container.setTransform(this.x + this.pivotX, this.y + this.pivotY, this.scaleX, this.scaleY, this.rotation * (Math.PI / 180), this.skewX, this.skewY, this.pivotX, this.pivotY);
-    }
+    };
     /**
      * 更新显示列表,子类重写，实现布局
      */
-    updateDisplayList(unscaledWidth, unscaledHeight) {
-    }
+    DisplayLayoutAbstract.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+    };
     /**
      * @private
      * 立即应用组件及其子项的所有属性
      */
-    validateNow() {
+    DisplayLayoutAbstract.prototype.validateNow = function () {
         if (this.parent)
             DisplayLayoutValidator_1.default.validateClient(this);
-    }
+    };
     /**
      * @private
     * 验证并更新此对象的属性和布局，如果需要的话重绘对象。
@@ -722,439 +754,552 @@ class DisplayLayoutAbstract extends DisplayObjectAbstract_1.DisplayObjectAbstrac
     * 例如，对 width 属性的设置可能会延迟，因为此设置需要重新计算这些对象的子项或父项的宽度。
     * 如果脚本多次设置了 width 属性，则延迟处理可防止进行多次处理。此方法允许您手动覆盖此行为。
      */
-    validateSizeNow() {
+    DisplayLayoutAbstract.prototype.validateSizeNow = function () {
         this.validateSize(true);
         this.updateSize();
-    }
-    /**
-     * @private
-     * 距父级容器离左边距离
-     */
-    get left() {
-        return this.$values[UIKeys.left];
-    }
-    set left(value) {
-        if (!value || typeof value == "number") {
+    };
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "left", {
+        /**
+         * @private
+         * 距父级容器离左边距离
+         */
+        get: function () {
+            return this.$values[UIKeys.left];
+        },
+        set: function (value) {
+            if (!value || typeof value == "number") {
+                value = +value;
+            }
+            else {
+                value = value.toString().trim();
+            }
+            var values = this.$values;
+            if (values[UIKeys.left] === value)
+                return;
+            values[UIKeys.left] = value;
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "right", {
+        /**
+         * @private
+         * 距父级容器右边距离
+         */
+        get: function () {
+            return this.$values[UIKeys.right];
+        },
+        set: function (value) {
+            if (!value || typeof value == "number") {
+                value = +value;
+            }
+            else {
+                value = value.toString().trim();
+            }
+            var values = this.$values;
+            if (values[UIKeys.right] === value)
+                return;
+            values[UIKeys.right] = value;
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "top", {
+        /**
+         * @private
+         * 距父级容器顶部距离
+         */
+        get: function () {
+            return this.$values[UIKeys.top];
+        },
+        set: function (value) {
+            if (!value || typeof value == "number") {
+                value = +value;
+            }
+            else {
+                value = value.toString().trim();
+            }
+            var values = this.$values;
+            if (values[UIKeys.top] === value)
+                return;
+            values[UIKeys.top] = value;
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "bottom", {
+        /**
+         * @private
+         * 距父级容器底部距离
+         */
+        get: function () {
+            return this.$values[UIKeys.bottom];
+        },
+        set: function (value) {
+            if (!value || typeof value == "number") {
+                value = +value;
+            }
+            else {
+                value = value.toString().trim();
+            }
+            var values = this.$values;
+            if (values[UIKeys.bottom] == value)
+                return;
+            values[UIKeys.bottom] = value;
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "horizontalCenter", {
+        /**
+         * @private
+         * 在父级容器中距水平中心位置的距离
+         */
+        get: function () {
+            return this.$values[UIKeys.horizontalCenter];
+        },
+        set: function (value) {
+            if (!value || typeof value == "number") {
+                value = +value;
+            }
+            else {
+                value = value.toString().trim();
+            }
+            var values = this.$values;
+            if (values[UIKeys.horizontalCenter] === value)
+                return;
+            values[UIKeys.horizontalCenter] = value;
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "verticalCenter", {
+        /**
+         * @private
+         * 在父级容器中距竖直中心位置的距离
+         */
+        get: function () {
+            return this.$values[UIKeys.verticalCenter];
+        },
+        set: function (value) {
+            if (!value || typeof value == "number") {
+                value = +value;
+            }
+            else {
+                value = value.toString().trim();
+            }
+            var values = this.$values;
+            if (values[UIKeys.verticalCenter] === value)
+                return;
+            values[UIKeys.verticalCenter] = value;
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "percentWidth", {
+        /**
+         * @private
+         * 相对父级容器宽度的百分比
+         */
+        get: function () {
+            return this.$values[UIKeys.percentWidth];
+        },
+        set: function (value) {
             value = +value;
-        }
-        else {
-            value = value.toString().trim();
-        }
-        const values = this.$values;
-        if (values[UIKeys.left] === value)
-            return;
-        values[UIKeys.left] = value;
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 距父级容器右边距离
-     */
-    get right() {
-        return this.$values[UIKeys.right];
-    }
-    set right(value) {
-        if (!value || typeof value == "number") {
+            var values = this.$values;
+            if (values[UIKeys.percentWidth] === value)
+                return;
+            values[UIKeys.percentWidth] = value;
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "percentHeight", {
+        /**
+         * @private
+         * 相对父级容器高度的百分比
+         */
+        get: function () {
+            return this.$values[UIKeys.percentHeight];
+        },
+        set: function (value) {
             value = +value;
-        }
-        else {
-            value = value.toString().trim();
-        }
-        const values = this.$values;
-        if (values[UIKeys.right] === value)
-            return;
-        values[UIKeys.right] = value;
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 距父级容器顶部距离
-     */
-    get top() {
-        return this.$values[UIKeys.top];
-    }
-    set top(value) {
-        if (!value || typeof value == "number") {
+            var values = this.$values;
+            if (values[UIKeys.percentHeight] === value)
+                return;
+            values[UIKeys.percentHeight] = value;
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "explicitWidth", {
+        /**
+         * @private
+         * 外部显式指定的宽度
+         */
+        get: function () {
+            return this.$values[UIKeys.explicitWidth];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "explicitHeight", {
+        /**
+         * @private
+         * 外部显式指定的高度
+         */
+        get: function () {
+            return this.$values[UIKeys.explicitHeight];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "_width", {
+        get: function () {
+            return this.$values[UIKeys.explicitWidth];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "_height", {
+        get: function () {
+            return this.$values[UIKeys.explicitHeight];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "width", {
+        /**
+         * @private
+         * 组件宽度设置为undefined将使用组件的measure()方法自动计算尺寸
+         */
+        get: function () {
+            //this.measureSizes();//不可以调用测量，有性能消耗，后期优化
+            return this.getPreferredUWidth();
+        },
+        /**
+         * @private
+         *
+         * @param value
+         */
+        set: function (value) {
             value = +value;
-        }
-        else {
-            value = value.toString().trim();
-        }
-        const values = this.$values;
-        if (values[UIKeys.top] === value)
-            return;
-        values[UIKeys.top] = value;
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 距父级容器底部距离
-     */
-    get bottom() {
-        return this.$values[UIKeys.bottom];
-    }
-    set bottom(value) {
-        if (!value || typeof value == "number") {
-            value = +value;
-        }
-        else {
-            value = value.toString().trim();
-        }
-        const values = this.$values;
-        if (values[UIKeys.bottom] == value)
-            return;
-        values[UIKeys.bottom] = value;
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 在父级容器中距水平中心位置的距离
-     */
-    get horizontalCenter() {
-        return this.$values[UIKeys.horizontalCenter];
-    }
-    set horizontalCenter(value) {
-        if (!value || typeof value == "number") {
-            value = +value;
-        }
-        else {
-            value = value.toString().trim();
-        }
-        const values = this.$values;
-        if (values[UIKeys.horizontalCenter] === value)
-            return;
-        values[UIKeys.horizontalCenter] = value;
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 在父级容器中距竖直中心位置的距离
-     */
-    get verticalCenter() {
-        return this.$values[UIKeys.verticalCenter];
-    }
-    set verticalCenter(value) {
-        if (!value || typeof value == "number") {
-            value = +value;
-        }
-        else {
-            value = value.toString().trim();
-        }
-        const values = this.$values;
-        if (values[UIKeys.verticalCenter] === value)
-            return;
-        values[UIKeys.verticalCenter] = value;
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 相对父级容器宽度的百分比
-     */
-    get percentWidth() {
-        return this.$values[UIKeys.percentWidth];
-    }
-    set percentWidth(value) {
-        value = +value;
-        const values = this.$values;
-        if (values[UIKeys.percentWidth] === value)
-            return;
-        values[UIKeys.percentWidth] = value;
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 相对父级容器高度的百分比
-     */
-    get percentHeight() {
-        return this.$values[UIKeys.percentHeight];
-    }
-    set percentHeight(value) {
-        value = +value;
-        const values = this.$values;
-        if (values[UIKeys.percentHeight] === value)
-            return;
-        values[UIKeys.percentHeight] = value;
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 外部显式指定的宽度
-     */
-    get explicitWidth() {
-        return this.$values[UIKeys.explicitWidth];
-    }
-    /**
-     * @private
-     * 外部显式指定的高度
-     */
-    get explicitHeight() {
-        return this.$values[UIKeys.explicitHeight];
-    }
-    get _width() {
-        return this.$values[UIKeys.explicitWidth];
-    }
-    get _height() {
-        return this.$values[UIKeys.explicitHeight];
-    }
-    /**
-     * @private
-     * 组件宽度设置为undefined将使用组件的measure()方法自动计算尺寸
-     */
-    get width() {
-        //this.measureSizes();//不可以调用测量，有性能消耗，后期优化
-        return this.getPreferredUWidth();
-    }
-    /**
-     * @private
-     *
-     * @param value
-     */
-    set width(value) {
-        value = +value;
-        const values = this.$values;
-        if (value < 0 || values[UIKeys.width] === value && values[UIKeys.explicitWidth] === value)
-            return;
-        values[UIKeys.explicitWidth] = value;
-        if (isNaN(value))
-            this.invalidateSize();
-        this.invalidateProperties();
-        this.invalidateDisplayList();
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
-     */
-    get height() {
-        //this.validateSizeNow();
-        //this.measureSizes();//不可以调用测量，有性能消耗，后期优化
-        return this.getPreferredUHeight();
-    }
-    /**
-     * @private
-     *
-     * @param value
-     */
-    set height(value) {
-        value = +value;
-        const values = this.$values;
-        if (value < 0 || values[UIKeys.height] === value && values[UIKeys.explicitHeight] === value)
-            return;
-        values[UIKeys.explicitHeight] = value;
-        if (isNaN(value))
-            this.invalidateSize();
-        this.invalidateProperties();
-        this.invalidateDisplayList();
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
-     */
-    get minWidth() {
-        return this.$values[UIKeys.minWidth];
-    }
-    set minWidth(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (value < 0 || values[UIKeys.minWidth] === value) {
-            return;
-        }
-        values[UIKeys.minWidth] = value;
-        this.invalidateSize();
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 组件的最大高度。同时影响测量和自动布局的尺寸。
-     */
-    get maxWidth() {
-        return this.$values[UIKeys.maxWidth];
-    }
-    set maxWidth(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (value < 0 || values[UIKeys.maxWidth] === value) {
-            return;
-        }
-        values[UIKeys.maxWidth] = value;
-        this.invalidateSize();
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
-     */
-    get minHeight() {
-        return this.$values[UIKeys.minHeight];
-    }
-    set minHeight(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (value < 0 || values[UIKeys.minHeight] === value) {
-            return;
-        }
-        values[UIKeys.minHeight] = value;
-        this.invalidateSize();
-        this.invalidateParentLayout();
-    }
-    /**
-     * @private
-     * 组件的最大高度,同时影响测量和自动布局的尺寸。
-     */
-    get maxHeight() {
-        return this.$values[UIKeys.maxHeight];
-    }
-    set maxHeight(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (value < 0 || values[UIKeys.maxHeight] === value) {
-            return;
-        }
-        values[UIKeys.maxHeight] = value;
-        this.invalidateSize();
-        this.invalidateParentLayout();
-    }
-    get scaleX() {
-        return this.$values[UIKeys.scaleX];
-    }
-    set scaleX(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (values[UIKeys.scaleX] === value) {
-            return;
-        }
-        if (value !== this.container.scale.x) {
-            values[UIKeys.scaleX] = value;
+            var values = this.$values;
+            if (value < 0 || values[UIKeys.width] === value && values[UIKeys.explicitWidth] === value)
+                return;
+            values[UIKeys.explicitWidth] = value;
+            if (isNaN(value))
+                this.invalidateSize();
             this.invalidateProperties();
-            this.invalidateSize();
             this.invalidateDisplayList();
             this.invalidateParentLayout();
-        }
-    }
-    get scaleY() {
-        return this.$values[UIKeys.scaleY];
-    }
-    set scaleY(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (values[UIKeys.scaleY] === value) {
-            return;
-        }
-        if (value !== this.container.scale.y) {
-            values[UIKeys.scaleY] = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "height", {
+        /**
+         * @private
+         * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
+         */
+        get: function () {
+            //this.validateSizeNow();
+            //this.measureSizes();//不可以调用测量，有性能消耗，后期优化
+            return this.getPreferredUHeight();
+        },
+        /**
+         * @private
+         *
+         * @param value
+         */
+        set: function (value) {
+            value = +value;
+            var values = this.$values;
+            if (value < 0 || values[UIKeys.height] === value && values[UIKeys.explicitHeight] === value)
+                return;
+            values[UIKeys.explicitHeight] = value;
+            if (isNaN(value))
+                this.invalidateSize();
             this.invalidateProperties();
-            this.invalidateSize();
             this.invalidateDisplayList();
             this.invalidateParentLayout();
-        }
-    }
-    get x() {
-        return this.$values[UIKeys.x];
-    }
-    set x(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (values[UIKeys.x] === value) {
-            return;
-        }
-        values[UIKeys.x] = value;
-        if (this.container.x !== value) {
-            this.container.x = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "minWidth", {
+        /**
+         * @private
+         * 组件的最小宽度,此属性设置为大于maxWidth的值时无效。同时影响测量和自动布局的尺寸。
+         */
+        get: function () {
+            return this.$values[UIKeys.minWidth];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (value < 0 || values[UIKeys.minWidth] === value) {
+                return;
+            }
+            values[UIKeys.minWidth] = value;
+            this.invalidateSize();
             this.invalidateParentLayout();
-        }
-    }
-    get y() {
-        return this.$values[UIKeys.y];
-    }
-    set y(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (values[UIKeys.y] === value) {
-            return;
-        }
-        values[UIKeys.y] = value;
-        if (value !== this.container.y) {
-            this.container.y = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "maxWidth", {
+        /**
+         * @private
+         * 组件的最大高度。同时影响测量和自动布局的尺寸。
+         */
+        get: function () {
+            return this.$values[UIKeys.maxWidth];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (value < 0 || values[UIKeys.maxWidth] === value) {
+                return;
+            }
+            values[UIKeys.maxWidth] = value;
+            this.invalidateSize();
             this.invalidateParentLayout();
-        }
-    }
-    get skewX() {
-        return this.$values[UIKeys.skewX];
-    }
-    set skewX(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (values[UIKeys.skewX] === value) {
-            return;
-        }
-        values[UIKeys.skewX] = value;
-        this.invalidateDisplayList();
-    }
-    get skewY() {
-        return this.$values[UIKeys.skewY];
-    }
-    set skewY(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (values[UIKeys.skewY] === value) {
-            return;
-        }
-        values[UIKeys.skewY] = value;
-        this.invalidateDisplayList();
-    }
-    get pivotX() {
-        return this.$values[UIKeys.pivotX];
-    }
-    set pivotX(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (values[UIKeys.pivotX] === value) {
-            return;
-        }
-        values[UIKeys.pivotX] = value;
-        this.invalidateDisplayList();
-    }
-    get pivotY() {
-        return this.$values[UIKeys.pivotY];
-    }
-    set pivotY(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (values[UIKeys.pivotY] === value) {
-            return;
-        }
-        values[UIKeys.pivotY] = value;
-        this.invalidateDisplayList();
-    }
-    get rotation() {
-        return this.$values[UIKeys.rotation];
-    }
-    set rotation(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (values[UIKeys.rotation] === value) {
-            return;
-        }
-        values[UIKeys.rotation] = value;
-        this.invalidateDisplayList();
-    }
-    /**
-     *  =不可用= 设置索引层级，每次父级变化时，会排序 （未实现）
-     */
-    get zIndex() {
-        return this.$values[UIKeys.zIndex];
-    }
-    set zIndex(value) {
-        value = +value || 0;
-        const values = this.$values;
-        if (values[UIKeys.zIndex] === value) {
-            return;
-        }
-        values[UIKeys.zIndex] = value;
-        this.invalidateParentLayout();
-    }
-}
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "minHeight", {
+        /**
+         * @private
+         * 组件的最小高度,此属性设置为大于maxHeight的值时无效。同时影响测量和自动布局的尺寸。
+         */
+        get: function () {
+            return this.$values[UIKeys.minHeight];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (value < 0 || values[UIKeys.minHeight] === value) {
+                return;
+            }
+            values[UIKeys.minHeight] = value;
+            this.invalidateSize();
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "maxHeight", {
+        /**
+         * @private
+         * 组件的最大高度,同时影响测量和自动布局的尺寸。
+         */
+        get: function () {
+            return this.$values[UIKeys.maxHeight];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (value < 0 || values[UIKeys.maxHeight] === value) {
+                return;
+            }
+            values[UIKeys.maxHeight] = value;
+            this.invalidateSize();
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "scaleX", {
+        get: function () {
+            return this.$values[UIKeys.scaleX];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (values[UIKeys.scaleX] === value) {
+                return;
+            }
+            if (value !== this.container.scale.x) {
+                values[UIKeys.scaleX] = value;
+                this.invalidateProperties();
+                this.invalidateSize();
+                this.invalidateDisplayList();
+                this.invalidateParentLayout();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "scaleY", {
+        get: function () {
+            return this.$values[UIKeys.scaleY];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (values[UIKeys.scaleY] === value) {
+                return;
+            }
+            if (value !== this.container.scale.y) {
+                values[UIKeys.scaleY] = value;
+                this.invalidateProperties();
+                this.invalidateSize();
+                this.invalidateDisplayList();
+                this.invalidateParentLayout();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "x", {
+        get: function () {
+            return this.$values[UIKeys.x];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (values[UIKeys.x] === value) {
+                return;
+            }
+            values[UIKeys.x] = value;
+            if (this.container.x !== value) {
+                this.container.x = value;
+                this.invalidateParentLayout();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "y", {
+        get: function () {
+            return this.$values[UIKeys.y];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (values[UIKeys.y] === value) {
+                return;
+            }
+            values[UIKeys.y] = value;
+            if (value !== this.container.y) {
+                this.container.y = value;
+                this.invalidateParentLayout();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "skewX", {
+        get: function () {
+            return this.$values[UIKeys.skewX];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (values[UIKeys.skewX] === value) {
+                return;
+            }
+            values[UIKeys.skewX] = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "skewY", {
+        get: function () {
+            return this.$values[UIKeys.skewY];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (values[UIKeys.skewY] === value) {
+                return;
+            }
+            values[UIKeys.skewY] = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "pivotX", {
+        get: function () {
+            return this.$values[UIKeys.pivotX];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (values[UIKeys.pivotX] === value) {
+                return;
+            }
+            values[UIKeys.pivotX] = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "pivotY", {
+        get: function () {
+            return this.$values[UIKeys.pivotY];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (values[UIKeys.pivotY] === value) {
+                return;
+            }
+            values[UIKeys.pivotY] = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "rotation", {
+        get: function () {
+            return this.$values[UIKeys.rotation];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (values[UIKeys.rotation] === value) {
+                return;
+            }
+            values[UIKeys.rotation] = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayLayoutAbstract.prototype, "zIndex", {
+        /**
+         *  =不可用= 设置索引层级，每次父级变化时，会排序 （未实现）
+         */
+        get: function () {
+            return this.$values[UIKeys.zIndex];
+        },
+        set: function (value) {
+            value = +value || 0;
+            var values = this.$values;
+            if (values[UIKeys.zIndex] === value) {
+                return;
+            }
+            values[UIKeys.zIndex] = value;
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return DisplayLayoutAbstract;
+}(DisplayObjectAbstract_1.DisplayObjectAbstract));
 exports.DisplayLayoutAbstract = DisplayLayoutAbstract;
 
 
@@ -1226,29 +1371,42 @@ exports.verticalCenter = Symbol("verticalCenter");
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const Ticker_1 = __webpack_require__(/*! ./Ticker */ "./src/core/Ticker.ts");
+var Ticker_1 = __webpack_require__(/*! ./Ticker */ "./src/core/Ticker.ts");
 /**
  * @private
  * 列表项
  */
-class DepthBin {
-    constructor() {
+var DepthBin = /** @class */ (function () {
+    function DepthBin() {
         this.map = {};
         this.items = [];
         this.length = 0;
     }
-    insert(client) {
-        const hashCode = client.uuid;
+    DepthBin.prototype.insert = function (client) {
+        var hashCode = client.uuid;
         if (this.map[hashCode]) {
             return;
         }
         this.map[hashCode] = true;
         this.length++;
         this.items.push(client);
-    }
-    pop() {
-        const client = this.items.pop(); //使用pop会比shift有更高的性能，避免索引整体重置。
+    };
+    DepthBin.prototype.pop = function () {
+        var client = this.items.pop(); //使用pop会比shift有更高的性能，避免索引整体重置。
         if (client) {
             this.length--;
             if (this.length === 0) {
@@ -1259,9 +1417,9 @@ class DepthBin {
             }
         }
         return client;
-    }
-    remove(client) {
-        const index = this.items.indexOf(client);
+    };
+    DepthBin.prototype.remove = function (client) {
+        var index = this.items.indexOf(client);
         if (index >= 0) {
             this.items.splice(index, 1);
             this.length--;
@@ -1272,14 +1430,15 @@ class DepthBin {
                 this.map[client.uuid] = false;
             }
         }
-    }
-}
+    };
+    return DepthBin;
+}());
 /**
  * @private
  * 显示列表嵌套深度排序队列
  */
-class DepthQueue {
-    constructor() {
+var DepthQueue = /** @class */ (function () {
+    function DepthQueue() {
         /**
          * 深度队列
          */
@@ -1296,8 +1455,8 @@ class DepthQueue {
     /**
      * 插入一个元素
      */
-    insert(client) {
-        const depth = client.$nestLevel;
+    DepthQueue.prototype.insert = function (client) {
+        var depth = client.$nestLevel;
         if (this.maxDepth < this.minDepth) {
             this.minDepth = this.maxDepth = depth;
         }
@@ -1307,20 +1466,20 @@ class DepthQueue {
             if (depth > this.maxDepth)
                 this.maxDepth = depth;
         }
-        let bin = this.depthBins[depth];
+        var bin = this.depthBins[depth];
         if (!bin) {
             bin = this.depthBins[depth] = new DepthBin();
         }
         bin.insert(client);
-    }
+    };
     /**
      * 从队列尾弹出深度最大的一个对象
      */
-    pop() {
-        let client;
-        const minDepth = this.minDepth;
+    DepthQueue.prototype.pop = function () {
+        var client;
+        var minDepth = this.minDepth;
         if (minDepth <= this.maxDepth) {
-            let bin = this.depthBins[this.maxDepth];
+            var bin = this.depthBins[this.maxDepth];
             while (!bin || bin.length === 0) {
                 this.maxDepth--;
                 if (this.maxDepth < minDepth)
@@ -1336,15 +1495,15 @@ class DepthQueue {
             }
         }
         return client;
-    }
+    };
     /**
      * 从队列首弹出深度最小的一个对象
      */
-    shift() {
-        let client;
-        const maxDepth = this.maxDepth;
+    DepthQueue.prototype.shift = function () {
+        var client;
+        var maxDepth = this.maxDepth;
         if (this.minDepth <= maxDepth) {
-            let bin = this.depthBins[this.minDepth];
+            var bin = this.depthBins[this.minDepth];
             while (!bin || bin.length === 0) {
                 this.minDepth++;
                 if (this.minDepth > maxDepth)
@@ -1360,17 +1519,17 @@ class DepthQueue {
             }
         }
         return client;
-    }
+    };
     /**
      * 移除大于等于指定组件层级的元素中最大的元素
      */
-    removeLargestChild(client) {
-        const hashCode = client.uuid;
-        const nestLevel = client.$nestLevel;
-        let max = this.maxDepth;
-        const min = nestLevel;
+    DepthQueue.prototype.removeLargestChild = function (client) {
+        var hashCode = client.uuid;
+        var nestLevel = client.$nestLevel;
+        var max = this.maxDepth;
+        var min = nestLevel;
         while (min <= max) {
-            const bin = this.depthBins[max];
+            var bin = this.depthBins[max];
             if (bin && bin.length > 0) {
                 if (max === nestLevel) {
                     if (bin.map[hashCode]) {
@@ -1379,10 +1538,10 @@ class DepthQueue {
                     }
                 }
                 else if (client["isContainer"]) {
-                    const items = bin.items;
-                    const length = bin.length;
-                    for (let i = 0; i < length; i++) {
-                        const value = items[i];
+                    var items = bin.items;
+                    var length_1 = bin.length;
+                    for (var i = 0; i < length_1; i++) {
+                        var value = items[i];
                         if (client.contains(value)) {
                             bin.remove(value);
                             return value;
@@ -1404,17 +1563,17 @@ class DepthQueue {
             }
         }
         return undefined;
-    }
+    };
     /**
      * 移除大于等于指定组件层级的元素中最小的元素
      */
-    removeSmallestChild(client) {
-        const nestLevel = client.$nestLevel;
-        let min = nestLevel;
-        const max = this.maxDepth;
-        const hashCode = client.uuid;
+    DepthQueue.prototype.removeSmallestChild = function (client) {
+        var nestLevel = client.$nestLevel;
+        var min = nestLevel;
+        var max = this.maxDepth;
+        var hashCode = client.uuid;
         while (min <= max) {
-            const bin = this.depthBins[min];
+            var bin = this.depthBins[min];
             if (bin && bin.length > 0) {
                 if (min === nestLevel) {
                     if (bin.map[hashCode]) {
@@ -1423,10 +1582,10 @@ class DepthQueue {
                     }
                 }
                 else if (client["isContainer"]) {
-                    const items = bin.items;
-                    const length = bin.length;
-                    for (let i = 0; i < length; i++) {
-                        const value = items[i];
+                    var items = bin.items;
+                    var length_2 = bin.length;
+                    for (var i = 0; i < length_2; i++) {
+                        var value = items[i];
                         if (client.contains(value)) {
                             bin.remove(value);
                             return value;
@@ -1447,72 +1606,75 @@ class DepthQueue {
             }
         }
         return undefined;
-    }
+    };
     /**
      * 队列是否为空
      */
-    isEmpty() {
+    DepthQueue.prototype.isEmpty = function () {
         return this.minDepth > this.maxDepth;
-    }
-}
+    };
+    return DepthQueue;
+}());
 /**
  * @private
  * 失效验证管理器
  */
-class UIValidator extends PIXI.utils.EventEmitter {
+var UIValidator = /** @class */ (function (_super) {
+    __extends(UIValidator, _super);
     /**
      * @private
      * 创建一个Validator对象
      */
-    constructor() {
-        super();
+    function UIValidator() {
+        var _this = _super.call(this) || this;
         /**
          * @private
          */
-        this.targetLevel = Infinity;
+        _this.targetLevel = Infinity;
         /**
          * @private
          */
-        this.invalidatePropertiesFlag = false;
+        _this.invalidatePropertiesFlag = false;
         /**
          * @private
          */
-        this.invalidateClientPropertiesFlag = false;
+        _this.invalidateClientPropertiesFlag = false;
         /**
          * @private
          */
-        this.invalidatePropertiesQueue = new DepthQueue();
+        _this.invalidatePropertiesQueue = new DepthQueue();
         /**
          * @private
          */
-        this.invalidateSizeFlag = false;
+        _this.invalidateSizeFlag = false;
         /**
          * @private
          */
-        this.invalidateClientSizeFlag = false;
+        _this.invalidateClientSizeFlag = false;
         /**
          * @private
          */
-        this.invalidateSizeQueue = new DepthQueue();
+        _this.invalidateSizeQueue = new DepthQueue();
         /**
          * @private
          */
-        this.invalidateDisplayListFlag = false;
+        _this.invalidateDisplayListFlag = false;
         /**
          * @private
          */
-        this.invalidateDisplayListQueue = new DepthQueue();
+        _this.invalidateDisplayListQueue = new DepthQueue();
         /**
          * @private
          * 是否已经添加了事件监听
          */
-        this.listenersAttached = false;
+        _this.listenersAttached = false;
+        return _this;
     }
     /**
      * @private
      * 标记组件属性失效
      */
-    invalidateProperties(target) {
+    UIValidator.prototype.invalidateProperties = function (target) {
         if (!this.invalidatePropertiesFlag) {
             this.invalidatePropertiesFlag = true;
             if (!this.listenersAttached)
@@ -1521,14 +1683,14 @@ class UIValidator extends PIXI.utils.EventEmitter {
         if (this.targetLevel <= target.$nestLevel)
             this.invalidateClientPropertiesFlag = true;
         this.invalidatePropertiesQueue.insert(target);
-    }
+    };
     /**
      * @private
      * 验证失效的属性
      */
-    validateProperties() {
-        const queue = this.invalidatePropertiesQueue;
-        let target = queue.shift();
+    UIValidator.prototype.validateProperties = function () {
+        var queue = this.invalidatePropertiesQueue;
+        var target = queue.shift();
         while (target) {
             if (target.parent) {
                 target.validateProperties();
@@ -1537,12 +1699,12 @@ class UIValidator extends PIXI.utils.EventEmitter {
         }
         if (queue.isEmpty())
             this.invalidatePropertiesFlag = false;
-    }
+    };
     /**
      * @private
      * 标记需要重新测量尺寸
      */
-    invalidateSize(target) {
+    UIValidator.prototype.invalidateSize = function (target) {
         if (!this.invalidateSizeFlag) {
             this.invalidateSizeFlag = true;
             if (!this.listenersAttached)
@@ -1551,14 +1713,14 @@ class UIValidator extends PIXI.utils.EventEmitter {
         if (this.targetLevel <= target.$nestLevel)
             this.invalidateClientSizeFlag = true;
         this.invalidateSizeQueue.insert(target);
-    }
+    };
     /**
      * @private
      * 测量尺寸
      */
-    validateSize() {
-        const queue = this.invalidateSizeQueue;
-        let target = queue.pop();
+    UIValidator.prototype.validateSize = function () {
+        var queue = this.invalidateSizeQueue;
+        var target = queue.pop();
         while (target) {
             if (target.parent) {
                 target.validateSize();
@@ -1567,26 +1729,26 @@ class UIValidator extends PIXI.utils.EventEmitter {
         }
         if (queue.isEmpty())
             this.invalidateSizeFlag = false;
-    }
+    };
     /**
      * @private
      * 标记需要重新布局
      */
-    invalidateDisplayList(client) {
+    UIValidator.prototype.invalidateDisplayList = function (client) {
         if (!this.invalidateDisplayListFlag) {
             this.invalidateDisplayListFlag = true;
             if (!this.listenersAttached)
                 this.attachListeners();
         }
         this.invalidateDisplayListQueue.insert(client);
-    }
+    };
     /**
      * @private
      * 重新布局
      */
-    validateDisplayList() {
-        const queue = this.invalidateDisplayListQueue;
-        let client = queue.shift();
+    UIValidator.prototype.validateDisplayList = function () {
+        var queue = this.invalidateDisplayListQueue;
+        var client = queue.shift();
         while (client) {
             if (client.parent) {
                 client.validateDisplayList();
@@ -1595,27 +1757,27 @@ class UIValidator extends PIXI.utils.EventEmitter {
         }
         if (queue.isEmpty())
             this.invalidateDisplayListFlag = false;
-    }
+    };
     /**
      * @private
      * 添加事件监听
      */
-    attachListeners() {
+    UIValidator.prototype.attachListeners = function () {
         Ticker_1.default.addUpdateEvent(this.doPhasedInstantiationCallBack, this);
         this.listenersAttached = true;
-    }
+    };
     /**
      * @private
      * 执行属性应用
      */
-    doPhasedInstantiationCallBack() {
+    UIValidator.prototype.doPhasedInstantiationCallBack = function () {
         Ticker_1.default.removeUpdateEvent(this.doPhasedInstantiationCallBack, this);
         this.doPhasedInstantiation();
-    }
+    };
     /**
      * @private
      */
-    doPhasedInstantiation() {
+    UIValidator.prototype.doPhasedInstantiation = function () {
         if (this.invalidatePropertiesFlag) {
             this.validateProperties();
         }
@@ -1633,21 +1795,21 @@ class UIValidator extends PIXI.utils.EventEmitter {
         else {
             this.listenersAttached = false;
         }
-    }
+    };
     /**
      * @private
      * 使大于等于指定组件层级的元素立即应用属性
      * @param target 要立即应用属性的组件
      */
-    validateClient(target) {
-        let obj;
-        let done = false;
-        const oldTargetLevel = this.targetLevel;
+    UIValidator.prototype.validateClient = function (target) {
+        var obj;
+        var done = false;
+        var oldTargetLevel = this.targetLevel;
         if (this.targetLevel === Infinity)
             this.targetLevel = target.$nestLevel;
-        const propertiesQueue = this.invalidatePropertiesQueue;
-        const sizeQueue = this.invalidateSizeQueue;
-        const displayListQueue = this.invalidateDisplayListQueue;
+        var propertiesQueue = this.invalidatePropertiesQueue;
+        var sizeQueue = this.invalidateSizeQueue;
+        var displayListQueue = this.invalidateDisplayListQueue;
         while (!done) {
             done = true;
             obj = propertiesQueue.removeSmallestChild(target);
@@ -1711,9 +1873,10 @@ class UIValidator extends PIXI.utils.EventEmitter {
         if (oldTargetLevel === Infinity) {
             this.targetLevel = Infinity;
         }
-    }
-}
-const validatorShared = new UIValidator();
+    };
+    return UIValidator;
+}(PIXI.utils.EventEmitter));
+var validatorShared = new UIValidator();
 exports.default = validatorShared;
 
 
@@ -1728,164 +1891,211 @@ exports.default = validatorShared;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const DisplayLayoutAbstract_1 = __webpack_require__(/*! ./DisplayLayoutAbstract */ "./src/core/DisplayLayoutAbstract.ts");
-const CSSStyle_1 = __webpack_require__(/*! ../layout/CSSStyle */ "./src/layout/CSSStyle.ts");
-const CSSLayout_1 = __webpack_require__(/*! ../layout/CSSLayout */ "./src/layout/CSSLayout.ts");
-const UIBaseDrag_1 = __webpack_require__(/*! ./plugs/UIBaseDrag */ "./src/core/plugs/UIBaseDrag.ts");
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const UIClick_1 = __webpack_require__(/*! ./plugs/UIClick */ "./src/core/plugs/UIClick.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var DisplayLayoutAbstract_1 = __webpack_require__(/*! ./DisplayLayoutAbstract */ "./src/core/DisplayLayoutAbstract.ts");
+var CSSStyle_1 = __webpack_require__(/*! ../layout/CSSStyle */ "./src/layout/CSSStyle.ts");
+var CSSLayout_1 = __webpack_require__(/*! ../layout/CSSLayout */ "./src/layout/CSSLayout.ts");
+var UIBaseDrag_1 = __webpack_require__(/*! ./plugs/UIBaseDrag */ "./src/core/plugs/UIBaseDrag.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var UIClick_1 = __webpack_require__(/*! ./plugs/UIClick */ "./src/core/plugs/UIClick.ts");
 /**
  * UI的顶级类，基础的UI对象
  *
  * @class
  * @since 1.0.0
  */
-class DisplayObject extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
+var DisplayObject = /** @class */ (function (_super) {
+    __extends(DisplayObject, _super);
     /**
      * 构造函数
      */
-    constructor() {
-        super();
+    function DisplayObject() {
+        var _this = _super.call(this) || this;
         /**
          * 插件列表
          */
-        this.plugs = new Map();
+        _this.plugs = new Map();
         /**
          * 拖动限制门槛,小于设置的数不执行拖动,防止点击与滚动
          */
-        this.dragThreshold = 0;
+        _this.dragThreshold = 0;
         /**
         *  在不同分辨率下保持像素稳定
         * @default
         */
-        this.pixelPerfect = true;
+        _this.pixelPerfect = true;
         /**
          * 动态属性，避免其他类注入
          */
-        this.attach = {};
-        this.container.name = this.constructor.name;
+        _this.attach = {};
+        _this.container.name = _this.constructor.name;
+        return _this;
     }
-    /**
-     * 设置拖动
-     */
-    get dragOption() {
-        if (this.plugs.has(UIBaseDrag_1.UIBaseDrag.key)) {
-            return this.plugs.get(UIBaseDrag_1.UIBaseDrag.key);
-        }
-        return new UIBaseDrag_1.UIBaseDrag(this);
-    }
-    set dragOption(value) {
-        const dragOption = this.dragOption;
-        Utils_1.deepCopy(value, dragOption);
-    }
-    /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
-    get isClick() {
-        let click = this.plugs.get(UIClick_1.UIClick.key);
-        if (click) {
-            return true;
-        }
-        return false;
-    }
-    set isClick(value) {
-        let click = this.plugs.get(UIClick_1.UIClick.key);
-        if (value) {
-            if (!click) {
-                new UIClick_1.UIClick(this);
+    Object.defineProperty(DisplayObject.prototype, "dragOption", {
+        /**
+         * 设置拖动
+         */
+        get: function () {
+            if (this.plugs.has(UIBaseDrag_1.UIBaseDrag.key)) {
+                return this.plugs.get(UIBaseDrag_1.UIBaseDrag.key);
             }
-        }
-        else {
+            return new UIBaseDrag_1.UIBaseDrag(this);
+        },
+        set: function (value) {
+            var dragOption = this.dragOption;
+            Utils_1.deepCopy(value, dragOption);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObject.prototype, "isClick", {
+        /** 是否开启鼠标或触摸点击，开启后，接收TouchMouseEvent */
+        get: function () {
+            var click = this.plugs.get(UIClick_1.UIClick.key);
             if (click) {
-                click.release();
+                return true;
             }
-        }
-    }
-    get groupName() {
-        return this._groupName;
-    }
-    set groupName(value) {
-        if (value === undefined) {
-            Index_1.GroupController.unRegistrerGroup(this);
-        }
-        if (this._groupName == value) {
-            return;
-        }
-        this._groupName = value;
-        Index_1.GroupController.registrerGroup(this);
-    }
-    /**
-     * 透明度
-     */
-    get alpha() {
-        return this.container.alpha;
-    }
-    set alpha(value) {
-        this.container.alpha = value;
-    }
-    get tint() {
-        return this._tint;
-    }
-    set tint(value) {
-        if (value === this._blendMode) {
-            return;
-        }
-        this._tint = value;
-        this.container.children.forEach(childrenItem => {
-            if (childrenItem["tint"]) {
-                childrenItem["tint"] = value;
+            return false;
+        },
+        set: function (value) {
+            var click = this.plugs.get(UIClick_1.UIClick.key);
+            if (value) {
+                if (!click) {
+                    new UIClick_1.UIClick(this);
+                }
             }
-        });
-    }
-    get blendMode() {
-        return this._blendMode;
-    }
-    set blendMode(value) {
-        if (value === this._blendMode) {
-            return;
-        }
-        this._blendMode = value;
-        this.container.children.forEach(childrenItem => {
-            if (childrenItem instanceof PIXI.Sprite) {
-                childrenItem.blendMode = value || PIXI.BLEND_MODES.NORMAL;
+            else {
+                if (click) {
+                    click.release();
+                }
             }
-        });
-    }
-    /**
-     * 设置Blur XY的模糊强度
-     *
-     * 参数类型为number时，设置 blurX = blurY = value
-     *
-     */
-    set filterBlur(value) {
-        const container = this.container;
-        if (this.blurFilter === undefined) {
-            this.blurFilter = new PIXI.filters.BlurFilter(8, 1, 1);
-            container.filters = [this.blurFilter];
-        }
-        this.blurFilter.blur = value;
-    }
-    get filterBlur() {
-        return this.blurFilter ? this.blurFilter.blur : 0;
-    }
-    /**
-     * 获取样式
-     */
-    get style() {
-        if (this._style == undefined) {
-            this._style = new CSSStyle_1.CSSStyle(this);
-        }
-        return this._style;
-    }
-    set style(value) {
-        const style = this.style;
-        Utils_1.deepCopy(value, style);
-        this.invalidateParentLayout();
-    }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObject.prototype, "groupName", {
+        get: function () {
+            return this._groupName;
+        },
+        set: function (value) {
+            if (value === undefined) {
+                Index_1.GroupController.unRegistrerGroup(this);
+            }
+            if (this._groupName == value) {
+                return;
+            }
+            this._groupName = value;
+            Index_1.GroupController.registrerGroup(this);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObject.prototype, "alpha", {
+        /**
+         * 透明度
+         */
+        get: function () {
+            return this.container.alpha;
+        },
+        set: function (value) {
+            this.container.alpha = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObject.prototype, "tint", {
+        get: function () {
+            return this._tint;
+        },
+        set: function (value) {
+            if (value === this._blendMode) {
+                return;
+            }
+            this._tint = value;
+            this.container.children.forEach(function (childrenItem) {
+                if (childrenItem["tint"]) {
+                    childrenItem["tint"] = value;
+                }
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObject.prototype, "blendMode", {
+        get: function () {
+            return this._blendMode;
+        },
+        set: function (value) {
+            if (value === this._blendMode) {
+                return;
+            }
+            this._blendMode = value;
+            this.container.children.forEach(function (childrenItem) {
+                if (childrenItem instanceof PIXI.Sprite) {
+                    childrenItem.blendMode = value || PIXI.BLEND_MODES.NORMAL;
+                }
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObject.prototype, "filterBlur", {
+        get: function () {
+            return this.blurFilter ? this.blurFilter.blur : 0;
+        },
+        /**
+         * 设置Blur XY的模糊强度
+         *
+         * 参数类型为number时，设置 blurX = blurY = value
+         *
+         */
+        set: function (value) {
+            var container = this.container;
+            if (this.blurFilter === undefined) {
+                this.blurFilter = new PIXI.filters.BlurFilter(8, 1, 1);
+                container.filters = [this.blurFilter];
+            }
+            this.blurFilter.blur = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObject.prototype, "style", {
+        /**
+         * 获取样式
+         */
+        get: function () {
+            if (this._style == undefined) {
+                this._style = new CSSStyle_1.CSSStyle(this);
+            }
+            return this._style;
+        },
+        set: function (value) {
+            var style = this.style;
+            Utils_1.deepCopy(value, style);
+            this.invalidateParentLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * 更新显示列表,子类重写，实现布局
      */
-    updateDisplayList(unscaledWidth, unscaledHeight) {
+    DisplayObject.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
         if (this._style && this._style.display !== "none") {
             //console.log("displayStyle",unscaledWidth,unscaledHeight,this.left,this.right,this.x,this.y);
             CSSLayout_1.updateDisplayLayout(this, unscaledWidth, unscaledHeight);
@@ -1894,13 +2104,13 @@ class DisplayObject extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
             //console.log("display",this.x + this.pivotX,this.y + this.pivotY,this.scaleX,this.scaleY,this.rotation*(Math.PI/180),this.skewX,this.skewY,this.pivotX,this.pivotY);
             this.updateTransform();
         }
-    }
-    load() {
+    };
+    DisplayObject.prototype.load = function () {
         this.initializeUIValues();
-        super.load();
-    }
-    release() {
-        const { container, mask, background } = this;
+        _super.prototype.load.call(this);
+    };
+    DisplayObject.prototype.release = function () {
+        var _a = this, container = _a.container, mask = _a.mask, background = _a.background;
         if (this._style) {
             this._style.release();
             this._style = undefined;
@@ -1919,24 +2129,25 @@ class DisplayObject extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
             background.parent.removeChild(background).destroy();
             this.background = undefined;
         }
-        this.plugs.forEach(value => {
+        this.plugs.forEach(function (value) {
             value.release();
         });
         Index_1.GroupController.unRegistrerGroup(this);
-        super.release();
-    }
-    releaseAll() {
+        _super.prototype.release.call(this);
+    };
+    DisplayObject.prototype.releaseAll = function () {
         this.offAll();
         this.release();
-        for (let i = 0; i < this.uiChildren.length; i++) {
-            const ui = this.uiChildren[i];
+        for (var i = 0; i < this.uiChildren.length; i++) {
+            var ui = this.uiChildren[i];
             ui.releaseAll();
         }
         this.uiChildren = [];
         this.container.removeAllListeners();
         this.container.removeChildren();
-    }
-}
+    };
+    return DisplayObject;
+}(DisplayLayoutAbstract_1.DisplayLayoutAbstract));
 exports.DisplayObject = DisplayObject;
 
 
@@ -1951,56 +2162,71 @@ exports.DisplayObject = DisplayObject;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const ContainerBase_1 = __webpack_require__(/*! ./ContainerBase */ "./src/core/ContainerBase.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var ContainerBase_1 = __webpack_require__(/*! ./ContainerBase */ "./src/core/ContainerBase.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 /**
  *
  */
-class DisplayObjectAbstract extends PIXI.utils.EventEmitter {
-    constructor() {
-        super();
+var DisplayObjectAbstract = /** @class */ (function (_super) {
+    __extends(DisplayObjectAbstract, _super);
+    function DisplayObjectAbstract() {
+        var _this = _super.call(this) || this;
         /**
          * 自定义组价名
          */
-        this.name = "";
+        _this.name = "";
         /**
          * @private
          * 这个对象在显示列表中的嵌套深度，舞台为1，它的子项为2，子项的子项为3，以此类推。当对象不在显示列表中时此属性值为0.
          */
-        this.$nestLevel = 0;
+        _this.$nestLevel = 0;
         /**
          * 是否初始化
          * @default
          */
-        this.initialized = false;
+        _this.initialized = false;
         /**
          * 节点列表
          */
-        this.uiChildren = [];
-        this._interactive = true;
-        this._interactiveChildren = true;
-        this._enabled = true;
+        _this.uiChildren = [];
+        _this._interactive = true;
+        _this._interactiveChildren = true;
+        _this._enabled = true;
         /**
          * 是否可见
          */
-        this._visible = true;
-        this.uuid = Utils_1.uid();
-        this.container = new ContainerBase_1.ContainerBase();
-        this.container.on("added", this.$onAddStage, this);
-        this.container.on("removed", this.$onRemoveStage, this);
+        _this._visible = true;
+        _this.uuid = Utils_1.uid();
+        _this.container = new ContainerBase_1.ContainerBase();
+        _this.container.on("added", _this.$onAddStage, _this);
+        _this.container.on("removed", _this.$onRemoveStage, _this);
+        return _this;
     }
     /** 添加显示对象，需集成Core */
-    addChild(item) {
+    DisplayObjectAbstract.prototype.addChild = function (item) {
         if (this.container.children.length !== this.uiChildren.length) {
             return this.addChildAt(item, this.container.children.length);
         }
         else {
             return this.addChildAt(item, this.uiChildren.length);
         }
-    }
-    addChildAt(item, index) {
+    };
+    DisplayObjectAbstract.prototype.addChildAt = function (item, index) {
         if (item.parent) {
             item.parent.removeChild(item);
         }
@@ -2015,140 +2241,169 @@ class DisplayObjectAbstract extends PIXI.utils.EventEmitter {
         this.emit(Index_1.ComponentEvent.ADD, this);
         this.container.addChildAt(item.container, index);
         return item;
-    }
-    getChildAt(index) {
+    };
+    DisplayObjectAbstract.prototype.getChildAt = function (index) {
         return this.uiChildren[index] || undefined;
-    }
+    };
     /**
      * 移除已添加的UI组件
      * @param UIObject 要移除的UI组件
      */
-    removeChild(item) {
-        const index = this.uiChildren.indexOf(item);
+    DisplayObjectAbstract.prototype.removeChild = function (item) {
+        var index = this.uiChildren.indexOf(item);
         return this.removeChildAt(index);
-    }
-    removeChildAt(index) {
+    };
+    DisplayObjectAbstract.prototype.removeChildAt = function (index) {
         index = Math.max(0, index);
         index = Math.min(this.uiChildren.length, index);
-        const item = this.uiChildren[index];
+        var item = this.uiChildren[index];
         if (item) {
             item.container.parent.removeChild(item.container);
             this.uiChildren.splice(index, 1);
             item.parent = undefined;
         }
         return item;
-    }
-    removeChildren(beginIndex, endIndex) {
-        const start = beginIndex ? beginIndex : 0;
-        const end = endIndex ? endIndex : this.uiChildren.length;
-        for (let i = start; i < end; i++) {
+    };
+    DisplayObjectAbstract.prototype.removeChildren = function (beginIndex, endIndex) {
+        var start = beginIndex ? beginIndex : 0;
+        var end = endIndex ? endIndex : this.uiChildren.length;
+        for (var i = start; i < end; i++) {
             this.removeChild(this.uiChildren[i]);
         }
-    }
-    /**
-     * 是否绘制显示对象，如果false不进行绘制，不过仍然会进行相关的更新计算。
-     * 只影响父级的递归调用。
-     */
-    set renderable(value) {
-        this.container.renderable = value;
-    }
-    get renderable() {
-        return this.container.renderable;
-    }
-    /**
-     * 缓存当前的显示对象，如果移除缓存，设置false即可
-     * 在设置这个值时，请确保你的纹理位图已经加载
-     */
-    set cacheAsBitmap(value) {
-        this.container.cacheAsBitmap = value;
-    }
-    get cacheAsBitmap() {
-        return this.container.cacheAsBitmap;
-    }
-    /**
-     * 对象是否可以接收事件
-     */
-    set interactive(value) {
-        this._interactive = value;
-        if (!this._enabled) {
-            return;
-        }
-        this.container.interactive = value;
-    }
-    get interactive() {
-        return this.container.interactive;
-    }
-    /**
-     * 子对象是否可以接收事件，设置false后，会绕过HitTest方法的递归
-     */
-    set interactiveChildren(value) {
-        this._interactiveChildren = value;
-        if (!this._enabled) {
-            return;
-        }
-        this.container.interactiveChildren = value;
-    }
-    get interactiveChildren() {
-        return this.container.interactiveChildren;
-    }
-    get enabled() {
-        return this._enabled;
-    }
-    set enabled(value) {
-        if (this._enabled === value) {
-            return;
-        }
-        this._enabled = value;
-        this.container.interactive = value;
-        this.container.interactiveChildren = value;
-    }
-    get visible() {
-        return this._visible;
-    }
-    set visible(value) {
-        if (this._visible === value) {
-            return;
-        }
-        this._visible = value;
-        this.container.visible = value;
-    }
+    };
+    Object.defineProperty(DisplayObjectAbstract.prototype, "renderable", {
+        get: function () {
+            return this.container.renderable;
+        },
+        /**
+         * 是否绘制显示对象，如果false不进行绘制，不过仍然会进行相关的更新计算。
+         * 只影响父级的递归调用。
+         */
+        set: function (value) {
+            this.container.renderable = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObjectAbstract.prototype, "cacheAsBitmap", {
+        get: function () {
+            return this.container.cacheAsBitmap;
+        },
+        /**
+         * 缓存当前的显示对象，如果移除缓存，设置false即可
+         * 在设置这个值时，请确保你的纹理位图已经加载
+         */
+        set: function (value) {
+            this.container.cacheAsBitmap = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObjectAbstract.prototype, "interactive", {
+        get: function () {
+            return this.container.interactive;
+        },
+        /**
+         * 对象是否可以接收事件
+         */
+        set: function (value) {
+            this._interactive = value;
+            if (!this._enabled) {
+                return;
+            }
+            this.container.interactive = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObjectAbstract.prototype, "interactiveChildren", {
+        get: function () {
+            return this.container.interactiveChildren;
+        },
+        /**
+         * 子对象是否可以接收事件，设置false后，会绕过HitTest方法的递归
+         */
+        set: function (value) {
+            this._interactiveChildren = value;
+            if (!this._enabled) {
+                return;
+            }
+            this.container.interactiveChildren = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObjectAbstract.prototype, "enabled", {
+        get: function () {
+            return this._enabled;
+        },
+        set: function (value) {
+            if (this._enabled === value) {
+                return;
+            }
+            this._enabled = value;
+            this.container.interactive = value;
+            this.container.interactiveChildren = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(DisplayObjectAbstract.prototype, "visible", {
+        get: function () {
+            return this._visible;
+        },
+        set: function (value) {
+            if (this._visible === value) {
+                return;
+            }
+            this._visible = value;
+            this.container.visible = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /** 清除全部事件 */
-    offAll(event) {
+    DisplayObjectAbstract.prototype.offAll = function (event) {
         return this.removeAllListeners(event);
-    }
-    get stage() {
-        if (this.$stage == undefined) {
-            this.$stage = Utils_1.getStage(this);
-        }
-        return this.$stage;
-    }
-    checkInvalidateFlag() {
-    }
-    load() {
+    };
+    Object.defineProperty(DisplayObjectAbstract.prototype, "stage", {
+        get: function () {
+            if (this.$stage == undefined) {
+                this.$stage = Utils_1.getStage(this);
+            }
+            return this.$stage;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    DisplayObjectAbstract.prototype.checkInvalidateFlag = function () {
+    };
+    DisplayObjectAbstract.prototype.load = function () {
         this.$onLoad();
-    }
-    release() {
+    };
+    DisplayObjectAbstract.prototype.release = function () {
         if (this.parent) {
             this.parent.removeChild(this);
         }
         this.$stage = undefined;
         this.$onRelease();
-    }
-    $onInit() {
+    };
+    DisplayObjectAbstract.prototype.$onInit = function () {
         this.emit(Index_1.ComponentEvent.CREATION_COMPLETE, this);
-    }
-    $onLoad() { }
-    $onRelease() { }
-    $onAddStage() {
+    };
+    DisplayObjectAbstract.prototype.$onLoad = function () { };
+    DisplayObjectAbstract.prototype.$onRelease = function () { };
+    DisplayObjectAbstract.prototype.$onAddStage = function () {
         this.checkInvalidateFlag();
         this.emit(Index_1.ComponentEvent.ADDED, this);
-    }
-    $onRemoveStage() {
+    };
+    DisplayObjectAbstract.prototype.$onRemoveStage = function () {
         this.checkInvalidateFlag();
         this.parent = undefined;
         this.emit(Index_1.ComponentEvent.REMOVEED, this);
-    }
-}
+    };
+    return DisplayObjectAbstract;
+}(PIXI.utils.EventEmitter));
 exports.DisplayObjectAbstract = DisplayObjectAbstract;
 
 
@@ -2163,9 +2418,22 @@ exports.DisplayObjectAbstract = DisplayObjectAbstract;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const Ticker_1 = __webpack_require__(/*! ./Ticker */ "./src/core/Ticker.ts");
-const DisplayLayoutAbstract_1 = __webpack_require__(/*! ./DisplayLayoutAbstract */ "./src/core/DisplayLayoutAbstract.ts");
+var Ticker_1 = __webpack_require__(/*! ./Ticker */ "./src/core/Ticker.ts");
+var DisplayLayoutAbstract_1 = __webpack_require__(/*! ./DisplayLayoutAbstract */ "./src/core/DisplayLayoutAbstract.ts");
 /**
  * UI的舞台对象，展示所有UI组件
  *
@@ -2173,67 +2441,90 @@ const DisplayLayoutAbstract_1 = __webpack_require__(/*! ./DisplayLayoutAbstract 
  * @param width {Number} 舞台宽度
  * @param height {Number} 舞台高度
  */
-class Stage extends DisplayLayoutAbstract_1.DisplayLayoutAbstract {
-    constructor(width, height, app) {
-        super();
-        this._stageWidth = 0; //调整缩放后的值
-        this._stageHeight = 0; //调整缩放后的值
-        this.width = width;
-        this.height = height;
-        this._stageWidth = width;
-        this._stageWidth = height;
-        this.setActualSize(width, height);
-        this.container.name = "Stage";
-        this.container.hitArea = new PIXI.Rectangle(0, 0, width, height);
-        this.container.interactive = true;
-        this.container.interactiveChildren = true;
-        this.initialized = true;
-        this.$nestLevel = 1;
-        this.app = app;
+var Stage = /** @class */ (function (_super) {
+    __extends(Stage, _super);
+    function Stage(width, height, app) {
+        var _this = _super.call(this) || this;
+        _this._stageWidth = 0; //调整缩放后的值
+        _this._stageHeight = 0; //调整缩放后的值
+        _this.width = width;
+        _this.height = height;
+        _this._stageWidth = width;
+        _this._stageWidth = height;
+        _this.setActualSize(width, height);
+        _this.container.name = "Stage";
+        _this.container.hitArea = new PIXI.Rectangle(0, 0, width, height);
+        _this.container.interactive = true;
+        _this.container.interactiveChildren = true;
+        _this.initialized = true;
+        _this.$nestLevel = 1;
+        _this.app = app;
+        return _this;
     }
-    get stageWidth() {
-        return this._stageWidth;
-    }
-    get stageHeight() {
-        return this._stageHeight;
-    }
-    get scaleX() {
-        return this.container.scale.x;
-    }
-    set scaleX(value) {
-        this.container.scale.x = value;
-        this._stageWidth = value * this.width;
-    }
-    get scaleY() {
-        return this.container.scale.y;
-    }
-    set scaleY(value) {
-        this.container.scale.y = value;
-        this._stageHeight = value * this.height;
-    }
-    set Scale(value) {
-        this.container.scale.copyFrom(value);
-        this._stageWidth = value.x * this.width;
-        this._stageHeight = value.y * this.height;
-    }
-    release() {
-        super.release();
-    }
-    releaseAll() {
-        for (let i = 0; i < this.uiChildren.length; i++) {
-            const ui = this.uiChildren[i];
+    Object.defineProperty(Stage.prototype, "stageWidth", {
+        get: function () {
+            return this._stageWidth;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Stage.prototype, "stageHeight", {
+        get: function () {
+            return this._stageHeight;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Stage.prototype, "scaleX", {
+        get: function () {
+            return this.container.scale.x;
+        },
+        set: function (value) {
+            this.container.scale.x = value;
+            this._stageWidth = value * this.width;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Stage.prototype, "scaleY", {
+        get: function () {
+            return this.container.scale.y;
+        },
+        set: function (value) {
+            this.container.scale.y = value;
+            this._stageHeight = value * this.height;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Stage.prototype, "Scale", {
+        set: function (value) {
+            this.container.scale.copyFrom(value);
+            this._stageWidth = value.x * this.width;
+            this._stageHeight = value.y * this.height;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Stage.prototype.release = function () {
+        _super.prototype.release.call(this);
+    };
+    Stage.prototype.releaseAll = function () {
+        for (var i = 0; i < this.uiChildren.length; i++) {
+            var ui = this.uiChildren[i];
             ui.releaseAll();
         }
         this.uiChildren = [];
         this.container.removeAllListeners();
         this.container.removeChildren();
         Ticker_1.shared.removeAllListeners();
-    }
-    resize() {
+    };
+    Stage.prototype.resize = function () {
         this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
         //this.updateChildren();
-    }
-}
+    };
+    return Stage;
+}(DisplayLayoutAbstract_1.DisplayLayoutAbstract));
 exports.Stage = Stage;
 
 
@@ -2248,57 +2539,77 @@ exports.Stage = Stage;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const tween = __webpack_require__(/*! ../tween/private/index */ "./src/tween/private/index.ts");
+var tween = __webpack_require__(/*! ../tween/private/index */ "./src/tween/private/index.ts");
 /**
  * 心跳，需要UI库初始化后，进行实例调用注册
  */
-class Ticker extends PIXI.utils.EventEmitter {
+var Ticker = /** @class */ (function (_super) {
+    __extends(Ticker, _super);
     /**
      * 心跳构造函数
      * @param autoStart 是否自动开启心跳，默认false
      */
-    constructor(autoStart) {
-        super();
-        this._disabled = true;
+    function Ticker(autoStart) {
+        var _this = _super.call(this) || this;
+        _this._disabled = true;
         if (autoStart) {
-            this.disabled = false;
+            _this.disabled = false;
         }
+        return _this;
     }
-    /** 是否关闭心跳.默认false不关闭,关闭后，缓动等组件也将关闭 */
-    get disabled() {
-        return this._disabled;
-    }
-    set disabled(value) {
-        if (value == this._disabled) {
-            return;
-        }
-        this._disabled = value;
-    }
-    update(deltaTime, lastTime, elapsedMS) {
+    Object.defineProperty(Ticker.prototype, "disabled", {
+        /** 是否关闭心跳.默认false不关闭,关闭后，缓动等组件也将关闭 */
+        get: function () {
+            return this._disabled;
+        },
+        set: function (value) {
+            if (value == this._disabled) {
+                return;
+            }
+            this._disabled = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Ticker.prototype.update = function (deltaTime, lastTime, elapsedMS) {
         if (this._disabled) {
             return;
         }
         tween.update(elapsedMS);
         this.emit("update", deltaTime, lastTime, elapsedMS);
-    }
+    };
     /**
      * 增加更新监听器
      * @param fn 被调用的函数
      * @param context 当前域
      */
-    addUpdateEvent(fn, context) {
+    Ticker.prototype.addUpdateEvent = function (fn, context) {
         return this.on("update", fn, context);
-    }
+    };
     /**
      * 移除更新监听器
      * @param fn 被调用的函数
      * @param context 当前域
      */
-    removeUpdateEvent(fn, context) {
+    Ticker.prototype.removeUpdateEvent = function (fn, context) {
         return this.removeListener("update", fn, context);
-    }
-}
+    };
+    return Ticker;
+}(PIXI.utils.EventEmitter));
 /**
  * Ticker 的实例
  */
@@ -2319,19 +2630,19 @@ exports.default = exports.tickerShared;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Index_1 = __webpack_require__(/*! ../../interaction/Index */ "./src/interaction/Index.ts");
-const DisplayObjectAbstract_1 = __webpack_require__(/*! ../DisplayObjectAbstract */ "./src/core/DisplayObjectAbstract.ts");
-const Utils_1 = __webpack_require__(/*! ../../utils/Utils */ "./src/utils/Utils.ts");
+var Index_1 = __webpack_require__(/*! ../../interaction/Index */ "./src/interaction/Index.ts");
+var DisplayObjectAbstract_1 = __webpack_require__(/*! ../DisplayObjectAbstract */ "./src/core/DisplayObjectAbstract.ts");
+var Utils_1 = __webpack_require__(/*! ../../utils/Utils */ "./src/utils/Utils.ts");
 /**
  *  组件的拖拽操作
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestDrop
  */
-class UIBaseDrag {
+var UIBaseDrag = /** @class */ (function () {
     /**
      * 构造函数
      */
-    constructor(target) {
+    function UIBaseDrag(target) {
         /**
          * 可拖动初始化
          *  @default
@@ -2364,170 +2675,199 @@ class UIBaseDrag {
         this.target = target;
         this.target.plugs.set(UIBaseDrag.key, this);
     }
-    /**
-     * 当前拖动组件的事件ID，用于处理DragDropController中多组件的选定
-     */
-    get dragDropEventId() {
-        if (this.target) {
-            return this.target.attach.dragDropEventId;
-        }
-    }
-    /**
-     * 是否开启拖动
-     * @default false
-     */
-    set draggable(value) {
-        if (value)
-            this.initDraggable();
-        else
-            this.clearDraggable();
-    }
-    get dragRestrictAxis() {
-        return this._dragRestrictAxis;
-    }
-    set dragRestrictAxis(value) {
-        this._dragRestrictAxis = value;
-        if (this.drag) {
-            this.drag.dragRestrictAxis = this._dragRestrictAxis;
-        }
-    }
-    /**
-     * 拖动分组
-     */
-    get dragGroup() {
-        if (this.target) {
-            return this.target.attach.dragGroup;
-        }
-        return "";
-    }
-    set dragGroup(value) {
-        if (this.target)
-            this.target.attach.dragGroup = value;
-    }
-    get dragContainer() {
-        return this._dragContainer;
-    }
-    set dragContainer(value) {
-        this._dragContainer = Utils_1.getDisplayObject(value);
-    }
-    /**
-     * 是否开启拖动掉落接收
-     */
-    set droppable(value) {
-        if (value)
-            this.initDroppable();
-        else
-            this.clearDroppable();
-    }
-    get droppableReparent() {
-        return this._droppableReparent;
-    }
-    set droppableReparent(value) {
-        this._droppableReparent = Utils_1.getDisplayObject(value);
-        ;
-    }
-    clearDraggable() {
+    Object.defineProperty(UIBaseDrag.prototype, "dragDropEventId", {
+        /**
+         * 当前拖动组件的事件ID，用于处理DragDropController中多组件的选定
+         */
+        get: function () {
+            if (this.target) {
+                return this.target.attach.dragDropEventId;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIBaseDrag.prototype, "draggable", {
+        /**
+         * 是否开启拖动
+         * @default false
+         */
+        set: function (value) {
+            if (value)
+                this.initDraggable();
+            else
+                this.clearDraggable();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIBaseDrag.prototype, "dragRestrictAxis", {
+        get: function () {
+            return this._dragRestrictAxis;
+        },
+        set: function (value) {
+            this._dragRestrictAxis = value;
+            if (this.drag) {
+                this.drag.dragRestrictAxis = this._dragRestrictAxis;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIBaseDrag.prototype, "dragGroup", {
+        /**
+         * 拖动分组
+         */
+        get: function () {
+            if (this.target) {
+                return this.target.attach.dragGroup;
+            }
+            return "";
+        },
+        set: function (value) {
+            if (this.target)
+                this.target.attach.dragGroup = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIBaseDrag.prototype, "dragContainer", {
+        get: function () {
+            return this._dragContainer;
+        },
+        set: function (value) {
+            this._dragContainer = Utils_1.getDisplayObject(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIBaseDrag.prototype, "droppable", {
+        /**
+         * 是否开启拖动掉落接收
+         */
+        set: function (value) {
+            if (value)
+                this.initDroppable();
+            else
+                this.clearDroppable();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(UIBaseDrag.prototype, "droppableReparent", {
+        get: function () {
+            return this._droppableReparent;
+        },
+        set: function (value) {
+            this._droppableReparent = Utils_1.getDisplayObject(value);
+            ;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    UIBaseDrag.prototype.clearDraggable = function () {
         if (this.dragInitialized) {
             this.dragInitialized = false;
             this.drag && this.drag.stopEvent();
         }
-    }
-    initDraggable() {
+    };
+    UIBaseDrag.prototype.initDraggable = function () {
+        var _this = this;
         if (this.target == undefined) {
             return;
         }
         if (!this.dragInitialized) {
             this.dragInitialized = true;
-            const containerStart = new PIXI.Point();
-            const stageOffset = new PIXI.Point();
-            this._containerStart = containerStart;
+            var containerStart_1 = new PIXI.Point();
+            var stageOffset_1 = new PIXI.Point();
+            this._containerStart = containerStart_1;
             this._dragPosition.set(0, 0);
             this.drag = new Index_1.DragEvent(this.target);
             this.drag.dragRestrictAxis = this._dragRestrictAxis;
-            this.drag.onDragStart = (e) => {
-                if (this.target == undefined) {
+            this.drag.onDragStart = function (e) {
+                if (_this.target == undefined) {
                     return;
                 }
-                let target = this.target;
-                this.$targetParent = target.parent;
-                if (this._dragContainer == undefined && !this.dragBoundary) {
-                    this._dragContainer = this.target.stage;
+                var target = _this.target;
+                _this.$targetParent = target.parent;
+                if (_this._dragContainer == undefined && !_this.dragBoundary) {
+                    _this._dragContainer = _this.target.stage;
                 }
-                const added = Index_1.DragDropController.add(target, e);
-                if (!this.dragging && added) {
+                var added = Index_1.DragDropController.add(target, e);
+                if (!_this.dragging && added) {
                     target.emit(Index_1.ComponentEvent.DRAG_START_BEFORE, target, e);
-                    this.dragging = true;
+                    _this.dragging = true;
                     target.interactive = false;
-                    containerStart.copyFrom(target.container.position);
-                    if (this._dragContainer) {
-                        let c;
-                        if (this._dragContainer instanceof DisplayObjectAbstract_1.DisplayObjectAbstract) {
-                            c = this._dragContainer;
+                    containerStart_1.copyFrom(target.container.position);
+                    if (_this._dragContainer) {
+                        var c = void 0;
+                        if (_this._dragContainer instanceof DisplayObjectAbstract_1.DisplayObjectAbstract) {
+                            c = _this._dragContainer;
                         }
                         if (c && target.parent) {
                             //_this.container._recursivePostUpdateTransform();
-                            stageOffset.set(c.container.worldTransform.tx - target.parent.container.worldTransform.tx, c.container.worldTransform.ty - target.parent.container.worldTransform.ty);
+                            stageOffset_1.set(c.container.worldTransform.tx - target.parent.container.worldTransform.tx, c.container.worldTransform.ty - target.parent.container.worldTransform.ty);
                             c.addChild(target);
-                            stageOffset.set(stageOffset.x / target.parent.scaleX, stageOffset.y / target.parent.scaleY);
+                            stageOffset_1.set(stageOffset_1.x / target.parent.scaleX, stageOffset_1.y / target.parent.scaleY);
                         }
                     }
                     else {
-                        stageOffset.set(0);
+                        stageOffset_1.set(0);
                     }
                     target.emit(Index_1.ComponentEvent.DRAG_START, target, e);
                 }
             };
-            this.drag.onDragMove = (e, offset) => {
-                if (this.target == undefined) {
+            this.drag.onDragMove = function (e, offset) {
+                if (_this.target == undefined) {
                     return;
                 }
-                let target = this.target;
-                if (this.dragging && target.stage) {
-                    let x = containerStart.x + (offset.x / target.stage.scaleX) - stageOffset.x;
-                    let y = containerStart.y + (offset.y / target.stage.scaleY) - stageOffset.y;
-                    if (this.dragRestrictAxis == "x") {
-                        this._dragPosition.set(x, containerStart.y - stageOffset.y);
+                var target = _this.target;
+                if (_this.dragging && target.stage) {
+                    var x = containerStart_1.x + (offset.x / target.stage.scaleX) - stageOffset_1.x;
+                    var y = containerStart_1.y + (offset.y / target.stage.scaleY) - stageOffset_1.y;
+                    if (_this.dragRestrictAxis == "x") {
+                        _this._dragPosition.set(x, containerStart_1.y - stageOffset_1.y);
                     }
-                    else if (this.dragRestrictAxis == "y") {
-                        this._dragPosition.set(containerStart.x - stageOffset.x, y);
+                    else if (_this.dragRestrictAxis == "y") {
+                        _this._dragPosition.set(containerStart_1.x - stageOffset_1.x, y);
                     }
                     else {
-                        this._dragPosition.set(x, y);
+                        _this._dragPosition.set(x, y);
                     }
-                    if (this.dragBoundary && target.parent) {
-                        this._dragPosition.x = Math.max(0, this._dragPosition.x);
-                        this._dragPosition.x = Math.min(this._dragPosition.x, target.parent.width - target.width);
-                        this._dragPosition.y = Math.max(0, this._dragPosition.y);
-                        this._dragPosition.y = Math.min(this._dragPosition.y, target.parent.height - target.height);
+                    if (_this.dragBoundary && target.parent) {
+                        _this._dragPosition.x = Math.max(0, _this._dragPosition.x);
+                        _this._dragPosition.x = Math.min(_this._dragPosition.x, target.parent.width - target.width);
+                        _this._dragPosition.y = Math.max(0, _this._dragPosition.y);
+                        _this._dragPosition.y = Math.min(_this._dragPosition.y, target.parent.height - target.height);
                     }
-                    target.setPosition(this._dragPosition.x, this._dragPosition.y);
+                    target.setPosition(_this._dragPosition.x, _this._dragPosition.y);
                     target.emit(Index_1.ComponentEvent.DRAG_MOVE, target, e);
                 }
             };
-            this.drag.onDragEnd = (e) => {
-                if (this.dragging) {
-                    this.dragging = false;
+            this.drag.onDragEnd = function (e) {
+                if (_this.dragging) {
+                    _this.dragging = false;
                     //如果没有可被放置掉落的容器，0秒后返回原容器
-                    setTimeout(() => {
-                        if (this.target == undefined) {
+                    setTimeout(function () {
+                        if (_this.target == undefined) {
                             return;
                         }
                         //dragBounces
-                        let target = this.target;
-                        let parent = this.$targetParent;
+                        var target = _this.target;
+                        var parent = _this.$targetParent;
                         target.interactive = true;
-                        const item = Index_1.DragDropController.getItem(target);
+                        var item = Index_1.DragDropController.getItem(target);
                         target.emit(Index_1.ComponentEvent.DRAG_END_BEFORE, target, e);
                         if (item && parent) {
                             if (target.parent !== parent && target.parent) {
-                                parent.container.toLocal(target.container.position, target.container.parent, this._dragPosition);
+                                parent.container.toLocal(target.container.position, target.container.parent, _this._dragPosition);
                                 parent.addChild(target);
-                                target.x = this._dragPosition.x;
-                                target.y = this._dragPosition.y;
+                                target.x = _this._dragPosition.x;
+                                target.y = _this._dragPosition.y;
                             }
-                            if (this.dragBounces && this._containerStart) {
-                                target.x = this._containerStart.x;
-                                target.y = this._containerStart.y;
+                            if (_this.dragBounces && _this._containerStart) {
+                                target.x = _this._containerStart.x;
+                                target.y = _this._containerStart.y;
                             }
                         }
                         target.emit(Index_1.ComponentEvent.DRAG_END, target, e);
@@ -2535,58 +2875,58 @@ class UIBaseDrag {
                 }
             };
         }
-    }
-    clearDroppable() {
+    };
+    UIBaseDrag.prototype.clearDroppable = function () {
         if (this.target == undefined) {
             return;
         }
-        let target = this.target;
+        var target = this.target;
         if (this.dropInitialized) {
             this.dropInitialized = false;
             target.container.off("mouseup" /* mouseup */, this.onDrop, this);
             target.container.off("touchend" /* touchend */, this.onDrop, this);
         }
-    }
-    initDroppable() {
+    };
+    UIBaseDrag.prototype.initDroppable = function () {
         if (this.target == undefined) {
             return;
         }
-        let target = this.target;
+        var target = this.target;
         if (!this.dropInitialized) {
             this.dropInitialized = true;
-            const container = target.container;
+            var container = target.container;
             //self = this;
             container.interactive = true;
             container.on("mouseup" /* mouseup */, this.onDrop, this);
             container.on("touchend" /* touchend */, this.onDrop, this);
         }
-    }
-    onDrop(e) {
+    };
+    UIBaseDrag.prototype.onDrop = function (e) {
         if (this.target == undefined) {
             return;
         }
-        let target = this.target;
-        const item = Index_1.DragDropController.getEventItem(e, this.dropGroup);
+        var target = this.target;
+        var item = Index_1.DragDropController.getEventItem(e, this.dropGroup);
         if (item && item.dragOption.dragging) {
             item.dragOption.dragging = false;
             item.interactive = true;
-            const parent = item.dragOption.droppableReparent !== undefined ? item.dragOption.droppableReparent : target;
-            if (parent) {
-                parent.container.toLocal(item.container.position, item.container.parent, this._dragPosition);
+            var parent_1 = item.dragOption.droppableReparent !== undefined ? item.dragOption.droppableReparent : target;
+            if (parent_1) {
+                parent_1.container.toLocal(item.container.position, item.container.parent, this._dragPosition);
                 item.x = this._dragPosition.x;
                 item.y = this._dragPosition.y;
-                if (parent != item.parent) {
-                    parent.addChild(item);
-                    parent.emit(Index_1.ComponentEvent.DROP_TARGET, parent, item, e);
+                if (parent_1 != item.parent) {
+                    parent_1.addChild(item);
+                    parent_1.emit(Index_1.ComponentEvent.DROP_TARGET, parent_1, item, e);
                 }
-                item.dragOption.$targetParent = parent;
+                item.dragOption.$targetParent = parent_1;
             }
             item.emit(Index_1.ComponentEvent.DRAG_TARGET, item, e);
         }
-    }
-    load() {
-    }
-    release() {
+    };
+    UIBaseDrag.prototype.load = function () {
+    };
+    UIBaseDrag.prototype.release = function () {
         this.clearDraggable();
         this.clearDroppable();
         if (this.target) {
@@ -2595,9 +2935,10 @@ class UIBaseDrag {
             this.$targetParent = undefined;
             this.dragContainer = undefined;
         }
-    }
-}
-UIBaseDrag.key = "UIBaseDrag";
+    };
+    UIBaseDrag.key = "UIBaseDrag";
+    return UIBaseDrag;
+}());
 exports.UIBaseDrag = UIBaseDrag;
 
 
@@ -2613,32 +2954,33 @@ exports.UIBaseDrag = UIBaseDrag;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Index_1 = __webpack_require__(/*! ../../interaction/Index */ "./src/interaction/Index.ts");
+var Index_1 = __webpack_require__(/*! ../../interaction/Index */ "./src/interaction/Index.ts");
 /**
  *  组件的单击操作
  *
  */
-class UIClick {
+var UIClick = /** @class */ (function () {
     /**
      * 构造函数
      */
-    constructor(target) {
+    function UIClick(target) {
         this._target = target;
         this._target.plugs.set(UIClick.key, this);
         this._clickEvent = new Index_1.ClickEvent(target, true);
         ;
     }
-    load() {
-    }
-    release() {
+    UIClick.prototype.load = function () {
+    };
+    UIClick.prototype.release = function () {
         this._clickEvent.remove();
         if (this._target) {
             this._target.plugs.delete(UIClick.key);
             this._target = undefined;
         }
-    }
-}
-UIClick.key = "UIClick";
+    };
+    UIClick.key = "UIClick";
+    return UIClick;
+}());
 exports.UIClick = UIClick;
 
 
@@ -2653,11 +2995,24 @@ exports.UIClick = UIClick;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const Label_1 = __webpack_require__(/*! ./Label */ "./src/display/Label.ts");
-const Image_1 = __webpack_require__(/*! ./Image */ "./src/display/Image.ts");
-const InputBase_1 = __webpack_require__(/*! ./private/InputBase */ "./src/display/private/InputBase.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var Label_1 = __webpack_require__(/*! ./Label */ "./src/display/Label.ts");
+var Image_1 = __webpack_require__(/*! ./Image */ "./src/display/Image.ts");
+var InputBase_1 = __webpack_require__(/*! ./private/InputBase */ "./src/display/private/InputBase.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 /**
  * 按钮
  *
@@ -2667,38 +3022,44 @@ const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interacti
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestButton
  */
-class Button extends InputBase_1.InputBase {
-    constructor() {
-        super();
-        this._selectedStr = "";
-        this._oldState = "";
+var Button = /** @class */ (function (_super) {
+    __extends(Button, _super);
+    function Button() {
+        var _this = _super.call(this) || this;
+        _this._selectedStr = "";
+        _this._oldState = "";
         /** 状态展示 */
-        this.img = new Image_1.Image();
+        _this.img = new Image_1.Image();
         /** 文字展示 */
-        this.label = new Label_1.Label();
-        this._text = "";
-        this.container.buttonMode = true;
-        this.img.fillMode = "scale";
-        this.img.scale9Grid = [3, 3, 3, 3];
-        this.addChild(this.img);
-        this.label.sprite.style.fontSize = 18;
-        this.addChild(this.label);
-        this.on(Index_1.ComponentEvent.STATE_CHANGE, this.onStateChange, this);
+        _this.label = new Label_1.Label();
+        _this._text = "";
+        _this.container.buttonMode = true;
+        _this.img.fillMode = "scale";
+        _this.img.scale9Grid = [3, 3, 3, 3];
+        _this.addChild(_this.img);
+        _this.label.sprite.style.fontSize = 18;
+        _this.addChild(_this.label);
+        _this.on(Index_1.ComponentEvent.STATE_CHANGE, _this.onStateChange, _this);
+        return _this;
     }
-    /**
-     * 设置按钮的文本内容
-     */
-    get text() {
-        return this.label.text;
-    }
-    set text(value) {
-        this._text = value;
-        this.invalidateDisplayList();
-    }
-    updateDisplayList(unscaledWidth, unscaledHeight) {
-        super.updateDisplayList(unscaledWidth, unscaledHeight);
+    Object.defineProperty(Button.prototype, "text", {
+        /**
+         * 设置按钮的文本内容
+         */
+        get: function () {
+            return this.label.text;
+        },
+        set: function (value) {
+            this._text = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Button.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+        _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
         this.container.hitArea = new PIXI.Rectangle(0, 0, unscaledWidth, unscaledHeight);
-        const img = this.img;
+        var img = this.img;
         img.width = unscaledWidth;
         img.height = unscaledHeight;
         if (this.label.width !== unscaledWidth)
@@ -2709,21 +3070,22 @@ class Button extends InputBase_1.InputBase {
             this.label.text = this._text;
         }
         this.onStateChange(this, this.currentState);
-    }
-    release() {
-        super.release();
+    };
+    Button.prototype.release = function () {
+        _super.prototype.release.call(this);
         this.offAll(Index_1.ComponentEvent.STATE_CHANGE);
         this.img.release();
         this.label.release();
-    }
-    onStateChange(label, state) {
+    };
+    Button.prototype.onStateChange = function (label, state) {
         if (this._oldState == state) {
             return;
         }
         this._oldState = state;
         this.img.src = this[state + this._selectedStr];
-    }
-}
+    };
+    return Button;
+}(InputBase_1.InputBase));
 exports.Button = Button;
 
 
@@ -2738,9 +3100,22 @@ exports.Button = Button;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const Button_1 = __webpack_require__(/*! ./Button */ "./src/display/Button.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var Button_1 = __webpack_require__(/*! ./Button */ "./src/display/Button.ts");
 /**
  * 单选\复选框
  *
@@ -2752,89 +3127,108 @@ const Button_1 = __webpack_require__(/*! ./Button */ "./src/display/Button.ts");
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestCheckBox
  */
-class CheckBox extends Button_1.Button {
-    constructor() {
-        super();
+var CheckBox = /** @class */ (function (_super) {
+    __extends(CheckBox, _super);
+    function CheckBox() {
+        var _this = _super.call(this) || this;
         /**
          * 设置值
          */
-        this._value = "";
+        _this._value = "";
         /**
          * 设置是否选中
          * */
-        this._checked = false;
+        _this._checked = false;
+        return _this;
     }
-    /**
-     * 获取或设置当前选中的值
-     */
-    get selectedValue() {
-        if (this.checkGroup) {
-            return Index_1.InputController.getCheckGroupSelectedValue(this.checkGroup);
-        }
-        return undefined;
-    }
-    /**
-     * 设置分组名
-     */
-    get checkGroup() {
-        return this._groupName;
-    }
-    set checkGroup(value) {
-        if (value === undefined) {
-            Index_1.InputController.unRegistrerCheckGroup(this);
-        }
-        if (this._groupName == value) {
-            return;
-        }
-        this._groupName = value; //需要在registrerCheckGroup之前
-        Index_1.InputController.registrerCheckGroup(this);
-    }
-    /**
-     * 获取设置默认值
-     */
-    get value() {
-        return this._value;
-    }
-    set value(value) {
-        if (value === this._value) {
-            return;
-        }
-        this._value = value;
-    }
-    /**
-     * 设置是否选中
-     * @default false
-     */
-    get checked() {
-        return this._checked;
-    }
-    set checked(value) {
-        if (value !== this._checked) {
-            if (this.checkGroup)
-                Index_1.InputController.updateCheckGroupSelected(this);
-            this._oldState = "";
-            if (value) {
-                this._selectedStr = "AndSelected";
+    Object.defineProperty(CheckBox.prototype, "selectedValue", {
+        /**
+         * 获取或设置当前选中的值
+         */
+        get: function () {
+            if (this.checkGroup) {
+                return Index_1.InputController.getCheckGroupSelectedValue(this.checkGroup);
             }
-            else {
-                this._selectedStr = "";
+            return undefined;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CheckBox.prototype, "checkGroup", {
+        /**
+         * 设置分组名
+         */
+        get: function () {
+            return this._groupName;
+        },
+        set: function (value) {
+            if (value === undefined) {
+                Index_1.InputController.unRegistrerCheckGroup(this);
             }
-            this._checked = value;
-            this.emit(Index_1.ComponentEvent.CHANGE, this);
-            this.onStateChange(this, this.currentState);
-        }
-    }
-    onClick() {
-        super.onClick();
+            if (this._groupName == value) {
+                return;
+            }
+            this._groupName = value; //需要在registrerCheckGroup之前
+            Index_1.InputController.registrerCheckGroup(this);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CheckBox.prototype, "value", {
+        /**
+         * 获取设置默认值
+         */
+        get: function () {
+            return this._value;
+        },
+        set: function (value) {
+            if (value === this._value) {
+                return;
+            }
+            this._value = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CheckBox.prototype, "checked", {
+        /**
+         * 设置是否选中
+         * @default false
+         */
+        get: function () {
+            return this._checked;
+        },
+        set: function (value) {
+            if (value !== this._checked) {
+                if (this.checkGroup)
+                    Index_1.InputController.updateCheckGroupSelected(this);
+                this._oldState = "";
+                if (value) {
+                    this._selectedStr = "AndSelected";
+                }
+                else {
+                    this._selectedStr = "";
+                }
+                this._checked = value;
+                this.emit(Index_1.ComponentEvent.CHANGE, this);
+                this.onStateChange(this, this.currentState);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    CheckBox.prototype.onClick = function () {
+        _super.prototype.onClick.call(this);
         if (this.checkGroup && this.checked)
             return;
         this.checked = !this.checked;
-    }
-    onLabelChange(label) {
+    };
+    CheckBox.prototype.onLabelChange = function (label) {
         label.style.left = this.width;
         label.style.top = this.height - label.height >> 1;
-    }
-}
+    };
+    return CheckBox;
+}(Button_1.Button));
 exports.CheckBox = CheckBox;
 
 
@@ -2849,8 +3243,21 @@ exports.CheckBox = CheckBox;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
 /**
  * 基础容器
  *
@@ -2862,10 +3269,12 @@ const DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestContainer
  */
-class Container extends DisplayObject_1.DisplayObject {
-    constructor() {
-        super();
-        this.isContainer = true;
+var Container = /** @class */ (function (_super) {
+    __extends(Container, _super);
+    function Container() {
+        var _this = _super.call(this) || this;
+        _this.isContainer = true;
+        return _this;
     }
     /**
      * 确定指定显示对象是 DisplayObjectContainer 实例的子项或该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
@@ -2873,7 +3282,7 @@ class Container extends DisplayObject_1.DisplayObject {
      * @param child 要测试的子对象。
      * @returns 如果 child 对象是 DisplayObjectContainer 的子项或容器本身，则为 true；否则为 false。
      */
-    contains(child) {
+    Container.prototype.contains = function (child) {
         while (child) {
             if (child == this) {
                 return true;
@@ -2884,8 +3293,9 @@ class Container extends DisplayObject_1.DisplayObject {
             return false;
         }
         return false;
-    }
-}
+    };
+    return Container;
+}(DisplayObject_1.DisplayObject));
 exports.Container = Container;
 
 
@@ -2900,8 +3310,21 @@ exports.Container = Container;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
 /**
  * 矢量绘制
  *
@@ -2911,13 +3334,16 @@ const DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
  */
-class Graphics extends DisplayObject_1.DisplayObject {
-    constructor(geometry) {
-        super();
-        this.graphics = new PIXI.Graphics(geometry);
-        this.container.addChild(this.graphics);
+var Graphics = /** @class */ (function (_super) {
+    __extends(Graphics, _super);
+    function Graphics(geometry) {
+        var _this = _super.call(this) || this;
+        _this.graphics = new PIXI.Graphics(geometry);
+        _this.container.addChild(_this.graphics);
+        return _this;
     }
-}
+    return Graphics;
+}(DisplayObject_1.DisplayObject));
 exports.Graphics = Graphics;
 
 
@@ -2932,10 +3358,23 @@ exports.Graphics = Graphics;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 /**
  * 图片
  *
@@ -2945,82 +3384,105 @@ const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interacti
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestImage
  */
-class Image extends DisplayObject_1.DisplayObject {
-    constructor() {
-        super();
+var Image = /** @class */ (function (_super) {
+    __extends(Image, _super);
+    function Image() {
+        var _this = _super.call(this) || this;
         /**
          * 填充模式
          * 设置scale后，可设置scale9Grid进行调整缩放区域
          */
-        this._fillMode = "no-repeat";
+        _this._fillMode = "no-repeat";
+        return _this;
     }
     /** 可以支持遮罩的组件 */
-    maskSprite() {
+    Image.prototype.maskSprite = function () {
         return this._sprite;
-    }
-    get src() {
-        return this._src;
-    }
-    set src(value) {
-        this._src = value;
-        this.srcSystem();
-    }
-    get scale9Grid() {
-        return this._scale9Grid;
-    }
-    set scale9Grid(value) {
-        this._scale9Grid = value;
-        this.scale9GridSystem();
-    }
-    get fillMode() {
-        return this._fillMode;
-    }
-    set fillMode(value) {
-        this._fillMode = value;
-        this._source = undefined;
-        this.srcSystem();
-    }
-    get anchorX() {
-        return this._anchorX;
-    }
-    set anchorX(value) {
-        this._anchorX = value;
-        this.anchorSystem();
-    }
-    get anchorY() {
-        return this._anchorY;
-    }
-    set anchorY(value) {
-        this._anchorY = value;
-        this.anchorSystem();
-    }
-    release() {
-        super.release();
+    };
+    Object.defineProperty(Image.prototype, "src", {
+        get: function () {
+            return this._src;
+        },
+        set: function (value) {
+            this._src = value;
+            this.srcSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Image.prototype, "scale9Grid", {
+        get: function () {
+            return this._scale9Grid;
+        },
+        set: function (value) {
+            this._scale9Grid = value;
+            this.scale9GridSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Image.prototype, "fillMode", {
+        get: function () {
+            return this._fillMode;
+        },
+        set: function (value) {
+            this._fillMode = value;
+            this._source = undefined;
+            this.srcSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Image.prototype, "anchorX", {
+        get: function () {
+            return this._anchorX;
+        },
+        set: function (value) {
+            this._anchorX = value;
+            this.anchorSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Image.prototype, "anchorY", {
+        get: function () {
+            return this._anchorY;
+        },
+        set: function (value) {
+            this._anchorY = value;
+            this.anchorSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Image.prototype.release = function () {
+        _super.prototype.release.call(this);
         this.offAll(Index_1.ComponentEvent.COMPLETE);
         if (this._sprite && this._sprite.parent) {
             this._sprite.parent.removeChild(this._sprite).destroy();
         }
-    }
+    };
     /**
      * @private
      * 测量组件尺寸
      */
-    measure() {
-    }
-    updateDisplayList(unscaledWidth, unscaledHeight) {
+    Image.prototype.measure = function () {
+    };
+    Image.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
         if (unscaledWidth === 0 && unscaledHeight === 0) {
             return;
         }
         if (this._sprite) {
-            super.updateDisplayList(unscaledWidth, unscaledHeight);
+            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
             this.scale9GridSystem();
             this._sprite.width = unscaledWidth;
             this._sprite.height = unscaledHeight;
             this.anchorSystem();
         }
-    }
-    srcSystem() {
-        const { container, src } = this;
+    };
+    Image.prototype.srcSystem = function () {
+        var _this = this;
+        var _a = this, container = _a.container, src = _a.src;
         if (src === undefined && this._sprite && this._sprite.parent) {
             container.removeChild(this._sprite);
             this._sprite.destroy();
@@ -3030,65 +3492,65 @@ class Image extends DisplayObject_1.DisplayObject {
         }
         if (src !== this._source) {
             this._source = src;
-            const texture = this._texture = Utils_1.getTexture(src);
-            if (texture === undefined) {
+            var texture_1 = this._texture = Utils_1.getTexture(src);
+            if (texture_1 === undefined) {
                 return;
             }
-            if (texture.frame.width > 1 && texture.frame.height > 1) {
-                this.setMeasuredSize(texture.frame.width, texture.frame.height);
+            if (texture_1.frame.width > 1 && texture_1.frame.height > 1) {
+                this.setMeasuredSize(texture_1.frame.width, texture_1.frame.height);
             }
-            let invalidateDisplayList = false;
-            texture.once("update", () => {
-                invalidateDisplayList = true;
-                this.setMeasuredSize(texture.frame.width, texture.frame.height);
-                this.invalidateSize();
-                this.emit(Index_1.ComponentEvent.COMPLETE, this);
+            var invalidateDisplayList_1 = false;
+            texture_1.once("update", function () {
+                invalidateDisplayList_1 = true;
+                _this.setMeasuredSize(texture_1.frame.width, texture_1.frame.height);
+                _this.invalidateSize();
+                _this.emit(Index_1.ComponentEvent.COMPLETE, _this);
             }, this);
-            let sprite = this._sprite;
+            var sprite = this._sprite;
             if (!PIXI.utils.isWebGLSupported()) {
-                sprite = PIXI.Sprite.from(texture);
+                sprite = PIXI.Sprite.from(texture_1);
             }
             else {
                 if (this.fillMode === "no-repeat") {
                     if (sprite instanceof PIXI.Sprite) {
-                        sprite.texture = texture;
+                        sprite.texture = texture_1;
                     }
                     else {
-                        sprite = new PIXI.Sprite(texture);
+                        sprite = new PIXI.Sprite(texture_1);
                     }
                 }
                 else if (this.fillMode === "repeat") {
                     if (sprite instanceof PIXI.TilingSprite) {
-                        sprite.texture = texture;
+                        sprite.texture = texture_1;
                     }
                     else {
-                        sprite = new PIXI.TilingSprite(texture);
+                        sprite = new PIXI.TilingSprite(texture_1);
                     }
                 }
                 else if (this.fillMode === "scale") {
                     if (sprite instanceof PIXI.NineSlicePlane) {
-                        sprite.texture = texture;
+                        sprite.texture = texture_1;
                     }
                     else {
-                        sprite = new PIXI.NineSlicePlane(texture);
+                        sprite = new PIXI.NineSlicePlane(texture_1);
                     }
                 }
             }
             if (sprite && sprite.parent == undefined) {
                 this._sprite = container.addChild(sprite);
             }
-            if (!invalidateDisplayList) {
+            if (!invalidateDisplayList_1) {
                 this.invalidateDisplayList();
                 this.invalidateParentLayout();
             }
         }
-    }
-    scale9GridSystem() {
+    };
+    Image.prototype.scale9GridSystem = function () {
         if (this._sprite === undefined || this.scale9Grid === undefined) {
             return;
         }
-        const sprite = this._sprite;
-        const scale9Grid = this.scale9Grid;
+        var sprite = this._sprite;
+        var scale9Grid = this.scale9Grid;
         if (sprite instanceof PIXI.TilingSprite) {
             sprite.tileScale.set(scale9Grid[0], scale9Grid[1]);
             sprite.tilePosition.set(scale9Grid[2], scale9Grid[3]);
@@ -3107,20 +3569,21 @@ class Image extends DisplayObject_1.DisplayObject {
                 sprite.bottomHeight = scale9Grid[3];
             }
         }
-    }
-    anchorSystem() {
+    };
+    Image.prototype.anchorSystem = function () {
         if (this._sprite === undefined) {
             return;
         }
-        const sprite = this._sprite;
+        var sprite = this._sprite;
         if (this.anchorX) {
             sprite.x = -Math.floor(sprite.width * this.anchorX);
         }
         if (this.anchorY) {
             sprite.y = -Math.floor(sprite.height * this.anchorY);
         }
-    }
-}
+    };
+    return Image;
+}(DisplayObject_1.DisplayObject));
 exports.Image = Image;
 
 
@@ -3135,10 +3598,23 @@ exports.Image = Image;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const UIKeys = __webpack_require__(/*! ../core/DisplayLayoutKeys */ "./src/core/DisplayLayoutKeys.ts");
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var UIKeys = __webpack_require__(/*! ../core/DisplayLayoutKeys */ "./src/core/DisplayLayoutKeys.ts");
 /**
  * 文本
  *
@@ -3152,36 +3628,47 @@ const UIKeys = __webpack_require__(/*! ../core/DisplayLayoutKeys */ "./src/core/
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestLabel
  */
-class Label extends DisplayObject_1.DisplayObject {
-    constructor(text = "") {
-        super();
-        this.sprite = new PIXI.Text(text, { breakWords: true, fill: "#ffffff" });
-        this.container.addChild(this.sprite);
+var Label = /** @class */ (function (_super) {
+    __extends(Label, _super);
+    function Label(text) {
+        if (text === void 0) { text = ""; }
+        var _this = _super.call(this) || this;
+        _this.sprite = new PIXI.Text(text, { breakWords: true, fill: "#ffffff" });
+        _this.container.addChild(_this.sprite);
+        return _this;
     }
-    /**
-     * 文本内容
-     */
-    get text() {
-        return this.sprite.text;
-    }
-    set text(value) {
-        this.sprite.text = value;
-        this.invalidateSize();
-        this.invalidateDisplayList();
-        this.emit(Index_1.ComponentEvent.CHANGE, this);
-    }
-    set fontCssStyle(value) {
-        if (value.color) {
-            value.fill = value.color;
-        }
-        value.breakWords = true;
-        this.sprite.style = value;
-        this.invalidateSize();
-        this.invalidateDisplayList();
-    }
-    updateDisplayList(unscaledWidth, unscaledHeight) {
-        super.updateDisplayList(unscaledWidth, unscaledHeight);
-        const values = this.$values;
+    Object.defineProperty(Label.prototype, "text", {
+        /**
+         * 文本内容
+         */
+        get: function () {
+            return this.sprite.text;
+        },
+        set: function (value) {
+            this.sprite.text = value;
+            this.invalidateSize();
+            this.invalidateDisplayList();
+            this.emit(Index_1.ComponentEvent.CHANGE, this);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Label.prototype, "fontCssStyle", {
+        set: function (value) {
+            if (value.color) {
+                value.fill = value.color;
+            }
+            value.breakWords = true;
+            this.sprite.style = value;
+            this.invalidateSize();
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Label.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+        _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+        var values = this.$values;
         if (!isNaN(values[UIKeys.explicitWidth])) {
             switch (this.style.textAlign) {
                 case "left":
@@ -3198,16 +3685,17 @@ class Label extends DisplayObject_1.DisplayObject {
         if (!isNaN(values[UIKeys.explicitHeight])) {
             this.sprite.y = values[UIKeys.explicitHeight] - this.sprite.height >> 1;
         }
-    }
-    release() {
-        super.release();
-        const sprite = this.sprite;
+    };
+    Label.prototype.release = function () {
+        _super.prototype.release.call(this);
+        var sprite = this.sprite;
         if (sprite && sprite.parent) {
             sprite.parent.removeChild(sprite).destroy();
         }
         this.offAll(Index_1.ComponentEvent.CHANGE);
-    }
-}
+    };
+    return Label;
+}(DisplayObject_1.DisplayObject));
 exports.Label = Label;
 
 
@@ -3222,8 +3710,21 @@ exports.Label = Label;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
 /**
  * 绘制矩形或圆角矩形
  *
@@ -3233,91 +3734,118 @@ const DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
  */
-class Rect extends DisplayObject_1.DisplayObject {
-    constructor() {
-        super();
+var Rect = /** @class */ (function (_super) {
+    __extends(Rect, _super);
+    function Rect() {
+        var _this = _super.call(this) || this;
         /**
          * 圆角
          */
-        this._radius = 0;
+        _this._radius = 0;
         /**
          * 线条颜色
          */
-        this._lineColor = 0;
+        _this._lineColor = 0;
         /**
          * 线条粗细
          */
-        this._lineWidth = 0;
+        _this._lineWidth = 0;
         /**
          * 颜色
          */
-        this._color = 0;
-        this.graphics = new PIXI.Graphics();
-        this.container.addChild(this.graphics);
+        _this._color = 0;
+        _this.graphics = new PIXI.Graphics();
+        _this.container.addChild(_this.graphics);
+        return _this;
     }
     /** 可以支持遮罩的组件 */
-    maskSprite() {
+    Rect.prototype.maskSprite = function () {
         return this.graphics;
-    }
-    get radius() {
-        return this._radius;
-    }
-    set radius(value) {
-        this._radius = value;
-        this.invalidateDisplayList();
-    }
-    get lineColor() {
-        return this._lineColor;
-    }
-    set lineColor(value) {
-        this._lineColor = value;
-        this.invalidateDisplayList();
-    }
-    get lineWidth() {
-        return this._lineWidth;
-    }
-    set lineWidth(value) {
-        this._lineWidth = value;
-        this.invalidateDisplayList();
-    }
-    get color() {
-        return this._color;
-    }
-    set color(value) {
-        this._color = value;
-        this.invalidateDisplayList();
-    }
-    get anchorX() {
-        return this._anchorX;
-    }
-    set anchorX(value) {
-        this._anchorX = value;
-        this.invalidateDisplayList();
-    }
-    get anchorY() {
-        return this._anchorY;
-    }
-    set anchorY(value) {
-        this._anchorY = value;
-        this.invalidateDisplayList();
-    }
-    drawRoundedRect() {
-        const graphics = this.graphics;
+    };
+    Object.defineProperty(Rect.prototype, "radius", {
+        get: function () {
+            return this._radius;
+        },
+        set: function (value) {
+            this._radius = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Rect.prototype, "lineColor", {
+        get: function () {
+            return this._lineColor;
+        },
+        set: function (value) {
+            this._lineColor = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Rect.prototype, "lineWidth", {
+        get: function () {
+            return this._lineWidth;
+        },
+        set: function (value) {
+            this._lineWidth = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Rect.prototype, "color", {
+        get: function () {
+            return this._color;
+        },
+        set: function (value) {
+            this._color = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Rect.prototype, "anchorX", {
+        get: function () {
+            return this._anchorX;
+        },
+        set: function (value) {
+            this._anchorX = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Rect.prototype, "anchorY", {
+        get: function () {
+            return this._anchorY;
+        },
+        set: function (value) {
+            this._anchorY = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Rect.prototype.drawRoundedRect = function () {
+        var graphics = this.graphics;
         graphics.clear();
         graphics.lineStyle(this._lineWidth, this._lineColor);
         graphics.beginFill(this._color);
         graphics.drawRoundedRect(this._anchorX ? -this._anchorX * this.width : 0, this._anchorY ? -this._anchorY * this.height : 0, this.width, this.height, this._radius);
         graphics.endFill();
-    }
-    release() {
-        super.release();
+    };
+    Rect.prototype.release = function () {
+        _super.prototype.release.call(this);
         this.graphics.parent.removeChild(this.graphics).destroy();
-    }
-    updateDisplayList(unscaledWidth, unscaledHeight) {
+    };
+    Rect.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
         this.drawRoundedRect();
-        super.updateDisplayList(unscaledWidth, unscaledHeight);
-    }
-}
+        _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+    };
+    return Rect;
+}(DisplayObject_1.DisplayObject));
 exports.Rect = Rect;
 
 
@@ -3332,15 +3860,28 @@ exports.Rect = Rect;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const Container_1 = __webpack_require__(/*! ./Container */ "./src/display/Container.ts");
-const Ticker = __webpack_require__(/*! ../core/Ticker */ "./src/core/Ticker.ts");
-const Utils = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const DragEvent_1 = __webpack_require__(/*! ../interaction/DragEvent */ "./src/interaction/DragEvent.ts");
-const MouseScrollEvent_1 = __webpack_require__(/*! ../interaction/MouseScrollEvent */ "./src/interaction/MouseScrollEvent.ts");
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const ContainerBase_1 = __webpack_require__(/*! ../core/ContainerBase */ "./src/core/ContainerBase.ts");
+var Container_1 = __webpack_require__(/*! ./Container */ "./src/display/Container.ts");
+var Ticker = __webpack_require__(/*! ../core/Ticker */ "./src/core/Ticker.ts");
+var Utils = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var DragEvent_1 = __webpack_require__(/*! ../interaction/DragEvent */ "./src/interaction/DragEvent.ts");
+var MouseScrollEvent_1 = __webpack_require__(/*! ../interaction/MouseScrollEvent */ "./src/interaction/MouseScrollEvent.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var ContainerBase_1 = __webpack_require__(/*! ../core/ContainerBase */ "./src/core/ContainerBase.ts");
 /**
  * 可滚动的容器
  *
@@ -3350,139 +3891,145 @@ const ContainerBase_1 = __webpack_require__(/*! ../core/ContainerBase */ "./src/
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
  */
-class ScrollingContainer extends Container_1.Container {
-    constructor() {
-        super();
+var ScrollingContainer = /** @class */ (function (_super) {
+    __extends(ScrollingContainer, _super);
+    function ScrollingContainer() {
+        var _this = _super.call(this) || this;
         /**
          * 是否启动拖拽滚动
          * @default true
          */
-        this._dragScrolling = true;
+        _this._dragScrolling = true;
         /**
          * 滚动的阻力或柔度 (0-1)
          * @default 0.5
          */
-        this.softness = 0.5;
+        _this.softness = 0.5;
         /**
          * 滚动条的圆角半径 设置0时，滚动条为直角长方形
          * @default 0
          */
-        this.radius = 0;
+        _this.radius = 0;
         /**
          * 遮罩的扩充范围
          */
-        this.expandMask = 0;
+        _this.expandMask = 0;
         /**
          * 是否开启滚动动画
          * @default false
          */
-        this.animating = false;
+        _this.animating = false;
         /**
          * 是否启用水平滚动
          * @default false
          */
-        this.scrollX = false;
+        _this.scrollX = false;
         /**
          * 是否滚动中
          */
-        this.scrollY = false;
+        _this.scrollY = false;
         /**
          * 内容容器
          * @private
          */
-        this._innerContainer = new ContainerBase_1.ContainerBase();
+        _this._innerContainer = new ContainerBase_1.ContainerBase();
         /**
          * 内容的宽高
          */
-        this.innerBounds = new PIXI.Rectangle();
+        _this.innerBounds = new PIXI.Rectangle();
         /**
          * 拖动处理类
          */
-        this.dragEvent = new DragEvent_1.DragEvent(this);
+        _this.dragEvent = new DragEvent_1.DragEvent(_this);
         /**
          * 鼠标滚动
          */
-        this.mouseScrollEvent = new MouseScrollEvent_1.MouseScrollEvent(this, true);
+        _this.mouseScrollEvent = new MouseScrollEvent_1.MouseScrollEvent(_this, true);
         /**
          * 是否滚动中
          */
-        this.scrolling = false;
+        _this.scrolling = false;
         /**
          * 临时方案，设置时间间隔，跳转容器宽高
          */
-        this._boundCached = Utils_1.now() - 1000;
-        this._lastWidth = 0;
-        this._lastHeight = 0;
-        this._isInitScrolling = false;
-        this._containerStart = new PIXI.Point();
-        this._targetPosition = new PIXI.Point();
-        this._lastPosition = new PIXI.Point();
-        this._Position = new PIXI.Point();
-        this._Speed = new PIXI.Point();
-        this._stop = false;
-        this.container.addChild(this._innerContainer);
-        this.container.name = "ScrollingContainer";
-        this._innerContainer.name = "innerContainer";
-        const _graphics = new PIXI.Graphics();
+        _this._boundCached = Utils_1.now() - 1000;
+        _this._lastWidth = 0;
+        _this._lastHeight = 0;
+        _this._isInitScrolling = false;
+        _this._containerStart = new PIXI.Point();
+        _this._targetPosition = new PIXI.Point();
+        _this._lastPosition = new PIXI.Point();
+        _this._Position = new PIXI.Point();
+        _this._Speed = new PIXI.Point();
+        _this._stop = false;
+        _this.container.addChild(_this._innerContainer);
+        _this.container.name = "ScrollingContainer";
+        _this._innerContainer.name = "innerContainer";
+        var _graphics = new PIXI.Graphics();
         _graphics.clear();
         _graphics.beginFill(0xffcc00);
         _graphics.drawRoundedRect(0, 0, 200, 200, 0);
         _graphics.endFill();
-        this.style.maskImage = _graphics;
-        this.dragEvent.onDragStart = () => {
-            if (!this.scrolling) {
-                this._containerStart.copyFrom(this._innerContainer.position);
-                this._Position.copyFrom(this._innerContainer.position);
-                this.scrolling = true;
-                this.setScrollPosition();
-                Ticker.shared.addUpdateEvent(this.updateScrollPosition, this);
+        _this.style.maskImage = _graphics;
+        _this.dragEvent.onDragStart = function () {
+            if (!_this.scrolling) {
+                _this._containerStart.copyFrom(_this._innerContainer.position);
+                _this._Position.copyFrom(_this._innerContainer.position);
+                _this.scrolling = true;
+                _this.setScrollPosition();
+                Ticker.shared.addUpdateEvent(_this.updateScrollPosition, _this);
             }
         };
-        this.dragEvent.onDragMove = (e, offset) => {
-            if (this.scrollX)
-                this._targetPosition.x = this._containerStart.x + offset.x;
-            if (this.scrollY)
-                this._targetPosition.y = this._containerStart.y + offset.y;
+        _this.dragEvent.onDragMove = function (e, offset) {
+            if (_this.scrollX)
+                _this._targetPosition.x = _this._containerStart.x + offset.x;
+            if (_this.scrollY)
+                _this._targetPosition.y = _this._containerStart.y + offset.y;
         };
-        this.dragEvent.onDragEnd = () => {
-            if (this.scrolling) {
-                this.scrolling = false;
-                Ticker.shared.removeUpdateEvent(this.updateScrollPosition, this);
+        _this.dragEvent.onDragEnd = function () {
+            if (_this.scrolling) {
+                _this.scrolling = false;
+                Ticker.shared.removeUpdateEvent(_this.updateScrollPosition, _this);
             }
         };
-        const scrollSpeed = new PIXI.Point();
-        this.mouseScrollEvent.onMouseScroll = (e, delta) => {
+        var scrollSpeed = new PIXI.Point();
+        _this.mouseScrollEvent.onMouseScroll = function (e, delta) {
             scrollSpeed.set(-delta.x * 0.2, -delta.y * 0.2);
-            this.setScrollPosition(scrollSpeed);
+            _this.setScrollPosition(scrollSpeed);
         };
+        return _this;
     }
-    get dragScrolling() {
-        return this._dragScrolling;
-    }
-    set dragScrolling(value) {
-        this._dragScrolling = value;
-        //Drag scroll and Mouse scroll
-        if (value) {
-            this.mouseScrollEvent.startEvent();
-            this.dragEvent.startEvent();
-        }
-        else {
-            this.mouseScrollEvent.stopEvent();
-            this.dragEvent.stopEvent();
-        }
-    }
-    updateDisplayList(unscaledWidth, unscaledHeight) {
+    Object.defineProperty(ScrollingContainer.prototype, "dragScrolling", {
+        get: function () {
+            return this._dragScrolling;
+        },
+        set: function (value) {
+            this._dragScrolling = value;
+            //Drag scroll and Mouse scroll
+            if (value) {
+                this.mouseScrollEvent.startEvent();
+                this.dragEvent.startEvent();
+            }
+            else {
+                this.mouseScrollEvent.stopEvent();
+                this.dragEvent.stopEvent();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ScrollingContainer.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
         if (this._lastWidth != unscaledWidth || this._lastHeight != unscaledHeight) {
-            super.updateDisplayList(unscaledWidth, unscaledHeight);
-            const _of = this.expandMask;
+            _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+            var _of = this.expandMask;
             this.style.maskPosition = [_of, _of];
             this._lastWidth = unscaledWidth;
             this._lastHeight = unscaledHeight;
             this.style.maskSize = [unscaledWidth, unscaledHeight];
             this.setScrollPosition();
         }
-    }
-    setScrollPosition(speed) {
+    };
+    ScrollingContainer.prototype.setScrollPosition = function (speed) {
         if (speed) {
             this._Speed = speed;
         }
@@ -3492,8 +4039,8 @@ class ScrollingContainer extends Container_1.Container {
             this._targetPosition.copyFrom(this._innerContainer.position);
             this.updateScrollPosition(0);
         }
-    }
-    addChildAt(item, index) {
+    };
+    ScrollingContainer.prototype.addChildAt = function (item, index) {
         if (item.parent) {
             item.parent.removeChild(item);
         }
@@ -3503,8 +4050,8 @@ class ScrollingContainer extends Container_1.Container {
         this.uiChildren.splice(index, 0, item);
         this.getInnerBounds(true);
         return item;
-    }
-    getInnerBounds(force) {
+    };
+    ScrollingContainer.prototype.getInnerBounds = function (force) {
         //this is a temporary fix, because we cant rely on innercontainer height if the children is positioned > 0 y.
         if (force || Utils_1.now() - this._boundCached > 1000) {
             this._innerContainer.getLocalBounds(this.innerBounds);
@@ -3513,25 +4060,25 @@ class ScrollingContainer extends Container_1.Container {
             this._boundCached = Utils_1.now();
         }
         return this.innerBounds;
-    }
-    $onInit() {
-        super.$onInit();
+    };
+    ScrollingContainer.prototype.$onInit = function () {
+        _super.prototype.$onInit.call(this);
         this.initScrolling();
-    }
-    initScrolling() {
+    };
+    ScrollingContainer.prototype.initScrolling = function () {
         this._isInitScrolling = true;
         this.updateScrollBars();
-    }
-    updateScrollBars() {
+    };
+    ScrollingContainer.prototype.updateScrollBars = function () {
         this.emit(Index_1.ComponentEvent.CHANGE, this);
-    }
+    };
     /**
      * 百分比设置位置
      * @param direction 方向
      * @param pct 百分比0-1
      */
-    forcePctPosition(direction, pct) {
-        const bounds = this.getInnerBounds();
+    ScrollingContainer.prototype.forcePctPosition = function (direction, pct) {
+        var bounds = this.getInnerBounds();
         if (this.scrollX && direction == "x") {
             this._innerContainer.position[direction] = -((bounds.width - this._width) * pct);
         }
@@ -3539,13 +4086,13 @@ class ScrollingContainer extends Container_1.Container {
             this._innerContainer[direction] = -((bounds.height - this._height) * pct);
         }
         this._Position[direction] = this._targetPosition[direction] = this._innerContainer.position[direction];
-    }
+    };
     /** 根据焦点设置位置 */
-    focusPosition(pos) {
-        const bounds = this.getInnerBounds();
-        let dif;
+    ScrollingContainer.prototype.focusPosition = function (pos) {
+        var bounds = this.getInnerBounds();
+        var dif;
         if (this.scrollX) {
-            const x = Math.max(0, (Math.min(bounds.width, pos.x)));
+            var x = Math.max(0, (Math.min(bounds.width, pos.x)));
             if (x + this._innerContainer.x > this._width) {
                 dif = x - this._width;
                 this._innerContainer.x = -dif;
@@ -3556,7 +4103,7 @@ class ScrollingContainer extends Container_1.Container {
             }
         }
         if (this.scrollY) {
-            const y = Math.max(0, (Math.min(bounds.height, pos.y)));
+            var y = Math.max(0, (Math.min(bounds.height, pos.y)));
             if (y + this._innerContainer.y > this._height) {
                 dif = y - this._height;
                 this._innerContainer.y = -dif;
@@ -3570,8 +4117,8 @@ class ScrollingContainer extends Container_1.Container {
         this._targetPosition.copyFrom(this._innerContainer.position);
         this._Position.copyFrom(this._innerContainer.position);
         this.updateScrollBars();
-    }
-    updateScrollPosition(delta) {
+    };
+    ScrollingContainer.prototype.updateScrollPosition = function (delta) {
         this._stop = true;
         if (this.scrollX)
             this.updateDirection("x", delta);
@@ -3580,11 +4127,11 @@ class ScrollingContainer extends Container_1.Container {
         if (stop) {
             this.animating = false;
         }
-    }
-    updateDirection(direction, delta) {
+    };
+    ScrollingContainer.prototype.updateDirection = function (direction, delta) {
         delta = delta * 0.001;
-        const bounds = this.getInnerBounds();
-        let min;
+        var bounds = this.getInnerBounds();
+        var min;
         if (direction == "y")
             min = Math.round(Math.min(0, this._height - bounds.height));
         else
@@ -3600,7 +4147,7 @@ class ScrollingContainer extends Container_1.Container {
             }
         }
         if (!this.scrolling && Math.round(this._Speed[direction]) === 0 && (this._innerContainer[direction] > 0 || this._innerContainer[direction] < min)) {
-            const target = this._Position[direction] > 0 ? 0 : min;
+            var target = this._Position[direction] > 0 ? 0 : min;
             this._Position[direction] = Utils.Lerp(this._Position[direction], target, (40 - (30 * this.softness)) * delta);
             this._stop = false;
         }
@@ -3624,8 +4171,9 @@ class ScrollingContainer extends Container_1.Container {
         }
         this._innerContainer.position[direction] = Math.round(this._Position[direction]);
         this.updateScrollBars();
-    }
-}
+    };
+    return ScrollingContainer;
+}(Container_1.Container));
 exports.ScrollingContainer = ScrollingContainer;
 
 
@@ -3640,13 +4188,26 @@ exports.ScrollingContainer = ScrollingContainer;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
-const Image_1 = __webpack_require__(/*! ./Image */ "./src/display/Image.ts");
-const Utils = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const Tween_1 = __webpack_require__(/*! ../tween/Tween */ "./src/tween/Tween.ts");
-const Easing_1 = __webpack_require__(/*! ../tween/Easing */ "./src/tween/Easing.ts");
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var Image_1 = __webpack_require__(/*! ./Image */ "./src/display/Image.ts");
+var Utils = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var Tween_1 = __webpack_require__(/*! ../tween/Tween */ "./src/tween/Tween.ts");
+var Easing_1 = __webpack_require__(/*! ../tween/Easing */ "./src/tween/Easing.ts");
 /**
  * 滑动条/进度条
  *
@@ -3656,132 +4217,162 @@ const Easing_1 = __webpack_require__(/*! ../tween/Easing */ "./src/tween/Easing.
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSlider
  */
-class Slider extends DisplayObject_1.DisplayObject {
-    constructor() {
-        super();
+var Slider = /** @class */ (function (_super) {
+    __extends(Slider, _super);
+    function Slider() {
+        var _this = _super.call(this) || this;
         /**
          * 当前值
          */
-        this._amt = 0;
+        _this._amt = 0;
         /**
          * 小数的保留位，0不保留
          * @default 0
          */
-        this._decimals = 0;
-        this._startValue = 0;
-        this._maxPosition = 0;
-        this._localMousePosition = new PIXI.Point();
-        this._lastChange = 0;
-        this._lastChanging = 0;
-        this._thumbDrag = new Index_1.DragEvent(this);
-        this._trackDrag = new Index_1.DragEvent(this);
+        _this._decimals = 0;
+        _this._startValue = 0;
+        _this._maxPosition = 0;
+        _this._localMousePosition = new PIXI.Point();
+        _this._lastChange = 0;
+        _this._lastChanging = 0;
+        _this._thumbDrag = new Index_1.DragEvent(_this);
+        _this._trackDrag = new Index_1.DragEvent(_this);
         /** 状态展示 */
-        this.trackImg = new Image_1.Image();
-        this.thumbImg = new Image_1.Image();
-        this.tracklightImg = new Image_1.Image();
-        this._value = 0;
+        _this.trackImg = new Image_1.Image();
+        _this.thumbImg = new Image_1.Image();
+        _this.tracklightImg = new Image_1.Image();
+        _this._value = 0;
         /**
          * 最小值
          */
-        this._minValue = 0;
+        _this._minValue = 0;
         /**
          * 最大值
          */
-        this._maxValue = 100;
+        _this._maxValue = 100;
         /**
          * 是否垂直,滑块方向
          */
-        this._vertical = false;
-        this.isExcValueSystem = false;
-        this._thumbDrag.onDragPress = this.onPress;
-        this._thumbDrag.onDragStart = this.onDragStart;
-        this._thumbDrag.onDragMove = this.onDragMove;
-        this._thumbDrag.onDragEnd = this.onDragEnd;
-        this._trackDrag.onDragPress = this.onPress;
-        this._trackDrag.onDragStart = this.onDragStart;
-        this._trackDrag.onDragMove = this.onDragMove;
-        this._trackDrag.onDragEnd = this.onDragEnd;
-        this.thumbImg.container.name = "thumbImg";
-        this.thumbImg.anchorX = 0.5;
-        this.thumbImg.anchorY = 0.5;
-        this.thumbImg.on(Index_1.ComponentEvent.COMPLETE, this.onImgload, this);
-        this.trackImg.container.name = "trackImg";
-        this.trackImg.fillMode = "scale";
-        this.trackImg.scale9Grid = [2, 2, 2, 2];
-        this.trackImg.style.width = "100%";
-        this.trackImg.style.height = "100%";
-        this.trackImg.on(Index_1.ComponentEvent.COMPLETE, this.onImgload, this);
-        this.tracklightImg.container.name = "tracklightImg";
-        this.tracklightImg.fillMode = "scale";
-        this.tracklightImg.scale9Grid = [2, 2, 2, 2];
-        this.addChild(this.trackImg);
-        this.addChild(this.tracklightImg);
-        this.addChild(this.thumbImg);
+        _this._vertical = false;
+        _this.isExcValueSystem = false;
+        _this._thumbDrag.onDragPress = _this.onPress;
+        _this._thumbDrag.onDragStart = _this.onDragStart;
+        _this._thumbDrag.onDragMove = _this.onDragMove;
+        _this._thumbDrag.onDragEnd = _this.onDragEnd;
+        _this._trackDrag.onDragPress = _this.onPress;
+        _this._trackDrag.onDragStart = _this.onDragStart;
+        _this._trackDrag.onDragMove = _this.onDragMove;
+        _this._trackDrag.onDragEnd = _this.onDragEnd;
+        _this.thumbImg.container.name = "thumbImg";
+        _this.thumbImg.anchorX = 0.5;
+        _this.thumbImg.anchorY = 0.5;
+        _this.thumbImg.on(Index_1.ComponentEvent.COMPLETE, _this.onImgload, _this);
+        _this.trackImg.container.name = "trackImg";
+        _this.trackImg.fillMode = "scale";
+        _this.trackImg.scale9Grid = [2, 2, 2, 2];
+        _this.trackImg.style.width = "100%";
+        _this.trackImg.style.height = "100%";
+        _this.trackImg.on(Index_1.ComponentEvent.COMPLETE, _this.onImgload, _this);
+        _this.tracklightImg.container.name = "tracklightImg";
+        _this.tracklightImg.fillMode = "scale";
+        _this.tracklightImg.scale9Grid = [2, 2, 2, 2];
+        _this.addChild(_this.trackImg);
+        _this.addChild(_this.tracklightImg);
+        _this.addChild(_this.thumbImg);
+        return _this;
     }
-    /**
-     * 当前值
-     */
-    get value() {
-        return Utils.Round(Utils.Lerp(this.minValue, this.maxValue, this._amt), this._decimals);
-    }
-    set value(value) {
-        this._value = value;
-        this.valueSystem();
-    }
-    valueSystem() {
+    Object.defineProperty(Slider.prototype, "value", {
+        /**
+         * 当前值
+         */
+        get: function () {
+            return Utils.Round(Utils.Lerp(this.minValue, this.maxValue, this._amt), this._decimals);
+        },
+        set: function (value) {
+            this._value = value;
+            this.valueSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Slider.prototype.valueSystem = function () {
         this._amt = (Math.max(this.minValue, Math.min(this.maxValue, this._value)) - this.minValue) / (this.maxValue - this.minValue);
         this.updatePosition();
         this.triggerValueChange();
         this.triggerValueChanging();
-    }
-    get minValue() {
-        return this._minValue;
-    }
-    set minValue(value) {
-        this._minValue = value;
-    }
-    get maxValue() {
-        return this._maxValue;
-    }
-    set maxValue(value) {
-        this._maxValue = value;
-    }
-    get vertical() {
-        return this._vertical;
-    }
-    set vertical(value) {
-        this._vertical = value;
-        this.updateLayout();
-    }
-    get track() {
-        return this._track;
-    }
-    set track(value) {
-        if (value !== this._track) {
-            this._track = value;
-            this.trackImg.src = value;
-        }
-    }
-    get thumb() {
-        return this._thumb;
-    }
-    set thumb(value) {
-        if (value !== this._thumb) {
-            this._thumb = value;
-            this.thumbImg.src = value;
-        }
-    }
-    get tracklight() {
-        return this._tracklight;
-    }
-    set tracklight(value) {
-        if (value !== this._tracklight) {
-            this._tracklight = value;
-            this.tracklightImg.src = value;
-        }
-    }
-    setActualSize(w, h) {
-        super.setActualSize(w, h);
+    };
+    Object.defineProperty(Slider.prototype, "minValue", {
+        get: function () {
+            return this._minValue;
+        },
+        set: function (value) {
+            this._minValue = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Slider.prototype, "maxValue", {
+        get: function () {
+            return this._maxValue;
+        },
+        set: function (value) {
+            this._maxValue = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Slider.prototype, "vertical", {
+        get: function () {
+            return this._vertical;
+        },
+        set: function (value) {
+            this._vertical = value;
+            this.updateLayout();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Slider.prototype, "track", {
+        get: function () {
+            return this._track;
+        },
+        set: function (value) {
+            if (value !== this._track) {
+                this._track = value;
+                this.trackImg.src = value;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Slider.prototype, "thumb", {
+        get: function () {
+            return this._thumb;
+        },
+        set: function (value) {
+            if (value !== this._thumb) {
+                this._thumb = value;
+                this.thumbImg.src = value;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Slider.prototype, "tracklight", {
+        get: function () {
+            return this._tracklight;
+        },
+        set: function (value) {
+            if (value !== this._tracklight) {
+                this._tracklight = value;
+                this.tracklightImg.src = value;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Slider.prototype.setActualSize = function (w, h) {
+        _super.prototype.setActualSize.call(this, w, h);
         if (this.trackImg.width !== w) {
             this.trackImg.width = w;
         }
@@ -3792,19 +4383,19 @@ class Slider extends DisplayObject_1.DisplayObject {
             this.valueSystem();
             this.isExcValueSystem = true;
         }
-    }
-    release() {
-        super.release();
+    };
+    Slider.prototype.release = function () {
+        _super.prototype.release.call(this);
         this.trackImg.release();
         this.thumbImg.release();
         this.tracklightImg.release();
-    }
-    onImgload() {
+    };
+    Slider.prototype.onImgload = function () {
         this.updateLayout();
-    }
-    updateLayout() {
-        const thumbImg = this.thumbImg;
-        const tracklightImg = this.tracklightImg;
+    };
+    Slider.prototype.updateLayout = function () {
+        var thumbImg = this.thumbImg;
+        var tracklightImg = this.tracklightImg;
         if (this.vertical) {
             //thumbImg.style.top =this._amt; 
             thumbImg.x = this._width >> 1;
@@ -3817,16 +4408,16 @@ class Slider extends DisplayObject_1.DisplayObject {
             tracklightImg.height = this._height;
             //tracklightImg.style.width =  this._amt * this.width;
         }
-    }
-    updatePosition(soft) {
-        let val = 0;
-        const thumbImg = this.thumbImg;
-        const tracklightImg = this.tracklightImg;
+    };
+    Slider.prototype.updatePosition = function (soft) {
+        var val = 0;
+        var thumbImg = this.thumbImg;
+        var tracklightImg = this.tracklightImg;
         if (this.vertical) {
             val = this._height * this._amt;
             if (soft) {
                 Tween_1.Tween.to({ y: thumbImg.y, height: tracklightImg.height }, { y: val, height: val }, 300).easing(Easing_1.Easing.Linear.None)
-                    .on(Tween_1.Tween.Event.update, (obj) => {
+                    .on(Tween_1.Tween.Event.update, function (obj) {
                     thumbImg.y = obj.y;
                     tracklightImg.height = obj.height;
                 }).start();
@@ -3840,7 +4431,7 @@ class Slider extends DisplayObject_1.DisplayObject {
             val = this._width * this._amt;
             if (soft) {
                 Tween_1.Tween.to({ x: thumbImg.x, width: tracklightImg.width }, { x: val, width: val }, 300).easing(Easing_1.Easing.Linear.None)
-                    .on(Tween_1.Tween.Event.update, (obj) => {
+                    .on(Tween_1.Tween.Event.update, function (obj) {
                     thumbImg.x = obj.x;
                     tracklightImg.width = obj.width;
                 }).start();
@@ -3850,22 +4441,22 @@ class Slider extends DisplayObject_1.DisplayObject {
                 tracklightImg.width = val;
             }
         }
-    }
-    onPress(event, isPressed, dragEvent) {
+    };
+    Slider.prototype.onPress = function (event, isPressed, dragEvent) {
         event.stopPropagation();
         if (this._trackDrag == dragEvent && this._trackDrag.id == event.data.identifier) {
             if (isPressed) {
                 this.updatePositionToMouse(event.data.global, true);
             }
         }
-    }
-    onDragStart(event) {
+    };
+    Slider.prototype.onDragStart = function (event) {
         if (this._thumbDrag.id == event.data.identifier) {
             this._startValue = this._amt;
             this._maxPosition = this.vertical ? this._height : this._width;
         }
-    }
-    onDragMove(event, offset) {
+    };
+    Slider.prototype.onDragMove = function (event, offset) {
         if (this._thumbDrag.id == event.data.identifier) {
             this._amt = !this._maxPosition ? 0 : Math.max(0, Math.min(1, this._startValue + ((this.vertical ? offset.y : offset.x) / this._maxPosition)));
             this.triggerValueChanging();
@@ -3874,8 +4465,8 @@ class Slider extends DisplayObject_1.DisplayObject {
         else if (this._trackDrag && this._trackDrag.id == event.data.identifier) {
             this.updatePositionToMouse(event.data.global, false);
         }
-    }
-    onDragEnd(event) {
+    };
+    Slider.prototype.onDragEnd = function (event) {
         if (this._thumbDrag.id == event.data.identifier) {
             this.triggerValueChange();
             this.updatePosition();
@@ -3883,30 +4474,31 @@ class Slider extends DisplayObject_1.DisplayObject {
         else if (this._trackDrag && this._trackDrag.id == event.data.identifier) {
             this.triggerValueChange();
         }
-    }
-    updatePositionToMouse(mousePosition, soft) {
+    };
+    Slider.prototype.updatePositionToMouse = function (mousePosition, soft) {
         this.trackImg.container.toLocal(mousePosition, undefined, this._localMousePosition, true);
-        const newPos = this.vertical ? this._localMousePosition.y : this._localMousePosition.x;
-        const maxPos = this.vertical ? this._height : this._width;
+        var newPos = this.vertical ? this._localMousePosition.y : this._localMousePosition.x;
+        var maxPos = this.vertical ? this._height : this._width;
         this._amt = !maxPos ? 0 : Math.max(0, Math.min(1, newPos / maxPos));
         this.updatePosition(soft);
         this.triggerValueChanging();
-    }
-    triggerValueChange() {
-        const value = this.value;
+    };
+    Slider.prototype.triggerValueChange = function () {
+        var value = this.value;
         this.emit(Index_1.ComponentEvent.CHANGE, this, value, this._lastChange);
         if (this._lastChange != value) {
             this._lastChange = value;
         }
-    }
-    triggerValueChanging() {
-        const value = this.value;
+    };
+    Slider.prototype.triggerValueChanging = function () {
+        var value = this.value;
         this.emit(Index_1.ComponentEvent.CHANGEING, this, value, this._lastChanging);
         if (this._lastChanging != value) {
             this._lastChanging = value;
         }
-    }
-}
+    };
+    return Slider;
+}(DisplayObject_1.DisplayObject));
 exports.Slider = Slider;
 
 
@@ -3921,6 +4513,19 @@ exports.Slider = Slider;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -3929,11 +4534,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const SpriteAnimated_1 = __webpack_require__(/*! ./SpriteAnimated */ "./src/display/SpriteAnimated.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const InputBase_1 = __webpack_require__(/*! ./private/InputBase */ "./src/display/private/InputBase.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var SpriteAnimated_1 = __webpack_require__(/*! ./SpriteAnimated */ "./src/display/SpriteAnimated.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var InputBase_1 = __webpack_require__(/*! ./private/InputBase */ "./src/display/private/InputBase.ts");
 exports.$sounds = new Map();
 /**
  * 音频播放组件
@@ -3944,141 +4576,191 @@ exports.$sounds = new Map();
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSound
  */
-class Sound extends InputBase_1.InputBase {
-    constructor() {
-        super();
+var Sound = /** @class */ (function (_super) {
+    __extends(Sound, _super);
+    function Sound() {
+        var _this = _super.call(this) || this;
         /**
          * 状态展示
          */
-        this.spriteAnimated = new SpriteAnimated_1.SpriteAnimated();
+        _this.spriteAnimated = new SpriteAnimated_1.SpriteAnimated();
         /**
          * 是否自动播放
          * @default false
          */
-        this._autoPlay = false;
-        this._speed = 1;
-        this._volume = 100;
-        this._loop = false;
-        this._curProgress = 0;
-        this._playing = false;
-        const sp = this.spriteAnimated;
+        _this._autoPlay = false;
+        _this._speed = 1;
+        _this._volume = 100;
+        _this._loop = false;
+        _this._curProgress = 0;
+        _this._playing = false;
+        var sp = _this.spriteAnimated;
         sp.loop = true;
-        this.addChild(sp);
-        this.container.buttonMode = true;
+        _this.addChild(sp);
+        _this.container.buttonMode = true;
+        return _this;
     }
-    get autoPlay() {
-        return this._autoPlay;
-    }
-    set autoPlay(value) {
-        this._autoPlay = value;
-    }
-    get sheetSkin() {
-        return this._sheetSkin;
-    }
-    set sheetSkin(value) {
-        this._sheetSkin = value;
-        this.spriteAnimated.src = value;
-    }
-    get duration() {
-        if (this._sound) {
-            return this._sound.duration;
-        }
-        return 0;
-    }
-    /**
-     * 音频源
-     */
-    get src() {
-        return this._src;
-    }
-    set src(src) {
-        if (src === this.src) {
-            return;
-        }
-        this._src = src;
-        this.invalidateProperties();
-    }
-    /**
-     * 动画速度
-     */
-    get animationSpeed() {
-        return this.spriteAnimated.animationSpeed;
-    }
-    set animationSpeed(value) {
-        this.spriteAnimated.animationSpeed = value;
-    }
-    /**
-     * 设置播放速度
-     */
-    get speed() {
-        return this._speed;
-    }
-    set speed(value) {
-        this._speed = value;
-        if (this._sound) {
-            this._sound.speed = value;
-        }
-    }
-    /**
-     * 音量
-     * @default 100
-     */
-    get volume() {
-        return this._volume;
-    }
-    set volume(value) {
-        this._volume = value;
-        if (this._sound) {
-            this._sound.volume = value;
-        }
-    }
-    /**
-     * 是否循环
-     * @default false
-     */
-    get loop() {
-        return this._loop;
-    }
-    set loop(value) {
-        this._loop = value;
-    }
-    get isPlaying() {
-        if (this._sound) {
-            return this._sound.isPlaying;
-        }
-        return false;
-    }
-    get startTime() {
-        return this._startTime;
-    }
-    set startTime(value) {
-        this._startTime = value;
-    }
-    get endTime() {
-        return this._endTime;
-    }
-    set endTime(value) {
-        this._endTime = value;
-    }
-    get isPlay() {
-        return this.isPlaying;
-    }
-    set isPlay(value) {
-        if (this._sound == undefined) {
-            console.warn("curent sound initialization not complete;");
-            return;
-        }
-        if (value) {
-            this.play();
-        }
-        else {
-            this.stop();
-        }
-    }
-    commitProperties() {
+    Object.defineProperty(Sound.prototype, "autoPlay", {
+        get: function () {
+            return this._autoPlay;
+        },
+        set: function (value) {
+            this._autoPlay = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Sound.prototype, "sheetSkin", {
+        get: function () {
+            return this._sheetSkin;
+        },
+        set: function (value) {
+            this._sheetSkin = value;
+            this.spriteAnimated.src = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Sound.prototype, "duration", {
+        get: function () {
+            if (this._sound) {
+                return this._sound.duration;
+            }
+            return 0;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Sound.prototype, "src", {
+        /**
+         * 音频源
+         */
+        get: function () {
+            return this._src;
+        },
+        set: function (src) {
+            if (src === this.src) {
+                return;
+            }
+            this._src = src;
+            this.invalidateProperties();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Sound.prototype, "animationSpeed", {
+        /**
+         * 动画速度
+         */
+        get: function () {
+            return this.spriteAnimated.animationSpeed;
+        },
+        set: function (value) {
+            this.spriteAnimated.animationSpeed = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Sound.prototype, "speed", {
+        /**
+         * 设置播放速度
+         */
+        get: function () {
+            return this._speed;
+        },
+        set: function (value) {
+            this._speed = value;
+            if (this._sound) {
+                this._sound.speed = value;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Sound.prototype, "volume", {
+        /**
+         * 音量
+         * @default 100
+         */
+        get: function () {
+            return this._volume;
+        },
+        set: function (value) {
+            this._volume = value;
+            if (this._sound) {
+                this._sound.volume = value;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Sound.prototype, "loop", {
+        /**
+         * 是否循环
+         * @default false
+         */
+        get: function () {
+            return this._loop;
+        },
+        set: function (value) {
+            this._loop = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Sound.prototype, "isPlaying", {
+        get: function () {
+            if (this._sound) {
+                return this._sound.isPlaying;
+            }
+            return false;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Sound.prototype, "startTime", {
+        get: function () {
+            return this._startTime;
+        },
+        set: function (value) {
+            this._startTime = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Sound.prototype, "endTime", {
+        get: function () {
+            return this._endTime;
+        },
+        set: function (value) {
+            this._endTime = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Sound.prototype, "isPlay", {
+        get: function () {
+            return this.isPlaying;
+        },
+        set: function (value) {
+            if (this._sound == undefined) {
+                console.warn("curent sound initialization not complete;");
+                return;
+            }
+            if (value) {
+                this.play();
+            }
+            else {
+                this.stop();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Sound.prototype.commitProperties = function () {
         this.releaseSound();
         if (this.src) {
-            const sound = this._sound = Utils_1.getSound(this.src);
+            var sound = this._sound = Utils_1.getSound(this.src);
             sound.volume = this.volume;
             sound.speed = this.speed;
             if (this.autoPlay) {
@@ -4089,46 +4771,58 @@ class Sound extends InputBase_1.InputBase {
             }
             this.container.hitArea = new PIXI.Rectangle(0, 0, this.width / this.scaleX, this.height / this.scaleY);
         }
-    }
-    play(start = 0, end) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.startTime) {
-                start = this.startTime;
-            }
-            if (this.endTime) {
-                end = this.endTime;
-            }
-            if (this._sound && this._sound.isPlaying) {
-                return;
-            }
-            const uiObjects = Index_1.GroupController.getGroup(this.groupName);
-            if (uiObjects) {
-                for (const key in uiObjects) {
-                    if (uiObjects[key] instanceof Sound) {
-                        uiObjects[key].stop();
-                    }
+    };
+    Sound.prototype.play = function (start, end) {
+        if (start === void 0) { start = 0; }
+        return __awaiter(this, void 0, void 0, function () {
+            var uiObjects, key, sound, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (this.startTime) {
+                            start = this.startTime;
+                        }
+                        if (this.endTime) {
+                            end = this.endTime;
+                        }
+                        if (this._sound && this._sound.isPlaying) {
+                            return [2 /*return*/];
+                        }
+                        uiObjects = Index_1.GroupController.getGroup(this.groupName);
+                        if (uiObjects) {
+                            for (key in uiObjects) {
+                                if (uiObjects[key] instanceof Sound) {
+                                    uiObjects[key].stop();
+                                }
+                            }
+                        }
+                        if (this._mediaInstance) {
+                            this._mediaInstance.off('progress', this.onProgress, this);
+                            this._mediaInstance.off('end', this.onEnd, this);
+                        }
+                        if (!this._sound) return [3 /*break*/, 2];
+                        _a = this;
+                        return [4 /*yield*/, this._sound.play({
+                                start: start,
+                                end: end
+                            })];
+                    case 1:
+                        sound = _a._mediaInstance = _b.sent();
+                        sound.on('progress', this.onProgress, this);
+                        sound.on('end', this.onEnd, this);
+                        _b.label = 2;
+                    case 2:
+                        this._playing = true;
+                        if (this._sheetSkin) {
+                            this.spriteAnimated.animationName = "play";
+                            this.spriteAnimated.play();
+                        }
+                        return [2 /*return*/];
                 }
-            }
-            if (this._mediaInstance) {
-                this._mediaInstance.off('progress', this.onProgress, this);
-                this._mediaInstance.off('end', this.onEnd, this);
-            }
-            if (this._sound) {
-                const sound = this._mediaInstance = yield this._sound.play({
-                    start: start,
-                    end: end
-                });
-                sound.on('progress', this.onProgress, this);
-                sound.on('end', this.onEnd, this);
-            }
-            this._playing = true;
-            if (this._sheetSkin) {
-                this.spriteAnimated.animationName = "play";
-                this.spriteAnimated.play();
-            }
+            });
         });
-    }
-    stop() {
+    };
+    Sound.prototype.stop = function () {
         if (this._sound) {
             this._sound.stop();
         }
@@ -4137,29 +4831,29 @@ class Sound extends InputBase_1.InputBase {
             this.spriteAnimated.animationName = "stop";
             this.spriteAnimated.stop();
         }
-    }
+    };
     /**
      * 恢复播放
      */
-    resume() {
+    Sound.prototype.resume = function () {
         this.play(this._curProgress);
-    }
+    };
     /**
      * 暂停播放
      */
-    pause() {
+    Sound.prototype.pause = function () {
         if (this._mediaInstance && this._sound) {
             this._curProgress = this._mediaInstance.progress * this._sound.duration;
         }
         this.stop();
-    }
-    release() {
-        super.release();
+    };
+    Sound.prototype.release = function () {
+        _super.prototype.release.call(this);
         this.releaseSound();
         this.offAll();
         this.spriteAnimated.release();
-    }
-    releaseSound() {
+    };
+    Sound.prototype.releaseSound = function () {
         if (this._mediaInstance) {
             this._mediaInstance.off('progress', this.onProgress, this);
             this._mediaInstance.off('end', this.onEnd, this);
@@ -4169,14 +4863,14 @@ class Sound extends InputBase_1.InputBase {
             this._sound.destroy();
             this._sound = undefined;
         }
-    }
-    onProgress(progress, duration) {
+    };
+    Sound.prototype.onProgress = function (progress, duration) {
         this._curProgress = progress * duration;
         if (this.listenerCount(Index_1.ComponentEvent.CHANGEING) > 0) {
             this.emit(Index_1.ComponentEvent.CHANGEING, this, this._curProgress);
         }
-    }
-    onEnd() {
+    };
+    Sound.prototype.onEnd = function () {
         if (this.loop) {
             this.play();
             this.emit(Index_1.ComponentEvent.LOOP, this);
@@ -4185,16 +4879,17 @@ class Sound extends InputBase_1.InputBase {
             this.stop();
             this.emit(Index_1.ComponentEvent.COMPLETE, this);
         }
-    }
-    onClick() {
+    };
+    Sound.prototype.onClick = function () {
         if (this.isPlaying) {
             this.stop();
         }
         else {
             this.play();
         }
-    }
-}
+    };
+    return Sound;
+}(InputBase_1.InputBase));
 exports.Sound = Sound;
 
 
@@ -4209,10 +4904,23 @@ exports.Sound = Sound;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 /**
  * 序列图动画
  *
@@ -4224,208 +4932,251 @@ const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interacti
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSpriteAnimated
  */
-class SpriteAnimated extends DisplayObject_1.DisplayObject {
-    constructor() {
-        super();
-        this._lastAnimatedName = "";
-        this._curFrameNumber = 0;
+var SpriteAnimated = /** @class */ (function (_super) {
+    __extends(SpriteAnimated, _super);
+    function SpriteAnimated() {
+        var _this = _super.call(this) || this;
+        _this._lastAnimatedName = "";
+        _this._curFrameNumber = 0;
         /**
          * 要播放的动作名
          */
-        this._animationName = "default";
+        _this._animationName = "default";
         /**
          * 动画速度
          */
-        this._animationSpeed = 0.1;
+        _this._animationSpeed = 0.1;
         /**
          * 是的循环
          */
-        this._loop = false;
-        this._playCount = 0;
+        _this._loop = false;
+        _this._playCount = 0;
         /**
          * 循环次数
          */
-        this._loopCount = 0;
+        _this._loopCount = 0;
         /**
          * 是否播放中
          */
-        this._playing = false;
+        _this._playing = false;
         /**
          * 锚点，调整位图的坐标中点 0-1, 可通过 TexturePacker输出sheet图并设置好 anchor
          */
-        this._anchorX = 0;
+        _this._anchorX = 0;
         /**
          * 锚点，调整位图的坐标中点 0-1, 可通过 TexturePacker输出sheet图并设置好 anchor
          */
-        this._anchorY = 0;
-        this._animatedSprites = new Map();
+        _this._anchorY = 0;
+        _this._animatedSprites = new Map();
+        return _this;
     }
-    get animationName() {
-        return this._animationName;
-    }
-    set animationName(value) {
-        if (this._animationName == value) {
-            return;
-        }
-        this._animationName = value;
-        this.animatedNameSystem();
-    }
-    get src() {
-        return this._src;
-    }
-    set src(value) {
-        this._src = value;
-        this.srcSystem();
-    }
-    get animationSpeed() {
-        return this._animationSpeed;
-    }
-    set animationSpeed(value) {
-        this._animationSpeed = value;
-        this.attribSystem();
-    }
-    get loop() {
-        return this._loop;
-    }
-    set loop(value) {
-        this._loop = value;
-        this.attribSystem();
-    }
-    get loopCount() {
-        return this._loopCount;
-    }
-    set loopCount(value) {
-        this._loopCount = value;
-    }
-    get playing() {
-        return this._playing;
-    }
-    get anchorX() {
-        return this._anchorX;
-    }
-    set anchorX(value) {
-        this._anchorX = value;
-        this.attribSystem();
-    }
-    get anchorY() {
-        return this._anchorY;
-    }
-    set anchorY(value) {
-        this._anchorY = value;
-        this.attribSystem();
-    }
+    Object.defineProperty(SpriteAnimated.prototype, "animationName", {
+        get: function () {
+            return this._animationName;
+        },
+        set: function (value) {
+            if (this._animationName == value) {
+                return;
+            }
+            this._animationName = value;
+            this.animatedNameSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SpriteAnimated.prototype, "src", {
+        get: function () {
+            return this._src;
+        },
+        set: function (value) {
+            this._src = value;
+            this.srcSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SpriteAnimated.prototype, "animationSpeed", {
+        get: function () {
+            return this._animationSpeed;
+        },
+        set: function (value) {
+            this._animationSpeed = value;
+            this.attribSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SpriteAnimated.prototype, "loop", {
+        get: function () {
+            return this._loop;
+        },
+        set: function (value) {
+            this._loop = value;
+            this.attribSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SpriteAnimated.prototype, "loopCount", {
+        get: function () {
+            return this._loopCount;
+        },
+        set: function (value) {
+            this._loopCount = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SpriteAnimated.prototype, "playing", {
+        get: function () {
+            return this._playing;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SpriteAnimated.prototype, "anchorX", {
+        get: function () {
+            return this._anchorX;
+        },
+        set: function (value) {
+            this._anchorX = value;
+            this.attribSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SpriteAnimated.prototype, "anchorY", {
+        get: function () {
+            return this._anchorY;
+        },
+        set: function (value) {
+            this._anchorY = value;
+            this.attribSystem();
+        },
+        enumerable: true,
+        configurable: true
+    });
     /** 跳转到第N帧并播放 */
-    gotoAndPlay(frameNumber) {
+    SpriteAnimated.prototype.gotoAndPlay = function (frameNumber) {
         this._curFrameNumber = frameNumber;
         this._playing = true;
         this.playSystem();
-    }
+    };
     /** 跳转到第N帧并停止 */
-    gotoAndStop(frameNumber) {
+    SpriteAnimated.prototype.gotoAndStop = function (frameNumber) {
         this._curFrameNumber = frameNumber;
         this._playing = false;
         this.playSystem();
-    }
+    };
     /** 停止 */
-    stop() {
+    SpriteAnimated.prototype.stop = function () {
         this._playCount = 0;
         this._curFrameNumber = 0;
         this._playing = false;
         this.playSystem();
-    }
+    };
     /** 播放 */
-    play() {
+    SpriteAnimated.prototype.play = function () {
         this._playCount = 0;
         this._curFrameNumber = 0;
         this._playing = true;
         this.playSystem();
-    }
-    get autoPlay() {
-        return this._playing;
-    }
-    set autoPlay(value) {
-        this._playing = value;
-    }
-    set isPlay(value) {
-        if (value) {
-            this.play();
-        }
-        else {
-            this.stop();
-        }
-    }
+    };
+    Object.defineProperty(SpriteAnimated.prototype, "autoPlay", {
+        get: function () {
+            return this._playing;
+        },
+        set: function (value) {
+            this._playing = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SpriteAnimated.prototype, "isPlay", {
+        set: function (value) {
+            if (value) {
+                this.play();
+            }
+            else {
+                this.stop();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * 添加动画
      */
-    addAnimated(animationName, textures) {
-        const sp = this._animatedSprites.get(animationName);
+    SpriteAnimated.prototype.addAnimated = function (animationName, textures) {
+        var sp = this._animatedSprites.get(animationName);
         if (sp && sp.parent) {
             sp.parent.removeChild(sp);
             sp.removeAllListeners();
             sp.destroy();
         }
         this._animatedSprites.set(animationName, new PIXI.AnimatedSprite(textures));
-    }
-    release() {
-        super.release();
+    };
+    SpriteAnimated.prototype.release = function () {
+        _super.prototype.release.call(this);
         this.releaseAnimate();
         this.src = undefined;
-    }
-    releaseAnimate() {
-        this._animatedSprites.forEach(element => {
+    };
+    SpriteAnimated.prototype.releaseAnimate = function () {
+        this._animatedSprites.forEach(function (element) {
             element.stop();
             element.removeAllListeners();
             if (element.parent) {
                 element.parent.removeChild(element).destroy();
             }
         });
-    }
-    srcSystem() {
+    };
+    SpriteAnimated.prototype.srcSystem = function () {
         this.releaseAnimate();
-        const src = Utils_1.getSheet(this.src);
+        var src = Utils_1.getSheet(this.src);
         if (src) {
             if (Array.isArray(src)) {
-                const textures = [];
-                src.forEach(value => {
-                    textures.push(Utils_1.getTexture(value));
+                var textures_1 = [];
+                src.forEach(function (value) {
+                    textures_1.push(Utils_1.getTexture(value));
                 });
-                this.addAnimated("default", textures);
+                this.addAnimated("default", textures_1);
             }
             else {
-                for (const key in src.animations) {
+                for (var key in src.animations) {
                     this.addAnimated(key, src.animations[key]);
                 }
             }
             this.animatedNameSystem();
         }
-    }
-    animatedNameSystem() {
+    };
+    SpriteAnimated.prototype.animatedNameSystem = function () {
+        var _this = this;
         if (this._animatedSprites.size == 0) {
             return;
         }
         if (this.animationName === this._lastAnimatedName) {
             return;
         }
-        const animatedSp = this._animatedSprites.get(this.animationName);
+        var animatedSp = this._animatedSprites.get(this.animationName);
         if (animatedSp == undefined) {
-            Utils_1.log(`Warning SpriteAnimated -> _animatedSprites[${this.animationName}] == undefined`);
+            Utils_1.log("Warning SpriteAnimated -> _animatedSprites[" + this.animationName + "] == undefined");
             return;
         }
-        const lastAnimated = this._animatedSprites.get(this._lastAnimatedName);
-        animatedSp.onLoop = () => {
-            this.emit(Index_1.ComponentEvent.LOOP, this);
-            this._playCount++;
-            if (this._loopCount !== 0 && this._playCount >= this._loopCount) {
-                this.stop();
+        var lastAnimated = this._animatedSprites.get(this._lastAnimatedName);
+        animatedSp.onLoop = function () {
+            _this.emit(Index_1.ComponentEvent.LOOP, _this);
+            _this._playCount++;
+            if (_this._loopCount !== 0 && _this._playCount >= _this._loopCount) {
+                _this.stop();
             }
         };
-        animatedSp.onComplete = () => {
-            this.emit(Index_1.ComponentEvent.COMPLETE, this);
+        animatedSp.onComplete = function () {
+            _this.emit(Index_1.ComponentEvent.COMPLETE, _this);
         };
         if (animatedSp.parent == undefined) {
-            setTimeout(() => {
+            setTimeout(function () {
                 //绘制会闪烁，与下一帧渲染有关，先临时解决，设置setTimeout
-                this.container.addChild(animatedSp);
+                _this.container.addChild(animatedSp);
             }, 0);
         }
         if (lastAnimated && lastAnimated.parent) {
@@ -4437,9 +5188,9 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
         this.emit(Index_1.ComponentEvent.CHANGE, this, this.animationName);
         this.attribSystem();
         this.playSystem();
-    }
-    playSystem() {
-        const animatedSp = this._animatedSprites.get(this.animationName);
+    };
+    SpriteAnimated.prototype.playSystem = function () {
+        var animatedSp = this._animatedSprites.get(this.animationName);
         if (animatedSp) {
             if (this.playing) {
                 animatedSp.gotoAndPlay(this._curFrameNumber);
@@ -4448,16 +5199,17 @@ class SpriteAnimated extends DisplayObject_1.DisplayObject {
                 animatedSp.gotoAndStop(this._curFrameNumber);
             }
         }
-    }
-    attribSystem() {
-        const animatedSp = this._animatedSprites.get(this.animationName);
+    };
+    SpriteAnimated.prototype.attribSystem = function () {
+        var animatedSp = this._animatedSprites.get(this.animationName);
         if (animatedSp) {
             animatedSp.loop = this.loop;
             animatedSp.animationSpeed = this.animationSpeed;
             animatedSp.anchor.set(this.anchorX, this.anchorY);
         }
-    }
-}
+    };
+    return SpriteAnimated;
+}(DisplayObject_1.DisplayObject));
 exports.SpriteAnimated = SpriteAnimated;
 
 
@@ -4472,12 +5224,25 @@ exports.SpriteAnimated = SpriteAnimated;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const HtmlInput_1 = __webpack_require__(/*! ./private/HtmlInput */ "./src/display/private/HtmlInput.ts");
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const InputBase_1 = __webpack_require__(/*! ./private/InputBase */ "./src/display/private/InputBase.ts");
-const Image_1 = __webpack_require__(/*! ./Image */ "./src/display/Image.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var HtmlInput_1 = __webpack_require__(/*! ./private/HtmlInput */ "./src/display/private/HtmlInput.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var InputBase_1 = __webpack_require__(/*! ./private/InputBase */ "./src/display/private/InputBase.ts");
+var Image_1 = __webpack_require__(/*! ./Image */ "./src/display/Image.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
 /**
  * 文本输入
  *
@@ -4487,31 +5252,33 @@ const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interacti
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTextInput
  */
-class TextInput extends InputBase_1.InputBase {
-    constructor(multiline = false) {
-        super();
-        this._oldState = "";
-        this._resolution = 1;
-        this._previous = {};
+var TextInput = /** @class */ (function (_super) {
+    __extends(TextInput, _super);
+    function TextInput(multiline) {
+        if (multiline === void 0) { multiline = false; }
+        var _this = _super.call(this) || this;
+        _this._oldState = "";
+        _this._resolution = 1;
+        _this._previous = {};
         /**
          * 预览文字的样式
          */
-        this.placeholderColor = 0xa9a9a9;
-        this._domVisible = true;
-        this.state = 'DEFAULT';
+        _this.placeholderColor = 0xa9a9a9;
+        _this._domVisible = true;
+        _this.state = 'DEFAULT';
         /**
          * 预览文字
          */
-        this._placeholder = '';
+        _this._placeholder = '';
         /**
          * 设置最大可输入
          */
-        this._maxLength = 99999;
+        _this._maxLength = 99999;
         /**
          * 状态展示
         */
-        this.img = new Image_1.Image();
-        this._inputStyle = Object.assign({
+        _this.img = new Image_1.Image();
+        _this._inputStyle = Object.assign({
             position: 'absolute',
             background: 'none',
             border: 'none',
@@ -4524,72 +5291,89 @@ class TextInput extends InputBase_1.InputBase {
         }, {
             multiline: multiline
         });
-        this.htmlInputShared = new HtmlInput_1.default(this._inputStyle.multiline);
-        this.htmlInputShared.setStyle(this._inputStyle);
-        this.htmlInputShared.on("input" /* input */, this._onInputInput, this);
-        this.htmlInputShared.on('focus', this._onFocused, this);
-        this.htmlInputShared.on('blur', this._onBlurred, this);
-        this.img.fillMode = "scale";
-        this.img.scale9Grid = [3, 3, 3, 3];
-        this.addChild(this.img);
-        this._textHitbox = new PIXI.Graphics();
-        this._textHitbox.name = "_textHitbox";
-        this._textHitbox.alpha = 0;
-        this._textHitbox.interactive = true;
-        this._textHitbox.cursor = 'text';
-        this._textHitbox.on('pointerdown', this._ontextFocus, this);
-        this.container.addChild(this._textHitbox);
-        this._textMask = new PIXI.Graphics();
-        this._textMask.name = "_textMask";
-        this.container.addChild(this._textMask);
-        this._text = new PIXI.Text('', {});
-        this._text.name = "_text";
-        this._text.visible = false;
-        this.container.addChild(this._text);
-        this._text.mask = this._textMask;
-        this._domVisible = false;
-        this.container.interactiveChildren = true;
-        this.on(Index_1.ComponentEvent.STATE_CHANGE, this.onStateChange, this);
-        this.container.isEmitRender = false;
-        this.container.on("renderChange", this.updateSystem, this);
+        _this.htmlInputShared = new HtmlInput_1.default(_this._inputStyle.multiline);
+        _this.htmlInputShared.setStyle(_this._inputStyle);
+        _this.htmlInputShared.on("input" /* input */, _this._onInputInput, _this);
+        _this.htmlInputShared.on('focus', _this._onFocused, _this);
+        _this.htmlInputShared.on('blur', _this._onBlurred, _this);
+        _this.img.fillMode = "scale";
+        _this.img.scale9Grid = [3, 3, 3, 3];
+        _this.addChild(_this.img);
+        _this._textHitbox = new PIXI.Graphics();
+        _this._textHitbox.name = "_textHitbox";
+        _this._textHitbox.alpha = 0;
+        _this._textHitbox.interactive = true;
+        _this._textHitbox.cursor = 'text';
+        _this._textHitbox.on('pointerdown', _this._ontextFocus, _this);
+        _this.container.addChild(_this._textHitbox);
+        _this._textMask = new PIXI.Graphics();
+        _this._textMask.name = "_textMask";
+        _this.container.addChild(_this._textMask);
+        _this._text = new PIXI.Text('', {});
+        _this._text.name = "_text";
+        _this._text.visible = false;
+        _this.container.addChild(_this._text);
+        _this._text.mask = _this._textMask;
+        _this._domVisible = false;
+        _this.container.interactiveChildren = true;
+        _this.on(Index_1.ComponentEvent.STATE_CHANGE, _this.onStateChange, _this);
+        _this.container.isEmitRender = false;
+        _this.container.on("renderChange", _this.updateSystem, _this);
+        return _this;
     }
-    /**
-     * 设置文本
-     */
-    get text() {
-        return this._text.text;
-    }
-    set text(value) {
-        this._text.text = value;
-        this.container.isEmitRender = true;
-    }
-    get placeholder() {
-        return this._placeholder;
-    }
-    set placeholder(value) {
-        this._placeholder = value;
-        this.container.isEmitRender = true;
-    }
-    get maxLength() {
-        return this._maxLength;
-    }
-    set maxLength(value) {
-        this._maxLength = value;
-        this.container.isEmitRender = true;
-    }
-    get restrict() {
-        return this._restrict;
-    }
-    set restrict(value) {
-        this._restrict = value;
-        this.container.isEmitRender = true;
-    }
+    Object.defineProperty(TextInput.prototype, "text", {
+        /**
+         * 设置文本
+         */
+        get: function () {
+            return this._text.text;
+        },
+        set: function (value) {
+            this._text.text = value;
+            this.container.isEmitRender = true;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TextInput.prototype, "placeholder", {
+        get: function () {
+            return this._placeholder;
+        },
+        set: function (value) {
+            this._placeholder = value;
+            this.container.isEmitRender = true;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TextInput.prototype, "maxLength", {
+        get: function () {
+            return this._maxLength;
+        },
+        set: function (value) {
+            this._maxLength = value;
+            this.container.isEmitRender = true;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(TextInput.prototype, "restrict", {
+        get: function () {
+            return this._restrict;
+        },
+        set: function (value) {
+            this._restrict = value;
+            this.container.isEmitRender = true;
+        },
+        enumerable: true,
+        configurable: true
+    });
     // GETTERS & SETTERS
-    updateSystem(renderer) {
+    TextInput.prototype.updateSystem = function (renderer) {
         if (renderer === undefined) {
             return;
         }
-        const { htmlInputShared } = this;
+        var htmlInputShared = this.htmlInputShared;
         htmlInputShared.maxlength = this.maxLength;
         htmlInputShared.placeholder = this.placeholder;
         htmlInputShared.disabled = !this.enabled;
@@ -4602,25 +5386,25 @@ class TextInput extends InputBase_1.InputBase {
         this.render(renderer);
         this.onStateChange(this, this.currentState);
         this.container.isEmitRender = false;
-    }
+    };
     /**
      * 设置焦点
      */
-    focus() {
+    TextInput.prototype.focus = function () {
         this.htmlInputShared.focus();
-    }
+    };
     /**
      * 失去焦点
      */
-    blur() {
+    TextInput.prototype.blur = function () {
         this.htmlInputShared.blur();
-    }
+    };
     /**
      * 设置css style样式
      * @param key 健
      * @param value 值
      */
-    setInputStyle(key, value) {
+    TextInput.prototype.setInputStyle = function (key, value) {
         if (key === "fontSize") {
             value = value + "px";
         }
@@ -4629,8 +5413,8 @@ class TextInput extends InputBase_1.InputBase {
         }
         this._inputStyle[key] = value;
         this.htmlInputShared.setStyleValue(key, value);
-    }
-    onStateChange(ui, state) {
+    };
+    TextInput.prototype.onStateChange = function (ui, state) {
         if (this._oldState == state) {
             return;
         }
@@ -4638,24 +5422,24 @@ class TextInput extends InputBase_1.InputBase {
             this.currentState = "disabled";
         }
         this._oldState = state;
-        const img = this.img;
+        var img = this.img;
         img.src = this[state];
-    }
+    };
     // SETUP
-    _onInputInput() {
+    TextInput.prototype._onInputInput = function () {
         this._updateSubstitution();
-    }
-    _onFocused() {
+    };
+    TextInput.prototype._onFocused = function () {
         this._setState('FOCUSED');
-    }
-    _onBlurred() {
+    };
+    TextInput.prototype._onBlurred = function () {
         this._setState('DEFAULT');
-    }
-    _setState(state) {
+    };
+    TextInput.prototype._setState = function (state) {
         this.state = state;
         this._updateSubstitution();
-    }
-    _updateSubstitution() {
+    };
+    TextInput.prototype._updateSubstitution = function () {
         if (this.state === 'FOCUSED') {
             this._domVisible = true;
             this._text.visible = false;
@@ -4666,44 +5450,44 @@ class TextInput extends InputBase_1.InputBase {
         }
         this._updateDOMInput();
         this._updatetext();
-    }
+    };
     // RENDER & UPDATE
     // for pixi v5
-    render(renderer) {
+    TextInput.prototype.render = function (renderer) {
         this._renderInternal(renderer);
-    }
-    _renderInternal(renderer) {
+    };
+    TextInput.prototype._renderInternal = function (renderer) {
         this._resolution = renderer.resolution;
         this._lastRenderer = renderer;
         this._canvasBounds = this._getCanvasBounds();
         if (this._needsUpdate()) {
             this._updateSubstitution();
         }
-    }
-    _updateDOMInput() {
+    };
+    TextInput.prototype._updateDOMInput = function () {
         if (!this._canvasBounds)
             return;
-        const cb = this._canvasBounds;
-        const transform = this._pixiMatrixToCSS(this._getDOMRelativeWorldTransform());
+        var cb = this._canvasBounds;
+        var transform = this._pixiMatrixToCSS(this._getDOMRelativeWorldTransform());
         this.htmlInputShared.updatePostion(cb.top, cb.left, transform, this.container.worldAlpha);
         this.htmlInputShared.visible = this.container.worldVisible && this._domVisible;
         this._previous.canvasBounds = this._canvasBounds;
         this._previous.worldTransform = this.container.worldTransform.clone();
         this._previous.worldAlpha = this.container.worldAlpha;
         this._previous.worldVisible = this.container.worldVisible;
-    }
+    };
     // STATE COMPAIRSON (FOR PERFORMANCE BENEFITS)
-    _needsUpdate() {
+    TextInput.prototype._needsUpdate = function () {
         return (!this._comparePixiMatrices(this.container.worldTransform, this._previous.worldTransform)
             || !this._compareClientRects(this._canvasBounds, this._previous.canvasBounds)
             || this.container.worldAlpha != this._previous.worldAlpha
             || this.container.worldVisible != this._previous.worldVisible);
-    }
-    _updatetext() {
-        const padding = this._derivetextPadding();
-        const inputBounds = this.htmlInputShared.getDOMInputBounds();
+    };
+    TextInput.prototype._updatetext = function () {
+        var padding = this._derivetextPadding();
+        var inputBounds = this.htmlInputShared.getDOMInputBounds();
         this._text.style = this._derivetextStyle();
-        this._text.style.padding = Math.max(...padding);
+        this._text.style.padding = Math.max.apply(Math, padding);
         this._text.y = this._inputStyle.multiline ? padding[0] : (inputBounds.height - this._text.height) / 2;
         this._text.x = padding[3];
         if (this._inputStyle.multiline) {
@@ -4723,19 +5507,19 @@ class TextInput extends InputBase_1.InputBase {
         this._textMask.endFill();
         this.img.width = inputBounds.width;
         this.img.height = inputBounds.height;
-    }
-    _ontextFocus() {
+    };
+    TextInput.prototype._ontextFocus = function () {
         this.htmlInputShared.visible = true;
         //sometimes the input is not being focused by the mouseclick
         setTimeout(this._ensureFocus.bind(this), 10);
-    }
-    _ensureFocus() {
+    };
+    TextInput.prototype._ensureFocus = function () {
         if (!this._hasFocus())
             this.focus();
-    }
-    _derivetextStyle() {
-        const style = new PIXI.TextStyle();
-        for (const key in this._inputStyle) {
+    };
+    TextInput.prototype._derivetextStyle = function () {
+        var style = new PIXI.TextStyle();
+        for (var key in this._inputStyle) {
             switch (key) {
                 case 'color':
                     style.fill = this._inputStyle.color;
@@ -4760,22 +5544,22 @@ class TextInput extends InputBase_1.InputBase {
         if (this.htmlInputShared.value.length === 0)
             style.fill = this.placeholderColor;
         return style;
-    }
-    _derivetextPadding() {
-        const indent = this._inputStyle.textIndent ? parseFloat(this._inputStyle.textIndent) : 0;
+    };
+    TextInput.prototype._derivetextPadding = function () {
+        var indent = this._inputStyle.textIndent ? parseFloat(this._inputStyle.textIndent) : 0;
         if (this._inputStyle.padding && this._inputStyle.padding.length > 0) {
-            const components = this._inputStyle.padding.trim().split(' ');
+            var components = this._inputStyle.padding.trim().split(' ');
             if (components.length == 1) {
-                const padding = parseFloat(components[0]);
+                var padding = parseFloat(components[0]);
                 return [padding, padding, padding, padding + indent];
             }
             else if (components.length == 2) {
-                const paddingV = parseFloat(components[0]);
-                const paddingH = parseFloat(components[1]);
+                var paddingV = parseFloat(components[0]);
+                var paddingH = parseFloat(components[1]);
                 return [paddingV, paddingH, paddingV, paddingH + indent];
             }
             else if (components.length == 4) {
-                const padding = components.map(component => {
+                var padding = components.map(function (component) {
                     return parseFloat(component);
                 });
                 padding[3] += indent;
@@ -4783,42 +5567,42 @@ class TextInput extends InputBase_1.InputBase {
             }
         }
         return [0, 0, 0, indent];
-    }
-    _derivetextText() {
+    };
+    TextInput.prototype._derivetextText = function () {
         return this.htmlInputShared.value.length === 0 ? this.placeholder : this.htmlInputShared.value;
-    }
+    };
     // private _updateFontMetrics() {
     //     const style = this._derivetextStyle();
     //     const font = style.toFontString();
     //     this._fontMetrics = PIXI.TextMetrics.measureFont(font);
     // }
     // HELPER FUNCTIONS
-    _hasFocus() {
+    TextInput.prototype._hasFocus = function () {
         return document.activeElement === this.htmlInputShared.domInput;
-    }
-    _getCanvasBounds() {
+    };
+    TextInput.prototype._getCanvasBounds = function () {
         if (this._lastRenderer) {
-            const rect = this._lastRenderer.view.getBoundingClientRect();
-            const bounds = { top: rect.top, left: rect.left, width: rect.width, height: rect.height };
+            var rect = this._lastRenderer.view.getBoundingClientRect();
+            var bounds = { top: rect.top, left: rect.left, width: rect.width, height: rect.height };
             bounds.left += window.scrollX;
             bounds.top += window.scrollY;
             return bounds;
         }
         return undefined;
-    }
-    _getDOMRelativeWorldTransform() {
+    };
+    TextInput.prototype._getDOMRelativeWorldTransform = function () {
         if (this._lastRenderer) {
-            const canvasBounds = this._lastRenderer.view.getBoundingClientRect();
-            const matrix = this.container.worldTransform.clone();
+            var canvasBounds = this._lastRenderer.view.getBoundingClientRect();
+            var matrix = this.container.worldTransform.clone();
             matrix.scale(this._resolution, this._resolution);
             matrix.scale(canvasBounds.width / this._lastRenderer.width, canvasBounds.height / this._lastRenderer.height);
             return matrix;
         }
-    }
-    _pixiMatrixToCSS(m) {
+    };
+    TextInput.prototype._pixiMatrixToCSS = function (m) {
         return 'matrix(' + [m.a, m.b, m.c, m.d, m.tx, m.ty].join(',') + ')';
-    }
-    _comparePixiMatrices(m1, m2) {
+    };
+    TextInput.prototype._comparePixiMatrices = function (m1, m2) {
         if (!m1 || !m2)
             return false;
         return (m1.a == m2.a
@@ -4827,17 +5611,17 @@ class TextInput extends InputBase_1.InputBase {
             && m1.d == m2.d
             && m1.tx == m2.tx
             && m1.ty == m2.ty);
-    }
-    _compareClientRects(r1, r2) {
+    };
+    TextInput.prototype._compareClientRects = function (r1, r2) {
         if (!r1 || !r2)
             return false;
         return (r1.left == r2.left
             && r1.top == r2.top
             && r1.width == r2.width
             && r1.height == r2.height);
-    }
-    release() {
-        super.release();
+    };
+    TextInput.prototype.release = function () {
+        _super.prototype.release.call(this);
         this.container.removeChild(this._text);
         this.container.removeChild(this._textHitbox);
         this.img.release();
@@ -4846,8 +5630,9 @@ class TextInput extends InputBase_1.InputBase {
         this.htmlInputShared.release();
         this.container.off("renderChange", this.updateSystem, this);
         this.offAll(Index_1.ComponentEvent.STATE_CHANGE);
-    }
-}
+    };
+    return TextInput;
+}(InputBase_1.InputBase));
 exports.TextInput = TextInput;
 
 
@@ -4862,101 +5647,144 @@ exports.TextInput = TextInput;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 私有的，由于PIXIJS不支持文本输入，这里以HTML方式实现
  */
-class HtmlInput extends PIXI.utils.EventEmitter {
-    constructor(multiline) {
-        super();
-        this._selection = [0, 0];
-        this._restrict_value = '';
+var HtmlInput = /** @class */ (function (_super) {
+    __extends(HtmlInput, _super);
+    function HtmlInput(multiline) {
+        var _this = _super.call(this) || this;
+        _this._selection = [0, 0];
+        _this._restrict_value = '';
         console.log("创建HtmlInput");
-        this._domInput = this.addDom(multiline);
-        this.visible = false;
-        document.body.appendChild(this._domInput);
+        _this._domInput = _this.addDom(multiline);
+        _this.visible = false;
+        document.body.appendChild(_this._domInput);
+        return _this;
     }
-    get domInput() {
-        return this._domInput;
-    }
-    set visible(value) {
-        this._domInput.style.display = value ? 'block' : 'none';
-    }
-    get visible() {
-        if (this._domInput.style.display === 'block')
-            return true;
-        return false;
-    }
-    get value() {
-        return this._domInput.value;
-    }
-    set value(value) {
-        this._domInput.value = value;
-    }
-    set placeholder(value) {
-        this._domInput.placeholder = value;
-    }
-    set disabled(value) {
-        this._domInput.disabled = value;
-    }
-    get maxlength() {
-        return this._domInput.maxLength;
-    }
-    set maxlength(value) {
-        this._domInput.maxLength = value;
-    }
-    /* 输入郑泽斌表达式 */
-    get restrict() {
-        return this._restrictRegex;
-    }
-    set restrict(regex) {
-        if (regex === undefined) {
-            return;
-        }
-        if (regex instanceof RegExp) {
-            let str = regex.toString().slice(1, -1);
-            if (str.charAt(0) !== '^')
-                str = '^' + str;
-            if (str.charAt(str.length - 1) !== '$')
-                str = str + '$';
-            regex = new RegExp(str);
-        }
-        else {
-            regex = new RegExp('^[' + regex + ']*$');
-        }
-        this._restrictRegex = regex;
-    }
-    setStyle(style) {
-        for (let key in style) {
+    Object.defineProperty(HtmlInput.prototype, "domInput", {
+        get: function () {
+            return this._domInput;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(HtmlInput.prototype, "visible", {
+        get: function () {
+            if (this._domInput.style.display === 'block')
+                return true;
+            return false;
+        },
+        set: function (value) {
+            this._domInput.style.display = value ? 'block' : 'none';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(HtmlInput.prototype, "value", {
+        get: function () {
+            return this._domInput.value;
+        },
+        set: function (value) {
+            this._domInput.value = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(HtmlInput.prototype, "placeholder", {
+        set: function (value) {
+            this._domInput.placeholder = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(HtmlInput.prototype, "disabled", {
+        set: function (value) {
+            this._domInput.disabled = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(HtmlInput.prototype, "maxlength", {
+        get: function () {
+            return this._domInput.maxLength;
+        },
+        set: function (value) {
+            this._domInput.maxLength = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(HtmlInput.prototype, "restrict", {
+        /* 输入郑泽斌表达式 */
+        get: function () {
+            return this._restrictRegex;
+        },
+        set: function (regex) {
+            if (regex === undefined) {
+                return;
+            }
+            if (regex instanceof RegExp) {
+                var str = regex.toString().slice(1, -1);
+                if (str.charAt(0) !== '^')
+                    str = '^' + str;
+                if (str.charAt(str.length - 1) !== '$')
+                    str = str + '$';
+                regex = new RegExp(str);
+            }
+            else {
+                regex = new RegExp('^[' + regex + ']*$');
+            }
+            this._restrictRegex = regex;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    HtmlInput.prototype.setStyle = function (style) {
+        for (var key in style) {
             this._domInput.style[key] = style[key];
         }
         //this._domInput.setAttribute("style", stylestr);
-    }
-    setStyleValue(key, value) {
+    };
+    HtmlInput.prototype.setStyleValue = function (key, value) {
         this._domInput.style[key] = value;
-    }
-    select() {
+    };
+    HtmlInput.prototype.select = function () {
         this._domInput.select();
-    }
+    };
     /** 测量，需要对象添加到body中 */
-    getDOMInputBounds() {
-        let org_transform = this._domInput.style.transform;
-        let org_display = this._domInput.style.display;
+    HtmlInput.prototype.getDOMInputBounds = function () {
+        var org_transform = this._domInput.style.transform;
+        var org_display = this._domInput.style.display;
         this._domInput.style.transform = '';
         this._domInput.style.display = 'block';
-        let bounds = this._domInput.getBoundingClientRect();
+        var bounds = this._domInput.getBoundingClientRect();
         this._domInput.style.transform = org_transform;
         this._domInput.style.display = org_display;
         return bounds;
-    }
-    updatePostion(top, left, transform, opacity) {
+    };
+    HtmlInput.prototype.updatePostion = function (top, left, transform, opacity) {
         this._domInput.style.top = top + 'px';
         this._domInput.style.left = left + 'px';
         this._domInput.style.transform = transform;
         if (opacity)
             this._domInput.style.opacity = opacity.toString();
-    }
-    addDom(multiline) {
+    };
+    HtmlInput.prototype.addDom = function (multiline) {
         if (multiline) {
             this._domInput = document.createElement('textarea');
             this._domInput.style.resize = 'none';
@@ -4968,18 +5796,18 @@ class HtmlInput extends PIXI.utils.EventEmitter {
         this.addEvent();
         document.body.appendChild(this._domInput);
         return this._domInput;
-    }
-    removeDom() {
+    };
+    HtmlInput.prototype.removeDom = function () {
         if (this._domInput) {
             document.body.removeChild(this._domInput);
         }
-    }
-    release() {
+    };
+    HtmlInput.prototype.release = function () {
         this.removeDom();
         this.removeEvent();
         this.removeAllListeners();
-    }
-    addEvent() {
+    };
+    HtmlInput.prototype.addEvent = function () {
         if (this._onInputKeyDownBind) {
             return;
         }
@@ -4993,8 +5821,8 @@ class HtmlInput extends PIXI.utils.EventEmitter {
         this._domInput.addEventListener('keyup', this._onInputKeyUpBind, { passive: false });
         this._domInput.addEventListener('focus', this._onFocusedBind, { passive: false });
         this._domInput.addEventListener('blur', this._onBlurredBind, { passive: false });
-    }
-    removeEvent() {
+    };
+    HtmlInput.prototype.removeEvent = function () {
         if (this._onInputKeyDownBind) {
             this._domInput.removeEventListener('keydown', this._onInputKeyDownBind);
             this._domInput.removeEventListener('input', this._onInputInputBind);
@@ -5007,8 +5835,8 @@ class HtmlInput extends PIXI.utils.EventEmitter {
             this._onFocusedBind = undefined;
             this._onBlurredBind = undefined;
         }
-    }
-    _applyRestriction() {
+    };
+    HtmlInput.prototype._applyRestriction = function () {
         if (this._restrictRegex) {
             if (this._restrictRegex.test(this.value)) {
                 this._restrict_value = this.value;
@@ -5018,44 +5846,45 @@ class HtmlInput extends PIXI.utils.EventEmitter {
                 this._domInput.setSelectionRange(this._selection[0], this._selection[1]);
             }
         }
-    }
-    _onInputKeyDown(e) {
+    };
+    HtmlInput.prototype._onInputKeyDown = function (e) {
         this._selection = [
             this._domInput.selectionStart || 0,
             this._domInput.selectionEnd || 0
         ];
         this.emit("keydown" /* keydown */, this, e.keyCode);
         //e.preventDefault();
-    }
-    _onInputInput(e) {
+    };
+    HtmlInput.prototype._onInputInput = function (e) {
         if (e.data != null) {
             if (this._restrictRegex)
                 this._applyRestriction();
         }
         this.emit("input" /* input */, this.value);
         e.preventDefault();
-    }
-    _onInputKeyUp(e) {
+    };
+    HtmlInput.prototype._onInputKeyUp = function (e) {
         this.emit("keyup" /* keyup */, this.value);
         e.preventDefault();
-    }
-    _onFocused(e) {
+    };
+    HtmlInput.prototype._onFocused = function (e) {
         this.emit('focus');
         e.preventDefault();
-    }
-    _onBlurred(e) {
+    };
+    HtmlInput.prototype._onBlurred = function (e) {
         this.emit('blur');
         e.preventDefault();
-    }
-    focus() {
+    };
+    HtmlInput.prototype.focus = function () {
         document.body.removeChild(this._domInput);
         document.body.appendChild(this._domInput);
         this._domInput.focus();
-    }
-    blur() {
+    };
+    HtmlInput.prototype.blur = function () {
         this._domInput.blur();
-    }
-}
+    };
+    return HtmlInput;
+}(PIXI.utils.EventEmitter));
 exports.default = HtmlInput;
 
 
@@ -5070,51 +5899,70 @@ exports.default = HtmlInput;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const DisplayObject_1 = __webpack_require__(/*! ../../core/DisplayObject */ "./src/core/DisplayObject.ts");
-const Index_1 = __webpack_require__(/*! ../../interaction/Index */ "./src/interaction/Index.ts");
+var DisplayObject_1 = __webpack_require__(/*! ../../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var Index_1 = __webpack_require__(/*! ../../interaction/Index */ "./src/interaction/Index.ts");
 /**
  * 输入对象的基础类
  */
-class InputBase extends DisplayObject_1.DisplayObject {
-    constructor() {
-        super();
-        this.clickEvent = new Index_1.ClickEvent(this, true);
-        this._currentState = "up";
-        this._focused = false;
-        this._useTab = true;
-        this._usePrev = true;
-        this._useNext = true;
-        this._down = false;
+var InputBase = /** @class */ (function (_super) {
+    __extends(InputBase, _super);
+    function InputBase() {
+        var _this = _super.call(this) || this;
+        _this.clickEvent = new Index_1.ClickEvent(_this, true);
+        _this._currentState = "up";
+        _this._focused = false;
+        _this._useTab = true;
+        _this._usePrev = true;
+        _this._useNext = true;
+        _this._down = false;
         //this.container.interactive = true;
-        this.container.interactiveChildren = false;
-        this.on(Index_1.TouchMouseEvent.onMove, this.onMove, this);
-        this.on(Index_1.TouchMouseEvent.onHover, this.onHover, this);
-        this.on(Index_1.TouchMouseEvent.onPress, this.onPress, this);
-        this.on(Index_1.TouchMouseEvent.onClick, this.onClick, this);
+        _this.container.interactiveChildren = false;
+        _this.on(Index_1.TouchMouseEvent.onMove, _this.onMove, _this);
+        _this.on(Index_1.TouchMouseEvent.onHover, _this.onHover, _this);
+        _this.on(Index_1.TouchMouseEvent.onPress, _this.onPress, _this);
+        _this.on(Index_1.TouchMouseEvent.onClick, _this.onClick, _this);
+        return _this;
     }
     ;
-    get currentState() {
-        return this._currentState;
-    }
-    set currentState(value) {
-        if (this._currentState == value) {
-            return;
-        }
-        this._currentState = value;
-        this.emit(Index_1.ComponentEvent.STATE_CHANGE, this, value);
-    }
-    onMove() {
+    Object.defineProperty(InputBase.prototype, "currentState", {
+        get: function () {
+            return this._currentState;
+        },
+        set: function (value) {
+            if (this._currentState == value) {
+                return;
+            }
+            this._currentState = value;
+            this.emit(Index_1.ComponentEvent.STATE_CHANGE, this, value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    InputBase.prototype.onMove = function () {
         if (this._down) {
             return;
         }
         this.currentState = "move";
-    }
+    };
     //e: InteractionEvent,thisObj: DisplayObject,over: boolean
-    onHover() {
+    InputBase.prototype.onHover = function () {
         this.currentState = "up";
-    }
-    onPress(e, thisObj, isPress) {
+    };
+    InputBase.prototype.onPress = function (e, thisObj, isPress) {
         this._down = isPress;
         if (isPress) {
             this.focus();
@@ -5123,12 +5971,12 @@ class InputBase extends DisplayObject_1.DisplayObject {
         else {
             this.currentState = "up";
         }
-    }
-    onClick() {
+    };
+    InputBase.prototype.onClick = function () {
         //this.currentState = "up";
-    }
-    keyDownEvent(event) {
-        const e = event;
+    };
+    InputBase.prototype.keyDownEvent = function (event) {
+        var e = event;
         if (e.which === 9) {
             if (this._useTab) {
                 Index_1.InputController.fireTab();
@@ -5147,26 +5995,26 @@ class InputBase extends DisplayObject_1.DisplayObject {
                 e.preventDefault();
             }
         }
-    }
-    documentMouseDown() {
+    };
+    InputBase.prototype.documentMouseDown = function () {
         if (this.currentState !== "down") {
             this.blur();
         }
-    }
-    _bindEvents() {
+    };
+    InputBase.prototype._bindEvents = function () {
         if (this.stage) {
             this.stage.on("pointerdown", this.documentMouseDown, this);
             this.keyDownEventBind = this.keyDownEvent.bind(this);
             document.addEventListener("keydown", this.keyDownEventBind);
         }
-    }
-    _clearEvents() {
+    };
+    InputBase.prototype._clearEvents = function () {
         if (this.stage) {
             this.stage.off("pointerdown", this.documentMouseDown, this);
             document.removeEventListener("keydown", this.keyDownEventBind);
         }
-    }
-    focus() {
+    };
+    InputBase.prototype.focus = function () {
         if (!this._focused) {
             this._focused = true;
             this._bindEvents();
@@ -5174,8 +6022,8 @@ class InputBase extends DisplayObject_1.DisplayObject {
             this.emit("focusChanged", true);
             this.emit("focus");
         }
-    }
-    blur() {
+    };
+    InputBase.prototype.blur = function () {
         if (this._focused) {
             Index_1.InputController.clear();
             this._focused = false;
@@ -5183,9 +6031,9 @@ class InputBase extends DisplayObject_1.DisplayObject {
             this.emit("focusChanged", false);
             this.emit("blur");
         }
-    }
-    release() {
-        super.release();
+    };
+    InputBase.prototype.release = function () {
+        _super.prototype.release.call(this);
         this.off(Index_1.TouchMouseEvent.onMove, this.onMove, this);
         this.off(Index_1.TouchMouseEvent.onHover, this.onHover, this);
         this.off(Index_1.TouchMouseEvent.onPress, this.onPress, this);
@@ -5194,15 +6042,16 @@ class InputBase extends DisplayObject_1.DisplayObject {
             document.removeEventListener("keydown", this.keyDownEventBind);
         if (this.documentMouseDown && this.stage)
             this.stage.off("pointerdown", this.documentMouseDown, this);
-    }
-    setTabIndex(index, group) {
+    };
+    InputBase.prototype.setTabIndex = function (index, group) {
         this._tabIndex = index;
         this._tabGroup = group;
         if (index !== undefined && group !== undefined) {
             Index_1.InputController.registrer(this, index, group);
         }
-    }
-}
+    };
+    return InputBase;
+}(DisplayObject_1.DisplayObject));
 exports.InputBase = InputBase;
 
 
@@ -5324,14 +6173,14 @@ exports.DROP_TARGET = "DROP_TARGET";
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const ComponentEvent = __webpack_require__(/*! ./ComponentEvent */ "./src/event/ComponentEvent.ts");
+var ComponentEvent = __webpack_require__(/*! ./ComponentEvent */ "./src/event/ComponentEvent.ts");
 exports.ComponentEvent = ComponentEvent;
-const InteractionEvent_1 = __webpack_require__(/*! ./InteractionEvent */ "./src/event/InteractionEvent.ts");
+var InteractionEvent_1 = __webpack_require__(/*! ./InteractionEvent */ "./src/event/InteractionEvent.ts");
 exports.InteractionEvent = InteractionEvent_1.InteractionEvent;
 //import {KeyEvent} from "./KeyEvent";
-const TouchMouseEvent_1 = __webpack_require__(/*! ./TouchMouseEvent */ "./src/event/TouchMouseEvent.ts");
+var TouchMouseEvent_1 = __webpack_require__(/*! ./TouchMouseEvent */ "./src/event/TouchMouseEvent.ts");
 exports.TouchMouseEvent = TouchMouseEvent_1.TouchMouseEvent;
-const TweenEvent_1 = __webpack_require__(/*! ./TweenEvent */ "./src/event/TweenEvent.ts");
+var TweenEvent_1 = __webpack_require__(/*! ./TweenEvent */ "./src/event/TweenEvent.ts");
 exports.TweenEvent = TweenEvent_1.TweenEvent;
 
 
@@ -5346,6 +6195,19 @@ exports.TweenEvent = TweenEvent_1.TweenEvent;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * 事件的基础类
@@ -5354,11 +6216,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * import InteractionEvent from "../interaction/InteractionEvent",
  */
-class InteractionEvent extends PIXI.interaction.InteractionEvent {
-    constructor() {
-        super();
+var InteractionEvent = /** @class */ (function (_super) {
+    __extends(InteractionEvent, _super);
+    function InteractionEvent() {
+        return _super.call(this) || this;
     }
-}
+    return InteractionEvent;
+}(PIXI.interaction.InteractionEvent));
 exports.InteractionEvent = InteractionEvent;
 
 
@@ -5486,7 +6350,7 @@ exports.TweenEvent = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const TouchMouseEvent_1 = __webpack_require__(/*! ../event/TouchMouseEvent */ "./src/event/TouchMouseEvent.ts");
+var TouchMouseEvent_1 = __webpack_require__(/*! ../event/TouchMouseEvent */ "./src/event/TouchMouseEvent.ts");
 /**
  * 点击触摸相关的事件处理订阅类,UI组件内部可以创建此类实现点击相关操作
  *
@@ -5509,7 +6373,7 @@ const TouchMouseEvent_1 = __webpack_require__(/*! ../event/TouchMouseEvent */ ".
  *
  * @since 1.0.0
  */
-class ClickEvent {
+var ClickEvent = /** @class */ (function () {
     /**
      * ClickEvent 构造函数
      * @param obj 调用的显示对象
@@ -5518,7 +6382,7 @@ class ClickEvent {
      * @param rightMouseButton 是否开启鼠标右键点击，默认false
      * @param doubleClick 是否开启鼠标双击,默认false
      */
-    constructor(obj, isOpenEmitEvent, includeHover, rightMouseButton, doubleClick) {
+    function ClickEvent(obj, isOpenEmitEvent, includeHover, rightMouseButton, doubleClick) {
         this.id = 0;
         /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | gui.Interaction.TouchEvent */
         this.isOpenEmitEvent = false;
@@ -5557,7 +6421,7 @@ class ClickEvent {
         obj.interactive = true;
         this.startEvent();
     }
-    startEvent() {
+    ClickEvent.prototype.startEvent = function () {
         if (this.isStop) {
             this.obj.container.on(this.eventnameMousedown, this._onMouseDown, this);
             if (!this.right)
@@ -5568,9 +6432,9 @@ class ClickEvent {
             }
             this.isStop = false;
         }
-    }
+    };
     /** 清除拖动 */
-    stopEvent() {
+    ClickEvent.prototype.stopEvent = function () {
         if (this.bound) {
             this.obj.container.off(this.eventnameMouseup, this._onMouseUp, this);
             this.obj.container.off(this.eventnameMouseupoutside, this._onMouseUpOutside, this);
@@ -5590,8 +6454,8 @@ class ClickEvent {
             this.obj.container.off("touchmove" /* touchmove */, this._onMouseMove, this);
         }
         this.isStop = true;
-    }
-    _onMouseDown(e) {
+    };
+    ClickEvent.prototype._onMouseDown = function (e) {
         this.mouse.copyFrom(e.data.global);
         this.id = e.data.identifier;
         this.onPress && this.onPress.call(this.obj, e, this.obj, true), this.obj;
@@ -5609,7 +6473,7 @@ class ClickEvent {
             this.bound = true;
         }
         if (this.double) {
-            const now = performance.now();
+            var now = performance.now();
             if (now - this.time < 210) {
                 this.onClick && this.onClick.call(this.obj, e, this.obj);
                 this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onClick, e);
@@ -5619,14 +6483,19 @@ class ClickEvent {
             }
         }
         e.data.originalEvent.preventDefault();
-    }
-    emitTouchEvent(event, e, ...args) {
+    };
+    ClickEvent.prototype.emitTouchEvent = function (event, e) {
+        var _a;
+        var args = [];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            args[_i - 2] = arguments[_i];
+        }
         if (this.isOpenEmitEvent) {
             e.type = event.toString();
-            this.obj.emit(e.type, e, this.obj, ...args);
+            (_a = this.obj).emit.apply(_a, [e.type, e, this.obj].concat(args));
         }
-    }
-    _mouseUpAll(e) {
+    };
+    ClickEvent.prototype._mouseUpAll = function (e) {
         if (e.data.identifier !== this.id)
             return;
         this.offset.set(e.data.global.x - this.mouse.x, e.data.global.y - this.mouse.y);
@@ -5644,8 +6513,8 @@ class ClickEvent {
             this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onUp, e);
         }
         this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onPress, e, false);
-    }
-    _onMouseUp(e) {
+    };
+    ClickEvent.prototype._onMouseUp = function (e) {
         if (e.data.identifier !== this.id)
             return;
         this._mouseUpAll(e);
@@ -5660,13 +6529,13 @@ class ClickEvent {
             this.onClick && this.onClick.call(this.obj, e, this.obj);
             this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onClick, e, false);
         }
-    }
-    _onMouseUpOutside(e) {
+    };
+    ClickEvent.prototype._onMouseUpOutside = function (e) {
         if (e.data.identifier !== this.id)
             return;
         this._mouseUpAll(e);
-    }
-    _onMouseOver(e) {
+    };
+    ClickEvent.prototype._onMouseOver = function (e) {
         if (!this.ishover) {
             this.ishover = true;
             this.obj.container.on("mousemove" /* mousemove */, this._onMouseMove, this);
@@ -5674,8 +6543,8 @@ class ClickEvent {
             this.onHover && this.onHover.call(this.obj, e, this.obj, true);
             this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onHover, e, true);
         }
-    }
-    _onMouseOut(e) {
+    };
+    ClickEvent.prototype._onMouseOut = function (e) {
         if (this.ishover) {
             this.ishover = false;
             this.obj.container.off("mousemove" /* mousemove */, this._onMouseMove, this);
@@ -5683,20 +6552,21 @@ class ClickEvent {
             this.onHover && this.onHover.call(this.obj, e, this.obj, false);
             this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onHover, e, false);
         }
-    }
-    _onMouseMove(e) {
+    };
+    ClickEvent.prototype._onMouseMove = function (e) {
         this.onMove && this.onMove.call(this.obj, e, this.obj);
         this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onMove, e);
-    }
-    remove() {
+    };
+    ClickEvent.prototype.remove = function () {
         this.stopEvent();
         this.onPress = undefined;
         this.onHover = undefined;
         this.onClick = undefined;
         this.onMove = undefined;
         this.obj.container.interactive = false;
-    }
-}
+    };
+    return ClickEvent;
+}());
 exports.ClickEvent = ClickEvent;
 
 
@@ -5739,8 +6609,8 @@ exports.add = add;
  * @returns flase | item
  */
 function getItem(item) {
-    let index;
-    for (let i = 0; i < exports._items.length; i++) {
+    var index;
+    for (var i = 0; i < exports._items.length; i++) {
         if (exports._items[i] === item) {
             index = i;
             break;
@@ -5761,9 +6631,9 @@ exports.getItem = getItem;
  * @param group 分组名
  */
 function getEventItem(e, group) {
-    let item = null, index;
-    const id = e.data.identifier;
-    for (let i = 0; i < exports._items.length; i++) {
+    var item = null, index;
+    var id = e.data.identifier;
+    for (var i = 0; i < exports._items.length; i++) {
         if (exports._items[i].attach.dragDropEventId === id) {
             if (group !== exports._items[i].attach.dragGroup && exports._items[i].attach.dragGroup !== "") {
                 return false;
@@ -5818,8 +6688,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * @since 1.0.0
  */
-class DragEvent {
-    constructor(obj) {
+var DragEvent = /** @class */ (function () {
+    function DragEvent(obj) {
         this.id = 0;
         this.offset = new PIXI.Point();
         this.movementX = 0;
@@ -5834,18 +6704,18 @@ class DragEvent {
         obj.interactive = true;
         this.startEvent();
     }
-    startEvent() {
+    DragEvent.prototype.startEvent = function () {
         if (this.isStop) {
             this.obj.container.on("mousedown" /* mousedown */, this._onDragStart, this);
             this.obj.container.on("touchstart" /* touchstart */, this._onDragStart, this);
             this.isStop = false;
         }
-    }
-    _onDragStart(e) {
+    };
+    DragEvent.prototype._onDragStart = function (e) {
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true, this);
         if (!this.bound && this.obj.parent && this.obj.stage) {
-            const stage = this.obj.stage.container;
+            var stage = this.obj.stage.container;
             this.start.copyFrom(e.data.global);
             stage.on("mousemove" /* mousemove */, this._onDragMove, this);
             stage.on("touchmove" /* touchmove */, this._onDragMove, this);
@@ -5857,8 +6727,8 @@ class DragEvent {
             this.bound = true;
         }
         e.data.originalEvent.preventDefault();
-    }
-    _onDragMove(e) {
+    };
+    DragEvent.prototype._onDragMove = function (e) {
         if (e.data.identifier !== this.id)
             return;
         this.mouse.copyFrom(e.data.global);
@@ -5883,12 +6753,12 @@ class DragEvent {
             this.dragging = true;
         }
         this.onDragMove && this.onDragMove.call(this.obj, e, this.offset, this);
-    }
-    _onDragEnd(e) {
+    };
+    DragEvent.prototype._onDragEnd = function (e) {
         if (e.data.identifier !== this.id)
             return;
         if (this.bound && this.obj.stage) {
-            const stage = this.obj.stage.container;
+            var stage = this.obj.stage.container;
             stage.off("mousemove" /* mousemove */, this._onDragMove, this);
             stage.off("touchmove" /* touchmove */, this._onDragMove, this);
             stage.off("mouseup" /* mouseup */, this._onDragEnd, this);
@@ -5901,11 +6771,11 @@ class DragEvent {
             this.onDragEnd && this.onDragEnd.call(this.obj, e, this);
             this.onDragPress && this.onDragPress.call(this.obj, e, false, this);
         }
-    }
+    };
     /** 清除拖动 */
-    stopEvent() {
+    DragEvent.prototype.stopEvent = function () {
         if (this.bound && this.obj.stage) {
-            const stage = this.obj.stage.container;
+            var stage = this.obj.stage.container;
             stage.off("mousemove" /* mousemove */, this._onDragMove, this);
             stage.off("touchmove" /* touchmove */, this._onDragMove, this);
             stage.off("mouseup" /* mouseup */, this._onDragEnd, this);
@@ -5917,16 +6787,17 @@ class DragEvent {
         this.obj.container.off("mousedown" /* mousedown */, this._onDragStart, this);
         this.obj.container.off("touchstart" /* touchstart */, this._onDragStart, this);
         this.isStop = true;
-    }
-    remove() {
+    };
+    DragEvent.prototype.remove = function () {
         this.stopEvent();
         this.onDragPress = undefined;
         this.onDragEnd = undefined;
         this.onDragMove = undefined;
         this.onDragStart = undefined;
         this.obj.interactive = false;
-    }
-}
+    };
+    return DragEvent;
+}());
 exports.DragEvent = DragEvent;
 
 
@@ -5952,7 +6823,7 @@ exports._GroupObject = new Map();
  */
 function registrerGroup(ui) {
     if (ui.groupName) {
-        let group = exports._GroupObject.get(ui.groupName);
+        var group = exports._GroupObject.get(ui.groupName);
         if (!group) {
             group = {};
             exports._GroupObject.set(ui.groupName, group);
@@ -5966,12 +6837,12 @@ exports.registrerGroup = registrerGroup;
  */
 function unRegistrerGroup(ui) {
     if (ui.groupName) {
-        const group = exports._GroupObject.get(ui.groupName);
+        var group = exports._GroupObject.get(ui.groupName);
         if (group) {
             delete group[ui.uuid];
         }
-        let isKey = false;
-        for (const key in group) {
+        var isKey = false;
+        for (var key in group) {
             isKey = true;
             break;
         }
@@ -6003,23 +6874,23 @@ exports.getGroup = getGroup;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const ClickEvent_1 = __webpack_require__(/*! ./ClickEvent */ "./src/interaction/ClickEvent.ts");
+var ClickEvent_1 = __webpack_require__(/*! ./ClickEvent */ "./src/interaction/ClickEvent.ts");
 exports.ClickEvent = ClickEvent_1.ClickEvent;
-const DragDropController = __webpack_require__(/*! ./DragDropController */ "./src/interaction/DragDropController.ts");
+var DragDropController = __webpack_require__(/*! ./DragDropController */ "./src/interaction/DragDropController.ts");
 exports.DragDropController = DragDropController;
-const DragEvent_1 = __webpack_require__(/*! ./DragEvent */ "./src/interaction/DragEvent.ts");
+var DragEvent_1 = __webpack_require__(/*! ./DragEvent */ "./src/interaction/DragEvent.ts");
 exports.DragEvent = DragEvent_1.DragEvent;
-const InputController = __webpack_require__(/*! ./InputController */ "./src/interaction/InputController.ts");
+var InputController = __webpack_require__(/*! ./InputController */ "./src/interaction/InputController.ts");
 exports.InputController = InputController;
-const MouseScrollEvent_1 = __webpack_require__(/*! ./MouseScrollEvent */ "./src/interaction/MouseScrollEvent.ts");
+var MouseScrollEvent_1 = __webpack_require__(/*! ./MouseScrollEvent */ "./src/interaction/MouseScrollEvent.ts");
 exports.MouseScrollEvent = MouseScrollEvent_1.MouseScrollEvent;
-const InteractionEvent_1 = __webpack_require__(/*! ../event/InteractionEvent */ "./src/event/InteractionEvent.ts");
+var InteractionEvent_1 = __webpack_require__(/*! ../event/InteractionEvent */ "./src/event/InteractionEvent.ts");
 exports.InteractionEvent = InteractionEvent_1.InteractionEvent;
-const TouchMouseEvent_1 = __webpack_require__(/*! ../event/TouchMouseEvent */ "./src/event/TouchMouseEvent.ts");
+var TouchMouseEvent_1 = __webpack_require__(/*! ../event/TouchMouseEvent */ "./src/event/TouchMouseEvent.ts");
 exports.TouchMouseEvent = TouchMouseEvent_1.TouchMouseEvent;
-const ComponentEvent = __webpack_require__(/*! ../event/ComponentEvent */ "./src/event/ComponentEvent.ts");
+var ComponentEvent = __webpack_require__(/*! ../event/ComponentEvent */ "./src/event/ComponentEvent.ts");
 exports.ComponentEvent = ComponentEvent;
-const GroupController = __webpack_require__(/*! ./GroupController */ "./src/interaction/GroupController.ts");
+var GroupController = __webpack_require__(/*! ./GroupController */ "./src/interaction/GroupController.ts");
 exports.GroupController = GroupController;
 
 
@@ -6039,7 +6910,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * 记录当前正在拖动的UI组件列表
  * @private
  */
-let _currentItem;
+var _currentItem;
 /**
  *
  * @private
@@ -6061,11 +6932,11 @@ exports._checkGroupObject = {
  * @returns 依据tabIndex返回是否需要排序 0，-1，1
  */
 function registrer(item, tabIndex, tabGroup) {
-    const groupName = tabGroup || "default";
-    let items = exports.tabGroups[groupName];
+    var groupName = tabGroup || "default";
+    var items = exports.tabGroups[groupName];
     if (!items)
         items = exports.tabGroups[groupName] = [];
-    const i = items.indexOf(item);
+    var i = items.indexOf(item);
     if (i === -1) {
         item.attach._tabIndex = tabIndex !== undefined ? tabIndex : -1;
         item.attach._tabGroup = items;
@@ -6082,7 +6953,7 @@ function registrer(item, tabIndex, tabGroup) {
 exports.registrer = registrer;
 /** 失去焦点时 */
 function blur() {
-    const obj = _currentItem;
+    var obj = _currentItem;
     if (obj) {
         if (obj.blur && typeof obj.blur == "function") {
             obj.blur();
@@ -6104,11 +6975,11 @@ exports.clear = clear;
 /** 一般再按下键盘tab健执行 焦点获取与设置 */
 function fireTab() {
     if (_currentItem) {
-        const _tabGroup = _currentItem.attach._tabGroup;
-        let i = _tabGroup.indexOf(_currentItem) + 1;
+        var _tabGroup = _currentItem.attach._tabGroup;
+        var i = _tabGroup.indexOf(_currentItem) + 1;
         if (i >= _tabGroup.length)
             i = 0;
-        const obj = _tabGroup[i];
+        var obj = _tabGroup[i];
         if (obj.focus)
             obj.focus();
     }
@@ -6117,11 +6988,11 @@ exports.fireTab = fireTab;
 /** 一般再按下键盘向下箭头执行 焦点获取与设置 */
 function fireNext() {
     if (_currentItem) {
-        const _tabGroup = _currentItem.attach._tabGroup;
-        let i = _tabGroup.indexOf(_currentItem) + 1;
+        var _tabGroup = _currentItem.attach._tabGroup;
+        var i = _tabGroup.indexOf(_currentItem) + 1;
         if (i >= _tabGroup.length)
             i = _tabGroup.length - 1;
-        const obj = _tabGroup[i];
+        var obj = _tabGroup[i];
         if (obj.focus)
             obj.focus();
     }
@@ -6130,11 +7001,11 @@ exports.fireNext = fireNext;
 /** 一般再按下键盘向上箭头执行 焦点获取与设置 */
 function firePrev() {
     if (_currentItem) {
-        const _tabGroup = _currentItem.attach._tabGroup;
-        let i = _tabGroup.indexOf(_currentItem) - 1;
+        var _tabGroup = _currentItem.attach._tabGroup;
+        var i = _tabGroup.indexOf(_currentItem) - 1;
         if (i < 0)
             i = 0;
-        const obj = _tabGroup[i];
+        var obj = _tabGroup[i];
         if (obj.focus)
             obj.focus();
     }
@@ -6148,9 +7019,9 @@ exports.firePrev = firePrev;
  * checkGroups = [key]:{["value"]:cb}
  */
 function registrerCheckGroup(cb) {
-    const name = cb.checkGroup;
+    var name = cb.checkGroup;
     if (name) {
-        let group = exports._checkGroupObject.groups[name];
+        var group = exports._checkGroupObject.groups[name];
         if (!group)
             group = exports._checkGroupObject.groups[name] = {};
         group[cb.uuid.toString()] = cb;
@@ -6166,8 +7037,8 @@ exports.registrerCheckGroup = registrerCheckGroup;
 function unRegistrerCheckGroup(cb) {
     if (cb.checkGroup && exports._checkGroupObject.groups[cb.checkGroup]) {
         delete exports._checkGroupObject.groups[cb.checkGroup][cb.uuid.toString()];
-        let isKey = false;
-        for (const key in exports._checkGroupObject.groups[cb.checkGroup]) {
+        var isKey = false;
+        for (var key in exports._checkGroupObject.groups[cb.checkGroup]) {
             if (key)
                 isKey = true;
             break;
@@ -6183,9 +7054,9 @@ exports.unRegistrerCheckGroup = unRegistrerCheckGroup;
 /** 更新分组中选中的checkbox组件  */
 function updateCheckGroupSelected(cb) {
     if (cb.checkGroup) {
-        const group = exports._checkGroupObject.groups[cb.checkGroup];
-        for (const val in group) {
-            const b = group[val];
+        var group = exports._checkGroupObject.groups[cb.checkGroup];
+        for (var val in group) {
+            var b = group[val];
             if (b !== cb)
                 b.checked = false;
         }
@@ -6195,9 +7066,9 @@ function updateCheckGroupSelected(cb) {
 exports.updateCheckGroupSelected = updateCheckGroupSelected;
 /** 获取分组中选中的checkbox值 */
 function getCheckGroupSelectedValue(name) {
-    const uuid = exports._checkGroupObject.values[name];
+    var uuid = exports._checkGroupObject.values[name];
     if (uuid) {
-        const cb = exports._checkGroupObject.groups[name][uuid.toString()];
+        var cb = exports._checkGroupObject.groups[name][uuid.toString()];
         return cb.value;
     }
     return undefined;
@@ -6205,9 +7076,9 @@ function getCheckGroupSelectedValue(name) {
 exports.getCheckGroupSelectedValue = getCheckGroupSelectedValue;
 /** 设置选中 */
 function setCheckGroupSelectedValue(name, uuid) {
-    const group = exports._checkGroupObject.groups[name];
+    var group = exports._checkGroupObject.groups[name];
     if (group) {
-        const cb = group[uuid];
+        var cb = group[uuid];
         if (cb) {
             cb.checked = true;
         }
@@ -6228,7 +7099,7 @@ exports.setCheckGroupSelectedValue = setCheckGroupSelectedValue;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 /**
  * 鼠标滑轮事件
  *
@@ -6245,13 +7116,13 @@ const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts"
  *
  * @since 1.0.0
  */
-class MouseScrollEvent {
+var MouseScrollEvent = /** @class */ (function () {
     /**
      *
      * @param obj 需要绑定的对象
      * @param preventDefault 是否组织系统默认的事件触发
      */
-    constructor(obj, preventDefault) {
+    function MouseScrollEvent(obj, preventDefault) {
         this.id = 0;
         this.delta = new PIXI.Point();
         this.isStop = true;
@@ -6260,16 +7131,16 @@ class MouseScrollEvent {
         obj.container.interactive = true;
         this.startEvent();
     }
-    startEvent() {
+    MouseScrollEvent.prototype.startEvent = function () {
         if (this.isStop) {
             this.obj.container.on("mouseover" /* mouseover */, this._onHover, this);
             this.obj.container.on("mouseout" /* mouseout */, this._onMouseOut, this);
             this.isStop = false;
         }
-    }
-    _onMouseScroll(_e) {
+    };
+    MouseScrollEvent.prototype._onMouseScroll = function (_e) {
         _e;
-        const e = _e;
+        var e = _e;
         if (this.preventDefault)
             e.preventDefault();
         if (typeof e.deltaX !== "undefined")
@@ -6277,25 +7148,25 @@ class MouseScrollEvent {
         else //Firefox{}
             this.delta.set(e.axis == 1 ? e.detail * 60 : 0, e.axis == 2 ? e.detail * 60 : 0);
         this.onMouseScroll && this.onMouseScroll.call(this.obj, e, this.delta);
-    }
+    };
     //e?: interaction.InteractionEvent
-    _onHover() {
+    MouseScrollEvent.prototype._onHover = function () {
         if (this.mouseScrllBind === undefined) {
             this.id = Utils_1.uid();
             this.mouseScrllBind = this._onMouseScroll.bind(this);
             document.addEventListener("mousewheel", this.mouseScrllBind, { passive: false });
             document.addEventListener("DOMMouseScroll", this.mouseScrllBind, { passive: false });
         }
-    }
+    };
     //e?: interaction.InteractionEvent
-    _onMouseOut() {
+    MouseScrollEvent.prototype._onMouseOut = function () {
         if (this.mouseScrllBind) {
             document.removeEventListener("mousewheel", this.mouseScrllBind);
             document.removeEventListener("DOMMouseScroll", this.mouseScrllBind);
             this.mouseScrllBind = undefined;
         }
-    }
-    stopEvent() {
+    };
+    MouseScrollEvent.prototype.stopEvent = function () {
         if (this.mouseScrllBind) {
             document.removeEventListener("mousewheel", this.mouseScrllBind);
             document.removeEventListener("DOMMouseScroll", this.mouseScrllBind);
@@ -6304,11 +7175,12 @@ class MouseScrollEvent {
         this.obj.container.removeListener('mouseover', this._onHover, this);
         this.obj.container.removeListener('mouseout', this._onMouseOut, this);
         this.isStop = true;
-    }
-    remove() {
+    };
+    MouseScrollEvent.prototype.remove = function () {
         this.stopEvent();
-    }
-}
+    };
+    return MouseScrollEvent;
+}());
 exports.MouseScrollEvent = MouseScrollEvent;
 
 
@@ -6324,7 +7196,7 @@ exports.MouseScrollEvent = MouseScrollEvent;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const UIKeys = __webpack_require__(/*! ../core/DisplayLayoutKeys */ "./src/core/DisplayLayoutKeys.ts");
+var UIKeys = __webpack_require__(/*! ../core/DisplayLayoutKeys */ "./src/core/DisplayLayoutKeys.ts");
 exports.$tempRectangle = new PIXI.Rectangle();
 /**
  * 布局尺寸>外部显式设置尺寸>测量尺寸 的优先级顺序返回尺寸
@@ -6336,12 +7208,12 @@ function formatRelative(value, total) {
     if (typeof value === "number") {
         return value;
     }
-    const str = value;
-    const index = str.indexOf("%");
+    var str = value;
+    var index = str.indexOf("%");
     if (index == -1) {
         return +str;
     }
-    const percent = +str.substring(0, index);
+    var percent = +str.substring(0, index);
     return percent * 0.01 * total;
 }
 exports.formatRelative = formatRelative;
@@ -6353,17 +7225,17 @@ function updateBasicDisplayList(target, unscaledWidth, unscaledHeight) {
     if (!target)
         return;
     //console.log(target.container.name);
-    const values = target.$values;
-    const parentWidth = target.parent ? target.parent.$values[UIKeys.width] : 1;
-    const parentHeight = target.parent ? target.parent.$values[UIKeys.height] : 1;
-    const hCenter = formatRelative(values[UIKeys.horizontalCenter], parentWidth * 0.5);
-    const vCenter = formatRelative(values[UIKeys.verticalCenter], parentHeight * 0.5);
-    const left = formatRelative(values[UIKeys.left], parentWidth || 1);
-    const right = formatRelative(values[UIKeys.right], parentWidth);
-    const top = formatRelative(values[UIKeys.top], parentHeight || 1);
-    const bottom = formatRelative(values[UIKeys.bottom], parentHeight);
-    let childWidth = unscaledWidth;
-    let childHeight = unscaledHeight;
+    var values = target.$values;
+    var parentWidth = target.parent ? target.parent.$values[UIKeys.width] : 1;
+    var parentHeight = target.parent ? target.parent.$values[UIKeys.height] : 1;
+    var hCenter = formatRelative(values[UIKeys.horizontalCenter], parentWidth * 0.5);
+    var vCenter = formatRelative(values[UIKeys.verticalCenter], parentHeight * 0.5);
+    var left = formatRelative(values[UIKeys.left], parentWidth || 1);
+    var right = formatRelative(values[UIKeys.right], parentWidth);
+    var top = formatRelative(values[UIKeys.top], parentHeight || 1);
+    var bottom = formatRelative(values[UIKeys.bottom], parentHeight);
+    var childWidth = unscaledWidth;
+    var childHeight = unscaledHeight;
     if (!isNaN(left) && !isNaN(right)) {
         childWidth = parentWidth - right - left;
     }
@@ -6372,8 +7244,8 @@ function updateBasicDisplayList(target, unscaledWidth, unscaledHeight) {
     }
     target.setMeasuredSize(childWidth, childHeight);
     target.setActualSize(childWidth, childHeight);
-    let childX = NaN;
-    let childY = NaN;
+    var childX = NaN;
+    var childY = NaN;
     if (!isNaN(hCenter))
         childX = Math.round((parentWidth - childWidth) / 2 + hCenter);
     else if (!isNaN(left))
@@ -6407,11 +7279,11 @@ exports.updateBasicDisplayList = updateBasicDisplayList;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const CSSBasicLayout_1 = __webpack_require__(/*! ./CSSBasicLayout */ "./src/layout/CSSBasicLayout.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var CSSBasicLayout_1 = __webpack_require__(/*! ./CSSBasicLayout */ "./src/layout/CSSBasicLayout.ts");
 function getColumnRowValue(gridTemplate, parentValue) {
-    const list = [];
-    let isInfinity = false;
+    var list = [];
+    var isInfinity = false;
     if (gridTemplate) {
         if (gridTemplate[0] === "repeat") {
             if (gridTemplate[1] === Infinity) {
@@ -6419,18 +7291,18 @@ function getColumnRowValue(gridTemplate, parentValue) {
                 list.push(Utils_1.formatRelative(0, parentValue));
             }
             else {
-                for (let i = 0; i < gridTemplate[1]; i++) {
+                for (var i = 0; i < gridTemplate[1]; i++) {
                     list.push(Utils_1.formatRelative(gridTemplate[2], parentValue));
                 }
             }
         }
         else {
-            for (let i = 0; i < gridTemplate.length; i++) {
+            for (var i = 0; i < gridTemplate.length; i++) {
                 list.push(Utils_1.formatRelative(gridTemplate[i], parentValue));
             }
         }
     }
-    return { list, isInfinity };
+    return { list: list, isInfinity: isInfinity };
 }
 /**
  *  更新网格布局
@@ -6464,20 +7336,20 @@ function updateGridLayout(target) {
     if (target.style == undefined) {
         return CSSBasicLayout_1.$tempRectangle;
     }
-    let rowHeightTotal = 0;
-    let columnWidthTotal = 0;
-    const style = target.style;
-    const gridColumnGap = style.gridColumnGap || 0;
-    const gridRowGap = style.gridRowGap || 0;
-    const column = getColumnRowValue(style.gridTemplateColumns, target.parent.width);
-    const row = getColumnRowValue(style.gridTemplateRows, target.parent.height);
-    let child;
-    let cloumnIndex = 0;
-    let rowIndex = 0;
-    let cloumnWidth = 0;
-    let rowHeight = 0;
-    let widthTotal = 0;
-    for (let i = 0; i < target.uiChildren.length; i++) {
+    var rowHeightTotal = 0;
+    var columnWidthTotal = 0;
+    var style = target.style;
+    var gridColumnGap = style.gridColumnGap || 0;
+    var gridRowGap = style.gridRowGap || 0;
+    var column = getColumnRowValue(style.gridTemplateColumns, target.parent.width);
+    var row = getColumnRowValue(style.gridTemplateRows, target.parent.height);
+    var child;
+    var cloumnIndex = 0;
+    var rowIndex = 0;
+    var cloumnWidth = 0;
+    var rowHeight = 0;
+    var widthTotal = 0;
+    for (var i = 0; i < target.uiChildren.length; i++) {
         child = target.uiChildren[i];
         if (child.style.justifyContent || child.style.alignContent) {
             continue;
@@ -6539,19 +7411,21 @@ exports.updateGridLayout = updateGridLayout;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const CSSGridLayout_1 = __webpack_require__(/*! ./CSSGridLayout */ "./src/layout/CSSGridLayout.ts");
-const CSSBasicLayout_1 = __webpack_require__(/*! ./CSSBasicLayout */ "./src/layout/CSSBasicLayout.ts");
+var CSSGridLayout_1 = __webpack_require__(/*! ./CSSGridLayout */ "./src/layout/CSSGridLayout.ts");
+var CSSBasicLayout_1 = __webpack_require__(/*! ./CSSBasicLayout */ "./src/layout/CSSBasicLayout.ts");
 exports.$TempRectangle = new PIXI.Rectangle();
-function updateDisplayAlign(target, parentWidth, parentHeight, marginTop = 0, marginLeft = 0) {
+function updateDisplayAlign(target, parentWidth, parentHeight, marginTop, marginLeft) {
+    if (marginTop === void 0) { marginTop = 0; }
+    if (marginLeft === void 0) { marginLeft = 0; }
     if (target.style == undefined) {
         return;
     }
     if (target.style.justifyContent == undefined && target.style.alignContent == undefined) {
         return;
     }
-    let startX = 0;
-    let startY = 0;
-    const bounds = target.getPreferredBounds(exports.$TempRectangle);
+    var startX = 0;
+    var startY = 0;
+    var bounds = target.getPreferredBounds(exports.$TempRectangle);
     switch (target.style.justifyContent) {
         case "center":
             startX = parentWidth - bounds.width >> 1;
@@ -6587,20 +7461,20 @@ function updateDisplayLayout(target, unscaledWidth, unscaledHeight) {
         return;
     }
     if (target.style.display === "block") {
-        const pos = CSSBasicLayout_1.updateBasicDisplayList(target, unscaledWidth, unscaledHeight);
+        var pos = CSSBasicLayout_1.updateBasicDisplayList(target, unscaledWidth, unscaledHeight);
         //console.log(pos);
     }
     else if (target.style.display === "grid") {
-        const size = CSSGridLayout_1.updateGridLayout(target);
+        var size = CSSGridLayout_1.updateGridLayout(target);
         CSSBasicLayout_1.updateBasicDisplayList(target, size.width, size.height);
     }
     if (target.parent) {
         updateDisplayAlign(target, target.parent.width, target.parent.height, target.style.gridRowGap, target.style.gridColumnGap);
     }
     if (target.isContainer) {
-        const bounds = target.getPreferredBounds(exports.$TempRectangle);
-        let child;
-        for (let i = 0; i < target.uiChildren.length; i++) {
+        var bounds = target.getPreferredBounds(exports.$TempRectangle);
+        var child = void 0;
+        for (var i = 0; i < target.uiChildren.length; i++) {
             child = target.uiChildren[i];
             updateDisplayAlign(child, bounds.width, bounds.height, child.style.gridRowGap, child.style.gridColumnGap);
         }
@@ -6621,8 +7495,8 @@ exports.updateDisplayLayout = updateDisplayLayout;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
 /** ===================== background  ===================== */
 function backgroundColor(target) {
     if (target.style == undefined) {
@@ -6643,8 +7517,8 @@ function backgroundPositionSize(target) {
         return;
     }
     if (target.background && target.background.children.length > 0) {
-        const sprite = target.background.getChildAt(0);
-        const style = target.style;
+        var sprite = target.background.getChildAt(0);
+        var style = target.style;
         if (sprite instanceof PIXI.TilingSprite) {
             sprite.tilePosition.set(style.backgroundPositionX || 0, style.backgroundPositionY || 0);
         }
@@ -6662,29 +7536,29 @@ function backgroundRepeat(target) {
     if (target.style == undefined) {
         return;
     }
-    const style = target.style;
+    var style = target.style;
     if (style.backgroundImage && target.background) {
         target.background.removeChildren();
-        let backgroundImage;
+        var backgroundImage_1;
         if (style.backgroundImage instanceof PIXI.Texture) {
-            backgroundImage = style.backgroundImage;
+            backgroundImage_1 = style.backgroundImage;
         }
         else if (typeof style.backgroundImage === "string") {
-            backgroundImage = Utils_1.getTexture(style.backgroundImage);
+            backgroundImage_1 = Utils_1.getTexture(style.backgroundImage);
         }
-        if (backgroundImage) {
-            let sprite;
+        if (backgroundImage_1) {
+            var sprite = void 0;
             if (style.backgroundRepeat === undefined) {
                 style.backgroundRepeat = "no-repeat";
             }
             if (style.backgroundRepeat === "repeat") {
-                sprite = new PIXI.TilingSprite(backgroundImage);
+                sprite = new PIXI.TilingSprite(backgroundImage_1);
             }
             else {
-                sprite = new PIXI.Sprite(backgroundImage);
+                sprite = new PIXI.Sprite(backgroundImage_1);
             }
             target.background.addChild(sprite);
-            const maskGraphics = new PIXI.Graphics();
+            var maskGraphics = new PIXI.Graphics();
             target.background.addChild(maskGraphics);
             target.background.mask = maskGraphics;
         }
@@ -6707,7 +7581,7 @@ function maskPosition(target) {
         return;
     }
     if (target.mask) {
-        const style = target.style;
+        var style = target.style;
         if (style.maskPosition === undefined) {
             return;
         }
@@ -6726,7 +7600,7 @@ function maskSize(target) {
         return;
     }
     if (target.mask) {
-        const style = target.style;
+        var style = target.style;
         if (style.maskSize === undefined) {
             return;
         }
@@ -6753,16 +7627,16 @@ function maskImage(target) {
             target.mask.parent.removeChild(target.mask);
         }
     }
-    for (let i = 0; i < target.uiChildren.length; i++) {
+    for (var i = 0; i < target.uiChildren.length; i++) {
         if (target.uiChildren[i].name == "maskImage") {
             target.removeChild(target.uiChildren[i]);
             break;
         }
     }
     target.mask = undefined;
-    const style = target.style;
-    const container = target.container;
-    const maskdisplay = Utils_1.getDisplayObject(style.maskImage, target);
+    var style = target.style;
+    var container = target.container;
+    var maskdisplay = Utils_1.getDisplayObject(style.maskImage, target);
     if (maskdisplay instanceof PIXI.Graphics) {
         target.mask = maskdisplay;
         container.mask = target.mask;
@@ -6820,9 +7694,9 @@ exports.color = color;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const CSSFunction = __webpack_require__(/*! ./CSSSSystem */ "./src/layout/CSSSSystem.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var CSSFunction = __webpack_require__(/*! ./CSSSSystem */ "./src/layout/CSSSSystem.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
 function formatRelative(value) {
     if (value == undefined) {
         return { percent: NaN, value: NaN };
@@ -6830,19 +7704,19 @@ function formatRelative(value) {
     if (typeof value === "number") {
         return { percent: NaN, value: value };
     }
-    const str = value;
-    const index = str.indexOf("%");
+    var str = value;
+    var index = str.indexOf("%");
     if (index == -1) {
         return { percent: NaN, value: +str };
     }
-    const percent = +str.substring(0, index);
+    var percent = +str.substring(0, index);
     return { percent: Math.min(percent * 0.01, 1), value: NaN };
 }
 /**
  * 组件样式表
  */
-class CSSStyle {
-    constructor(target) {
+var CSSStyle = /** @class */ (function () {
+    function CSSStyle(target) {
         /**
          * 规定元素的显示类型。布局模式
          *
@@ -6900,505 +7774,753 @@ class CSSStyle {
         this.parent = target;
         target.on(Index_1.ComponentEvent.RESIZE, this.onResize, this);
     }
-    release() {
+    CSSStyle.prototype.release = function () {
         this.parent.off(Index_1.ComponentEvent.RESIZE, this.onResize, this);
-    }
-    get display() {
-        return this._display;
-    }
-    set display(value) {
-        this._display = value;
-    }
-    get position() {
-        return this._position;
-    }
-    set position(value) {
-        this._position = value;
-    }
-    get justifyContent() {
-        return this._justifyContent;
-    }
-    set justifyContent(value) {
-        this._justifyContent = value;
-    }
-    get alignContent() {
-        return this._alignContent;
-    }
-    set alignContent(value) {
-        this._alignContent = value;
-    }
-    get gridTemplateColumns() {
-        return this._gridTemplateColumns;
-    }
-    set gridTemplateColumns(value) {
-        this._gridTemplateColumns = value;
-    }
-    get gridColumnGap() {
-        return this._gridColumnGap;
-    }
-    set gridColumnGap(value) {
-        this._gridColumnGap = value;
-    }
-    get gridTemplateRows() {
-        return this._gridTemplateRows;
-    }
-    set gridTemplateRows(value) {
-        this._gridTemplateRows = value;
-    }
-    get gridRowGap() {
-        return this._gridRowGap;
-    }
-    set gridRowGap(value) {
-        this._gridRowGap = value;
-    }
-    /**
-     * 表示显示对象的宽度，以像素为单位。
-     * */
-    get width() {
-        return this.parent.width;
-    }
-    set width(value) {
-        const relative = formatRelative(value);
-        this.parent.width = relative.value;
-        this.parent.percentWidth = relative.percent;
-    }
-    /**
-     * 表示显示对象的高度，以像素为单位。
-     * */
-    get height() {
-        return this.parent.height;
-    }
-    set height(value) {
-        const relative = formatRelative(value);
-        this.parent.height = relative.value;
-        this.parent.percentHeight = relative.percent;
-    }
-    /**
-     * 设置元素的最小宽度。
-     */
-    get minWidth() {
-        return this.parent.minWidth;
-    }
-    set minWidth(value) {
-        this.parent.minWidth = value;
-    }
-    /**
-     * 设置元素的最大宽度。
-     */
-    get maxWidth() {
-        return this.parent.maxWidth;
-    }
-    set maxWidth(value) {
-        this.parent.maxWidth = value;
-    }
-    /**
-     * 设置元素的最小高度。
-     */
-    get maxHeight() {
-        return this.parent.maxHeight;
-    }
-    set maxHeight(value) {
-        this.parent.maxHeight = value;
-    }
-    /**
-     * 设置元素的最大高度。
-     * */
-    get minHeight() {
-        return this.parent.minHeight;
-    }
-    set minHeight(value) {
-        this.parent.minHeight = value;
-    }
-    /**
-     * 设置定位元素左外边距边界与其容器左边界之间的偏移。
-     * */
-    get left() {
-        return this.parent.left;
-    }
-    set left(value) {
-        this.parent.left = value;
-    }
-    /**
-     * 设置定位元素的上外边距边界与其容器上边界之间的偏移。
-     * */
-    get top() {
-        return this.parent.top;
-    }
-    set top(value) {
-        this.parent.top = value;
-    }
-    /**
-     * 设置定位元素右外边距边界与其容器右边界之间的偏移。
-     * */
-    get right() {
-        return this.parent.right;
-    }
-    set right(value) {
-        this.parent.right = value;
-    }
-    /**
-     * 设置定位元素下外边距边界与其容器下边界之间的偏移。
-     * */
-    get bottom() {
-        return this.parent.bottom;
-    }
-    set bottom(value) {
-        this.parent.bottom = value;
-    }
-    /**
-     * 缩放
-     * */
-    get scaleX() {
-        return this.parent.scaleX;
-    }
-    set scaleX(value) {
-        this.parent.scaleX = value;
-    }
-    /**
-     * 缩放
-     * */
-    get scaleY() {
-        return this.parent.scaleY;
-    }
-    set scaleY(value) {
-        this.parent.scaleY = value;
-    }
-    /**
-     * 设置元素水平拉伸扭曲（角度）。
-     * */
-    get skewX() {
-        return this.parent.skewX;
-    }
-    set skewX(value) {
-        this.parent.skewX = value;
-    }
-    /**
-     * 设置元素垂直拉伸扭曲（角度）。
-     * */
-    get skewY() {
-        return this.parent.skewY;
-    }
-    set skewY(value) {
-        this.parent.skewY = value;
-    }
-    /**
-     * 设置元素旋转 （角度）
-    */
-    get rotate() {
-        return this.parent.rotation;
-    }
-    set rotate(value) {
-        this.parent.rotation = value;
-    }
-    /**
-     * 设置元素旋转 （角度）
-    */
-    get rotation() {
-        return this.parent.rotation;
-    }
-    set rotation(value) {
-        this.parent.rotation = value;
-    }
-    /**
-     * 轴点 像素值
-     */
-    get pivotX() {
-        return this.parent.pivotX;
-    }
-    set pivotX(value) {
-        this.parent.pivotX = value;
-    }
-    /**
-     * 轴点 像素值
-     */
-    get pivotY() {
-        return this.parent.pivotY;
-    }
-    set pivotY(value) {
-        this.parent.pivotY = value;
-    }
-    /**
-      * 调整元素的色调，取消设置0xFFFFFF
-      */
-    get tint() {
-        return this.parent.tint;
-    }
-    set tint(value) {
-        this.parent.tint = value;
-    }
-    /**
-     * 表示指定对象的 Alpha 透明度值。有效值为0（完全透明）～ 1（完全不透明）。
-     * */
-    get alpha() {
-        return this.parent.alpha;
-    }
-    set alpha(value) {
-        this.parent.alpha = value;
-    }
-    /**
-     * 显示对象是否可见
-     * */
-    get visible() {
-        return this.parent.visible;
-    }
-    set visible(value) {
-        this.parent.visible = value;
-    }
-    get visibility() {
-        return this.parent.visible ? "visible" : "hidden";
-    }
-    set visibility(value) {
-        this.visible = value === "hidden" ? false : true;
-    }
-    get backgroundColor() {
-        return this._backgroundColor;
-    }
-    set backgroundColor(value) {
-        if (value === this.backgroundColor) {
-            return;
-        }
-        this._backgroundColor = value;
-        CSSFunction.backgroundColor(this.parent);
-    }
-    get backgroundImage() {
-        return this._backgroundImage;
-    }
-    set backgroundImage(value) {
-        this._backgroundImage = value;
-        CSSFunction.backgroundImage(this.parent);
-    }
-    get backgroundPositionX() {
-        return this._backgroundPositionX;
-    }
-    set backgroundPositionX(value) {
-        this._backgroundPositionX = value;
-        CSSFunction.backgroundPositionSize(this.parent);
-    }
-    get backgroundPositionY() {
-        return this._backgroundPositionY;
-    }
-    set backgroundPositionY(value) {
-        this._backgroundPositionY = value;
-        CSSFunction.backgroundPositionSize(this.parent);
-    }
-    get backgroundSize() {
-        return this._backgroundSize;
-    }
-    set backgroundSize(value) {
-        this._backgroundSize = value;
-        CSSFunction.backgroundPositionSize(this.parent);
-    }
-    get backgroundRepeat() {
-        return this._backgroundRepeat;
-    }
-    set backgroundRepeat(value) {
-        this._backgroundRepeat = value;
-        CSSFunction.backgroundRepeat(this.parent);
-    }
-    get maskImage() {
-        return this._maskImage;
-    }
-    set maskImage(value) {
-        this._maskImage = value;
-        CSSFunction.maskImage(this.parent);
-    }
-    get maskPosition() {
-        return this._maskPosition;
-    }
-    set maskPosition(value) {
-        this._maskPosition = value;
-        CSSFunction.maskPosition(this.parent);
-    }
-    get maskSize() {
-        return this._maskSize;
-    }
-    set maskSize(value) {
-        this._maskSize = value;
-        CSSFunction.maskSize(this.parent);
-    }
-    get filter() {
-        return this._filter;
-    }
-    set filter(value) {
-        if (value === this._filter) {
-            return;
-        }
-        this._filter = value;
-        if (value === undefined || value === 'none') {
-            this.parent.container.filters = [];
-            return;
-        }
-        const target = Utils_1.getStringFunctionParam(value);
-        switch (target.key) {
-            case "blur":
-                this.parent.filterBlur = target.value;
-                break;
-        }
-    }
-    /**
-     * 设置鼠标样式
-     */
-    get cursor() {
-        return this.parent.container.cursor;
-    }
-    set cursor(value) {
-        this.parent.container.cursor = value;
-    }
-    get color() {
-        return this._color;
-    }
-    set color(value) {
-        this._color = value;
-        CSSFunction.color(this.parent, "color", value);
-    }
-    get letterSpacing() {
-        return this._letterSpacing;
-    }
-    set letterSpacing(value) {
-        this._letterSpacing = value;
-        CSSFunction.updateFontStyle(this.parent, "letterSpacing", value);
-    }
-    get wordWrap() {
-        return this._wordWrap;
-    }
-    set wordWrap(value) {
-        this._wordWrap = value;
-        CSSFunction.updateFontStyle(this.parent, "wordWrap", value);
-    }
-    get wordWrapWidth() {
-        return this._wordWrapWidth;
-    }
-    set wordWrapWidth(value) {
-        this._wordWrapWidth = value;
-        CSSFunction.updateFontStyle(this.parent, "wordWrapWidth", value);
-    }
-    get textAlign() {
-        return this._textAlign;
-    }
-    set textAlign(value) {
-        this._textAlign = value;
-        CSSFunction.updateFontStyle(this.parent, "textAlign", value);
-        CSSFunction.updateFontStyle(this.parent, "align", value);
-    }
-    get lineHeight() {
-        return this._lineHeight;
-    }
-    set lineHeight(value) {
-        this._lineHeight = value;
-        CSSFunction.updateFontStyle(this.parent, "lineHeight", value);
-    }
-    get fontFamily() {
-        return this._fontFamily;
-    }
-    set fontFamily(value) {
-        this._fontFamily = value;
-        CSSFunction.updateFontStyle(this.parent, "fontFamily", value);
-    }
-    get fontSize() {
-        return this._fontSize;
-    }
-    set fontSize(value) {
-        this._fontSize = value;
-        CSSFunction.updateFontStyle(this.parent, "fontSize", value);
-    }
-    get fontStyle() {
-        return this._fontStyle;
-    }
-    set fontStyle(value) {
-        this._fontStyle = value;
-        CSSFunction.updateFontStyle(this.parent, "fontStyle", value);
-    }
-    get fontVariant() {
-        return this._fontVariant;
-    }
-    set fontVariant(value) {
-        this._fontVariant = value;
-        CSSFunction.updateFontStyle(this.parent, "fontVariant", value);
-    }
-    get fontWeight() {
-        return this._fontWeight;
-    }
-    set fontWeight(value) {
-        this._fontWeight = value;
-        CSSFunction.updateFontStyle(this.parent, "fontWeight", value);
-    }
-    get padding() {
-        return this._padding;
-    }
-    set padding(value) {
-        this._padding = value;
-        CSSFunction.updateFontStyle(this.parent, "padding", value);
-    }
-    get stroke() {
-        return this._stroke;
-    }
-    set stroke(value) {
-        this._stroke = value;
-        CSSFunction.updateFontStyle(this.parent, "stroke", value);
-    }
-    get strokeThickness() {
-        return this._strokeThickness;
-    }
-    set strokeThickness(value) {
-        this._strokeThickness = value;
-        CSSFunction.updateFontStyle(this.parent, "strokeThickness", value);
-    }
-    get dropShadow() {
-        return this._dropShadow;
-    }
-    set dropShadow(value) {
-        this._dropShadow = value;
-        CSSFunction.updateFontStyle(this.parent, "dropShadow", value);
-    }
-    get dropShadowAlpha() {
-        return this._dropShadowAlpha;
-    }
-    set dropShadowAlpha(value) {
-        this._dropShadowAlpha = value;
-        CSSFunction.updateFontStyle(this.parent, "dropShadowAlpha", value);
-    }
-    get dropShadowAngle() {
-        return this._dropShadowAngle;
-    }
-    set dropShadowAngle(value) {
-        this._dropShadowAngle = value;
-        CSSFunction.updateFontStyle(this.parent, "dropShadowAngle", value);
-    }
-    get dropShadowBlur() {
-        return this._dropShadowBlur;
-    }
-    set dropShadowBlur(value) {
-        this._dropShadowBlur = value;
-        CSSFunction.updateFontStyle(this.parent, "dropShadowBlur", value);
-    }
-    get dropShadowColor() {
-        return this._dropShadowColor;
-    }
-    set dropShadowColor(value) {
-        this._dropShadowColor = value;
-        CSSFunction.updateFontStyle(this.parent, "dropShadowColor", value);
-    }
-    get dropShadowDistance() {
-        return this._dropShadowDistance;
-    }
-    set dropShadowDistance(value) {
-        this._dropShadowDistance = value;
-        CSSFunction.updateFontStyle(this.parent, "dropShadowDistance", value);
-    }
-    get breakWords() {
-        return this._breakWords;
-    }
-    set breakWords(value) {
-        this._breakWords = value;
-        CSSFunction.updateFontStyle(this.parent, "breakWords", value);
-    }
-    onResize() {
-        const target = this.parent;
+    };
+    Object.defineProperty(CSSStyle.prototype, "display", {
+        get: function () {
+            return this._display;
+        },
+        set: function (value) {
+            this._display = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "position", {
+        get: function () {
+            return this._position;
+        },
+        set: function (value) {
+            this._position = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "justifyContent", {
+        get: function () {
+            return this._justifyContent;
+        },
+        set: function (value) {
+            this._justifyContent = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "alignContent", {
+        get: function () {
+            return this._alignContent;
+        },
+        set: function (value) {
+            this._alignContent = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "gridTemplateColumns", {
+        get: function () {
+            return this._gridTemplateColumns;
+        },
+        set: function (value) {
+            this._gridTemplateColumns = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "gridColumnGap", {
+        get: function () {
+            return this._gridColumnGap;
+        },
+        set: function (value) {
+            this._gridColumnGap = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "gridTemplateRows", {
+        get: function () {
+            return this._gridTemplateRows;
+        },
+        set: function (value) {
+            this._gridTemplateRows = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "gridRowGap", {
+        get: function () {
+            return this._gridRowGap;
+        },
+        set: function (value) {
+            this._gridRowGap = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "width", {
+        /**
+         * 表示显示对象的宽度，以像素为单位。
+         * */
+        get: function () {
+            return this.parent.width;
+        },
+        set: function (value) {
+            var relative = formatRelative(value);
+            this.parent.width = relative.value;
+            this.parent.percentWidth = relative.percent;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "height", {
+        /**
+         * 表示显示对象的高度，以像素为单位。
+         * */
+        get: function () {
+            return this.parent.height;
+        },
+        set: function (value) {
+            var relative = formatRelative(value);
+            this.parent.height = relative.value;
+            this.parent.percentHeight = relative.percent;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "minWidth", {
+        /**
+         * 设置元素的最小宽度。
+         */
+        get: function () {
+            return this.parent.minWidth;
+        },
+        set: function (value) {
+            this.parent.minWidth = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "maxWidth", {
+        /**
+         * 设置元素的最大宽度。
+         */
+        get: function () {
+            return this.parent.maxWidth;
+        },
+        set: function (value) {
+            this.parent.maxWidth = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "maxHeight", {
+        /**
+         * 设置元素的最小高度。
+         */
+        get: function () {
+            return this.parent.maxHeight;
+        },
+        set: function (value) {
+            this.parent.maxHeight = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "minHeight", {
+        /**
+         * 设置元素的最大高度。
+         * */
+        get: function () {
+            return this.parent.minHeight;
+        },
+        set: function (value) {
+            this.parent.minHeight = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "left", {
+        /**
+         * 设置定位元素左外边距边界与其容器左边界之间的偏移。
+         * */
+        get: function () {
+            return this.parent.left;
+        },
+        set: function (value) {
+            this.parent.left = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "top", {
+        /**
+         * 设置定位元素的上外边距边界与其容器上边界之间的偏移。
+         * */
+        get: function () {
+            return this.parent.top;
+        },
+        set: function (value) {
+            this.parent.top = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "right", {
+        /**
+         * 设置定位元素右外边距边界与其容器右边界之间的偏移。
+         * */
+        get: function () {
+            return this.parent.right;
+        },
+        set: function (value) {
+            this.parent.right = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "bottom", {
+        /**
+         * 设置定位元素下外边距边界与其容器下边界之间的偏移。
+         * */
+        get: function () {
+            return this.parent.bottom;
+        },
+        set: function (value) {
+            this.parent.bottom = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "scaleX", {
+        /**
+         * 缩放
+         * */
+        get: function () {
+            return this.parent.scaleX;
+        },
+        set: function (value) {
+            this.parent.scaleX = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "scaleY", {
+        /**
+         * 缩放
+         * */
+        get: function () {
+            return this.parent.scaleY;
+        },
+        set: function (value) {
+            this.parent.scaleY = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "skewX", {
+        /**
+         * 设置元素水平拉伸扭曲（角度）。
+         * */
+        get: function () {
+            return this.parent.skewX;
+        },
+        set: function (value) {
+            this.parent.skewX = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "skewY", {
+        /**
+         * 设置元素垂直拉伸扭曲（角度）。
+         * */
+        get: function () {
+            return this.parent.skewY;
+        },
+        set: function (value) {
+            this.parent.skewY = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "rotate", {
+        /**
+         * 设置元素旋转 （角度）
+        */
+        get: function () {
+            return this.parent.rotation;
+        },
+        set: function (value) {
+            this.parent.rotation = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "rotation", {
+        /**
+         * 设置元素旋转 （角度）
+        */
+        get: function () {
+            return this.parent.rotation;
+        },
+        set: function (value) {
+            this.parent.rotation = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "pivotX", {
+        /**
+         * 轴点 像素值
+         */
+        get: function () {
+            return this.parent.pivotX;
+        },
+        set: function (value) {
+            this.parent.pivotX = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "pivotY", {
+        /**
+         * 轴点 像素值
+         */
+        get: function () {
+            return this.parent.pivotY;
+        },
+        set: function (value) {
+            this.parent.pivotY = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "tint", {
+        /**
+          * 调整元素的色调，取消设置0xFFFFFF
+          */
+        get: function () {
+            return this.parent.tint;
+        },
+        set: function (value) {
+            this.parent.tint = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "alpha", {
+        /**
+         * 表示指定对象的 Alpha 透明度值。有效值为0（完全透明）～ 1（完全不透明）。
+         * */
+        get: function () {
+            return this.parent.alpha;
+        },
+        set: function (value) {
+            this.parent.alpha = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "visible", {
+        /**
+         * 显示对象是否可见
+         * */
+        get: function () {
+            return this.parent.visible;
+        },
+        set: function (value) {
+            this.parent.visible = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "visibility", {
+        get: function () {
+            return this.parent.visible ? "visible" : "hidden";
+        },
+        set: function (value) {
+            this.visible = value === "hidden" ? false : true;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "backgroundColor", {
+        get: function () {
+            return this._backgroundColor;
+        },
+        set: function (value) {
+            if (value === this.backgroundColor) {
+                return;
+            }
+            this._backgroundColor = value;
+            CSSFunction.backgroundColor(this.parent);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "backgroundImage", {
+        get: function () {
+            return this._backgroundImage;
+        },
+        set: function (value) {
+            this._backgroundImage = value;
+            CSSFunction.backgroundImage(this.parent);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "backgroundPositionX", {
+        get: function () {
+            return this._backgroundPositionX;
+        },
+        set: function (value) {
+            this._backgroundPositionX = value;
+            CSSFunction.backgroundPositionSize(this.parent);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "backgroundPositionY", {
+        get: function () {
+            return this._backgroundPositionY;
+        },
+        set: function (value) {
+            this._backgroundPositionY = value;
+            CSSFunction.backgroundPositionSize(this.parent);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "backgroundSize", {
+        get: function () {
+            return this._backgroundSize;
+        },
+        set: function (value) {
+            this._backgroundSize = value;
+            CSSFunction.backgroundPositionSize(this.parent);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "backgroundRepeat", {
+        get: function () {
+            return this._backgroundRepeat;
+        },
+        set: function (value) {
+            this._backgroundRepeat = value;
+            CSSFunction.backgroundRepeat(this.parent);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "maskImage", {
+        get: function () {
+            return this._maskImage;
+        },
+        set: function (value) {
+            this._maskImage = value;
+            CSSFunction.maskImage(this.parent);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "maskPosition", {
+        get: function () {
+            return this._maskPosition;
+        },
+        set: function (value) {
+            this._maskPosition = value;
+            CSSFunction.maskPosition(this.parent);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "maskSize", {
+        get: function () {
+            return this._maskSize;
+        },
+        set: function (value) {
+            this._maskSize = value;
+            CSSFunction.maskSize(this.parent);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "filter", {
+        get: function () {
+            return this._filter;
+        },
+        set: function (value) {
+            if (value === this._filter) {
+                return;
+            }
+            this._filter = value;
+            if (value === undefined || value === 'none') {
+                this.parent.container.filters = [];
+                return;
+            }
+            var target = Utils_1.getStringFunctionParam(value);
+            switch (target.key) {
+                case "blur":
+                    this.parent.filterBlur = target.value;
+                    break;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "cursor", {
+        /**
+         * 设置鼠标样式
+         */
+        get: function () {
+            return this.parent.container.cursor;
+        },
+        set: function (value) {
+            this.parent.container.cursor = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "color", {
+        get: function () {
+            return this._color;
+        },
+        set: function (value) {
+            this._color = value;
+            CSSFunction.color(this.parent, "color", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "letterSpacing", {
+        get: function () {
+            return this._letterSpacing;
+        },
+        set: function (value) {
+            this._letterSpacing = value;
+            CSSFunction.updateFontStyle(this.parent, "letterSpacing", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "wordWrap", {
+        get: function () {
+            return this._wordWrap;
+        },
+        set: function (value) {
+            this._wordWrap = value;
+            CSSFunction.updateFontStyle(this.parent, "wordWrap", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "wordWrapWidth", {
+        get: function () {
+            return this._wordWrapWidth;
+        },
+        set: function (value) {
+            this._wordWrapWidth = value;
+            CSSFunction.updateFontStyle(this.parent, "wordWrapWidth", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "textAlign", {
+        get: function () {
+            return this._textAlign;
+        },
+        set: function (value) {
+            this._textAlign = value;
+            CSSFunction.updateFontStyle(this.parent, "textAlign", value);
+            CSSFunction.updateFontStyle(this.parent, "align", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "lineHeight", {
+        get: function () {
+            return this._lineHeight;
+        },
+        set: function (value) {
+            this._lineHeight = value;
+            CSSFunction.updateFontStyle(this.parent, "lineHeight", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "fontFamily", {
+        get: function () {
+            return this._fontFamily;
+        },
+        set: function (value) {
+            this._fontFamily = value;
+            CSSFunction.updateFontStyle(this.parent, "fontFamily", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "fontSize", {
+        get: function () {
+            return this._fontSize;
+        },
+        set: function (value) {
+            this._fontSize = value;
+            CSSFunction.updateFontStyle(this.parent, "fontSize", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "fontStyle", {
+        get: function () {
+            return this._fontStyle;
+        },
+        set: function (value) {
+            this._fontStyle = value;
+            CSSFunction.updateFontStyle(this.parent, "fontStyle", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "fontVariant", {
+        get: function () {
+            return this._fontVariant;
+        },
+        set: function (value) {
+            this._fontVariant = value;
+            CSSFunction.updateFontStyle(this.parent, "fontVariant", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "fontWeight", {
+        get: function () {
+            return this._fontWeight;
+        },
+        set: function (value) {
+            this._fontWeight = value;
+            CSSFunction.updateFontStyle(this.parent, "fontWeight", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "padding", {
+        get: function () {
+            return this._padding;
+        },
+        set: function (value) {
+            this._padding = value;
+            CSSFunction.updateFontStyle(this.parent, "padding", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "stroke", {
+        get: function () {
+            return this._stroke;
+        },
+        set: function (value) {
+            this._stroke = value;
+            CSSFunction.updateFontStyle(this.parent, "stroke", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "strokeThickness", {
+        get: function () {
+            return this._strokeThickness;
+        },
+        set: function (value) {
+            this._strokeThickness = value;
+            CSSFunction.updateFontStyle(this.parent, "strokeThickness", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "dropShadow", {
+        get: function () {
+            return this._dropShadow;
+        },
+        set: function (value) {
+            this._dropShadow = value;
+            CSSFunction.updateFontStyle(this.parent, "dropShadow", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "dropShadowAlpha", {
+        get: function () {
+            return this._dropShadowAlpha;
+        },
+        set: function (value) {
+            this._dropShadowAlpha = value;
+            CSSFunction.updateFontStyle(this.parent, "dropShadowAlpha", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "dropShadowAngle", {
+        get: function () {
+            return this._dropShadowAngle;
+        },
+        set: function (value) {
+            this._dropShadowAngle = value;
+            CSSFunction.updateFontStyle(this.parent, "dropShadowAngle", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "dropShadowBlur", {
+        get: function () {
+            return this._dropShadowBlur;
+        },
+        set: function (value) {
+            this._dropShadowBlur = value;
+            CSSFunction.updateFontStyle(this.parent, "dropShadowBlur", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "dropShadowColor", {
+        get: function () {
+            return this._dropShadowColor;
+        },
+        set: function (value) {
+            this._dropShadowColor = value;
+            CSSFunction.updateFontStyle(this.parent, "dropShadowColor", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "dropShadowDistance", {
+        get: function () {
+            return this._dropShadowDistance;
+        },
+        set: function (value) {
+            this._dropShadowDistance = value;
+            CSSFunction.updateFontStyle(this.parent, "dropShadowDistance", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CSSStyle.prototype, "breakWords", {
+        get: function () {
+            return this._breakWords;
+        },
+        set: function (value) {
+            this._breakWords = value;
+            CSSFunction.updateFontStyle(this.parent, "breakWords", value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    CSSStyle.prototype.onResize = function () {
+        var target = this.parent;
         if (target.width == 0 || target.height == 0) {
             return;
         }
         if (this.backgroundColor && target.background) {
-            const background = target.background;
+            var background = target.background;
             //console.log("onResize backgroundColor",background.width , target.width ,background.height ,target.height)
             background.clear();
             background.beginFill(this.backgroundColor);
@@ -7407,14 +8529,15 @@ class CSSStyle {
         }
         if (target.background && target.background.mask) {
             //console.log("onResize backgroundColor mask",this.backgroundColor)
-            const mask = target.background.mask;
+            var mask = target.background.mask;
             mask.clear();
             mask.beginFill(this.backgroundColor);
             mask.drawRoundedRect(0, 0, target.width, target.height, 0);
             mask.endFill();
         }
-    }
-}
+    };
+    return CSSStyle;
+}());
 exports.CSSStyle = CSSStyle;
 /*
 CSS3.0 所有样式属性
@@ -7747,18 +8870,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 exports.Easing = {
     Linear: {
-        None(k) {
+        None: function (k) {
             return k;
         }
     },
     Quadratic: {
-        In(k) {
+        In: function (k) {
             return Math.pow(k, 2);
         },
-        Out(k) {
+        Out: function (k) {
             return k * (2 - k);
         },
-        InOut(k) {
+        InOut: function (k) {
             if ((k *= 2) < 1) {
                 return 0.5 * Math.pow(k, 2);
             }
@@ -7766,13 +8889,13 @@ exports.Easing = {
         }
     },
     Cubic: {
-        In(k) {
+        In: function (k) {
             return Math.pow(k, 3);
         },
-        Out(k) {
+        Out: function (k) {
             return --k * k * k + 1;
         },
-        InOut(k) {
+        InOut: function (k) {
             if ((k *= 2) < 1) {
                 return 0.5 * Math.pow(k, 3);
             }
@@ -7780,13 +8903,13 @@ exports.Easing = {
         }
     },
     Quartic: {
-        In(k) {
+        In: function (k) {
             return Math.pow(k, 4);
         },
-        Out(k) {
+        Out: function (k) {
             return 1 - --k * k * k * k;
         },
-        InOut(k) {
+        InOut: function (k) {
             if ((k *= 2) < 1) {
                 return 0.5 * Math.pow(k, 4);
             }
@@ -7794,13 +8917,13 @@ exports.Easing = {
         }
     },
     Quintic: {
-        In(k) {
+        In: function (k) {
             return Math.pow(k, 5);
         },
-        Out(k) {
+        Out: function (k) {
             return --k * k * k * k * k + 1;
         },
-        InOut(k) {
+        InOut: function (k) {
             if ((k *= 2) < 1) {
                 return 0.5 * Math.pow(k, 5);
             }
@@ -7808,24 +8931,24 @@ exports.Easing = {
         }
     },
     Sinusoidal: {
-        In(k) {
+        In: function (k) {
             return 1 - Math.cos((k * Math.PI) / 2);
         },
-        Out(k) {
+        Out: function (k) {
             return Math.sin((k * Math.PI) / 2);
         },
-        InOut(k) {
+        InOut: function (k) {
             return 0.5 * (1 - Math.cos(Math.PI * k));
         }
     },
     Exponential: {
-        In(k) {
+        In: function (k) {
             return k === 0 ? 0 : Math.pow(1024, k - 1);
         },
-        Out(k) {
+        Out: function (k) {
             return k === 1 ? 1 : 1 - Math.pow(2, -10 * k);
         },
-        InOut(k) {
+        InOut: function (k) {
             if (k === 0) {
                 return 0;
             }
@@ -7839,13 +8962,13 @@ exports.Easing = {
         }
     },
     Circular: {
-        In(k) {
+        In: function (k) {
             return 1 - Math.sqrt(1 - k * k);
         },
-        Out(k) {
+        Out: function (k) {
             return Math.sqrt(1 - --k * k);
         },
-        InOut(k) {
+        InOut: function (k) {
             if ((k *= 2) < 1) {
                 return -0.5 * (Math.sqrt(1 - k * k) - 1);
             }
@@ -7853,7 +8976,7 @@ exports.Easing = {
         }
     },
     Elastic: {
-        In(k) {
+        In: function (k) {
             if (k === 0) {
                 return 0;
             }
@@ -7862,7 +8985,7 @@ exports.Easing = {
             }
             return -Math.pow(2, 10 * (k - 1)) * Math.sin((k - 1.1) * 5 * Math.PI);
         },
-        Out(k) {
+        Out: function (k) {
             if (k === 0) {
                 return 0;
             }
@@ -7871,7 +8994,7 @@ exports.Easing = {
             }
             return Math.pow(2, -10 * k) * Math.sin((k - 0.1) * 5 * Math.PI) + 1;
         },
-        InOut(k) {
+        InOut: function (k) {
             if (k === 0) {
                 return 0;
             }
@@ -7886,16 +9009,16 @@ exports.Easing = {
         }
     },
     Back: {
-        In(k) {
-            const s = 1.70158;
+        In: function (k) {
+            var s = 1.70158;
             return k * k * ((s + 1) * k - s);
         },
-        Out(k) {
-            const s = 1.70158;
+        Out: function (k) {
+            var s = 1.70158;
             return --k * k * ((s + 1) * k + s) + 1;
         },
-        InOut(k) {
-            const s = 1.70158 * 1.525;
+        InOut: function (k) {
+            var s = 1.70158 * 1.525;
             if ((k *= 2) < 1) {
                 return 0.5 * (k * k * ((s + 1) * k - s));
             }
@@ -7903,12 +9026,12 @@ exports.Easing = {
         }
     },
     Bounce: {
-        In(k) {
+        In: function (k) {
             return 1 - exports.Easing.Bounce.Out(1 - k);
         },
-        Out(k) {
-            const x = 2.75;
-            const y = 7.5625;
+        Out: function (k) {
+            var x = 2.75;
+            var y = 7.5625;
             if (k < 1 / x) {
                 return y * k * k;
             }
@@ -7922,7 +9045,7 @@ exports.Easing = {
                 return y * (k -= 2.625 / x) * k + 0.984375;
             }
         },
-        InOut(k) {
+        InOut: function (k) {
             if (k < 0.5) {
                 return exports.Easing.Bounce.In(k * 2) * 0.5;
             }
@@ -7930,7 +9053,7 @@ exports.Easing = {
         }
     },
     Stepped: {
-        steps: (steps) => (k) => ((k * steps) | 0) / steps
+        steps: function (steps) { return function (k) { return ((k * steps) | 0) / steps; }; }
     }
 };
 
@@ -7946,16 +9069,29 @@ exports.Easing = {
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const Ticker_1 = __webpack_require__(/*! ../core/Ticker */ "./src/core/Ticker.ts");
-const ObjectPool_1 = __webpack_require__(/*! ../utils/ObjectPool */ "./src/utils/ObjectPool.ts");
-const Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
-const Easing_1 = __webpack_require__(/*! ./Easing */ "./src/tween/Easing.ts");
+var Ticker_1 = __webpack_require__(/*! ../core/Ticker */ "./src/core/Ticker.ts");
+var ObjectPool_1 = __webpack_require__(/*! ../utils/ObjectPool */ "./src/utils/ObjectPool.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var Easing_1 = __webpack_require__(/*! ./Easing */ "./src/tween/Easing.ts");
 /**
  * @private
  */
-class Node {
-    constructor(node) {
+var Node = /** @class */ (function () {
+    function Node(node) {
         this.default = 0;
         this.start = 0;
         this.end = 0;
@@ -7965,7 +9101,7 @@ class Node {
         this.prevTime = 0;
         this.parent = node;
     }
-    release() {
+    Node.prototype.release = function () {
         this.parent = undefined;
         this.easing = undefined;
         this.start = 0;
@@ -7973,10 +9109,11 @@ class Node {
         this.duration = 0;
         this.endFrame = 0;
         this.prevTime = 0;
-    }
-    load() { }
-    destroy() { }
-}
+    };
+    Node.prototype.load = function () { };
+    Node.prototype.destroy = function () { };
+    return Node;
+}());
 /**
  * 基于帧的时间轴控制类
  *
@@ -7986,42 +9123,44 @@ class Node {
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
  */
-class Timeline extends PIXI.utils.EventEmitter {
-    constructor() {
-        super();
-        this.id = -1;
-        this._frames = new Array();
-        this._frameCount = 0;
-        this._elapsedMS = 16.66; //1000/60
-        this._prevTime = 0;
-        this._isStop = false;
-        this._lastNode = new Map();
-        this._isSetDefault = false;
-        this.loop = false;
+var Timeline = /** @class */ (function (_super) {
+    __extends(Timeline, _super);
+    function Timeline() {
+        var _this = _super.call(this) || this;
+        _this.id = -1;
+        _this._frames = new Array();
+        _this._frameCount = 0;
+        _this._elapsedMS = 16.66; //1000/60
+        _this._prevTime = 0;
+        _this._isStop = false;
+        _this._lastNode = new Map();
+        _this._isSetDefault = false;
+        _this.loop = false;
+        return _this;
     }
-    setDefault(object, _duration, fps) {
+    Timeline.prototype.setDefault = function (object, _duration, fps) {
         this._object = object;
         this._elapsedMS = 1000 / fps;
-        const frameCount = Math.round(_duration / this._elapsedMS);
+        var frameCount = Math.round(_duration / this._elapsedMS);
         this._frameCount = frameCount;
-        const frames = this._frames;
+        var frames = this._frames;
         while (frames && frames.length > frameCount) {
             frames.pop();
         }
-        let i = frames.length === 0 ? 0 : frames.length;
+        var i = frames.length === 0 ? 0 : frames.length;
         for (i; i <= frameCount; i++) {
             if (frames[i] === undefined)
                 frames[i] = new Map();
         }
         this._isSetDefault = true;
         return this;
-    }
-    addProperty(property, value, endFrame, easing) {
+    };
+    Timeline.prototype.addProperty = function (property, value, endFrame, easing) {
         if (endFrame > this._frameCount) {
             throw "Error Timeline.addProperty overflow frame";
         }
-        const parentNode = this._lastNode.get(property);
-        const node = ObjectPool_1.objectPoolShared.pop(Node);
+        var parentNode = this._lastNode.get(property);
+        var node = ObjectPool_1.objectPoolShared.pop(Node);
         if (parentNode === undefined) {
             node.parent = undefined;
         }
@@ -8041,24 +9180,24 @@ class Timeline extends PIXI.utils.EventEmitter {
         node.duration = (endFrame - node.startFrame) * this._elapsedMS;
         node.endFrame = endFrame;
         this._lastNode.set(property, node);
-        for (let i = node.startFrame; i <= endFrame; i++) {
+        for (var i = node.startFrame; i <= endFrame; i++) {
             this._frames[i].set(property, node);
         }
         return this;
-    }
-    stop() {
+    };
+    Timeline.prototype.stop = function () {
         this._isStop = true;
-    }
-    play() {
+    };
+    Timeline.prototype.play = function () {
         this._isStop = false;
-    }
-    gotoAndPlay(frame) {
+    };
+    Timeline.prototype.gotoAndPlay = function (frame) {
         this.goto(frame, false);
-    }
-    gotoAndStop(frame) {
+    };
+    Timeline.prototype.gotoAndStop = function (frame) {
         this.goto(frame, true);
-    }
-    seekLastNode(value, frame) {
+    };
+    Timeline.prototype.seekLastNode = function (value, frame) {
         if (value.parent === undefined) {
             return value;
         }
@@ -8066,38 +9205,45 @@ class Timeline extends PIXI.utils.EventEmitter {
             this.seekLastNode(value.parent, frame);
         }
         return value;
-    }
-    goto(frame, isStop) {
-        const { _lastNode, _frames } = this;
-        _lastNode.forEach((value, key) => {
-            const node = this.seekLastNode(value, frame);
+    };
+    Timeline.prototype.goto = function (frame, isStop) {
+        var _this = this;
+        var _a = this, _lastNode = _a._lastNode, _frames = _a._frames;
+        _lastNode.forEach(function (value, key) {
+            var node = _this.seekLastNode(value, frame);
             node.prevTime = node.duration;
-            this.updateobject(key, node);
+            _this.updateobject(key, node);
         }, this);
         this._prevTime = frame * this._elapsedMS;
-        for (let i = frame; i < _frames.length; i++) {
-            _frames[i].forEach((value, key) => {
+        var _loop_1 = function (i) {
+            _frames[i].forEach(function (value, key) {
                 if (i == frame) {
-                    value.prevTime = (frame - value.startFrame) * this._elapsedMS;
-                    this.updateobject(key, value);
+                    value.prevTime = (frame - value.startFrame) * _this._elapsedMS;
+                    _this.updateobject(key, value);
                 }
                 else {
                     value.prevTime = 0;
                 }
-            }, this);
+            }, this_1);
+        };
+        var this_1 = this;
+        for (var i = frame; i < _frames.length; i++) {
+            _loop_1(i);
         }
         this._isStop = isStop;
         if (!this._isStop) {
             this.load();
         }
-    }
-    update(a, b, elapsedMS = 0) {
+    };
+    Timeline.prototype.update = function (a, b, elapsedMS) {
+        var _this = this;
+        if (elapsedMS === void 0) { elapsedMS = 0; }
         if (this._isStop) {
             return;
         }
-        let _prevTime = this._prevTime;
-        const { _frames, _frameCount, _elapsedMS } = this;
-        const curFrame = Math.round(_prevTime / _elapsedMS);
+        var _prevTime = this._prevTime;
+        var _a = this, _frames = _a._frames, _frameCount = _a._frameCount, _elapsedMS = _a._elapsedMS;
+        var curFrame = Math.round(_prevTime / _elapsedMS);
         if (curFrame >= _frameCount) {
             if (this.loop) {
                 this.emit(Index_1.ComponentEvent.LOOP, this);
@@ -8112,17 +9258,17 @@ class Timeline extends PIXI.utils.EventEmitter {
             return;
         }
         _prevTime += elapsedMS;
-        _frames[curFrame].forEach((value, key) => {
+        _frames[curFrame].forEach(function (value, key) {
             if (value.start !== value.end) {
                 value.prevTime += elapsedMS;
-                this.updateobject(key, value);
+                _this.updateobject(key, value);
             }
         }, this);
         this._prevTime = _prevTime;
         return true;
-    }
-    updateobject(key, node) {
-        let elapsed;
+    };
+    Timeline.prototype.updateobject = function (key, node) {
+        var elapsed;
         if (!node.duration) {
             elapsed = 1;
         }
@@ -8130,9 +9276,9 @@ class Timeline extends PIXI.utils.EventEmitter {
             elapsed = node.prevTime / node.duration;
             elapsed = elapsed > 1 ? 1 : elapsed;
         }
-        const value = node.easing(elapsed);
-        const start = node.start;
-        const end = node.end;
+        var value = node.easing(elapsed);
+        var start = node.start;
+        var end = node.end;
         if (typeof end === 'number') {
             switch (key) {
                 case "x":
@@ -8156,18 +9302,18 @@ class Timeline extends PIXI.utils.EventEmitter {
             return true;
         }
         return false;
-    }
-    load() {
+    };
+    Timeline.prototype.load = function () {
         if (!this._isSetDefault) {
             throw "Error Timeline.load undefined default";
         }
         Ticker_1.shared.removeUpdateEvent(this.update, this);
         Ticker_1.shared.addUpdateEvent(this.update, this);
-    }
-    release() {
+    };
+    Timeline.prototype.release = function () {
         Ticker_1.shared.removeUpdateEvent(this.update, this);
-        this._frames.forEach(map => {
-            map.forEach((value) => {
+        this._frames.forEach(function (map) {
+            map.forEach(function (value) {
                 ObjectPool_1.objectPoolShared.push(Node, value);
             });
             map.clear();
@@ -8181,8 +9327,9 @@ class Timeline extends PIXI.utils.EventEmitter {
         this._isSetDefault = false;
         this.loop = false;
         this._lastNode.clear();
-    }
-}
+    };
+    return Timeline;
+}(PIXI.utils.EventEmitter));
 exports.Timeline = Timeline;
 
 
@@ -8197,14 +9344,27 @@ exports.Timeline = Timeline;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
-const Easing_1 = __webpack_require__(/*! ./Easing */ "./src/tween/Easing.ts");
-const Interpolation_1 = __webpack_require__(/*! ./private/Interpolation */ "./src/tween/private/Interpolation.ts");
-const core_1 = __webpack_require__(/*! ./private/core */ "./src/tween/private/core.ts");
-const constants_1 = __webpack_require__(/*! ./private/constants */ "./src/tween/private/constants.ts");
-const TweenEvent_1 = __webpack_require__(/*! ../event/TweenEvent */ "./src/event/TweenEvent.ts");
-const defaultEasing = Easing_1.Easing.Linear.None;
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var Easing_1 = __webpack_require__(/*! ./Easing */ "./src/tween/Easing.ts");
+var Interpolation_1 = __webpack_require__(/*! ./private/Interpolation */ "./src/tween/private/Interpolation.ts");
+var core_1 = __webpack_require__(/*! ./private/core */ "./src/tween/private/core.ts");
+var constants_1 = __webpack_require__(/*! ./private/constants */ "./src/tween/private/constants.ts");
+var TweenEvent_1 = __webpack_require__(/*! ../event/TweenEvent */ "./src/event/TweenEvent.ts");
+var defaultEasing = Easing_1.Easing.Linear.None;
 /**
  * 缓动动画
  *
@@ -8214,32 +9374,33 @@ const defaultEasing = Easing_1.Easing.Linear.None;
  *
  * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
  */
-class Tween extends PIXI.utils.EventEmitter {
-    constructor(object) {
-        super();
-        this._valuesEnd = null;
-        this._duration = 1000;
-        this._easingFunction = defaultEasing;
-        this._easingReverse = defaultEasing;
-        this._startTime = 0;
-        this._delayTime = 0;
-        this._repeat = 0;
-        this._initRepeat = 0;
-        this._isPlaying = false;
-        this._yoyo = false;
-        this._reversed = false;
-        this._onStartCallbackFired = false;
-        this._isFinite = true;
-        this._prevTime = 0;
-        this._rendered = false;
-        this._reverseDelayTime = 0;
+var Tween = /** @class */ (function (_super) {
+    __extends(Tween, _super);
+    function Tween(object) {
+        var _this = _super.call(this) || this;
+        _this._valuesEnd = null;
+        _this._duration = 1000;
+        _this._easingFunction = defaultEasing;
+        _this._easingReverse = defaultEasing;
+        _this._startTime = 0;
+        _this._delayTime = 0;
+        _this._repeat = 0;
+        _this._initRepeat = 0;
+        _this._isPlaying = false;
+        _this._yoyo = false;
+        _this._reversed = false;
+        _this._onStartCallbackFired = false;
+        _this._isFinite = true;
+        _this._prevTime = 0;
+        _this._rendered = false;
+        _this._reverseDelayTime = 0;
         /** 附加数据 */
-        this.data = {};
-        this.id = Utils_1.uid();
-        this.object = object;
-        this._valuesStart = Array.isArray(object) ? [] : {};
-        this._interpolationFunction = Interpolation_1.Interpolation.Linear;
-        return this;
+        _this.data = {};
+        _this.id = Utils_1.uid();
+        _this.object = object;
+        _this._valuesStart = Array.isArray(object) ? [] : {};
+        _this._interpolationFunction = Interpolation_1.Interpolation.Linear;
+        return _this;
     }
     /**
      * Easier way to call the Tween
@@ -8250,10 +9411,10 @@ class Tween extends PIXI.utils.EventEmitter {
      * @memberof gui.Tween
      * @static
      */
-    static fromTo(object, to, duration) {
-        const tween = new Tween(object).to(to, duration);
+    Tween.fromTo = function (object, to, duration) {
+        var tween = new Tween(object).to(to, duration);
         return tween;
-    }
+    };
     /**
      * Easier way calling constructor only applies the `to` value, useful for CSS Animation
      * @param {TAny} object object
@@ -8263,9 +9424,9 @@ class Tween extends PIXI.utils.EventEmitter {
      * @memberof gui.Tween
      * @static
      */
-    static to(object, to, duration) {
+    Tween.to = function (object, to, duration) {
         return Tween.fromTo(object, to, duration);
-    }
+    };
     /**
      * Easier way calling constructor only applies the `from` value, useful for CSS Animation
      * @param {TAny} object object
@@ -8275,92 +9436,108 @@ class Tween extends PIXI.utils.EventEmitter {
      * @memberof gui.Tween
      * @static
      */
-    static from(object, from, duration) {
+    Tween.from = function (object, from, duration) {
         return Tween.fromTo(object, from, duration);
-    }
-    /**
-     * 是否在播放中
-     * @return {boolean}
-     * @example tween.isPlaying()
-     * @memberof gui.Tween
-     */
-    get isPlaying() {
-        return this._isPlaying;
-    }
-    /**
-     * 是否开始播放
-     * @return {boolean}
-     * @example tween.isStarted()
-     * @memberof gui.Tween
-     */
-    get isStarted() {
-        return this._onStartCallbackFired;
-    }
-    /**
-     * 获取动画的开始时间
-     */
-    get startTime() {
-        return this._startTime;
-    }
-    /**
-     * 获取动画的开始时间
-     */
-    set startTime(value) {
-        this._startTime = value;
-    }
-    /**
-     * 设置缓动时长
-     * @param {number} amount 持续的毫秒值
-     * @example tween.duration(2000)
-     * @memberof gui.Tween
-     * @deprecated 不推荐使用这个方法，内部使用
-     * @private
-     */
-    set duration(amount) {
-        this._duration = typeof amount === 'function' ? amount(this._duration) : amount;
-    }
-    get duration() {
-        return this._duration;
-    }
+    };
+    Object.defineProperty(Tween.prototype, "isPlaying", {
+        /**
+         * 是否在播放中
+         * @return {boolean}
+         * @example tween.isPlaying()
+         * @memberof gui.Tween
+         */
+        get: function () {
+            return this._isPlaying;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tween.prototype, "isStarted", {
+        /**
+         * 是否开始播放
+         * @return {boolean}
+         * @example tween.isStarted()
+         * @memberof gui.Tween
+         */
+        get: function () {
+            return this._onStartCallbackFired;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tween.prototype, "startTime", {
+        /**
+         * 获取动画的开始时间
+         */
+        get: function () {
+            return this._startTime;
+        },
+        /**
+         * 获取动画的开始时间
+         */
+        set: function (value) {
+            this._startTime = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Tween.prototype, "duration", {
+        get: function () {
+            return this._duration;
+        },
+        /**
+         * 设置缓动时长
+         * @param {number} amount 持续的毫秒值
+         * @example tween.duration(2000)
+         * @memberof gui.Tween
+         * @deprecated 不推荐使用这个方法，内部使用
+         * @private
+         */
+        set: function (amount) {
+            this._duration = typeof amount === 'function' ? amount(this._duration) : amount;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * 逆向缓动
      * @example tween.reverse()
      * @param {boolean=} state 是否逆向
      * @memberof gui.Tween
      */
-    reverse(state) {
-        const { _reversed } = this;
+    Tween.prototype.reverse = function (state) {
+        var _reversed = this._reversed;
         this._reversed = state !== undefined ? state : !_reversed;
         return this;
-    }
+    };
     /**
      * 当前动画是否逆转
      * @return {boolean}
      * @example tween.reversed() true逆向中
      * @memberof gui.Tween
      */
-    reversed() {
+    Tween.prototype.reversed = function () {
         return this._reversed;
-    }
+    };
     /**
      * 暂停缓动
      * @example tween.pause()
      * @memberof gui.Tween
      */
-    pause() {
+    Tween.prototype.pause = function () {
         if (!this._isPlaying) {
             return this;
         }
         this._isPlaying = false;
         core_1.remove(this);
         return this.emit(TweenEvent_1.TweenEvent.pause, this.object);
-    }
+    };
     /**
      * 播放或恢复播放
      * @example tween.play()
      * @memberof gui.Tween
      */
-    play() {
+    Tween.prototype.play = function () {
         if (this._isPlaying) {
             return this;
         }
@@ -8368,7 +9545,7 @@ class Tween extends PIXI.utils.EventEmitter {
         this._startTime = 0;
         core_1.add(this);
         return this.emit(TweenEvent_1.TweenEvent.play, this.object);
-    }
+    };
     /**
      * 设置要缓动的目标属性与持续时间
      * @param {object} properties 目标属性值
@@ -8376,19 +9553,20 @@ class Tween extends PIXI.utils.EventEmitter {
      * @example let tween = new gui.Tween({x:0}).to({x:100}, 2000)
      * @memberof gui.Tween
      */
-    to(properties, duration = 1000) {
+    Tween.prototype.to = function (properties, duration) {
+        if (duration === void 0) { duration = 1000; }
         this._valuesEnd = properties;
         this._duration = duration;
         return this;
-    }
-    render() {
+    };
+    Tween.prototype.render = function () {
         if (this._rendered) {
             return this;
         }
-        const { _valuesStart, _valuesEnd, object } = this;
+        var _a = this, _valuesStart = _a._valuesStart, _valuesEnd = _a._valuesEnd, object = _a.object;
         if (!_valuesStart.processed) {
-            for (const property in _valuesEnd) {
-                const start = object && object[property] && Utils_1.deepCopy(object[property]);
+            for (var property in _valuesEnd) {
+                var start = object && object[property] && Utils_1.deepCopy(object[property]);
                 _valuesStart[property] = start || 0;
                 constants_1.decompose(property, object, _valuesStart, _valuesEnd);
             }
@@ -8396,14 +9574,14 @@ class Tween extends PIXI.utils.EventEmitter {
         }
         this._rendered = true;
         return this;
-    }
+    };
     /**
      * 开始执行缓动
      * @param {number|string} time 要开始的时间，延迟值
      * @example tween.start()
      * @memberof gui.Tween
      */
-    start(time) {
+    Tween.prototype.start = function (time) {
         this._startTime = time !== undefined ? time : 0;
         this._startTime += this._delayTime;
         this._prevTime = 0;
@@ -8412,18 +9590,18 @@ class Tween extends PIXI.utils.EventEmitter {
         this._isPlaying = true;
         core_1.add(this);
         return this;
-    }
+    };
     /**
      * 停止缓动
      * @example tween.stop()
      * @memberof gui.Tween
      */
-    stop() {
-        const { _isPlaying, _isFinite, object, _duration, _initRepeat, _yoyo, _reversed } = this;
+    Tween.prototype.stop = function () {
+        var _a = this, _isPlaying = _a._isPlaying, _isFinite = _a._isFinite, object = _a.object, _duration = _a._duration, _initRepeat = _a._initRepeat, _yoyo = _a._yoyo, _reversed = _a._reversed;
         if (!_isPlaying) {
             return this;
         }
-        const atStart = _isFinite ? (_initRepeat + 1) % 2 === 1 : !_reversed;
+        var atStart = _isFinite ? (_initRepeat + 1) % 2 === 1 : !_reversed;
         this._reversed = false;
         if (_yoyo && atStart) {
             this._prevTime = _duration;
@@ -8435,39 +9613,39 @@ class Tween extends PIXI.utils.EventEmitter {
         this._isPlaying = false;
         core_1.remove(this);
         return this.emit(TweenEvent_1.TweenEvent.stop, object);
-    }
+    };
     /**
      * 设置延迟执行时间
      * @param {number} amount 延迟等待的时间，毫秒
      * @example tween.delay(500)
      * @memberof gui.Tween
      */
-    delay(amount) {
+    Tween.prototype.delay = function (amount) {
         this._delayTime = amount;
         return this;
-    }
+    };
     /**
      * 设置重复执行的次数
      * @param {number} amount 重复次数
      * @example tween.repeat(5)
      * @memberof gui.Tween
      */
-    repeat(amount) {
+    Tween.prototype.repeat = function (amount) {
         this._repeat = !this._duration ? 0 : amount;
         this._initRepeat = this._repeat;
         this._isFinite = isFinite(amount);
         return this;
-    }
+    };
     /**
      * 设置每个重复执行过程的延迟时间，毫秒
      * @param {number} amount 延迟值
      * @example tween.reverseDelay(500)
      * @memberof gui.Tween
      */
-    reverseDelay(amount) {
+    Tween.prototype.reverseDelay = function (amount) {
         this._reverseDelayTime = amount;
         return this;
-    }
+    };
     /**
      * 是否在重复执行中启用反向动画
      * @param {boolean} state true启动
@@ -8475,7 +9653,7 @@ class Tween extends PIXI.utils.EventEmitter {
      * @example tween.yoyo(true)
      * @memberof gui.Tween
      */
-    yoyo(state, _easingReverse) {
+    Tween.prototype.yoyo = function (state, _easingReverse) {
         this._yoyo = typeof state === 'function' ? state(this._yoyo) : state === null ? this._yoyo : state;
         if (!state) {
             this._reversed = false;
@@ -8487,54 +9665,54 @@ class Tween extends PIXI.utils.EventEmitter {
             this._easingReverse = this._easingFunction;
         }
         return this;
-    }
+    };
     /**
      * 设置缓动函数
      * @param {Function} _easingFunction 缓动函数的公式，如果设置yoyo的第二个值会应用于逆向缓动
      * @example tween.easing(Easing.Elastic.InOut)
      * @memberof gui.Tween
      */
-    easing(_easingFunction) {
+    Tween.prototype.easing = function (_easingFunction) {
         this._easingFunction = _easingFunction;
         return this;
-    }
+    };
     /**
      * 设置差值
      * @param {Function} _interpolationFunction 差值的函数
      * @example tween.interpolation(Interpolation.Bezier)
      * @memberof gui.Tween
      */
-    interpolation(_interpolationFunction) {
+    Tween.prototype.interpolation = function (_interpolationFunction) {
         if (typeof _interpolationFunction === 'function') {
             this._interpolationFunction = _interpolationFunction;
         }
         return this;
-    }
+    };
     /**
      * 更新动画到指定时间点，进行播放
      * @param time
      */
-    gotoAndPlay(time) {
+    Tween.prototype.gotoAndPlay = function (time) {
         this._prevTime = time;
         this.update(0);
-    }
+    };
     /**
      * 更新动画到指定时间点，停止播放
      * @param time
      */
-    gotoAndStop(time) {
+    Tween.prototype.gotoAndStop = function (time) {
         this._prevTime = time;
         this.update(0);
         this.pause();
-    }
+    };
     /**
      * 更新动画到指定时间点，停止播放
      * @param time
      */
-    gotoAndEnd() {
+    Tween.prototype.gotoAndEnd = function () {
         this._prevTime = this._duration;
         this.update(0);
-    }
+    };
     /**
      * 更新函数，通过给定的 `time` 设置目标属性变化
     * @param {number=} elapsedMS 帧间隔
@@ -8543,16 +9721,16 @@ class Tween extends PIXI.utils.EventEmitter {
      * @example tween.update(100)
      * @memberof gui.Tween
      */
-    update(elapsedMS, preserve, forceTime) {
-        const { _onStartCallbackFired, _easingFunction, _easingReverse, _delayTime, _reverseDelayTime, _yoyo, _reversed, _startTime, _duration, _valuesStart, _valuesEnd, object, _isFinite, _isPlaying } = this;
+    Tween.prototype.update = function (elapsedMS, preserve, forceTime) {
+        var _a = this, _onStartCallbackFired = _a._onStartCallbackFired, _easingFunction = _a._easingFunction, _easingReverse = _a._easingReverse, _delayTime = _a._delayTime, _reverseDelayTime = _a._reverseDelayTime, _yoyo = _a._yoyo, _reversed = _a._reversed, _startTime = _a._startTime, _duration = _a._duration, _valuesStart = _a._valuesStart, _valuesEnd = _a._valuesEnd, object = _a.object, _isFinite = _a._isFinite, _isPlaying = _a._isPlaying;
         if (!_isPlaying || (_startTime > 0 && !forceTime)) {
             this._startTime -= elapsedMS;
             this._startTime = Math.max(0, this._startTime);
             return true;
         }
-        let elapsed;
-        let property;
-        let _repeat = this._repeat;
+        var elapsed;
+        var property;
+        var _repeat = this._repeat;
         if (!_duration) {
             elapsed = 1;
             _repeat = 0;
@@ -8574,11 +9752,11 @@ class Tween extends PIXI.utils.EventEmitter {
             this.emit(TweenEvent_1.TweenEvent.start, object);
             this._onStartCallbackFired = true;
         }
-        const currentEasing = _reversed ? _easingReverse || _easingFunction : _easingFunction;
+        var currentEasing = _reversed ? _easingReverse || _easingFunction : _easingFunction;
         for (property in _valuesEnd) {
-            const start = _valuesStart[property];
-            const end = _valuesEnd[property];
-            const value = currentEasing[property] ? currentEasing[property](elapsed) : typeof currentEasing === 'function' ? currentEasing(elapsed) : defaultEasing(elapsed);
+            var start = _valuesStart[property];
+            var end = _valuesEnd[property];
+            var value = currentEasing[property] ? currentEasing[property](elapsed) : typeof currentEasing === 'function' ? currentEasing(elapsed) : defaultEasing(elapsed);
             if (typeof end === 'number') {
                 object[property] = start + (end - start) * value;
             }
@@ -8625,10 +9803,11 @@ class Tween extends PIXI.utils.EventEmitter {
             }
         }
         return true;
-    }
-}
-Tween.core = { add: core_1.add, get: core_1.get, getAll: core_1.getAll, remove: core_1.remove, removeAll: core_1.removeAll, removeDisplay: core_1.removeDisplay, update: core_1.update };
-Tween.Event = TweenEvent_1.TweenEvent;
+    };
+    Tween.core = { add: core_1.add, get: core_1.get, getAll: core_1.getAll, remove: core_1.remove, removeAll: core_1.removeAll, removeDisplay: core_1.removeDisplay, update: core_1.update };
+    Tween.Event = TweenEvent_1.TweenEvent;
+    return Tween;
+}(PIXI.utils.EventEmitter));
 exports.Tween = Tween;
 
 
@@ -8644,7 +9823,7 @@ exports.Tween = Tween;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const constants_1 = __webpack_require__(/*! ./constants */ "./src/tween/private/constants.ts");
+var constants_1 = __webpack_require__(/*! ./constants */ "./src/tween/private/constants.ts");
 /**
  * 差值计算列表
  * @namespace TWEEN.Interpolation
@@ -8655,11 +9834,11 @@ const constants_1 = __webpack_require__(/*! ./constants */ "./src/tween/private/
  * @memberof gui.tween
  */
 exports.Interpolation = {
-    Linear(v, k, value) {
-        const m = v.length - 1;
-        const f = m * k;
-        const i = Math.floor(f);
-        const fn = exports.Interpolation.Utils.Linear;
+    Linear: function (v, k, value) {
+        var m = v.length - 1;
+        var f = m * k;
+        var i = Math.floor(f);
+        var fn = exports.Interpolation.Utils.Linear;
         if (k < 0) {
             return fn(v[0], v[1], f, value);
         }
@@ -8668,18 +9847,18 @@ exports.Interpolation = {
         }
         return fn(v[i], v[i + 1 > m ? m : i + 1], f - i, value);
     },
-    Bezier(v, k, value) {
-        let b = exports.Interpolation.Utils.Reset(value);
-        let n = v.length - 1;
-        let pw = Math.pow;
-        let fn = exports.Interpolation.Utils.Bernstein;
-        let isBArray = Array.isArray(b);
-        for (let i = 0; i <= n; i++) {
+    Bezier: function (v, k, value) {
+        var b = exports.Interpolation.Utils.Reset(value);
+        var n = v.length - 1;
+        var pw = Math.pow;
+        var fn = exports.Interpolation.Utils.Bernstein;
+        var isBArray = Array.isArray(b);
+        for (var i = 0; i <= n; i++) {
             if (typeof b === 'number') {
                 b += pw(1 - k, n - i) * pw(k, i) * v[i] * fn(n, i);
             }
             else if (isBArray) {
-                for (let p = 0, len = b.length; p < len; p++) {
+                for (var p = 0, len = b.length; p < len; p++) {
                     if (typeof b[p] === 'number') {
                         b[p] += pw(1 - k, n - i) * pw(k, i) * v[i][p] * fn(n, i);
                     }
@@ -8689,7 +9868,7 @@ exports.Interpolation = {
                 }
             }
             else if (typeof b === 'object') {
-                for (let p in b) {
+                for (var p in b) {
                     if (typeof b[p] === 'number') {
                         b[p] += pw(1 - k, n - i) * pw(k, i) * v[i][p] * fn(n, i);
                     }
@@ -8699,10 +9878,10 @@ exports.Interpolation = {
                 }
             }
             else if (typeof b === 'string') {
-                let STRING_BUFFER = '';
-                let idx = Math.round(n * k);
-                let vCurr = v[idx];
-                for (let ks = 1, len = vCurr.length; ks < len; ks++) {
+                var STRING_BUFFER = '';
+                var idx = Math.round(n * k);
+                var vCurr = v[idx];
+                for (var ks = 1, len = vCurr.length; ks < len; ks++) {
                     STRING_BUFFER += vCurr[ks];
                 }
                 return STRING_BUFFER;
@@ -8710,11 +9889,11 @@ exports.Interpolation = {
         }
         return b;
     },
-    CatmullRom(v, k, value) {
-        const m = v.length - 1;
-        let f = m * k;
-        let i = Math.floor(f);
-        const fn = exports.Interpolation.Utils.CatmullRom;
+    CatmullRom: function (v, k, value) {
+        var m = v.length - 1;
+        var f = m * k;
+        var i = Math.floor(f);
+        var fn = exports.Interpolation.Utils.CatmullRom;
         if (v[0] === v[m]) {
             if (k < 0) {
                 i = Math.floor((f = m * (1 + k)));
@@ -8732,12 +9911,12 @@ exports.Interpolation = {
         }
     },
     Utils: {
-        Linear(p0, p1, t, v) {
+        Linear: function (p0, p1, t, v) {
             if (p0 === p1 || typeof p0 === 'string') {
                 // Quick return for performance reason
                 if (p1.length && p1.splice && p1.isString) {
                     p1 = '';
-                    for (let i = 0, len = p0.length; i < len; i++) {
+                    for (var i = 0, len = p0.length; i < len; i++) {
                         p1 += p0[i];
                     }
                 }
@@ -8748,11 +9927,11 @@ exports.Interpolation = {
             }
             else if (typeof p0 === 'object') {
                 if (p0.length !== undefined) {
-                    const isForceStringProp = typeof p0[0] === 'string' || p0.isString;
+                    var isForceStringProp = typeof p0[0] === 'string' || p0.isString;
                     if (isForceStringProp || p0[0] === constants_1.STRING_PROP) {
-                        let STRING_BUFFER = '';
-                        for (let i = isForceStringProp ? 0 : 1, len = p0.length; i < len; i++) {
-                            let currentValue = t === 0 ? p0[i] : t === 1 ? p1[i] : typeof p0[i] === 'number' ? p0[i] + (p1[i] - p0[i]) * t : p1[i];
+                        var STRING_BUFFER = '';
+                        for (var i = isForceStringProp ? 0 : 1, len = p0.length; i < len; i++) {
+                            var currentValue = t === 0 ? p0[i] : t === 1 ? p1[i] : typeof p0[i] === 'number' ? p0[i] + (p1[i] - p0[i]) * t : p1[i];
                             if ((t > 0 && t < 1 && constants_1.isRGBColor(p0, i)) || constants_1.isRGBColor(p0, i, constants_1.RGBA)) {
                                 currentValue |= 0;
                             }
@@ -8761,28 +9940,28 @@ exports.Interpolation = {
                         return STRING_BUFFER;
                     }
                     else if (v && v.length && v.splice) {
-                        for (let p = 0, len = v.length; p < len; p++) {
+                        for (var p = 0, len = v.length; p < len; p++) {
                             v[p] = exports.Interpolation.Utils.Linear(p0[p], p1[p], t, v[p]);
                         }
                     }
                 }
                 else {
-                    for (const p in v) {
+                    for (var p in v) {
                         v[p] = exports.Interpolation.Utils.Linear(p0[p], p1[p], t, v[p]);
                     }
                 }
                 return v;
             }
         },
-        Reset(value) {
+        Reset: function (value) {
             if (Array.isArray(value)) {
-                for (let i = 0, len = value.length; i < len; i++) {
+                for (var i = 0, len = value.length; i < len; i++) {
                     value[i] = exports.Interpolation.Utils.Reset(value[i]);
                 }
                 return value;
             }
             else if (typeof value === 'object') {
-                for (let i in value) {
+                for (var i in value) {
                     value[i] = exports.Interpolation.Utils.Reset(value[i]);
                 }
                 return value;
@@ -8792,41 +9971,41 @@ exports.Interpolation = {
             }
             return value;
         },
-        Bernstein(n, i) {
-            const fc = exports.Interpolation.Utils.Factorial;
+        Bernstein: function (n, i) {
+            var fc = exports.Interpolation.Utils.Factorial;
             return fc(n) / fc(i) / fc(n - i);
         },
         Factorial: (function () {
-            const a = [1];
-            return (n) => {
-                let s = 1;
+            var a = [1];
+            return function (n) {
+                var s = 1;
                 if (a[n]) {
                     return a[n];
                 }
-                for (let i = n; i > 1; i--) {
+                for (var i = n; i > 1; i--) {
                     s *= i;
                 }
                 a[n] = s;
                 return s;
             };
         })(),
-        CatmullRom(p0, p1, p2, p3, t, v) {
+        CatmullRom: function (p0, p1, p2, p3, t, v) {
             if (typeof p0 === 'string') {
                 return p1;
             }
             else if (typeof p0 === 'number') {
-                const v0 = (p2 - p0) * 0.5;
-                const v1 = (p3 - p1) * 0.5;
-                const t2 = t * t;
-                const t3 = t * t2;
+                var v0 = (p2 - p0) * 0.5;
+                var v1 = (p3 - p1) * 0.5;
+                var t2 = t * t;
+                var t3 = t * t2;
                 return (2 * p1 - 2 * p2 + v0 + v1) * t3 + (-3 * p1 + 3 * p2 - 2 * v0 - v1) * t2 + v0 * t + p1;
             }
             else if (typeof p0 === 'object') {
                 if (p0.length !== undefined) {
                     if (p0[0] === constants_1.STRING_PROP) {
-                        let STRING_BUFFER = '';
-                        for (let i = 1, len = p0.length; i < len; i++) {
-                            let currentValue = typeof p0[i] === 'number' ? exports.Interpolation.Utils.CatmullRom(p0[i], p1[i], p2[i], p3[i], t) : p3[i];
+                        var STRING_BUFFER = '';
+                        for (var i = 1, len = p0.length; i < len; i++) {
+                            var currentValue = typeof p0[i] === 'number' ? exports.Interpolation.Utils.CatmullRom(p0[i], p1[i], p2[i], p3[i], t) : p3[i];
                             if (constants_1.isRGBColor(p0, i) || constants_1.isRGBColor(p0, i, constants_1.RGBA)) {
                                 currentValue |= 0;
                             }
@@ -8834,12 +10013,12 @@ exports.Interpolation = {
                         }
                         return STRING_BUFFER;
                     }
-                    for (let p = 0, len = v.length; p < len; p++) {
+                    for (var p = 0, len = v.length; p < len; p++) {
                         v[p] = exports.Interpolation.Utils.CatmullRom(p0[p], p1[p], p2[p], p3[p], t, v[p]);
                     }
                 }
                 else {
-                    for (const p in v) {
+                    for (var p in v) {
                         v[p] = exports.Interpolation.Utils.CatmullRom(p0[p], p1[p], p2[p], p3[p], t, v[p]);
                     }
                 }
@@ -8862,7 +10041,7 @@ exports.Interpolation = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Utils_1 = __webpack_require__(/*! ../../utils/Utils */ "./src/utils/Utils.ts");
+var Utils_1 = __webpack_require__(/*! ../../utils/Utils */ "./src/utils/Utils.ts");
 /**
  * 卡帧后的平滑处理帧率
  */
@@ -8879,10 +10058,14 @@ exports.CHAINED_TWEENS = '_chainedTweens';
 exports.STRING_PROP = 'STRING_PROP';
 // Also RegExp's for string tweening
 exports.NUM_REGEX = /\s+|([A-Za-z?().,{}:""[\]#%]+)|([-+]=+)?([-+]+)?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]=?\d+)?/g;
-const isNaNForST = (v) => isNaN(+v) || ((v[0] === '+' || v[0] === '-') && v[1] === '=') || v === '' || v === ' ';
-const hexColor = /^#([0-9a-f]{6}|[0-9a-f]{3})$/gi;
-const hex2rgbext = (all, ...hex) => {
-    let rgb = Utils_1.hexToRgb(all);
+var isNaNForST = function (v) { return isNaN(+v) || ((v[0] === '+' || v[0] === '-') && v[1] === '=') || v === '' || v === ' '; };
+var hexColor = /^#([0-9a-f]{6}|[0-9a-f]{3})$/gi;
+var hex2rgbext = function (all) {
+    var hex = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        hex[_i - 1] = arguments[_i];
+    }
+    var rgb = Utils_1.hexToRgb(all);
     return 'rgb(' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ')';
 };
 function decomposeString(fromValue) {
@@ -8895,10 +10078,10 @@ function decomposeString(fromValue) {
     if (fromValue.charAt(1) === '=') {
         return fromValue;
     }
-    const hex = fromValue.replace(hexColor, hex2rgbext).match(exports.NUM_REGEX);
-    let value;
+    var hex = fromValue.replace(hexColor, hex2rgbext).match(exports.NUM_REGEX);
+    var value;
     if (hex) {
-        value = hex.map((v) => (isNaNForST(v) ? v : +v));
+        value = hex.map(function (v) { return (isNaNForST(v) ? v : +v); });
     }
     value.isString = true;
     return value;
@@ -8906,15 +10089,15 @@ function decomposeString(fromValue) {
 exports.decomposeString = decomposeString;
 // Decompose value, now for only `string` that required
 function decompose(prop, obj, from, to) {
-    const fromValue = from[prop];
-    const toValue = to[prop];
+    var fromValue = from[prop];
+    var toValue = to[prop];
     if (fromValue === toValue) {
         return true;
     }
     else if (Array.isArray(fromValue) && Array.isArray(toValue) && fromValue.length === toValue.length) {
-        for (let i = 0, len = toValue.length; i < len; i++) {
-            const a = fromValue[i];
-            const b = toValue[i];
+        for (var i = 0, len = toValue.length; i < len; i++) {
+            var a = fromValue[i];
+            var b = toValue[i];
             if (a === b || (typeof a === 'number' && typeof b === 'number')) {
                 continue;
             }
@@ -8930,19 +10113,19 @@ function decompose(prop, obj, from, to) {
         //
     }
     else if (typeof fromValue === 'string' && Array.isArray(toValue)) {
-        const fromValue1 = decomposeString(fromValue);
-        const toValues = toValue.map(decomposeString);
+        var fromValue1 = decomposeString(fromValue);
+        var toValues = toValue.map(decomposeString);
         from[prop] = fromValue1;
         to[prop] = toValues;
         return true;
     }
     else if (typeof fromValue === 'string' || typeof toValue === 'string') {
-        let fromValue1 = Array.isArray(fromValue) && fromValue[0] === exports.STRING_PROP ? fromValue : decomposeString(fromValue);
-        let toValue1 = Array.isArray(toValue) && toValue[0] === exports.STRING_PROP ? toValue : decomposeString(toValue);
+        var fromValue1 = Array.isArray(fromValue) && fromValue[0] === exports.STRING_PROP ? fromValue : decomposeString(fromValue);
+        var toValue1 = Array.isArray(toValue) && toValue[0] === exports.STRING_PROP ? toValue : decomposeString(toValue);
         if (fromValue1 === undefined) {
             return;
         }
-        let i = 1;
+        var i = 1;
         while (i < fromValue1.length) {
             if (fromValue1[i] === toValue1[i] && typeof fromValue1[i - 1] === 'string') {
                 fromValue1.splice(i - 1, 2, fromValue1[i - 1] + fromValue1[i]);
@@ -8965,10 +10148,10 @@ function decompose(prop, obj, from, to) {
     }
     else if (typeof fromValue === 'object' && typeof toValue === 'object') {
         if (Array.isArray(fromValue) && !fromValue.isString) {
-            return fromValue.map((v, i) => decompose(i, obj[prop], fromValue, toValue));
+            return fromValue.map(function (v, i) { return decompose(i, obj[prop], fromValue, toValue); });
         }
         else {
-            for (let prop2 in toValue) {
+            for (var prop2 in toValue) {
                 decompose(prop2, obj[prop], fromValue, toValue);
             }
         }
@@ -8980,13 +10163,14 @@ exports.decompose = decompose;
 // Recompose value
 exports.RGB = 'rgb(';
 exports.RGBA = 'rgba(';
-function isRGBColor(v, i, r = exports.RGB) {
+function isRGBColor(v, i, r) {
+    if (r === void 0) { r = exports.RGB; }
     return typeof v[i] === 'number' && (v[i - 1] === r || v[i - 3] === r || v[i - 5] === r);
 }
 exports.isRGBColor = isRGBColor;
 function recompose(prop, obj, from, to, t, originalT, stringBuffer) {
-    const fromValue = stringBuffer ? from : from[prop];
-    let toValue = stringBuffer ? to : to[prop];
+    var fromValue = stringBuffer ? from : from[prop];
+    var toValue = stringBuffer ? to : to[prop];
     if (toValue === undefined) {
         return fromValue;
     }
@@ -9003,11 +10187,11 @@ function recompose(prop, obj, from, to, t, originalT, stringBuffer) {
             toValue &&
             toValue.splice &&
             toValue.isString) {
-            let STRING_BUFFER = '';
-            for (let i = 0, len = fromValue.length; i < len; i++) {
+            var STRING_BUFFER = '';
+            for (var i = 0, len = fromValue.length; i < len; i++) {
                 if (fromValue[i] !== toValue[i] || typeof fromValue[i] !== 'number' || typeof toValue[i] === 'number') {
-                    const isRelative = typeof fromValue[i] === 'number' && typeof toValue[i] === 'string' && toValue[i][1] === '=';
-                    let currentValue = typeof fromValue[i] !== 'number'
+                    var isRelative = typeof fromValue[i] === 'number' && typeof toValue[i] === 'string' && toValue[i][1] === '=';
+                    var currentValue = typeof fromValue[i] !== 'number'
                         ? fromValue[i]
                         : isRelative
                             ? fromValue[i] + parseFloat(toValue[i][0] + toValue[i].substr(2)) * t
@@ -9030,7 +10214,7 @@ function recompose(prop, obj, from, to, t, originalT, stringBuffer) {
             return STRING_BUFFER;
         }
         else if (Array.isArray(fromValue) && fromValue[0] !== exports.STRING_PROP) {
-            for (let i = 0, len = fromValue.length; i < len; i++) {
+            for (var i = 0, len = fromValue.length; i < len; i++) {
                 if (fromValue[i] === toValue[i] || typeof obj[prop] === 'string') {
                     continue;
                 }
@@ -9038,7 +10222,7 @@ function recompose(prop, obj, from, to, t, originalT, stringBuffer) {
             }
         }
         else if (typeof fromValue === 'object' && !!fromValue && !fromValue.isString) {
-            for (let i in fromValue) {
+            for (var i in fromValue) {
                 if (fromValue[i] === toValue[i]) {
                     continue;
                 }
@@ -9047,7 +10231,7 @@ function recompose(prop, obj, from, to, t, originalT, stringBuffer) {
         }
     }
     else if (typeof fromValue === 'number') {
-        const isRelative = typeof toValue === 'string';
+        var isRelative = typeof toValue === 'string';
         obj[prop] = isRelative
             ? fromValue + parseFloat(toValue[0] + toValue.substr(2)) * t
             : fromValue + (toValue - fromValue) * t;
@@ -9065,14 +10249,14 @@ exports.recompose = recompose;
 // example
 // {'scale.x.y.z':'VALUE'} => {scale:{x:{y:{z:'VALUE'}}}}
 // Only works for 3-level parsing, after 3-level, parsing dot-notation not works as it's not affects
-const propRegExp = /([.[])/g;
-const replaceBrace = /\]/g;
-const propExtract = function (obj, property) {
-    const value = obj[property];
-    const props = property.replace(replaceBrace, '').split(propRegExp);
-    const propsLastIndex = props.length - 1;
-    let lastArr = Array.isArray(obj);
-    let lastObj = typeof obj === 'object' && !lastArr;
+var propRegExp = /([.[])/g;
+var replaceBrace = /\]/g;
+var propExtract = function (obj, property) {
+    var value = obj[property];
+    var props = property.replace(replaceBrace, '').split(propRegExp);
+    var propsLastIndex = props.length - 1;
+    var lastArr = Array.isArray(obj);
+    var lastObj = typeof obj === 'object' && !lastArr;
     if (lastObj) {
         obj[property] = null;
         delete obj[property];
@@ -9080,14 +10264,14 @@ const propExtract = function (obj, property) {
     else if (lastArr) {
         obj.splice(property, 1);
     }
-    return props.reduce((nested, prop, index) => {
+    return props.reduce(function (nested, prop, index) {
         if (lastArr) {
             if (prop !== '.' && prop !== '[') {
                 prop *= 1;
             }
         }
-        let nextProp = props[index + 1];
-        let nextIsArray = nextProp === '[';
+        var nextProp = props[index + 1];
+        var nextIsArray = nextProp === '[';
         if (prop === '.' || prop === '[') {
             if (prop === '.') {
                 lastObj = true;
@@ -9117,19 +10301,19 @@ const propExtract = function (obj, property) {
 };
 exports.SET_NESTED = function (nested) {
     if (typeof nested === 'object' && !!nested) {
-        for (let prop in nested) {
+        for (var prop in nested) {
             if (prop.indexOf('.') !== -1 || prop.indexOf('[') !== -1) {
                 propExtract(nested, prop);
             }
             else if (typeof nested[prop] === 'object' && !!nested[prop]) {
-                let nested2 = nested[prop];
-                for (let prop2 in nested2) {
+                var nested2 = nested[prop];
+                for (var prop2 in nested2) {
                     if (prop2.indexOf('.') !== -1 || prop2.indexOf('[') !== -1) {
                         propExtract(nested2, prop2);
                     }
                     else if (typeof nested2[prop2] === 'object' && !!nested2[prop2]) {
-                        let nested3 = nested2[prop2];
-                        for (let prop3 in nested3) {
+                        var nested3 = nested2[prop2];
+                        for (var prop3 in nested3) {
                             if (prop3.indexOf('.') !== -1 || prop3.indexOf('[') !== -1) {
                                 propExtract(nested3, prop3);
                             }
@@ -9159,23 +10343,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * 缓动列表
  * @private
  */
-const _tweens = [];
+var _tweens = [];
 /**
  * 是否运行中
  */
-let isStarted = false;
+var isStarted = false;
 /**
  * 空帧标识
  */
-let emptyFrame = 0;
+var emptyFrame = 0;
 /**
  * 空帧后最大间隔帧率
  */
-let powerModeThrottle = 120;
+var powerModeThrottle = 120;
 /**
  * 是否开启卡针后平滑处理
  */
-let handleLag = true;
+var handleLag = true;
 /**
  * 插件存储器
  * @namespace tween.Plugins
@@ -9198,7 +10382,7 @@ exports.Plugins = {};
  * gui.tween.add(tween)
  */
 function add(tween) {
-    let i = _tweens.indexOf(tween);
+    var i = _tweens.indexOf(tween);
     if (i > -1) {
         _tweens.splice(i, 1);
     }
@@ -9214,7 +10398,8 @@ exports.add = add;
  * @example
  * gui.tween.FrameThrottle(60)
  */
-function FrameThrottle(frameCount = 120) {
+function FrameThrottle(frameCount) {
+    if (frameCount === void 0) { frameCount = 120; }
     powerModeThrottle = frameCount * 1.05;
 }
 exports.FrameThrottle = FrameThrottle;
@@ -9225,7 +10410,8 @@ exports.FrameThrottle = FrameThrottle;
  * @example
  * gui.tween.ToggleLagSmoothing(false)
  */
-function ToggleLagSmoothing(_state = true) {
+function ToggleLagSmoothing(_state) {
+    if (_state === void 0) { _state = true; }
     handleLag = _state;
 }
 exports.ToggleLagSmoothing = ToggleLagSmoothing;
@@ -9257,7 +10443,7 @@ exports.removeAll = removeAll;
  * gui.tween.get(tween)
  */
 function get(tween) {
-    for (let i = 0; i < _tweens.length; i++) {
+    for (var i = 0; i < _tweens.length; i++) {
         if (tween === _tweens[i]) {
             return _tweens[i];
         }
@@ -9266,7 +10452,7 @@ function get(tween) {
 }
 exports.get = get;
 function removeDisplay(uuid) {
-    for (let i = 0; i < _tweens.length; i++) {
+    for (var i = 0; i < _tweens.length; i++) {
         if (_tweens[i].object.uuid && uuid === _tweens[i].object.uuid) {
             _tweens[i].stop();
             remove(_tweens[i]);
@@ -9284,7 +10470,7 @@ exports.removeDisplay = removeDisplay;
  * gui.tween.remove(tween)
  */
 function remove(tween) {
-    const i = _tweens.indexOf(tween);
+    var i = _tweens.indexOf(tween);
     if (i !== -1) {
         _tweens.splice(i, 1);
     }
@@ -9301,7 +10487,8 @@ exports.remove = remove;
  * @example
  * gui.tween.update(500)
  */
-function update(time, preserve = false) {
+function update(time, preserve) {
+    if (preserve === void 0) { preserve = false; }
     if (!isStarted) {
         return false;
     }
@@ -9314,8 +10501,8 @@ function update(time, preserve = false) {
     if (!_tweens.length) {
         emptyFrame++;
     }
-    let i = 0;
-    let length = _tweens.length;
+    var i = 0;
+    var length = _tweens.length;
     while (i < length) {
         _tweens[i++].update(time, preserve);
         if (length > _tweens.length) {
@@ -9361,7 +10548,7 @@ exports.isLagSmoothing = isLagSmoothing;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = __webpack_require__(/*! ./core */ "./src/tween/private/core.ts");
+var core_1 = __webpack_require__(/*! ./core */ "./src/tween/private/core.ts");
 exports.add = core_1.add;
 exports.get = core_1.get;
 exports.getAll = core_1.getAll;
@@ -9373,13 +10560,13 @@ exports.remove = core_1.remove;
 exports.removeAll = core_1.removeAll;
 exports.removeDisplay = core_1.removeDisplay;
 exports.update = core_1.update;
-const Interpolation_1 = __webpack_require__(/*! ./Interpolation */ "./src/tween/private/Interpolation.ts");
+var Interpolation_1 = __webpack_require__(/*! ./Interpolation */ "./src/tween/private/Interpolation.ts");
 exports.Interpolation = Interpolation_1.Interpolation;
-const utils = __webpack_require__(/*! ./constants */ "./src/tween/private/constants.ts");
+var utils = __webpack_require__(/*! ./constants */ "./src/tween/private/constants.ts");
 exports.utils = utils;
-const TweenEvent_1 = __webpack_require__(/*! ../../event/TweenEvent */ "./src/event/TweenEvent.ts");
+var TweenEvent_1 = __webpack_require__(/*! ../../event/TweenEvent */ "./src/event/TweenEvent.ts");
 exports.TweenEvent = TweenEvent_1.TweenEvent;
-const Timeline_1 = __webpack_require__(/*! ../Timeline */ "./src/tween/Timeline.ts");
+var Timeline_1 = __webpack_require__(/*! ../Timeline */ "./src/tween/Timeline.ts");
 exports.Timeline = Timeline_1.Timeline;
 
 
@@ -9396,8 +10583,8 @@ exports.Timeline = Timeline_1.Timeline;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 /** 对象池*/
-class ObjectPool {
-    constructor() {
+var ObjectPool = /** @class */ (function () {
+    function ObjectPool() {
         /**
          * 作为对象池的词典dict
          */
@@ -9406,11 +10593,11 @@ class ObjectPool {
     /**
      * 向对象池中放入对象，以便重复利用
      */
-    push(keyClass, oldObj) {
+    ObjectPool.prototype.push = function (keyClass, oldObj) {
         if (oldObj === undefined) {
             return;
         }
-        let objs = this.objPoolDict.get(keyClass);
+        var objs = this.objPoolDict.get(keyClass);
         if (objs === undefined) {
             objs = [];
             this.objPoolDict.set(keyClass, objs);
@@ -9419,20 +10606,21 @@ class ObjectPool {
             oldObj.release();
             objs.push(oldObj);
         }
-    }
+    };
     /**
      * 从对象池中取出需要的对象
      * @return 取出的相应对象
      *
      */
-    pop(keyClass) {
-        const objs = this.objPoolDict.get(keyClass);
+    ObjectPool.prototype.pop = function (keyClass) {
+        var objs = this.objPoolDict.get(keyClass);
         if (objs !== undefined && objs.length > 0) {
             return objs.pop();
         }
         return new keyClass();
-    }
-}
+    };
+    return ObjectPool;
+}());
 /**
  * 对象池实例
  */
@@ -9451,13 +10639,17 @@ exports.objectPoolShared = new ObjectPool();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const Stage_1 = __webpack_require__(/*! ../core/Stage */ "./src/core/Stage.ts");
+var Stage_1 = __webpack_require__(/*! ../core/Stage */ "./src/core/Stage.ts");
 /**
  * 工具类
  */
 /** 日志输出 */
-function log(message, ...optionalParams) {
-    console.log(message, ...optionalParams);
+function log(message) {
+    var optionalParams = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        optionalParams[_i - 1] = arguments[_i];
+    }
+    console.log.apply(console, [message].concat(optionalParams));
 }
 exports.log = log;
 function setSourcePath(params) {
@@ -9547,7 +10739,7 @@ function now() {
         // Use Date.now if it is available.
     }
     else {
-        const offset = performance && performance.timing && performance.timing.navigationStart ? performance.timing.navigationStart : Date.now();
+        var offset = performance && performance.timing && performance.timing.navigationStart ? performance.timing.navigationStart : Date.now();
         return Date.now() - offset;
     }
 }
@@ -9564,8 +10756,8 @@ function deepCopy(source, target) {
         return [].concat(source);
     }
     else if (typeof source === 'object') {
-        const tempTarget = target || {};
-        for (const prop in source) {
+        var tempTarget = target || {};
+        for (var prop in source) {
             tempTarget[prop] = deepCopy(source[prop], tempTarget[prop]);
         }
         return tempTarget;
@@ -9583,7 +10775,7 @@ exports.deepCopy = deepCopy;
 function hexToInt(str, def) {
     if (typeof str === 'number')
         return str;
-    const result = parseInt(str.replace('#', '0x'));
+    var result = parseInt(str.replace('#', '0x'));
     if (isNaN(result))
         return def;
     return result;
@@ -9597,7 +10789,7 @@ exports.hexToInt = hexToInt;
  * @returns "rgba(255,255,255,1)" || false
  */
 function hexToRgba(hex, alpha) {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? "rgba(" + parseInt(result[1], 16) + "," + parseInt(result[2], 16) + "," + parseInt(result[3], 16) + "," + alpha + ")" : false;
 }
 exports.hexToRgba = hexToRgba;
@@ -9606,7 +10798,7 @@ exports.hexToRgba = hexToRgba;
  * @param c 要转换的数字
  */
 function componentToHex(c) {
-    const hex = c.toString(16);
+    var hex = c.toString(16);
     if (hex.length == 4) {
         return "00" + hex;
     }
@@ -9638,7 +10830,7 @@ exports.rgbToNumber = rgbToNumber;
  * @param color rgb(255,255,255)
  */
 function rgbStrToNumber(color) {
-    const colors = color.substring(4, color.length - 1).split(",");
+    var colors = color.substring(4, color.length - 1).split(",");
     return rgbToNumber(parseInt(colors[0]), parseInt(colors[1]), parseInt(colors[2]));
 }
 exports.rgbStrToNumber = rgbStrToNumber;
@@ -9669,11 +10861,11 @@ function hexToRgb(hex) {
         return numberToRgb(hex);
     }
     // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
     hex = hex.replace(shorthandRegex, function (m, r, g, b) {
         return r + r + g + g + b + b;
     });
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? {
         r: parseInt(result[1], 16),
         g: parseInt(result[2], 16),
@@ -9701,7 +10893,7 @@ exports.Lerp = Lerp;
  * @param decimals 保留小数位
  */
 function Round(num, decimals) {
-    const pow = Math.pow(10, decimals);
+    var pow = Math.pow(10, decimals);
     return Math.round(num * pow) / pow;
 }
 exports.Round = Round;
@@ -9712,7 +10904,7 @@ function uid() {
 exports.uid = uid;
 /** 获取URL参数 */
 function getQueryVariable(variable) {
-    const params = new URLSearchParams(location.search);
+    var params = new URLSearchParams(location.search);
     if (params.has(variable)) {
         return params.get(variable);
     }
@@ -9724,9 +10916,9 @@ exports.getQueryVariable = getQueryVariable;
  * @param
  */
 function getStringFunctionParam(str) {
-    const target = {};
+    var target = {};
     target.key = str.substr(0, str.indexOf("("));
-    const value = str.substr(str.indexOf("(") + 1);
+    var value = str.substr(str.indexOf("(") + 1);
     target.value = parseFloat(value.substr(0, value.lastIndexOf(")")));
     return target;
 }
@@ -9747,12 +10939,12 @@ function formatRelative(value, total) {
     if (typeof value === "number") {
         return value;
     }
-    const str = value;
-    const index = str.indexOf("%");
+    var str = value;
+    var index = str.indexOf("%");
     if (index == -1) {
         return +str;
     }
-    const percent = +str.substring(0, index);
+    var percent = +str.substring(0, index);
     return percent * 0.01 * total;
 }
 exports.formatRelative = formatRelative;
@@ -9770,7 +10962,7 @@ exports.formatRelative = formatRelative;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
+var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 // //注入常规兼容方法
 // if(!Array.from){
 //     Array.from = function (el: unknown[]) {
