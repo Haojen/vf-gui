@@ -66,6 +66,9 @@ export class ClickEvent {
     public  id = 0;
     /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | gui.Interaction.TouchEvent */
     public isOpenEmitEvent = false;
+    /** 是否开启本地坐标转换，开启后，事件InteractionEvent中的localX localY为本地坐标，false情况下为0 */
+    public isOpenLocalPoint = false;
+    private localOffset = new PIXI.Point();
     private offset = new PIXI.Point();
     private movementX = 0;
     private movementY = 0;
@@ -122,7 +125,7 @@ export class ClickEvent {
     }
 
     private _onMouseDown(e: InteractionEvent) {
- 
+        this.setLocalPoint(e);
         this.mouse.copyFrom(e.data.global);
         this.id = e.data.identifier;
         this.onPress && this.onPress.call(this.obj, e,this.obj, true),this.obj;
@@ -229,8 +232,16 @@ export class ClickEvent {
     }
 
     private _onMouseMove(e: InteractionEvent) {
+        this.setLocalPoint(e);
         this.onMove && this.onMove.call(this.obj, e,this.obj);
         this.emitTouchEvent(TouchMouseEvent.onMove,e);
+    }
+
+    private setLocalPoint(e: InteractionEvent){
+        if(this.isOpenLocalPoint){
+            this.obj.container.toLocal(e.data.global,undefined,this.localOffset);
+            e.local = this.localOffset;
+        }
     }
 
     public remove(){

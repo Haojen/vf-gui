@@ -24,6 +24,7 @@ export const CHANGEING = "CHANGEING";
  * 2. Image 图片加载完成时
  * 3. Slider 滑动完成
  * 4. Timeline  每次播放完时，触发(loop = false时)
+ * 5. FollowLine 完成一次划线
  */
 export const COMPLETE = "COMPLETE";
 

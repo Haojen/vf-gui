@@ -1,0 +1,474 @@
+import { DisplayObject } from "../core/DisplayObject";
+import { InteractionEvent, TouchMouseEvent, ClickEvent, ComponentEvent } from "../interaction/Index";
+import { pointDistance, pointSub, pointSignAngle } from "../utils/Utils";
+import { TouchMouseEventEnum } from "../interaction/TouchMouseEventEnum";
+
+
+type GraData = {
+    name: string;
+    xMin: number;
+    xMax: number;
+    yMin: number;
+    yMax: number;
+    role: number;
+    graphics: PIXI.Graphics;
+    using: boolean;
+};
+
+const tempLocalBounds = new PIXI.Rectangle();
+/** 验证是否触发的距离 */
+const POS_DISTANCE: number = 7;
+/** 优化曲率，小于这个弧度视为直线，把当前点优化掉 */
+const MAX_ARC: number = 0.09; // 5度
+
+/** 点数字转换成字符的数位 */
+const DIGIT: number = 90;
+/** 字符列表 ascii */
+const NUMBER_TO_STR: string = "$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}";
+
+/** 压缩比例，有损压缩 */
+const COMPRESS_RATE: number = 2;
+
+/** 最大宽度 */
+const MAX_WIDTH = 1500;
+
+/** 为了把点都变成正数所用 */
+const POSITIVE: number = MAX_WIDTH / 2;
+
+/** 线条最大数量 */
+const MAX_LINES = 100;
+
+const TeacherDrawColor = 0xcd0032;
+const StudentDrawColor = 0x3200cd;
+
+/** 将一个x，y坐标转换成3个字符，宽高不能超过MAX_WIDTH */
+function getStrFromPos(x: number, y: number) {
+    x = Math.min(Math.max(0, x), MAX_WIDTH);
+    y = Math.min(Math.max(0, y), MAX_WIDTH);
+
+    // 有损压缩
+    let compX = Math.floor(x / COMPRESS_RATE);
+    let compY = Math.floor(y / COMPRESS_RATE);
+
+    let n1 = compX % DIGIT;
+    let n2 = compY % DIGIT;
+    let n3 = Math.floor(compX / DIGIT) * 10 + Math.floor(compY / DIGIT);
+
+    return NUMBER_TO_STR[n1] + NUMBER_TO_STR[n2] + NUMBER_TO_STR[n3];
+}
+
+/** 将字符串转换成坐标数字列表 */
+function getVecListFromStr(str: string, from: number, to: number): number[] {
+    let list = [];
+    for (let index = from; index < to; index += 3) {
+        let n1 = str.charCodeAt(index) - 36;
+        let n2 = str.charCodeAt(index + 1) - 36;
+        let n3 = str.charCodeAt(index + 2) - 36;
+
+        let n12 = Math.floor(n3 / 10);
+        let n22 = n3 % 10;
+
+        let compX = n1 + n12 * DIGIT;
+        let compY = n2 + n22 * DIGIT;
+
+        let realX = compX * COMPRESS_RATE;
+        let realY = compY * COMPRESS_RATE;
+
+        list.push(realX);
+        list.push(realY);
+    }
+    return list;
+}
+
+
+/**
+ * 跟随鼠标或触摸绘制线条
+ * 
+ * @example let graphics = new gui.FollowLine();
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ */
+export class FollowLine extends DisplayObject {
+
+    public constructor(geometry?: PIXI.GraphicsGeometry | undefined) {
+        super();
+        this._lastPos = new PIXI.Point();
+        this._mouseOffset = new PIXI.Point();
+        this.clickEvent.isOpenLocalPoint = true;
+        this._lines = new Map();
+    }
+
+    public static CommandName = {
+        /** 画线 */
+        draw: 1,
+        /** 擦除 */
+        erase: 2
+    };
+    protected clickEvent = new ClickEvent(this,true);
+    /** 线条 */
+    private _lines:Map<string,PIXI.Graphics>;
+    /** 要删除的线，复制品 */
+    private _eraseLine?: PIXI.Graphics;
+    /** 触摸的ID */
+    private _touchId = -1;
+    /** 位置缓存，记录画线时候每一个点，最后画完优化 */
+    private _posCache: PIXI.Point[] = [];
+    /** 保存已画线的key */
+    private _lineKeys:string[] = [];
+
+    /** 是否擦除中 */
+    private _isErasing = false;
+    public get isErasing() {
+        return this._isErasing;
+    }
+    public set isErasing(value) {
+        this._isErasing = value;
+        if(value){
+            this.style.cursor = "grab";
+        }else{
+            this.style.cursor = "auto";
+        }
+    }
+    /** 角色状态 */
+    private _role: 1 | 2 = 1;
+    public get role(): 1 | 2 {
+        return this._role;
+    }
+    public set role(value: 1 | 2) {
+        this._role = value;
+    }
+
+    private _mouseOffset:PIXI.Point;
+    /** 上次点击坐标 */
+    private _lastPos: PIXI.Point;
+    /**
+     * 由老师触发的划线索引
+     */
+    private _curLineIndex = 0;
+    /** 
+     * 由消息触发的划线索引,分段10000开始 
+     */
+    private _messageIndex = 10000;
+    /**
+     * 需要处理的消息列表
+     */
+    private _messageCache:string[] = [];
+    /**
+     * @private
+     * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
+     */
+    protected commitProperties(): void {
+        this.onMessage();
+        this.getCurLineByPos();
+    }
+    /**
+     * 更新显示列表,子类重写，实现布局
+     */
+    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void {
+        super.updateDisplayList(unscaledWidth,unscaledHeight);
+        this.container.hitArea = new PIXI.Rectangle(0,0,this.width,this.height);
+    }
+
+    $onInit(){
+
+        this.on(TouchMouseEvent.onPress,this.onPress,this);
+        this.on(TouchMouseEvent.onMove,this.onMove,this);
+    }
+
+
+    $onRelease(){
+        this.clickEvent.remove();
+        this.off(TouchMouseEvent.onPress,this.onPress,this);
+        this.off(TouchMouseEvent.onMove,this.onMove,this);
+        this.clear();
+    }
+
+    private onPress(e: InteractionEvent,thisObj: DisplayObject,isPress: boolean){
+        if(isPress){
+            if(this.parent === undefined) return;
+
+            if (this._isErasing) return;
+
+            if (this._touchId !== -1) return;
+
+            this._touchId = e.data.identifier;
+            this._lastPos.set(Math.floor(e.local.x),Math.floor(e.local.y));
+            this._posCache = [this._lastPos.clone()];       
+            this._curLineIndex++;
+            
+        }else{
+
+            // 清除操作
+            if (this._isErasing && this._eraseLine) {
+                console.log(this._eraseLine.name);
+                this.removeLine(this._eraseLine.name);
+                this._eraseLine = undefined;
+                return;
+            }
+
+            if (this._touchId === -1 || this._touchId != e.data.identifier) return;
+
+            this._touchId = -1;
+
+            if(this._posCache.length == 1){ //划线失败
+                console.log('gui -> 移动距离过短，画线失败 >' + POS_DISTANCE);
+                this._curLineIndex--;
+                this._posCache.pop();
+                return;
+            }
+    
+            let dataStr = this.role.toString() + this._curLineIndex + '|' + this.getDataStrByPosCache();
+            this.emit(ComponentEvent.COMPLETE,this,dataStr);
+        }
+    }
+      
+    private onMove(e: InteractionEvent){
+        this._mouseOffset.copyFrom(e.local);
+        if (this._isErasing) {
+            if(this._role == 1){
+                this.invalidateProperties();
+            }
+            return;
+        }
+        
+        
+        if (this._touchId === -1 || !this._lastPos || this._touchId != e.data.identifier) return;
+
+        let {_lastPos,_posCache} = this;
+
+        let len = pointDistance(_lastPos,e.local);
+
+        if (len < POS_DISTANCE) {
+            return;
+        }
+
+        let brush = this.getGraphics(this._curLineIndex.toString(),this.role);
+        brush.moveTo( _lastPos.x, _lastPos.y);
+        brush.lineTo(Math.floor(e.local.x), Math.floor(e.local.y));
+        _lastPos.set(Math.floor(e.local.x),Math.floor(e.local.y));
+        _posCache.push(_lastPos.clone());
+
+    }
+
+    private onMessage(){
+        let {_messageCache,_lines} = this;
+        if(_messageCache.length>0){
+            let message:string;
+            let data:string;
+            let role = 0;
+            while(_messageCache.length>0){
+                message = _messageCache.pop() as string;
+                let messageIndex = message.indexOf('|');
+                let messageId = message.substr(0,messageIndex);
+                if(_lines.has(messageId)){
+                    continue;
+                }
+                role = parseInt(message.charAt(0));
+                data = message.substr(messageIndex+1);
+                this.drawLine(data, 0, data.length,role);
+            }
+        } 
+    }
+
+    private onReceive() {
+        // let { name, data, role } = command;
+
+        // let stepKey = this.getStepKey();
+        // let curLineState = this.lineState[stepKey] || '';
+
+        // if (name == DrawingBoard.CommandName.draw) {
+        //     let key = role == cocosMessager.roleEnum.TEACHER ? TEA_KEY : STU_KEY;
+        //     curLineState += data + key;
+        // } else {
+        //     let index = curLineState.indexOf(data);
+        //     if (index >= 0) {
+        //         curLineState = curLineState.slice(0, index) + curLineState.slice(index + data.length + 1);
+        //     }
+        // }
+        // this.lineState[stepKey] = curLineState;
+        // this.sendState(this.lineState);
+    }
+
+    private onReset(): any {
+        this.clear();
+    }
+
+    private getGraphics(name: string,role:number): PIXI.Graphics {
+        let key = role + name;
+        if(this._lines.has(key)){
+            return this._lines.get(key) as PIXI.Graphics;
+        }
+        if(this._lines.size>MAX_LINES){
+            this.removeLine(this._lineKeys.shift() as string);
+        }
+        let graphics = new PIXI.Graphics();
+        graphics.name = key;
+        this.container.addChild(graphics);
+        this._lineKeys.push(key);
+        this._lines.set(key,graphics);
+        if (role == 1) {
+            graphics.lineStyle(3,TeacherDrawColor);
+        } else {
+            graphics.lineStyle(3,StudentDrawColor);
+        }
+        return graphics;
+    }
+
+    private getCurLineByPos() {
+        
+
+        let {_lines,_mouseOffset} = this;
+
+        if(this._eraseLine){
+            this._eraseLine.tint =  0xFFFFFF; 
+            this._eraseLine = undefined;
+        }
+
+        if(!this.isErasing){
+            return;
+        }
+        
+        let lastDistance = 10000;
+        
+        _lines.forEach(value=>{
+            value.getLocalBounds(tempLocalBounds);
+            if(tempLocalBounds.contains(_mouseOffset.x,_mouseOffset.y)){
+                let distance = pointDistance(_mouseOffset,{x:tempLocalBounds.x + tempLocalBounds.width*0.5,y:tempLocalBounds.y + tempLocalBounds.height*0.5});
+                if(distance<lastDistance){
+                    lastDistance = distance;
+                    this._eraseLine  = value;
+                }
+                
+            }
+        });
+
+        if(this._eraseLine){
+            (this._eraseLine as PIXI.Graphics).tint =  0x000000; 
+        }
+
+    }
+
+    private getDataStrByPosCache() {
+
+
+        let { _posCache } = this;
+        // 稀疏位置点，通过曲率
+        let finalX = [_posCache[0].x];
+        let finalY = [_posCache[0].y];
+
+        let lastLastPos = _posCache[0];
+        let lastPos = _posCache[1];
+
+        let sumAngle = 0;
+
+        for (let index = 2; index < _posCache.length; index++) {
+            const pos = _posCache[index];
+            let pos1 = pointSub(lastPos,lastLastPos);
+            let pos2 = pointSub(pos,lastPos); 
+            let angle = pointSignAngle(pos1,pos2);
+
+            if (angle > MAX_ARC || angle < -MAX_ARC || sumAngle > MAX_ARC || sumAngle < -MAX_ARC) {
+                finalX.push(lastPos.x);
+                finalY.push(lastPos.y);
+                sumAngle = 0;
+            } else {
+                sumAngle += angle;
+            }
+
+            lastLastPos = lastPos;
+            lastPos = pos;
+        }
+
+        finalX.push(_posCache[_posCache.length - 1].x);
+        finalY.push(_posCache[_posCache.length - 1].y);
+
+        let finalStrList = [];
+        for (let index = 0; index < finalX.length; index++) {
+            const x = finalX[index] + POSITIVE;
+            const y = finalY[index] + POSITIVE;
+            let str = getStrFromPos(x, y);
+
+            finalStrList.push(str);
+        }
+
+        let finalStr = finalStrList.join('');
+        return finalStr;
+    }
+
+    private drawLine(data: string, from: number, to: number, role: number) {
+        this._messageIndex++;
+        let graphics = this.getGraphics(this._messageIndex.toString(),role);
+        let posList = getVecListFromStr(data, from, to);
+        this.draw(graphics, posList);
+    }
+
+    private draw(graphics: PIXI.Graphics, posList: number[]) {
+        let lastX = posList[0] - POSITIVE;
+        let lastY = posList[1] - POSITIVE;
+        graphics.moveTo(lastX, lastY);
+
+        // 利用贝塞尔将线平滑化
+        let realList = [];
+        for (let index = 2; index < posList.length; index += 2) {
+            const x = posList[index] - POSITIVE;
+            const y = posList[index + 1] - POSITIVE;
+
+            let halfX = lastX + (x - lastX) * 0.5;
+            let halfY = lastY + (y - lastY) * 0.5;
+
+            realList.push(halfX, halfY, x, y);
+
+            lastX = x;
+            lastY = y;
+        }
+
+        graphics.lineTo(realList[0], realList[1]);
+        for (let index = 2; index < realList.length - 2; index += 4) {
+            const cx = realList[index];
+            const cy = realList[index + 1];
+            const x = realList[index + 2];
+            const y = realList[index + 3];
+            graphics.quadraticCurveTo(cx, cy, x, y);
+        }
+
+        graphics.lineTo(realList[realList.length - 2], realList[realList.length - 1]);
+    }
+
+    private removeLine(key:string){
+        let delKeyIndex = this._lineKeys.indexOf(key);
+        if(delKeyIndex !== -1){
+            this._lineKeys.splice(delKeyIndex,1);
+        }
+        let line =  this._lines.get(key);
+        if(line){
+            this._lines.delete(key);
+            if(line.parent){
+                line.parent.removeChild(line);
+                line.destroy();
+            }
+        }
+        
+    } 
+
+    public clear(){
+        this._lines.forEach((value: PIXI.Graphics, key: string)=>{
+            if(value.parent){
+                value.parent.removeChild(value);
+                value.destroy();
+            }
+        });
+        this._lines.clear();
+        this._curLineIndex = 0;
+        this._posCache = [];
+        this._lineKeys = [];
+    }
+
+    public setData(data:string){
+        this._messageCache.push(data);
+        this.invalidateProperties();
+    }
+
+    
+}

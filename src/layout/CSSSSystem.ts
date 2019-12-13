@@ -9,13 +9,13 @@ export function backgroundColor(target: DisplayObject){
     if(target.style == undefined){
         return;
     }
-    if(target.style.backgroundColor==undefined  && target.background == undefined){
+    if(target.style.backgroundColor==undefined  && target.$background == undefined){
         return;
     }
-    if (target.background === undefined) {
-        target.background = new PIXI.Graphics();
-        target.background.name = "background";
-        target.container.addChildAt(target.background, 0);
+    if (target.$background === undefined) {
+        target.$background = new PIXI.Graphics();
+        target.$background.name = "background";
+        target.container.addChildAt(target.$background, 0);
     }
 }
 
@@ -23,8 +23,8 @@ export function backgroundPositionSize(target: DisplayObject){
     if(target.style == undefined){
         return;
     }
-    if (target.background && target.background.children.length > 0) {
-        const sprite = target.background.getChildAt(0) as PIXI.Sprite;
+    if (target.$background && target.$background.children.length > 0) {
+        const sprite = target.$background.getChildAt(0) as PIXI.Sprite;
         const style = target.style;
         if (sprite instanceof PIXI.TilingSprite) {
             sprite.tilePosition.set(style.backgroundPositionX || 0, style.backgroundPositionY || 0);
@@ -43,8 +43,8 @@ export function backgroundRepeat(target: DisplayObject){
         return;
     }
     const style = target.style;
-    if (style.backgroundImage && target.background) {
-        target.background.removeChildren();
+    if (style.backgroundImage && target.$background) {
+        target.$background.removeChildren();
 
         let backgroundImage: PIXI.Texture | undefined;
         if (style.backgroundImage instanceof PIXI.Texture) {
@@ -63,19 +63,19 @@ export function backgroundRepeat(target: DisplayObject){
                 sprite = new PIXI.Sprite(backgroundImage);
             }
 
-            target.background.addChild(sprite);
+            target.$background.addChild(sprite);
             const maskGraphics = new PIXI.Graphics();
-            target.background.addChild(maskGraphics);
-            target.background.mask = maskGraphics;
+            target.$background.addChild(maskGraphics);
+            target.$background.mask = maskGraphics;
         }
     }
 }
 
 export function backgroundImage(target: DisplayObject){
-    if (target.background === undefined) {
-        target.background = new PIXI.Graphics();
-        target.background.name = "background";
-        target.container.addChildAt(target.background, 0);
+    if (target.$background === undefined) {
+        target.$background = new PIXI.Graphics();
+        target.$background.name = "background";
+        target.container.addChildAt(target.$background, 0);
     }
     backgroundRepeat(target);
     backgroundPositionSize(target);
@@ -89,17 +89,17 @@ export function maskPosition(target: DisplayObject){
     if(target.style == undefined){
         return;
     }
-    if(target.mask){
+    if(target.$mask){
         const style = target.style;
         if(style.maskPosition === undefined){
             return;
         }
         
-        if(target.mask instanceof DisplayObject){
-            target.mask.x = style.maskPosition[0];
-            target.mask.y =  style.maskPosition[1];
+        if(target.$mask instanceof DisplayObject){
+            target.$mask.x = style.maskPosition[0];
+            target.$mask.y =  style.maskPosition[1];
         }else{
-            target.mask.position.set(style.maskPosition[0],style.maskPosition[1])
+            target.$mask.position.set(style.maskPosition[0],style.maskPosition[1])
         }
     }
 }
@@ -108,19 +108,19 @@ export function maskSize(target: DisplayObject){
     if(target.style == undefined){
         return;
     }
-    if(target.mask){
+    if(target.$mask){
         const style = target.style;
         if(style.maskSize === undefined){
             return;
         }
 
-        target.mask.width = style.maskSize[0];
-        target.mask.height = style.maskSize[1];
-        if(target.mask instanceof PIXI.Graphics){
-            target.mask.clone
+        target.$mask.width = style.maskSize[0];
+        target.$mask.height = style.maskSize[1];
+        if(target.$mask instanceof PIXI.Graphics){
+            //target.$mask.clone
         }
-        if(!(target.mask instanceof DisplayObject))
-            target.mask.updateTransform();
+        if(!(target.$mask instanceof DisplayObject))
+            target.$mask.updateTransform();
     }
 }
 
@@ -129,11 +129,11 @@ export function maskImage(target: DisplayObject){
         return;
     }
     target.container.mask = null;
-    if (target.mask && target.mask.parent) {
-        if (target.mask instanceof DisplayObject) {
-            target.removeChild(target.mask);
+    if (target.$mask && target.$mask.parent) {
+        if (target.$mask instanceof DisplayObject) {
+            target.removeChild(target.$mask);
         } else {
-            target.mask.parent.removeChild(target.mask);
+            target.$mask.parent.removeChild(target.$mask);
         }
     }
 
@@ -144,20 +144,20 @@ export function maskImage(target: DisplayObject){
         }
     }
 
-    target.mask = undefined;
+    target.$mask = undefined;
     const style = target.style;
     const container = target.container;
     const maskdisplay = getDisplayObject( style.maskImage,target) as MaskSprite | PIXI.Graphics;
     
     if (maskdisplay instanceof PIXI.Graphics) {
-        target.mask = maskdisplay;
-        container.mask = target.mask;
-        container.addChild(target.mask);
+        target.$mask = maskdisplay;
+        container.mask = target.$mask;
+        container.addChild(target.$mask);
     } else if (maskdisplay instanceof DisplayObject) {
 
         if((maskdisplay as MaskSprite).maskSprite){
-            target.mask = maskdisplay;//gui组件
-            target.mask.name = "maskImage";
+            target.$mask = maskdisplay;//gui组件
+            target.$mask.name = "maskImage";
             container.mask = maskdisplay.maskSprite() || null;//pixi组件
             if(maskdisplay.parent == undefined){
                 target.addChild(maskdisplay);
@@ -165,9 +165,9 @@ export function maskImage(target: DisplayObject){
                 
         }
     } else {
-        target.mask = PIXI.Sprite.from(getTexture(style.maskImage));
-        container.mask = target.mask;
-        container.addChild(target.mask);
+        target.$mask = PIXI.Sprite.from(getTexture(style.maskImage));
+        container.mask = target.$mask;
+        container.addChild(target.$mask);
     }
 
     maskSize(target);

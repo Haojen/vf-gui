@@ -129,6 +129,16 @@ import {Rect} from "./display/Rect";
  */
 import {Graphics} from "./display/Graphics";
 /**
+ * 跟随划线（鼠标或触摸按下时）
+ * 
+ * @example let graphics = new gui.FollowLine();
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ */
+import {FollowLine} from "./display/FollowLine";
+/**
  * 音频播放组件
  * 
  * @example let sound = new gui.Sound();
@@ -180,5 +190,5 @@ import * as Event from "./event/Index";
 
 /** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,Slider,
-    Label,TextInput,Button,CheckBox,Rect,Graphics,Interaction,
+    Label,TextInput,Button,CheckBox,Rect,Graphics,FollowLine,Interaction,
     DisplayObject,TickerShared,Tween,Timeline,Easing,Image,SpriteAnimated,Sound,Event};
