@@ -188,7 +188,12 @@ import * as Interaction from "./interaction/Index";
  */
 import * as Event from "./event/Index";
 
+/**
+ * 枚举
+ */
+import * as Enum from './enum/Index';
+
 /** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,Slider,
     Label,TextInput,Button,CheckBox,Rect,Graphics,FollowLine,Interaction,
-    DisplayObject,TickerShared,Tween,Timeline,Easing,Image,SpriteAnimated,Sound,Event};
+    DisplayObject,TickerShared,Tween,Timeline,Easing,Image,SpriteAnimated,Sound,Event,Enum};

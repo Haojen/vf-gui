@@ -1,21 +1,10 @@
 import { DisplayObject } from "../core/DisplayObject";
 import { InteractionEvent, TouchMouseEvent, ClickEvent, ComponentEvent } from "../interaction/Index";
 import { pointDistance, pointSub, pointSignAngle } from "../utils/Utils";
-import { TouchMouseEventEnum } from "../interaction/TouchMouseEventEnum";
-
-
-type GraData = {
-    name: string;
-    xMin: number;
-    xMax: number;
-    yMin: number;
-    yMax: number;
-    role: number;
-    graphics: PIXI.Graphics;
-    using: boolean;
-};
+import { FollowLineEnum } from "../enum/Index";
 
 const tempLocalBounds = new PIXI.Rectangle();
+
 /** 验证是否触发的距离 */
 const POS_DISTANCE: number = 7;
 /** 优化曲率，小于这个弧度视为直线，把当前点优化掉 */
@@ -106,9 +95,11 @@ export class FollowLine extends DisplayObject {
         /** 擦除 */
         erase: 2
     };
-    protected clickEvent = new ClickEvent(this,true);
+
+
+    protected clickEvent = new ClickEvent(this, true);
     /** 线条 */
-    private _lines:Map<string,PIXI.Graphics>;
+    private _lines: Map<string, PIXI.Graphics>;
     /** 要删除的线，复制品 */
     private _eraseLine?: PIXI.Graphics;
     /** 触摸的ID */
@@ -116,7 +107,19 @@ export class FollowLine extends DisplayObject {
     /** 位置缓存，记录画线时候每一个点，最后画完优化 */
     private _posCache: PIXI.Point[] = [];
     /** 保存已画线的key */
-    private _lineKeys:string[] = [];
+    private _lineKeys: string[] = [];
+    /** 鼠标坐标 */
+    private _mouseOffset: PIXI.Point;
+    /** 上次点击坐标 */
+    private _lastPos: PIXI.Point;
+    /**
+     * 由老师触发的划线索引
+     */
+    private _curLineIndex = 0;
+    /**
+     * 需要处理的消息列表
+     */
+    private _messageCache: string[] = [];
 
     /** 是否擦除中 */
     private _isErasing = false;
@@ -125,36 +128,21 @@ export class FollowLine extends DisplayObject {
     }
     public set isErasing(value) {
         this._isErasing = value;
-        if(value){
+        if (value) {
             this.style.cursor = "grab";
-        }else{
+        } else {
             this.style.cursor = "auto";
         }
     }
     /** 角色状态 */
-    private _role: 1 | 2 = 1;
-    public get role(): 1 | 2 {
+    private _role: FollowLineEnum.Role = FollowLineEnum.Role.teacher;
+    public get role() {
         return this._role;
     }
-    public set role(value: 1 | 2) {
+    public set role(value) {
         this._role = value;
     }
 
-    private _mouseOffset:PIXI.Point;
-    /** 上次点击坐标 */
-    private _lastPos: PIXI.Point;
-    /**
-     * 由老师触发的划线索引
-     */
-    private _curLineIndex = 0;
-    /** 
-     * 由消息触发的划线索引,分段10000开始 
-     */
-    private _messageIndex = 10000;
-    /**
-     * 需要处理的消息列表
-     */
-    private _messageCache:string[] = [];
     /**
      * @private
      * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
@@ -167,43 +155,74 @@ export class FollowLine extends DisplayObject {
      * 更新显示列表,子类重写，实现布局
      */
     protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void {
-        super.updateDisplayList(unscaledWidth,unscaledHeight);
-        this.container.hitArea = new PIXI.Rectangle(0,0,this.width,this.height);
+        super.updateDisplayList(unscaledWidth, unscaledHeight);
+        this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
     }
 
-    $onInit(){
+    $onInit() {
 
-        this.on(TouchMouseEvent.onPress,this.onPress,this);
-        this.on(TouchMouseEvent.onMove,this.onMove,this);
+        this.on(TouchMouseEvent.onPress, this.onPress, this);
+        this.on(TouchMouseEvent.onMove, this.onMove, this);
     }
 
 
-    $onRelease(){
+    $onRelease() {
         this.clickEvent.remove();
-        this.off(TouchMouseEvent.onPress,this.onPress,this);
-        this.off(TouchMouseEvent.onMove,this.onMove,this);
+        this.off(TouchMouseEvent.onPress, this.onPress, this);
+        this.off(TouchMouseEvent.onMove, this.onMove, this);
         this.clear();
     }
 
-    private onPress(e: InteractionEvent,thisObj: DisplayObject,isPress: boolean){
-        if(isPress){
-            if(this.parent === undefined) return;
+    private onMessage() {
+        let { _messageCache } = this;
+        if (_messageCache.length > 0) {
+            let message: string;
+            let data: string;
+            let role: string;
+            let operate: FollowLineEnum.Operate;
+            let lineId: string;
+            while (_messageCache.length > 0) {
+                message = _messageCache.pop() as string;
+                operate = message.charAt(0) as FollowLineEnum.Operate;
+                let messageIndex = message.indexOf('|');
+                role = message.charAt(1);
+                lineId = message.substr(2, messageIndex - 2);
+                switch (operate) {
+                    case FollowLineEnum.Operate.add:
+                        data = message.substr(messageIndex + 1);
+                        this.drawLine(lineId, data, 0, data.length, role);
+                        break;
+                    case FollowLineEnum.Operate.remove:
+                        this.removeLine(role + lineId);
+                        break;
+                    case FollowLineEnum.Operate.clear:
+                        this.clear();
+                        break;
+                }
+            }
+        }
+    }
+
+    private onPress(e: InteractionEvent, thisObj: DisplayObject, isPress: boolean) {
+        if (isPress) {
+            if (this.parent === undefined) return;
 
             if (this._isErasing) return;
 
             if (this._touchId !== -1) return;
 
             this._touchId = e.data.identifier;
-            this._lastPos.set(Math.floor(e.local.x),Math.floor(e.local.y));
-            this._posCache = [this._lastPos.clone()];       
+            this._lastPos.set(Math.floor(e.local.x), Math.floor(e.local.y));
+            this._posCache = [this._lastPos.clone()];
             this._curLineIndex++;
-            
-        }else{
+
+        } else {
 
             // 清除操作
             if (this._isErasing && this._eraseLine) {
-                console.log(this._eraseLine.name);
-                this.removeLine(this._eraseLine.name);
+                let name = this._eraseLine.name;
+                this.removeLine(name);
+                this.emitMsg(FollowLineEnum.Operate.remove, name.charAt(0) as FollowLineEnum.Role, name.substr(1));
                 this._eraseLine = undefined;
                 return;
             }
@@ -212,64 +231,44 @@ export class FollowLine extends DisplayObject {
 
             this._touchId = -1;
 
-            if(this._posCache.length == 1){ //划线失败
+            if (this._posCache.length == 1) { //划线失败
                 console.log('gui -> 移动距离过短，画线失败 >' + POS_DISTANCE);
                 this._curLineIndex--;
                 this._posCache.pop();
                 return;
             }
-    
-            let dataStr = this.role.toString() + this._curLineIndex + '|' + this.getDataStrByPosCache();
-            this.emit(ComponentEvent.COMPLETE,this,dataStr);
+            this.emitMsg(FollowLineEnum.Operate.add, this.role, this._curLineIndex.toString(),this.getDataStrByPosCache());
         }
     }
-      
-    private onMove(e: InteractionEvent){
+
+
+
+    private onMove(e: InteractionEvent) {
         this._mouseOffset.copyFrom(e.local);
         if (this._isErasing) {
-            if(this._role == 1){
+            if (this._role == FollowLineEnum.Role.teacher) {
                 this.invalidateProperties();
             }
             return;
         }
-        
-        
+
+
         if (this._touchId === -1 || !this._lastPos || this._touchId != e.data.identifier) return;
 
-        let {_lastPos,_posCache} = this;
+        let { _lastPos, _posCache } = this;
 
-        let len = pointDistance(_lastPos,e.local);
+        let len = pointDistance(_lastPos, e.local);
 
         if (len < POS_DISTANCE) {
             return;
         }
 
-        let brush = this.getGraphics(this._curLineIndex.toString(),this.role);
-        brush.moveTo( _lastPos.x, _lastPos.y);
+        let brush = this.getGraphics(this._curLineIndex.toString(), this.role);
+        brush.moveTo(_lastPos.x, _lastPos.y);
         brush.lineTo(Math.floor(e.local.x), Math.floor(e.local.y));
-        _lastPos.set(Math.floor(e.local.x),Math.floor(e.local.y));
+        _lastPos.set(Math.floor(e.local.x), Math.floor(e.local.y));
         _posCache.push(_lastPos.clone());
 
-    }
-
-    private onMessage(){
-        let {_messageCache,_lines} = this;
-        if(_messageCache.length>0){
-            let message:string;
-            let data:string;
-            let role = 0;
-            while(_messageCache.length>0){
-                message = _messageCache.pop() as string;
-                let messageIndex = message.indexOf('|');
-                let messageId = message.substr(0,messageIndex);
-                if(_lines.has(messageId)){
-                    continue;
-                }
-                role = parseInt(message.charAt(0));
-                data = message.substr(messageIndex+1);
-                this.drawLine(data, 0, data.length,role);
-            }
-        } 
     }
 
     private onReceive() {
@@ -279,7 +278,7 @@ export class FollowLine extends DisplayObject {
         // let curLineState = this.lineState[stepKey] || '';
 
         // if (name == DrawingBoard.CommandName.draw) {
-        //     let key = role == cocosMessager.roleEnum.TEACHER ? TEA_KEY : STU_KEY;
+        //     let key = role == cocosMessager.Role.TEACHER ? TEA_KEY : STU_KEY;
         //     curLineState += data + key;
         // } else {
         //     let index = curLineState.indexOf(data);
@@ -291,61 +290,73 @@ export class FollowLine extends DisplayObject {
         // this.sendState(this.lineState);
     }
 
-    private onReset(): any {
-        this.clear();
+    /**
+     * 发送操作事件
+     * @param operate   1添加 2删除 3重置
+     * @param role  Role
+     * @param lineIndex 线段 ID
+     */
+    private emitMsg(operate: FollowLineEnum.Operate, role: FollowLineEnum.Role, lineId: string,data = '') {
+        let dataStr = operate + role + lineId + '|' + data;
+        this.emit(ComponentEvent.COMPLETE, this, dataStr);
     }
 
-    private getGraphics(name: string,role:number): PIXI.Graphics {
+    /**
+     * 
+     * @param name (name = role + lineId)
+     * @param role 
+     */
+    private getGraphics(name: string, role: string): PIXI.Graphics {
         let key = role + name;
-        if(this._lines.has(key)){
+        if (this._lines.has(key)) {
             return this._lines.get(key) as PIXI.Graphics;
         }
-        if(this._lines.size>MAX_LINES){
+        if (this._lines.size > MAX_LINES) {
             this.removeLine(this._lineKeys.shift() as string);
         }
         let graphics = new PIXI.Graphics();
         graphics.name = key;
         this.container.addChild(graphics);
         this._lineKeys.push(key);
-        this._lines.set(key,graphics);
-        if (role == 1) {
-            graphics.lineStyle(3,TeacherDrawColor);
+        this._lines.set(key, graphics);
+        if (role == FollowLineEnum.Role.teacher) {
+            graphics.lineStyle(3, TeacherDrawColor);
         } else {
-            graphics.lineStyle(3,StudentDrawColor);
+            graphics.lineStyle(3, StudentDrawColor);
         }
         return graphics;
     }
 
     private getCurLineByPos() {
-        
 
-        let {_lines,_mouseOffset} = this;
 
-        if(this._eraseLine){
-            this._eraseLine.tint =  0xFFFFFF; 
+        let { _lines, _mouseOffset } = this;
+
+        if (this._eraseLine) {
+            this._eraseLine.tint = 0xFFFFFF;
             this._eraseLine = undefined;
         }
 
-        if(!this.isErasing){
+        if (!this.isErasing) {
             return;
         }
-        
+
         let lastDistance = 10000;
-        
-        _lines.forEach(value=>{
+
+        _lines.forEach(value => {
             value.getLocalBounds(tempLocalBounds);
-            if(tempLocalBounds.contains(_mouseOffset.x,_mouseOffset.y)){
-                let distance = pointDistance(_mouseOffset,{x:tempLocalBounds.x + tempLocalBounds.width*0.5,y:tempLocalBounds.y + tempLocalBounds.height*0.5});
-                if(distance<lastDistance){
+            if (tempLocalBounds.contains(_mouseOffset.x, _mouseOffset.y)) {
+                let distance = pointDistance(_mouseOffset, { x: tempLocalBounds.x + tempLocalBounds.width * 0.5, y: tempLocalBounds.y + tempLocalBounds.height * 0.5 });
+                if (distance < lastDistance) {
                     lastDistance = distance;
-                    this._eraseLine  = value;
+                    this._eraseLine = value;
                 }
-                
+
             }
         });
 
-        if(this._eraseLine){
-            (this._eraseLine as PIXI.Graphics).tint =  0x000000; 
+        if (this._eraseLine) {
+            (this._eraseLine as PIXI.Graphics).tint = 0x000000;
         }
 
     }
@@ -365,9 +376,9 @@ export class FollowLine extends DisplayObject {
 
         for (let index = 2; index < _posCache.length; index++) {
             const pos = _posCache[index];
-            let pos1 = pointSub(lastPos,lastLastPos);
-            let pos2 = pointSub(pos,lastPos); 
-            let angle = pointSignAngle(pos1,pos2);
+            let pos1 = pointSub(lastPos, lastLastPos);
+            let pos2 = pointSub(pos, lastPos);
+            let angle = pointSignAngle(pos1, pos2);
 
             if (angle > MAX_ARC || angle < -MAX_ARC || sumAngle > MAX_ARC || sumAngle < -MAX_ARC) {
                 finalX.push(lastPos.x);
@@ -397,9 +408,8 @@ export class FollowLine extends DisplayObject {
         return finalStr;
     }
 
-    private drawLine(data: string, from: number, to: number, role: number) {
-        this._messageIndex++;
-        let graphics = this.getGraphics(this._messageIndex.toString(),role);
+    private drawLine(drawId: string, data: string, from: number, to: number, role: string) {
+        let graphics = this.getGraphics(drawId, role);
         let posList = getVecListFromStr(data, from, to);
         this.draw(graphics, posList);
     }
@@ -436,27 +446,26 @@ export class FollowLine extends DisplayObject {
         graphics.lineTo(realList[realList.length - 2], realList[realList.length - 1]);
     }
 
-    private removeLine(key:string){
+    private removeLine(key: string) {
         let delKeyIndex = this._lineKeys.indexOf(key);
-        if(delKeyIndex !== -1){
-            this._lineKeys.splice(delKeyIndex,1);
+        if (delKeyIndex !== -1) {
+            this._lineKeys.splice(delKeyIndex, 1);
         }
-        let line =  this._lines.get(key);
-        if(line){
+        let line = this._lines.get(key);
+        if (line) {
             this._lines.delete(key);
-            if(line.parent){
+            if (line.parent) {
                 line.parent.removeChild(line);
                 line.destroy();
             }
         }
-        
-    } 
 
-    public clear(){
-        this._lines.forEach((value: PIXI.Graphics, key: string)=>{
-            if(value.parent){
-                value.parent.removeChild(value);
-                value.destroy();
+    }
+
+    public clear() {
+        this._lines.forEach((value: PIXI.Graphics, key: string) => {
+            if (value.parent) {
+                value.parent.removeChild(value).destroy();
             }
         });
         this._lines.clear();
@@ -465,10 +474,15 @@ export class FollowLine extends DisplayObject {
         this._lineKeys = [];
     }
 
-    public setData(data:string){
+    public setData(data: string) {
         this._messageCache.push(data);
         this.invalidateProperties();
     }
 
-    
+    public reset(): any {
+        this.emitMsg(FollowLineEnum.Operate.clear, this.role, "");
+        this.clear();
+    }
+
+
 }
