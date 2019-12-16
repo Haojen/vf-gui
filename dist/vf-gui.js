@@ -3427,15 +3427,16 @@ function getVecListFromStr(str, from, to) {
  */
 var FollowLine = /** @class */ (function (_super) {
     __extends(FollowLine, _super);
-    function FollowLine(geometry) {
+    function FollowLine(bindDisplay) {
         var _this = _super.call(this) || this;
-        _this.clickEvent = new Index_1.ClickEvent(_this, true);
         /** 触摸的ID */
         _this._touchId = -1;
         /** 位置缓存，记录画线时候每一个点，最后画完优化 */
         _this._posCache = [];
         /** 保存已画线的key */
         _this._lineKeys = [];
+        /** 开始偏移量 */
+        _this.startOffset = new PIXI.Point();
         /**
          * 由老师触发的划线索引
          */
@@ -3450,8 +3451,15 @@ var FollowLine = /** @class */ (function (_super) {
         _this._role = "T" /* teacher */;
         _this._lastPos = new PIXI.Point();
         _this._mouseOffset = new PIXI.Point();
-        _this.clickEvent.isOpenLocalPoint = true;
         _this._lines = new Map();
+        _this.container.interactiveChildren = false;
+        if (bindDisplay) {
+            _this.clickEvent = new Index_1.ClickEvent(bindDisplay, true);
+        }
+        else {
+            _this.clickEvent = new Index_1.ClickEvent(_this, true);
+        }
+        _this.clickEvent.isOpenLocalPoint = true;
         return _this;
     }
     Object.defineProperty(FollowLine.prototype, "isErasing", {
@@ -3459,12 +3467,15 @@ var FollowLine = /** @class */ (function (_super) {
             return this._isErasing;
         },
         set: function (value) {
+            if (this._isErasing === value) {
+                return;
+            }
             this._isErasing = value;
             if (value) {
-                this.style.cursor = "grab";
+                this.clickEvent.getTarget().container.cursor = "grab";
             }
             else {
-                this.style.cursor = "auto";
+                this.clickEvent.getTarget().container.cursor = "auto";
             }
         },
         enumerable: true,
@@ -3496,13 +3507,14 @@ var FollowLine = /** @class */ (function (_super) {
         this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
     };
     FollowLine.prototype.$onInit = function () {
-        this.on(Index_1.TouchMouseEvent.onPress, this.onPress, this);
-        this.on(Index_1.TouchMouseEvent.onMove, this.onMove, this);
+        //由于绑定的可能非当前显示对象，所以此处不可以使用this.on("xxxx")
+        this.clickEvent.getTarget().on(Index_1.TouchMouseEvent.onPress, this.onPress, this);
+        this.clickEvent.getTarget().on(Index_1.TouchMouseEvent.onMove, this.onMove, this);
     };
     FollowLine.prototype.$onRelease = function () {
+        this.clickEvent.getTarget().off(Index_1.TouchMouseEvent.onPress, this.onPress, this);
+        this.clickEvent.getTarget().off(Index_1.TouchMouseEvent.onMove, this.onMove, this);
         this.clickEvent.remove();
-        this.off(Index_1.TouchMouseEvent.onPress, this.onPress, this);
-        this.off(Index_1.TouchMouseEvent.onMove, this.onMove, this);
         this.clear();
     };
     FollowLine.prototype.onMessage = function () {
@@ -3535,6 +3547,7 @@ var FollowLine = /** @class */ (function (_super) {
         }
     };
     FollowLine.prototype.onPress = function (e, thisObj, isPress) {
+        e.stopPropagation();
         if (isPress) {
             if (this.parent === undefined)
                 return;
@@ -3543,7 +3556,9 @@ var FollowLine = /** @class */ (function (_super) {
             if (this._touchId !== -1)
                 return;
             this._touchId = e.data.identifier;
-            this._lastPos.set(Math.floor(e.local.x), Math.floor(e.local.y));
+            var curLocal = this.container.toLocal(e.local, thisObj.container);
+            this.startOffset.set(Math.floor(e.local.x - curLocal.x), Math.floor(e.local.y - curLocal.y));
+            this._lastPos.copyFrom(curLocal);
             this._posCache = [this._lastPos.clone()];
             this._curLineIndex++;
         }
@@ -3569,7 +3584,8 @@ var FollowLine = /** @class */ (function (_super) {
         }
     };
     FollowLine.prototype.onMove = function (e) {
-        this._mouseOffset.copyFrom(e.local);
+        e.stopPropagation();
+        this._mouseOffset.set(Math.floor(e.local.x) - this.startOffset.x, Math.floor(e.local.y) - this.startOffset.y);
         if (this._isErasing) {
             if (this._role == "T" /* teacher */) {
                 this.invalidateProperties();
@@ -3579,31 +3595,15 @@ var FollowLine = /** @class */ (function (_super) {
         if (this._touchId === -1 || !this._lastPos || this._touchId != e.data.identifier)
             return;
         var _a = this, _lastPos = _a._lastPos, _posCache = _a._posCache;
-        var len = Utils_1.pointDistance(_lastPos, e.local);
+        var len = Utils_1.pointDistance(_lastPos, this._mouseOffset);
         if (len < POS_DISTANCE) {
             return;
         }
         var brush = this.getGraphics(this._curLineIndex.toString(), this.role);
         brush.moveTo(_lastPos.x, _lastPos.y);
-        brush.lineTo(Math.floor(e.local.x), Math.floor(e.local.y));
-        _lastPos.set(Math.floor(e.local.x), Math.floor(e.local.y));
+        brush.lineTo(this._mouseOffset.x, this._mouseOffset.y);
+        _lastPos.copyFrom(this._mouseOffset);
         _posCache.push(_lastPos.clone());
-    };
-    FollowLine.prototype.onReceive = function () {
-        // let { name, data, role } = command;
-        // let stepKey = this.getStepKey();
-        // let curLineState = this.lineState[stepKey] || '';
-        // if (name == DrawingBoard.CommandName.draw) {
-        //     let key = role == cocosMessager.Role.TEACHER ? TEA_KEY : STU_KEY;
-        //     curLineState += data + key;
-        // } else {
-        //     let index = curLineState.indexOf(data);
-        //     if (index >= 0) {
-        //         curLineState = curLineState.slice(0, index) + curLineState.slice(index + data.length + 1);
-        //     }
-        // }
-        // this.lineState[stepKey] = curLineState;
-        // this.sendState(this.lineState);
     };
     /**
      * 发送操作事件
@@ -3630,6 +3630,8 @@ var FollowLine = /** @class */ (function (_super) {
             this.removeLine(this._lineKeys.shift());
         }
         var graphics = new PIXI.Graphics();
+        graphics.interactive = false;
+        graphics.interactiveChildren = false;
         graphics.name = key;
         this.container.addChild(graphics);
         this._lineKeys.push(key);
@@ -3669,6 +3671,9 @@ var FollowLine = /** @class */ (function (_super) {
     };
     FollowLine.prototype.getDataStrByPosCache = function () {
         var _posCache = this._posCache;
+        if (_posCache.length == 0) {
+            return;
+        }
         // 稀疏位置点，通过曲率
         var finalX = [_posCache[0].x];
         var finalY = [_posCache[0].y];
@@ -3770,12 +3775,6 @@ var FollowLine = /** @class */ (function (_super) {
     FollowLine.prototype.reset = function () {
         this.emitMsg("3" /* clear */, this.role, "");
         this.clear();
-    };
-    FollowLine.CommandName = {
-        /** 画线 */
-        draw: 1,
-        /** 擦除 */
-        erase: 2
     };
     return FollowLine;
 }(DisplayObject_1.DisplayObject));
@@ -6957,6 +6956,9 @@ var ClickEvent = /** @class */ (function () {
         obj.interactive = true;
         this.startEvent();
     }
+    ClickEvent.prototype.getTarget = function () {
+        return this.obj;
+    };
     ClickEvent.prototype.startEvent = function () {
         if (this.isStop) {
             this.obj.container.on(this.eventnameMousedown, this._onMouseDown, this);
@@ -11533,10 +11535,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.14.0.7.14.0.7.14) ==0.7.14.0.7.14.0.7.14;
+//     return this.lastIndexOf(word, pos0.7.15.0.7.15.0.7.15) ==0.7.15.0.7.15.0.7.15;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.14";
+window.gui.version = "0.7.15";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

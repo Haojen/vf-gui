@@ -126,6 +126,9 @@ export class FollowLine extends DisplayObject {
         return this._isErasing;
     }
     public set isErasing(value) {
+        if(this._isErasing === value){
+            return;
+        }
         this._isErasing = value;
         if (value) {
             this.clickEvent.getTarget().container.cursor  = "grab";
@@ -204,6 +207,7 @@ export class FollowLine extends DisplayObject {
 
 
     private onPress(e: InteractionEvent, thisObj: DisplayObject, isPress: boolean) {
+        e.stopPropagation();
         if (isPress) {
             if (this.parent === undefined) return;
 
@@ -246,7 +250,7 @@ export class FollowLine extends DisplayObject {
 
 
     private onMove(e: InteractionEvent) {
-
+        e.stopPropagation();
         this._mouseOffset.set(Math.floor(e.local.x) - this.startOffset.x,Math.floor(e.local.y) - this.startOffset.y);
         
         if (this._isErasing) {

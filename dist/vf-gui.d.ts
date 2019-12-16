@@ -135,6 +135,7 @@ declare module 'interaction/ClickEvent' {
 	    private eventnameMouseup;
 	    private eventnameMouseupoutside;
 	    private isStop;
+	    getTarget(): DisplayObject;
 	    startEvent(): void;
 	    /** 清除拖动 */
 	    stopEvent(): void;
@@ -3279,7 +3280,6 @@ declare module 'enum/Index' {
 
 }
 declare module 'display/FollowLine' {
-	/// <reference types="pixi.js" />
 	import { DisplayObject } from 'core/DisplayObject';
 	import { ClickEvent } from 'interaction/Index';
 	import { FollowLineEnum } from 'enum/Index';
@@ -3293,13 +3293,7 @@ declare module 'display/FollowLine' {
 	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
 	 */
 	export class FollowLine extends DisplayObject {
-	    constructor(geometry?: PIXI.GraphicsGeometry | undefined);
-	    static CommandName: {
-	        /** 画线 */
-	        draw: number;
-	        /** 擦除 */
-	        erase: number;
-	    };
+	    constructor(bindDisplay?: DisplayObject);
 	    protected clickEvent: ClickEvent;
 	    /** 线条 */
 	    private _lines;
@@ -3313,6 +3307,8 @@ declare module 'display/FollowLine' {
 	    private _lineKeys;
 	    /** 鼠标坐标 */
 	    private _mouseOffset;
+	    /** 开始偏移量 */
+	    private startOffset;
 	    /** 上次点击坐标 */
 	    private _lastPos;
 	    /**
@@ -3343,7 +3339,6 @@ declare module 'display/FollowLine' {
 	    private onMessage;
 	    private onPress;
 	    private onMove;
-	    private onReceive;
 	    /**
 	     * 发送操作事件
 	     * @param operate   1添加 2删除 3重置
