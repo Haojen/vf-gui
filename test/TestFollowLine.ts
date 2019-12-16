@@ -10,12 +10,35 @@ export default class TestFollowLine {
 
         let messageList:string[] = [];
 
-        let followLineTop = new gui.FollowLine();
+
+        /** 测试影响点击区域 */
+        let rect = new gui.Rect();
+        rect.lineWidth = 3;
+        rect.lineColor = 0x00ffcc;
+        rect.width = 600;
+        rect.height = 300;
+        rect.x = 100;
+        rect.y = 50;
+        uiStage.addChild(rect);
+
+        let eraseBtn = new gui.Button();
+        eraseBtn.x = 150
+        eraseBtn.y = 100;
+        eraseBtn.text = '擦除 false';
+        uiStage.addChild(eraseBtn);
+
+        let restorBtn = new gui.Button();
+        restorBtn.x = 250
+        restorBtn.y = 100;
+        restorBtn.text = '重置';
+        uiStage.addChild(restorBtn);
+
+        let followLineTop = new gui.FollowLine(uiStage as any);
         followLineTop.x = 100;
         followLineTop.y = 50;
         followLineTop.width = 600;
         followLineTop.height = 300;
-        followLineTop.style.backgroundColor = 0xffffff;
+        //followLineTop.style.backgroundColor = 0xffffff;
         followLineTop.role = gui.Enum.FollowLineEnum.Role.teacher;
         uiStage.addChild(followLineTop);
 
@@ -63,25 +86,15 @@ export default class TestFollowLine {
             followLineTop.setData(data);
         });
 
-        let eraseBtn = new gui.Button();
-        eraseBtn.x = 100
-        eraseBtn.y = 15;
-        eraseBtn.text = '擦除 false';
-        uiStage.addChild(eraseBtn);
+
         let isErasing = true;
         eraseBtn.on(gui.Interaction.TouchMouseEvent.onClick,()=>{
             followLineTop.isErasing = isErasing;
             followLineDown.isErasing = isErasing;
             eraseBtn.text = '擦除 ' + isErasing;
             isErasing = !isErasing;
-
         });
 
-        let restorBtn = new gui.Button();
-        restorBtn.x = 200
-        restorBtn.y = 15;
-        restorBtn.text = '重置';
-        uiStage.addChild(restorBtn);
         restorBtn.on(gui.Interaction.TouchMouseEvent.onClick,()=>{
             followLineTop.reset();
 

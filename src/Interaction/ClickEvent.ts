@@ -84,6 +84,10 @@ export class ClickEvent {
     private eventnameMouseupoutside =  TouchMouseEventEnum.mouseupoutside;
     private isStop = true;
 
+    public getTarget(){
+        return this.obj;
+    }
+
     public startEvent() {
 
         if(this.isStop){

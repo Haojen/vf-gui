@@ -81,23 +81,20 @@ function getVecListFromStr(str: string, from: number, to: number): number[] {
  */
 export class FollowLine extends DisplayObject {
 
-    public constructor(geometry?: PIXI.GraphicsGeometry | undefined) {
+    public constructor(bindDisplay?:DisplayObject) {
         super();
         this._lastPos = new PIXI.Point();
         this._mouseOffset = new PIXI.Point();
-        this.clickEvent.isOpenLocalPoint = true;
         this._lines = new Map();
+        this.container.interactiveChildren = false;
+        if(bindDisplay){
+            this.clickEvent = new ClickEvent(bindDisplay, true);
+        }else{
+            this.clickEvent = new ClickEvent(this, true);
+        }
+        this.clickEvent.isOpenLocalPoint = true;
     }
-
-    public static CommandName = {
-        /** 画线 */
-        draw: 1,
-        /** 擦除 */
-        erase: 2
-    };
-
-
-    protected clickEvent = new ClickEvent(this, true);
+    protected clickEvent:ClickEvent;
     /** 线条 */
     private _lines: Map<string, PIXI.Graphics>;
     /** 要删除的线，复制品 */
@@ -110,6 +107,8 @@ export class FollowLine extends DisplayObject {
     private _lineKeys: string[] = [];
     /** 鼠标坐标 */
     private _mouseOffset: PIXI.Point;
+    /** 开始偏移量 */
+    private startOffset = new PIXI.Point();
     /** 上次点击坐标 */
     private _lastPos: PIXI.Point;
     /**
@@ -129,9 +128,9 @@ export class FollowLine extends DisplayObject {
     public set isErasing(value) {
         this._isErasing = value;
         if (value) {
-            this.style.cursor = "grab";
+            this.clickEvent.getTarget().container.cursor  = "grab";
         } else {
-            this.style.cursor = "auto";
+            this.clickEvent.getTarget().container.cursor  = "auto";
         }
     }
     /** 角色状态 */
@@ -160,16 +159,16 @@ export class FollowLine extends DisplayObject {
     }
 
     $onInit() {
-
-        this.on(TouchMouseEvent.onPress, this.onPress, this);
-        this.on(TouchMouseEvent.onMove, this.onMove, this);
+        //由于绑定的可能非当前显示对象，所以此处不可以使用this.on("xxxx")
+        this.clickEvent.getTarget().on(TouchMouseEvent.onPress, this.onPress, this);
+        this.clickEvent.getTarget().on(TouchMouseEvent.onMove, this.onMove, this);
     }
 
 
     $onRelease() {
+        this.clickEvent.getTarget().off(TouchMouseEvent.onPress, this.onPress, this);
+        this.clickEvent.getTarget().off(TouchMouseEvent.onMove, this.onMove, this);
         this.clickEvent.remove();
-        this.off(TouchMouseEvent.onPress, this.onPress, this);
-        this.off(TouchMouseEvent.onMove, this.onMove, this);
         this.clear();
     }
 
@@ -203,6 +202,7 @@ export class FollowLine extends DisplayObject {
         }
     }
 
+
     private onPress(e: InteractionEvent, thisObj: DisplayObject, isPress: boolean) {
         if (isPress) {
             if (this.parent === undefined) return;
@@ -212,7 +212,9 @@ export class FollowLine extends DisplayObject {
             if (this._touchId !== -1) return;
 
             this._touchId = e.data.identifier;
-            this._lastPos.set(Math.floor(e.local.x), Math.floor(e.local.y));
+            let curLocal = this.container.toLocal(e.local,thisObj.container);
+            this.startOffset.set(Math.floor(e.local.x - curLocal.x),Math.floor(e.local.y - curLocal.y));
+            this._lastPos.copyFrom(curLocal);
             this._posCache = [this._lastPos.clone()];
             this._curLineIndex++;
 
@@ -244,7 +246,9 @@ export class FollowLine extends DisplayObject {
 
 
     private onMove(e: InteractionEvent) {
-        this._mouseOffset.copyFrom(e.local);
+
+        this._mouseOffset.set(Math.floor(e.local.x) - this.startOffset.x,Math.floor(e.local.y) - this.startOffset.y);
+        
         if (this._isErasing) {
             if (this._role == FollowLineEnum.Role.teacher) {
                 this.invalidateProperties();
@@ -257,7 +261,7 @@ export class FollowLine extends DisplayObject {
 
         let { _lastPos, _posCache } = this;
 
-        let len = pointDistance(_lastPos, e.local);
+        let len = pointDistance(_lastPos,this._mouseOffset);
 
         if (len < POS_DISTANCE) {
             return;
@@ -265,29 +269,10 @@ export class FollowLine extends DisplayObject {
 
         let brush = this.getGraphics(this._curLineIndex.toString(), this.role);
         brush.moveTo(_lastPos.x, _lastPos.y);
-        brush.lineTo(Math.floor(e.local.x), Math.floor(e.local.y));
-        _lastPos.set(Math.floor(e.local.x), Math.floor(e.local.y));
+        brush.lineTo(this._mouseOffset.x,this._mouseOffset.y);
+        _lastPos.copyFrom(this._mouseOffset);
         _posCache.push(_lastPos.clone());
 
-    }
-
-    private onReceive() {
-        // let { name, data, role } = command;
-
-        // let stepKey = this.getStepKey();
-        // let curLineState = this.lineState[stepKey] || '';
-
-        // if (name == DrawingBoard.CommandName.draw) {
-        //     let key = role == cocosMessager.Role.TEACHER ? TEA_KEY : STU_KEY;
-        //     curLineState += data + key;
-        // } else {
-        //     let index = curLineState.indexOf(data);
-        //     if (index >= 0) {
-        //         curLineState = curLineState.slice(0, index) + curLineState.slice(index + data.length + 1);
-        //     }
-        // }
-        // this.lineState[stepKey] = curLineState;
-        // this.sendState(this.lineState);
     }
 
     /**
@@ -315,6 +300,8 @@ export class FollowLine extends DisplayObject {
             this.removeLine(this._lineKeys.shift() as string);
         }
         let graphics = new PIXI.Graphics();
+        graphics.interactive = false;
+        graphics.interactiveChildren = false;
         graphics.name = key;
         this.container.addChild(graphics);
         this._lineKeys.push(key);
@@ -365,6 +352,9 @@ export class FollowLine extends DisplayObject {
 
 
         let { _posCache } = this;
+        if(_posCache.length == 0){
+            return;
+        }
         // 稀疏位置点，通过曲率
         let finalX = [_posCache[0].x];
         let finalY = [_posCache[0].y];
