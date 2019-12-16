@@ -2173,15 +2173,11 @@ var DisplayObject = /** @class */ (function (_super) {
     DisplayObject.prototype.releaseAll = function () {
         this.offAll();
         this.release();
-        // while(this.uiChildren.length>0){
-        //    if(this.uiChildren[0].uiChildren.length>0){
-        //         (this.uiChildren[0].uiChildren[0] as DisplayObject).releaseAll();
-        //    }
-        //    (this.uiChildren[0] as DisplayObject).releaseAll();
-        // }   
-        for (var i = 0; i < this.uiChildren.length; i++) {
-            var ui = this.uiChildren[i];
-            ui.releaseAll();
+        while (this.uiChildren.length > 0) {
+            if (this.uiChildren[0].uiChildren.length > 0) {
+                this.uiChildren[0].uiChildren[0].releaseAll();
+            }
+            this.uiChildren[0].releaseAll();
         }
         this.uiChildren = [];
         this.container.removeAllListeners();
