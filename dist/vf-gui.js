@@ -241,6 +241,17 @@ exports.Rect = Rect_1.Rect;
 var Graphics_1 = __webpack_require__(/*! ./display/Graphics */ "./src/display/Graphics.ts");
 exports.Graphics = Graphics_1.Graphics;
 /**
+ * 跟随划线（鼠标或触摸按下时）
+ *
+ * @example let graphics = new gui.FollowLine();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ */
+var FollowLine_1 = __webpack_require__(/*! ./display/FollowLine */ "./src/display/FollowLine.ts");
+exports.FollowLine = FollowLine_1.FollowLine;
+/**
  * 音频播放组件
  *
  * @example let sound = new gui.Sound();
@@ -294,6 +305,11 @@ exports.Interaction = Interaction;
  */
 var Event = __webpack_require__(/*! ./event/Index */ "./src/event/Index.ts");
 exports.Event = Event;
+/**
+ * 枚举
+ */
+var Enum = __webpack_require__(/*! ./enum/Index */ "./src/enum/Index.ts");
+exports.Enum = Enum;
 
 
 /***/ }),
@@ -1453,6 +1469,20 @@ var DepthQueue = /** @class */ (function () {
         this.maxDepth = -1;
     }
     /**
+     * 移除所有
+     */
+    DepthQueue.prototype.removeAll = function () {
+        var depthBins = this.depthBins;
+        for (var key in depthBins) {
+            var item = depthBins[key];
+            item.items = [];
+            item.map = {};
+            item.length = 0;
+        }
+        this.minDepth = 0;
+        this.maxDepth = -1;
+    };
+    /**
      * 插入一个元素
      */
     DepthQueue.prototype.insert = function (client) {
@@ -1874,6 +1904,11 @@ var UIValidator = /** @class */ (function (_super) {
             this.targetLevel = Infinity;
         }
     };
+    UIValidator.prototype.removeDepthQueueAll = function () {
+        this.invalidatePropertiesQueue.removeAll();
+        this.invalidateDisplayListQueue.removeAll();
+        this.invalidateSizeQueue.removeAll();
+    };
     return UIValidator;
 }(PIXI.utils.EventEmitter));
 var validatorShared = new UIValidator();
@@ -2110,24 +2145,24 @@ var DisplayObject = /** @class */ (function (_super) {
         _super.prototype.load.call(this);
     };
     DisplayObject.prototype.release = function () {
-        var _a = this, container = _a.container, mask = _a.mask, background = _a.background;
+        var _a = this, container = _a.container, $mask = _a.$mask, $background = _a.$background;
         if (this._style) {
             this._style.release();
             this._style = undefined;
         }
-        if (mask) {
+        if ($mask) {
             container.mask = null;
-            if (mask instanceof DisplayObject) {
-                mask.release();
+            if ($mask instanceof DisplayObject) {
+                $mask.release();
             }
             else {
-                mask.parent && mask.parent.removeChild(mask).destroy();
+                $mask.parent && $mask.parent.removeChild($mask).destroy();
             }
-            this.mask = undefined;
+            this.$mask = undefined;
         }
-        if (background && background.parent) {
-            background.parent.removeChild(background).destroy();
-            this.background = undefined;
+        if ($background && $background.parent) {
+            $background.parent.removeChild($background).destroy();
+            this.$background = undefined;
         }
         this.plugs.forEach(function (value) {
             value.release();
@@ -2138,6 +2173,12 @@ var DisplayObject = /** @class */ (function (_super) {
     DisplayObject.prototype.releaseAll = function () {
         this.offAll();
         this.release();
+        // while(this.uiChildren.length>0){
+        //    if(this.uiChildren[0].uiChildren.length>0){
+        //         (this.uiChildren[0].uiChildren[0] as DisplayObject).releaseAll();
+        //    }
+        //    (this.uiChildren[0] as DisplayObject).releaseAll();
+        // }   
         for (var i = 0; i < this.uiChildren.length; i++) {
             var ui = this.uiChildren[i];
             ui.releaseAll();
@@ -2385,8 +2426,8 @@ var DisplayObjectAbstract = /** @class */ (function (_super) {
         if (this.parent) {
             this.parent.removeChild(this);
         }
-        this.$stage = undefined;
         this.$onRelease();
+        this.$stage = undefined;
     };
     DisplayObjectAbstract.prototype.$onInit = function () {
         this.emit(Index_1.ComponentEvent.CREATION_COMPLETE, this);
@@ -2434,6 +2475,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Ticker_1 = __webpack_require__(/*! ./Ticker */ "./src/core/Ticker.ts");
 var DisplayLayoutAbstract_1 = __webpack_require__(/*! ./DisplayLayoutAbstract */ "./src/core/DisplayLayoutAbstract.ts");
+var DisplayLayoutValidator_1 = __webpack_require__(/*! ./DisplayLayoutValidator */ "./src/core/DisplayLayoutValidator.ts");
 /**
  * UI的舞台对象，展示所有UI组件
  *
@@ -2518,6 +2560,8 @@ var Stage = /** @class */ (function (_super) {
         this.container.removeAllListeners();
         this.container.removeChildren();
         Ticker_1.shared.removeAllListeners();
+        DisplayLayoutValidator_1.default.removeAllListeners();
+        DisplayLayoutValidator_1.default.removeDepthQueueAll();
     };
     Stage.prototype.resize = function () {
         this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
@@ -3301,6 +3345,449 @@ exports.Container = Container;
 
 /***/ }),
 
+/***/ "./src/display/FollowLine.ts":
+/*!***********************************!*\
+  !*** ./src/display/FollowLine.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var tempLocalBounds = new PIXI.Rectangle();
+/** 验证是否触发的距离 */
+var POS_DISTANCE = 7;
+/** 优化曲率，小于这个弧度视为直线，把当前点优化掉 */
+var MAX_ARC = 0.09; // 5度
+/** 点数字转换成字符的数位 */
+var DIGIT = 90;
+/** 字符列表 ascii */
+var NUMBER_TO_STR = "$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}";
+/** 压缩比例，有损压缩 */
+var COMPRESS_RATE = 2;
+/** 最大宽度 */
+var MAX_WIDTH = 1500;
+/** 为了把点都变成正数所用 */
+var POSITIVE = MAX_WIDTH / 2;
+/** 线条最大数量 */
+var MAX_LINES = 100;
+var TeacherDrawColor = 0xcd0032;
+var StudentDrawColor = 0x3200cd;
+/** 将一个x，y坐标转换成3个字符，宽高不能超过MAX_WIDTH */
+function getStrFromPos(x, y) {
+    x = Math.min(Math.max(0, x), MAX_WIDTH);
+    y = Math.min(Math.max(0, y), MAX_WIDTH);
+    // 有损压缩
+    var compX = Math.floor(x / COMPRESS_RATE);
+    var compY = Math.floor(y / COMPRESS_RATE);
+    var n1 = compX % DIGIT;
+    var n2 = compY % DIGIT;
+    var n3 = Math.floor(compX / DIGIT) * 10 + Math.floor(compY / DIGIT);
+    return NUMBER_TO_STR[n1] + NUMBER_TO_STR[n2] + NUMBER_TO_STR[n3];
+}
+/** 将字符串转换成坐标数字列表 */
+function getVecListFromStr(str, from, to) {
+    var list = [];
+    for (var index = from; index < to; index += 3) {
+        var n1 = str.charCodeAt(index) - 36;
+        var n2 = str.charCodeAt(index + 1) - 36;
+        var n3 = str.charCodeAt(index + 2) - 36;
+        var n12 = Math.floor(n3 / 10);
+        var n22 = n3 % 10;
+        var compX = n1 + n12 * DIGIT;
+        var compY = n2 + n22 * DIGIT;
+        var realX = compX * COMPRESS_RATE;
+        var realY = compY * COMPRESS_RATE;
+        list.push(realX);
+        list.push(realY);
+    }
+    return list;
+}
+/**
+ * 跟随鼠标或触摸绘制线条
+ *
+ * @example let graphics = new gui.FollowLine();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ */
+var FollowLine = /** @class */ (function (_super) {
+    __extends(FollowLine, _super);
+    function FollowLine(geometry) {
+        var _this = _super.call(this) || this;
+        _this.clickEvent = new Index_1.ClickEvent(_this, true);
+        /** 触摸的ID */
+        _this._touchId = -1;
+        /** 位置缓存，记录画线时候每一个点，最后画完优化 */
+        _this._posCache = [];
+        /** 保存已画线的key */
+        _this._lineKeys = [];
+        /**
+         * 由老师触发的划线索引
+         */
+        _this._curLineIndex = 0;
+        /**
+         * 需要处理的消息列表
+         */
+        _this._messageCache = [];
+        /** 是否擦除中 */
+        _this._isErasing = false;
+        /** 角色状态 */
+        _this._role = "T" /* teacher */;
+        _this._lastPos = new PIXI.Point();
+        _this._mouseOffset = new PIXI.Point();
+        _this.clickEvent.isOpenLocalPoint = true;
+        _this._lines = new Map();
+        return _this;
+    }
+    Object.defineProperty(FollowLine.prototype, "isErasing", {
+        get: function () {
+            return this._isErasing;
+        },
+        set: function (value) {
+            this._isErasing = value;
+            if (value) {
+                this.style.cursor = "grab";
+            }
+            else {
+                this.style.cursor = "auto";
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FollowLine.prototype, "role", {
+        get: function () {
+            return this._role;
+        },
+        set: function (value) {
+            this._role = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @private
+     * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
+     */
+    FollowLine.prototype.commitProperties = function () {
+        this.onMessage();
+        this.getCurLineByPos();
+    };
+    /**
+     * 更新显示列表,子类重写，实现布局
+     */
+    FollowLine.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+        _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+        this.container.hitArea = new PIXI.Rectangle(0, 0, this.width, this.height);
+    };
+    FollowLine.prototype.$onInit = function () {
+        this.on(Index_1.TouchMouseEvent.onPress, this.onPress, this);
+        this.on(Index_1.TouchMouseEvent.onMove, this.onMove, this);
+    };
+    FollowLine.prototype.$onRelease = function () {
+        this.clickEvent.remove();
+        this.off(Index_1.TouchMouseEvent.onPress, this.onPress, this);
+        this.off(Index_1.TouchMouseEvent.onMove, this.onMove, this);
+        this.clear();
+    };
+    FollowLine.prototype.onMessage = function () {
+        var _messageCache = this._messageCache;
+        if (_messageCache.length > 0) {
+            var message = void 0;
+            var data = void 0;
+            var role = void 0;
+            var operate = void 0;
+            var lineId = void 0;
+            while (_messageCache.length > 0) {
+                message = _messageCache.pop();
+                operate = message.charAt(0);
+                var messageIndex = message.indexOf('|');
+                role = message.charAt(1);
+                lineId = message.substr(2, messageIndex - 2);
+                switch (operate) {
+                    case "1" /* add */:
+                        data = message.substr(messageIndex + 1);
+                        this.drawLine(lineId, data, 0, data.length, role);
+                        break;
+                    case "2" /* remove */:
+                        this.removeLine(role + lineId);
+                        break;
+                    case "3" /* clear */:
+                        this.clear();
+                        break;
+                }
+            }
+        }
+    };
+    FollowLine.prototype.onPress = function (e, thisObj, isPress) {
+        if (isPress) {
+            if (this.parent === undefined)
+                return;
+            if (this._isErasing)
+                return;
+            if (this._touchId !== -1)
+                return;
+            this._touchId = e.data.identifier;
+            this._lastPos.set(Math.floor(e.local.x), Math.floor(e.local.y));
+            this._posCache = [this._lastPos.clone()];
+            this._curLineIndex++;
+        }
+        else {
+            // 清除操作
+            if (this._isErasing && this._eraseLine) {
+                var name_1 = this._eraseLine.name;
+                this.removeLine(name_1);
+                this.emitMsg("2" /* remove */, name_1.charAt(0), name_1.substr(1));
+                this._eraseLine = undefined;
+                return;
+            }
+            if (this._touchId === -1 || this._touchId != e.data.identifier)
+                return;
+            this._touchId = -1;
+            if (this._posCache.length == 1) { //划线失败
+                console.log('gui -> 移动距离过短，画线失败 >' + POS_DISTANCE);
+                this._curLineIndex--;
+                this._posCache.pop();
+                return;
+            }
+            this.emitMsg("1" /* add */, this.role, this._curLineIndex.toString(), this.getDataStrByPosCache());
+        }
+    };
+    FollowLine.prototype.onMove = function (e) {
+        this._mouseOffset.copyFrom(e.local);
+        if (this._isErasing) {
+            if (this._role == "T" /* teacher */) {
+                this.invalidateProperties();
+            }
+            return;
+        }
+        if (this._touchId === -1 || !this._lastPos || this._touchId != e.data.identifier)
+            return;
+        var _a = this, _lastPos = _a._lastPos, _posCache = _a._posCache;
+        var len = Utils_1.pointDistance(_lastPos, e.local);
+        if (len < POS_DISTANCE) {
+            return;
+        }
+        var brush = this.getGraphics(this._curLineIndex.toString(), this.role);
+        brush.moveTo(_lastPos.x, _lastPos.y);
+        brush.lineTo(Math.floor(e.local.x), Math.floor(e.local.y));
+        _lastPos.set(Math.floor(e.local.x), Math.floor(e.local.y));
+        _posCache.push(_lastPos.clone());
+    };
+    FollowLine.prototype.onReceive = function () {
+        // let { name, data, role } = command;
+        // let stepKey = this.getStepKey();
+        // let curLineState = this.lineState[stepKey] || '';
+        // if (name == DrawingBoard.CommandName.draw) {
+        //     let key = role == cocosMessager.Role.TEACHER ? TEA_KEY : STU_KEY;
+        //     curLineState += data + key;
+        // } else {
+        //     let index = curLineState.indexOf(data);
+        //     if (index >= 0) {
+        //         curLineState = curLineState.slice(0, index) + curLineState.slice(index + data.length + 1);
+        //     }
+        // }
+        // this.lineState[stepKey] = curLineState;
+        // this.sendState(this.lineState);
+    };
+    /**
+     * 发送操作事件
+     * @param operate   1添加 2删除 3重置
+     * @param role  Role
+     * @param lineIndex 线段 ID
+     */
+    FollowLine.prototype.emitMsg = function (operate, role, lineId, data) {
+        if (data === void 0) { data = ''; }
+        var dataStr = operate + role + lineId + '|' + data;
+        this.emit(Index_1.ComponentEvent.COMPLETE, this, dataStr);
+    };
+    /**
+     *
+     * @param name (name = role + lineId)
+     * @param role
+     */
+    FollowLine.prototype.getGraphics = function (name, role) {
+        var key = role + name;
+        if (this._lines.has(key)) {
+            return this._lines.get(key);
+        }
+        if (this._lines.size > MAX_LINES) {
+            this.removeLine(this._lineKeys.shift());
+        }
+        var graphics = new PIXI.Graphics();
+        graphics.name = key;
+        this.container.addChild(graphics);
+        this._lineKeys.push(key);
+        this._lines.set(key, graphics);
+        if (role == "T" /* teacher */) {
+            graphics.lineStyle(3, TeacherDrawColor);
+        }
+        else {
+            graphics.lineStyle(3, StudentDrawColor);
+        }
+        return graphics;
+    };
+    FollowLine.prototype.getCurLineByPos = function () {
+        var _this = this;
+        var _a = this, _lines = _a._lines, _mouseOffset = _a._mouseOffset;
+        if (this._eraseLine) {
+            this._eraseLine.tint = 0xFFFFFF;
+            this._eraseLine = undefined;
+        }
+        if (!this.isErasing) {
+            return;
+        }
+        var lastDistance = 10000;
+        _lines.forEach(function (value) {
+            value.getLocalBounds(tempLocalBounds);
+            if (tempLocalBounds.contains(_mouseOffset.x, _mouseOffset.y)) {
+                var distance = Utils_1.pointDistance(_mouseOffset, { x: tempLocalBounds.x + tempLocalBounds.width * 0.5, y: tempLocalBounds.y + tempLocalBounds.height * 0.5 });
+                if (distance < lastDistance) {
+                    lastDistance = distance;
+                    _this._eraseLine = value;
+                }
+            }
+        });
+        if (this._eraseLine) {
+            this._eraseLine.tint = 0x000000;
+        }
+    };
+    FollowLine.prototype.getDataStrByPosCache = function () {
+        var _posCache = this._posCache;
+        // 稀疏位置点，通过曲率
+        var finalX = [_posCache[0].x];
+        var finalY = [_posCache[0].y];
+        var lastLastPos = _posCache[0];
+        var lastPos = _posCache[1];
+        var sumAngle = 0;
+        for (var index = 2; index < _posCache.length; index++) {
+            var pos = _posCache[index];
+            var pos1 = Utils_1.pointSub(lastPos, lastLastPos);
+            var pos2 = Utils_1.pointSub(pos, lastPos);
+            var angle = Utils_1.pointSignAngle(pos1, pos2);
+            if (angle > MAX_ARC || angle < -MAX_ARC || sumAngle > MAX_ARC || sumAngle < -MAX_ARC) {
+                finalX.push(lastPos.x);
+                finalY.push(lastPos.y);
+                sumAngle = 0;
+            }
+            else {
+                sumAngle += angle;
+            }
+            lastLastPos = lastPos;
+            lastPos = pos;
+        }
+        finalX.push(_posCache[_posCache.length - 1].x);
+        finalY.push(_posCache[_posCache.length - 1].y);
+        var finalStrList = [];
+        for (var index = 0; index < finalX.length; index++) {
+            var x = finalX[index] + POSITIVE;
+            var y = finalY[index] + POSITIVE;
+            var str = getStrFromPos(x, y);
+            finalStrList.push(str);
+        }
+        var finalStr = finalStrList.join('');
+        return finalStr;
+    };
+    FollowLine.prototype.drawLine = function (drawId, data, from, to, role) {
+        var graphics = this.getGraphics(drawId, role);
+        var posList = getVecListFromStr(data, from, to);
+        this.draw(graphics, posList);
+    };
+    FollowLine.prototype.draw = function (graphics, posList) {
+        var lastX = posList[0] - POSITIVE;
+        var lastY = posList[1] - POSITIVE;
+        graphics.moveTo(lastX, lastY);
+        // 利用贝塞尔将线平滑化
+        var realList = [];
+        for (var index = 2; index < posList.length; index += 2) {
+            var x = posList[index] - POSITIVE;
+            var y = posList[index + 1] - POSITIVE;
+            var halfX = lastX + (x - lastX) * 0.5;
+            var halfY = lastY + (y - lastY) * 0.5;
+            realList.push(halfX, halfY, x, y);
+            lastX = x;
+            lastY = y;
+        }
+        graphics.lineTo(realList[0], realList[1]);
+        for (var index = 2; index < realList.length - 2; index += 4) {
+            var cx = realList[index];
+            var cy = realList[index + 1];
+            var x = realList[index + 2];
+            var y = realList[index + 3];
+            graphics.quadraticCurveTo(cx, cy, x, y);
+        }
+        graphics.lineTo(realList[realList.length - 2], realList[realList.length - 1]);
+    };
+    FollowLine.prototype.removeLine = function (key) {
+        var delKeyIndex = this._lineKeys.indexOf(key);
+        if (delKeyIndex !== -1) {
+            this._lineKeys.splice(delKeyIndex, 1);
+        }
+        var line = this._lines.get(key);
+        if (line) {
+            this._lines.delete(key);
+            if (line.parent) {
+                line.parent.removeChild(line);
+                line.destroy();
+            }
+        }
+    };
+    FollowLine.prototype.clear = function () {
+        this._lines.forEach(function (value, key) {
+            if (value.parent) {
+                value.parent.removeChild(value).destroy();
+            }
+        });
+        this._lines.clear();
+        this._curLineIndex = 0;
+        this._posCache = [];
+        this._lineKeys = [];
+    };
+    FollowLine.prototype.setData = function (data) {
+        if (typeof data === 'string') {
+            this._messageCache.push(data);
+        }
+        else {
+            this._messageCache = this._messageCache.concat(data);
+        }
+        this.invalidateProperties();
+    };
+    FollowLine.prototype.reset = function () {
+        this.emitMsg("3" /* clear */, this.role, "");
+        this.clear();
+    };
+    FollowLine.CommandName = {
+        /** 画线 */
+        draw: 1,
+        /** 擦除 */
+        erase: 2
+    };
+    return FollowLine;
+}(DisplayObject_1.DisplayObject));
+exports.FollowLine = FollowLine;
+
+
+/***/ }),
+
 /***/ "./src/display/Graphics.ts":
 /*!*********************************!*\
   !*** ./src/display/Graphics.ts ***!
@@ -3838,7 +4325,9 @@ var Rect = /** @class */ (function (_super) {
     };
     Rect.prototype.release = function () {
         _super.prototype.release.call(this);
-        this.graphics.parent.removeChild(this.graphics).destroy();
+        if (this.graphics.parent) {
+            this.graphics.parent.removeChild(this.graphics).destroy();
+        }
     };
     Rect.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
         this.drawRoundedRect();
@@ -4938,6 +5427,7 @@ var SpriteAnimated = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this._lastAnimatedName = "";
         _this._curFrameNumber = 0;
+        _this._setTimeoutId = -1;
         /**
          * 要播放的动作名
          */
@@ -4990,7 +5480,12 @@ var SpriteAnimated = /** @class */ (function (_super) {
         },
         set: function (value) {
             this._src = value;
-            this.srcSystem();
+            if (value === undefined) {
+                this.releaseAnimate();
+            }
+            else {
+                this.srcSystem();
+            }
         },
         enumerable: true,
         configurable: true
@@ -5109,26 +5604,31 @@ var SpriteAnimated = /** @class */ (function (_super) {
      */
     SpriteAnimated.prototype.addAnimated = function (animationName, textures) {
         var sp = this._animatedSprites.get(animationName);
-        if (sp && sp.parent) {
-            sp.parent.removeChild(sp);
+        if (sp) {
+            if (sp.parent)
+                sp.parent.removeChild(sp);
             sp.removeAllListeners();
             sp.destroy();
         }
         this._animatedSprites.set(animationName, new PIXI.AnimatedSprite(textures));
     };
     SpriteAnimated.prototype.release = function () {
+        if (this._setTimeoutId) {
+            clearTimeout(this._setTimeoutId);
+        }
         _super.prototype.release.call(this);
         this.releaseAnimate();
         this.src = undefined;
     };
     SpriteAnimated.prototype.releaseAnimate = function () {
         this._animatedSprites.forEach(function (element) {
-            element.stop();
-            element.removeAllListeners();
             if (element.parent) {
-                element.parent.removeChild(element).destroy();
+                element.parent.removeChild(element);
             }
+            element.removeAllListeners();
+            element.destroy();
         });
+        this._animatedSprites.clear();
     };
     SpriteAnimated.prototype.srcSystem = function () {
         this.releaseAnimate();
@@ -5174,7 +5674,8 @@ var SpriteAnimated = /** @class */ (function (_super) {
             _this.emit(Index_1.ComponentEvent.COMPLETE, _this);
         };
         if (animatedSp.parent == undefined) {
-            setTimeout(function () {
+            clearTimeout(this._setTimeoutId);
+            this._setTimeoutId = setTimeout(function () {
                 //绘制会闪烁，与下一帧渲染有关，先临时解决，设置setTimeout
                 _this.container.addChild(animatedSp);
             }, 0);
@@ -6057,6 +6558,38 @@ exports.InputBase = InputBase;
 
 /***/ }),
 
+/***/ "./src/enum/FollowLineEnum.ts":
+/*!************************************!*\
+  !*** ./src/enum/FollowLineEnum.ts ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+;
+;
+
+
+/***/ }),
+
+/***/ "./src/enum/Index.ts":
+/*!***************************!*\
+  !*** ./src/enum/Index.ts ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var FollowLineEnum = __webpack_require__(/*! ./FollowLineEnum */ "./src/enum/FollowLineEnum.ts");
+exports.FollowLineEnum = FollowLineEnum;
+
+
+/***/ }),
+
 /***/ "./src/event/ComponentEvent.ts":
 /*!*************************************!*\
   !*** ./src/event/ComponentEvent.ts ***!
@@ -6091,6 +6624,7 @@ exports.CHANGEING = "CHANGEING";
  * 2. Image 图片加载完成时
  * 3. Slider 滑动完成
  * 4. Timeline  每次播放完时，触发(loop = false时)
+ * 5. FollowLine 完成一次划线
  */
 exports.COMPLETE = "COMPLETE";
 /**
@@ -6209,6 +6743,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+var tempLocal = new PIXI.Point(0, 0);
 /**
  * 事件的基础类
  *
@@ -6219,7 +6754,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var InteractionEvent = /** @class */ (function (_super) {
     __extends(InteractionEvent, _super);
     function InteractionEvent() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.local = tempLocal;
+        return _this;
     }
     return InteractionEvent;
 }(PIXI.interaction.InteractionEvent));
@@ -6386,6 +6923,9 @@ var ClickEvent = /** @class */ (function () {
         this.id = 0;
         /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | gui.Interaction.TouchEvent */
         this.isOpenEmitEvent = false;
+        /** 是否开启本地坐标转换，开启后，事件InteractionEvent中的localX localY为本地坐标，false情况下为0 */
+        this.isOpenLocalPoint = false;
+        this.localOffset = new PIXI.Point();
         this.offset = new PIXI.Point();
         this.movementX = 0;
         this.movementY = 0;
@@ -6456,6 +6996,7 @@ var ClickEvent = /** @class */ (function () {
         this.isStop = true;
     };
     ClickEvent.prototype._onMouseDown = function (e) {
+        this.setLocalPoint(e);
         this.mouse.copyFrom(e.data.global);
         this.id = e.data.identifier;
         this.onPress && this.onPress.call(this.obj, e, this.obj, true), this.obj;
@@ -6554,8 +7095,15 @@ var ClickEvent = /** @class */ (function () {
         }
     };
     ClickEvent.prototype._onMouseMove = function (e) {
+        this.setLocalPoint(e);
         this.onMove && this.onMove.call(this.obj, e, this.obj);
         this.emitTouchEvent(TouchMouseEvent_1.TouchMouseEvent.onMove, e);
+    };
+    ClickEvent.prototype.setLocalPoint = function (e) {
+        if (this.isOpenLocalPoint) {
+            this.obj.container.toLocal(e.data.global, undefined, this.localOffset);
+            e.local = this.localOffset;
+        }
     };
     ClickEvent.prototype.remove = function () {
         this.stopEvent();
@@ -7502,13 +8050,13 @@ function backgroundColor(target) {
     if (target.style == undefined) {
         return;
     }
-    if (target.style.backgroundColor == undefined && target.background == undefined) {
+    if (target.style.backgroundColor == undefined && target.$background == undefined) {
         return;
     }
-    if (target.background === undefined) {
-        target.background = new PIXI.Graphics();
-        target.background.name = "background";
-        target.container.addChildAt(target.background, 0);
+    if (target.$background === undefined) {
+        target.$background = new PIXI.Graphics();
+        target.$background.name = "background";
+        target.container.addChildAt(target.$background, 0);
     }
 }
 exports.backgroundColor = backgroundColor;
@@ -7516,8 +8064,8 @@ function backgroundPositionSize(target) {
     if (target.style == undefined) {
         return;
     }
-    if (target.background && target.background.children.length > 0) {
-        var sprite = target.background.getChildAt(0);
+    if (target.$background && target.$background.children.length > 0) {
+        var sprite = target.$background.getChildAt(0);
         var style = target.style;
         if (sprite instanceof PIXI.TilingSprite) {
             sprite.tilePosition.set(style.backgroundPositionX || 0, style.backgroundPositionY || 0);
@@ -7537,8 +8085,8 @@ function backgroundRepeat(target) {
         return;
     }
     var style = target.style;
-    if (style.backgroundImage && target.background) {
-        target.background.removeChildren();
+    if (style.backgroundImage && target.$background) {
+        target.$background.removeChildren();
         var backgroundImage_1;
         if (style.backgroundImage instanceof PIXI.Texture) {
             backgroundImage_1 = style.backgroundImage;
@@ -7557,19 +8105,19 @@ function backgroundRepeat(target) {
             else {
                 sprite = new PIXI.Sprite(backgroundImage_1);
             }
-            target.background.addChild(sprite);
+            target.$background.addChild(sprite);
             var maskGraphics = new PIXI.Graphics();
-            target.background.addChild(maskGraphics);
-            target.background.mask = maskGraphics;
+            target.$background.addChild(maskGraphics);
+            target.$background.mask = maskGraphics;
         }
     }
 }
 exports.backgroundRepeat = backgroundRepeat;
 function backgroundImage(target) {
-    if (target.background === undefined) {
-        target.background = new PIXI.Graphics();
-        target.background.name = "background";
-        target.container.addChildAt(target.background, 0);
+    if (target.$background === undefined) {
+        target.$background = new PIXI.Graphics();
+        target.$background.name = "background";
+        target.container.addChildAt(target.$background, 0);
     }
     backgroundRepeat(target);
     backgroundPositionSize(target);
@@ -7580,17 +8128,17 @@ function maskPosition(target) {
     if (target.style == undefined) {
         return;
     }
-    if (target.mask) {
+    if (target.$mask) {
         var style = target.style;
         if (style.maskPosition === undefined) {
             return;
         }
-        if (target.mask instanceof DisplayObject_1.DisplayObject) {
-            target.mask.x = style.maskPosition[0];
-            target.mask.y = style.maskPosition[1];
+        if (target.$mask instanceof DisplayObject_1.DisplayObject) {
+            target.$mask.x = style.maskPosition[0];
+            target.$mask.y = style.maskPosition[1];
         }
         else {
-            target.mask.position.set(style.maskPosition[0], style.maskPosition[1]);
+            target.$mask.position.set(style.maskPosition[0], style.maskPosition[1]);
         }
     }
 }
@@ -7599,18 +8147,18 @@ function maskSize(target) {
     if (target.style == undefined) {
         return;
     }
-    if (target.mask) {
+    if (target.$mask) {
         var style = target.style;
         if (style.maskSize === undefined) {
             return;
         }
-        target.mask.width = style.maskSize[0];
-        target.mask.height = style.maskSize[1];
-        if (target.mask instanceof PIXI.Graphics) {
-            target.mask.clone;
+        target.$mask.width = style.maskSize[0];
+        target.$mask.height = style.maskSize[1];
+        if (target.$mask instanceof PIXI.Graphics) {
+            //target.$mask.clone
         }
-        if (!(target.mask instanceof DisplayObject_1.DisplayObject))
-            target.mask.updateTransform();
+        if (!(target.$mask instanceof DisplayObject_1.DisplayObject))
+            target.$mask.updateTransform();
     }
 }
 exports.maskSize = maskSize;
@@ -7619,12 +8167,12 @@ function maskImage(target) {
         return;
     }
     target.container.mask = null;
-    if (target.mask && target.mask.parent) {
-        if (target.mask instanceof DisplayObject_1.DisplayObject) {
-            target.removeChild(target.mask);
+    if (target.$mask && target.$mask.parent) {
+        if (target.$mask instanceof DisplayObject_1.DisplayObject) {
+            target.removeChild(target.$mask);
         }
         else {
-            target.mask.parent.removeChild(target.mask);
+            target.$mask.parent.removeChild(target.$mask);
         }
     }
     for (var i = 0; i < target.uiChildren.length; i++) {
@@ -7633,19 +8181,19 @@ function maskImage(target) {
             break;
         }
     }
-    target.mask = undefined;
+    target.$mask = undefined;
     var style = target.style;
     var container = target.container;
     var maskdisplay = Utils_1.getDisplayObject(style.maskImage, target);
     if (maskdisplay instanceof PIXI.Graphics) {
-        target.mask = maskdisplay;
-        container.mask = target.mask;
-        container.addChild(target.mask);
+        target.$mask = maskdisplay;
+        container.mask = target.$mask;
+        container.addChild(target.$mask);
     }
     else if (maskdisplay instanceof DisplayObject_1.DisplayObject) {
         if (maskdisplay.maskSprite) {
-            target.mask = maskdisplay; //gui组件
-            target.mask.name = "maskImage";
+            target.$mask = maskdisplay; //gui组件
+            target.$mask.name = "maskImage";
             container.mask = maskdisplay.maskSprite() || null; //pixi组件
             if (maskdisplay.parent == undefined) {
                 target.addChild(maskdisplay);
@@ -7653,9 +8201,9 @@ function maskImage(target) {
         }
     }
     else {
-        target.mask = PIXI.Sprite.from(Utils_1.getTexture(style.maskImage));
-        container.mask = target.mask;
-        container.addChild(target.mask);
+        target.$mask = PIXI.Sprite.from(Utils_1.getTexture(style.maskImage));
+        container.mask = target.$mask;
+        container.addChild(target.$mask);
     }
     maskSize(target);
     maskPosition(target);
@@ -8519,17 +9067,17 @@ var CSSStyle = /** @class */ (function () {
         if (target.width == 0 || target.height == 0) {
             return;
         }
-        if (this.backgroundColor && target.background) {
-            var background = target.background;
+        if (this.backgroundColor && target.$background) {
+            var background = target.$background;
             //console.log("onResize backgroundColor",background.width , target.width ,background.height ,target.height)
             background.clear();
             background.beginFill(this.backgroundColor);
             background.drawRoundedRect(0, 0, target.width, target.height, 0);
             background.endFill();
         }
-        if (target.background && target.background.mask) {
+        if (target.$background && target.$background.mask) {
             //console.log("onResize backgroundColor mask",this.backgroundColor)
-            var mask = target.background.mask;
+            var mask = target.$background.mask;
             mask.clear();
             mask.beginFill(this.backgroundColor);
             mask.drawRoundedRect(0, 0, target.width, target.height, 0);
@@ -10948,6 +11496,25 @@ function formatRelative(value, total) {
     return percent * 0.01 * total;
 }
 exports.formatRelative = formatRelative;
+/** 计算两点距离 */
+function pointDistance(pointA, pointB) {
+    return Math.sqrt((pointA.x - pointB.x) * (pointA.x - pointB.x) + (pointA.y - pointB.y) * (pointA.y - pointB.y));
+}
+exports.pointDistance = pointDistance;
+/** 坐标相减 */
+function pointSub(source, subPoint) {
+    var x = source.x - subPoint.x;
+    var y = source.y - subPoint.y;
+    return { x: x, y: y };
+}
+exports.pointSub = pointSub;
+/** 向量转弧度 */
+function pointSignAngle(pointA, pointB) {
+    var num1 = (pointA.x * pointB.y) - (pointB.x * pointA.y);
+    var num2 = (pointA.x * pointB.x) + (pointA.y * pointB.y);
+    return Math.atan2(num1, num2) * (360 / (Math.PI * 2));
+}
+exports.pointSignAngle = pointSignAngle;
 
 
 /***/ }),
@@ -10970,10 +11537,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.12.0.7.12.0.7.12) ==0.7.12.0.7.12.0.7.12;
+//     return this.lastIndexOf(word, pos0.7.14.0.7.14.0.7.14) ==0.7.14.0.7.14.0.7.14;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.12";
+window.gui.version = "0.7.14";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

@@ -246,17 +246,17 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
         this.offAll();
         this.release();
 
-        while(this.uiChildren.length>0){
-           if(this.uiChildren[0].uiChildren.length>0){
-                (this.uiChildren[0].uiChildren[0] as DisplayObject).releaseAll();
-           }
-           (this.uiChildren[0] as DisplayObject).releaseAll();
-        }   
+        // while(this.uiChildren.length>0){
+        //    if(this.uiChildren[0].uiChildren.length>0){
+        //         (this.uiChildren[0].uiChildren[0] as DisplayObject).releaseAll();
+        //    }
+        //    (this.uiChildren[0] as DisplayObject).releaseAll();
+        // }   
 
-        // for(let i=0;i<this.uiChildren.length;i++){
-        //     const ui = this.uiChildren[i] as DisplayObject;
-        //     ui.releaseAll();
-        // }
+        for(let i=0;i<this.uiChildren.length;i++){
+            const ui = this.uiChildren[i] as DisplayObject;
+            ui.releaseAll();
+        }
         this.uiChildren = [];
         this.container.removeAllListeners();
         this.container.removeChildren();

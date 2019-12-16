@@ -33,6 +33,7 @@ declare module 'event/InteractionEvent' {
 	 */
 	export class InteractionEvent extends PIXI.interaction.InteractionEvent {
 	    constructor();
+	    local: PIXI.Point;
 	}
 
 }
@@ -117,6 +118,9 @@ declare module 'interaction/ClickEvent' {
 	    id: number;
 	    /** 是否基于事件派发，开启后，可以侦听相关的事件 InteractionEvent.TouchEvent | gui.Interaction.TouchEvent */
 	    isOpenEmitEvent: boolean;
+	    /** 是否开启本地坐标转换，开启后，事件InteractionEvent中的localX localY为本地坐标，false情况下为0 */
+	    isOpenLocalPoint: boolean;
+	    private localOffset;
 	    private offset;
 	    private movementX;
 	    private movementY;
@@ -142,6 +146,7 @@ declare module 'interaction/ClickEvent' {
 	    private _onMouseOver;
 	    private _onMouseOut;
 	    private _onMouseMove;
+	    private setLocalPoint;
 	    remove(): void;
 	    onHover: ((e: InteractionEvent, thisOBj: DisplayObject, over: boolean) => void) | undefined;
 	    onPress: ((e: InteractionEvent, thisOBj: DisplayObject, isPressed: boolean) => void) | undefined;
@@ -659,6 +664,7 @@ declare module 'event/ComponentEvent' {
 	 * 2. Image 图片加载完成时
 	 * 3. Slider 滑动完成
 	 * 4. Timeline  每次播放完时，触发(loop = false时)
+	 * 5. FollowLine 完成一次划线
 	 */
 	export const COMPLETE = "COMPLETE";
 	/**
@@ -1481,6 +1487,7 @@ declare module 'core/DisplayLayoutValidator' {
 	     * @param target 要立即应用属性的组件
 	     */
 	    validateClient(target: DisplayLayoutAbstract): void;
+	    removeDepthQueueAll(): void;
 	} const validatorShared: UIValidator;
 	export default validatorShared;
 
@@ -2369,13 +2376,13 @@ declare module 'core/DisplayObject' {
 	     */
 	    constructor();
 	    /**
-	     * 背景
+	     * 背景(内部使用)
 	     */
-	    background?: PIXI.Graphics;
+	    $background?: PIXI.Graphics;
 	    /**
 	     * 遮罩，设置遮罩后，组件内部的索引位置可能产生变化
 	     */
-	    mask?: PIXI.Graphics | PIXI.Sprite | DisplayObject;
+	    $mask?: PIXI.Graphics | PIXI.Sprite | DisplayObject;
 	    /**
 	     * 插件列表
 	     */
@@ -2581,6 +2588,33 @@ declare module 'utils/Utils' {
 	 * @param total
 	 */
 	export function formatRelative(value: number | string | undefined, total: number): number;
+	/** 计算两点距离 */
+	export function pointDistance(pointA: PIXI.Point | {
+	    x: number;
+	    y: number;
+	}, pointB: PIXI.Point | {
+	    x: number;
+	    y: number;
+	}): number;
+	/** 坐标相减 */
+	export function pointSub(source: PIXI.Point | {
+	    x: number;
+	    y: number;
+	}, subPoint: PIXI.Point | {
+	    x: number;
+	    y: number;
+	}): {
+	    x: number;
+	    y: number;
+	};
+	/** 向量转弧度 */
+	export function pointSignAngle(pointA: PIXI.Point | {
+	    x: number;
+	    y: number;
+	}, pointB: PIXI.Point | {
+	    x: number;
+	    y: number;
+	}): number;
 
 }
 declare module 'display/Container' {
@@ -2730,6 +2764,7 @@ declare module 'display/SpriteAnimated' {
 	    private _animatedSprites;
 	    private _lastAnimatedName;
 	    private _curFrameNumber;
+	    private _setTimeoutId;
 	    /**
 	     * 要播放的动作名
 	     */
@@ -3224,6 +3259,115 @@ declare module 'display/Graphics' {
 	}
 
 }
+declare module 'enum/FollowLineEnum' {
+	export const enum Role {
+	    /** 老师 */
+	    teacher = "T",
+	    /** 学生 */
+	    student = "S"
+	}
+	export const enum Operate {
+	    add = "1",
+	    remove = "2",
+	    clear = "3"
+	}
+
+}
+declare module 'enum/Index' {
+	import * as FollowLineEnum from 'enum/FollowLineEnum';
+	export { FollowLineEnum };
+
+}
+declare module 'display/FollowLine' {
+	/// <reference types="pixi.js" />
+	import { DisplayObject } from 'core/DisplayObject';
+	import { ClickEvent } from 'interaction/Index';
+	import { FollowLineEnum } from 'enum/Index';
+	/**
+	 * 跟随鼠标或触摸绘制线条
+	 *
+	 * @example let graphics = new gui.FollowLine();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+	 */
+	export class FollowLine extends DisplayObject {
+	    constructor(geometry?: PIXI.GraphicsGeometry | undefined);
+	    static CommandName: {
+	        /** 画线 */
+	        draw: number;
+	        /** 擦除 */
+	        erase: number;
+	    };
+	    protected clickEvent: ClickEvent;
+	    /** 线条 */
+	    private _lines;
+	    /** 要删除的线，复制品 */
+	    private _eraseLine?;
+	    /** 触摸的ID */
+	    private _touchId;
+	    /** 位置缓存，记录画线时候每一个点，最后画完优化 */
+	    private _posCache;
+	    /** 保存已画线的key */
+	    private _lineKeys;
+	    /** 鼠标坐标 */
+	    private _mouseOffset;
+	    /** 上次点击坐标 */
+	    private _lastPos;
+	    /**
+	     * 由老师触发的划线索引
+	     */
+	    private _curLineIndex;
+	    /**
+	     * 需要处理的消息列表
+	     */
+	    private _messageCache;
+	    /** 是否擦除中 */
+	    private _isErasing;
+	    isErasing: boolean;
+	    /** 角色状态 */
+	    private _role;
+	    role: FollowLineEnum.Role;
+	    /**
+	     * @private
+	     * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
+	     */
+	    protected commitProperties(): void;
+	    /**
+	     * 更新显示列表,子类重写，实现布局
+	     */
+	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
+	    $onInit(): void;
+	    $onRelease(): void;
+	    private onMessage;
+	    private onPress;
+	    private onMove;
+	    private onReceive;
+	    /**
+	     * 发送操作事件
+	     * @param operate   1添加 2删除 3重置
+	     * @param role  Role
+	     * @param lineIndex 线段 ID
+	     */
+	    private emitMsg;
+	    /**
+	     *
+	     * @param name (name = role + lineId)
+	     * @param role
+	     */
+	    private getGraphics;
+	    private getCurLineByPos;
+	    private getDataStrByPosCache;
+	    private drawLine;
+	    private draw;
+	    private removeLine;
+	    clear(): void;
+	    setData(data: string | string[]): void;
+	    reset(): any;
+	}
+
+}
 declare module 'display/Sound' {
 	/// <reference types="pixi-sound" />
 	/// <reference types="pixi.js" />
@@ -3450,6 +3594,16 @@ declare module 'UI' {
 	 */
 	import { Graphics } from 'display/Graphics';
 	/**
+	 * 跟随划线（鼠标或触摸按下时）
+	 *
+	 * @example let graphics = new gui.FollowLine();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+	 */
+	import { FollowLine } from 'display/FollowLine';
+	/**
 	 * 音频播放组件
 	 *
 	 * @example let sound = new gui.Sound();
@@ -3497,8 +3651,12 @@ declare module 'UI' {
 	 * 事件名
 	 */
 	import * as Event from 'event/Index';
+	/**
+	 * 枚举
+	 */
+	import * as Enum from 'enum/Index';
 	/** 请不要在编写UI组件内部使用本类 */
-	export { Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Graphics, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event };
+	export { Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Graphics, FollowLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum };
 
 }
 declare module 'vf-gui' {

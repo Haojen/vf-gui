@@ -1,7 +1,6 @@
 import {DisplayObject} from "../core/DisplayObject";
 import { log, getTexture, getSheet } from "../utils/Utils";
 import { ComponentEvent } from "../interaction/Index";
-import tickerShared from "../core/Ticker";
 
 /**
  * 序列图动画
@@ -18,7 +17,6 @@ export class SpriteAnimated extends DisplayObject{
     public constructor(){
         super();
         this._animatedSprites = new Map();
-        //tickerShared.addUpdateEvent(this.update,this);
     }
 
 
@@ -179,14 +177,13 @@ export class SpriteAnimated extends DisplayObject{
             sp.removeAllListeners();
             sp.destroy();
         }
-        this._animatedSprites.set(animationName,new PIXI.AnimatedSprite(textures,true));
+        this._animatedSprites.set(animationName,new PIXI.AnimatedSprite(textures));
     }
 
     public release(){
         if(this._setTimeoutId){
             clearTimeout(this._setTimeoutId);
         }
-        //tickerShared.removeUpdateEvent(this.update,this);
         super.release();
         this.releaseAnimate();
         this.src = undefined;
@@ -290,13 +287,4 @@ export class SpriteAnimated extends DisplayObject{
         }
     }
 
-    // private update(){
-    //     const animatedSp  = this._animatedSprites.get(this.animationName);
-    //     animatedSp.updateT
-    //     if(animatedSp && animatedSp.playing &&  animatedSp['update']){
-    //         console.log(animatedSp.texture);
-            
-    //     }
-    // }
-  
 }
