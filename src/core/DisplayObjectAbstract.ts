@@ -215,8 +215,8 @@ export class DisplayObjectAbstract extends PIXI.utils.EventEmitter implements Li
         if(this.parent){
             this.parent.removeChild(this);
         }
-        this.$stage = undefined;
         this.$onRelease();
+        this.$stage = undefined;
     }
 
     $onInit(){

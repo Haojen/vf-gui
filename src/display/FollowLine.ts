@@ -474,8 +474,13 @@ export class FollowLine extends DisplayObject {
         this._lineKeys = [];
     }
 
-    public setData(data: string) {
-        this._messageCache.push(data);
+    public setData(data: string | string[]) {
+        if(typeof data === 'string'){
+            this._messageCache.push(data);
+        }else{
+            this._messageCache = this._messageCache.concat(data);
+        }
+        
         this.invalidateProperties();
     }
 
