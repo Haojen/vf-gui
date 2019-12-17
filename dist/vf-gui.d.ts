@@ -3319,6 +3319,16 @@ declare module 'display/FollowLine' {
 	     * 需要处理的消息列表
 	     */
 	    private _messageCache;
+	    /**
+	     * 线条颜色
+	     */
+	    private _lineColor;
+	    lineColor: number;
+	    /**
+	     * 是否暂停，一些特殊情况，如拖拽时，可暂停
+	     */
+	    private _isPause;
+	    isPause: boolean;
 	    /** 是否擦除中 */
 	    private _isErasing;
 	    isErasing: boolean;

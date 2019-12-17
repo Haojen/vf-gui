@@ -81,20 +81,20 @@ function getVecListFromStr(str: string, from: number, to: number): number[] {
  */
 export class FollowLine extends DisplayObject {
 
-    public constructor(bindDisplay?:DisplayObject) {
+    public constructor(bindDisplay?: DisplayObject) {
         super();
         this._lastPos = new PIXI.Point();
         this._mouseOffset = new PIXI.Point();
         this._lines = new Map();
         this.container.interactiveChildren = false;
-        if(bindDisplay){
+        if (bindDisplay) {
             this.clickEvent = new ClickEvent(bindDisplay, true);
-        }else{
+        } else {
             this.clickEvent = new ClickEvent(this, true);
         }
         this.clickEvent.isOpenLocalPoint = true;
     }
-    protected clickEvent:ClickEvent;
+    protected clickEvent: ClickEvent;
     /** 线条 */
     private _lines: Map<string, PIXI.Graphics>;
     /** 要删除的线，复制品 */
@@ -119,7 +119,17 @@ export class FollowLine extends DisplayObject {
      * 需要处理的消息列表
      */
     private _messageCache: string[] = [];
-    
+    /**
+     * 线条颜色
+     */
+    private _lineColor = 0x000000;
+    public get lineColor() {
+        return this._lineColor;
+    }
+    public set lineColor(value) {
+        this._lineColor = value;
+    }
+
     /**
      * 是否暂停，一些特殊情况，如拖拽时，可暂停
      */
@@ -137,14 +147,14 @@ export class FollowLine extends DisplayObject {
         return this._isErasing;
     }
     public set isErasing(value) {
-        if(this._isErasing === value){
+        if (this._isErasing === value) {
             return;
         }
         this._isErasing = value;
         if (value) {
-            this.clickEvent.getTarget().container.cursor  = "grab";
+            this.clickEvent.getTarget().container.cursor = "grab";
         } else {
-            this.clickEvent.getTarget().container.cursor  = "auto";
+            this.clickEvent.getTarget().container.cursor = "auto";
         }
     }
     /** 角色状态 */
@@ -154,6 +164,11 @@ export class FollowLine extends DisplayObject {
     }
     public set role(value) {
         this._role = value;
+        if (value == FollowLineEnum.Role.teacher) {
+            this._lineColor = TeacherDrawColor;
+        } else {
+            this._lineColor = StudentDrawColor;
+        }
     }
 
     /**
@@ -218,7 +233,7 @@ export class FollowLine extends DisplayObject {
 
 
     private onPress(e: InteractionEvent, thisObj: DisplayObject, isPress: boolean) {
-        if(this._isPause){
+        if (this._isPause) {
             return;
         }
         e.stopPropagation();
@@ -230,8 +245,8 @@ export class FollowLine extends DisplayObject {
             if (this._touchId !== -1) return;
 
             this._touchId = e.data.identifier;
-            let curLocal = this.container.toLocal(e.local,thisObj.container);
-            this.startOffset.set(Math.floor(e.local.x - curLocal.x),Math.floor(e.local.y - curLocal.y));
+            let curLocal = this.container.toLocal(e.local, thisObj.container);
+            this.startOffset.set(Math.floor(e.local.x - curLocal.x), Math.floor(e.local.y - curLocal.y));
             this._lastPos.copyFrom(curLocal);
             this._posCache = [this._lastPos.clone()];
             this._curLineIndex++;
@@ -257,7 +272,7 @@ export class FollowLine extends DisplayObject {
                 this._posCache.pop();
                 return;
             }
-            this.emitMsg(FollowLineEnum.Operate.add, this.role, this._curLineIndex.toString(),this.getDataStrByPosCache());
+            this.emitMsg(FollowLineEnum.Operate.add, this.role, this._curLineIndex.toString(), this.getDataStrByPosCache());
         }
     }
 
@@ -265,8 +280,8 @@ export class FollowLine extends DisplayObject {
 
     private onMove(e: InteractionEvent) {
         e.stopPropagation();
-        this._mouseOffset.set(Math.floor(e.local.x) - this.startOffset.x,Math.floor(e.local.y) - this.startOffset.y);
-        
+        this._mouseOffset.set(Math.floor(e.local.x) - this.startOffset.x, Math.floor(e.local.y) - this.startOffset.y);
+
         if (this._isErasing) {
             if (this._role == FollowLineEnum.Role.teacher) {
                 this.invalidateProperties();
@@ -279,7 +294,7 @@ export class FollowLine extends DisplayObject {
 
         let { _lastPos, _posCache } = this;
 
-        let len = pointDistance(_lastPos,this._mouseOffset);
+        let len = pointDistance(_lastPos, this._mouseOffset);
 
         if (len < POS_DISTANCE) {
             return;
@@ -287,7 +302,7 @@ export class FollowLine extends DisplayObject {
 
         let brush = this.getGraphics(this._curLineIndex.toString(), this.role);
         brush.moveTo(_lastPos.x, _lastPos.y);
-        brush.lineTo(this._mouseOffset.x,this._mouseOffset.y);
+        brush.lineTo(this._mouseOffset.x, this._mouseOffset.y);
         _lastPos.copyFrom(this._mouseOffset);
         _posCache.push(_lastPos.clone());
 
@@ -299,7 +314,7 @@ export class FollowLine extends DisplayObject {
      * @param role  Role
      * @param lineIndex 线段 ID
      */
-    private emitMsg(operate: FollowLineEnum.Operate, role: FollowLineEnum.Role, lineId: string,data = '') {
+    private emitMsg(operate: FollowLineEnum.Operate, role: FollowLineEnum.Role, lineId: string, data = '') {
         let dataStr = operate + role + lineId + '|' + data;
         this.emit(ComponentEvent.COMPLETE, this, dataStr);
     }
@@ -324,11 +339,7 @@ export class FollowLine extends DisplayObject {
         this.container.addChild(graphics);
         this._lineKeys.push(key);
         this._lines.set(key, graphics);
-        if (role == FollowLineEnum.Role.teacher) {
-            graphics.lineStyle(3, TeacherDrawColor);
-        } else {
-            graphics.lineStyle(3, StudentDrawColor);
-        }
+        graphics.lineStyle(3, this._lineColor);
         return graphics;
     }
 
@@ -370,7 +381,7 @@ export class FollowLine extends DisplayObject {
 
 
         let { _posCache } = this;
-        if(_posCache.length == 0){
+        if (_posCache.length == 0) {
             return;
         }
         // 稀疏位置点，通过曲率
@@ -483,12 +494,12 @@ export class FollowLine extends DisplayObject {
     }
 
     public setData(data: string | string[]) {
-        if(typeof data === 'string'){
+        if (typeof data === 'string') {
             this._messageCache.push(data);
-        }else{
+        } else {
             this._messageCache = this._messageCache.concat(data);
         }
-        
+
         this.invalidateProperties();
     }
 

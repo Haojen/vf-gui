@@ -3445,6 +3445,14 @@ var FollowLine = /** @class */ (function (_super) {
          * 需要处理的消息列表
          */
         _this._messageCache = [];
+        /**
+         * 线条颜色
+         */
+        _this._lineColor = 0x000000;
+        /**
+         * 是否暂停，一些特殊情况，如拖拽时，可暂停
+         */
+        _this._isPause = false;
         /** 是否擦除中 */
         _this._isErasing = false;
         /** 角色状态 */
@@ -3462,6 +3470,26 @@ var FollowLine = /** @class */ (function (_super) {
         _this.clickEvent.isOpenLocalPoint = true;
         return _this;
     }
+    Object.defineProperty(FollowLine.prototype, "lineColor", {
+        get: function () {
+            return this._lineColor;
+        },
+        set: function (value) {
+            this._lineColor = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FollowLine.prototype, "isPause", {
+        get: function () {
+            return this._isPause;
+        },
+        set: function (value) {
+            this._isPause = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(FollowLine.prototype, "isErasing", {
         get: function () {
             return this._isErasing;
@@ -3487,6 +3515,12 @@ var FollowLine = /** @class */ (function (_super) {
         },
         set: function (value) {
             this._role = value;
+            if (value == "T" /* teacher */) {
+                this._lineColor = TeacherDrawColor;
+            }
+            else {
+                this._lineColor = StudentDrawColor;
+            }
         },
         enumerable: true,
         configurable: true
@@ -3547,6 +3581,9 @@ var FollowLine = /** @class */ (function (_super) {
         }
     };
     FollowLine.prototype.onPress = function (e, thisObj, isPress) {
+        if (this._isPause) {
+            return;
+        }
         e.stopPropagation();
         if (isPress) {
             if (this.parent === undefined)
@@ -3636,12 +3673,7 @@ var FollowLine = /** @class */ (function (_super) {
         this.container.addChild(graphics);
         this._lineKeys.push(key);
         this._lines.set(key, graphics);
-        if (role == "T" /* teacher */) {
-            graphics.lineStyle(3, TeacherDrawColor);
-        }
-        else {
-            graphics.lineStyle(3, StudentDrawColor);
-        }
+        graphics.lineStyle(3, this._lineColor);
         return graphics;
     };
     FollowLine.prototype.getCurLineByPos = function () {
@@ -7258,6 +7290,7 @@ var DragEvent = /** @class */ (function () {
         }
     };
     DragEvent.prototype._onDragStart = function (e) {
+        e.stopPropagation();
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true, this);
         if (!this.bound && this.obj.parent && this.obj.stage) {
@@ -11535,10 +11568,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.15.0.7.15.0.7.15) ==0.7.15.0.7.15.0.7.15;
+//     return this.lastIndexOf(word, pos0.7.16.0.7.16.0.7.16) ==0.7.16.0.7.16.0.7.16;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.15";
+window.gui.version = "0.7.16";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
