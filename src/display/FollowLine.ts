@@ -119,6 +119,17 @@ export class FollowLine extends DisplayObject {
      * 需要处理的消息列表
      */
     private _messageCache: string[] = [];
+    
+    /**
+     * 是否暂停，一些特殊情况，如拖拽时，可暂停
+     */
+    private _isPause = false;
+    public get isPause() {
+        return this._isPause;
+    }
+    public set isPause(value) {
+        this._isPause = value;
+    }
 
     /** 是否擦除中 */
     private _isErasing = false;
@@ -207,6 +218,9 @@ export class FollowLine extends DisplayObject {
 
 
     private onPress(e: InteractionEvent, thisObj: DisplayObject, isPress: boolean) {
+        if(this._isPause){
+            return;
+        }
         e.stopPropagation();
         if (isPress) {
             if (this.parent === undefined) return;
