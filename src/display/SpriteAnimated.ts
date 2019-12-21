@@ -23,6 +23,7 @@ export class SpriteAnimated extends DisplayObject{
     private _animatedSprites: Map<string,PIXI.AnimatedSprite>;
     private _lastAnimatedName = "";
     private _curFrameNumber = 0;
+    private _setTimeoutId = -1;
 
     /**
      * 要播放的动作名
@@ -47,7 +48,12 @@ export class SpriteAnimated extends DisplayObject{
     }
     public set src(value: PIXI.Spritesheet | PIXI.Texture[] | undefined) {
         this._src = value;
-        this.srcSystem();
+        if(value === undefined){
+            this.releaseAnimate();
+        }else{
+            this.srcSystem();
+        }
+        
     }
     /**
      * 动画速度
@@ -165,8 +171,9 @@ export class SpriteAnimated extends DisplayObject{
      */
     public addAnimated(animationName: string,textures: PIXI.Texture[]){
         const sp = this._animatedSprites.get(animationName);
-        if(sp && sp.parent){
-            sp.parent.removeChild(sp);
+        if(sp){
+            if(sp.parent)
+                sp.parent.removeChild(sp);
             sp.removeAllListeners();
             sp.destroy();
         }
@@ -174,6 +181,9 @@ export class SpriteAnimated extends DisplayObject{
     }
 
     public release(){
+        if(this._setTimeoutId){
+            clearTimeout(this._setTimeoutId);
+        }
         super.release();
         this.releaseAnimate();
         this.src = undefined;
@@ -181,12 +191,13 @@ export class SpriteAnimated extends DisplayObject{
 
     protected releaseAnimate(){
         this._animatedSprites.forEach(element => {
-            element.stop();
-            element.removeAllListeners();
             if(element.parent){
-                element.parent.removeChild(element).destroy();
+                element.parent.removeChild(element)
             }
+            element.removeAllListeners();
+            element.destroy();
         });
+        this._animatedSprites.clear();
     }
 
     protected srcSystem(){
@@ -234,7 +245,8 @@ export class SpriteAnimated extends DisplayObject{
             this.emit(ComponentEvent.COMPLETE,this);
         }
         if(animatedSp.parent == undefined){
-            setTimeout(() => {
+            clearTimeout(this._setTimeoutId);
+            this._setTimeoutId = setTimeout(() => {
                 //绘制会闪烁，与下一帧渲染有关，先临时解决，设置setTimeout
                 this.container.addChild(animatedSp);
             }, 0);
@@ -274,5 +286,5 @@ export class SpriteAnimated extends DisplayObject{
             animatedSp.anchor.set(this.anchorX,this.anchorY);
         }
     }
-  
+
 }

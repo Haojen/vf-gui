@@ -1,6 +1,6 @@
 {
   "name": "vf-gui",
-  "version": "0.7.12",
+  "version": "0.7.16",
   "description": "[https://vipkid-edu.github.io/vf-gui-docs/](https://vipkid-edu.github.io/vf-gui-docs/)",
   "main": "dist/vf-gui.js",
   "types": "dist/vf-gui.d.ts",

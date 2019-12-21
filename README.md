@@ -44,7 +44,7 @@ Master:
 
     <script src="http://unpkg.com/vf-gui/dist/vf-gui.min.js"></script>
 
-### 创建方式(Use)：
+### 创建方式(Usage)：
 
     let button = new  gui.Button();
 
@@ -82,6 +82,7 @@ Master:
 | gui.CheckBox | 单选与复选 |
 | gui.SpriteAnimated | 序列图 |
 | gui.Slider | 滑动/进度条 |
+| gui.FollowLine | 跟随鼠标划线与擦除 |
 | gui.Ticker | 心跳 |
 | gui.Tween | 缓动 |
 | gui.Timeline | 缓动 |

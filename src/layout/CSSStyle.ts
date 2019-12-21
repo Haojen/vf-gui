@@ -721,9 +721,9 @@ export class CSSStyle {
         if (target.width == 0 || target.height == 0) {
             return;
         }
-        if (this.backgroundColor && target.background) {
+        if (this.backgroundColor && target.$background) {
 
-            const background = target.background;
+            const background = target.$background;
             //console.log("onResize backgroundColor",background.width , target.width ,background.height ,target.height)
             background.clear();
             background.beginFill(this.backgroundColor);
@@ -731,9 +731,9 @@ export class CSSStyle {
             background.endFill();
 
         }
-        if (target.background && target.background.mask) {
+        if (target.$background && target.$background.mask) {
             //console.log("onResize backgroundColor mask",this.backgroundColor)
-            const mask = target.background.mask as PIXI.Graphics;
+            const mask = target.$background.mask as PIXI.Graphics;
             mask.clear();
             mask.beginFill(this.backgroundColor);
             mask.drawRoundedRect(0, 0, target.width, target.height, 0);

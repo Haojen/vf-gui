@@ -312,3 +312,22 @@ export function formatRelative(value: number | string | undefined, total: number
     const percent = +str.substring(0, index);
     return percent * 0.01 * total;
 }
+
+/** 计算两点距离 */
+export function pointDistance(pointA:PIXI.Point|{x:number,y:number}, pointB:PIXI.Point|{x:number,y:number}){
+    return  Math.sqrt((pointA.x- pointB.x)*(pointA.x - pointB.x) +(pointA.y - pointB.y)*(pointA.y - pointB.y));
+}
+
+/** 坐标相减 */
+export function pointSub(source:PIXI.Point|{x:number,y:number}, subPoint:PIXI.Point|{x:number,y:number}){
+    let x = source.x - subPoint.x;
+    let y = source.y - subPoint.y;
+    return {x,y};
+}
+
+/** 向量转弧度 */
+export function pointSignAngle(pointA:PIXI.Point|{x:number,y:number}, pointB:PIXI.Point|{x:number,y:number}){
+    let num1 = (pointA.x * pointB.y) - (pointB.x * pointA.y);
+    let num2 = (pointA.x * pointB.x) + (pointA.y * pointB.y);
+    return  Math.atan2(num1, num2) * ( 360 / (Math.PI * 2));
+}

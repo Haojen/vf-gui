@@ -68,6 +68,21 @@ class DepthQueue {
      */
     private maxDepth: number = -1;
 
+    /** 
+     * 移除所有
+     */
+    public removeAll(){
+        let depthBins = this.depthBins;
+        for(let key in depthBins){
+            let item:DepthBin = depthBins[key];
+            item.items = [];
+            item.map = {};
+            item.length = 0;
+        }
+        this.minDepth = 0;
+        this.maxDepth = -1;
+    }
+
     /**
      * 插入一个元素
      */
@@ -285,7 +300,7 @@ class UIValidator extends PIXI.utils.EventEmitter {
     /**
      * @private
      */
-    private invalidatePropertiesQueue: DepthQueue = new DepthQueue();
+    private invalidatePropertiesQueue = new DepthQueue();
 
     /**
      * @private
@@ -332,7 +347,7 @@ class UIValidator extends PIXI.utils.EventEmitter {
     /**
      * @private
      */
-    private invalidateSizeQueue: DepthQueue = new DepthQueue();
+    private invalidateSizeQueue = new DepthQueue();
 
     /**
      * @private
@@ -375,7 +390,7 @@ class UIValidator extends PIXI.utils.EventEmitter {
     /**
      * @private
      */
-    private invalidateDisplayListQueue: DepthQueue = new DepthQueue();
+    private invalidateDisplayListQueue = new DepthQueue();
 
     /**
      * @private
@@ -547,6 +562,14 @@ class UIValidator extends PIXI.utils.EventEmitter {
         if (oldTargetLevel === Infinity) {
             this.targetLevel = Infinity;
         }
+    }
+
+
+    public removeDepthQueueAll(){
+        this.invalidatePropertiesQueue.removeAll();
+        this.invalidateDisplayListQueue.removeAll();
+        this.invalidateSizeQueue.removeAll();
+
     }
 
 }

@@ -59,7 +59,7 @@ export class DragEvent {
 
 
     private _onDragStart(e: InteractionEvent) {
-
+        e.stopPropagation();
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true,this);
 

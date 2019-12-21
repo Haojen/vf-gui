@@ -103,7 +103,10 @@ export class Rect extends DisplayObject implements MaskSprite{
     
     public release(){
         super.release();
-        this.graphics.parent.removeChild(this.graphics).destroy();
+        if(this.graphics.parent){
+            this.graphics.parent.removeChild(this.graphics).destroy();
+        }
+        
     }
 
     protected updateDisplayList(unscaledWidth: number, unscaledHeight: number) {

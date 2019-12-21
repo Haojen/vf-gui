@@ -22,13 +22,13 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
     }
 
     /** 
-     * 背景 
+     * 背景(内部使用) 
      */
-    public background?: PIXI.Graphics;
+    public $background?: PIXI.Graphics;
     /** 
      * 遮罩，设置遮罩后，组件内部的索引位置可能产生变化 
      */
-    public mask?: PIXI.Graphics | PIXI.Sprite | DisplayObject;
+    public $mask?: PIXI.Graphics | PIXI.Sprite | DisplayObject;
     /**
      * 插件列表
      */
@@ -210,26 +210,26 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
 
     public release() {
         
-        const {container,mask,background} = this;
+        const {container,$mask,$background} = this;
 
         if(this._style){
             this._style.release();
             this._style = undefined;
         }  
 
-        if(mask){
+        if($mask){
             container.mask = null;
-            if(mask instanceof DisplayObject){
-                mask.release();
+            if($mask instanceof DisplayObject){
+                $mask.release();
             }else{
-                mask.parent && mask.parent.removeChild(mask).destroy();
+                $mask.parent && $mask.parent.removeChild($mask).destroy();
             }
-            this.mask = undefined;
+            this.$mask = undefined;
         }
 
-        if(background && background.parent){
-            background.parent.removeChild(background).destroy();
-            this.background = undefined;
+        if($background && $background.parent){
+            $background.parent.removeChild($background).destroy();
+            this.$background = undefined;
         }
 
         this.plugs.forEach(value=>{
@@ -242,13 +242,17 @@ export class DisplayObject extends DisplayLayoutAbstract implements Lifecycle {
     }
 
     public releaseAll(){
-        
+
         this.offAll();
         this.release();
-        for(let i=0;i<this.uiChildren.length;i++){
-            const ui = this.uiChildren[i] as DisplayObject;
-            ui.releaseAll();
-        }
+
+        while(this.uiChildren.length>0){
+           if(this.uiChildren[0].uiChildren.length>0){
+                (this.uiChildren[0].uiChildren[0] as DisplayObject).releaseAll();
+           }
+           (this.uiChildren[0] as DisplayObject).releaseAll();
+        }   
+
         this.uiChildren = [];
         this.container.removeAllListeners();
         this.container.removeChildren();

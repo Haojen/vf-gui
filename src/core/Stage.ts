@@ -1,6 +1,7 @@
 import {shared as TickerShared} from "./Ticker";
 import { DisplayLayoutAbstract } from "./DisplayLayoutAbstract";
 import { DisplayObject } from "./DisplayObject";
+import validatorShared from "./DisplayLayoutValidator";
 
 /**
  * UI的舞台对象，展示所有UI组件
@@ -69,6 +70,7 @@ export class Stage extends DisplayLayoutAbstract{
     }
 
     public releaseAll(){
+        
         for(let i=0;i<this.uiChildren.length;i++){
             const ui = this.uiChildren[i] as DisplayObject;
             ui.releaseAll();
@@ -77,6 +79,8 @@ export class Stage extends DisplayLayoutAbstract{
         this.container.removeAllListeners();
         this.container.removeChildren();
         TickerShared.removeAllListeners();
+        validatorShared.removeAllListeners();
+        validatorShared.removeDepthQueueAll();
     }
 
  

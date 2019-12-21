@@ -1,3 +1,5 @@
+
+const tempLocal = new PIXI.Point(0,0);
 /**
  * 事件的基础类
  * 
@@ -7,6 +9,9 @@
  */
 export class InteractionEvent extends PIXI.interaction.InteractionEvent {
     public constructor() {
-        super()
+        super();
+        this.local = tempLocal;
     }
+
+    public local:PIXI.Point;
 }
