@@ -1908,6 +1908,7 @@ var UIValidator = /** @class */ (function (_super) {
         this.invalidatePropertiesQueue.removeAll();
         this.invalidateDisplayListQueue.removeAll();
         this.invalidateSizeQueue.removeAll();
+        this.listenersAttached = false;
     };
     return UIValidator;
 }(PIXI.utils.EventEmitter));
@@ -11568,10 +11569,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.16.0.7.16.0.7.16) ==0.7.16.0.7.16.0.7.16;
+//     return this.lastIndexOf(word, pos0.7.17.0.7.17.0.7.17) ==0.7.17.0.7.17.0.7.17;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.16";
+window.gui.version = "0.7.17";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
