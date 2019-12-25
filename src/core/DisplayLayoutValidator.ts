@@ -569,8 +569,7 @@ class UIValidator extends PIXI.utils.EventEmitter {
         this.invalidatePropertiesQueue.removeAll();
         this.invalidateDisplayListQueue.removeAll();
         this.invalidateSizeQueue.removeAll();
-        this.listenersAttached = false;
-
+        this.doPhasedInstantiation();
     }
 
 }
