@@ -938,7 +938,7 @@ declare module 'event/TweenEvent' {
 	};
 
 }
-declare module 'tween/tween' {
+declare module 'tween/Tween' {
 	/// <reference types="pixi.js" />
 	import { add, get, getAll, remove, removeAll, removeDisplay, update } from 'tween/private/core';
 	/**
@@ -968,15 +968,7 @@ declare module 'tween/tween' {
 	        repeat: string;
 	        reverse: string;
 	        pause: string;
-	        play: string; /**
-	         * 缓动动画
-	         *
-	         * @example let tween = new gui.Tween(myObject).to({width:'300px'}, 2000).start()
-	         *
-	         * @namespace gui
-	         *
-	         * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
-	         */
+	        play: string;
 	        restart: string;
 	        stop: string;
 	    };
@@ -1035,6 +1027,7 @@ declare module 'tween/tween' {
 	    data: {
 	        [key: string]: TAny;
 	    };
+	    setObject(object: TAny): void;
 	    /**
 	     * 是否在播放中
 	     * @return {boolean}
@@ -1185,7 +1178,7 @@ declare module 'tween/tween' {
 
 }
 declare module 'tween/private/core' {
-	import { Tween } from 'tween/tween';
+	import { Tween } from 'tween/Tween';
 	/**
 	 * 插件存储器
 	 * @namespace tween.Plugins
@@ -3692,10 +3685,6 @@ interface ArrayConstructor {
 }
 interface String {
     startsWith(searchString: string, position?: number): boolean;
-}
-interface IInputBase {
-    blur?: Function;
-    focus?: Function;
 }
 interface TInputBase {
     blur?: Function;

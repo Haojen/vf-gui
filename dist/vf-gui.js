@@ -10019,6 +10019,10 @@ var Tween = /** @class */ (function (_super) {
     Tween.from = function (object, from, duration) {
         return Tween.fromTo(object, from, duration);
     };
+    Tween.prototype.setObject = function (object) {
+        this.object = object;
+        this._valuesStart = Array.isArray(object) ? [] : {};
+    };
     Object.defineProperty(Tween.prototype, "isPlaying", {
         /**
          * 是否在播放中
@@ -10385,6 +10389,7 @@ var Tween = /** @class */ (function (_super) {
         return true;
     };
     Tween.prototype.release = function () {
+        this.object = undefined;
         this.stop();
     };
     Tween.core = { add: core_1.add, get: core_1.get, getAll: core_1.getAll, remove: core_1.remove, removeAll: core_1.removeAll, removeDisplay: core_1.removeDisplay, update: core_1.update };

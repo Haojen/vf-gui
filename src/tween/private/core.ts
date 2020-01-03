@@ -1,4 +1,4 @@
-import { Tween } from "../tween";
+import { Tween } from "../Tween";
 
 /**
  * 缓动列表
