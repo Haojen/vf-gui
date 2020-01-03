@@ -10384,6 +10384,9 @@ var Tween = /** @class */ (function (_super) {
         }
         return true;
     };
+    Tween.prototype.release = function () {
+        this.stop();
+    };
     Tween.core = { add: core_1.add, get: core_1.get, getAll: core_1.getAll, remove: core_1.remove, removeAll: core_1.removeAll, removeDisplay: core_1.removeDisplay, update: core_1.update };
     Tween.Event = TweenEvent_1.TweenEvent;
     return Tween;
@@ -11573,10 +11576,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos0.7.18.0.7.18.0.7.18) ==0.7.18.0.7.18.0.7.18;
+//     return this.lastIndexOf(word, pos1.0.0.1.0.0.1.0.0) ==1.0.0.1.0.0.1.0.0;
 // });
 window.gui = vfgui;
-window.gui.version = "0.7.18";
+window.gui.version = "1.0.0";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
