@@ -17,12 +17,13 @@ export default class TestTween2 {
         basicText.isClick = true;
         uiStage.addChild(basicText);
 
-        let tween = new gui.Tween(basicText).to({rotation:0,scaleX:0.1,scaleY:0.1},7000)
+        const tween = new gui.Tween();
+        tween.setObject(basicText);
+        tween.to({rotation:0,scaleX:0.1,scaleY:0.1},7000)
             .repeat(Infinity)
             .easing(gui.Easing.Linear.None)
             .yoyo(true)
             .start().delay(2000);
-        
 
         basicText.on('click',()=>{
             if(tween.isPlaying)

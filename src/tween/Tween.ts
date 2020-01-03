@@ -94,6 +94,12 @@ export class Tween extends PIXI.utils.EventEmitter {
     /** 附加数据 */
     public data: { [key: string]: TAny } = {};
 
+
+    public setObject(object: TAny){
+        this.object = object;
+        this._valuesStart = Array.isArray(object) ? [] : {};
+    }
+    
     /**
      * 是否在播放中
      * @return {boolean} 
@@ -509,6 +515,7 @@ export class Tween extends PIXI.utils.EventEmitter {
     }
 
     public release() {
+        this.object = undefined;
         this.stop();
     }
 }
