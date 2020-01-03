@@ -6,8 +6,6 @@ import { decompose, recompose, FRAME_MS, TOO_LONG_FRAME_MS } from './private/con
 import { TweenEvent } from '../event/TweenEvent';
 
 const defaultEasing = Easing.Linear.None;
-
-
 /**
  * 缓动动画
  * 
