@@ -1,8 +1,8 @@
 import { deepCopy, uid } from "../utils/Utils";
-import {Easing} from './Easing';
-import {Interpolation} from "./private/Interpolation";
-import { add, get,getAll, remove,removeAll,removeDisplay,update, isRunning, isLagSmoothing } from './private/core';
-import { decompose,recompose,FRAME_MS,TOO_LONG_FRAME_MS } from './private/constants';
+import { Easing } from './Easing';
+import { Interpolation } from "./private/Interpolation";
+import { add, get, getAll, remove, removeAll, removeDisplay, update, isRunning, isLagSmoothing } from './private/core';
+import { decompose, recompose, FRAME_MS, TOO_LONG_FRAME_MS } from './private/constants';
 import { TweenEvent } from '../event/TweenEvent';
 
 const defaultEasing = Easing.Linear.None;
@@ -19,7 +19,7 @@ const defaultEasing = Easing.Linear.None;
  */
 export class Tween extends PIXI.utils.EventEmitter {
 
-    static core = {add,get,getAll,remove,removeAll,removeDisplay,update};
+    static core = { add, get, getAll, remove, removeAll, removeDisplay, update };
     static Event = TweenEvent;
     /**
      * Easier way to call the Tween
@@ -506,5 +506,9 @@ export class Tween extends PIXI.utils.EventEmitter {
         }
 
         return true;
+    }
+
+    public release() {
+        this.stop();
     }
 }

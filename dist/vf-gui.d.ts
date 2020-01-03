@@ -968,7 +968,15 @@ declare module 'tween/tween' {
 	        repeat: string;
 	        reverse: string;
 	        pause: string;
-	        play: string;
+	        play: string; /**
+	         * 缓动动画
+	         *
+	         * @example let tween = new gui.Tween(myObject).to({width:'300px'}, 2000).start()
+	         *
+	         * @namespace gui
+	         *
+	         * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
+	         */
 	        restart: string;
 	        stop: string;
 	    };
@@ -1172,6 +1180,7 @@ declare module 'tween/tween' {
 	     * @memberof gui.Tween
 	     */
 	    update(elapsedMS: number, preserve?: boolean, forceTime?: boolean): boolean;
+	    release(): void;
 	}
 
 }
@@ -3683,6 +3692,10 @@ interface ArrayConstructor {
 }
 interface String {
     startsWith(searchString: string, position?: number): boolean;
+}
+interface IInputBase {
+    blur?: Function;
+    focus?: Function;
 }
 interface TInputBase {
     blur?: Function;

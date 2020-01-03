@@ -13,6 +13,18 @@
 const {execSync } = require('child_process');
 const fs = require("fs");
 const packageData = require('./package.json');
+const version = `
+/*
+ * vfgui - v${packageData.version}
+ * Compiled ${new Date()}
+ */
+`;
+
+
+let content = fs.readFileSync("./src/vf-gui.ts","utf8");
+const versionRegExp = /\d+(\.\d+){0,3}/g;
+content = content.replace(versionRegExp,packageData.version);
+fs.writeFileSync("./src/vf-gui.ts",content);
 
 let buildOut =  execSync("npm run build",{encoding:"utf8"});
 console.log(buildOut);
@@ -29,18 +41,7 @@ declare namespace gui{
 `;
 fs.writeFileSync("./dist/vf-gui.d.ts",dtsFile);
 
-let content = fs.readFileSync("./src/vf-gui.ts","utf8");
-const versionRegExp = /\d+(\.\d+){0,3}/g;
-content = content.replace(versionRegExp,packageData.version);
-fs.writeFileSync("./src/vf-gui.ts",content);
 
-
-const version = `
-/*
- * vf - v${packageData.version}
- * Compiled ${new Date()}
- */
-`;
 const pixiLegacy = fs.readFileSync('./node_modules/pixi.js-legacy/dist/pixi-legacy.min.js',"utf8");
 const pixiSound = fs.readFileSync('./node_modules/pixi-sound/dist/pixi-sound.js',"utf8");
 const vfgui = fs.readFileSync('./dist/vf-gui.min.js',"utf8");

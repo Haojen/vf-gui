@@ -35,7 +35,11 @@ export function getTexture(src: TAny){
     if(src instanceof PIXI.Texture){
         return src;
     }
-    if(src === ''){
+    if (src == null) {
+        src = undefined;
+        return src;
+    }
+    if(src == null){
         src = undefined;
         return src;
     }
