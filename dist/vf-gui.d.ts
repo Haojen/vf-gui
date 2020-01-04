@@ -3226,8 +3226,8 @@ declare module 'display/Rect' {
 	    /**
 	     * 颜色
 	     */
-	    private _color;
-	    color: number;
+	    private _color?;
+	    color: number | undefined;
 	    /**
 	     * 锚点，调整位图的坐标中点 0-1
 	     */

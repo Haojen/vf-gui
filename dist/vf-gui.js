@@ -4265,10 +4265,6 @@ var Rect = /** @class */ (function (_super) {
          * 线条粗细
          */
         _this._lineWidth = 0;
-        /**
-         * 颜色
-         */
-        _this._color = 0;
         _this.graphics = new PIXI.Graphics();
         _this.container.addChild(_this.graphics);
         return _this;
@@ -4347,7 +4343,8 @@ var Rect = /** @class */ (function (_super) {
         var graphics = this.graphics;
         graphics.clear();
         graphics.lineStyle(this._lineWidth, this._lineColor);
-        graphics.beginFill(this._color);
+        if (this._color !== undefined)
+            graphics.beginFill(this._color);
         graphics.drawRoundedRect(this._anchorX ? -this._anchorX * this.width : 0, this._anchorY ? -this._anchorY * this.height : 0, this.width, this.height, this._radius);
         graphics.endFill();
     };
@@ -11581,10 +11578,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.0.0.1.0.0.1.0.0) ==1.0.0.1.0.0.1.0.0;
+//     return this.lastIndexOf(word, pos1.0.1.1.0.1.1.0.1) ==1.0.1.1.0.1.1.0.1;
 // });
 window.gui = vfgui;
-window.gui.version = "1.0.0";
+window.gui.version = "1.0.1";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
