@@ -38,6 +38,17 @@ export class InputBase extends DisplayObject{
     protected _useNext = true;
     protected _down = false;
 
+    private _clickSound?: string;
+    public get clickSound() {
+        return this._clickSound;
+    }
+    public set clickSound(value) {
+        if(this._clickSound === value){
+            return;
+        }
+        this._clickSound = value;
+    }
+
     /** 
      * 状态皮肤，
      */
@@ -78,11 +89,13 @@ export class InputBase extends DisplayObject{
         }
         this.currentState = "move";
     }
+    
     //e: InteractionEvent,thisObj: DisplayObject,over: boolean
     protected onHover(){
         this.currentState = "up";
        
     }
+
     protected onPress(e: InteractionEvent,thisObj: DisplayObject,isPress: boolean){
         this._down = isPress;  
         if(isPress){
@@ -93,8 +106,12 @@ export class InputBase extends DisplayObject{
         }
             
     }
+
     protected onClick(){
-        //this.currentState = "up";
+        if(this._clickSound){
+            this.emit(ComponentEvent.PLAY_AUDIO, {name:this._clickSound,mode:'effect'});
+            console.log("aaa");
+        }
     }
 
     protected keyDownEvent (event: WheelEvent|Event) {

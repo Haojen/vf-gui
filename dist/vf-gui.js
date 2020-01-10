@@ -6478,6 +6478,19 @@ var InputBase = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(InputBase.prototype, "clickSound", {
+        get: function () {
+            return this._clickSound;
+        },
+        set: function (value) {
+            if (this._clickSound === value) {
+                return;
+            }
+            this._clickSound = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     InputBase.prototype.onMove = function () {
         if (this._down) {
             return;
@@ -6499,7 +6512,10 @@ var InputBase = /** @class */ (function (_super) {
         }
     };
     InputBase.prototype.onClick = function () {
-        //this.currentState = "up";
+        if (this._clickSound) {
+            this.emit(Index_1.ComponentEvent.PLAY_AUDIO, { name: this._clickSound, mode: 'effect' });
+            console.log("aaa");
+        }
     };
     InputBase.prototype.keyDownEvent = function (event) {
         var e = event;
@@ -6718,6 +6734,10 @@ exports.DRAG_TARGET = "DRAG_TARGET";
  * 有拖拽物掉落到此容器时触发
  */
 exports.DROP_TARGET = "DROP_TARGET";
+/**
+ * 播放音效 {name,mode}
+ */
+exports.PLAY_AUDIO = "PLAY_AUDIO";
 
 
 /***/ }),
@@ -11578,10 +11598,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.0.1.1.0.1.1.0.1) ==1.0.1.1.0.1.1.0.1;
+//     return this.lastIndexOf(word, pos1.0.2.1.0.2.1.0.2) ==1.0.2.1.0.2.1.0.2;
 // });
 window.gui = vfgui;
-window.gui.version = "1.0.1";
+window.gui.version = "1.0.2";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

@@ -17,6 +17,7 @@ export default class TestButton {
         button1.up = "assets/skin/Button/button_up.png";
         button1.down = "assets/skin/Button/button_down.png";
         button1.move = "assets/skin/Button/button_move.png";
+        //button1.clickSound = "aaaa"; 绑定音效，只可以vf使用，绑定json资源id
 
         button1.on(gui.Interaction.TouchMouseEvent.onClick, this.onClick, this);
         button1.on(gui.Interaction.TouchMouseEvent.onPress, this.onPress, this);

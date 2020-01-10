@@ -103,3 +103,8 @@ export const DRAG_TARGET = "DRAG_TARGET";
  */
 export const DROP_TARGET = "DROP_TARGET";
 
+/**
+ * 播放音效 {name,mode}
+ */
+export const PLAY_AUDIO = "PLAY_AUDIO";
+

@@ -405,6 +405,8 @@ declare module 'display/private/InputBase' {
 	    protected _usePrev: boolean;
 	    protected _useNext: boolean;
 	    protected _down: boolean;
+	    private _clickSound?;
+	    clickSound: string | undefined;
 	    /**
 	     * 状态皮肤，
 	     */
@@ -734,6 +736,10 @@ declare module 'event/ComponentEvent' {
 	 * 有拖拽物掉落到此容器时触发
 	 */
 	export const DROP_TARGET = "DROP_TARGET";
+	/**
+	 * 播放音效 {name,mode}
+	 */
+	export const PLAY_AUDIO = "PLAY_AUDIO";
 
 }
 declare module 'interaction/GroupController' {
