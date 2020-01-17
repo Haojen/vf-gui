@@ -30,7 +30,7 @@ export default class TestRect {
         //rect1.color = undefined;
         rect1.lineColor = 0xff00cc;
         rect1.lineWidth = 1;
-        rect1.radius = 360; //圆角
+        rect1.radius = 40; //圆角，最大值为 width/2
         uiStage.addChild(rect1);
 
 
