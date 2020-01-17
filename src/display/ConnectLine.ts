@@ -1,6 +1,6 @@
 import { DisplayObject } from "../core/DisplayObject";
 import { ComponentEvent } from "../interaction/Index";
-import { pointPlus, pointDistance } from "../utils/Utils";
+import { pointPlus, pointDistance, getDisplayObject } from "../utils/Utils";
 import { Tween } from "../tween/Tween";
 
 type LinePostion = 'leftTop' | 'centerTop' | 'rightTop' |
@@ -71,10 +71,10 @@ export class ConnectLine extends DisplayObject {
         return this._source;
     }
     public set source(value) {
-        if (this._source === value) {
+        if (this._source === getDisplayObject(value)) {
             return;
-        }
-        this._source = value;
+        }      
+        this._source = getDisplayObject(value);
         this.invalidateDisplayList();
     }
 
@@ -101,10 +101,10 @@ export class ConnectLine extends DisplayObject {
         return this._target;
     }
     public set target(value) {
-        if (this._target === value) {
+        if (this._target === getDisplayObject(value)) {
             return;
         }
-        this._target = value;
+        this._target = getDisplayObject(value);
         this.invalidateDisplayList();
     }
 
@@ -288,6 +288,8 @@ export class ConnectLine extends DisplayObject {
 
     public release() {
         super.release();
+        this._source = undefined;
+        this._target = undefined;
         const line = this.line;
         line.clear();
         if (line.parent) {
