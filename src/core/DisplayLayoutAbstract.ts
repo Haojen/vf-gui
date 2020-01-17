@@ -149,7 +149,7 @@ export class DisplayLayoutAbstract extends DisplayObjectAbstract {
      * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
      */
     protected commitProperties(): void {
-
+        //
     }
     /**
      * @private
@@ -396,7 +396,7 @@ export class DisplayLayoutAbstract extends DisplayObjectAbstract {
      * 更新显示列表,子类重写，实现布局
      */
     protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void {
-
+        //
     }
 
     /**

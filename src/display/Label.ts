@@ -7,13 +7,15 @@ import * as UIKeys from "../core/DisplayLayoutKeys";
  * 
  * 中文换行特殊处理 xxxx.style.breakWords = true;
  * 
- * 文本没有宽高，自适应
+ * 当文本容器设置宽高后，文字默认会根据文本容器宽高居中.
+ * 
+ * 当文本容器设置宽高后，可通过 style.textAlign 进行文字位置调整
  * 
  * @example let label = new gui.Label();
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestLabel
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestLabel
  */
 export class Label extends DisplayObject {
 

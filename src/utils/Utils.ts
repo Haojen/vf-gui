@@ -15,7 +15,7 @@ export function log(message?: string | number | object, ...optionalParams: strin
  * 组件获取资源 - 源路径,外部可以重写本方法
  */
 export let $getSourcePath: Function;
-export function setSourcePath(params: (path: TAny,cls?: TAny) => {}) {
+export function setSourcePath(params: (path: TAny, cls?: TAny) => {}) {
     $getSourcePath = params;
 }
 
@@ -23,49 +23,49 @@ export function setSourcePath(params: (path: TAny,cls?: TAny) => {}) {
  * 根据显示路径，获取显示对象
  */
 export let $getUIDisplayObjectPath: Function;
-export function setDisplayObjectPath(params: (cls?: TAny,target?: DisplayObject) => {}) {
+export function setDisplayObjectPath(params: (cls?: TAny, target?: DisplayObject) => {}) {
     $getUIDisplayObjectPath = params;
 }
 
 
-export function getTexture(src: TAny){
-    if($getSourcePath){
+export function getTexture(src: TAny) {
+    if ($getSourcePath) {
         src = $getSourcePath(src);
     }
-    if(src instanceof PIXI.Texture){
+    if (src instanceof PIXI.Texture) {
         return src;
     }
     if (src == null) {
         src = undefined;
         return src;
     }
-    if(src == null){
+    if (src == null) {
         src = undefined;
         return src;
     }
     return PIXI.Texture.from(src);
 }
 
-export function getSheet(src: TAny){
-    if($getSourcePath){
+export function getSheet(src: TAny) {
+    if ($getSourcePath) {
         src = $getSourcePath(src);
     }
     return src;
 }
 
-export function getSound(src: TAny){
-    if($getSourcePath){
+export function getSound(src: TAny) {
+    if ($getSourcePath) {
         src = $getSourcePath(src);
     }
-    if(src instanceof PIXI.sound.Sound){
+    if (src instanceof PIXI.sound.Sound) {
         return src;
     }
     return PIXI.sound.Sound.from(src);
 }
 
-export function getDisplayObject(src: TAny,target?: DisplayObject){
-    if($getUIDisplayObjectPath){
-        src = $getUIDisplayObjectPath(src,target);
+export function getDisplayObject(src: TAny, target?: DisplayObject) {
+    if ($getUIDisplayObjectPath) {
+        src = $getUIDisplayObjectPath(src, target);
     }
     return src;
 }
@@ -74,14 +74,14 @@ export function getDisplayObject(src: TAny,target?: DisplayObject){
  * 递归获取舞台，组件必须已经添加到舞台
  * @param DisplayObject 
  */
-export function  getStage(target: DisplayObject|DisplayObjectAbstract|Stage): Stage|undefined{
-    if(target.$stage){
+export function getStage(target: DisplayObject | DisplayObjectAbstract | Stage): Stage | undefined {
+    if (target.$stage) {
         return target.$stage;
     }
-    if(target.parent instanceof Stage){
+    if (target.parent instanceof Stage) {
         return target.parent;
     }
-    if(target.parent){
+    if (target.parent) {
         return getStage(target.parent);
     }
     return undefined;
@@ -119,7 +119,7 @@ export function now() {
  * 深度拷贝对象
  * @param source 对象元
  */
-export function deepCopy(source: TAny,target?: TAny) {
+export function deepCopy(source: TAny, target?: TAny) {
     if (source === undefined || typeof source !== 'object') {
         return source;
     } else if (Array.isArray(source)) {
@@ -127,7 +127,7 @@ export function deepCopy(source: TAny,target?: TAny) {
     } else if (typeof source === 'object') {
         const tempTarget: { [key: string]: TAny } = target || {};
         for (const prop in source) {
-            tempTarget[prop] = deepCopy(source[prop],tempTarget[prop]);
+            tempTarget[prop] = deepCopy(source[prop], tempTarget[prop]);
         }
         return tempTarget;
     }
@@ -168,7 +168,7 @@ export function hexToRgba(hex: string, alpha: number) {
  */
 export function componentToHex(c: number) {
     const hex = c.toString(16);
-    if(hex.length ==4){
+    if (hex.length == 4) {
         return "00" + hex;
     }
     return hex.length == 1 ? "0" + hex : hex;
@@ -284,15 +284,15 @@ export function getQueryVariable(variable: string) {
  * 解析一个字符串函数的参数，如xxx(1) = 1
  * @param
  */
-export function getStringFunctionParam(str: string){
-    const target: {key: string;value: number} = {} as TAny;
-    target.key = str.substr(0,str.indexOf("("));
-    const value = str.substr(str.indexOf("(")+1);
-    target.value = parseFloat(value.substr(0,value.lastIndexOf(")")));
+export function getStringFunctionParam(str: string) {
+    const target: { key: string; value: number } = {} as TAny;
+    target.key = str.substr(0, str.indexOf("("));
+    const value = str.substr(str.indexOf("(") + 1);
+    target.value = parseFloat(value.substr(0, value.lastIndexOf(")")));
     return target
 }
 
-export function  isDeltaIdentity(m: PIXI.Matrix): boolean {
+export function isDeltaIdentity(m: PIXI.Matrix): boolean {
     return (m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1);
 }
 
@@ -318,20 +318,27 @@ export function formatRelative(value: number | string | undefined, total: number
 }
 
 /** 计算两点距离 */
-export function pointDistance(pointA:PIXI.Point|{x:number,y:number}, pointB:PIXI.Point|{x:number,y:number}){
-    return  Math.sqrt((pointA.x- pointB.x)*(pointA.x - pointB.x) +(pointA.y - pointB.y)*(pointA.y - pointB.y));
+export function pointDistance(pointA: PIXI.Point | { x: number; y: number }, pointB: PIXI.Point | { x: number; y: number }) {
+    return Math.sqrt((pointA.x - pointB.x) * (pointA.x - pointB.x) + (pointA.y - pointB.y) * (pointA.y - pointB.y));
 }
 
 /** 坐标相减 */
-export function pointSub(source:PIXI.Point|{x:number,y:number}, subPoint:PIXI.Point|{x:number,y:number}){
-    let x = source.x - subPoint.x;
-    let y = source.y - subPoint.y;
-    return {x,y};
+export function pointSub(source: PIXI.Point | { x: number; y: number }, subPoint: PIXI.Point | { x: number; y: number }) {
+    const x = source.x - subPoint.x;
+    const y = source.y - subPoint.y;
+    return { x, y };
+}
+
+/** 坐标相加 */
+export function pointPlus(source: PIXI.Point | { x: number; y: number }, PlusPoint: PIXI.Point | { x: number; y: number }) {
+    const x = source.x + PlusPoint.x;
+    const y = source.y + PlusPoint.y;
+    return { x, y };
 }
 
 /** 向量转弧度 */
-export function pointSignAngle(pointA:PIXI.Point|{x:number,y:number}, pointB:PIXI.Point|{x:number,y:number}){
-    let num1 = (pointA.x * pointB.y) - (pointB.x * pointA.y);
-    let num2 = (pointA.x * pointB.x) + (pointA.y * pointB.y);
-    return  Math.atan2(num1, num2) * ( 360 / (Math.PI * 2));
+export function pointSignAngle(pointA: PIXI.Point | { x: number; y: number }, pointB: PIXI.Point | { x: number; y: number }) {
+    const num1 = (pointA.x * pointB.y) - (pointB.x * pointA.y);
+    const num2 = (pointA.x * pointB.x) + (pointA.y * pointB.y);
+    return Math.atan2(num1, num2) * (360 / (Math.PI * 2));
 }

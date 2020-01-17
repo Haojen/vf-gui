@@ -9,7 +9,7 @@ import {DisplayObject} from "../core/DisplayObject";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestContainer
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestContainer
  */
 export class Container extends DisplayObject{
     public constructor(){

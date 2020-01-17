@@ -8,7 +8,7 @@ import {MaskSprite} from "../core/MaskSprite";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
  */
 export class Rect extends DisplayObject implements MaskSprite{
     public constructor(){
@@ -60,7 +60,7 @@ export class Rect extends DisplayObject implements MaskSprite{
     /** 
      * 颜色 
      */
-    private _color = 0;
+    private _color?: number;
     public get color() {
         return this._color;
     }
@@ -95,7 +95,8 @@ export class Rect extends DisplayObject implements MaskSprite{
         const graphics = this.graphics;
         graphics.clear();
         graphics.lineStyle(this._lineWidth,this._lineColor);
-        graphics.beginFill(this._color);   
+        if(this._color !== undefined)
+            graphics.beginFill(this._color);   
         
         graphics.drawRoundedRect(this._anchorX?-this._anchorX*this.width:0,this._anchorY?-this._anchorY*this.height:0,this.width, this.height,this._radius);
         graphics.endFill();

@@ -118,7 +118,7 @@ exports.TickerShared = Ticker_1.shared;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestContainer
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestContainer
  */
 var Container_1 = __webpack_require__(/*! ./display/Container */ "./src/display/Container.ts");
 exports.Container = Container_1.Container;
@@ -129,7 +129,7 @@ exports.Container = Container_1.Container;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestRect
  */
 var ScrollingContainer_1 = __webpack_require__(/*! ./display/ScrollingContainer */ "./src/display/ScrollingContainer.ts");
 exports.ScrollingContainer = ScrollingContainer_1.ScrollingContainer;
@@ -140,7 +140,7 @@ exports.ScrollingContainer = ScrollingContainer_1.ScrollingContainer;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestImage
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestImage
  */
 var Image_1 = __webpack_require__(/*! ./display/Image */ "./src/display/Image.ts");
 exports.Image = Image_1.Image;
@@ -153,7 +153,7 @@ exports.Image = Image_1.Image;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSpriteAnimated
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSpriteAnimated
  */
 var SpriteAnimated_1 = __webpack_require__(/*! ./display/SpriteAnimated */ "./src/display/SpriteAnimated.ts");
 exports.SpriteAnimated = SpriteAnimated_1.SpriteAnimated;
@@ -168,7 +168,7 @@ exports.SpriteAnimated = SpriteAnimated_1.SpriteAnimated;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestLabel
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestLabel
  */
 var Label_1 = __webpack_require__(/*! ./display/Label */ "./src/display/Label.ts");
 exports.Label = Label_1.Label;
@@ -179,7 +179,7 @@ exports.Label = Label_1.Label;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTextInput
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTextInput
  */
 var TextInput_1 = __webpack_require__(/*! ./display/TextInput */ "./src/display/TextInput.ts");
 exports.TextInput = TextInput_1.TextInput;
@@ -190,7 +190,7 @@ exports.TextInput = TextInput_1.TextInput;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSlider
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSlider
  */
 var Slider_1 = __webpack_require__(/*! ./display/Slider */ "./src/display/Slider.ts");
 exports.Slider = Slider_1.Slider;
@@ -201,7 +201,7 @@ exports.Slider = Slider_1.Slider;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestButton
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestButton
  */
 var Button_1 = __webpack_require__(/*! ./display/Button */ "./src/display/Button.ts");
 exports.Button = Button_1.Button;
@@ -214,7 +214,7 @@ exports.Button = Button_1.Button;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestCheckBox
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestCheckBox
  */
 var CheckBox_1 = __webpack_require__(/*! ./display/CheckBox */ "./src/display/CheckBox.ts");
 exports.CheckBox = CheckBox_1.CheckBox;
@@ -225,7 +225,7 @@ exports.CheckBox = CheckBox_1.CheckBox;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestRect
  */
 var Rect_1 = __webpack_require__(/*! ./display/Rect */ "./src/display/Rect.ts");
 exports.Rect = Rect_1.Rect;
@@ -236,7 +236,7 @@ exports.Rect = Rect_1.Rect;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
  */
 var Graphics_1 = __webpack_require__(/*! ./display/Graphics */ "./src/display/Graphics.ts");
 exports.Graphics = Graphics_1.Graphics;
@@ -247,10 +247,22 @@ exports.Graphics = Graphics_1.Graphics;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
  */
 var FollowLine_1 = __webpack_require__(/*! ./display/FollowLine */ "./src/display/FollowLine.ts");
 exports.FollowLine = FollowLine_1.FollowLine;
+/**
+ * 连线组件
+ *
+ *
+ * @example let connectLine = new gui.ConnectLine();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestConnectLine
+ */
+var ConnectLine_1 = __webpack_require__(/*! ./display/ConnectLine */ "./src/display/ConnectLine.ts");
+exports.ConnectLine = ConnectLine_1.ConnectLine;
 /**
  * 音频播放组件
  *
@@ -258,7 +270,7 @@ exports.FollowLine = FollowLine_1.FollowLine;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSound
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSound
  */
 var Sound_1 = __webpack_require__(/*! ./display/Sound */ "./src/display/Sound.ts");
 exports.Sound = Sound_1.Sound;
@@ -269,7 +281,7 @@ exports.Sound = Sound_1.Sound;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTween
  */
 var Easing_1 = __webpack_require__(/*! ./tween/Easing */ "./src/tween/Easing.ts");
 exports.Easing = Easing_1.Easing;
@@ -280,7 +292,7 @@ exports.Easing = Easing_1.Easing;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTween
  */
 var Tween_1 = __webpack_require__(/*! ./tween/Tween */ "./src/tween/Tween.ts");
 exports.Tween = Tween_1.Tween;
@@ -291,7 +303,7 @@ exports.Tween = Tween_1.Tween;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
  */
 var Timeline_1 = __webpack_require__(/*! ./tween/Timeline */ "./src/tween/Timeline.ts");
 exports.Timeline = Timeline_1.Timeline;
@@ -525,6 +537,7 @@ var DisplayLayoutAbstract = /** @class */ (function (_super) {
      * 提交属性，子类在调用完invalidateProperties()方法后，应覆盖此方法以应用属性
      */
     DisplayLayoutAbstract.prototype.commitProperties = function () {
+        //
     };
     /**
      * @private
@@ -752,6 +765,7 @@ var DisplayLayoutAbstract = /** @class */ (function (_super) {
      * 更新显示列表,子类重写，实现布局
      */
     DisplayLayoutAbstract.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+        //
     };
     /**
      * @private
@@ -2677,7 +2691,7 @@ var Utils_1 = __webpack_require__(/*! ../../utils/Utils */ "./src/utils/Utils.ts
 /**
  *  组件的拖拽操作
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestDrop
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestDrop
  */
 var UIBaseDrag = /** @class */ (function () {
     /**
@@ -3061,7 +3075,7 @@ var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestButton
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestButton
  */
 var Button = /** @class */ (function (_super) {
     __extends(Button, _super);
@@ -3166,7 +3180,7 @@ var Button_1 = __webpack_require__(/*! ./Button */ "./src/display/Button.ts");
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestCheckBox
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestCheckBox
  */
 var CheckBox = /** @class */ (function (_super) {
     __extends(CheckBox, _super);
@@ -3275,6 +3289,342 @@ exports.CheckBox = CheckBox;
 
 /***/ }),
 
+/***/ "./src/display/ConnectLine.ts":
+/*!************************************!*\
+  !*** ./src/display/ConnectLine.ts ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction/Index.ts");
+var Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./src/utils/Utils.ts");
+var Tween_1 = __webpack_require__(/*! ../tween/Tween */ "./src/tween/Tween.ts");
+exports.play = Symbol("play");
+/**
+ * 连线组件
+ *
+ *
+ * @example let connectLine = new gui.ConnectLine();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestConnectLine
+ */
+var ConnectLine = /** @class */ (function (_super) {
+    __extends(ConnectLine, _super);
+    function ConnectLine() {
+        var _this = _super.call(this) || this;
+        _this._lastStartPos = { x: NaN, y: NaN };
+        _this._lastEndPos = { x: NaN, y: NaN };
+        _this._play = 1;
+        _this._autoPlay = true;
+        _this._sourcePostion = [0, 0];
+        _this._targetPostion = [0, 0];
+        /**
+         * 线条颜色
+         */
+        _this._lineColor = 0;
+        /**
+         * 线条粗细
+         */
+        _this._lineWidth = 1;
+        _this._isAnimation = false;
+        _this.line = new PIXI.Graphics();
+        _this.container.addChild(_this.line);
+        return _this;
+    }
+    Object.defineProperty(ConnectLine.prototype, "play", {
+        /**
+         *  触发画线操作
+         *
+         *  属性 play = 1 触发画线，线条从source->target.
+         *  属性 play = 2 触发画线，线条从target->source.
+         */
+        get: function () {
+            return this._play;
+        },
+        set: function (value) {
+            this.$values[exports.play] = true;
+            this._play = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ConnectLine.prototype, "autoPlay", {
+        /**
+         *  默认 autoPlay = true
+         *
+         *  autoPlay = true时，组件在设置source,target,sourcePostion,targetPostion后自动触发画线，线条从source->target.
+         *
+         *  autoPlay = false时，设置source,target,sourcePostion,targetPostion后不会触发画线，需调用 play.
+         */
+        get: function () {
+            return this._autoPlay;
+        },
+        set: function (value) {
+            this._autoPlay = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ConnectLine.prototype, "source", {
+        /**
+         * 设置源显示对象
+         */
+        get: function () {
+            return this._source;
+        },
+        set: function (value) {
+            if (this._source === value) {
+                return;
+            }
+            this._source = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ConnectLine.prototype, "sourcePostion", {
+        /**
+         * 设置源显示对象位置
+         */
+        get: function () {
+            return this._sourcePostion;
+        },
+        set: function (value) {
+            if (this._sourcePostion === value) {
+                return;
+            }
+            this._sourcePostion = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ConnectLine.prototype, "target", {
+        /**
+         * 设置目标显示对象
+         */
+        get: function () {
+            return this._target;
+        },
+        set: function (value) {
+            if (this._target === value) {
+                return;
+            }
+            this._target = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ConnectLine.prototype, "targetPostion", {
+        /**
+         * 设置目标显示对象位置
+         */
+        get: function () {
+            return this._targetPostion;
+        },
+        set: function (value) {
+            if (this._targetPostion === value) {
+                return;
+            }
+            this._targetPostion = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ConnectLine.prototype, "lineColor", {
+        get: function () {
+            return this._lineColor;
+        },
+        set: function (value) {
+            if (this._lineColor === value) {
+                return;
+            }
+            this._lineColor = value;
+            this.invalidateProperties();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ConnectLine.prototype, "lineWidth", {
+        get: function () {
+            return this._lineWidth;
+        },
+        set: function (value) {
+            if (this._lineWidth === value) {
+                return;
+            }
+            this._lineWidth = value;
+            this.invalidateProperties();
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ConnectLine.prototype, "isAnimation", {
+        /**
+         * 线条位置改变时，是否有动画
+         */
+        get: function () {
+            return this._isAnimation;
+        },
+        set: function (value) {
+            if (this._isAnimation === value) {
+                return;
+            }
+            this._isAnimation = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ConnectLine.prototype.commitProperties = function () {
+        this.line.lineStyle(this.lineWidth, this.lineColor, this.alpha);
+    };
+    ConnectLine.prototype.getLocalPos = function (_linePostion, display) {
+        var pos = { x: 0, y: 0 };
+        if (display) {
+            var startPos = this.container.parent.toLocal(display.container.position, display.container.parent);
+            switch (_linePostion) {
+                case 'leftTop':
+                    pos = Utils_1.pointPlus(startPos, { x: 0, y: 0 });
+                    break;
+                case 'leftCenter':
+                    pos = Utils_1.pointPlus(startPos, { x: 0, y: display.height >> 1 });
+                    break;
+                case 'leftBottom':
+                    pos = Utils_1.pointPlus(startPos, { x: 0, y: display.height });
+                    break;
+                case 'centerTop':
+                    pos = Utils_1.pointPlus(startPos, { x: display.width >> 1, y: 0 });
+                    break;
+                case 'center':
+                    pos = Utils_1.pointPlus(startPos, { x: display.width >> 1, y: display.height >> 1 });
+                    break;
+                case 'centerBottom':
+                    pos = Utils_1.pointPlus(startPos, { x: display.width >> 1, y: display.height });
+                    break;
+                case 'rightTop':
+                    pos = Utils_1.pointPlus(startPos, { x: display.width, y: 0 });
+                    break;
+                case "rightCenter":
+                    pos = Utils_1.pointPlus(startPos, { x: display.width, y: display.height >> 1 });
+                    break;
+                case 'rightBottom':
+                    pos = Utils_1.pointPlus(startPos, { x: display.width, y: display.height });
+                    break;
+                default:
+                    pos.x = _linePostion[0];
+                    pos.y = _linePostion[1];
+            }
+        }
+        else {
+            if (Array.isArray(_linePostion)) {
+                pos.x = _linePostion[0];
+                pos.y = _linePostion[1];
+            }
+        }
+        return pos;
+    };
+    ConnectLine.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+        var _a = this, _source = _a._source, _target = _a._target, _sourcePostion = _a._sourcePostion, _targetPostion = _a._targetPostion, _lastStartPos = _a._lastStartPos, _lastEndPos = _a._lastEndPos, line = _a.line;
+        var startPos = this.getLocalPos(_sourcePostion, _source);
+        var endPos = this.getLocalPos(_targetPostion, _target);
+        if (_lastStartPos.x !== startPos.x ||
+            _lastStartPos.y !== startPos.y ||
+            _lastEndPos.x !== endPos.x ||
+            _lastEndPos.y !== endPos.y) {
+            this._lastStartPos = startPos;
+            this._lastEndPos = endPos;
+            if (this._autoPlay) {
+                this.animation();
+            }
+        }
+        if (this.$values[exports.play] === true && !this._autoPlay) {
+            this.$values[exports.play] = false;
+            this.animation();
+        }
+        //super.updateDisplayList(unscaledWidth, unscaledHeight);     
+    };
+    ConnectLine.prototype.animation = function () {
+        var yoyo = this._play;
+        var line = this.line;
+        var startPos = yoyo === 1 ? this._lastStartPos : this._lastEndPos;
+        var endPos = yoyo === 1 ? this._lastEndPos : this._lastStartPos;
+        line.removeChildren();
+        if (!this.isAnimation) {
+            line.moveTo(startPos.x, startPos.y);
+            line.lineTo(endPos.x, endPos.y);
+            this.emit(Index_1.ComponentEvent.COMPLETE, this);
+            return;
+        }
+        var distance = Utils_1.pointDistance(startPos, endPos);
+        var lastPos = { x: startPos.x, y: startPos.y };
+        var from = { dt: 0 };
+        var to = { dt: distance };
+        var tw = new Tween_1.Tween(from)
+            .to(to, 500)
+            .on(Tween_1.Tween.Event.update, function (obj) {
+            var dt = Math.ceil(obj.dt);
+            var x = (dt * (endPos.x - startPos.x)) / distance + startPos.x;
+            var y = (dt * (endPos.y - startPos.y)) / distance + startPos.y;
+            line.moveTo(lastPos.x, lastPos.y);
+            line.lineTo(x, y);
+            lastPos.x = x;
+            lastPos.y = y;
+        })
+            .once(Tween_1.Tween.Event.complete, function (obj) {
+            tw.removeAllListeners();
+            // tw.release();
+            // line.removeChildren();
+            // line.lineStyle(this.lineWidth, this.lineColor, this.alpha);
+            // line.moveTo(startPos.x,startPos.y);
+            // line.lineTo(endPos.x, endPos.y);
+            // this.emit(ComponentEvent.COMPLETE,this);
+        })
+            .start();
+    };
+    ConnectLine.prototype.claer = function () {
+        var line = this.line;
+        line.clear();
+        this.commitProperties();
+    };
+    ConnectLine.prototype.release = function () {
+        _super.prototype.release.call(this);
+        var line = this.line;
+        line.clear();
+        if (line.parent) {
+            line.parent.removeChild(line).destroy();
+        }
+        this.offAll(Index_1.ComponentEvent.CHANGE);
+    };
+    return ConnectLine;
+}(DisplayObject_1.DisplayObject));
+exports.ConnectLine = ConnectLine;
+
+
+/***/ }),
+
 /***/ "./src/display/Container.ts":
 /*!**********************************!*\
   !*** ./src/display/Container.ts ***!
@@ -3308,7 +3658,7 @@ var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/co
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestContainer
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestContainer
  */
 var Container = /** @class */ (function (_super) {
     __extends(Container, _super);
@@ -3424,7 +3774,7 @@ function getVecListFromStr(str, from, to) {
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
  */
 var FollowLine = /** @class */ (function (_super) {
     __extends(FollowLine, _super);
@@ -3847,7 +4197,7 @@ var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/co
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
  */
 var Graphics = /** @class */ (function (_super) {
     __extends(Graphics, _super);
@@ -3897,7 +4247,7 @@ var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestImage
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestImage
  */
 var Image = /** @class */ (function (_super) {
     __extends(Image, _super);
@@ -4135,13 +4485,15 @@ var UIKeys = __webpack_require__(/*! ../core/DisplayLayoutKeys */ "./src/core/Di
  *
  * 中文换行特殊处理 xxxx.style.breakWords = true;
  *
- * 文本没有宽高，自适应
+ * 当文本容器设置宽高后，文字默认会根据文本容器宽高居中.
+ *
+ * 当文本容器设置宽高后，可通过 style.textAlign 进行文字位置调整
  *
  * @example let label = new gui.Label();
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestLabel
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestLabel
  */
 var Label = /** @class */ (function (_super) {
     __extends(Label, _super);
@@ -4247,7 +4599,7 @@ var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/co
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestRect
  */
 var Rect = /** @class */ (function (_super) {
     __extends(Rect, _super);
@@ -4265,10 +4617,6 @@ var Rect = /** @class */ (function (_super) {
          * 线条粗细
          */
         _this._lineWidth = 0;
-        /**
-         * 颜色
-         */
-        _this._color = 0;
         _this.graphics = new PIXI.Graphics();
         _this.container.addChild(_this.graphics);
         return _this;
@@ -4347,7 +4695,8 @@ var Rect = /** @class */ (function (_super) {
         var graphics = this.graphics;
         graphics.clear();
         graphics.lineStyle(this._lineWidth, this._lineColor);
-        graphics.beginFill(this._color);
+        if (this._color !== undefined)
+            graphics.beginFill(this._color);
         graphics.drawRoundedRect(this._anchorX ? -this._anchorX * this.width : 0, this._anchorY ? -this._anchorY * this.height : 0, this.width, this.height, this._radius);
         graphics.endFill();
     };
@@ -4406,7 +4755,7 @@ var ContainerBase_1 = __webpack_require__(/*! ../core/ContainerBase */ "./src/co
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestRect
  */
 var ScrollingContainer = /** @class */ (function (_super) {
     __extends(ScrollingContainer, _super);
@@ -4732,7 +5081,7 @@ var Easing_1 = __webpack_require__(/*! ../tween/Easing */ "./src/tween/Easing.ts
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSlider
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSlider
  */
 var Slider = /** @class */ (function (_super) {
     __extends(Slider, _super);
@@ -5091,7 +5440,7 @@ exports.$sounds = new Map();
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSound
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSound
  */
 var Sound = /** @class */ (function (_super) {
     __extends(Sound, _super);
@@ -5447,7 +5796,7 @@ var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSpriteAnimated
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSpriteAnimated
  */
 var SpriteAnimated = /** @class */ (function (_super) {
     __extends(SpriteAnimated, _super);
@@ -5779,7 +6128,7 @@ var Index_1 = __webpack_require__(/*! ../interaction/Index */ "./src/interaction
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTextInput
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTextInput
  */
 var TextInput = /** @class */ (function (_super) {
     __extends(TextInput, _super);
@@ -6481,6 +6830,19 @@ var InputBase = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(InputBase.prototype, "clickSound", {
+        get: function () {
+            return this._clickSound;
+        },
+        set: function (value) {
+            if (this._clickSound === value) {
+                return;
+            }
+            this._clickSound = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     InputBase.prototype.onMove = function () {
         if (this._down) {
             return;
@@ -6502,7 +6864,10 @@ var InputBase = /** @class */ (function (_super) {
         }
     };
     InputBase.prototype.onClick = function () {
-        //this.currentState = "up";
+        if (this._clickSound) {
+            this.emit(Index_1.ComponentEvent.PLAY_AUDIO, { name: this._clickSound, mode: 'effect' });
+            console.log("aaa");
+        }
     };
     InputBase.prototype.keyDownEvent = function (event) {
         var e = event;
@@ -6637,6 +7002,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * 5. ScrollingContainer 拖动改变时
  * 6. Slider 滑动改变后
  * 7. SpriteAnimated 动画改变后
+ * 8. ConnectLine 连线完成时
  */
 exports.CHANGE = "CHANGE";
 /**
@@ -6721,6 +7087,10 @@ exports.DRAG_TARGET = "DRAG_TARGET";
  * 有拖拽物掉落到此容器时触发
  */
 exports.DROP_TARGET = "DROP_TARGET";
+/**
+ * 播放音效 {name,mode}
+ */
+exports.PLAY_AUDIO = "PLAY_AUDIO";
 
 
 /***/ }),
@@ -9446,7 +9816,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTween
  */
 exports.Easing = {
     Linear: {
@@ -9701,7 +10071,7 @@ var Node = /** @class */ (function () {
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
  */
 var Timeline = /** @class */ (function (_super) {
     __extends(Timeline, _super);
@@ -9952,7 +10322,7 @@ var defaultEasing = Easing_1.Easing.Linear.None;
  *
  * @namespace gui
  *
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTween
  */
 var Tween = /** @class */ (function (_super) {
     __extends(Tween, _super);
@@ -10018,6 +10388,10 @@ var Tween = /** @class */ (function (_super) {
      */
     Tween.from = function (object, from, duration) {
         return Tween.fromTo(object, from, duration);
+    };
+    Tween.prototype.setObject = function (object) {
+        this.object = object;
+        this._valuesStart = Array.isArray(object) ? [] : {};
     };
     Object.defineProperty(Tween.prototype, "isPlaying", {
         /**
@@ -10181,6 +10555,7 @@ var Tween = /** @class */ (function (_super) {
         if (!_isPlaying) {
             return this;
         }
+        this._isPlaying = false;
         var atStart = _isFinite ? (_initRepeat + 1) % 2 === 1 : !_reversed;
         this._reversed = false;
         if (_yoyo && atStart) {
@@ -10190,7 +10565,6 @@ var Tween = /** @class */ (function (_super) {
             this._prevTime = 0;
         }
         this.update(0);
-        this._isPlaying = false;
         core_1.remove(this);
         return this.emit(TweenEvent_1.TweenEvent.stop, object);
     };
@@ -10385,6 +10759,7 @@ var Tween = /** @class */ (function (_super) {
         return true;
     };
     Tween.prototype.release = function () {
+        this.object = undefined;
         this.stop();
     };
     Tween.core = { add: core_1.add, get: core_1.get, getAll: core_1.getAll, remove: core_1.remove, removeAll: core_1.removeAll, removeDisplay: core_1.removeDisplay, update: core_1.update };
@@ -11547,6 +11922,13 @@ function pointSub(source, subPoint) {
     return { x: x, y: y };
 }
 exports.pointSub = pointSub;
+/** 坐标相加 */
+function pointPlus(source, PlusPoint) {
+    var x = source.x + PlusPoint.x;
+    var y = source.y + PlusPoint.y;
+    return { x: x, y: y };
+}
+exports.pointPlus = pointPlus;
 /** 向量转弧度 */
 function pointSignAngle(pointA, pointB) {
     var num1 = (pointA.x * pointB.y) - (pointB.x * pointA.y);
@@ -11576,10 +11958,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.0.0.1.0.0.1.0.0) ==1.0.0.1.0.0.1.0.0;
+//     return this.lastIndexOf(word, pos1.1.0.1.1.0.1.1.0) ==1.1.0.1.1.0.1.1.0;
 // });
 window.gui = vfgui;
-window.gui.version = "1.0.0";
+window.gui.version = "1.1.0";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

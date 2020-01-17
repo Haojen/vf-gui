@@ -16,7 +16,7 @@ import {shared as TickerShared} from "./core/Ticker";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestContainer
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestContainer
  */
 import {Container} from "./display/Container";
 /**
@@ -26,7 +26,7 @@ import {Container} from "./display/Container";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
  */
 import {ScrollingContainer} from "./display/ScrollingContainer";
 /**
@@ -36,7 +36,7 @@ import {ScrollingContainer} from "./display/ScrollingContainer";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestImage
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestImage
  */
 import {Image} from "./display/Image";
 /**
@@ -48,7 +48,7 @@ import {Image} from "./display/Image";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSpriteAnimated
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSpriteAnimated
  */
 import {SpriteAnimated} from "./display/SpriteAnimated";
 /**
@@ -62,7 +62,7 @@ import {SpriteAnimated} from "./display/SpriteAnimated";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestLabel
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestLabel
  */
 import {Label} from "./display/Label";
 /**
@@ -72,7 +72,7 @@ import {Label} from "./display/Label";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTextInput
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTextInput
  */
 import {TextInput} from "./display/TextInput";
 /**
@@ -82,7 +82,7 @@ import {TextInput} from "./display/TextInput";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSlider
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSlider
  */
 import {Slider} from "./display/Slider";
 /**
@@ -92,7 +92,7 @@ import {Slider} from "./display/Slider";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestButton
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestButton
  */
 import {Button} from "./display/Button";
 
@@ -105,7 +105,7 @@ import {Button} from "./display/Button";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestCheckBox
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCheckBox
  */
 import {CheckBox} from "./display/CheckBox";
 /**
@@ -115,7 +115,7 @@ import {CheckBox} from "./display/CheckBox";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
  */
 import {Rect} from "./display/Rect";
 /**
@@ -125,7 +125,7 @@ import {Rect} from "./display/Rect";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
  */
 import {Graphics} from "./display/Graphics";
 /**
@@ -135,9 +135,20 @@ import {Graphics} from "./display/Graphics";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
  */
 import {FollowLine} from "./display/FollowLine";
+/**
+ * 连线组件
+ * 
+ * 
+ * @example let connectLine = new gui.ConnectLine();
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestConnectLine
+ */
+import {ConnectLine} from "./display/ConnectLine";
 /**
  * 音频播放组件
  * 
@@ -145,7 +156,7 @@ import {FollowLine} from "./display/FollowLine";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSound
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSound
  */
 import {Sound} from "./display/Sound";
 /**
@@ -155,7 +166,7 @@ import {Sound} from "./display/Sound";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTween
  */
 import {Easing} from "./tween/Easing";
 /**
@@ -165,7 +176,7 @@ import {Easing} from "./tween/Easing";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTween
  */
 import {Tween} from "./tween/Tween";
 /**
@@ -175,7 +186,7 @@ import {Tween} from "./tween/Tween";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
  */
 import {Timeline} from "./tween/Timeline";
 
@@ -195,5 +206,5 @@ import * as Enum from './enum/Index';
 
 /** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,Slider,
-    Label,TextInput,Button,CheckBox,Rect,Graphics,FollowLine,Interaction,
+    Label,TextInput,Button,CheckBox,Rect,Graphics,FollowLine,ConnectLine,Interaction,
     DisplayObject,TickerShared,Tween,Timeline,Easing,Image,SpriteAnimated,Sound,Event,Enum};
