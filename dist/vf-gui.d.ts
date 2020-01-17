@@ -302,7 +302,7 @@ declare module 'display/Label' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestLabel
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestLabel
 	 */
 	export class Label extends DisplayObject {
 	    constructor(text?: string);
@@ -336,7 +336,7 @@ declare module 'display/Image' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestImage
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestImage
 	 */
 	export class Image extends DisplayObject implements MaskSprite {
 	    constructor();
@@ -468,7 +468,7 @@ declare module 'display/Button' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestButton
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestButton
 	 */
 	export class Button extends InputBase {
 	    constructor();
@@ -501,7 +501,7 @@ declare module 'display/CheckBox' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestCheckBox
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCheckBox
 	 */
 	export class CheckBox extends Button {
 	    constructor();
@@ -789,7 +789,7 @@ declare module 'tween/Easing' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTween
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTween
 	 */
 	export const Easing: {
 	    Linear: {
@@ -957,7 +957,7 @@ declare module 'tween/Tween' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTween
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTween
 	 */
 	export class Tween extends PIXI.utils.EventEmitter {
 	    static core: {
@@ -1329,7 +1329,7 @@ declare module 'tween/Timeline' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
 	 */
 	export class Timeline extends PIXI.utils.EventEmitter implements Lifecycle {
 	    constructor();
@@ -2259,7 +2259,7 @@ declare module 'core/plugs/UIBaseDrag' {
 	/**
 	 *  组件的拖拽操作
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestDrop
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestDrop
 	 */
 	export class UIBaseDrag implements Lifecycle {
 	    /**
@@ -2651,7 +2651,7 @@ declare module 'display/Container' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestContainer
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestContainer
 	 */
 	export class Container extends DisplayObject {
 	    constructor();
@@ -2676,7 +2676,7 @@ declare module 'display/ScrollingContainer' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestRect
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
 	 */
 	export class ScrollingContainer extends Container {
 	    constructor();
@@ -2780,7 +2780,7 @@ declare module 'display/SpriteAnimated' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSpriteAnimated
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSpriteAnimated
 	 */
 	export class SpriteAnimated extends DisplayObject {
 	    constructor();
@@ -3027,7 +3027,7 @@ declare module 'display/TextInput' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTextInput
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTextInput
 	 */
 	export class TextInput extends InputBase {
 	    constructor(multiline?: boolean);
@@ -3134,7 +3134,7 @@ declare module 'display/Slider' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSlider
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSlider
 	 */
 	export class Slider extends DisplayObject {
 	    constructor();
@@ -3221,7 +3221,7 @@ declare module 'display/Rect' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestRect
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
 	 */
 	export class Rect extends DisplayObject implements MaskSprite {
 	    constructor();
@@ -3274,7 +3274,7 @@ declare module 'display/Graphics' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
 	 */
 	export class Graphics extends DisplayObject {
 	    constructor(geometry?: PIXI.GraphicsGeometry | undefined);
@@ -3312,7 +3312,7 @@ declare module 'display/FollowLine' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
 	 */
 	export class FollowLine extends DisplayObject {
 	    constructor(bindDisplay?: DisplayObject);
@@ -3406,7 +3406,7 @@ declare module 'display/ConnectLine' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestConnectLine
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestConnectLine
 	 */
 	export class ConnectLine extends DisplayObject {
 	    constructor();
@@ -3488,7 +3488,7 @@ declare module 'display/Sound' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSound
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSound
 	 */
 	export class Sound extends InputBase {
 	    constructor();
@@ -3589,7 +3589,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestContainer
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestContainer
 	 */
 	import { Container } from 'display/Container';
 	/**
@@ -3599,7 +3599,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestRect
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
 	 */
 	import { ScrollingContainer } from 'display/ScrollingContainer';
 	/**
@@ -3609,7 +3609,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestImage
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestImage
 	 */
 	import { Image } from 'display/Image';
 	/**
@@ -3621,7 +3621,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSpriteAnimated
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSpriteAnimated
 	 */
 	import { SpriteAnimated } from 'display/SpriteAnimated';
 	/**
@@ -3635,7 +3635,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestLabel
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestLabel
 	 */
 	import { Label } from 'display/Label';
 	/**
@@ -3645,7 +3645,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTextInput
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTextInput
 	 */
 	import { TextInput } from 'display/TextInput';
 	/**
@@ -3655,7 +3655,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSlider
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSlider
 	 */
 	import { Slider } from 'display/Slider';
 	/**
@@ -3665,7 +3665,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestButton
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestButton
 	 */
 	import { Button } from 'display/Button';
 	/**
@@ -3677,7 +3677,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestCheckBox
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCheckBox
 	 */
 	import { CheckBox } from 'display/CheckBox';
 	/**
@@ -3687,7 +3687,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestRect
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
 	 */
 	import { Rect } from 'display/Rect';
 	/**
@@ -3697,7 +3697,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
 	 */
 	import { Graphics } from 'display/Graphics';
 	/**
@@ -3707,7 +3707,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
 	 */
 	import { FollowLine } from 'display/FollowLine';
 	/**
@@ -3718,7 +3718,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestConnectLine
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestConnectLine
 	 */
 	import { ConnectLine } from 'display/ConnectLine';
 	/**
@@ -3728,7 +3728,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestSound
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSound
 	 */
 	import { Sound } from 'display/Sound';
 	/**
@@ -3738,7 +3738,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTween
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTween
 	 */
 	import { Easing } from 'tween/Easing';
 	/**
@@ -3748,7 +3748,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTween
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTween
 	 */
 	import { Tween } from 'tween/Tween';
 	/**
@@ -3758,7 +3758,7 @@ declare module 'UI' {
 	 *
 	 * @namespace gui
 	 *
-	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/1.1.0/TestTimeLine
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
 	 */
 	import { Timeline } from 'tween/Timeline';
 	/**
@@ -3912,8 +3912,4 @@ declare module 'tween/private/PlaybackPosition' {
 	    eraseLabel(_name: string, offset: string | number | null): this;
 	}
 
-}
-
-declare namespace gui{
-    export * from "UI";
 }
