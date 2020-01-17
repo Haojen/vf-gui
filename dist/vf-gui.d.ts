@@ -3913,3 +3913,7 @@ declare module 'tween/private/PlaybackPosition' {
 	}
 
 }
+
+declare namespace gui{
+    export * from "UI";
+}
