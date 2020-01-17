@@ -13,7 +13,7 @@ const defaultEasing = Easing.Linear.None;
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTween
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTween
  */
 export class Tween extends PIXI.utils.EventEmitter {
 
@@ -266,6 +266,7 @@ export class Tween extends PIXI.utils.EventEmitter {
         if (!_isPlaying) {
             return this;
         }
+        this._isPlaying = false;
 
         const atStart = _isFinite ? (_initRepeat + 1) % 2 === 1 : !_reversed;
 
@@ -276,7 +277,6 @@ export class Tween extends PIXI.utils.EventEmitter {
             this._prevTime = 0;
         }
         this.update(0);
-        this._isPlaying = false;
         remove(this);
 
         return this.emit(TweenEvent.stop, object);

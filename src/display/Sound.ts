@@ -13,7 +13,7 @@ export const $sounds = new Map<string,PIXI.sound.Sound>();
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestSound
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestSound
  */
 export class Sound extends InputBase {
 

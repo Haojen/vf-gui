@@ -77,7 +77,7 @@ function getVecListFromStr(str: string, from: number, to: number): number[] {
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestTimeLine
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestTimeLine
  */
 export class FollowLine extends DisplayObject {
 

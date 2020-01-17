@@ -7,6 +7,7 @@
  * 5. ScrollingContainer 拖动改变时
  * 6. Slider 滑动改变后
  * 7. SpriteAnimated 动画改变后
+ * 8. ConnectLine 连线完成时
  */
 export const CHANGE = "CHANGE";
 

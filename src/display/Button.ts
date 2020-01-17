@@ -11,7 +11,7 @@ import { ComponentEvent } from "../interaction/Index";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestButton
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestButton
  */
 export class Button extends InputBase{
 

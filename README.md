@@ -8,12 +8,9 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
 
 ## 学习(Learn) 
 
-
-* [文档(Documentation)](https://vipkid-edu.github.io/vf-gui-docs/0.7.0/)
-
 * [示例(Examples)](https://vipkid-edu.github.io/vf-gui-docs/play)
 
-* [API](https://vipkid-edu.github.io/vf-gui-docs/0.7.0/globals.html)
+* [API](https://vipkid-edu.github.io/vf-gui-docs/api)
 
 * [源码(Github)](https://github.com/vipkid-edu/vf-gui/)
 
@@ -26,17 +23,13 @@ vf-gui简称`gui`是基于PIXIJS引擎，使用TypeScript语言开发的开源UI
 
     npm install vf-gui
 
-#### ES6 导入方式 (The correct way to import is): 
-
-    import gui from "vf-gui";
-
 ### CDN Install
     
 Version:
 
-    <script src="http://unpkg.com/vf-gui@0.7.12/dist/vf-gui.js"></script>
+    <script src="http://unpkg.com/vf-gui@1.1.0/dist/vf-gui.js"></script>
     
-    <script src="http://unpkg.com/vf-gui@0.7.12/dist/vf-gui.min.js"></script>
+    <script src="http://unpkg.com/vf-gui@01.1.0/dist/vf-gui.min.js"></script>
 
 Master:
 
@@ -83,6 +76,7 @@ Master:
 | gui.SpriteAnimated | 序列图 |
 | gui.Slider | 滑动/进度条 |
 | gui.FollowLine | 跟随鼠标划线与擦除 |
+| gui.ConnectLine | 连线 |
 | gui.Ticker | 心跳 |
 | gui.Tween | 缓动 |
 | gui.Timeline | 缓动 |

@@ -8,7 +8,7 @@ import {MaskSprite} from "../core/MaskSprite";
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/0.7.0/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
  */
 export class Rect extends DisplayObject implements MaskSprite{
     public constructor(){
