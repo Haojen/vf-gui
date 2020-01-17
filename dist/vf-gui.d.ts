@@ -308,6 +308,10 @@ declare module 'display/Label' {
 	    constructor(text?: string);
 	    readonly sprite: PIXI.Text;
 	    /**
+	     * 设置分辨力比例
+	     */
+	    resolution: number;
+	    /**
 	     * 文本内容
 	     */
 	    text: string;

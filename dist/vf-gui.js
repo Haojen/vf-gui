@@ -4504,6 +4504,19 @@ var Label = /** @class */ (function (_super) {
         _this.container.addChild(_this.sprite);
         return _this;
     }
+    Object.defineProperty(Label.prototype, "resolution", {
+        /**
+         * 设置分辨力比例
+         */
+        get: function () {
+            return this.sprite.resolution;
+        },
+        set: function (value) {
+            this.sprite.resolution = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(Label.prototype, "text", {
         /**
          * 文本内容
@@ -11958,10 +11971,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.0.1.1.0.1.1.0) ==1.1.0.1.1.0.1.1.0;
+//     return this.lastIndexOf(word, pos1.1.1.1.1.1.1.1.1) ==1.1.1.1.1.1.1.1.1;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.0";
+window.gui.version = "1.1.1";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
