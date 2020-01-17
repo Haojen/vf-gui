@@ -243,7 +243,6 @@ export class ConnectLine extends DisplayObject {
     }
 
     private animation(){
-        
         const yoyo = this._play;
         const line = this.line;
         const startPos = yoyo === 1 ? this._lastStartPos : this._lastEndPos;
@@ -275,12 +274,8 @@ export class ConnectLine extends DisplayObject {
         })
         .once(Tween.Event.complete, (obj: TAny) => {
             tw.removeAllListeners();
-            // tw.release();
-            // line.removeChildren();
-            // line.lineStyle(this.lineWidth, this.lineColor, this.alpha);
-            // line.moveTo(startPos.x,startPos.y);
-            // line.lineTo(endPos.x, endPos.y);
-            // this.emit(ComponentEvent.COMPLETE,this);
+            tw.release();
+            this.emit(ComponentEvent.COMPLETE,this);
         })
         .start();
     }
