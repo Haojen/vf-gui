@@ -4,6 +4,8 @@ import {MaskSprite} from "../core/MaskSprite";
 /**
  * 绘制矩形或圆角矩形
  * 
+ * 不设置 lineWidth 或 color 矩形不可见
+ * 
  * @example let rect = new gui.Rect();
  * 
  * @namespace gui
