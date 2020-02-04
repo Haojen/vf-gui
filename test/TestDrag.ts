@@ -102,6 +102,7 @@ export default class TestDrag {
             rect.on(gui.Interaction.ComponentEvent.DRAG_TARGET,(rect1:gui.Rect)=>{
                 console.log("DRAG_TARGET");
                 rect1.scaleX = rect1.scaleY = 1;
+                rect1.dragOption.draggable = false;
             },this);
             c6.container.addChild(rect);
         }

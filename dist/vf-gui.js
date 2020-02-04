@@ -230,6 +230,17 @@ exports.CheckBox = CheckBox_1.CheckBox;
 var Rect_1 = __webpack_require__(/*! ./display/Rect */ "./src/display/Rect.ts");
 exports.Rect = Rect_1.Rect;
 /**
+ * 绘制矩形或圆角矩形
+ *
+ * @example let rect = new gui.Circle();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCircle
+ */
+var Circle_1 = __webpack_require__(/*! ./display/Circle */ "./src/display/Circle.ts");
+exports.Circle = Circle_1.Circle;
+/**
  * 矢量绘制
  *
  * @example let graphics = new gui.Graphics();
@@ -3289,6 +3300,155 @@ exports.CheckBox = CheckBox;
 
 /***/ }),
 
+/***/ "./src/display/Circle.ts":
+/*!*******************************!*\
+  !*** ./src/display/Circle.ts ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
+/**
+ * 绘制圆型
+ *
+ * @example let circle = new gui.Circle();
+ *
+ * @namespace gui
+ *
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCircle
+ */
+var Circle = /** @class */ (function (_super) {
+    __extends(Circle, _super);
+    function Circle() {
+        var _this = _super.call(this) || this;
+        /**
+         * 半径
+         */
+        _this._radius = 0;
+        /**
+         * 线条颜色
+         */
+        _this._lineColor = 0;
+        /**
+         * 线条粗细
+         */
+        _this._lineWidth = 0;
+        _this.graphics = new PIXI.Graphics();
+        _this.container.addChild(_this.graphics);
+        return _this;
+    }
+    /** 可以支持遮罩的组件 */
+    Circle.prototype.maskSprite = function () {
+        return this.graphics;
+    };
+    Object.defineProperty(Circle.prototype, "radius", {
+        get: function () {
+            return this._radius;
+        },
+        set: function (value) {
+            this._radius = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Circle.prototype, "lineColor", {
+        get: function () {
+            return this._lineColor;
+        },
+        set: function (value) {
+            this._lineColor = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Circle.prototype, "lineWidth", {
+        get: function () {
+            return this._lineWidth;
+        },
+        set: function (value) {
+            this._lineWidth = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Circle.prototype, "color", {
+        get: function () {
+            return this._color;
+        },
+        set: function (value) {
+            this._color = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Circle.prototype, "anchorX", {
+        get: function () {
+            return this._anchorX;
+        },
+        set: function (value) {
+            this._anchorX = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Circle.prototype, "anchorY", {
+        get: function () {
+            return this._anchorY;
+        },
+        set: function (value) {
+            this._anchorY = value;
+            this.invalidateDisplayList();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Circle.prototype.drawCircle = function () {
+        var graphics = this.graphics;
+        graphics.clear();
+        graphics.lineStyle(this._lineWidth, this._lineColor);
+        if (this._color !== undefined)
+            graphics.beginFill(this._color);
+        graphics.drawCircle(this._anchorX || 0, this._anchorY || 0, this._radius);
+        graphics.endFill();
+    };
+    Circle.prototype.release = function () {
+        _super.prototype.release.call(this);
+        if (this.graphics.parent) {
+            this.graphics.parent.removeChild(this.graphics).destroy();
+        }
+    };
+    Circle.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
+        this.drawCircle();
+        _super.prototype.updateDisplayList.call(this, unscaledWidth, unscaledHeight);
+    };
+    return Circle;
+}(DisplayObject_1.DisplayObject));
+exports.Circle = Circle;
+
+
+/***/ }),
+
 /***/ "./src/display/ConnectLine.ts":
 /*!************************************!*\
   !*** ./src/display/ConnectLine.ts ***!
@@ -3393,10 +3553,10 @@ var ConnectLine = /** @class */ (function (_super) {
             return this._source;
         },
         set: function (value) {
-            if (this._source === value) {
+            if (this._source === Utils_1.getDisplayObject(value)) {
                 return;
             }
-            this._source = value;
+            this._source = Utils_1.getDisplayObject(value);
             this.invalidateDisplayList();
         },
         enumerable: true,
@@ -3427,10 +3587,10 @@ var ConnectLine = /** @class */ (function (_super) {
             return this._target;
         },
         set: function (value) {
-            if (this._target === value) {
+            if (this._target === Utils_1.getDisplayObject(value)) {
                 return;
             }
-            this._target = value;
+            this._target = Utils_1.getDisplayObject(value);
             this.invalidateDisplayList();
         },
         enumerable: true,
@@ -3567,6 +3727,7 @@ var ConnectLine = /** @class */ (function (_super) {
         //super.updateDisplayList(unscaledWidth, unscaledHeight);     
     };
     ConnectLine.prototype.animation = function () {
+        var _this = this;
         var yoyo = this._play;
         var line = this.line;
         var startPos = yoyo === 1 ? this._lastStartPos : this._lastEndPos;
@@ -3595,12 +3756,8 @@ var ConnectLine = /** @class */ (function (_super) {
         })
             .once(Tween_1.Tween.Event.complete, function (obj) {
             tw.removeAllListeners();
-            // tw.release();
-            // line.removeChildren();
-            // line.lineStyle(this.lineWidth, this.lineColor, this.alpha);
-            // line.moveTo(startPos.x,startPos.y);
-            // line.lineTo(endPos.x, endPos.y);
-            // this.emit(ComponentEvent.COMPLETE,this);
+            tw.release();
+            _this.emit(Index_1.ComponentEvent.COMPLETE, _this);
         })
             .start();
     };
@@ -3611,6 +3768,8 @@ var ConnectLine = /** @class */ (function (_super) {
     };
     ConnectLine.prototype.release = function () {
         _super.prototype.release.call(this);
+        this._source = undefined;
+        this._target = undefined;
         var line = this.line;
         line.clear();
         if (line.parent) {
@@ -4707,7 +4866,12 @@ var Rect = /** @class */ (function (_super) {
     Rect.prototype.drawRoundedRect = function () {
         var graphics = this.graphics;
         graphics.clear();
-        graphics.lineStyle(this._lineWidth, this._lineColor);
+        if (this._radius >= (this.width / 2)) {
+            graphics.lineStyle(this._lineWidth, this._lineColor, 1, 1, true);
+        }
+        else {
+            graphics.lineStyle(this._lineWidth, this._lineColor);
+        }
         if (this._color !== undefined)
             graphics.beginFill(this._color);
         graphics.drawRoundedRect(this._anchorX ? -this._anchorX * this.width : 0, this._anchorY ? -this._anchorY * this.height : 0, this.width, this.height, this._radius);
@@ -8600,6 +8764,9 @@ function maskImage(target) {
     var style = target.style;
     var container = target.container;
     var maskdisplay = Utils_1.getDisplayObject(style.maskImage, target);
+    if (maskdisplay == null || maskdisplay === '') {
+        return;
+    }
     if (maskdisplay instanceof PIXI.Graphics) {
         target.$mask = maskdisplay;
         container.mask = target.$mask;
@@ -11971,10 +12138,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.1.1.1.1.1.1.1) ==1.1.1.1.1.1.1.1.1;
+//     return this.lastIndexOf(word, pos1.1.2.1.1.2.1.1.2) ==1.1.2.1.1.2.1.1.2;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.1";
+window.gui.version = "1.1.2";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

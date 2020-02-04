@@ -3268,6 +3268,60 @@ declare module 'display/Rect' {
 	}
 
 }
+declare module 'display/Circle' {
+	/// <reference types="pixi.js" />
+	import { DisplayObject } from 'core/DisplayObject';
+	import { MaskSprite } from 'core/MaskSprite';
+	/**
+	 * 绘制圆型
+	 *
+	 * @example let circle = new gui.Circle();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCircle
+	 */
+	export class Circle extends DisplayObject implements MaskSprite {
+	    constructor();
+	    readonly graphics: PIXI.Graphics;
+	    /** 可以支持遮罩的组件 */
+	    maskSprite(): PIXI.Graphics;
+	    /**
+	     * 半径
+	     */
+	    private _radius;
+	    radius: number;
+	    /**
+	     * 线条颜色
+	     */
+	    private _lineColor;
+	    lineColor: number;
+	    /**
+	     * 线条粗细
+	     */
+	    private _lineWidth;
+	    lineWidth: number;
+	    /**
+	     * 颜色
+	     */
+	    private _color?;
+	    color: number | undefined;
+	    /**
+	     * 锚点，调整位图的坐标中点 0-1
+	     */
+	    private _anchorX?;
+	    anchorX: number | undefined;
+	    /**
+	     * 锚点，调整位图的坐标中点 0-1
+	     */
+	    private _anchorY?;
+	    anchorY: number | undefined;
+	    drawCircle(): void;
+	    release(): void;
+	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
+	}
+
+}
 declare module 'display/Graphics' {
 	/// <reference types="pixi.js" />
 	import { DisplayObject } from 'core/DisplayObject';
@@ -3695,6 +3749,16 @@ declare module 'UI' {
 	 */
 	import { Rect } from 'display/Rect';
 	/**
+	 * 绘制矩形或圆角矩形
+	 *
+	 * @example let rect = new gui.Circle();
+	 *
+	 * @namespace gui
+	 *
+	 * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCircle
+	 */
+	import { Circle } from 'display/Circle';
+	/**
 	 * 矢量绘制
 	 *
 	 * @example let graphics = new gui.Graphics();
@@ -3778,7 +3842,7 @@ declare module 'UI' {
 	 */
 	import * as Enum from 'enum/Index';
 	/** 请不要在编写UI组件内部使用本类 */
-	export { Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum };
+	export { Utils, Stage, Container, ScrollingContainer, Slider, Label, TextInput, Button, CheckBox, Rect, Circle, Graphics, FollowLine, ConnectLine, Interaction, DisplayObject, TickerShared, Tween, Timeline, Easing, Image, SpriteAnimated, Sound, Event, Enum };
 
 }
 declare module 'vf-gui' {
