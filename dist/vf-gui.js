@@ -1994,6 +1994,8 @@ var DisplayObject = /** @class */ (function (_super) {
          * 拖动限制门槛,小于设置的数不执行拖动,防止点击与滚动
          */
         _this.dragThreshold = 0;
+        /** 拖动时，事件流是否继续传输 */
+        _this.dragStopPropagation = true;
         /**
         *  在不同分辨率下保持像素稳定
         * @default
@@ -3325,7 +3327,9 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
 /**
- * 绘制圆型
+ * 绘制圆形
+ *
+ * 不设置 lineWidth 或 color 圆形不可见
  *
  * @example let circle = new gui.Circle();
  *
@@ -4766,6 +4770,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
 /**
  * 绘制矩形或圆角矩形
+ *
+ * 不设置 lineWidth 或 color 矩形不可见
  *
  * @example let rect = new gui.Rect();
  *
@@ -7838,7 +7844,8 @@ var DragEvent = /** @class */ (function () {
         }
     };
     DragEvent.prototype._onDragStart = function (e) {
-        e.stopPropagation();
+        if (this.obj.dragStopPropagation)
+            e.stopPropagation();
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true, this);
         if (!this.bound && this.obj.parent && this.obj.stage) {
@@ -12138,10 +12145,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.2.1.1.2.1.1.2) ==1.1.2.1.1.2.1.1.2;
+//     return this.lastIndexOf(word, pos1.1.3.1.1.3.1.1.3) ==1.1.3.1.1.3.1.1.3;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.2";
+window.gui.version = "1.1.3";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
