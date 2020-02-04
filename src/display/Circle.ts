@@ -2,15 +2,15 @@ import {DisplayObject} from "../core/DisplayObject";
 import {MaskSprite} from "../core/MaskSprite";
 
 /**
- * 绘制矩形或圆角矩形
+ * 绘制圆型
  * 
- * @example let rect = new gui.Rect();
+ * @example let circle = new gui.Circle();
  * 
  * @namespace gui
  * 
- * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestRect
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCircle
  */
-export class Rect extends DisplayObject implements MaskSprite{
+export class Circle extends DisplayObject implements MaskSprite{
     public constructor(){
         super();
         this.graphics = new PIXI.Graphics();
@@ -25,7 +25,7 @@ export class Rect extends DisplayObject implements MaskSprite{
     }
 
     /**
-     * 圆角
+     * 半径
      */
     private _radius = 0;
     public get radius() {
@@ -91,20 +91,16 @@ export class Rect extends DisplayObject implements MaskSprite{
         this.invalidateDisplayList();
     }
 
-    public drawRoundedRect(){
+    public drawCircle(){
         const graphics = this.graphics;
         graphics.clear();
-        if(this._radius>=(this.width/2)){
-            graphics.lineStyle(this._lineWidth,this._lineColor,1,1,true);
-        }else{
-            graphics.lineStyle(this._lineWidth,this._lineColor);
-        }
+        graphics.lineStyle(this._lineWidth,this._lineColor);
         
         if(this._color !== undefined)
             graphics.beginFill(this._color);   
         
         
-        graphics.drawRoundedRect(this._anchorX?-this._anchorX*this.width:0,this._anchorY?-this._anchorY*this.height:0,this.width, this.height,this._radius);
+        graphics.drawCircle(this._anchorX || 0,this._anchorY || 0,this._radius);
         graphics.endFill();
     }
     
@@ -117,7 +113,7 @@ export class Rect extends DisplayObject implements MaskSprite{
     }
 
     protected updateDisplayList(unscaledWidth: number, unscaledHeight: number) {
-        this.drawRoundedRect();
+        this.drawCircle();
         super.updateDisplayList(unscaledWidth,unscaledHeight);
     }
 

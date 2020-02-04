@@ -119,6 +119,16 @@ import {CheckBox} from "./display/CheckBox";
  */
 import {Rect} from "./display/Rect";
 /**
+ * 绘制矩形或圆角矩形
+ * 
+ * @example let rect = new gui.Circle();
+ * 
+ * @namespace gui
+ * 
+ * @link https://vipkid-edu.github.io/vf-gui-docs/play/#example/TestCircle
+ */
+import {Circle} from "./display/Circle";
+/**
  * 矢量绘制
  * 
  * @example let graphics = new gui.Graphics();
@@ -206,5 +216,5 @@ import * as Enum from './enum/Index';
 
 /** 请不要在编写UI组件内部使用本类 */
 export {Utils,Stage,Container,ScrollingContainer,Slider,
-    Label,TextInput,Button,CheckBox,Rect,Graphics,FollowLine,ConnectLine,Interaction,
+    Label,TextInput,Button,CheckBox,Rect,Circle,Graphics,FollowLine,ConnectLine,Interaction,
     DisplayObject,TickerShared,Tween,Timeline,Easing,Image,SpriteAnimated,Sound,Event,Enum};

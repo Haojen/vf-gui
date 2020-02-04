@@ -27,6 +27,17 @@ export class Label extends DisplayObject {
     }
 
     public readonly sprite: PIXI.Text;
+
+    /**
+     * 设置分辨力比例
+     */
+    public get resolution() {
+        return this.sprite.resolution;
+    }
+    public set resolution(value) {
+        this.sprite.resolution = value;
+    }
+
     /**
      * 文本内容
      */

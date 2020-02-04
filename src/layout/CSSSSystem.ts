@@ -147,8 +147,12 @@ export function maskImage(target: DisplayObject){
     target.$mask = undefined;
     const style = target.style;
     const container = target.container;
-    const maskdisplay = getDisplayObject( style.maskImage,target) as MaskSprite | PIXI.Graphics;
-    
+    const maskdisplay = getDisplayObject( style.maskImage,target) as MaskSprite | PIXI.Graphics | string;
+
+    if(maskdisplay == null || maskdisplay === ''){
+        return;
+    }
+
     if (maskdisplay instanceof PIXI.Graphics) {
         target.$mask = maskdisplay;
         container.mask = target.$mask;

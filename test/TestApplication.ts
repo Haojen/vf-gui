@@ -5,8 +5,15 @@ export default class TestApplication {
 
     public constructor(thisObj: any, callback: (app: PIXI.Application, uiStage: gui.Stage) => void) {
 
-        this.app = new PIXI.Application({ width: window.innerWidth, height: window.innerHeight ,antialias:true,forceCanvas:false});
-        updateViewSize(this.app,this.app.renderer.resolution,PIXI.utils.isWebGLSupported(),'noScale');      
+        this.app = new PIXI.Application({ 
+            width: window.innerWidth, 
+            height: window.innerHeight,
+            antialias:true,
+            forceCanvas:false,
+            resolution: window.devicePixelRatio,
+            forceFXAA:true
+        });
+        updateViewSize(this.app,window.devicePixelRatio,PIXI.utils.isWebGLSupported(),'noScale');      
         this.uiStage = new gui.Stage(this.app.view.width, this.app.view.height,this.app);
         this.app.stage.addChild(this.uiStage.container);
         document.body.appendChild(this.app.view);
