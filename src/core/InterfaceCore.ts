@@ -3,7 +3,9 @@ declare type TAny = any;
 interface Window{
     readonly clipboardData: DataTransfer | null;
     gui: any;
-    
+    module: any;
+    require:any;
+    exports:any;
 }
 
 declare interface ObjectConstructor {
