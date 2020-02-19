@@ -2,7 +2,9 @@ import {DisplayObject} from "../core/DisplayObject";
 import {MaskSprite} from "../core/MaskSprite";
 
 /**
- * 绘制圆型
+ * 绘制圆形
+ * 
+ * 不设置 lineWidth 或 color 圆形不可见
  * 
  * @example let circle = new gui.Circle();
  * 

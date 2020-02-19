@@ -119,7 +119,7 @@ export class UIBaseDrag implements Lifecycle {
         return this._dragContainer;
     }
     public set dragContainer(value) {
-        this._dragContainer = getDisplayObject(value);
+        this._dragContainer = getDisplayObject(value,this.target);
     }
 
     /**
@@ -140,7 +140,7 @@ export class UIBaseDrag implements Lifecycle {
         return this._droppableReparent;
     }
     public set droppableReparent(value) {
-        this._droppableReparent = getDisplayObject(value);;
+        this._droppableReparent = getDisplayObject(value,this.target);
     }
     /**
      * 接收拖动掉落的分组名

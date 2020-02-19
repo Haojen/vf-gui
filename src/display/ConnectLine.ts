@@ -4,8 +4,8 @@ import { pointPlus, pointDistance, getDisplayObject } from "../utils/Utils";
 import { Tween } from "../tween/Tween";
 
 type LinePostion = 'leftTop' | 'centerTop' | 'rightTop' |
-    'leftCenter' | 'center' | 'rightCenter' |
-    'leftBottom' | 'centerBottom' | 'rightBottom' | number[];
+'leftCenter' | 'center' | 'rightCenter' |
+'leftBottom' | 'centerBottom' | 'rightBottom' | number[];
 
 
 export const play = Symbol("play");
@@ -71,10 +71,10 @@ export class ConnectLine extends DisplayObject {
         return this._source;
     }
     public set source(value) {
-        if (this._source === getDisplayObject(value)) {
+        if (this._source === getDisplayObject(value,this)) {
             return;
         }      
-        this._source = getDisplayObject(value);
+        this._source = getDisplayObject(value,this);
         this.invalidateDisplayList();
     }
 
@@ -101,10 +101,10 @@ export class ConnectLine extends DisplayObject {
         return this._target;
     }
     public set target(value) {
-        if (this._target === getDisplayObject(value)) {
+        if (this._target === getDisplayObject(value,this)) {
             return;
         }
-        this._target = getDisplayObject(value);
+        this._target = getDisplayObject(value,this);
         this.invalidateDisplayList();
     }
 
@@ -176,6 +176,9 @@ export class ConnectLine extends DisplayObject {
         let pos: { x: number; y: number } = {x: 0, y: 0};
 
         if (display) {
+            if(display.container.position.x === 0 && display.container.position.y === 0){
+                display.validateNow();
+            }
             const startPos = this.container.parent.toLocal(display.container.position, display.container.parent);
             switch (_linePostion) {
                 case 'leftTop':
@@ -262,25 +265,29 @@ export class ConnectLine extends DisplayObject {
         const from =  {dt:0};
         const to =  {dt:distance};
         const tw = new Tween(from)
-        .to(to,500)
-        .on(Tween.Event.update, (obj: TAny) => {
-            const dt =  Math.ceil(obj.dt);
-            const x = (dt*(endPos.x-startPos.x))/distance + startPos.x;
-            const y = (dt*(endPos.y-startPos.y))/distance + startPos.y;
-            line.moveTo(lastPos.x, lastPos.y);
-            line.lineTo(x, y);
-            lastPos.x = x;
-            lastPos.y = y;
-        })
-        .once(Tween.Event.complete, (obj: TAny) => {
-            tw.removeAllListeners();
-            tw.release();
-            this.emit(ComponentEvent.COMPLETE,this);
-        })
-        .start();
+            .to(to,500)
+            .on(Tween.Event.update, (obj: TAny) => {
+                const dt =  Math.ceil(obj.dt);
+                const x = (dt*(endPos.x-startPos.x))/distance + startPos.x;
+                const y = (dt*(endPos.y-startPos.y))/distance + startPos.y;
+                line.moveTo(lastPos.x, lastPos.y);
+                line.lineTo(x, y);
+                lastPos.x = x;
+                lastPos.y = y;
+            })
+            .once(Tween.Event.complete, (obj: TAny) => {
+                tw.removeAllListeners();
+                tw.release();
+                this.emit(ComponentEvent.COMPLETE,this);
+            })
+            .start();
     }
 
-    public claer(){
+    public set isClear(value: boolean){
+        this.clear();
+    }
+
+    public clear(){
         const line = this.line;
         line.clear();
         this.commitProperties();

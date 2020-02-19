@@ -1994,6 +1994,8 @@ var DisplayObject = /** @class */ (function (_super) {
          * 拖动限制门槛,小于设置的数不执行拖动,防止点击与滚动
          */
         _this.dragThreshold = 0;
+        /** 拖动时，事件流是否继续传输 */
+        _this.dragStopPropagation = true;
         /**
         *  在不同分辨率下保持像素稳定
         * @default
@@ -2802,7 +2804,7 @@ var UIBaseDrag = /** @class */ (function () {
             return this._dragContainer;
         },
         set: function (value) {
-            this._dragContainer = Utils_1.getDisplayObject(value);
+            this._dragContainer = Utils_1.getDisplayObject(value, this.target);
         },
         enumerable: true,
         configurable: true
@@ -2825,8 +2827,7 @@ var UIBaseDrag = /** @class */ (function () {
             return this._droppableReparent;
         },
         set: function (value) {
-            this._droppableReparent = Utils_1.getDisplayObject(value);
-            ;
+            this._droppableReparent = Utils_1.getDisplayObject(value, this.target);
         },
         enumerable: true,
         configurable: true
@@ -3325,7 +3326,9 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
 /**
- * 绘制圆型
+ * 绘制圆形
+ *
+ * 不设置 lineWidth 或 color 圆形不可见
  *
  * @example let circle = new gui.Circle();
  *
@@ -3553,10 +3556,10 @@ var ConnectLine = /** @class */ (function (_super) {
             return this._source;
         },
         set: function (value) {
-            if (this._source === Utils_1.getDisplayObject(value)) {
+            if (this._source === Utils_1.getDisplayObject(value, this)) {
                 return;
             }
-            this._source = Utils_1.getDisplayObject(value);
+            this._source = Utils_1.getDisplayObject(value, this);
             this.invalidateDisplayList();
         },
         enumerable: true,
@@ -3587,10 +3590,10 @@ var ConnectLine = /** @class */ (function (_super) {
             return this._target;
         },
         set: function (value) {
-            if (this._target === Utils_1.getDisplayObject(value)) {
+            if (this._target === Utils_1.getDisplayObject(value, this)) {
                 return;
             }
-            this._target = Utils_1.getDisplayObject(value);
+            this._target = Utils_1.getDisplayObject(value, this);
             this.invalidateDisplayList();
         },
         enumerable: true,
@@ -3664,6 +3667,9 @@ var ConnectLine = /** @class */ (function (_super) {
     ConnectLine.prototype.getLocalPos = function (_linePostion, display) {
         var pos = { x: 0, y: 0 };
         if (display) {
+            if (display.container.position.x === 0 && display.container.position.y === 0) {
+                display.validateNow();
+            }
             var startPos = this.container.parent.toLocal(display.container.position, display.container.parent);
             switch (_linePostion) {
                 case 'leftTop':
@@ -3761,7 +3767,14 @@ var ConnectLine = /** @class */ (function (_super) {
         })
             .start();
     };
-    ConnectLine.prototype.claer = function () {
+    Object.defineProperty(ConnectLine.prototype, "isClear", {
+        set: function (value) {
+            this.clear();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ConnectLine.prototype.clear = function () {
         var line = this.line;
         line.clear();
         this.commitProperties();
@@ -4766,6 +4779,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var DisplayObject_1 = __webpack_require__(/*! ../core/DisplayObject */ "./src/core/DisplayObject.ts");
 /**
  * 绘制矩形或圆角矩形
+ *
+ * 不设置 lineWidth 或 color 矩形不可见
  *
  * @example let rect = new gui.Rect();
  *
@@ -7838,7 +7853,8 @@ var DragEvent = /** @class */ (function () {
         }
     };
     DragEvent.prototype._onDragStart = function (e) {
-        e.stopPropagation();
+        if (this.obj.dragStopPropagation)
+            e.stopPropagation();
         this.id = e.data.identifier;
         this.onDragPress && this.onDragPress.call(this.obj, e, true, this);
         if (!this.bound && this.obj.parent && this.obj.stage) {
@@ -12138,10 +12154,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.2.1.1.2.1.1.2) ==1.1.2.1.1.2.1.1.2;
+//     return this.lastIndexOf(word, pos1.1.5.1.1.5.1.1.5) ==1.1.5.1.1.5.1.1.5;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.2";
+window.gui.version = "1.1.5";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";

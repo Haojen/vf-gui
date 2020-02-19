@@ -2409,6 +2409,8 @@ declare module 'core/DisplayObject' {
 	    dragThreshold: number;
 	    /** 模糊 */
 	    private blurFilter?;
+	    /** 拖动时，事件流是否继续传输 */
+	    dragStopPropagation: boolean;
 	    /**
 	     * 设置拖动
 	     */
@@ -3221,6 +3223,8 @@ declare module 'display/Rect' {
 	/**
 	 * 绘制矩形或圆角矩形
 	 *
+	 * 不设置 lineWidth 或 color 矩形不可见
+	 *
 	 * @example let rect = new gui.Rect();
 	 *
 	 * @namespace gui
@@ -3273,7 +3277,9 @@ declare module 'display/Circle' {
 	import { DisplayObject } from 'core/DisplayObject';
 	import { MaskSprite } from 'core/MaskSprite';
 	/**
-	 * 绘制圆型
+	 * 绘制圆形
+	 *
+	 * 不设置 lineWidth 或 color 圆形不可见
 	 *
 	 * @example let circle = new gui.Circle();
 	 *
@@ -3527,7 +3533,8 @@ declare module 'display/ConnectLine' {
 	    private getLocalPos;
 	    protected updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
 	    private animation;
-	    claer(): void;
+	    isClear: boolean;
+	    clear(): void;
 	    release(): void;
 	}
 	export {};
@@ -3854,6 +3861,9 @@ declare type TAny = any;
 interface Window {
     readonly clipboardData: DataTransfer | null;
     gui: any;
+    module: any;
+    require: any;
+    exports: any;
 }
 declare interface ObjectConstructor {
     assign(...objects: Record<string, any>[]): Record<string, any>;
