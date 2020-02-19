@@ -59,11 +59,11 @@ export default class TestConnectLine {
         const e4_line1 = this.getNewConnectLine(container,e4_rect1,e4_rect2);
 
         e4_rect1.on(gui.Interaction.TouchMouseEvent.onClick,()=>{
-            e4_line1.claer();
+            e4_line1.clear();
             e4_line1.play = 2;
         });
         e4_rect2.on(gui.Interaction.TouchMouseEvent.onClick,()=>{
-            e4_line1.claer();
+            e4_line1.clear();
             e4_line1.play = 1;
         });
     }
