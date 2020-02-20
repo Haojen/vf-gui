@@ -209,8 +209,8 @@ export class ConnectLine extends DisplayObject {
                     pos = pointPlus(startPos,{x: display.width, y: display.height});
                     break;
                 default:
-                    pos.x = _linePostion[0];
-                    pos.y = _linePostion[1];
+                    pos.x = startPos.x + _linePostion[0];
+                    pos.y = startPos.y + _linePostion[1];
             }
         } else {
             if (Array.isArray(_linePostion)) {

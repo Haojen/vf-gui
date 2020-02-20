@@ -51,7 +51,7 @@ Master:
 1. setup Visual Studio Code Extension (ESLint）
 1. setup Visual Studio Code Extension (Live Server）
 1. run Live Server
-1. npm run build or npm run watch
+1. npm run test
 1. view http://127.0.0.1:5501/
 
 
