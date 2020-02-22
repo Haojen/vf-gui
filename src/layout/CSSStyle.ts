@@ -6,15 +6,15 @@ import { getStringFunctionParam } from "../utils/Utils";
 
 /**
  * 	定位方式
- * 
+ *
  *  元素的位置通过 "left", "top", "right" 以及 "bottom" 属性进行规定。
- * 
+ *
  * 	absolute 生成绝对定位的元素，相对于第一个父元素进行定位。
- * 
+ *
  *  fixed 生成绝对定位的元素，相对于舞台进行定位。
- * 
+ *
  *  static 没有定位，元素出现在正常的流中（忽略 top, bottom, left, right 或者 z-index 声明）。
- * 
+ *
  */
 export type Position = "absolute" | "fixed" | "static";
 
@@ -55,11 +55,11 @@ export class CSSStyle {
     public release() {
         this.parent.off(ComponentEvent.RESIZE, this.onResize, this);
     }
-    /** 
-     * 规定元素的显示类型。布局模式 
-     * 
+    /**
+     * 规定元素的显示类型。布局模式
+     *
      * grid 模式下，子节点会忽略left,top,right，bottom,width,height等
-     * 
+     *
      * none 模式下，忽略style
      * */
     private _display: Display = "block";
@@ -69,7 +69,7 @@ export class CSSStyle {
     public set display(value: Display) {
         this._display = value;
     }
-    /** 
+    /**
      * 规定元素的定位类型。
      * */
     private _position: Position = "absolute";
@@ -103,9 +103,9 @@ export class CSSStyle {
     }
     /**
      * 基于 网格列的维度，去定义网格线的名称和网格轨道的尺寸大小。
-     * 
+     *
      * 方式一 [80,90,100]|["30%","40%","30%"] 第一列宽度80，第二列宽度，第三列宽度100
-     * 
+     *
      * 方式二 ["repeat",3,100] 三列，宽度都为100像素
      */
     private _gridTemplateColumns?: number[] | string[] | [string, number, number];
@@ -128,9 +128,9 @@ export class CSSStyle {
     }
     /**
      * 基于 网格行的维度，去定义网格线的名称和网格轨道的尺寸大小。
-     * 
+     *
      * 方式一 [80,90,100]|["30%","40%","30%"] 第一行高度80，第二行高度90，第三行行高度100
-     * 
+     *
      * 方式二 ["repeat",3,100] 三行，宽度都为100像素
      */
     private _gridTemplateRows?: number[] | string[] | [string, number, number];
@@ -151,7 +151,7 @@ export class CSSStyle {
         this._gridRowGap = value;
     }
 
-    /** 
+    /**
      * 表示显示对象的宽度，以像素为单位。
      * */
     public get width() {
@@ -162,7 +162,7 @@ export class CSSStyle {
         this.parent.width = relative.value;
         this.parent.percentWidth = relative.percent;
     }
-    /** 
+    /**
      * 表示显示对象的高度，以像素为单位。
      * */
     public get height() {
@@ -174,7 +174,7 @@ export class CSSStyle {
         this.parent.percentHeight = relative.percent;
     }
 
-    /** 
+    /**
      * 设置元素的最小宽度。
      */
     public get minWidth() {
@@ -183,7 +183,7 @@ export class CSSStyle {
     public set minWidth(value) {
         this.parent.minWidth = value;
     }
-    /** 
+    /**
      * 设置元素的最大宽度。
      */
     public get maxWidth() {
@@ -193,7 +193,7 @@ export class CSSStyle {
         this.parent.maxWidth = value;
     }
 
-    /** 
+    /**
      * 设置元素的最小高度。
      */
     public get maxHeight() {
@@ -202,7 +202,7 @@ export class CSSStyle {
     public set maxHeight(value) {
         this.parent.maxHeight = value;
     }
-    /** 
+    /**
      * 设置元素的最大高度。
      * */
     public get minHeight() {
@@ -212,8 +212,8 @@ export class CSSStyle {
         this.parent.minHeight = value;
     }
 
-    /** 
-     * 设置定位元素左外边距边界与其容器左边界之间的偏移。 
+    /**
+     * 设置定位元素左外边距边界与其容器左边界之间的偏移。
      * */
     public get left() {
         return this.parent.left;
@@ -221,7 +221,7 @@ export class CSSStyle {
     public set left(value) {
         this.parent.left = value;
     }
-    /** 
+    /**
      * 设置定位元素的上外边距边界与其容器上边界之间的偏移。
      * */
     public get top() {
@@ -230,7 +230,7 @@ export class CSSStyle {
     public set top(value) {
         this.parent.top = value;
     }
-    /** 
+    /**
      * 设置定位元素右外边距边界与其容器右边界之间的偏移。
      * */
     public get right() {
@@ -239,7 +239,7 @@ export class CSSStyle {
     public set right(value) {
         this.parent.right = value;
     }
-    /** 
+    /**
      * 设置定位元素下外边距边界与其容器下边界之间的偏移。
      * */
     public get bottom() {
@@ -249,7 +249,7 @@ export class CSSStyle {
         this.parent.bottom = value;
     }
 
-    /** 
+    /**
      * 缩放
      * */
     public get scaleX() {
@@ -258,7 +258,7 @@ export class CSSStyle {
     public set scaleX(value) {
         this.parent.scaleX = value;
     }
-    /** 
+    /**
      * 缩放
      * */
     public get scaleY() {
@@ -267,7 +267,7 @@ export class CSSStyle {
     public set scaleY(value) {
         this.parent.scaleY = value;
     }
-    /** 
+    /**
      * 设置元素水平拉伸扭曲（角度）。
      * */
     public get skewX() {
@@ -276,7 +276,7 @@ export class CSSStyle {
     public set skewX(value) {
         this.parent.skewX = value;
     }
-    /** 
+    /**
      * 设置元素垂直拉伸扭曲（角度）。
      * */
     public get skewY() {
@@ -286,7 +286,7 @@ export class CSSStyle {
         this.parent.skewY = value;
     }
 
-    /** 
+    /**
      * 设置元素旋转 （角度）
     */
     public get rotate() {
@@ -295,7 +295,7 @@ export class CSSStyle {
     public set rotate(value) {
         this.parent.rotation = value;
     }
-    /** 
+    /**
      * 设置元素旋转 （角度）
     */
     public get rotation() {
@@ -305,7 +305,7 @@ export class CSSStyle {
         this.parent.rotation = value;
     }
 
-    /** 
+    /**
      * 轴点 像素值
      */
     public get pivotX() {
@@ -314,7 +314,7 @@ export class CSSStyle {
     public set pivotX(value) {
         this.parent.pivotX = value;
     }
-    /** 
+    /**
      * 轴点 像素值
      */
     public get pivotY() {
@@ -334,7 +334,7 @@ export class CSSStyle {
         this.parent.tint = value;
     }
 
-    /** 
+    /**
      * 表示指定对象的 Alpha 透明度值。有效值为0（完全透明）～ 1（完全不透明）。
      * */
     public get alpha() {
@@ -344,8 +344,8 @@ export class CSSStyle {
         this.parent.alpha = value;
     }
 
-    /** 
-     * 显示对象是否可见 
+    /**
+     * 显示对象是否可见
      * */
     public get visible() {
         return this.parent.visible;
@@ -361,7 +361,7 @@ export class CSSStyle {
     }
 
 
-    /** 
+    /**
      * 设置元件的背景颜色。（16进制数字0xffffff
      * */
     private _backgroundColor?: number;
@@ -377,8 +377,8 @@ export class CSSStyle {
 
     }
 
-    /** 
-     * 设置元素的背景图像。backgroundImage = "./xxx.png" 
+    /**
+     * 设置元素的背景图像。backgroundImage = "./xxx.png"
      * */
     private _backgroundImage?: PIXI.Texture | string;
     public get backgroundImage() {
@@ -388,7 +388,7 @@ export class CSSStyle {
         this._backgroundImage = value;
         CSSFunction.backgroundImage(this.parent);
     }
-    /** 
+    /**
      * 设置 backgroundImage 后 ，设置背景图像的X位置
      * */
     private _backgroundPositionX?: number;
@@ -399,7 +399,7 @@ export class CSSStyle {
         this._backgroundPositionX = value;
         CSSFunction.backgroundPositionSize(this.parent);
     }
-    /** 
+    /**
      * 设置 backgroundImage 后 ，设置背景图像的Y位置
      * */
     private _backgroundPositionY?: number;
@@ -410,8 +410,8 @@ export class CSSStyle {
         this._backgroundPositionY = value;
         CSSFunction.backgroundPositionSize(this.parent);
     }
-    /** 
-     * 设置 backgroundImage 后， 规定背景图像的尺寸。 [width,height] 
+    /**
+     * 设置 backgroundImage 后， 规定背景图像的尺寸。 [width,height]
      * */
     private _backgroundSize?: number[];
     public get backgroundSize() {
@@ -421,7 +421,7 @@ export class CSSStyle {
         this._backgroundSize = value;
         CSSFunction.backgroundPositionSize(this.parent);
     }
-    /** 
+    /**
      * 设置 backgroundImage 后，设置是否及如何重复背景图像。
      * repeat重复
      * no-repeat不重复，
@@ -437,8 +437,8 @@ export class CSSStyle {
 
 
 
-    /** 
-     * 遮罩图 
+    /**
+     * 遮罩图
      */
     private _maskImage?: string | PIXI.Graphics | PIXI.Texture | DisplayObject;
     public get maskImage() {
@@ -448,8 +448,8 @@ export class CSSStyle {
         this._maskImage = value;
         CSSFunction.maskImage(this.parent);
     }
-    /** 
-     * 设置位数 [x,y] 
+    /**
+     * 设置位数 [x,y]
      */
     private _maskPosition?: number[];
     public get maskPosition() {
@@ -460,8 +460,8 @@ export class CSSStyle {
         CSSFunction.maskPosition(this.parent);
 
     }
-    /** 
-     * 设置遮罩位图的大小 
+    /**
+     * 设置遮罩位图的大小
      */
     private _maskSize?: number[];
     public get maskSize() {
@@ -472,9 +472,9 @@ export class CSSStyle {
         CSSFunction.maskSize(this.parent);
     }
 
-    /** 
+    /**
      * 设置滤镜
-     * 
+     *
      * 支持 blur(number)
      */
     private _filter?: string;
@@ -495,6 +495,12 @@ export class CSSStyle {
             case "blur":
                 this.parent.filterBlur = target.value;
                 break;
+            case "grayscale":
+                this.parent.filterGrayscale = target.value;
+                break;
+            case "outline":
+                this.parent.filterOutline = value;
+                break;
         }
     }
 
@@ -512,8 +518,8 @@ export class CSSStyle {
 
 
 
-    /** 
-     * 文本颜色，16进制 
+    /**
+     * 文本颜色，16进制
      * */
     private _color?: number | number[] = 0xfffff0;
     public get color() {
@@ -532,8 +538,8 @@ export class CSSStyle {
         this._letterSpacing = value;
         CSSFunction.updateFontStyle(this.parent, "letterSpacing", value);
     }
-    /** 
-     * 是否自动换行 
+    /**
+     * 是否自动换行
      * */
     private _wordWrap = false;
     public get wordWrap() {
@@ -543,8 +549,8 @@ export class CSSStyle {
         this._wordWrap = value;
         CSSFunction.updateFontStyle(this.parent, "wordWrap", value);
     }
-    /** 
-     * 自动换行的宽度 
+    /**
+     * 自动换行的宽度
      * */
     private _wordWrapWidth?: number;
     public get wordWrapWidth() {
@@ -554,7 +560,7 @@ export class CSSStyle {
         this._wordWrapWidth = value;
         CSSFunction.updateFontStyle(this.parent, "wordWrapWidth", value);
     }
-    /** 
+    /**
      * 多行文本(wordWrap = true) - 对齐方式
      * */
     private _textAlign: "left" | "right" | "center" = "center";
@@ -567,8 +573,8 @@ export class CSSStyle {
         CSSFunction.updateFontStyle(this.parent, "align", value);
 
     }
-    /** 
-     * 多行文本(wordWrap = true) - 行高 
+    /**
+     * 多行文本(wordWrap = true) - 行高
      * */
     private _lineHeight?: number;
     public get lineHeight() {
