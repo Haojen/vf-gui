@@ -25792,8 +25792,8 @@ var ConnectLine = /** @class */ (function (_super) {
                     pos = Utils_1.pointPlus(startPos, { x: display.width, y: display.height });
                     break;
                 default:
-                    pos.x = _linePostion[0];
-                    pos.y = _linePostion[1];
+                    pos.x = startPos.x + _linePostion[0];
+                    pos.y = startPos.y + _linePostion[1];
             }
         }
         else {
@@ -34252,10 +34252,10 @@ var vfgui = __webpack_require__(/*! ./UI */ "./src/UI.ts");
 //     }
 // }
 // String.prototype.startsWith || (String.prototype.startsWith = function(word,pos?: number) {
-//     return this.lastIndexOf(word, pos1.1.5.1.1.5.1.1.5) ==1.1.5.1.1.5.1.1.5;
+//     return this.lastIndexOf(word, pos1.1.6.1.1.6.1.1.6) ==1.1.6.1.1.6.1.1.6;
 // });
 window.gui = vfgui;
-window.gui.version = "1.1.5";
+window.gui.version = "1.1.6";
 exports.default = vfgui;
 // declare namespace gui{
 //     export * from "src/UI";
